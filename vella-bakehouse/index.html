@@ -295,8 +295,8 @@
         <div class="steps">
           <div class="step"><span class="n">Step 01</span><h2 class="serif">Mix<em class="it" style="color:var(--crust)">.</em></h2><p>Flour, water, a little patience. Everything good starts with a bowl and a pair of hands.</p></div>
           <div class="step"><span class="n">Step 02</span><h2 class="serif">Rest<em class="it" style="color:var(--crust)">.</em></h2><p>Then we wait. Dough takes its time, and honestly so do we.</p></div>
-          <div class="step"><span class="n">Step 03</span><h2 class="serif">Bake<em class="it" style="color:var(--crust)">.</em></h2><p>Into the oven until it's golden, crackly and making the whole street smell amazing.</p></div>
-          <div class="step"><span class="n">Step 04</span><h2 class="serif">Share<em class="it" style="color:var(--crust)">.</em></h2><p>Out it comes, still warm. The only thing missing is you.</p></div>
+          <div class="step"><span class="n">Step 03</span><h2 class="serif">Bake<em class="it" style="color:var(--crust)">.</em></h2><p>Into the oven until it's golden, puffed up and making the whole street smell amazing.</p></div>
+          <div class="step"><span class="n">Step 04</span><h2 class="serif">Share<em class="it" style="color:var(--crust)">.</em></h2><p>Out it comes, still warm, with a drizzle on top. The only thing missing is you.</p></div>
         </div>
       </div>
       <div class="dial" aria-hidden="true">
@@ -491,7 +491,7 @@
 
     /* ---------- The dough (Three.js) ---------- */
     // Shared state the scroll story animates; the render loop reads it every frame.
-    const D = { bake: 0, rise: 1, spin: 0, poke: 0, pokeHover: 0, x: 0, y: 0, visible: true };
+    const D = { bake: 0, rise: 1, spin: 0, icing: 0, poke: 0, pokeHover: 0, x: 0, y: 0, visible: true };
     let doughOK = false;
     (function dough() {
       if (!window.THREE) return;
@@ -502,8 +502,8 @@
       renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 1.75));
       const scene = new THREE.Scene();
       const camera = new THREE.PerspectiveCamera(32, 1, .1, 100);
-      camera.position.set(0, .35, 6.2);
-      camera.lookAt(0, 0, 0);
+      camera.position.set(0, 6.2 * Math.sin(.44), 6.2 * Math.cos(.44));   // look down on the roll a little so the swirl shows
+      camera.lookAt(0, -.1, 0);
 
       const noise = `
         vec3 mod289(vec3 x){return x-floor(x*(1./289.))*289.;}
@@ -530,84 +530,148 @@
           return 42.*dot(m*m,vec4(dot(p0,x0),dot(p1,x1),dot(p2,x2),dot(p3,x3)));
         }`;
 
-      const uniforms = {
-        uTime: { value: 0 }, uBake: { value: 0 }, uPoke: { value: 0 }, uPokeDir: { value: new THREE.Vector3(0, 0, 1) }
+      // ---- Cinnamon roll: a thick strip of dough rolled into a spiral, edges rounded ----
+      const R0 = .15, TURNS = 3.15, BEVEL = .07, DEPTH = .22, BT = .15;
+      const OUTER = .95;                                    // outer radius of the roll's centerline + half wall
+      const B = (OUTER - R0) / (2 * Math.PI * TURNS);       // spiral growth per radian
+      const PITCH = 2 * Math.PI * B;
+      const T = PITCH * .97 - 2 * BEVEL;                    // strip thickness so neighbouring layers just touch
+      const thMax = 2 * Math.PI * TURNS, N = 560;
+      const outerPts = [], innerPts = [];
+      for (let i = 0; i <= N; i++) {
+        const th = i / N * thMax, rc = R0 + B * th;
+        const k = Math.max(.18, Math.min(1, (thMax - th) / 1.6));   // outer flap thins out where it's tucked
+        const ro = rc + T / 2, ri = rc + T / 2 - T * k;
+        outerPts.push(new THREE.Vector2(Math.cos(th) * ro, Math.sin(th) * ro));
+        innerPts.push(new THREE.Vector2(Math.cos(th) * ri, Math.sin(th) * ri));
+      }
+      const shape = new THREE.Shape([...outerPts, ...innerPts.reverse()]);
+      let rollGeo = new THREE.ExtrudeGeometry(shape, { depth: DEPTH, bevelEnabled: true, bevelThickness: BT, bevelSize: BEVEL, bevelSegments: 7, curveSegments: 1, steps: 1 });
+      rollGeo.rotateX(-Math.PI / 2);
+      rollGeo.computeBoundingBox();
+      rollGeo.translate(0, -(rollGeo.boundingBox.max.y + rollGeo.boundingBox.min.y) / 2, 0);
+      // Weld shared vertices so normals are smooth and the dough reads soft, not faceted
+      const weld = g => {
+        const p = g.attributes.position, map = new Map(), verts = [], idx = [];
+        for (let i = 0; i < p.count; i++) {
+          const x = p.getX(i), y = p.getY(i), z = p.getZ(i);
+          const key = Math.round(x * 1e4) + "," + Math.round(y * 1e4) + "," + Math.round(z * 1e4);
+          let j = map.get(key);
+          if (j === undefined) { j = verts.length / 3; verts.push(x, y, z); map.set(key, j); }
+          idx.push(j);
+        }
+        const out = new THREE.BufferGeometry();
+        out.setAttribute("position", new THREE.Float32BufferAttribute(verts, 3));
+        out.setIndex(idx); out.computeVertexNormals();
+        return out;
       };
-      const material = new THREE.ShaderMaterial({
-        uniforms,
-        vertexShader: noise + `
-          uniform float uTime; uniform float uPoke; uniform vec3 uPokeDir;
-          varying vec3 vN; varying vec3 vView; varying vec3 vObj;
-          float field(vec3 n){
-            float v = snoise(n*1.1 + vec3(0., uTime*.11, 0.))*.075 + snoise(n*2.6 + uTime*.07)*.012;
-            v += sin(uTime*1.3)*.022;
-            float d = distance(n, normalize(uPokeDir));
-            v -= uPoke*.34*exp(-d*d*9.);
-            return v;
-          }
-          vec3 shape(vec3 n){
-            vec3 q = n*(1. + field(n));
-            q.y *= .8;
-            float k = smoothstep(-.35, -.85, q.y);       // flatten the bottom like dough resting on a bench
-            q.y = mix(q.y, -.58 + (q.y + .58)*.18, k);
-            q.xz *= 1. + k*.06;
-            return q;
-          }
-          void main(){
-            vec3 n = normalize(position);
-            vec3 t = normalize(cross(n, abs(n.y) > .95 ? vec3(1.,0.,0.) : vec3(0.,1.,0.)));
-            vec3 b = cross(n, t);
-            float e = .012;
-            vec3 P = shape(n), P1 = shape(normalize(n + t*e)), P2 = shape(normalize(n + b*e));
-            vec3 N = normalize(cross(P1 - P, P2 - P));
-            if (dot(N, P) < 0.) N = -N;
-            vObj = n;
-            vN = normalize(normalMatrix*N);
-            vec4 mv = modelViewMatrix*vec4(P, 1.);
-            vView = -mv.xyz;
-            gl_Position = projectionMatrix*mv;
-          }`,
-        fragmentShader: noise + `
-          uniform float uBake;
-          varying vec3 vN; varying vec3 vView; varying vec3 vObj;
-          void main(){
-            vec3 N = normalize(vN); vec3 V = normalize(vView);
-            vec3 L = normalize(vec3(-.45, .85, .55));
-            float wrap = clamp(dot(N, L)*.55 + .45, 0., 1.);
-            float top = smoothstep(-.25, .85, vObj.y);
-            float speck = snoise(vObj*16.)*.5 + .5;
-            vec3 raw = vec3(.975, .915, .82);
-            vec3 gold = vec3(.88, .58, .27);
-            vec3 deep = vec3(.56, .31, .12);
-            vec3 crust = mix(gold, deep, clamp(top*.55 + speck*.22 - .1, 0., 1.));
-            float baked = uBake*mix(.45, 1., top);
-            vec3 col = mix(raw, crust, baked);
-            float flour = smoothstep(.62, .82, snoise(vObj*7.5 + 3.)*.5 + .5)*top*(1. - uBake*.45);
-            col = mix(col, vec3(1., .99, .97), flour*.55);
-            vec3 lit = col*(.42 + .72*wrap)*vec3(1., .975, .94);
-            float rim = pow(1. - max(dot(N, V), 0.), 2.6);
-            lit += vec3(1., .8, .58)*rim*(.18 + uBake*.12);
-            vec3 H = normalize(L + V);
-            lit += pow(max(dot(N, H), 0.), 40.)*mix(.10, .26, uBake);
-            gl_FragColor = vec4(lit, 1.);
-          }`
-      });
+      rollGeo = weld(rollGeo);
+      const TOP = DEPTH / 2 + BT, BOTTOM = -TOP;
+
+      const uniforms = {
+        uTime: { value: 0 }, uBake: { value: 0 }, uPoke: { value: 0 }, uPokePos: { value: new THREE.Vector3(0, 0, 0) }, uKind: { value: 0 }
+      };
+      const vert = noise + `
+        uniform float uTime; uniform float uPoke; uniform vec3 uPokePos; uniform float uKind;
+        varying vec3 vN; varying vec3 vView; varying vec3 vObj; varying vec3 vNo;
+        void main(){
+          vec3 p = position;
+          float r = length(p.xz);
+          if (uKind < 1.5) p.y += (1. - smoothstep(0., 1.05, r))*.2*smoothstep(-.25, .2, p.y);   // domed middle
+          float upper = smoothstep(-.35, .2, p.y);
+          p.y += snoise(p*2.2 + vec3(0., uTime*.1, 0.))*.02*upper;
+          p.xz *= 1. + snoise(p*1.4 + uTime*.06)*.018;
+          p *= 1. + sin(uTime*1.3)*.01;
+          float d = distance(p.xz, uPokePos.xz);
+          p.y -= uPoke*.17*exp(-d*d*9.)*upper;
+          vObj = position; vNo = normal;
+          vN = normalize(normalMatrix*normal);
+          vec4 mv = modelViewMatrix*vec4(p, 1.);
+          vView = -mv.xyz;
+          gl_Position = projectionMatrix*mv;
+        }`;
+      const frag = `#define R0 ${R0.toFixed(5)}\n#define BB ${B.toFixed(6)}\n#define THMAX ${thMax.toFixed(5)}\n` + noise + `
+        uniform float uBake; uniform float uKind;
+        varying vec3 vN; varying vec3 vView; varying vec3 vObj; varying vec3 vNo;
+        void main(){
+          vec3 N = normalize(vN); vec3 V = normalize(vView);
+          vec3 L = normalize(vec3(-.45, .85, .5));
+          float wrap = clamp(dot(N, L)*.55 + .45, 0., 1.);
+          // Where are we on the spiral? 0 = middle of a layer, 1 = the seam between layers
+          float r = length(vObj.xz);
+          float th = atan(-vObj.z, vObj.x); if (th < 0.) th += 6.2831853;
+          float pitch = 6.2831853*BB;
+          float k = floor((r - R0 - BB*th)/pitch + .5);
+          float off = r - (R0 + BB*(th + 6.2831853*k));
+          float edge = abs(off)/(pitch*.5);
+          float outerWall = step(THMAX - 6.2831853, th + 6.2831853*k)*step(0., off)*(1. - smoothstep(.55, .9, abs(vNo.y)));
+          float cin = smoothstep(.38, .82, edge)*(1. - outerWall);
+          cin = max(cin, 1. - smoothstep(R0*.35, R0*1.15, r));
+          cin *= .65 + .35*smoothstep(-.1, .6, vNo.y);
+          float speck = snoise(vObj*15.)*.5 + .5;
+          float top = smoothstep(0., .9, vNo.y);
+          vec3 raw = vec3(.975, .905, .8);
+          vec3 gold = vec3(.9, .6, .3), deep = vec3(.64, .36, .14);
+          vec3 crust = mix(gold, deep, clamp((1. - edge)*top*.55 + speck*.2, 0., 1.));
+          vec3 dough = mix(raw, crust, uBake*mix(.55, 1., top));
+          vec3 cinC = mix(vec3(.5, .27, .13), vec3(.3, .14, .05), uBake)*(.8 + speck*.4);
+          vec3 col = mix(dough, cinC, cin);
+          float flour = smoothstep(.66, .86, snoise(vObj*8. + 3.)*.5 + .5)*(1. - uBake)*(1. - cin)*top;
+          col = mix(col, vec3(1.), flour*.35);
+          float gloss = mix(.07, .2, uBake) + cin*.22;
+          float shin = 34.;
+          if (uKind > 1.5) { col = vec3(1., .985, .955); gloss = .5; shin = 70.; }
+          vec3 lit = col*(.42 + .72*wrap)*vec3(1., .975, .94);
+          if (uKind > 1.5) lit = mix(lit, col, .4);
+          float rim = pow(1. - max(dot(N, V), 0.), 2.6);
+          lit += vec3(1., .8, .58)*rim*(.16 + uBake*.12);
+          vec3 H = normalize(L + V);
+          lit += pow(max(dot(N, H), 0.), shin)*gloss;
+          gl_FragColor = vec4(lit, 1.);
+        }`;
+      const material = new THREE.ShaderMaterial({ uniforms, vertexShader: vert, fragmentShader: frag });
+      const icingUniforms = { ...uniforms, uKind: { value: 2 } };
+      const icingMat = new THREE.ShaderMaterial({ uniforms: icingUniforms, vertexShader: vert, fragmentShader: frag });
+
       const group = new THREE.Group();
-      const mesh = new THREE.Mesh(new THREE.IcosahedronGeometry(1, 40), material);
-      group.add(mesh);
-      // Invisible sphere for pointer hits
-      const hit = new THREE.Mesh(new THREE.SphereGeometry(1, 24, 16), new THREE.MeshBasicMaterial({ visible: false }));
-      hit.scale.set(1, .8, 1);
+      const spinner = new THREE.Group();          // the roll and its icing turn together
+      const mesh = new THREE.Mesh(rollGeo, material);
+      spinner.add(mesh);
+
+      // Icing drizzle: a zigzag across the domed top, drawn in during the "Share" step
+      const domeAt = r => (1 - THREE.MathUtils.smoothstep(r, 0, 1.05)) * .2;
+      const pts = [], LINES = 9, ang = .55;
+      for (let i = 0; i <= LINES; i++) {
+        const u = -.78 + i * (1.56 / LINES);
+        const span = Math.sqrt(Math.max(0, .82 * .82 - u * u));
+        const ends = i % 2 ? [-span, span] : [span, -span];
+        for (let j = 0; j <= 8; j++) {
+          const v = ends[0] + (ends[1] - ends[0]) * j / 8;
+          const x = u * Math.cos(ang) - v * Math.sin(ang), z = u * Math.sin(ang) + v * Math.cos(ang);
+          const w = Math.sin(i * 2.3 + j * 1.7) * .035;
+          pts.push(new THREE.Vector3(x + w, TOP + domeAt(Math.hypot(x, z)) + .025, z + w * .6));
+        }
+      }
+      const icingGeo = new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts, false, "catmullrom", .3), 900, .026, 10, false);
+      const icingTotal = icingGeo.index.count;
+      icingGeo.setDrawRange(0, 0);
+      const icing = new THREE.Mesh(icingGeo, icingMat);
+      spinner.add(icing);
+      group.add(spinner);
+
+      // Invisible proxy for pointer hits
+      const hit = new THREE.Mesh(new THREE.CylinderGeometry(1, 1, TOP * 2 + .2, 32), new THREE.MeshBasicMaterial({ visible: false }));
       group.add(hit);
       // Soft contact shadow
       const sc = document.createElement("canvas"); sc.width = sc.height = 128;
       const sx = sc.getContext("2d"); const gr = sx.createRadialGradient(64, 64, 4, 64, 64, 64);
-      gr.addColorStop(0, "rgba(59,36,22,.45)"); gr.addColorStop(1, "rgba(59,36,22,0)");
+      gr.addColorStop(0, "rgba(59,36,22,.5)"); gr.addColorStop(1, "rgba(59,36,22,0)");
       sx.fillStyle = gr; sx.fillRect(0, 0, 128, 128);
-      const shadow = new THREE.Mesh(new THREE.PlaneGeometry(3.2, 1.6), new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(sc), transparent: true, depthWrite: false }));
-      shadow.rotation.x = -Math.PI / 2; shadow.position.y = -.6;
+      const shadow = new THREE.Mesh(new THREE.PlaneGeometry(2.9, 2.9), new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(sc), transparent: true, depthWrite: false }));
+      shadow.rotation.x = -Math.PI / 2; shadow.position.y = BOTTOM - .01;
       group.add(shadow);
       scene.add(group);
+
 
       // Flour dust
       const COUNT = 260;
@@ -631,8 +695,8 @@
         renderer.setSize(w, h, false);
         camera.aspect = w / h; camera.updateProjectionMatrix();
         const halfW = Math.tan(THREE.MathUtils.degToRad(16)) * 6.2 * camera.aspect;
-        if (camera.aspect >= 1) { baseS = Math.min(1.1, halfW * .36); baseX = halfW * .48; baseY = -.05; }
-        else { baseS = Math.min(.8, halfW * .62); baseX = 0; baseY = .8; }
+        if (camera.aspect >= 1) { baseS = Math.min(1.25, halfW * .37); baseX = halfW * .48; baseY = -.15; }
+        else { baseS = Math.min(.82, halfW * .7); baseX = 0; baseY = .72; }
       };
       size(); addEventListener("resize", size);
 
@@ -660,9 +724,8 @@
         const hits = ray.intersectObject(hit);
         over = hits.length > 0;
         if (over) {
-          const p = hit.worldToLocal(hits[0].point.clone());
-          p.y /= .8;
-          uniforms.uPokeDir.value.lerp(p.normalize(), .35);
+          const p = spinner.worldToLocal(hits[0].point.clone());
+          uniforms.uPokePos.value.lerp(p, .35);
         }
         cursor.classList.toggle("poke", over && !cursor.classList.contains("link"));
       }
@@ -678,11 +741,12 @@
           uniforms.uPoke.value = Math.max(D.poke, D.pokeHover);
           uniforms.uBake.value = D.bake;
           group.position.set(baseX + D.x, baseY + D.y, 0);
-          const s = baseS * D.rise;
-          group.scale.set(s, s, s);
+          const s = baseS;
+          group.scale.set(s * (1 + (D.rise - 1) * .55), s * (1 + (D.rise - 1) * 1.5), s * (1 + (D.rise - 1) * .55));   // proofing puffs it up more than out
+          icingGeo.setDrawRange(0, Math.floor(icingTotal * D.icing / 3) * 3);
           group.rotation.y += ((mx * .35 + D.spin) - group.rotation.y) * .05;
           group.rotation.x += ((-my * .12) - group.rotation.x) * .05;
-          mesh.rotation.y = t * .08;
+          spinner.rotation.y = t * .08;
           for (let i = 0; i < COUNT; i++) {
             pos[i * 3 + 1] += speed[i] * dt * (reduced ? 0 : 1);
             pos[i * 3] += Math.sin(t * .6 + i) * .0015;
@@ -770,6 +834,7 @@
       // 04 Share: settle and turn
       story
         .to(D, { spin: Math.PI * 2.6, rise: 1.15, duration: 1, ease: "power2.inOut" }, 3)
+        .to(D, { icing: 1, duration: .85, ease: "power1.inOut" }, 3.05)
         .to(".tint", { backgroundColor: "#f6ead8", duration: 1 }, 3);
 
       // Hero copy drifts away as the bake begins
