@@ -1,0 +1,933 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mr. 2 Weeks | Roofing, Remodeling &amp; Full Builds</title>
+  <meta name="description" content="Mr. 2 Weeks. Residential and commercial roofing, remodeling and full builds. Plus the jobsite comedy you came here for.">
+  <meta name="theme-color" content="#121212">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Saira+Stencil+One&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --asphalt: #121212;
+      --asphalt-2: #1b1b1b;
+      --asphalt-3: #262626;
+      --yellow: #ffc414;
+      --orange: #ff6a13;
+      --paper: #f3f0e8;
+      --concrete: #9b9a94;
+      --blue: #173a66;
+      --blue-2: #1e4a80;
+      --line: rgba(243,240,232,.14);
+      --stencil: "Saira Stencil One", Impact, sans-serif;
+      --sans: "Archivo", system-ui, sans-serif;
+      --mono: "JetBrains Mono", ui-monospace, monospace;
+      --pad: clamp(16px, 4vw, 56px);
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    html.lenis, html.lenis body { height: auto; }
+    .lenis.lenis-smooth { scroll-behavior: auto !important; }
+    body { margin: 0; background: var(--asphalt); color: var(--paper); font: 17px/1.55 var(--sans); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration: none; }
+    img, svg, iframe { display: block; }
+    button { font: inherit; color: inherit; }
+    ::selection { background: var(--yellow); color: var(--asphalt); }
+    .cond { font-stretch: 68%; font-weight: 900; text-transform: uppercase; letter-spacing: -.01em; line-height: .86; }
+    .stencil { font-family: var(--stencil); font-weight: 400; text-transform: uppercase; }
+    .mono { font-family: var(--mono); }
+    .label { font-family: var(--mono); font-size: .74rem; letter-spacing: .14em; text-transform: uppercase; color: var(--yellow); display: inline-flex; align-items: center; gap: .7em; }
+    .label::before { content: ""; width: 18px; height: 10px; background: repeating-linear-gradient(-45deg, var(--yellow) 0 4px, var(--asphalt) 4px 8px); }
+    .hazard { background: repeating-linear-gradient(-45deg, var(--yellow) 0 22px, var(--asphalt) 22px 44px); }
+
+    /* ---------- Hammer cursor ---------- */
+    @media (pointer: fine) {
+      body.hammer, body.hammer a, body.hammer button, body.hammer .sign { cursor: none; }
+      input, textarea, select { cursor: auto; }
+    }
+    .hammer-cursor { position: fixed; top: 0; left: 0; z-index: 300; pointer-events: none; width: 44px; height: 44px; margin: -6px 0 0 -30px; display: none; opacity: 0; transition: opacity .2s; }
+    .hammer-cursor svg { width: 100%; height: 100%; transform-origin: 80% 85%; }
+    body.hammer.has-pointer .hammer-cursor { opacity: 1; }
+    body.hammer.over-input .hammer-cursor { opacity: 0; }
+    @media (pointer: fine) { .hammer-cursor { display: block; } }
+    .bonk { position: fixed; z-index: 299; pointer-events: none; font-family: var(--stencil); color: var(--yellow); font-size: 1.4rem; text-shadow: 2px 2px 0 var(--asphalt); white-space: nowrap; }
+    .dust { position: fixed; z-index: 298; pointer-events: none; width: 5px; height: 5px; border-radius: 50%; background: var(--concrete); }
+
+    /* ---------- Loader ---------- */
+    .loader { position: fixed; inset: 0; z-index: 200; background: var(--asphalt); display: grid; place-items: center; padding: 24px; }
+    .loader-box { width: min(560px, 100%); }
+    .loader .top { display: flex; justify-content: space-between; font-family: var(--mono); font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; color: var(--concrete); margin-bottom: 12px; }
+    .loader .pct { color: var(--yellow); font-weight: 700; }
+    .bar { height: 26px; border: 2px solid var(--yellow); padding: 3px; }
+    .bar i { display: block; height: 100%; width: 0%; background: repeating-linear-gradient(-45deg, var(--yellow) 0 10px, #e0a800 10px 20px); background-size: 28px 28px; animation: stripes .6s linear infinite; }
+    @keyframes stripes { to { background-position: 28px 0; } }
+    .loader .status { margin-top: 16px; font-family: var(--stencil); font-size: clamp(1.4rem, 4vw, 2rem); text-transform: uppercase; min-height: 1.3em; }
+    .loader .skip { position: absolute; bottom: 22px; left: 50%; transform: translateX(-50%); font-family: var(--mono); font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; color: var(--concrete); background: none; border: 0; cursor: pointer; }
+    html.no-motion .loader, html.loaded .loader { display: none; }
+
+    /* ---------- Nav ---------- */
+    .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 80; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px var(--pad); transition: background .3s, box-shadow .3s; }
+    .nav.scrolled { background: rgba(18,18,18,.92); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: 0 1px 0 var(--line); }
+    .logo { display: inline-flex; align-items: center; gap: 10px; white-space: nowrap; }
+    .logo .badge { background: var(--yellow); color: var(--asphalt); font-family: var(--stencil); font-size: 1.35rem; line-height: 1; padding: .3em .5em .25em; transform: rotate(-2deg); box-shadow: 3px 3px 0 var(--orange); }
+    .nav-links { display: flex; gap: 28px; font-weight: 600; font-size: .95rem; }
+    .nav-links a { position: relative; opacity: .85; }
+    .nav-links a:hover { opacity: 1; color: var(--yellow); }
+    @media (max-width: 880px) { .nav-links { display: none; } }
+
+    /* ---------- Buttons ---------- */
+    .btn {
+      display: inline-flex; align-items: center; gap: .6em; white-space: nowrap; padding: .95em 1.5em; font-weight: 800; font-size: .98rem;
+      text-transform: uppercase; letter-spacing: .03em; border: 2px solid var(--paper); color: var(--paper); background: transparent;
+      clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+      transition: background .2s, color .2s, transform .15s; cursor: pointer;
+    }
+    .btn:hover { background: var(--paper); color: var(--asphalt); }
+    .btn:active { transform: translateY(2px); }
+    .btn.yellow { background: var(--yellow); border-color: var(--yellow); color: var(--asphalt); }
+    .btn.yellow:hover { background: var(--paper); border-color: var(--paper); }
+    .btn svg { width: 18px; height: 18px; flex: none; }
+    @media (max-width: 480px) { .nav .btn { padding: .7em 1em; font-size: .8rem; } .logo .badge { font-size: 1.1rem; } }
+
+    /* ---------- Hero ---------- */
+    .hero { position: relative; min-height: 100svh; overflow: hidden; display: flex; align-items: flex-end; padding: 110px var(--pad) 110px; }
+    .grid-bg { position: absolute; inset: 0; background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px); background-size: 48px 48px; mask-image: radial-gradient(120% 80% at 70% 30%, #000 20%, transparent 75%); -webkit-mask-image: radial-gradient(120% 80% at 70% 30%, #000 20%, transparent 75%); opacity: .5; }
+    .spot { position: absolute; width: 90vmax; height: 90vmax; right: -30vmax; top: -40vmax; background: radial-gradient(circle, rgba(255,196,20,.16), transparent 60%); pointer-events: none; }
+    .hero-copy { position: relative; z-index: 3; max-width: 980px; }
+    .hero h1 { margin: 18px 0 22px; font-size: clamp(3.2rem, 8.6vw, 8.6rem); }
+    .hero h1 .row { display: block; overflow: hidden; padding-bottom: .04em; }
+    .hero h1 .row > span { display: inline-block; will-change: transform; }
+    .hero h1 .big { color: var(--yellow); font-size: 1.42em; display: inline-block; position: relative; }
+    .hero h1 sup { font-size: .32em; vertical-align: top; position: relative; top: .2em; color: var(--orange); cursor: help; }
+    .hero p { max-width: 34em; font-size: clamp(1.05rem, 1.5vw, 1.25rem); color: rgba(243,240,232,.82); margin: 0 0 28px; }
+    .hero .actions { display: flex; flex-wrap: wrap; gap: 12px; }
+    .hero .ground { position: absolute; left: 0; right: 0; bottom: 0; height: 26px; z-index: 2; }
+    .tip { position: absolute; left: 50%; bottom: 120%; transform: translateX(-50%); white-space: nowrap; background: var(--paper); color: var(--asphalt); font: 600 .8rem/1.3 var(--sans); padding: 6px 10px; letter-spacing: 0; text-transform: none; opacity: 0; pointer-events: none; transition: opacity .2s; }
+    .hero h1 sup:hover .tip, .hero h1 sup:focus .tip { opacity: 1; }
+
+    /* Crane + swinging sign */
+    .crane { position: absolute; z-index: 2; right: clamp(8px, 4vw, 60px); bottom: 26px; width: clamp(260px, 34vw, 480px); aspect-ratio: 400 / 600; }
+    .crane svg { width: 100%; height: 100%; overflow: visible; }
+    .crane .steel { fill: none; stroke: var(--yellow); stroke-width: 3; stroke-linejoin: round; }
+    .crane .thin { fill: none; stroke: var(--yellow); stroke-width: 1.6; opacity: .75; }
+    .hanger { position: absolute; left: 44%; top: 10.4%; width: 0; height: 0; transform-origin: 0 0; will-change: transform; }
+    .cable { position: absolute; left: -1px; top: 0; width: 2px; height: calc(var(--cw) * .2); background: #d9d4c7; }
+    .hook { position: absolute; left: -9px; top: calc(var(--cw) * .2 - 4px); width: 18px; height: 16px; border: 3px solid #d9d4c7; border-top: 0; border-radius: 0 0 10px 10px; }
+    .sign {
+      position: absolute; left: calc(var(--cw) * -.29); top: calc(var(--cw) * .2 + 10px); width: calc(var(--cw) * .58);
+      background: var(--yellow); color: var(--asphalt); border: 4px solid var(--asphalt); box-shadow: 0 0 0 3px var(--yellow), 10px 14px 0 rgba(0,0,0,.45);
+      text-align: center; padding: 8px 8px 10px; touch-action: none; user-select: none; -webkit-user-select: none; cursor: grab;
+    }
+    .sign::before { content: ""; display: block; height: 12px; margin: -4px -4px 8px; background: repeating-linear-gradient(-45deg, var(--asphalt) 0 8px, var(--yellow) 8px 16px); }
+    .sign b { display: block; font-family: var(--stencil); font-weight: 400; font-size: calc(var(--cw) * .072); line-height: 1; }
+    .sign small { display: block; font-family: var(--mono); font-size: calc(var(--cw) * .026); margin-top: 6px; letter-spacing: .08em; }
+    .sign-wires { position: absolute; left: 50%; top: calc(var(--cw) * .2 + 12px); width: calc(var(--cw) * .5); height: 10px; transform: translateX(-50%); border-top: 2px solid #d9d4c7; }
+    .grab-hint { position: absolute; z-index: 3; right: clamp(8px, 4vw, 60px); top: 92px; font-family: var(--mono); font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; color: var(--concrete); display: none; }
+    @media (pointer: fine) { .grab-hint { display: block; } }
+    @media (max-width: 760px) {
+      .hero { padding-top: 46svh; }
+      .crane { width: 56vw; bottom: auto; top: 64px; right: 4px; }
+      .grab-hint { display: none !important; }
+    }
+
+    /* ---------- Caution tape ---------- */
+    .tapes { position: relative; height: clamp(150px, 18vw, 230px); overflow: hidden; background: var(--asphalt); }
+    .tape { position: absolute; left: -5%; width: 110%; top: 50%; background: var(--yellow); color: var(--asphalt); padding: 12px 0; overflow: hidden; border-block: 4px solid var(--asphalt); box-shadow: 0 0 0 2px var(--yellow); }
+    .tape.t1 { transform: translateY(-50%) rotate(-3.5deg); z-index: 2; }
+    .tape.t2 { transform: translateY(-50%) rotate(3deg); background: var(--orange); box-shadow: 0 0 0 2px var(--orange); }
+    .tape-track { display: flex; width: max-content; will-change: transform; }
+    .tape-track span { font-family: var(--stencil); font-size: clamp(1.6rem, 3.6vw, 2.8rem); line-height: 1; padding-right: .7em; white-space: nowrap; display: inline-flex; align-items: center; gap: .7em; }
+    .tape-track span::after { content: "▲"; font-size: .55em; }
+
+    /* ---------- Section basics ---------- */
+    section { position: relative; }
+    .wrap { max-width: 1360px; margin: 0 auto; }
+    .sec { padding: clamp(90px, 15vh, 170px) var(--pad); }
+    .sec-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 22px; margin-bottom: 48px; }
+    .sec-head h2 { margin: 14px 0 0; font-size: clamp(3rem, 8vw, 7.5rem); }
+    .sec-head h2 em { font-style: normal; color: var(--yellow); }
+    .sec-head p { max-width: 26em; margin: 0; color: rgba(243,240,232,.72); }
+
+    /* ---------- Services ---------- */
+    .toggle { position: relative; display: inline-flex; border: 2px solid var(--paper); padding: 4px; gap: 0; }
+    .toggle button { position: relative; z-index: 1; background: none; border: 0; padding: .7em 1.2em; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; font-size: .85rem; cursor: pointer; transition: color .3s; }
+    .toggle button[aria-pressed="true"] { color: var(--asphalt); }
+    .toggle .knob { position: absolute; z-index: 0; top: 4px; bottom: 4px; left: 4px; background: var(--yellow); transition: transform .45s cubic-bezier(.7,0,.2,1), width .45s cubic-bezier(.7,0,.2,1); }
+    .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .card {
+      position: relative; background: var(--asphalt-2); border: 1px solid var(--line); padding: 30px 28px; min-height: 380px; display: flex; flex-direction: column; overflow: hidden;
+      transition: border-color .3s, transform .4s cubic-bezier(.2,.8,.2,1);
+    }
+    .card::after { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 6px; background: repeating-linear-gradient(-45deg, var(--yellow) 0 8px, var(--asphalt) 8px 16px); transform: scaleX(0); transform-origin: left; transition: transform .5s cubic-bezier(.7,0,.2,1); }
+    .card:hover { border-color: var(--yellow); transform: translateY(-6px); }
+    .card:hover::after { transform: scaleX(1); }
+    .card .num { font-family: var(--mono); font-size: .8rem; color: var(--concrete); }
+    .card svg { width: 76px; height: 76px; margin: 22px 0 auto; fill: none; stroke: var(--yellow); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+    .card h3 { font-size: clamp(2.2rem, 3.4vw, 3rem); margin: 28px 0 12px; }
+    .card p { margin: 0; color: rgba(243,240,232,.75); min-height: 3.1em; transition: opacity .25s, transform .25s; }
+    .card p.swap { opacity: 0; transform: translateY(8px); }
+    @media (max-width: 900px) { .cards { grid-template-columns: 1fr; } .card { min-height: 0; } }
+
+    /* ---------- The build (pinned) ---------- */
+    .build { background: var(--blue); overflow: hidden; }
+    .build .grid-paper { position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.08) 1px, transparent 1px), linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px); background-size: 96px 96px, 96px 96px, 24px 24px, 24px 24px; }
+    .build-inner { position: relative; height: 100svh; display: grid; grid-template-columns: minmax(280px, 1fr) 1.6fr; gap: clamp(20px, 4vw, 60px); align-items: center; padding: 90px var(--pad) 40px; }
+    .day { font-family: var(--mono); font-weight: 700; color: var(--yellow); font-size: clamp(1rem, 1.4vw, 1.2rem); letter-spacing: .1em; }
+    .day b { font-family: var(--stencil); font-weight: 400; font-size: clamp(3.6rem, 8vw, 7rem); line-height: .9; display: block; color: var(--paper); letter-spacing: 0; }
+    .meter { height: 10px; border: 2px solid var(--paper); margin: 16px 0 26px; max-width: 360px; padding: 1px; }
+    .meter i { display: block; height: 100%; width: 0; background: var(--yellow); }
+    .captions { position: relative; min-height: 190px; }
+    .cap { position: absolute; inset: 0; }
+    .cap h3 { font-size: clamp(2.2rem, 4vw, 3.6rem); margin: 0 0 10px; }
+    .cap p { margin: 0; max-width: 24em; color: rgba(243,240,232,.85); font-size: 1.08rem; }
+    .foot-note { font-family: var(--mono); font-size: .72rem; color: rgba(243,240,232,.6); margin-top: 18px; }
+    .house { width: 100%; height: auto; max-height: 78svh; overflow: visible; }
+    .bp { fill: none; stroke: #cfe2ff; stroke-width: 2; stroke-dasharray: 8 6; }
+    .bp-solid { fill: none; stroke: #cfe2ff; stroke-width: 1.4; }
+    .bp-text { fill: #cfe2ff; font: 500 13px var(--mono); }
+    @media (max-width: 860px) {
+      .build-inner { grid-template-columns: 1fr; align-content: center; gap: 10px; padding-top: 80px; }
+      .build-text { order: 2; }
+      .captions { min-height: 150px; }
+      .day b { font-size: 3rem; }
+      .meter { margin: 10px 0 14px; }
+    }
+
+    /* ---------- Translator ---------- */
+    .translator { background: var(--paper); color: var(--asphalt); }
+    .translator .label { color: var(--asphalt); }
+    .translator .label::before { background: repeating-linear-gradient(-45deg, var(--asphalt) 0 4px, var(--paper) 4px 8px); }
+    .translator .sec-head p { color: #555; }
+    .translator .sec-head h2 em { color: var(--orange); }
+    .flips { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; }
+    .flip { display: block; width: 100%; perspective: 1200px; background: none; border: 0; padding: 0; text-align: left; min-height: 250px; cursor: pointer; color: var(--asphalt); }
+    .flip-in { display: block; position: relative; width: 100%; height: 100%; min-height: 250px; transform-style: preserve-3d; transition: transform .7s cubic-bezier(.3,1.4,.4,1); }
+    .flip[aria-pressed="true"] .flip-in { transform: rotateY(180deg); }
+    .face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; padding: 26px; display: flex; flex-direction: column; justify-content: space-between; border: 3px solid var(--asphalt); }
+    .face.front { background: #fff; box-shadow: 8px 8px 0 var(--asphalt); }
+    .face.back { background: var(--yellow); transform: rotateY(180deg); box-shadow: 8px 8px 0 var(--asphalt); }
+    .face q { display: block; font-size: clamp(1.5rem, 2.2vw, 1.9rem); font-weight: 800; line-height: 1.12; quotes: "“" "”"; }
+    .face .tap { font-family: var(--mono); font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: #777; }
+    .face.back .tr { font-family: var(--mono); font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; }
+    .face.back .tr, .face .tap { display: block; }
+    .face.back p { margin: 0; font-size: 1.15rem; font-weight: 700; line-height: 1.35; }
+
+    /* ---------- Skits ---------- */
+    .skits-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: clamp(40px, 6vw, 100px); align-items: center; }
+    .skits h2 { font-size: clamp(3rem, 7.5vw, 7rem); margin: 14px 0 22px; }
+    .skits h2 em { font-style: normal; color: var(--yellow); }
+    .skits p { color: rgba(243,240,232,.75); max-width: 30em; margin: 0 0 28px; }
+    .phone-zone { display: flex; justify-content: center; position: relative; }
+    .phone {
+      width: min(360px, 84vw); aspect-ratio: 9 / 18.5; border-radius: 44px; padding: 16px; position: relative;
+      background: var(--yellow); box-shadow: inset 0 0 0 6px #e0a800, 0 40px 80px -30px rgba(0,0,0,.8);
+      transform: rotate(-4deg);
+    }
+    .phone::before, .phone::after { content: ""; position: absolute; width: 26px; height: 26px; background: var(--asphalt); border-radius: 50%; box-shadow: inset 0 0 0 7px #2c2c2c; }
+    .phone::before { top: 12px; left: 12px; } .phone::after { bottom: 12px; right: 12px; }
+    .screen { width: 100%; height: 100%; border-radius: 30px; overflow: hidden; background: var(--asphalt-3); position: relative; border: 3px solid var(--asphalt); }
+    .screen iframe { position: relative; z-index: 1; width: 100%; height: 100%; border: 0; opacity: 0; transition: opacity .8s; }
+    .screen iframe.ready { opacity: 1; }
+    .screen .loading { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 10px; font-family: var(--mono); font-size: .8rem; color: var(--concrete); }
+    .screen .loading i { width: 44px; height: 44px; border: 3px solid var(--line); border-top-color: var(--yellow); border-radius: 50%; animation: spin 1s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .clap { position: absolute; z-index: 3; left: -10px; bottom: 10%; background: var(--paper); color: var(--asphalt); font-family: var(--stencil); font-size: 1.2rem; padding: .4em .7em; transform: rotate(-8deg); box-shadow: 5px 5px 0 var(--orange); }
+    .reels { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; margin-top: 72px; }
+    .reels:empty { display: none; }
+    .reels .instagram-media { margin: 0 !important; min-width: 0 !important; max-width: 100% !important; border-radius: 0 !important; border: 3px solid var(--yellow) !important; }
+    @media (max-width: 860px) { .skits-grid { grid-template-columns: 1fr; } }
+
+    /* ---------- Quote ---------- */
+    .quote { background: var(--asphalt-2); border-top: 1px solid var(--line); }
+    .quote-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: clamp(32px, 6vw, 90px); }
+    .quote h2 { font-size: clamp(3rem, 7vw, 6.5rem); margin: 14px 0 20px; }
+    .quote h2 em { font-style: normal; color: var(--yellow); }
+    .quote .intro p { color: rgba(243,240,232,.75); max-width: 26em; }
+    .contact-list { margin: 28px 0 0; padding: 0; list-style: none; display: grid; gap: 14px; }
+    .contact-list li { display: flex; gap: 12px; align-items: center; font-weight: 600; }
+    .contact-list svg { width: 22px; height: 22px; stroke: var(--yellow); fill: none; stroke-width: 2; flex: none; }
+    .contact-list a { border-bottom: 2px solid var(--yellow); }
+    form { background: var(--asphalt); border: 2px solid var(--line); padding: clamp(22px, 3vw, 36px); display: grid; gap: 16px; }
+    .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 600px) { .row2 { grid-template-columns: 1fr; } }
+    label { display: grid; gap: 6px; font-family: var(--mono); font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--concrete); }
+    input, select, textarea {
+      font: 500 1rem/1.4 var(--sans); color: var(--paper); background: var(--asphalt-2); border: 2px solid var(--asphalt-3); padding: .8em .9em; border-radius: 0; width: 100%;
+      transition: border-color .2s;
+    }
+    input:focus, select:focus, textarea:focus { outline: none; border-color: var(--yellow); }
+    textarea { min-height: 120px; resize: vertical; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chips label { display: inline-flex; cursor: pointer; }
+    .chips input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+    .chips span { padding: .6em 1em; border: 2px solid var(--asphalt-3); font: 700 .85rem/1 var(--sans); text-transform: none; letter-spacing: 0; color: var(--paper); transition: background .2s, border-color .2s, color .2s; }
+    .chips input:checked + span { background: var(--yellow); border-color: var(--yellow); color: var(--asphalt); }
+    .chips input:focus-visible + span { border-color: var(--yellow); }
+    .form-note { font-size: .85rem; color: var(--concrete); margin: 0; }
+    .toast { position: fixed; left: 50%; bottom: 24px; z-index: 250; transform: translate(-50%, calc(100% + 40px)); visibility: hidden; background: var(--yellow); color: var(--asphalt); font-weight: 800; padding: 14px 20px; border: 3px solid var(--asphalt); box-shadow: 6px 6px 0 var(--orange); max-width: calc(100vw - 32px); transition: transform .45s cubic-bezier(.3,1.5,.5,1); }
+    .toast.show { transform: translate(-50%, 0); visibility: visible; }
+    .fallback-msg { display: none; }
+    .fallback-msg.show { display: grid; gap: 8px; }
+    @media (max-width: 860px) { .quote-grid { grid-template-columns: 1fr; } }
+
+    /* ---------- Footer ---------- */
+    footer { background: var(--asphalt); }
+    footer .hz { height: 26px; }
+    .foot-big { padding: clamp(50px, 9vh, 100px) var(--pad) 0; overflow: hidden; }
+    .foot-big .stencil { font-size: clamp(2.6rem, 12.6vw, 15rem); line-height: .85; white-space: nowrap; color: var(--yellow); display: block; }
+    .foot-big .stencil .ch { display: inline-block; will-change: transform; }
+    .foot-row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 32px; padding: 26px var(--pad) 30px; margin-top: 30px; border-top: 1px solid var(--line); font-size: .9rem; color: rgba(243,240,232,.65); }
+    .foot-row a:hover { color: var(--yellow); }
+
+    [hidden] { display: none !important; }
+    @media (prefers-reduced-motion: reduce) { .bar i, .screen .loading i { animation: none; } .flip-in { transition: none; } }
+  </style>
+</head>
+<body>
+  <script>
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('no-motion');
+  </script>
+
+  <div class="hammer-cursor" aria-hidden="true">
+    <svg viewBox="0 0 64 64"><g><rect x="34" y="20" width="7" height="40" rx="2" transform="rotate(35 37 40)" fill="#8a5a2b" stroke="#121212" stroke-width="2"/><path d="M14 10h26l6 6v8H20l-6-6z" transform="rotate(35 30 17)" fill="#c9c9c4" stroke="#121212" stroke-width="2.5" stroke-linejoin="round"/></g></svg>
+  </div>
+
+  <div class="loader" aria-hidden="true">
+    <div class="loader-box">
+      <div class="top"><span>Estimated completion</span><span class="pct">0%</span></div>
+      <div class="bar"><i></i></div>
+      <div class="status">Pulling permits…</div>
+    </div>
+    <button class="skip" type="button">Skip the wait →</button>
+  </div>
+
+  <header class="nav">
+    <a class="logo" href="#top"><span class="badge">Mr. 2 Weeks</span></a>
+    <nav class="nav-links" aria-label="Main">
+      <a href="#services">Services</a>
+      <a href="#build">The build</a>
+      <a href="#translator">Translator</a>
+      <a href="#skits">Skits</a>
+      <a href="#quote">Quote</a>
+    </nav>
+    <a class="btn yellow" href="#quote">Get a quote</a>
+  </header>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="hero" aria-label="Intro">
+      <div class="grid-bg"></div>
+      <div class="spot"></div>
+
+      <div class="crane" aria-hidden="true">
+        <svg viewBox="0 0 400 600">
+          <!-- mast -->
+          <path class="steel" d="M318 70V600M358 70V600"/>
+          <path class="thin" d="M318 100l40 40M358 140l-40 40M318 180l40 40M358 220l-40 40M318 260l40 40M358 300l-40 40M318 340l40 40M358 380l-40 40M318 420l40 40M358 460l-40 40M318 500l40 40M358 540l-40 40"/>
+          <!-- apex + ties -->
+          <path class="steel" d="M326 70L338 12L350 70"/>
+          <path class="thin" d="M338 12L30 52M338 12L396 56"/>
+          <!-- jib -->
+          <path class="steel" d="M20 52H396M20 70H396"/>
+          <path class="thin" d="M30 52l18 18 18-18 18 18 18-18 18 18 18-18 18 18 18-18 18 18 18-18 18 18 18-18 18 18 18-18 18 18 18-18"/>
+          <!-- counterweight + cab -->
+          <rect x="366" y="70" width="30" height="36" fill="#3a3a3a" stroke="#ffc414" stroke-width="3"/>
+          <rect x="300" y="74" width="30" height="30" fill="#ffc414"/>
+          <rect x="306" y="80" width="18" height="12" fill="#121212"/>
+          <!-- trolley -->
+          <rect x="164" y="66" width="24" height="10" fill="#ffc414"/>
+          <!-- ground plate -->
+          <path class="steel" d="M300 598h76"/>
+        </svg>
+        <div class="hanger">
+          <div class="cable"></div>
+          <div class="hook"></div>
+          <div class="sign" role="img" aria-label="Under construction sign">
+            <b>Under<br>construction</b>
+            <small>Est. completion: 2 weeks*</small>
+          </div>
+        </div>
+      </div>
+      <div class="grab-hint" aria-hidden="true">← grab the sign. swing it.</div>
+
+      <div class="hero-copy">
+        <span class="label hero-in">Roofing · Remodeling · Full builds</span>
+        <h1 class="cond">
+          <span class="row"><span>It'll be done in</span></span>
+          <span class="row"><span class="big">2 weeks.<sup tabindex="0">*<span class="tip">*Real timelines depend on the job. Ask us for yours.</span></sup></span></span>
+        </h1>
+        <p class="hero-in">Residential and commercial roofing, remodeling and full builds. Run by the same guy making the jobsite skits on your feed. Yes, really.</p>
+        <div class="actions hero-in">
+          <a class="btn yellow" href="#quote">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M3 21h18M5 21V10l7-5 7 5v11M9 21v-6h6v6"/></svg>
+            Get a quote
+          </a>
+          <a class="btn" href="#skits">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+            Watch the skits
+          </a>
+        </div>
+      </div>
+      <div class="ground hazard" aria-hidden="true"></div>
+    </section>
+
+    <!-- TAPES -->
+    <div class="tapes" aria-hidden="true">
+      <div class="tape t2"><div class="tape-track" data-dir="1">
+        <span>Roofing</span><span>Remodeling</span><span>Full builds</span><span>Residential</span><span>Commercial</span><span>Roofing</span><span>Remodeling</span><span>Full builds</span><span>Residential</span><span>Commercial</span>
+      </div></div>
+      <div class="tape t1"><div class="tape-track" data-dir="-1">
+        <span>Caution</span><span>Mr. 2 Weeks at work</span><span>Caution</span><span>Comedy in progress</span><span>Caution</span><span>Mr. 2 Weeks at work</span><span>Caution</span><span>Comedy in progress</span>
+      </div></div>
+    </div>
+
+    <!-- SERVICES -->
+    <section class="sec" id="services" aria-label="Services">
+      <div class="wrap">
+        <div class="sec-head">
+          <div>
+            <span class="label">What we build</span>
+            <h2 class="cond">Three jobs. <em>Done right.</em></h2>
+          </div>
+          <div class="toggle" role="group" aria-label="Show services for">
+            <span class="knob" aria-hidden="true"></span>
+            <button type="button" aria-pressed="true" data-mode="res">Residential</button>
+            <button type="button" aria-pressed="false" data-mode="com">Commercial</button>
+          </div>
+        </div>
+        <div class="cards">
+          <article class="card">
+            <span class="num">01 / Roofing</span>
+            <svg viewBox="0 0 76 76" aria-hidden="true"><path class="draw" d="M6 40L38 12l32 28"/><path class="draw" d="M14 33v33h48V33"/><path class="draw" d="M22 26l32 0M18 30h40"/><path class="draw" d="M32 66V48h12v18"/></svg>
+            <h3 class="cond">Roofing</h3>
+            <p data-res="Repairs, leaks and full replacements for your home. Keeping the rain where it belongs: outside." data-com="Roofing for storefronts, offices and buildings. Keeping your business dry so it can keep doing business.">Repairs, leaks and full replacements for your home. Keeping the rain where it belongs: outside.</p>
+          </article>
+          <article class="card">
+            <span class="num">02 / Remodeling</span>
+            <svg viewBox="0 0 76 76" aria-hidden="true"><path class="draw" d="M10 66h56M14 66V20h48v46"/><path class="draw" d="M14 34h48M30 20v14M46 34v14M14 48h48M30 48v18"/><path class="draw" d="M52 10l10 10-22 22-12 2 2-12z"/></svg>
+            <h3 class="cond">Remodeling</h3>
+            <p data-res="Kitchens, bathrooms, basements and everything in between. Same house, way better." data-com="Office, retail and commercial space refreshes. Same building, way better first impression.">Kitchens, bathrooms, basements and everything in between. Same house, way better.</p>
+          </article>
+          <article class="card">
+            <span class="num">03 / Full builds</span>
+            <svg viewBox="0 0 76 76" aria-hidden="true"><path class="draw" d="M8 66h60"/><path class="draw" d="M14 66V34L38 14l24 20v32"/><path class="draw" d="M22 66V40M30 66V34M38 66V28M46 66V34M54 66V40M14 46h48"/></svg>
+            <h3 class="cond">Full builds</h3>
+            <p data-res="New homes and additions, from the dirt to the doorbell." data-com="New commercial construction and buildouts, from the ground up.">New homes and additions, from the dirt to the doorbell.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- THE BUILD -->
+    <section class="build" id="build" aria-label="The build">
+      <div class="grid-paper" aria-hidden="true"></div>
+      <div class="build-inner">
+        <div class="build-text">
+          <span class="label">The build</span>
+          <div class="day" aria-live="off" style="margin-top:14px">DAY <b class="js-day">01</b></div>
+          <div class="meter" aria-hidden="true"><i></i></div>
+          <div class="captions">
+            <div class="cap"><h3 class="cond">Blueprints</h3><p>Plans first. Measure twice, cut once, make a skit about it.</p></div>
+            <div class="cap"><h3 class="cond">Foundation</h3><p>Everything sits on this, so we don't rush it. Rock solid. Literally.</p></div>
+            <div class="cap"><h3 class="cond">Framing</h3><p>The skeleton goes up. This is where it starts to actually look like something.</p></div>
+            <div class="cap"><h3 class="cond">Roof</h3><p>Our favorite part, honestly. Trusses, sheathing, shingles. Rain is officially not invited.</p></div>
+            <div class="cap"><h3 class="cond">Finishes</h3><p>Walls, windows, a front door. The stuff everybody actually notices.</p></div>
+            <div class="cap"><h3 class="cond">Done.</h3><p>Told you. 2 weeks.* Now go take the picture for the group chat.</p></div>
+          </div>
+          <div class="foot-note">*Real timelines depend on the job. We'll give you a straight answer for yours.</div>
+        </div>
+
+        <svg class="house" viewBox="0 0 800 520" role="img" aria-label="A house being built step by step">
+          <defs>
+            <clipPath id="roofClip"><polygon points="140,262 400,104 660,262"/></clipPath>
+          </defs>
+          <!-- blueprint -->
+          <g class="g-bp">
+            <path class="bp" d="M180 440V262h440v178"/>
+            <path class="bp" d="M140 262L400 104l260 158"/>
+            <path class="bp" d="M372 440v-98h56v98M226 300h92v70h-92zM482 300h92v70h-92z"/>
+            <path class="bp-solid" d="M180 488h440M180 480v16M620 480v16"/>
+            <text class="bp-text" x="370" y="508">40'-0"</text>
+            <path class="bp-solid" d="M700 440V262M692 440h16M692 262h16"/>
+            <text class="bp-text" x="712" y="356">12'</text>
+            <text class="bp-text" x="190" y="90">SHEET A-1 · MR. 2 WEEKS</text>
+          </g>
+          <!-- ground -->
+          <path d="M40 440H760" stroke="#cfe2ff" stroke-width="2" opacity=".5"/>
+          <!-- foundation -->
+          <g class="g-found"><rect x="166" y="440" width="468" height="30" fill="#a9a8a2" stroke="#121212" stroke-width="2"/><path d="M190 455h30M260 452h18M340 458h26M450 452h22M540 456h30" stroke="#86857f" stroke-width="2"/></g>
+          <!-- framing -->
+          <g class="g-frame">
+            <rect x="180" y="432" width="440" height="8" fill="#d9a35b" stroke="#7a5326" stroke-width="1.5"/>
+            <rect x="180" y="262" width="440" height="8" fill="#d9a35b" stroke="#7a5326" stroke-width="1.5"/>
+          </g>
+          <g class="g-studs"></g>
+          <!-- trusses -->
+          <g class="g-truss" stroke="#d9a35b" stroke-width="6" stroke-linecap="round"></g>
+          <!-- sheathing + shingles -->
+          <polygon class="g-sheath" points="140,262 400,104 660,262" fill="#b98a4a" stroke="#7a5326" stroke-width="2"/>
+          <g class="g-shingles" clip-path="url(#roofClip)"></g>
+          <path class="g-ridge" d="M140 262L400 104l260 158" fill="none" stroke="#2a2d33" stroke-width="10" stroke-linejoin="round"/>
+          <!-- walls / siding -->
+          <g class="g-walls">
+            <rect x="180" y="270" width="440" height="162" fill="#ece6d6"/>
+            <path d="M180 290h440M180 310h440M180 330h440M180 350h440M180 370h440M180 390h440M180 410h440" stroke="#d3cbb6" stroke-width="2"/>
+          </g>
+          <!-- windows + door -->
+          <g class="g-win">
+            <rect x="226" y="300" width="92" height="70" fill="#8fc1e6" stroke="#121212" stroke-width="4"/><path d="M272 300v70M226 335h92" stroke="#121212" stroke-width="3"/>
+            <rect x="482" y="300" width="92" height="70" fill="#8fc1e6" stroke="#121212" stroke-width="4"/><path d="M528 300v70M482 335h92" stroke="#121212" stroke-width="3"/>
+            <path d="M236 310l20 0M492 310l20 0" stroke="#fff" stroke-width="3" opacity=".7"/>
+          </g>
+          <g class="g-door"><rect x="372" y="342" width="56" height="98" fill="#c8402a" stroke="#121212" stroke-width="4"/><circle cx="416" cy="394" r="4" fill="#ffc414"/><rect x="360" y="438" width="80" height="6" fill="#a9a8a2"/></g>
+          <!-- extras -->
+          <g class="g-tree"><rect x="684" y="372" width="12" height="68" fill="#7a5326"/><circle cx="690" cy="356" r="38" fill="#3f8a4f" stroke="#121212" stroke-width="3"/><circle cx="110" cy="424" r="18" fill="#3f8a4f" stroke="#121212" stroke-width="3"/><circle cx="138" cy="430" r="13" fill="#4f9d5f" stroke="#121212" stroke-width="3"/></g>
+          <g class="g-stamp" transform="translate(560 150) rotate(-12)">
+            <rect x="-96" y="-38" width="192" height="76" fill="none" stroke="#ffc414" stroke-width="6"/>
+            <text x="0" y="16" text-anchor="middle" fill="#ffc414" style="font: 400 46px 'Saira Stencil One', Impact, sans-serif">DONE ✓</text>
+          </g>
+        </svg>
+      </div>
+    </section>
+
+    <!-- TRANSLATOR -->
+    <section class="sec translator" id="translator" aria-label="Contractor translator">
+      <div class="wrap">
+        <div class="sec-head">
+          <div>
+            <span class="label">Contractor translator</span>
+            <h2 class="cond">Things every contractor says. <em>Decoded.</em></h2>
+          </div>
+          <p>We'd know. Tap a card to flip it.</p>
+        </div>
+        <div class="flips">
+          <button class="flip" type="button" aria-pressed="false"><span class="flip-in">
+            <span class="face front"><q>It'll be done in two weeks.</q><span class="tap">Tap to translate ↻</span></span>
+            <span class="face back"><span class="tr">Translation</span><p>We literally named the company after this. At this point we're contractually obligated to say it.</p></span>
+          </span></button>
+          <button class="flip" type="button" aria-pressed="false"><span class="flip-in">
+            <span class="face front"><q>Oh, that's an easy fix.</q><span class="tap">Tap to translate ↻</span></span>
+            <span class="face back"><span class="tr">Translation</span><p>Famous last words, said right before finding three more things behind the drywall.</p></span>
+          </span></button>
+          <button class="flip" type="button" aria-pressed="false"><span class="flip-in">
+            <span class="face front"><q>Who did this work before?</q><span class="tap">Tap to translate ↻</span></span>
+            <span class="face back"><span class="tr">Translation</span><p>Oh no. Oh no no no.</p></span>
+          </span></button>
+          <button class="flip" type="button" aria-pressed="false"><span class="flip-in">
+            <span class="face front"><q>We'll just open up this wall real quick.</q><span class="tap">Tap to translate ↻</span></span>
+            <span class="face back"><span class="tr">Translation</span><p>There is no such thing as "real quick" once the wall is open. Physics won't allow it.</p></span>
+          </span></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SKITS -->
+    <section class="sec skits" id="skits" aria-label="Jobsite comedy">
+      <div class="wrap">
+        <div class="skits-grid">
+          <div class="skits-copy">
+            <span class="label">Jobsite comedy</span>
+            <h2 class="cond">Come for the skits. <em>Stay for the roof.</em></h2>
+            <p>Same guy, same jobsites. One minute he's framing a wall, the next he's acting out every contractor you've ever hired. Follow along for the bits and a look at the work.</p>
+            <a class="btn yellow js-ig" href="#" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/></svg>
+              Follow @mr.2weeks
+            </a>
+          </div>
+          <div class="phone-zone">
+            <div class="phone">
+              <div class="screen">
+                <div class="loading"><i></i><span>@mr.2weeks</span></div>
+                <iframe class="js-ig-embed" title="Mr. 2 Weeks on Instagram" loading="lazy" scrolling="yes" allowtransparency="true"></iframe>
+              </div>
+            </div>
+            <span class="clap" aria-hidden="true">Take 47</span>
+          </div>
+        </div>
+        <div class="reels js-reels"></div>
+      </div>
+    </section>
+
+    <!-- QUOTE -->
+    <section class="sec quote" id="quote" aria-label="Get a quote">
+      <div class="wrap quote-grid">
+        <div class="intro">
+          <span class="label">Get a quote</span>
+          <h2 class="cond">Got a project? <em>Let's talk.</em></h2>
+          <p>Tell us what you're working with. Roof, remodel or a whole new build, residential or commercial. We'll get back to you with real answers. And probably a joke.</p>
+          <ul class="contact-list">
+            <li class="js-phone-row" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg><a class="js-phone" href="#"></a></li>
+            <li class="js-email-row" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg><a class="js-email" href="#"></a></li>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/></svg><a class="js-ig" href="#" target="_blank" rel="noopener">DM @mr.2weeks</a></li>
+            <li class="js-area-row" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span class="js-area"></span></li>
+          </ul>
+        </div>
+        <form class="js-form" novalidate>
+          <div class="row2">
+            <label>Your name<input name="name" autocomplete="name" required></label>
+            <label>Phone or email<input name="contact" autocomplete="email" required></label>
+          </div>
+          <div>
+            <label style="margin-bottom:8px">What kind of job?</label>
+            <div class="chips">
+              <label><input type="radio" name="job" value="Roofing" checked><span>Roofing</span></label>
+              <label><input type="radio" name="job" value="Remodeling"><span>Remodeling</span></label>
+              <label><input type="radio" name="job" value="Full build"><span>Full build</span></label>
+              <label><input type="radio" name="job" value="Something else"><span>Something else</span></label>
+            </div>
+          </div>
+          <div>
+            <label style="margin-bottom:8px">Where?</label>
+            <div class="chips">
+              <label><input type="radio" name="where" value="Residential" checked><span>Residential</span></label>
+              <label><input type="radio" name="where" value="Commercial"><span>Commercial</span></label>
+            </div>
+          </div>
+          <label>Tell us about it<textarea name="details" placeholder="What's going on, where's the project, any timeline you're working with…"></textarea></label>
+          <button class="btn yellow" type="submit" style="justify-self:start">
+            <span class="js-submit-label">Send it</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+          <p class="form-note js-form-note">Hitting send copies your message and opens our Instagram DMs. Just paste and send.</p>
+          <label class="fallback-msg js-fallback">Copy this and send it to us:<textarea readonly></textarea></label>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="hz hazard" aria-hidden="true"></div>
+    <div class="foot-big" aria-hidden="true"><span class="stencil js-foot">Mr. 2 Weeks</span></div>
+    <div class="foot-row">
+      <span>&copy; <span id="year"></span> Mr. 2 Weeks</span>
+      <span>Roofing · Remodeling · Full builds · Residential &amp; Commercial</span>
+      <a class="js-ig" href="#" target="_blank" rel="noopener">Instagram</a>
+    </div>
+  </footer>
+
+  <div class="toast" role="status" aria-live="polite"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+  <script>
+    // ---- Business details: fill these in and the whole page updates. ----
+    const BIZ = {
+      instagram: "mr.2weeks",
+      phone: "",          // e.g. "(313) 555-0123"
+      email: "",          // e.g. "jobs@mr2weeks.com" (quote form sends by email when set)
+      serviceArea: "",    // e.g. "Serving Metro Detroit"
+      // Paste links to skits/reels to feature them under the phone, e.g.
+      // "https://www.instagram.com/reel/ABC123xyz/"
+      featuredPosts: [
+      ]
+    };
+
+    /* ---------- Content wiring ---------- */
+    const $ = (s, r = document) => r.querySelector(s);
+    const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+    const igUrl = "https://www.instagram.com/" + BIZ.instagram + "/";
+    const dmUrl = "https://ig.me/m/" + BIZ.instagram;
+    $$(".js-ig").forEach(a => a.href = igUrl);
+    const igFrame = $(".js-ig-embed");
+    igFrame.addEventListener("load", () => igFrame.classList.add("ready"));
+    igFrame.src = igUrl + "embed/";
+    if (BIZ.phone) { const a = $(".js-phone"); a.textContent = BIZ.phone; a.href = "tel:" + BIZ.phone.replace(/[^\d+]/g, ""); $(".js-phone-row").hidden = false; }
+    if (BIZ.email) {
+      const a = $(".js-email"); a.textContent = BIZ.email; a.href = "mailto:" + BIZ.email; $(".js-email-row").hidden = false;
+      $(".js-form-note").textContent = "Hitting send opens an email to us with everything filled in.";
+    }
+    if (BIZ.serviceArea) { $(".js-area").textContent = BIZ.serviceArea; $(".js-area-row").hidden = false; }
+    if (BIZ.featuredPosts.length) {
+      const wrap = $(".js-reels");
+      BIZ.featuredPosts.forEach(url => {
+        const bq = document.createElement("blockquote");
+        bq.className = "instagram-media"; bq.setAttribute("data-instgrm-permalink", url); bq.setAttribute("data-instgrm-version", "14");
+        wrap.appendChild(bq);
+      });
+      const s = document.createElement("script"); s.async = true; s.src = "https://www.instagram.com/embed.js"; document.body.appendChild(s);
+    }
+    $("#year").textContent = new Date().getFullYear();
+    const nav = $(".nav");
+    const onScroll = () => nav.classList.toggle("scrolled", scrollY > 40);
+    addEventListener("scroll", onScroll, { passive: true }); onScroll();
+
+    const toastEl = $(".toast");
+    let toastTimer;
+    const toast = msg => { toastEl.textContent = msg; toastEl.classList.add("show"); clearTimeout(toastTimer); toastTimer = setTimeout(() => toastEl.classList.remove("show"), 4200); };
+
+    /* ---------- Residential / commercial toggle ---------- */
+    const toggle = $(".toggle"), knob = $(".toggle .knob");
+    const placeKnob = btn => { knob.style.width = btn.offsetWidth + "px"; knob.style.transform = `translateX(${btn.offsetLeft - 4}px)`; };
+    $$(".toggle button").forEach(btn => btn.addEventListener("click", () => {
+      $$(".toggle button").forEach(b => b.setAttribute("aria-pressed", b === btn));
+      placeKnob(btn);
+      const mode = btn.dataset.mode;
+      $$(".card p").forEach(p => {
+        p.classList.add("swap");
+        setTimeout(() => { p.textContent = p.dataset[mode]; p.classList.remove("swap"); }, 250);
+      });
+    }));
+    const placeActive = () => placeKnob($('.toggle button[aria-pressed="true"]'));
+    placeActive(); addEventListener("resize", placeActive);
+    document.fonts && document.fonts.ready.then(placeActive);
+
+    /* ---------- Translator flip cards ---------- */
+    $$(".flip").forEach(f => f.addEventListener("click", () => f.setAttribute("aria-pressed", f.getAttribute("aria-pressed") !== "true")));
+
+    /* ---------- Quote form (no backend needed) ---------- */
+    const form = $(".js-form");
+    form.addEventListener("submit", async e => {
+      e.preventDefault();
+      const d = new FormData(form);
+      const name = (d.get("name") || "").trim(), contact = (d.get("contact") || "").trim();
+      if (!name || !contact) { toast("Need at least your name and a way to reach you."); (name ? form.contact : form.name).focus(); return; }
+      const msg = `Hey Mr. 2 Weeks! I'd like a quote.\n\nName: ${name}\nContact: ${contact}\nJob: ${d.get("job")} (${d.get("where")})\nDetails: ${(d.get("details") || "").trim() || "-"}`;
+      if (BIZ.email) {
+        location.href = `mailto:${BIZ.email}?subject=${encodeURIComponent("Quote request: " + d.get("job"))}&body=${encodeURIComponent(msg)}`;
+        return;
+      }
+      let copied = false;
+      try { await navigator.clipboard.writeText(msg); copied = true; } catch (err) {}
+      if (copied) {
+        toast("Message copied! Paste it in the DM that just opened.");
+        window.open(dmUrl, "_blank", "noopener");
+      } else {
+        const fb = $(".js-fallback"); fb.classList.add("show"); fb.querySelector("textarea").value = msg;
+        fb.querySelector("textarea").select();
+        toast("Copy the message below and DM it to @" + BIZ.instagram + ".");
+      }
+    });
+
+    /* ---------- Build the house pieces (studs, trusses, shingles) ---------- */
+    const SVGNS = "http://www.w3.org/2000/svg";
+    const mk = (tag, attrs, parent) => { const el = document.createElementNS(SVGNS, tag); for (const k in attrs) el.setAttribute(k, attrs[k]); parent.appendChild(el); return el; };
+    const studs = $(".g-studs");
+    for (let x = 184; x <= 612; x += 24) mk("rect", { x, y: 270, width: 7, height: 162, fill: "#e0ae6a", stroke: "#7a5326", "stroke-width": 1.2 }, studs);
+    const truss = $(".g-truss");
+    for (let i = 0; i <= 8; i++) {
+      const t = i / 8, x = 160 + t * 480;
+      const yTop = x < 400 ? 262 - (x - 140) / 260 * 158 : 262 - (660 - x) / 260 * 158;
+      mk("line", { x1: x, y1: 262, x2: x, y2: yTop + 6 }, truss);
+    }
+    mk("line", { x1: 150, y1: 262, x2: 650, y2: 262 }, truss);
+    mk("path", { d: "M150 258L400 108l250 150", fill: "none" }, truss);
+    const shingles = $(".g-shingles");
+    for (let y = 110, row = 0; y < 268; y += 16, row++) {
+      const g = mk("g", { class: "shingle-row" }, shingles);
+      for (let x = 130 + (row % 2) * 18; x < 680; x += 36) mk("rect", { x, y, width: 34, height: 15, fill: row % 3 ? "#3a3f47" : "#454b55", stroke: "#22252a", "stroke-width": 1.5 }, g);
+    }
+
+    /* ---------- Swinging sign (pendulum you can grab) ---------- */
+    const crane = $(".crane"), hanger = $(".hanger"), sign = $(".sign");
+    const setCw = () => crane.style.setProperty("--cw", crane.clientWidth + "px");
+    setCw(); addEventListener("resize", setCw);
+    const P = { a: .35, v: 0, dragging: false };
+    const reducedMotion = document.documentElement.classList.contains("no-motion");
+    let lastPointerAngle = 0, lastPointerT = 0;
+    const pivot = () => { const r = hanger.getBoundingClientRect(); return { x: r.left, y: r.top }; };
+    sign.addEventListener("pointerdown", e => {
+      P.dragging = true; sign.setPointerCapture(e.pointerId); sign.style.cursor = "grabbing";
+      lastPointerT = performance.now();
+    });
+    sign.addEventListener("pointermove", e => {
+      if (!P.dragging) return;
+      const p = pivot();
+      const ang = Math.max(-1.25, Math.min(1.25, Math.atan2(-(e.clientX - p.x), e.clientY - p.y)));
+      const now = performance.now(), dt = Math.max(16, now - lastPointerT) / 1000;
+      P.v = (ang - lastPointerAngle) / dt * .9;
+      lastPointerAngle = ang; lastPointerT = now; P.a = ang;
+    });
+    const release = () => { if (!P.dragging) return; P.dragging = false; sign.style.cursor = ""; P.v = Math.max(-6, Math.min(6, P.v)); };
+    sign.addEventListener("pointerup", release); sign.addEventListener("pointercancel", release);
+    let pLast = performance.now();
+    const swing = now => {
+      const dt = Math.min((now - pLast) / 1000, .033); pLast = now;
+      if (!P.dragging) {
+        const L = .9;
+        P.v += (-9.8 / L * Math.sin(P.a)) * dt * .55;
+        P.v *= reducedMotion ? .8 : .992;
+        P.a += P.v * dt;
+      } else lastPointerAngle = P.a;
+      hanger.style.transform = `rotate(${P.a}rad)`;
+      requestAnimationFrame(swing);
+    };
+    requestAnimationFrame(swing);
+    let lastY = scrollY;
+    addEventListener("scroll", () => { const dy = scrollY - lastY; lastY = scrollY; if (!P.dragging && !reducedMotion) P.v += Math.max(-.6, Math.min(.6, dy * .004)); }, { passive: true });
+
+    /* ---------- Hammer cursor ---------- */
+    const finePointer = matchMedia("(pointer: fine)").matches;
+    if (finePointer && window.gsap) {
+      document.body.classList.add("hammer");
+      const hc = $(".hammer-cursor"), hs = hc.querySelector("svg");
+      const xs = gsap.quickTo(hc, "x", { duration: .12, ease: "power3" }), ys = gsap.quickTo(hc, "y", { duration: .12, ease: "power3" });
+      addEventListener("pointermove", e => {
+        document.body.classList.add("has-pointer"); xs(e.clientX); ys(e.clientY);
+        document.body.classList.toggle("over-input", !!e.target.closest("input, textarea, select"));
+      });
+      const WORDS = ["BONK!", "THUD", "*tap*", "BAM!", "WHACK"];
+      addEventListener("pointerdown", e => {
+        if (e.target.closest("input, textarea, select")) return;
+        gsap.fromTo(hs, { rotate: 0 }, { rotate: -48, duration: .07, ease: "power2.in", yoyo: true, repeat: 1 });
+        if (reducedMotion) return;
+        const b = document.createElement("span"); b.className = "bonk"; b.textContent = WORDS[Math.floor(Math.random() * WORDS.length)];
+        b.style.left = e.clientX - 20 + "px"; b.style.top = e.clientY - 30 + "px"; document.body.appendChild(b);
+        gsap.fromTo(b, { scale: .4, rotate: gsap.utils.random(-20, 20) }, { scale: 1, y: -40, autoAlpha: 0, duration: .8, ease: "power2.out", onComplete: () => b.remove() });
+        for (let i = 0; i < 6; i++) {
+          const d = document.createElement("span"); d.className = "dust"; d.style.left = e.clientX + "px"; d.style.top = e.clientY + "px"; document.body.appendChild(d);
+          gsap.to(d, { x: gsap.utils.random(-40, 40), y: gsap.utils.random(-30, 20), autoAlpha: 0, scale: .3, duration: .6, ease: "power2.out", onComplete: () => d.remove() });
+        }
+      });
+    }
+
+    /* ---------- Motion ---------- */
+    const footWord = $(".js-foot");
+    footWord.innerHTML = [...footWord.textContent].map(c => `<span class="ch">${c === " " ? "&nbsp;" : c}</span>`).join("");
+
+    if (reducedMotion || !window.gsap) {
+      document.documentElement.classList.add("loaded");
+      $$(".cap").forEach((c, i) => c.style.display = i === 5 ? "" : "none");
+      $(".js-day").textContent = "14"; $(".meter i").style.width = "100%";
+      $$(".g-stamp").forEach(s => s.style.opacity = 1);
+    } else {
+      gsap.registerPlugin(ScrollTrigger);
+      let lenis = null;
+      if (window.Lenis) {
+        lenis = new Lenis({ lerp: .1, smoothWheel: true });
+        lenis.on("scroll", ScrollTrigger.update);
+        gsap.ticker.add(t => lenis.raf(t * 1000));
+        gsap.ticker.lagSmoothing(0);
+      }
+      $$('a[href^="#"]').forEach(a => a.addEventListener("click", e => {
+        const target = $(a.getAttribute("href")); if (!target) return;
+        e.preventDefault(); lenis ? lenis.scrollTo(target, { duration: 1.4 }) : target.scrollIntoView({ behavior: "smooth" });
+      }));
+
+      // Loader: the progress bar every contractor knows
+      gsap.set(".hero h1 .row > span", { yPercent: 120 });
+      gsap.set(".hero-in", { autoAlpha: 0, y: 24 });
+      gsap.set(".nav, .grab-hint", { autoAlpha: 0 });
+      gsap.set(".crane", { yPercent: 18, autoAlpha: 0 });
+      lenis && lenis.stop();
+      const prog = { v: 0 };
+      const setP = () => { $(".bar i").style.width = prog.v + "%"; $(".loader .pct").textContent = Math.round(prog.v) + "%"; };
+      const status = t => () => $(".loader .status").textContent = t;
+      const intro = gsap.timeline({ onComplete: () => { document.documentElement.classList.add("loaded"); lenis && lenis.start(); } })
+        .to(prog, { v: 38, duration: .45, ease: "power1.out", onUpdate: setP })
+        .add(status("Pouring concrete…"))
+        .to(prog, { v: 71, duration: .4, ease: "power1.inOut", onUpdate: setP })
+        .add(status("Framing it up…"))
+        .to(prog, { v: 92, duration: .35, ease: "power1.inOut", onUpdate: setP })
+        .add(status("Waiting on materials…"))
+        .to({}, { duration: .55 })
+        .add(status("Done. 2 weeks, like we said."))
+        .to(prog, { v: 100, duration: .15, onUpdate: setP })
+        .to(".loader", { clipPath: "inset(0 0 100% 0)", duration: .7, ease: "expo.inOut" }, "+=.25")
+        .to(".crane", { yPercent: 0, autoAlpha: 1, duration: 1, ease: "power3.out" }, "-=.4")
+        .to(".hero h1 .row > span", { yPercent: 0, duration: .9, ease: "back.out(1.6)", stagger: .12 }, "-=.8")
+        .fromTo(".hero h1 .big", { scale: 1.6, rotate: -6 }, { scale: 1, rotate: 0, duration: .5, ease: "back.out(3)" }, "-=.45")
+        .fromTo(".hero", { x: 0 }, { keyframes: [{ x: -8 }, { x: 7 }, { x: -4 }, { x: 2 }, { x: 0 }], duration: .35, ease: "none", clearProps: "transform" }, "-=.25")
+        .add(() => { P.v = 2.4; })
+        .to(".hero-in", { autoAlpha: 1, y: 0, duration: .7, ease: "power3.out", stagger: .08 }, "-=.3")
+        .to(".nav, .grab-hint", { autoAlpha: 1, duration: .5 }, "-=.6");
+      $(".loader .skip").addEventListener("click", () => intro.progress(.72));
+
+      // Tapes
+      $$(".tape-track").forEach(track => {
+        const dir = +track.dataset.dir;
+        const tween = gsap.fromTo(track, { xPercent: dir < 0 ? 0 : -50 }, { xPercent: dir < 0 ? -50 : 0, duration: 24, ease: "none", repeat: -1 });
+        ScrollTrigger.create({ onUpdate: self => {
+          gsap.to(tween, { timeScale: 1 + Math.min(Math.abs(self.getVelocity()) / 250, 6), duration: .2, overwrite: true });
+          gsap.to(tween, { timeScale: 1, duration: 1, delay: .2 });
+        } });
+      });
+
+      // Services
+      gsap.from("#services .sec-head > *", { y: 50, autoAlpha: 0, duration: .9, stagger: .1, ease: "power3.out", scrollTrigger: { trigger: "#services", start: "top 78%" } });
+      gsap.from(".card", { y: 90, autoAlpha: 0, rotate: 2, duration: 1, stagger: .12, ease: "back.out(1.4)", scrollTrigger: { trigger: ".cards", start: "top 82%" } });
+      $$(".card .draw").forEach(p => {
+        const len = p.getTotalLength();
+        gsap.fromTo(p, { strokeDasharray: len, strokeDashoffset: len }, { strokeDashoffset: 0, duration: 1.4, ease: "power2.inOut", scrollTrigger: { trigger: p.closest(".card"), start: "top 80%" } });
+      });
+
+      // THE BUILD: scroll builds the house, day 1 → 14
+      const caps = $$(".cap");
+      gsap.set(caps.slice(1), { autoAlpha: 0, y: 30 });
+      const bpPaths = $$(".g-bp path");
+      bpPaths.forEach(p => { const l = p.getTotalLength(); gsap.set(p, { strokeDasharray: p.classList.contains("bp") ? "8 6" : "none" }); p.dataset.len = l; });
+      gsap.set(".g-bp path", { autoAlpha: 0 }); gsap.set(".g-bp text", { autoAlpha: 0 });
+      gsap.set(".g-found", { scaleY: 0, transformOrigin: "50% 0%" });
+      gsap.set(".g-frame rect, .g-studs rect", { scaleY: 0, transformOrigin: "50% 100%" });
+      gsap.set(".g-truss > *", { autoAlpha: 0 });
+      gsap.set(".g-sheath, .g-ridge", { autoAlpha: 0 });
+      gsap.set(".shingle-row", { y: -40, autoAlpha: 0 });
+      gsap.set(".g-walls", { autoAlpha: 0 });
+      gsap.set(".g-win, .g-door", { scale: 0, transformOrigin: "50% 50%" });
+      gsap.set(".g-tree", { scale: 0, transformOrigin: "50% 100%" });
+      gsap.set(".g-stamp", { autoAlpha: 0 });
+      const STAGES = [0, 3, 5, 8, 11, 14];
+      const build = gsap.timeline({
+        defaults: { ease: "none" },
+        scrollTrigger: {
+          trigger: ".build", start: "top top", end: "+=360%", pin: true, scrub: .8,
+          onUpdate: self => {
+            const day = Math.max(1, Math.round(1 + self.progress * 13));
+            $(".js-day").textContent = String(day).padStart(2, "0");
+            $(".meter i").style.width = (self.progress * 100) + "%";
+          }
+        }
+      });
+      const capSwap = (from, to, at) => build
+        .to(caps[from], { autoAlpha: 0, y: -24, duration: .25 }, at)
+        .to(caps[to], { autoAlpha: 1, y: 0, duration: .25 }, at + .28);
+      // 0 Blueprints
+      build.to(".g-bp path, .g-bp text", { autoAlpha: 1, duration: .8, stagger: .08 }, 0);
+      // 1 Foundation
+      capSwap(0, 1, 1);
+      build.to(".g-found", { scaleY: 1, duration: .6, ease: "power2.out" }, 1.1);
+      // 2 Framing
+      capSwap(1, 2, 2);
+      build.to(".g-frame rect", { scaleY: 1, duration: .3 }, 2.05)
+        .to(".g-studs rect", { scaleY: 1, duration: .25, stagger: .035, ease: "back.out(2)" }, 2.1)
+        .to(".g-bp", { opacity: .35, duration: .5 }, 2.3);
+      // 3 Roof
+      capSwap(2, 3, 3);
+      build.to(".g-truss > *", { autoAlpha: 1, duration: .2, stagger: .05 }, 3.05)
+        .to(".g-sheath", { autoAlpha: 1, duration: .3 }, 3.5)
+        .to(".shingle-row", { y: 0, autoAlpha: 1, duration: .25, stagger: .05, ease: "power2.out" }, 3.6)
+        .to(".g-ridge", { autoAlpha: 1, duration: .2 }, 4.1);
+      // 4 Finishes
+      capSwap(3, 4, 4.2);
+      build.to(".g-walls", { autoAlpha: 1, duration: .4 }, 4.3)
+        .to(".g-win", { scale: 1, duration: .35, ease: "back.out(2)" }, 4.6)
+        .to(".g-door", { scale: 1, duration: .35, ease: "back.out(2)" }, 4.8)
+        .to(".g-bp", { opacity: 0, duration: .4 }, 4.8);
+      // 5 Done
+      capSwap(4, 5, 5.2);
+      build.to(".g-tree", { scale: 1, duration: .4, ease: "back.out(2)" }, 5.3)
+        .fromTo(".g-stamp", { autoAlpha: 0, scale: 2.2 }, { autoAlpha: 1, scale: 1, duration: .3, ease: "back.out(3)", transformOrigin: "50% 50%" }, 5.6)
+        .to({}, { duration: .4 });
+
+      // Translator cards deal in
+      gsap.from("#translator .sec-head > *", { y: 50, autoAlpha: 0, duration: .9, stagger: .1, ease: "power3.out", scrollTrigger: { trigger: "#translator", start: "top 78%" } });
+      gsap.from(".flip", { y: 120, rotate: () => gsap.utils.random(-10, 10), autoAlpha: 0, duration: 1, stagger: .1, ease: "back.out(1.5)", scrollTrigger: { trigger: ".flips", start: "top 85%" } });
+
+      // Skits
+      gsap.from(".skits-copy > *", { y: 50, autoAlpha: 0, duration: .9, stagger: .1, ease: "power3.out", scrollTrigger: { trigger: ".skits", start: "top 75%" } });
+      gsap.from(".phone", { y: 200, rotate: 14, autoAlpha: 0, duration: 1.2, ease: "back.out(1.4)", scrollTrigger: { trigger: ".phone-zone", start: "top 85%" } });
+      gsap.from(".clap", { scale: 0, rotate: -60, duration: .7, ease: "back.out(2.5)", scrollTrigger: { trigger: ".phone-zone", start: "top 60%" } });
+
+      // Quote
+      gsap.from(".quote .intro > *, .js-form", { y: 50, autoAlpha: 0, duration: .9, stagger: .08, ease: "power3.out", scrollTrigger: { trigger: ".quote", start: "top 75%" } });
+
+      // Footer letters stack in like they're being craned in
+      gsap.from(".foot-big .ch", { yPercent: -160, rotate: () => gsap.utils.random(-25, 25), duration: 1, stagger: .06, ease: "bounce.out", scrollTrigger: { trigger: "footer", start: "top 80%" } });
+
+      addEventListener("load", () => ScrollTrigger.refresh());
+    }
+  </script>
+</body>
+</html>
