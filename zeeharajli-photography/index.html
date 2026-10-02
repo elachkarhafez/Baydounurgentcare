@@ -114,7 +114,17 @@
     .print figcaption { height: calc(var(--w) * .2); display: flex; align-items: center; padding: 0 4px; }
     .print .hand { font: 500 calc(var(--w) * .062)/1 var(--hand); color: var(--pen); clip-path: inset(0 100% 0 0); transition: clip-path 1.4s cubic-bezier(.5,.1,.3,1) .15s; white-space: nowrap; transform: rotate(-1.5deg); }
     .print.done .hand { clip-path: inset(-20% -40% -20% 0); }
-    .table-ui { position: absolute; left: 0; right: 0; bottom: 0; display: flex; justify-content: space-between; align-items: center; gap: 12px; font: 400 12.5px/1.3 var(--mono); color: var(--muted); pointer-events: none; }
+    .table-ui { position: absolute; left: 0; right: 0; bottom: 0; display: flex; justify-content: space-between; align-items: center; gap: 12px; font: 500 14.5px/1.3 var(--sans); color: var(--ink); pointer-events: none; }
+    .table-ui .count { font: 400 12.5px/1.3 var(--mono); color: var(--muted); }
+    .coach { position: absolute; left: 50%; top: -6px; z-index: 260; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; pointer-events: none; opacity: 0; transition: opacity .5s; }
+    .coach.on { opacity: 1; }
+    .coach-pill { display: inline-flex; align-items: center; gap: 11px; padding: 10px 20px 10px 10px; border-radius: 999px; background: var(--ink); color: var(--paper); font: 600 16px/1.2 var(--sans); white-space: nowrap; box-shadow: 0 16px 34px -14px rgba(0,0,0,.5); animation: coachBob 2.4s ease-in-out infinite; }
+    .coach-pill small { font-weight: 400; font-size: 14px; opacity: .72; }
+    .coach-pill i { width: 34px; height: 34px; border-radius: 50%; background: var(--accent); display: grid; place-items: center; flex: none; }
+    .coach-pill i svg { width: 20px; height: 20px; color: #fff; transform-origin: 50% 85%; animation: coachHand 1.3s ease-in-out infinite; }
+    .coach-arrow { width: 54px; height: 46px; margin: 2px 0 0 90px; color: var(--accent); }
+    @keyframes coachBob { 50% { transform: translateY(-5px); } }
+    @keyframes coachHand { 0%, 55%, 100% { transform: rotate(0); } 10% { transform: rotate(-20deg); } 20% { transform: rotate(18deg); } 30% { transform: rotate(-14deg); } 40% { transform: rotate(10deg); } }
     .table-ui .hint { display: inline-flex; align-items: center; gap: 10px; }
     .table-ui .hint svg { width: 22px; height: 22px; color: var(--accent); flex: none; }
     .table-ui .count b { color: var(--ink); font-weight: 500; }
@@ -131,6 +141,11 @@
       .table { height: clamp(340px, 98vw, 470px); margin-top: -10px; }
       .print { --w: clamp(220px, 64vw, 330px); }
       .payoff { top: auto; bottom: 40px; transform: translateX(-50%); padding: 16px 18px 16px; }
+      .coach { top: -14px; }
+      .coach-pill { font-size: 15px; padding: 8px 16px 8px 8px; gap: 9px; }
+      .coach-pill i { width: 30px; height: 30px; }
+      .coach-arrow { width: 44px; height: 36px; margin-left: 60px; }
+      .table-ui { font-size: 13.5px; }
       .payoff h3 { font-size: 26px; }
       .payoff p { margin: 4px 0 12px; font-size: 13.5px; }
     }
@@ -232,6 +247,7 @@
     .lb button { position: absolute; width: 50px; height: 50px; border-radius: 50%; border: 1px solid rgba(255,255,255,.25); background: rgba(255,255,255,.06); color: #fff; cursor: pointer; display: grid; place-items: center; }
     .lb button svg { width: 18px; height: 18px; }
     .lb .x { top: 18px; right: 18px; } .lb .prev { left: 18px; top: 50%; margin-top: -25px; } .lb .next { right: 18px; top: 50%; margin-top: -25px; }
+    @media (max-width: 420px) { .coach-pill small { display: none; } }
     @media (max-width: 600px) { .lb-in { padding: 70px 12px 90px; } .lb .prev, .lb .next { top: auto; bottom: 22px; margin: 0; } .lb .prev { left: 14px; } .lb .next { right: 14px; } .lb .cap { bottom: 36px; font-size: 22px; padding: 0 70px; } }
 
     /* ---------------- planner ---------------- */
@@ -347,8 +363,12 @@
               <button class="btn sm ghost" type="button" data-again>Develop again</button>
             </div>
           </div>
+          <div class="coach" data-coach aria-hidden="true">
+            <span class="coach-pill"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 13V6.5a1.5 1.5 0 0 1 3 0V12M11 11V5a1.5 1.5 0 0 1 3 0v6M14 11V6.5a1.5 1.5 0 0 1 3 0V14c0 4-2.5 7-6.5 7-2.6 0-4.4-1.6-5.6-3.8L3.4 14.4a1.4 1.4 0 0 1 2.3-1.6L8 15"/></svg></i><span data-coach-text>Grab the photo &amp; shake it</span><small>to develop it</small></span>
+            <svg class="coach-arrow" viewBox="0 0 54 46" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4c4 16 14 28 36 34"/><path d="M33 31l10 7-11 4"/></svg>
+          </div>
           <div class="table-ui">
-            <span class="hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 13V6.5a1.5 1.5 0 0 1 3 0V12M11 11V5a1.5 1.5 0 0 1 3 0v6M14 11V6.5a1.5 1.5 0 0 1 3 0V14c0 4-2.5 7-6.5 7-2.6 0-4.4-1.6-5.6-3.8L3.4 14.4a1.4 1.4 0 0 1 2.3-1.6L8 15"/><path d="M19 3.5c1 1 1.5 2 1.5 3.5M2.5 7c0-1.5.5-2.5 1.5-3.5"/></svg><span data-hint>Shake the print to develop it</span></span>
+            <span class="hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 13V6.5a1.5 1.5 0 0 1 3 0V12M11 11V5a1.5 1.5 0 0 1 3 0v6M14 11V6.5a1.5 1.5 0 0 1 3 0V14c0 4-2.5 7-6.5 7-2.6 0-4.4-1.6-5.6-3.8L3.4 14.4a1.4 1.4 0 0 1 2.3-1.6L8 15"/><path d="M19 3.5c1 1 1.5 2 1.5 3.5M2.5 7c0-1.5.5-2.5 1.5-3.5"/></svg><span data-hint>It develops on its own. Shaking speeds it up.</span></span>
             <span class="count"><span data-count><b>1</b> / 5</span><span class="meter" aria-hidden="true"><i data-meter></i></span></span>
           </div>
           <p class="sr" aria-live="polite" data-live style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)"></p>
@@ -635,7 +655,18 @@
       </figure>`).join('');
     const els = $$('.print', holder);
     const P = new Array(N).fill(0);
-    const state = { cur: 0, drag: null, idle: 0, visible: true, tossT: 0, done: false };
+    const state = { cur: 0, drag: null, idle: 0, visible: true, tossT: 0, done: false, engaged: false, nudge: 0 };
+    const coach = $('[data-coach]'), coachText = $('[data-coach-text]');
+    if (!FINE) coachText.textContent = 'Hold the photo & shake it';
+    const showCoach = () => { if (!state.engaged && !state.done) coach.classList.add('on'); };
+    const engage = () => { if (state.engaged) return; state.engaged = true; coach.classList.remove('on'); };
+    const wiggle = el => {
+      const base = gsap.getProperty(el, 'rotation');
+      gsap.timeline()
+        .to(el, { rotation: base + 5, x: '+=6', duration: .08, ease: 'power1.out' })
+        .to(el, { rotation: base - 5, x: '-=12', duration: .1, ease: 'sine.inOut', repeat: 3, yoyo: true })
+        .to(el, { rotation: base, x: '+=6', duration: .14, ease: 'power2.out' });
+    };
     const isMobile = () => table.clientWidth < 600;
 
     const setP = (i, v) => { P[i] = clamp(v, 0, 1); els[i].style.setProperty('--p', P[i].toFixed(3)); if (i === state.cur) meter.style.transform = `scaleX(${P[i]})`; };
@@ -681,6 +712,7 @@
     }
     function finale() {
       state.done = true;
+      coach.classList.remove('on');
       meter.style.transform = 'scaleX(1)';
       hint.textContent = 'Every print, developed';
       payoff.hidden = false;
@@ -690,7 +722,7 @@
       payoff.hidden = true; state.done = false; state.cur = 0; state.idle = 0;
       els.forEach((el, i) => { el.classList.remove('done'); setP(i, 0); });
       setTop(); layout(.9);
-      hint.textContent = 'Shake the print to develop it';
+      hint.textContent = 'It develops on its own. Shaking speeds it up.';
     }
     $('[data-again]').addEventListener('click', reset);
 
@@ -703,6 +735,7 @@
       if (window.gsap) gsap.killTweensOf(el);
       state.drag = { el, i, x0: e.clientX, y0: e.clientY, lx: e.clientX, ly: e.clientY, bx: window.gsap ? gsap.getProperty(el, 'x') : 0, by: window.gsap ? gsap.getProperty(el, 'y') : 0, rot: window.gsap ? gsap.getProperty(el, 'rotation') : 0, moved: 0, z: el.style.zIndex };
       el.classList.add('held'); el.style.zIndex = 250;
+      engage();
       try { el.setPointerCapture(e.pointerId); } catch (_) {}
       state.idle = 0;
     };
@@ -738,7 +771,7 @@
       el.addEventListener('pointermove', onMove);
       el.addEventListener('pointerup', onUp);
       el.addEventListener('pointercancel', onUp);
-      el.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && +el.dataset.i === state.cur) { e.preventDefault(); setP(state.cur, P[state.cur] + .25); if (P[state.cur] >= 1) develop(state.cur); } });
+      el.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && +el.dataset.i === state.cur) { e.preventDefault(); engage(); setP(state.cur, P[state.cur] + .25); if (P[state.cur] >= 1) develop(state.cur); } });
     });
     els.forEach((el, i) => { el.tabIndex = 0; el.setAttribute('role', 'button'); el.setAttribute('aria-label', `Instant print ${i + 1}: ${CONFIG.prints[i].alt}. Press Enter to develop.`); });
 
@@ -751,6 +784,7 @@
       if (!started || !state.visible || document.hidden || state.done || state.drag) return;
       const i = state.cur; if (i >= N || els[i].classList.contains('done')) return;
       state.idle += dt;
+      if (!state.engaged && ANIM) { state.nudge += dt; if (state.nudge > 3.2 && P[i] < .85) { state.nudge = 0; wiggle(els[i]); } }
       setP(i, P[i] + dt / 11);
       if (state.idle > 3 && P[i] < .9 && !hint.textContent.startsWith('Developing')) hint.textContent = 'Developing… shake it to speed it up';
       if (P[i] >= 1) develop(i);
@@ -761,6 +795,8 @@
     if (RM || !window.gsap) {
       els.forEach((el, i) => { setP(i, 1); el.classList.add('done'); });
       hint.textContent = 'Tap a print to see the next one';
+      coachText.textContent = 'Tap the photo to see the next one';
+      $('.coach-pill small').remove();
       els.forEach(el => el.addEventListener('click', () => { if (+el.dataset.i === state.cur) toss(state.cur); }));
     }
 
@@ -779,8 +815,8 @@
     addEventListener('resize', () => layout(0));
     const start = () => {
       if (ANIM) {
-        gsap.from(els, { y: '-=' + (innerHeight * .7), rotation: (i) => ROT[i] * 4, opacity: 0, duration: 1.1, ease: 'power3.out', stagger: { each: .09, from: 'end' }, onComplete: () => { started = true; } });
-      } else started = !RM;
+        gsap.from(els, { y: '-=' + (innerHeight * .7), rotation: (i) => ROT[i] * 4, opacity: 0, duration: 1.1, ease: 'power3.out', stagger: { each: .09, from: 'end' }, onComplete: () => { started = true; showCoach(); } });
+      } else { started = !RM; showCoach(); }
     };
     return { start };
   })();
