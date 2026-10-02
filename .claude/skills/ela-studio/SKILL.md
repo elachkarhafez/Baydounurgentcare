@@ -110,7 +110,7 @@ Also script the signature interaction itself in Playwright (drag, hold, click) a
 
 ## Phase 7: Ship
 
-1. **Name check**: before claiming a `<name>.vercel.app` or inventing a concept brand, make sure the name isn't a real business in that niche. If it is, rename the concept.
+1. **Name check**: before claiming a `<name>.vercel.app` or inventing a concept brand, make sure the name isn't a real business in that niche. If it is, rename the concept. Also `curl https://<name>.vercel.app` first: if it returns anything but `DEPLOYMENT_NOT_FOUND`, someone else owns that subdomain and your deploy will only get a private team URL, so pick another name (The Family Doc ended up on `familydoc-clinics`).
 2. **Commit and push** the site folder.
 3. **Deploy to Vercel** as a static site with no build step, using the site folder as the root directory.
    - With the Vercel MCP: `create_deployment` with `gitSource` (org, repo, ref, sha), `target: "production"` and `projectSettings: { rootDirectory: "<folder>", framework: null, buildCommand: null, installCommand: null, outputDirectory: null }`.
