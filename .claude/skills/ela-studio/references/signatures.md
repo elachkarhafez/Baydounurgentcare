@@ -15,6 +15,7 @@ Each of these was built and shipped. Use them as proof of the pattern, not as te
 | Bagel shop | Bagel & Co | 3D bagel with a visible cream cheese schmear | Bagel is a TorusGeometry; the schmear is a LatheGeometry. Watch the lathe profile order: reversed points render inside-out and the cream cheese looks invisible |
 | Construction (comedy brand) | Mr. 2 Weeks | Job-site energy: hazard-tape marquees, a "2 weeks" running-joke counter, skit-style copy | Plays on the owner's comedy persona. The joke is the brand, so the copy carries it |
 | Urgent care | Baydoun (cinematic) | Calm, confident cinematic scroll: walk-in, get seen | Big type reveals, pinned "how a visit works" steps, live open/closed status, one-tap call and directions |
+| Salon suite rentals | The Suites Cincinnati | 3D empty suite you furnish: pick your trade (stylist, barber, lash, nails, skin, massage) and the furniture drops in; pick a wall colour; type your name and it lights up as a neon sign. A pinned door with your name on the plate swings open across the move-in steps. A commission/booth-rent calculator shows what you hand over per year | Three.js diorama (box/cylinder furniture sets cached per trade, GSAP drop-and-squash in, back-in out), canvas-texture oak floor, neon drawn to a canvas texture with shadowBlur and a flicker-on sequence. Door is CSS 3D `rotateY` scrubbed by a pinned ScrollTrigger |
 
 ## Ideas for niches not done yet
 
