@@ -341,7 +341,8 @@ textarea::placeholder,.inp::placeholder{color:rgba(10,9,9,.38);font-style:italic
 .range::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:var(--blood);border:0}
 .sizebox{display:grid;grid-template-columns:120px 1fr;gap:18px;align-items:center;margin-top:8px}
 .szprev{position:relative;height:120px;border:1px dashed rgba(10,9,9,.3);border-radius:6px;display:grid;place-items:center;overflow:hidden;background:repeating-linear-gradient(0deg,rgba(10,9,9,.05) 0 1px,transparent 1px 15px),repeating-linear-gradient(90deg,rgba(10,9,9,.05) 0 1px,transparent 1px 15px)}
-.szprev svg{width:var(--sw,60px);height:auto;transition:width .25s var(--ease)}
+.szprev svg{width:var(--sw,60px);height:auto;transition:width .25s var(--ease),filter .4s}
+.szprev.bw svg{filter:grayscale(1) contrast(1.15)}
 .sztext{font-family:var(--f-serif);font-style:italic;font-size:19px;line-height:1.3;color:rgba(10,9,9,.75);margin:0}
 .ruler{height:22px;margin-top:6px;position:relative;background:repeating-linear-gradient(90deg,rgba(10,9,9,.5) 0 1px,transparent 1px 100%);background-size:calc(100%/14) 8px;background-repeat:repeat-x;border-top:1px solid rgba(10,9,9,.5)}
 .figure-card{position:sticky;top:90px}
@@ -602,15 +603,16 @@ html.no-anim [data-rv]{opacity:1!important;transform:none!important}
     <div class="ink-static" aria-hidden="true">
       <svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice">
         <defs>
-          <filter id="inkst" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency=".008 .012" numOctaves="4" seed="11" result="t"/><feDisplacementMap in="SourceGraphic" in2="t" scale="190" xChannelSelector="R" yChannelSelector="B" result="d"/><feGaussianBlur in="d" stdDeviation="3"/></filter>
+          <filter id="inkst" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency=".006 .01" numOctaves="5" seed="11" result="t"/><feGaussianBlur in="SourceGraphic" stdDeviation="14" result="b"/><feDisplacementMap in="b" in2="t" scale="230" xChannelSelector="R" yChannelSelector="B" result="d"/><feGaussianBlur in="d" stdDeviation="1.2"/></filter>
           <radialGradient id="vig" cx="50%" cy="50%" r="70%"><stop offset="55%" stop-color="#e7ddc9" stop-opacity="0"/><stop offset="100%" stop-color="#a8957a" stop-opacity=".55"/></radialGradient>
         </defs>
         <g filter="url(#inkst)" opacity=".9">
-          <path d="M140,690 C330,560 420,760 620,640 C820,520 900,700 1120,560 C1260,470 1330,520 1400,480" stroke="#0d0b0b" stroke-width="70" fill="none" opacity=".55"/>
-          <circle cx="1130" cy="230" r="120" fill="#0d0b0b" opacity=".45"/>
-          <circle cx="300" cy="260" r="70" fill="#b3201f" opacity=".55"/>
-          <path d="M900,820 C960,700 1100,760 1180,690" stroke="#b3201f" stroke-width="40" fill="none" opacity=".5"/>
-          <circle cx="760" cy="420" r="60" fill="#0d0b0b" opacity=".25"/>
+          <path d="M80,700 C300,560 420,780 640,650 C840,530 920,720 1130,570 C1260,480 1340,520 1420,470" stroke="#0d0b0b" stroke-width="46" fill="none" opacity=".4"/>
+          <path d="M120,760 C320,640 460,820 660,720" stroke="#0d0b0b" stroke-width="18" fill="none" opacity=".3"/>
+          <circle cx="1140" cy="230" r="96" fill="#0d0b0b" opacity=".38"/>
+          <circle cx="1060" cy="330" r="40" fill="#0d0b0b" opacity=".25"/>
+          <circle cx="290" cy="250" r="58" fill="#b3201f" opacity=".45"/>
+          <path d="M920,820 C980,720 1100,770 1190,700" stroke="#b3201f" stroke-width="26" fill="none" opacity=".4"/>
         </g>
         <rect width="1440" height="900" fill="url(#vig)"/>
       </svg>
@@ -741,7 +743,7 @@ html.no-anim [data-rv]{opacity:1!important;transform:none!important}
         </div>
         <div class="card figure-card" data-rv>
           <div class="fig-head">
-            <span class="lbl" id="placeLbl">Placement — tap a spot</span>
+            <span class="lbl" id="placeLbl">Placement · tap a spot</span>
             <div class="toggle" role="group" aria-label="Body view">
               <button type="button" aria-pressed="true" data-view="front">Front</button>
               <button type="button" aria-pressed="false" data-view="back">Back</button>
@@ -1214,7 +1216,9 @@ const EMBLEM = {
   thread() {
     const items = [];
     items.push(L("M196,150A82,82 0 1,0 196,310A66,66 0 1,1 196,150Z", { w: "d" }));
-    for (let i = 0; i < 70; i++) { const a = 1.9 + (i / 70) * 2.5, r = 70 + (i * 37 % 9); const x = 196 - 64 + Math.cos(a) * r * .95 + 40, y = 230 + Math.sin(a) * r * .95; if (x < 116) items.push(dot(f1(x), f1(y), .7)); }
+    items.push(L("M104,350C112,322 124,300 146,282", { w: "d" }));
+    [[110,330,-1],[116,316,1],[124,302,-1],[133,292,1]].forEach(([x, y, k]) => items.push(L(`M${x},${y}C${x + 12 * k},${y - 2} ${x + 18 * k},${y - 10} ${x + 16 * k},${y - 18}C${x + 6 * k},${y - 14} ${x},${y - 8} ${x},${y}Z`, { w: "d" })));
+    for (let i = 0; i < 26; i++) { const a = 2.2 + (i / 26) * 1.9; items.push(dot(f1(196 - 64 + 40 + Math.cos(a) * 74), f1(230 + Math.sin(a) * 74), .55)); }
     items.push(L("M112,334L198,156", { w: "d" }), L(ell(197,158,2.2,4.5), { w: "d", tr: "rotate(26 197 158)" }),
       L("M198,152C236,118 252,192 214,204C176,216 164,146 128,164C100,178 112,224 144,216C162,212 168,196 160,188", { w: "d" }),
       L(star4(160,188,9), { w: "d" }), L("M212,250L236,272L226,300M236,272L258,262", { w: "d" }), dot(212,250,2), dot(236,272,2), dot(226,300,2), dot(258,262,2),
@@ -1589,6 +1593,7 @@ function updateSize() {
   }
 }
 sizeIn.addEventListener("input", updateSize);
+$$("input[name=col]").forEach(r => r.addEventListener("change", () => $("#szPrev").classList.toggle("bw", $("#col2").checked)));
 updateSize();
 
 function composeBooking() {
@@ -1725,7 +1730,7 @@ if (HAS_GSAP && !RM) {
   if (lenis) lenis.on("scroll", ({ velocity }) => gsap.to(mq, { skewX: gsap.utils.clamp(-8, 8, velocity * -.4), duration: .4, overwrite: true }));
 } else {
   // no-motion: process shows the finished piece, stage follows scroll position
-  const st = $("#pStamp"); st.setAttribute("opacity", "1");
+  
   ["#pConstruct", "#pNotes", "#pSketch", "#pStencil", "#pHalo", "#pShine"].forEach(s => $(s).style.display = "none");
   $$("#pMain .pc").forEach(e => e.style.opacity = 1);
   addEventListener("scroll", () => { const r = $("#process").getBoundingClientRect(); const p = Math.min(1, Math.max(0, -r.top / (r.height - innerHeight))); setStep(Math.min(4, Math.floor(p * 5 * .999))); }, { passive: true });
@@ -1816,7 +1821,7 @@ function initInk() {
       void main(){ vec2 vel=texture2D(uV,vUv).xy; vec2 c=vUv-dt*vel*vtex; vec4 d=texture2D(uS,c)/(1.+diss*dt);
         float m=texture2D(uMask,vUv).r; float sp=clamp(length(vel)/90.,0.,1.); d.r+=m*bleed*sp*dt; d.g+=m*bleed*.12*sp*dt;
         gl_FragColor=min(d,vec4(4.)); }`,
-      { uV: { value: null }, uS: { value: null }, uMask: { value: null }, vtex: { value: new THREE.Vector2() }, dt: { value: .016 }, diss: { value: .24 }, bleed: { value: 2.6 } }),
+      { uV: { value: null }, uS: { value: null }, uMask: { value: null }, vtex: { value: new THREE.Vector2() }, dt: { value: .016 }, diss: { value: .3 }, bleed: { value: 2.6 } }),
     show: mk(`uniform sampler2D uD; uniform vec2 dtex,res; uniform float time;
       float h(vec2 p){ return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453); }
       float n(vec2 p){ vec2 i=floor(p),f=fract(p); f=f*f*(3.-2.*f); return mix(mix(h(i),h(i+vec2(1,0)),f.x),mix(h(i+vec2(0,1)),h(i+vec2(1,1)),f.x),f.y); }
@@ -1831,7 +1836,7 @@ function initInk() {
         vec2 q=vUv-.5; float vig=smoothstep(.95,.25,length(q*vec2(1.,1.25)));
         paper*=mix(.8,1.,vig); paper=mix(paper,paper*vec3(.96,.88,.74),(1.-vig)*.55);
         float gran=.82+.36*n(gl_FragCoord.xy*.55);
-        float bk=1.-exp(-d.r*1.7*gran), rd=1.-exp(-d.g*1.5*gran);
+        float bk=smoothstep(.035,1.,1.-exp(-d.r*1.9*gran)), rd=smoothstep(.03,1.,1.-exp(-d.g*1.6*gran));
         vec3 col=paper;
         col=mix(col,col*vec3(.74,.13,.12)*1.15,rd);
         vec3 ink=mix(vec3(.27,.29,.33),vec3(.035,.03,.03),smoothstep(.15,.9,bk));
@@ -1905,7 +1910,7 @@ function initInk() {
     ptr.x = x; ptr.y = y; ptr.moved = true; ptr.last = now; lastInput = now;
   }
   addEventListener("pointermove", e => { if (e.pointerType === "mouse" || e.pointerType === "pen") feed(e.clientX, e.clientY); }, { passive: true });
-  hero.addEventListener("pointerdown", e => { if (e.pointerType !== "mouse") return; const r = hero.getBoundingClientRect(); queue.push([(e.clientX - r.left) / r.width, 1 - (e.clientY - r.top) / r.height, 0, 0, [0, 2.2], .006]); lastInput = performance.now(); });
+  hero.addEventListener("pointerdown", e => { if (e.pointerType !== "mouse") return; const r = hero.getBoundingClientRect(); drop((e.clientX - r.left) / r.width, 1 - (e.clientY - r.top) / r.height, 1, Math.random() < .5 ? 1 : -1); lastInput = performance.now(); });
   hero.addEventListener("touchstart", e => { const t = e.touches[0]; ptr.last = 0; feed(t.clientX, t.clientY); }, { passive: true });
   hero.addEventListener("touchmove", e => { const t = e.touches[0]; feed(t.clientX, t.clientY); }, { passive: true });
   const queue = [];
@@ -1933,7 +1938,7 @@ function initInk() {
         const steps = Math.min(6, Math.ceil(sp / .012));
         for (let i = 1; i <= steps; i++) {
           const t = i / steps, x = ptr.px + dx * t, y = ptr.py + dy * t;
-          const amt = Math.min(.24, .05 + sp * 2.4) / steps * INK;
+          const amt = (.004 + sp * 2.6) / steps * INK;
           splat(x, y, dx * 5200 / steps * (W / H > 1 ? 1 : 1.4), dy * 5200 / steps, ptr.red ? [amt * .15, amt * 1.1] : [amt, amt * .04], .0021);
         }
       }
