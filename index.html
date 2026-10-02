@@ -653,8 +653,8 @@
               <p>Straightforward weekly pricing, no insurance needed. Plans start at $55 a week.</p>
             </div>
             <div class="plan">
-              <b>Insurance-based</b><span class="amt ask">Ask us</span>
-              <p>Bring your insurance card and we'll go over what your plan can cover.</p>
+              <b>Insurance-based</b><span class="amt ask">BMI 40+</span>
+              <p>Insurance approval requires a BMI of 40 or higher. Bring your insurance card and we'll go over what your plan can cover.</p>
             </div>
           </div>
 
@@ -669,7 +669,7 @@
               <button class="btn btn-fill magnetic" type="submit" data-hover>Check my BMI</button>
             </form>
             <div class="result" aria-live="polite"><p class="idle">Your result shows up here.</p></div>
-            <p class="note">GLP-1 weight-loss medications are generally prescribed for adults with a BMI of 30 or higher, or 27 and up with a weight-related condition like high blood pressure, type 2 diabetes or high cholesterol. This is a quick guide, not a diagnosis. A provider makes the final call.</p>
+            <p class="note">Insurance approval requires a BMI of 40 or higher. On self-pay, GLP-1 medications are generally prescribed for adults with a BMI of 30 or higher, or 27 and up with a weight-related condition like high blood pressure, type 2 diabetes or high cholesterol. This is a quick guide, not a diagnosis. A provider makes the final call.</p>
           </div>
         </div>
 
@@ -957,11 +957,14 @@
         return;
       }
       const bmi = 703 * lb / (totalIn * totalIn);
-      const msg = bmi >= 30
-        ? "You're in the range where GLP-1 medication is usually considered. Come in for a consult and we'll go over your options."
-        : bmi >= 27
-          ? "You may qualify if you also have a weight-related condition like high blood pressure, type 2 diabetes or high cholesterol. A quick consult will tell you for sure."
-          : "Medication may not be the right fit at this BMI, but we're still happy to talk through a plan that works for you.";
+      // Insurance approval needs a BMI of 40+; below that, the self-pay plan is the path.
+      const msg = bmi >= 40
+        ? "You're in the BMI 40+ range insurance looks for. Bring your insurance card to your consult and we'll check your coverage."
+        : bmi >= 30
+          ? "Insurance approval needs a BMI of 40 or higher, so our self-pay plan (from $55/week) is likely your best way in. Come in for a consult and we'll go over your options."
+          : bmi >= 27
+            ? "Insurance approval needs a BMI of 40 or higher, but you may qualify for our self-pay plan if you also have a weight-related condition like high blood pressure, type 2 diabetes or high cholesterol. A quick consult will tell you for sure."
+            : "Medication may not be the right fit at this BMI, but we're still happy to talk through a plan that works for you.";
       bmiOut.innerHTML = `<div class="bmi">${bmi.toFixed(1)}<small>BMI</small></div><p>${msg}</p>`;
     });
 
