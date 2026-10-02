@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Hamoudi Eats | Pull Up Hungry</title>
-  <meta name="description" content="Hamoudi Eats. Loud flavor, good food. Pull up hungry.">
+  <title>Stack Shack | Smash Burgers</title>
+  <meta name="description" content="Stack Shack. Smash burgers, loud flavor, zero regrets.">
   <meta name="theme-color" content="#e63312">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -141,6 +141,16 @@
     .badge text { font: 800 14px var(--sans); letter-spacing: 0; text-transform: uppercase; fill: var(--ink); }
     @media (max-width: 700px) { .badge { top: auto; bottom: 33vh; right: 16px; width: 92px; } }
 
+
+    /* ---------- Animated burger ---------- */
+    .burger { position: absolute; z-index: 4; right: 5vw; top: 46%; width: clamp(280px, 27vw, 430px); cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    .burger svg { width: 100%; height: auto; overflow: visible; }
+    .burger .bl, .burger .bs, .burger .b-all, .burger .b-drips path { transform-box: fill-box; }
+    .burger-hint { position: absolute; left: 50%; bottom: -6px; transform: translateX(-50%) rotate(-3deg); background: var(--ink); color: var(--yellow); font: 800 .72rem/1 var(--sans); letter-spacing: .16em; text-transform: uppercase; padding: .55em .9em; border-radius: 999px; white-space: nowrap; }
+    @media (max-width: 700px) {
+      .burger { top: 66px; right: 10px; width: 170px; }
+      .burger-hint { display: none; }
+    }
     /* ---------- Tape marquees ---------- */
     .tapes { position: relative; height: clamp(170px, 22vw, 260px); overflow: hidden; background: var(--ink); border-bottom: 3px solid var(--ink); }
     .tape {
@@ -264,6 +274,24 @@
     .foot-row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px 32px; padding: 28px var(--pad) 32px; font-weight: 600; font-size: .95rem; border-top: 2px solid rgba(255,243,226,.15); margin-top: 28px; }
     .foot-row a:hover { color: var(--yellow); }
 
+
+    /* ---------- Mock feed (generic demo) ---------- */
+    .mock-feed { position: absolute; inset: 0; z-index: 2; background: #fffaf2; padding: 46px 12px 12px; display: flex; flex-direction: column; gap: 10px; overflow: hidden; }
+    .mf-head { display: flex; align-items: center; gap: 10px; }
+    .mf-av { width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; background: var(--yellow); border: 2.5px solid var(--ink); }
+    .mf-av svg { width: 32px; }
+    .mf-head b { display: block; font-weight: 800; font-size: .95rem; }
+    .mf-head small { font-size: .7rem; color: var(--muted); }
+    .mf-stats { display: flex; justify-content: space-around; font-size: .7rem; color: var(--muted); border-block: 1.5px solid rgba(26,18,16,.12); padding: 6px 2px; }
+    .mf-stats b { color: var(--ink); }
+    .mf-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
+    .mf-grid span { aspect-ratio: 1; display: grid; place-items: center; border-radius: 4px; }
+    .mf-grid svg { width: 62%; }
+    .map-ph { position: absolute; inset: 0; background: var(--cream-2);
+      background-image: linear-gradient(rgba(26,18,16,.14) 3px, transparent 3px), linear-gradient(90deg, rgba(26,18,16,.14) 3px, transparent 3px), linear-gradient(32deg, transparent 47%, var(--yellow) 47% 53%, transparent 53%);
+      background-size: 80px 80px, 80px 80px, 100% 100%; }
+    .map-ph .pin { position: absolute; left: 50%; top: 50%; width: 58px; height: 58px; margin: -58px 0 0 -29px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); background: var(--red); border: 3px solid var(--ink); box-shadow: 4px 4px 0 var(--ink); }
+    .map-ph .pin::after { content: ""; position: absolute; inset: 15px; border-radius: 50%; background: var(--cream); border: 3px solid var(--ink); }
     [hidden] { display: none !important; }
 
     @media (prefers-reduced-motion: reduce) {
@@ -287,7 +315,7 @@
   </div>
 
   <header class="nav">
-    <a class="logo" href="#top" data-cursor><span class="dot"></span>Hamoudi Eats</a>
+    <a class="logo" href="#top" data-cursor><span class="dot"></span>Stack Shack</a>
     <nav class="nav-links" aria-label="Main">
       <a href="#menu" data-cursor>Menu</a>
       <a href="#how" data-cursor>How it goes</a>
@@ -308,16 +336,69 @@
         <defs><path id="circ" d="M100 100 m-78 0 a78 78 0 1 1 156 0 a78 78 0 1 1 -156 0"/></defs>
         <circle cx="100" cy="100" r="96" fill="#ffc021" stroke="#1a1210" stroke-width="4"/>
         <g class="badge-spin" style="transform-origin:100px 100px">
-          <text class="badge-text"><textPath href="#circ">Hamoudi Eats ✦ Pull up hungry ✦ </textPath></text>
+          <text class="badge-text"><textPath href="#circ">Stack Shack ✦ Pull up hungry ✦ </textPath></text>
         </g>
         <circle cx="100" cy="100" r="44" fill="#e63312" stroke="#1a1210" stroke-width="4"/>
         <path d="M100 72c3 10 16 15 16 31a16 16 0 0 1-32 0c0-7 4-11 7-15 0 6 3 9 6 9-3-10 3-18 3-25z" fill="#fff3e2"/>
       </svg>
 
+
+      <div class="burger" role="img" aria-label="Animated cheeseburger. Click it to blow it apart.">
+        <svg viewBox="0 0 420 400" aria-hidden="true">
+          <ellipse class="b-shadow" cx="210" cy="372" rx="170" ry="16" fill="#1a1210" opacity=".18"/>
+          <g class="b-steam" fill="none" stroke="#1a1210" stroke-width="5" stroke-linecap="round" opacity=".55">
+            <path d="M160 52c-14-16 14-24 0-42"/><path d="M210 44c-14-16 14-24 0-42"/><path d="M260 52c-14-16 14-24 0-42"/>
+          </g>
+          <g class="b-all">
+            <!-- bottom bun -->
+            <g class="bs"><g class="bl">
+              <path d="M44 300 Q44 352 112 352 L308 352 Q376 352 376 300 Z" fill="#e89a45" stroke="#1a1210" stroke-width="7" stroke-linejoin="round"/>
+              <path d="M70 318 Q74 336 112 338 L300 338" fill="none" stroke="#f7c27a" stroke-width="7" stroke-linecap="round"/>
+            </g></g>
+            <!-- patty -->
+            <g class="bs"><g class="bl">
+              <path d="M34 270 Q30 250 62 250 L358 250 Q392 250 386 270 L386 288 Q390 308 358 308 L62 308 Q30 308 34 288 Z" fill="#5a2e1a" stroke="#1a1210" stroke-width="7" stroke-linejoin="round"/>
+              <g stroke="#7b4428" stroke-width="7" stroke-linecap="round"><path d="M90 268l20 22"/><path d="M150 266l20 24"/><path d="M210 268l20 22"/><path d="M270 266l20 24"/><path d="M330 268l14 16"/></g>
+            </g></g>
+            <!-- cheese with drips -->
+            <g class="bs"><g class="bl">
+              <path d="M40 240 L380 240 L372 258 L48 258 Z" fill="#ffc021" stroke="#1a1210" stroke-width="7" stroke-linejoin="round"/>
+              <g class="b-drips" fill="#ffc021" stroke="#1a1210" stroke-width="7" stroke-linejoin="round">
+                <path d="M84 256 q10 0 10 14 v26 a10 10 0 0 1 -20 0 v-26 q0 -14 10 -14z"/>
+                <path d="M178 256 q9 0 9 12 v14 a9 9 0 0 1 -18 0 v-14 q0 -12 9 -12z"/>
+                <path d="M262 256 q11 0 11 14 v40 a11 11 0 0 1 -22 0 v-40 q0 -14 11 -14z"/>
+                <path d="M340 256 q8 0 8 10 v10 a8 8 0 0 1 -16 0 v-10 q0 -10 8 -10z"/>
+              </g>
+            </g></g>
+            <!-- tomato -->
+            <g class="bs"><g class="bl">
+              <rect x="56" y="214" width="150" height="30" rx="15" fill="#e63312" stroke="#1a1210" stroke-width="7"/>
+              <rect x="214" y="214" width="150" height="30" rx="15" fill="#e63312" stroke="#1a1210" stroke-width="7"/>
+              <path d="M80 229h102M238 229h102" stroke="#ff7a5c" stroke-width="6" stroke-linecap="round"/>
+            </g></g>
+            <!-- lettuce -->
+            <g class="bs"><g class="bl">
+              <path d="M32 204 Q46 186 64 204 Q82 186 100 204 Q118 186 136 204 Q154 186 172 204 Q190 186 208 204 Q226 186 244 204 Q262 186 280 204 Q298 186 316 204 Q334 186 352 204 Q370 186 388 204 L382 220 L38 220 Z" fill="#4fa35a" stroke="#1a1210" stroke-width="7" stroke-linejoin="round"/>
+            </g></g>
+            <!-- top bun -->
+            <g class="bs"><g class="bl b-top">
+              <path d="M40 192 Q40 80 210 72 Q380 80 380 192 Q380 206 364 206 L56 206 Q40 206 40 192 Z" fill="#f2a84e" stroke="#1a1210" stroke-width="7" stroke-linejoin="round"/>
+              <path d="M90 130 Q120 98 170 92" fill="none" stroke="#ffd79a" stroke-width="10" stroke-linecap="round"/>
+              <g fill="#fff3e2" stroke="#1a1210" stroke-width="3">
+                <ellipse cx="150" cy="120" rx="9" ry="5" transform="rotate(-20 150 120)"/><ellipse cx="210" cy="104" rx="9" ry="5"/>
+                <ellipse cx="268" cy="118" rx="9" ry="5" transform="rotate(20 268 118)"/><ellipse cx="120" cy="160" rx="9" ry="5" transform="rotate(-30 120 160)"/>
+                <ellipse cx="186" cy="150" rx="9" ry="5" transform="rotate(10 186 150)"/><ellipse cx="246" cy="156" rx="9" ry="5" transform="rotate(-12 246 156)"/>
+                <ellipse cx="310" cy="152" rx="9" ry="5" transform="rotate(26 310 152)"/>
+              </g>
+            </g></g>
+          </g>
+        </svg>
+        <span class="burger-hint">Click me</span>
+      </div>
       <div class="hero-inner">
         <span class="tag red reveal" style="align-self:flex-start">Now serving</span>
         <h1 class="display split-chars">Hungry?</h1>
-        <p class="sub reveal">Pull up to <mark>Hamoudi Eats</mark>. Loud flavor, good food, zero regrets.</p>
+        <p class="sub reveal">Smash burgers at <mark>Stack Shack</mark>. Crispy edges, melty cheese, zero regrets.</p>
         <div class="actions reveal">
           <a class="btn red js-order" href="#" data-cursor>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18M16 10a4 4 0 0 1-8 0"/></svg>
@@ -339,8 +420,8 @@
         <span>Pull up hungry</span><span>Leave happy</span><span>Pull up hungry</span><span>Leave happy</span><span>Pull up hungry</span><span>Leave happy</span>
       </div></div>
       <div class="tape t1"><div class="tape-track" data-dir="-1">
-        <span>Hamoudi Eats</span><span>Loud flavor</span><span>Hamoudi Eats</span><span>Good food</span><span>Hamoudi Eats</span><span>Loud flavor</span>
-        <span>Hamoudi Eats</span><span>Loud flavor</span><span>Hamoudi Eats</span><span>Good food</span><span>Hamoudi Eats</span><span>Loud flavor</span>
+        <span>Stack Shack</span><span>Loud flavor</span><span>Stack Shack</span><span>Good food</span><span>Stack Shack</span><span>Loud flavor</span>
+        <span>Stack Shack</span><span>Loud flavor</span><span>Stack Shack</span><span>Good food</span><span>Stack Shack</span><span>Loud flavor</span>
       </div></div>
     </div>
 
@@ -414,7 +495,7 @@
       <div class="ig-grid">
         <div>
           <span class="tag">Follow the food</span>
-          <h2 class="display">Straight from <a class="js-ig" href="#" target="_blank" rel="noopener" data-cursor>@hamoudi_eats</a></h2>
+          <h2 class="display">Straight from <a class="js-ig" href="#" target="_blank" rel="noopener" data-cursor>the grill</a></h2>
           <p>New drops, specials, behind-the-grill clips and whatever we're cooking today. Follow so you never miss it.</p>
           <a class="btn red js-ig" href="#" target="_blank" rel="noopener" data-cursor>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/></svg>
@@ -427,8 +508,8 @@
           <div class="float f3"><span class="sticker s-green round">Yum</span></div>
           <div class="phone">
             <div class="screen">
-              <div class="screen-loading"><span class="ring"></span><span>@hamoudi_eats</span></div>
-              <iframe class="js-ig-embed" title="Hamoudi Eats on Instagram" loading="lazy" scrolling="yes" allowtransparency="true"></iframe>
+              <div class="screen-loading"><span class="ring"></span><span class="js-ig-handle">Stack Shack</span></div>
+              <iframe class="js-ig-embed" title="Instagram feed" loading="lazy" scrolling="yes" allowtransparency="true"></iframe>
             </div>
           </div>
         </div>
@@ -447,7 +528,7 @@
           <dl>
             <div>
               <dt>Where</dt>
-              <dd class="js-address">Search "Hamoudi Eats" on Google Maps</dd>
+              <dd class="js-address">Address goes here</dd>
             </div>
             <div>
               <dt>When</dt>
@@ -463,7 +544,8 @@
           </div>
         </div>
         <div class="map">
-          <iframe class="js-map" title="Map to Hamoudi Eats" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          <iframe class="js-map" title="Map" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          <div class="map-ph" aria-hidden="true"><span class="pin"></span></div>
         </div>
       </div>
     </section>
@@ -471,11 +553,11 @@
 
   <footer>
     <div class="giant" aria-hidden="true">
-      <div class="display outline">Hamoudi Eats</div>
-      <div class="display fill">Hamoudi Eats</div>
+      <div class="display outline">Stack Shack</div>
+      <div class="display fill">Stack Shack</div>
     </div>
     <div class="foot-row">
-      <span>&copy; <span id="year"></span> Hamoudi Eats</span>
+      <span>&copy; <span id="year"></span> Stack Shack · concept site, sample menu</span>
       <span class="js-address">Pull up hungry</span>
       <a class="js-ig" href="#" target="_blank" rel="noopener" data-cursor>Instagram</a>
     </div>
@@ -492,12 +574,27 @@
       phone: "",          // e.g. "(313) 555-0123"
       address: "",        // e.g. "1234 Warren Ave, Dearborn, MI 48126"
       orderUrl: "",       // e.g. a DoorDash / Uber Eats / Toast link
-      hours: [            // e.g. ["Mon – Thu", "11am – 10pm"]
+      name: "Stack Shack",
+      hours: [            // sample hours
+        ["Mon – Thu", "11am – 10pm"], ["Fri – Sat", "11am – late"], ["Sunday", "12pm – 9pm"]
       ],
-      instagram: "https://www.instagram.com/hamoudi_eats/",
+      instagram: "",      // e.g. "https://www.instagram.com/yourspot/" (turns on the live feed in the phone)
       // Fill this in to show a real menu instead of the "menu drops on the gram" card, e.g.
       // { category: "Sandwiches", items: [{ name: "Chicken Shawarma", price: "$9", desc: "Garlic, pickles, fries" }] }
-      menu: [
+      menu: [            // sample menu & prices
+        { category: "Burgers", items: [
+          { name: "The Stack", price: "$11", desc: "Double smash, American cheese, pickles, house sauce" },
+          { name: "Hot Stack", price: "$12", desc: "Jalapeños, pepper jack, chili mayo" },
+          { name: "Single Smash", price: "$8", desc: "One patty, all the crunch" },
+          { name: "Mushroom Swiss", price: "$11", desc: "Garlic mushrooms, Swiss, onion jam" } ] },
+        { category: "Sides", items: [
+          { name: "Fries", price: "$4", desc: "Skin-on, salted right" },
+          { name: "Loaded Fries", price: "$8", desc: "Cheese sauce, crispy onions, stack sauce" },
+          { name: "Onion Rings", price: "$5", desc: "Beer-battered, extra crunchy" } ] },
+        { category: "Shakes & Drinks", items: [
+          { name: "Vanilla Shake", price: "$6", desc: "Thick enough to need a spoon" },
+          { name: "Chocolate Shake", price: "$6", desc: "Fudge swirl, no regrets" },
+          { name: "Fresh Lemonade", price: "$3", desc: "Squeezed daily" } ] }
       ],
       // Paste links to posts or reels to feature them under the phone, e.g.
       // "https://www.instagram.com/reel/ABC123xyz/"
@@ -505,26 +602,59 @@
       ]
     };
 
+
+    function mockFeed() {
+      const ICONS = {
+        burger: '<path d="M8 30h48v6a6 6 0 0 1-6 6H14a6 6 0 0 1-6-6z" fill="#f2a84e"/><rect x="6" y="24" width="52" height="7" rx="3" fill="#5a2e1a"/><path d="M8 24l6 5 6-5 6 5 6-5 6 5 6-5 6 5 6-5" fill="#ffc021"/><path d="M8 22c0-12 11-18 24-18s24 6 24 18z" fill="#f2a84e"/><g fill="#fff3e2"><ellipse cx="22" cy="12" rx="2" ry="1.2"/><ellipse cx="34" cy="9" rx="2" ry="1.2"/><ellipse cx="44" cy="14" rx="2" ry="1.2"/></g>',
+        fries: '<path d="M18 22h28l-4 24H22z" fill="#e63312"/><g fill="#ffc021"><rect x="20" y="6" width="5" height="18" rx="2"/><rect x="27" y="3" width="5" height="21" rx="2"/><rect x="34" y="6" width="5" height="18" rx="2"/><rect x="41" y="9" width="5" height="15" rx="2"/></g>',
+        shake: '<path d="M20 18h24l-4 28H24z" fill="#fff3e2"/><path d="M18 14h28v6H18z" fill="#e63312"/><path d="M22 14c0-8 20-8 20 0" fill="#fff3e2"/><rect x="34" y="0" width="3" height="16" fill="#2f7d4f" transform="rotate(14 35 8)"/>',
+        flame: '<path d="M32 4c4 12 16 16 16 30a16 16 0 0 1-32 0c0-8 4-12 8-16 0 6 3 9 6 9-3-10 2-17 2-23z" fill="#ffc021"/>'
+      };
+      const tiles = [["#e63312", "burger"], ["#ffc021", "fries"], ["#1a1210", "flame"], ["#2f7d4f", "shake"], ["#fff3e2", "burger"], ["#e63312", "flame"],
+                     ["#1a1210", "burger"], ["#ffc021", "shake"], ["#e63312", "fries"], ["#fff3e2", "flame"], ["#2f7d4f", "burger"], ["#ffc021", "burger"],
+                     ["#e63312", "shake"], ["#1a1210", "fries"], ["#ffc021", "flame"], ["#fff3e2", "fries"], ["#e63312", "burger"], ["#2f7d4f", "flame"]];
+      return `<div class="mock-feed">
+        <div class="mf-head"><span class="mf-av"><svg viewBox="0 0 64 48">${ICONS.burger}</svg></span><div><b>${esc(SPOT.name)}</b><small>Smash burgers · fries · shakes</small></div></div>
+        <div class="mf-stats"><span><b>Burgers</b></span><span><b>Fries</b></span><span><b>Shakes</b></span></div>
+        <div class="mf-grid">${tiles.map(([bg, ic]) => `<span style="background:${bg}"><svg viewBox="0 0 64 48">${ICONS[ic]}</svg></span>`).join("")}</div>
+      </div>`;
+    }
     /* ---------- Content wiring ---------- */
     const $ = (s, r = document) => r.querySelector(s);
     const $$ = (s, r = document) => [...r.querySelectorAll(s)];
     const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-    const mapQuery = encodeURIComponent(SPOT.address || "Hamoudi Eats");
+    const mapQuery = encodeURIComponent(SPOT.address);
 
-    $$(".js-ig").forEach(a => a.href = SPOT.instagram);
-    $$(".js-directions").forEach(a => a.href = "https://www.google.com/maps/search/?api=1&query=" + mapQuery);
-    $(".js-map").src = "https://www.google.com/maps?q=" + mapQuery + "&output=embed";
     const igFrame = $(".js-ig-embed");
-    igFrame.addEventListener("load", () => igFrame.classList.add("ready"));
-    igFrame.src = SPOT.instagram.replace(/\/?$/, "/") + "embed/";
+    if (SPOT.instagram) {
+      $$(".js-ig").forEach(a => a.href = SPOT.instagram);
+      igFrame.addEventListener("load", () => igFrame.classList.add("ready"));
+      igFrame.src = SPOT.instagram.replace(/\/?$/, "/") + "embed/";
+    } else {
+      // generic demo: links stay on the page and the phone shows a mock feed
+      $$(".js-ig").forEach(a => { a.href = "#menu"; a.removeAttribute("target"); a.removeAttribute("rel"); });
+      const igBtn = $(".ig .btn.js-ig"); if (igBtn) igBtn.lastChild.textContent = " See the menu";
+      igFrame.remove();
+      $(".screen").insertAdjacentHTML("beforeend", mockFeed());
+    }
+    if (SPOT.address) {
+      $$(".js-directions").forEach(a => a.href = "https://www.google.com/maps/search/?api=1&query=" + mapQuery);
+      $(".js-map").src = "https://www.google.com/maps?q=" + mapQuery + "&output=embed";
+      $(".map-ph").remove();
+    } else {
+      $$(".js-directions").forEach(a => { a.href = "#visit"; a.removeAttribute("target"); a.removeAttribute("rel"); });
+      $(".js-map").remove();
+      $$(".js-address").forEach(el => el.textContent = "123 Main Street · Your City");
+    }
 
     // Order buttons: order link > phone > Instagram DM
     $$(".js-order").forEach(a => {
       if (SPOT.orderUrl) { a.href = SPOT.orderUrl; a.target = "_blank"; a.rel = "noopener"; }
       else if (SPOT.phone) { a.href = "tel:" + SPOT.phone.replace(/[^\d+]/g, ""); }
-      else { a.href = SPOT.instagram; a.target = "_blank"; a.rel = "noopener"; }
+      else if (SPOT.instagram) { a.href = SPOT.instagram; a.target = "_blank"; a.rel = "noopener"; }
+      else a.href = "#menu";
     });
-    const orderLabel = SPOT.orderUrl ? "Order now" : SPOT.phone ? "Call to order" : "DM to order";
+    const orderLabel = SPOT.orderUrl ? "Order now" : SPOT.phone ? "Call to order" : SPOT.instagram ? "DM to order" : "Order now";
     $$(".js-order-label").forEach(el => el.textContent = orderLabel);
 
     if (SPOT.address) $$(".js-address").forEach(el => el.textContent = SPOT.address);
@@ -621,6 +751,18 @@
       const left = Bodies.rectangle(-T / 2, H / 2, T, H * 4, { isStatic: true });
       const right = Bodies.rectangle(W + T / 2, H / 2, T, H * 4, { isStatic: true });
       Composite.add(engine.world, [ground, left, right]);
+      // the burger is solid on wide screens, so thrown stickers bounce off it
+      const burgerEl = $(".burger");
+      let burgerBody = null;
+      const placeBurgerBody = () => {
+        if (burgerBody) { Composite.remove(engine.world, burgerBody); burgerBody = null; }
+        if (small || !burgerEl) return;
+        const r = burgerEl.getBoundingClientRect(), lr = layer.getBoundingClientRect();
+        if (r.width < 10) return;
+        burgerBody = Bodies.rectangle(r.left - lr.left + r.width / 2, r.top - lr.top + r.height * .52, r.width * .86, r.height * .74, { isStatic: true, chamfer: { radius: r.width * .18 } });
+        Composite.add(engine.world, burgerBody);
+      };
+      placeBurgerBody();
 
       const items = [];
       const makeSticker = (text, cls, x, y) => {
@@ -643,8 +785,8 @@
       };
       // Drop them in, favouring the right side on wide screens so the headline stays clear
       list.forEach(([t, c], i) => setTimeout(() => {
-        const minX = small ? W * .1 : W * .35;
-        makeSticker(t, c, minX + Math.random() * (W * .9 - minX), -80 - Math.random() * 200);
+        const minX = small ? W * .1 : W * .06, maxX = small ? W * .9 : W * .62;
+        makeSticker(t, c, minX + Math.random() * (maxX - minX), -80 - Math.random() * 200);
       }, reduced ? 0 : 250 + i * 140));
 
       if (finePointer) {
@@ -673,6 +815,7 @@
         Body.setPosition(ground, { x: W / 2, y: H + T / 2 });
         Body.setPosition(left, { x: -T / 2, y: H / 2 });
         Body.setPosition(right, { x: W + T / 2, y: H / 2 });
+        placeBurgerBody();
         items.forEach(({ body }) => {
           if (body.position.x > W - 20 || body.position.x < 20 || body.position.y > H) Body.setPosition(body, { x: Math.min(Math.max(body.position.x, 40), W - 40), y: 0 });
         });
@@ -694,6 +837,64 @@
       requestAnimationFrame(loop);
     }
 
+
+    /* ---------- Animated burger ---------- */
+    (function burger() {
+      const root = $(".burger"); if (!root || !window.gsap) return;
+      if (window.ScrollTrigger) gsap.registerPlugin(ScrollTrigger);
+      const layers = $$(".burger .bl"), shells = $$(".burger .bs"), drips = $$(".burger .b-drips path"), top = $(".burger .b-top");
+      const all = $(".burger .b-all"), steam = $$(".burger .b-steam path"), hint = $(".burger-hint");
+      if (reduced) return;
+      gsap.set(layers, { y: -520, autoAlpha: 0 });
+      gsap.set(drips, { scaleY: 0, transformOrigin: "50% 0%" });
+      gsap.set(".burger .b-steam", { autoAlpha: 0 });
+      gsap.set(hint, { autoAlpha: 0, y: 10 });
+      let busy = true, idle = null;
+      const steamLoop = () => steam.forEach((p, i) => {
+        const len = p.getTotalLength();
+        gsap.fromTo(p, { strokeDasharray: len, strokeDashoffset: len, y: 18, opacity: 0 }, { strokeDashoffset: -len, y: -18, opacity: 1, duration: 2.4, ease: "sine.inOut", repeat: -1, delay: i * .7, keyframes: { opacity: [0, 1, 0] } });
+      });
+      const startIdle = () => {
+        idle = gsap.timeline({ repeat: -1, yoyo: true })
+          .to(all, { y: -10, duration: 1.4, ease: "sine.inOut" }, 0)
+          .to(top, { y: -7, rotation: -1.5, duration: 1.4, ease: "sine.inOut" }, 0);
+      };
+      window.buildBurger = () => {
+        const tl = gsap.timeline({ onComplete: () => { busy = false; startIdle(); gsap.to(".burger .b-steam", { autoAlpha: 1, duration: .6 }); steamLoop(); gsap.to(hint, { autoAlpha: 1, y: 0, duration: .5, ease: "back.out(2)" }); } });
+        layers.forEach((l, i) => {
+          tl.to(l, { y: 0, autoAlpha: 1, duration: .6, ease: "bounce.out" }, i * .17)
+            .fromTo(all, { scaleY: .9, scaleX: 1.05, transformOrigin: "50% 100%" }, { scaleY: 1, scaleX: 1, duration: .35, ease: "back.out(3)" }, i * .17 + .38);
+        });
+        tl.to(drips, { scaleY: 1, duration: 1.4, ease: "power2.out", stagger: .12 }, "-=.2");
+        return tl;
+      };
+      // click: blow it apart, then restack
+      const explode = () => {
+        if (busy) return; busy = true;
+        idle && idle.pause();
+        const n = layers.length;
+        gsap.timeline({ onComplete: () => { busy = false; idle && idle.resume(); } })
+          .to(all, { scaleY: .82, scaleX: 1.08, transformOrigin: "50% 100%", duration: .12, ease: "power2.in" })
+          .to(all, { scaleY: 1, scaleX: 1, duration: .5, ease: "elastic.out(1, .4)" })
+          .to(layers, { y: i => -(i - (n - 1) / 2) * 62 - 40, x: () => gsap.utils.random(-40, 40), rotation: () => gsap.utils.random(-22, 22), transformOrigin: "50% 50%", duration: .5, ease: "back.out(2)", stagger: .03 }, "<")
+          .to(layers, { y: 0, x: 0, rotation: 0, duration: .7, ease: "bounce.out", stagger: { each: .09, from: "start" } }, "+=.35")
+          .fromTo(drips, { scaleY: .2 }, { scaleY: 1, duration: 1, ease: "power2.out", stagger: .1 }, "-=.4");
+        gsap.to(hint, { autoAlpha: 0, duration: .2 });
+      };
+      root.addEventListener("click", explode);
+      // hover: layers lift apart a little
+      root.addEventListener("pointerenter", () => { if (!busy) gsap.to(shells, { y: i => -i * 9, duration: .4, ease: "back.out(2)" }); });
+      root.addEventListener("pointerleave", () => gsap.to(shells, { y: 0, duration: .6, ease: "elastic.out(1, .5)" }));
+      // lean toward the cursor
+      $(".hero").addEventListener("pointermove", e => {
+        const r = root.getBoundingClientRect();
+        const dx = (e.clientX - (r.left + r.width / 2)) / innerWidth;
+        gsap.to(root, { rotation: dx * 10, duration: .8, ease: "power3.out" });
+      });
+      // scroll: exploded view as the hero leaves
+      gsap.timeline({ scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true } })
+        .to(shells, { y: i => -(i - 2.5) * 46, ease: "none" }, 0);
+    })();
     /* ---------- Motion ---------- */
     if (reduced || !window.gsap) {
       document.documentElement.classList.add("loaded");
@@ -727,6 +928,7 @@
         .to(".loader > div", { scale: .8, autoAlpha: 0, duration: .35, ease: "power2.in" })
         .to(".loader", { clipPath: "inset(0 0 100% 0)", duration: .8, ease: "expo.inOut" }, "-=.05")
         .add(startPhysics, "-=.5")
+        .add(() => window.buildBurger && window.buildBurger(), "-=.35")
         .to(".hero h1 .ch", { yPercent: 0, rotate: 0, duration: 1, ease: "back.out(2.2)", stagger: .05 }, "-=.55")
         .to(".hero .reveal", { autoAlpha: 1, y: 0, duration: .7, ease: "back.out(1.8)", stagger: .1 }, "-=.7")
         .fromTo(".badge", { autoAlpha: 0, scale: 0, rotate: -120 }, { autoAlpha: 1, scale: 1, rotate: 0, duration: 1, ease: "back.out(1.6)" }, "-=.6")
