@@ -1,0 +1,967 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Family Doc | Family Medicine &amp; Urgent Care in Dearborn Heights, Allen Park &amp; Hamtramck</title>
+  <meta name="description" content="The Family Doc: family medicine and urgent care with Dr. Ali I. Nasrallah and team. Clinics in Dearborn Heights, Allen Park and Hamtramck, Michigan.">
+  <meta name="theme-color" content="#f6f8f8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@400..700&family=Albert+Sans:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    /* ------------------------------------------------------------
+       THE FAMILY DOC · design tokens
+       Material world: stethoscope, black scrubs, the bright blue
+       logo, exam-room white, the black slatted wall + leather chair
+       from their videos, and the bold caption bars on every reel.
+       ------------------------------------------------------------ */
+    :root {
+      --bg: #f6f8f8;
+      --bg-2: #e8eef0;
+      --paper: #ffffff;
+      --ink: #121417;
+      --muted: #59636a;
+      --line: rgba(18,20,23,.12);
+      --teal: #19b3c6;
+      --teal-ink: #0a7381;
+      --caramel: #b5733d;
+      --red: #d23a2f;
+      --slat: #141619;
+      --display: "Familjen Grotesk", system-ui, sans-serif;
+      --sans: "Albert Sans", system-ui, sans-serif;
+      --cap: "Barlow Condensed", "Arial Narrow", sans-serif;
+      --mono: "IBM Plex Mono", ui-monospace, monospace;
+      --pad: clamp(16px, 4vw, 56px);
+      --max: 1320px;
+      --ease: cubic-bezier(.2,.7,.1,1);
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    html.lenis, html.lenis body { height: auto; }
+    .lenis.lenis-smooth { scroll-behavior: auto !important; }
+    .lenis.lenis-stopped { overflow: hidden; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font: 17px/1.6 var(--sans); overflow-x: clip; -webkit-font-smoothing: antialiased; }
+    img, svg, canvas, iframe { display: block; max-width: 100%; }
+    a { color: inherit; }
+    button { font: inherit; color: inherit; }
+    :focus-visible { outline: 2px solid var(--teal); outline-offset: 3px; }
+    ::selection { background: var(--teal); color: #fff; }
+    [hidden] { display: none !important; }
+    .wrap { width: 100%; max-width: var(--max); margin: 0 auto; padding: 0 var(--pad); }
+    .eyebrow { font: 500 12px/1.4 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--teal-ink); margin: 0 0 18px; }
+    h1, h2, h3 { font-family: var(--display); font-weight: 650; letter-spacing: -.025em; margin: 0; }
+    h2 { font-size: clamp(36px, 4.8vw, 72px); line-height: 1; }
+    h2 em, h1 em { font-style: normal; color: var(--teal-ink); }
+    .capbar { display: inline; background: var(--ink); color: #fff; font: 700 1em/1.25 var(--cap); padding: .08em .3em; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+
+    /* logo (built in CSS from their mark) */
+    .logo { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo .mark { position: relative; display: inline-flex; flex-direction: column; align-items: flex-start; padding: 4px 10px 4px 10px; border: 2px solid var(--teal); font-family: Georgia, "Times New Roman", serif; line-height: .9; color: var(--ink); background: var(--paper); }
+    .logo .mark small { font-size: 11px; margin-left: 12px; }
+    .logo .mark b { font-weight: 400; font-size: 20px; line-height: .95; letter-spacing: -.01em; }
+    .logo .mark i { font-style: normal; font-size: 11px; align-self: flex-end; margin-top: 3px; }
+    .logo .mark svg { position: absolute; left: -7px; top: -10px; width: 22px; height: 22px; color: var(--teal); background: var(--bg); border-radius: 50%; }
+
+    .btn { --bg: var(--ink); --fg: #fff; display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 50px; padding: 0 24px; border-radius: 12px; background: var(--bg); color: var(--fg); border: 1px solid transparent; font: 600 15.5px/1 var(--sans); text-decoration: none; cursor: pointer; transition: background .25s, border-color .25s, color .25s; will-change: transform; }
+    .btn svg { width: 17px; height: 17px; transition: transform .3s var(--ease); }
+    .btn:hover svg { transform: translateX(3px); }
+    .btn:hover { --bg: #000; }
+    .btn.teal { --bg: var(--teal); --fg: #06232a; }
+    .btn.teal:hover { --bg: #3fc6d6; }
+    .btn.ghost { --bg: transparent; --fg: var(--ink); border-color: rgba(18,20,23,.22); }
+    .btn.ghost:hover { --bg: rgba(18,20,23,.04); border-color: var(--ink); }
+    .btn.red { --bg: var(--red); --fg: #fff; }
+    .btn.red:hover { --bg: #b52d23; }
+    .btn.light { --bg: #fff; --fg: var(--ink); }
+    .btn.light:hover { --bg: #e9f8fa; }
+    .btn.sm { min-height: 42px; padding: 0 16px; font-size: 14.5px; border-radius: 10px; }
+
+    /* ---------------- loader: a heartbeat line ---------------- */
+    .loader { position: fixed; inset: 0; z-index: 100; background: var(--slat); display: grid; place-items: center; }
+    .loader svg { width: min(80vw, 640px); height: auto; }
+    .loader path { fill: none; stroke: var(--teal); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; filter: drop-shadow(0 0 8px rgba(25,179,198,.7)); }
+    .rm .loader { display: none; }
+
+    /* ---------------- nav ---------------- */
+    .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 40; transition: background .35s, box-shadow .35s; }
+    .nav.scrolled { background: rgba(246,248,248,.88); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); box-shadow: 0 1px 0 var(--line); }
+    .nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 20px; height: 76px; }
+    .nav-links { display: flex; gap: 28px; }
+    .nav-links a { font-size: 14.5px; font-weight: 500; text-decoration: none; position: relative; padding: 6px 0; }
+    .nav-links a::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--teal); transform: scaleX(0); transform-origin: right; transition: transform .35s var(--ease); }
+    .nav-links a:hover::after { transform: scaleX(1); transform-origin: left; }
+    @media (max-width: 940px) { .nav-links { display: none; } .nav .wrap { height: 64px; } }
+
+    /* ---------------- hero ---------------- */
+    .hero { position: relative; min-height: 100svh; padding: 108px 0 40px; display: flex; align-items: center; }
+    .hero .wrap { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6.4fr); gap: clamp(28px, 4vw, 64px); align-items: center; }
+    .hero h1 { font-size: clamp(48px, 6vw, 96px); line-height: .95; font-weight: 700; }
+    .hero h1 .ln { display: block; overflow: hidden; padding-bottom: .08em; margin-bottom: -.06em; }
+    .hero h1 .ln > span { display: inline-block; }
+    .hero h1 .heartword { color: var(--teal-ink); position: relative; display: inline-block; }
+    .hero h1 .heartword.beat { animation: wordBeat .833s ease-in-out infinite; }
+    @keyframes wordBeat { 0%, 100% { transform: scale(1); } 14% { transform: scale(1.06); } 28% { transform: scale(1); } 42% { transform: scale(1.03); } }
+    .lede { font-size: clamp(16px, 1.3vw, 19px); color: #353b40; max-width: 31em; margin: 24px 0 28px; }
+    .ctas { display: flex; flex-wrap: wrap; gap: 12px; }
+    .where { margin: 26px 0 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 8px; }
+    .where li { display: inline-flex; align-items: center; gap: 7px; padding: 7px 12px; border-radius: 999px; background: var(--paper); box-shadow: 0 0 0 1px var(--line); font-size: 13.5px; font-weight: 500; }
+    .where li::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--teal); }
+
+    /* exam card */
+    .exam { position: relative; height: clamp(470px, 66vh, 640px); border-radius: 24px; overflow: hidden; background:
+      linear-gradient(rgba(25,179,198,.06) 1px, transparent 1px) 0 0 / 100% 28px,
+      linear-gradient(90deg, rgba(25,179,198,.06) 1px, transparent 1px) 0 0 / 28px 100%,
+      var(--paper); box-shadow: 0 0 0 1px var(--line), 0 40px 80px -45px rgba(10,40,50,.45); user-select: none; -webkit-user-select: none; }
+    .exam .tag { position: absolute; left: 18px; top: 16px; font: 500 11.5px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+    .torso { position: absolute; left: 0; right: 0; top: 0; bottom: var(--mon, 78px); width: 100%; height: calc(100% - var(--mon, 78px)); }
+    .torso .body { fill: #f3f7f8; stroke: #a9b9c0; stroke-width: 2; vector-effect: non-scaling-stroke; }
+    .torso .det { fill: none; stroke: #c3d0d5; stroke-width: 1.6; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+    .torso .heart { fill: var(--teal); opacity: 0; transform-box: fill-box; transform-origin: 50% 55%; }
+    .torso .heart.beat { animation: heartBeat .833s ease-in-out infinite; }
+    @keyframes heartBeat { 0%, 100% { transform: scale(1); } 12% { transform: scale(1.18); } 26% { transform: scale(1); } 40% { transform: scale(1.1); } }
+    .torso .ring { fill: none; stroke: var(--teal); stroke-width: 2; stroke-dasharray: 4 6; vector-effect: non-scaling-stroke; opacity: 0; transform-box: fill-box; transform-origin: center; }
+    .torso .ring.hint { animation: ringHint 1.6s ease-in-out infinite; }
+    @keyframes ringHint { 0% { opacity: 0; transform: scale(.7); } 40% { opacity: .9; } 100% { opacity: 0; transform: scale(1.25); } }
+    .tube { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+    .chest { position: absolute; left: 0; top: 0; width: 64px; height: 64px; margin: -32px 0 0 -32px; border-radius: 50%; border: 0; padding: 0; cursor: grab; touch-action: none; z-index: 3;
+      background: radial-gradient(circle at 50% 50%, #4fd3e2 0 38%, #1aa6b8 39% 44%, #e9eef1 45% 58%, #aab6bd 59% 66%, #f4f7f8 67% 74%, #8b979e 75% 100%); box-shadow: 0 8px 18px -6px rgba(0,0,0,.45), inset 0 2px 3px rgba(255,255,255,.6); }
+    .chest::after { content: ""; position: absolute; inset: 18px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(255,255,255,.55); }
+    .chest.held { cursor: grabbing; }
+    .chest.pulse { animation: chestPulse .833s ease-in-out infinite; }
+    @keyframes chestPulse { 0%, 100% { box-shadow: 0 8px 18px -6px rgba(0,0,0,.45), 0 0 0 0 rgba(25,179,198,.55); } 15% { box-shadow: 0 8px 18px -6px rgba(0,0,0,.45), 0 0 0 12px rgba(25,179,198,0); } }
+    .coach { position: absolute; left: 0; top: 0; z-index: 4; display: flex; align-items: center; gap: 4px; pointer-events: none; opacity: 0; transition: opacity .45s; }
+    .coach.on { opacity: 1; }
+    .coach-pill { display: inline-flex; align-items: center; gap: 10px; padding: 9px 16px 9px 9px; border-radius: 999px; background: var(--ink); color: #fff; font: 600 15px/1.2 var(--sans); white-space: nowrap; box-shadow: 0 14px 30px -14px rgba(0,0,0,.55); animation: coachBob 2.4s ease-in-out infinite; }
+    .coach-pill i { width: 32px; height: 32px; border-radius: 50%; background: var(--teal); display: grid; place-items: center; flex: none; }
+    .coach-pill i svg { width: 19px; height: 19px; color: #06232a; transform-origin: 50% 85%; animation: coachHand 1.3s ease-in-out infinite; }
+    .coach-arrow { width: 40px; height: 30px; color: var(--teal-ink); flex: none; }
+    @keyframes coachBob { 50% { transform: translateY(-4px); } }
+    @keyframes coachHand { 0%, 55%, 100% { transform: rotate(0); } 12% { transform: rotate(-18deg); } 24% { transform: rotate(16deg); } 36% { transform: rotate(-10deg); } }
+    .monitor { position: absolute; left: 0; right: 0; bottom: 0; height: var(--mon, 78px); background: #0d1114; color: #cfe9ed; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 14px; padding: 0 18px 0 0; }
+    .monitor { grid-template-rows: var(--mon, 78px); }
+    .monitor canvas { width: 100%; height: var(--mon, 78px); min-width: 0; }
+    .vitals { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; min-width: 128px; }
+    .vitals .bpm { font: 500 30px/1 var(--mono); color: #4fd3e2; text-shadow: 0 0 12px rgba(79,211,226,.6); display: flex; align-items: baseline; gap: 6px; }
+    .vitals .bpm small { font-size: 11px; color: #7fa7ae; letter-spacing: .12em; }
+    .vitals .bpm svg { width: 16px; height: 16px; color: #4fd3e2; align-self: center; }
+    .vitals .status { font: 400 11.5px/1.2 var(--mono); color: #93aeb3; text-align: right; }
+    .found { position: absolute; left: 50%; top: 18%; z-index: 5; transform: translate(-50%, 0); text-align: center; pointer-events: none; opacity: 0; font-size: clamp(22px, 2.6vw, 32px); }
+    .found .capbar { font-size: 1em; }
+    .found p { margin: 10px 0 0; font: 500 13px/1.3 var(--mono); color: var(--teal-ink); }
+    .floatheart { position: absolute; z-index: 4; width: 22px; height: 22px; color: var(--teal); pointer-events: none; }
+    @media (max-width: 980px) {
+      .hero { padding-top: 88px; min-height: 0; }
+      .hero .wrap { grid-template-columns: 1fr; }
+      .exam { height: clamp(430px, 120vw, 540px); --mon: 70px; }
+      .vitals { min-width: 104px; } .vitals .bpm { font-size: 24px; }
+    }
+    @media (max-width: 480px) { .coach-pill { font-size: 13.5px; padding: 7px 12px 7px 7px; } .coach-pill i { width: 28px; height: 28px; } }
+
+    /* ---------------- caption-bar marquee ---------------- */
+    .marquee { overflow: hidden; padding: 20px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--paper); }
+    .marquee-track { display: flex; width: max-content; gap: 18px; animation: mq 48s linear infinite; padding-right: 18px; }
+    .marquee-track span { flex: none; background: var(--ink); color: #fff; font: 700 clamp(20px, 2.2vw, 28px)/1 var(--cap); padding: 8px 14px 9px; letter-spacing: .01em; white-space: nowrap; }
+    .marquee-track span:nth-child(3n+2) { background: var(--teal); color: #06232a; }
+    @keyframes mq { to { transform: translateX(-50%); } }
+
+    /* ---------------- ages (pinned) ---------------- */
+    .ages { background: var(--paper); }
+    .ages-pin { min-height: 100vh; padding: clamp(80px, 10vw, 120px) 0; display: flex; flex-direction: column; justify-content: center; }
+    .ages-head { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 30px; align-items: end; margin-bottom: clamp(30px, 4vw, 56px); }
+    .ages-head > p { margin: 0; color: var(--muted); max-width: 30em; justify-self: end; }
+    .ages-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: clamp(30px, 5vw, 80px); align-items: center; }
+    .agebox .age { font: 700 clamp(80px, 11vw, 168px)/.85 var(--display); letter-spacing: -.05em; display: flex; align-items: baseline; gap: 14px; }
+    .agebox .age small { font: 500 13px/1 var(--mono); letter-spacing: .14em; color: var(--muted); text-transform: uppercase; }
+    .stages { position: relative; margin-top: 26px; min-height: 230px; }
+    .stage h3 { font-size: clamp(28px, 3vw, 42px); line-height: 1.05; }
+    .stage h3 span { font: 500 13px/1 var(--mono); color: var(--teal-ink); letter-spacing: .12em; display: block; margin-bottom: 10px; }
+    .stage ul { margin: 16px 0 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+    .stage li { display: flex; gap: 10px; align-items: baseline; font-size: 17px; color: #343a3f; }
+    .stage li::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--teal); flex: none; transform: translateY(-1px); }
+    .pinned .stage { position: absolute; inset: 0 0 auto 0; opacity: 0; visibility: hidden; }
+    .pinned .stage:first-child { opacity: 1; visibility: visible; }
+    .stack-stages .stage + .stage { margin-top: 34px; padding-top: 30px; border-top: 1px solid var(--line); }
+    .family { position: relative; }
+    .family svg { width: 100%; height: auto; overflow: visible; }
+    .family .fig { transition: none; }
+    .family .fig .b { fill: #e3eaed; transition: fill .4s; }
+    .family .fig .h { fill: #cfd9dd; transition: fill .4s; }
+    .family .fig.on .b { fill: var(--ink); }
+    .family .fig.on .h { fill: #c79a74; }
+    .family .fig.on .acc { fill: var(--teal); }
+    .family .fig .acc { fill: #d6dfe2; transition: fill .4s; }
+    .family .ecgline { fill: none; stroke: var(--teal); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; }
+    .ages-note { margin-top: 26px; font-size: 14.5px; color: var(--muted); }
+    @media (max-width: 900px) { .ages-head, .ages-grid { grid-template-columns: 1fr; } .ages-head > p { justify-self: start; } .ages-pin { min-height: 0; } }
+
+    /* ---------------- triage ---------------- */
+    .triage { padding: clamp(80px, 11vw, 150px) 0; }
+    .tri-head { max-width: 760px; margin-bottom: clamp(30px, 4vw, 50px); }
+    .tri-head p { color: var(--muted); margin: 18px 0 0; max-width: 34em; }
+    .tri { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: clamp(20px, 3vw, 40px); align-items: start; }
+    .groups { display: grid; gap: 22px; }
+    .group h3 { font: 600 13px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .group h3 i { width: 10px; height: 10px; border-radius: 50%; }
+    .group.er h3 i { background: var(--red); } .group.uc h3 i { background: var(--teal); } .group.fd h3 i { background: var(--caramel); }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip { display: inline-flex; align-items: center; gap: 8px; min-height: 42px; padding: 0 15px; border-radius: 10px; border: 1px solid rgba(18,20,23,.16); background: var(--paper); font-size: 15px; font-weight: 500; cursor: pointer; transition: background .2s, color .2s, border-color .2s; text-align: left; }
+    .chip:hover { border-color: var(--ink); }
+    .chip[aria-pressed="true"] { background: var(--ink); color: #fff; border-color: var(--ink); }
+    .group.er .chip[aria-pressed="true"] { background: var(--red); border-color: var(--red); }
+    .chip svg { width: 14px; height: 14px; display: none; }
+    .chip[aria-pressed="true"] svg { display: block; }
+    .verdict { position: sticky; top: 100px; border-radius: 20px; padding: clamp(22px, 3vw, 34px); background: var(--ink); color: #fff; min-height: 320px; display: flex; flex-direction: column; gap: 14px; transition: background .4s; }
+    .verdict.er { background: var(--red); }
+    .verdict.uc { background: #0b5e69; }
+    .verdict.fd { background: #2b2420; }
+    .verdict .lbl { font: 500 12px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; opacity: .75; }
+    .verdict h3 { font-size: clamp(30px, 3.2vw, 46px); line-height: 1; }
+    .verdict p { margin: 0; color: rgba(255,255,255,.86); }
+    .verdict .ctas { margin-top: auto; padding-top: 10px; }
+    .verdict .fine { font-size: 12.5px; color: rgba(255,255,255,.62); margin-top: 6px; }
+    .verdict .clear { align-self: flex-start; background: none; border: 0; color: rgba(255,255,255,.7); font-size: 13px; text-decoration: underline; cursor: pointer; padding: 0; }
+    @media (max-width: 900px) { .tri { grid-template-columns: 1fr; } .verdict { position: static; min-height: 0; } }
+
+    /* ---------------- locations ---------------- */
+    .locations { padding: clamp(80px, 10vw, 140px) 0; background: var(--bg-2); }
+    .loc-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 20px; margin-bottom: clamp(28px, 4vw, 48px); }
+    .loc-head .side { display: grid; gap: 10px; justify-items: end; }
+    .loc-msg { font: 400 13px/1.4 var(--mono); color: var(--muted); min-height: 1.4em; text-align: right; }
+    .loc-grid { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: clamp(18px, 3vw, 36px); align-items: stretch; }
+    .loc-cards { display: grid; gap: 14px; }
+    .loc { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 6px 18px; align-items: center; padding: 22px; border-radius: 18px; background: var(--paper); box-shadow: 0 0 0 1px var(--line); transition: box-shadow .3s, transform .3s; }
+    .loc .n { width: 42px; height: 42px; border-radius: 12px; background: var(--ink); color: #fff; display: grid; place-items: center; font: 700 18px/1 var(--display); grid-column: 1; grid-row: 1 / span 2; }
+    .loc h3 { font-size: 24px; line-height: 1.1; grid-column: 2; }
+    .loc p { margin: 0; color: var(--muted); font-size: 15px; grid-column: 2; }
+    .loc .go { grid-column: 3; grid-row: 1 / span 2; display: flex; gap: 8px; }
+    .loc .near { position: absolute; top: -10px; right: 18px; background: var(--teal); color: #06232a; font: 700 13px/1 var(--cap); letter-spacing: .04em; text-transform: uppercase; padding: 6px 10px; border-radius: 6px; }
+    .loc.nearest { box-shadow: 0 0 0 2px var(--teal), 0 20px 40px -24px rgba(10,100,115,.45); }
+    .loc-map { position: relative; border-radius: 22px; overflow: hidden; background: #dfe7ea; box-shadow: 0 0 0 1px var(--line); min-height: 340px; }
+    .loc-map svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .loc-map .pin circle.dot { fill: var(--ink); stroke: #fff; stroke-width: 3; }
+    .loc-map .pin.hot circle.dot { fill: var(--teal); }
+    .loc-map .pin text { font: 700 15px/1 "Barlow Condensed", sans-serif; fill: var(--ink); }
+    .loc-map .pulse { fill: rgba(25,179,198,.25); }
+    .loc-note { margin-top: 18px; font-size: 14.5px; color: var(--muted); }
+    @media (max-width: 900px) { .loc-grid { grid-template-columns: 1fr; } .loc-head .side { justify-items: start; } .loc-msg { text-align: left; } .loc { grid-template-columns: auto minmax(0, 1fr); } .loc .go { grid-column: 1 / -1; grid-row: auto; justify-self: start; margin-top: 8px; }
+      .loc h3, .loc p { grid-column: 2; } }
+
+    /* ---------------- team ---------------- */
+    .team { padding: clamp(80px, 11vw, 150px) 0; }
+    .team-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 30px; align-items: end; margin-bottom: clamp(30px, 4vw, 54px); }
+    .team-head > p { margin: 0; color: var(--muted); max-width: 30em; justify-self: end; }
+    .people { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(14px, 2vw, 26px); }
+    .person { position: relative; border-radius: 20px; overflow: hidden; background: var(--slat); color: #fff; }
+    .person .ph { aspect-ratio: 1; overflow: hidden; }
+    .person img { width: 100%; height: 100%; object-fit: cover; transition: transform 1s var(--ease); }
+    .person:hover img { transform: scale(1.04); }
+    .person .badge { position: absolute; top: 16px; left: 16px; font-size: 18px; }
+    .person .txt { padding: 20px 22px 24px; }
+    .person h3 { font-size: 26px; line-height: 1.05; }
+    .person .role { font: 500 12px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: #6fd6e3; margin: 8px 0 12px; display: block; }
+    .person p { margin: 0; color: #c9d0d4; font-size: 15px; }
+    @media (max-width: 900px) { .team-head { grid-template-columns: 1fr; } .team-head > p { justify-self: start; } .people { grid-template-columns: 1fr; max-width: 460px; } }
+
+    /* ---------------- watch / instagram ---------------- */
+    .watch { padding: clamp(80px, 10vw, 140px) 0; background: var(--slat); color: #fff; position: relative; overflow: hidden; }
+    .watch::before { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(90deg, #17191c 0 26px, #0d0f11 26px 30px); opacity: .9; }
+    .watch .wrap { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .9fr); gap: clamp(36px, 6vw, 90px); align-items: center; }
+    .watch .eyebrow { color: #6fd6e3; }
+    .watch h2 em { color: #4fd3e2; }
+    .watch .quotes { list-style: none; margin: 26px 0 30px; padding: 0; display: grid; gap: 12px; font-size: clamp(22px, 2.2vw, 30px); }
+    .watch .quotes li .capbar { background: #fff; color: var(--ink); }
+    .watch .quotes li:nth-child(2) .capbar { background: var(--teal); color: #06232a; }
+    .tip { margin-top: 30px; padding: 22px; border-radius: 18px; background: rgba(255,255,255,.06); box-shadow: inset 0 0 0 1px rgba(255,255,255,.12); max-width: 560px; }
+    .tip .lbl { font: 500 12px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: #6fd6e3; }
+    .tip h3 { font-size: 22px; margin: 10px 0 8px; }
+    .tip p { margin: 0 0 12px; color: #c4ccd0; font-size: 15px; }
+    .tip a { color: #fff; font-weight: 600; }
+    .phone { justify-self: center; width: min(100%, 360px); aspect-ratio: 9 / 17.5; border-radius: 42px; padding: 11px; background: #050607; box-shadow: 0 50px 100px -40px rgba(0,0,0,.8), inset 0 0 0 2px #2b2f33; position: relative; }
+    .phone::before { content: ""; position: absolute; top: 20px; left: 50%; width: 88px; height: 22px; margin-left: -44px; border-radius: 12px; background: #050607; z-index: 2; }
+    .phone-screen { position: relative; width: 100%; height: 100%; border-radius: 32px; overflow: hidden; background: #fff; }
+    .phone iframe { width: 100%; height: 100%; border: 0; }
+    .phone-ph { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; padding: 30px; color: var(--muted); font-size: 14px; }
+    @media (max-width: 900px) { .watch .wrap { grid-template-columns: 1fr; } }
+
+    /* ---------------- closing ---------------- */
+    .closing { position: relative; padding: clamp(110px, 15vw, 200px) 0; text-align: center; color: #fff; background: #0e1012; overflow: hidden; }
+    .closing::before { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(90deg, #1a1d20 0 24px, #0b0c0e 24px 28px); }
+    .closing::after { content: ""; position: absolute; inset: 0; background: radial-gradient(60% 70% at 50% 50%, rgba(25,179,198,.18), transparent 70%); }
+    .closing .wrap { position: relative; z-index: 1; }
+    .closing h2 { font-size: clamp(44px, 7.4vw, 120px); line-height: .95; font-weight: 700; }
+    .closing h2 em { color: #4fd3e2; }
+    .closing p { color: #c4ccd0; margin: 24px auto 34px; font-size: 18px; max-width: 32em; }
+    .closing .ctas { justify-content: center; }
+    .closing .heart-ecg { width: min(560px, 90%); margin: 0 auto 30px; }
+    .closing .heart-ecg path { fill: none; stroke: #4fd3e2; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; filter: drop-shadow(0 0 6px rgba(79,211,226,.6)); }
+
+    footer { padding: 40px 0 34px; font-size: 14px; color: var(--muted); }
+    footer .wrap { display: grid; grid-template-columns: auto 1fr auto; gap: 20px 40px; align-items: center; }
+    footer ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 22px; }
+    footer a { text-decoration: none; } footer a:hover { color: var(--ink); }
+    footer .er { grid-column: 1 / -1; font-size: 13px; padding-top: 18px; border-top: 1px solid var(--line); }
+    @media (max-width: 800px) { footer .wrap { grid-template-columns: 1fr; } }
+
+    .js [data-reveal] { opacity: 0; transform: translateY(24px); }
+    .rm [data-reveal] { opacity: 1 !important; transform: none !important; }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    }
+  </style>
+  <script>document.documentElement.classList.add('js');if(matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('rm');</script>
+</head>
+<body>
+  <div class="loader" aria-hidden="true">
+    <svg viewBox="0 0 640 120"><path pathLength="1" d="M0 60 H220 L236 60 L246 40 L256 60 L270 60 L282 8 L296 112 L308 60 L330 60 L344 46 L358 60 H640"/></svg>
+  </div>
+
+  <header class="nav">
+    <div class="wrap">
+      <a class="logo" href="#top" aria-label="The Family Doc, back to top">
+        <span class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 3v6a5 5 0 0 0 10 0V3"/><path d="M11 14v2a4 4 0 0 0 8 0v-2"/><circle cx="19" cy="12" r="2"/></svg><small>The</small><b>Family</b><i>Doc</i></span>
+      </a>
+      <nav class="nav-links" aria-label="Sections">
+        <a href="#ages">Care for every age</a>
+        <a href="#triage">Where should I go?</a>
+        <a href="#locations">Locations</a>
+        <a href="#team">Our team</a>
+      </nav>
+      <a class="btn sm teal" href="#locations" data-magnetic>Find a clinic</a>
+    </div>
+  </header>
+
+  <main>
+    <!-- ======================= HERO ======================= -->
+    <section class="hero" id="top">
+      <div class="wrap">
+        <div>
+          <p class="eyebrow" data-hero-in>Family medicine &amp; urgent care · Metro Detroit</p>
+          <h1 aria-label="Care that feels like family.">
+            <span class="ln" aria-hidden="true"><span>Care that</span></span>
+            <span class="ln" aria-hidden="true"><span>feels like</span></span>
+            <span class="ln" aria-hidden="true"><span><span class="heartword" data-heartword>family.</span></span></span>
+          </h1>
+          <p class="lede" data-hero-in>Dr. Ali I. Nasrallah and the Family Doc team look after everyone, from first checkups to grandparents, plus urgent care when something can’t wait.</p>
+          <div class="ctas" data-hero-in>
+            <a class="btn" href="#locations" data-magnetic>Find your nearest clinic <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4"/></svg></a>
+            <a class="btn ghost" href="#triage">Where should I go?</a>
+          </div>
+          <ul class="where" data-hero-in data-where></ul>
+        </div>
+
+        <div class="exam" data-exam data-hero-in>
+          <span class="tag">Exam room 1 · Auscultation</span>
+          <svg class="torso" data-torso viewBox="0 0 600 560" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+            <path class="body" d="M232 30 C232 62 234 82 236 96 C210 114 152 120 120 140 C94 156 84 196 82 250 L78 600 L442 600 L438 250 C436 196 426 156 400 140 C368 120 310 114 284 96 C286 82 288 62 288 30 Z"/>
+            <path class="det" d="M150 142 C190 152 226 154 252 147 M268 147 C294 154 330 152 370 142"/>
+            <path class="det" d="M260 152 L260 340" stroke-dasharray="3 7"/>
+            <path class="det" d="M148 262 C196 304 238 304 255 288 M265 288 C282 304 324 304 372 262"/>
+            <path class="det" d="M176 350 C214 372 240 374 257 364 M263 364 C280 374 306 372 344 350 M186 400 C220 418 242 420 257 412 M263 412 C278 420 300 418 334 400"/>
+            <path class="det" d="M236 96 C246 106 274 106 284 96"/>
+            <circle class="ring" data-ring cx="302" cy="236" r="42"/>
+            <path class="heart" data-heart d="M302 262 C302 262 272 244 272 226 C272 214 281 207 289 207 C296 207 301 212 302 217 C303 212 308 207 315 207 C323 207 332 214 332 226 C332 244 302 262 302 262 Z"/>
+          </svg>
+          <canvas class="tube" data-tube aria-hidden="true"></canvas>
+          <button class="chest" type="button" data-chest aria-label="Stethoscope. Drag it onto the heart to listen, or press Enter."></button>
+          <div class="coach" data-coach aria-hidden="true">
+            <span class="coach-pill"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 13V6.5a1.5 1.5 0 0 1 3 0V12M11 11V5a1.5 1.5 0 0 1 3 0v6M14 11V6.5a1.5 1.5 0 0 1 3 0V14c0 4-2.5 7-6.5 7-2.6 0-4.4-1.6-5.6-3.8L3.4 14.4a1.4 1.4 0 0 1 2.3-1.6L8 15"/></svg></i><span data-coach-text>Drag the stethoscope to the heart</span></span>
+            <svg class="coach-arrow" viewBox="0 0 40 30" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8c10 0 22 4 31 15"/><path d="M24 22l10 1 1-10"/></svg>
+          </div>
+          <div class="found" data-found aria-live="polite"><span class="capbar">Sounds like family 💙</span><p>Strong and steady · 72 bpm</p></div>
+          <div class="monitor">
+            <canvas data-ecg aria-hidden="true"></canvas>
+            <div class="vitals">
+              <div class="bpm"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.3 3 4.5 6.7 4.5c2.2 0 3.6 1.2 4.3 2.4.7-1.2 2.1-2.4 4.3-2.4 3.7 0 5.8 3.8 4.3 7.3C19.5 16.4 12 21 12 21z"/></svg><span data-bpm>--</span><small>BPM</small></div>
+              <div class="status" data-status>No signal yet</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="marquee" aria-hidden="true"><div class="marquee-track" data-marquee></div></div>
+
+    <!-- ======================= AGES (pinned) ======================= -->
+    <section class="ages" id="ages">
+      <div class="ages-pin">
+        <div class="wrap">
+          <div class="ages-head">
+            <div>
+              <p class="eyebrow" data-reveal>Care for every age</p>
+              <h2 data-reveal>One doctor for the <em>whole family.</em></h2>
+            </div>
+            <p data-reveal>From the first checkup to the hundredth. Scroll through the years.</p>
+          </div>
+          <div class="ages-grid">
+            <div class="agebox">
+              <div class="age" aria-hidden="true"><small>Age</small><span data-age>0</span></div>
+              <div class="stages" data-stages></div>
+            </div>
+            <div class="family" aria-hidden="true">
+              <svg viewBox="0 0 640 380" data-family>
+                <path class="ecgline" pathLength="1" d="M10 360 H120 L132 340 L144 360 H250 L262 318 L276 372 L288 360 H400 L412 330 L426 366 L438 360 H630"/>
+              </svg>
+            </div>
+          </div>
+          <p class="ages-note" data-reveal>Not sure we cover something? Message us and we’ll tell you straight.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================= TRIAGE ======================= -->
+    <section class="triage" id="triage">
+      <div class="wrap">
+        <div class="tri-head">
+          <p class="eyebrow" data-reveal>Where should I go?</p>
+          <h2 data-reveal>Not sure if it’s <em>urgent?</em></h2>
+          <p data-reveal>Tap whatever’s going on. We’ll point you to the right kind of care, the same way we would on the phone.</p>
+        </div>
+        <div class="tri" data-reveal>
+          <div class="groups" data-groups></div>
+          <aside class="verdict" data-verdict aria-live="polite">
+            <span class="lbl" data-v-lbl>Your answer</span>
+            <h3 data-v-h>Tap what’s going on.</h3>
+            <p data-v-p>Pick one or more. If anything feels seriously wrong, don’t wait: call 911.</p>
+            <div class="ctas" data-v-ctas></div>
+            <button class="clear" type="button" data-clear hidden>Start over</button>
+            <p class="fine">A quick guide, not a diagnosis. It doesn’t replace talking to a doctor.</p>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================= LOCATIONS ======================= -->
+    <section class="locations" id="locations">
+      <div class="wrap">
+        <div class="loc-head">
+          <div>
+            <p class="eyebrow" data-reveal>Locations</p>
+            <h2 data-reveal>Three clinics, <em>one family.</em></h2>
+          </div>
+          <div class="side" data-reveal>
+            <button class="btn" type="button" data-locate><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true" style="width:18px;height:18px"><circle cx="12" cy="12" r="3.5"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="8"/></svg>Find the closest one</button>
+            <span class="loc-msg" data-loc-msg aria-live="polite"></span>
+          </div>
+        </div>
+        <div class="loc-grid">
+          <div class="loc-cards" data-locs></div>
+          <div class="loc-map" data-reveal aria-hidden="true"><svg viewBox="0 0 500 420" data-map></svg></div>
+        </div>
+        <p class="loc-note" data-reveal data-hours-note></p>
+      </div>
+    </section>
+
+    <!-- ======================= TEAM ======================= -->
+    <section class="team" id="team">
+      <div class="wrap">
+        <div class="team-head">
+          <div>
+            <p class="eyebrow" data-reveal>Our team</p>
+            <h2 data-reveal>The people who <em>know your name.</em></h2>
+          </div>
+          <p data-reveal>Doctors, staff and front desk legends. Fair warning: they might put you in a skit.</p>
+        </div>
+        <div class="people" data-people></div>
+      </div>
+    </section>
+
+    <!-- ======================= WATCH ======================= -->
+    <section class="watch" id="watch">
+      <div class="wrap">
+        <div>
+          <p class="eyebrow" data-reveal>On Instagram</p>
+          <h2 data-reveal>Yes, your doctor <em>makes skits.</em></h2>
+          <ul class="quotes" data-reveal>
+            <li><span class="capbar">Small pinch 😬</span></li>
+            <li><span class="capbar">Don’t we make a great team</span></li>
+            <li><span class="capbar">The real bosses? We know who they are. 👏</span></li>
+          </ul>
+          <a class="btn light" data-ig href="#" target="_blank" rel="noopener" data-reveal data-magnetic>Follow <span data-cfg="handle">@thefamilydoc_</span></a>
+          <div class="tip" data-reveal>
+            <span class="lbl">From the doc</span>
+            <h3>Gambling can start as harmless fun.</h3>
+            <p>For some people it turns into a habit that hits their mental health, money and relationships. Watch for secrecy about finances, chasing losses and changes in mood or sleep, and start the conversation with compassion, not judgment.</p>
+            <p>Michigan Problem Gambling Helpline: <a href="tel:18002707117">1-800-270-7117</a></p>
+          </div>
+        </div>
+        <div class="phone" data-reveal>
+          <div class="phone-screen">
+            <div class="phone-ph"><div>Loading the latest videos…</div></div>
+            <iframe data-ig-embed title="The Family Doc on Instagram" loading="lazy" scrolling="yes"></iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================= CLOSING ======================= -->
+    <section class="closing" aria-labelledby="closing-h">
+      <div class="wrap">
+        <svg class="heart-ecg" viewBox="0 0 560 90" aria-hidden="true"><path pathLength="1" d="M0 50 H170 L184 50 L194 34 L204 50 L216 50 L228 6 L242 84 L254 50 L270 50 C276 30 300 26 300 44 C300 26 324 30 330 50 C334 64 300 80 300 80 C300 80 266 64 270 50 M330 50 H560"/></svg>
+        <h2 id="closing-h" data-reveal>Come as you are. Leave feeling like <em>family.</em></h2>
+        <p data-reveal>Family medicine and urgent care in Dearborn Heights, Allen Park and Hamtramck.</p>
+        <div class="ctas" data-reveal>
+          <a class="btn teal" href="#locations" data-magnetic>Find your nearest clinic <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4"/></svg></a>
+          <a class="btn ghost" data-dm href="#locations" style="--fg:#fff;border-color:rgba(255,255,255,.3)">Message us</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <a class="logo" href="#top" aria-label="Back to top"><span class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 3v6a5 5 0 0 0 10 0V3"/><path d="M11 14v2a4 4 0 0 0 8 0v-2"/><circle cx="19" cy="12" r="2"/></svg><small>The</small><b>Family</b><i>Doc</i></span></a>
+      <ul data-foot-locs></ul>
+      <a data-ig href="#" target="_blank" rel="noopener">Instagram</a>
+      <p class="er" style="margin:0">In an emergency, call 911. &nbsp;·&nbsp; &copy; <span data-year></span> The Family Doc</p>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+
+  <script>
+  /* =============================================================
+     CONFIG: every practice detail lives here.
+     Empty strings are fine: the page falls back gracefully.
+     ============================================================= */
+  const CONFIG = {
+    name: 'The Family Doc',
+    instagram: { handle: '@thefamilydoc_', url: 'https://www.instagram.com/thefamilydoc_/', dm: 'https://ig.me/m/thefamilydoc_' },
+    // per-location phone and hours can be filled in later; leave '' or null to hide them
+    locations: [
+      { city: 'Dearborn Heights', address: '25350 W Warren St', state: 'MI', phone: '', hours: '', lat: 42.3436, lng: -83.2907 },
+      { city: 'Allen Park',       address: '19100 Goddard Rd',  state: 'MI', phone: '', hours: '', lat: 42.2312, lng: -83.2165 },
+      { city: 'Hamtramck',        address: '9800 Conant, Suite A', state: 'MI', phone: '', hours: '', lat: 42.3946, lng: -83.0571 }
+    ],
+    team: [
+      { name: 'Dr. Ali I. Nasrallah', role: 'Family medicine', img: 'img/dr-nasrallah.jpg', alt: 'Dr. Ali Nasrallah in a white coat with a stethoscope', text: 'Family doctor, the face you’ve probably seen on your feed, and a straight-talking voice on community health.' },
+      { name: 'Dr. Ali Baydoun, DO',  role: 'Family medicine', img: 'img/dr-baydoun.jpg',   alt: 'Dr. Ali Baydoun in black Family Doc scrubs', text: 'Calm, steady and always up for a round of “this or that.”' },
+      { name: 'Enshad',               role: 'Office manager',  img: 'img/enshad.jpg',       alt: 'Enshad smiling through a paper photo frame', text: '“She’s the heart of our office, keeping everything organized, supporting our team, and making sure our patients feel cared for.”' }
+    ],
+    stages: [
+      { age: 0,  label: 'Ages 0–5',   title: 'Little ones',            items: ['Well-child visits', 'Vaccines (yes, the small pinch 😬)', 'Fevers, coughs and ear infections'] },
+      { age: 9,  label: 'Ages 6–17',  title: 'School years',           items: ['School and sports physicals', 'Sick visits that can’t wait', 'Growing-up questions, answered straight'] },
+      { age: 34, label: 'Ages 18–49', title: 'Grown-ups',              items: ['Annual physicals', 'Stress, sleep and mental health check-ins', 'Same-day care when life gets in the way'] },
+      { age: 68, label: 'Ages 50+',   title: 'Parents & grandparents', items: ['Blood pressure and diabetes care', 'Medication reviews', 'A doctor who actually knows your history'] }
+    ],
+    triage: {
+      er: { title: 'Call 911 now', items: ['Chest pain or pressure', 'Trouble breathing', 'Face drooping, arm weakness or slurred speech', 'Severe bleeding', 'Fainting or confusion after a head injury', 'Swelling of the lips or throat'] },
+      uc: { title: 'Feeling sick or hurt', items: ['Fever or flu symptoms', 'Sore throat', 'Ear pain', 'Cough or cold that won’t quit', 'Painful urination', 'Pink eye', 'Rash', 'Sprain or strain'] },
+      fd: { title: 'Routine stuff', items: ['Annual physical', 'School or sports physical', 'Medication refill', 'Blood pressure or diabetes follow-up', 'Vaccines', 'Stress or trouble sleeping'] }
+    },
+    marquee: ['Family medicine', 'Urgent care', 'Small pinch 😬', 'Dearborn Heights', 'Allen Park', 'Hamtramck', 'Don’t we make a great team', 'Every age', 'The real bosses? We know who they are 👏']
+  };
+  </script>
+
+  <script>
+  (() => {
+  'use strict';
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+  const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const FINE = matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const HAS_G = !!(window.gsap && window.ScrollTrigger);
+  const ANIM = HAS_G && !RM;
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  if (HAS_G) gsap.registerPlugin(ScrollTrigger);
+  const ARROW = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4"/></svg>';
+  const TICK = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M3 8.5l3.2 3L13 4.5"/></svg>';
+  const mapsUrl = l => 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(`${l.address}, ${l.city}, ${l.state}`);
+
+  /* ---------------- bind CONFIG ---------------- */
+  const ig = CONFIG.instagram || {};
+  $$('[data-ig]').forEach(a => { if (ig.url) a.href = ig.url; else { a.removeAttribute('target'); a.href = '#locations'; } });
+  $$('[data-dm]').forEach(a => { const h = ig.dm || ig.url; if (h) { a.href = h; a.target = '_blank'; a.rel = 'noopener'; } });
+  $$('[data-cfg="handle"]').forEach(el => el.textContent = ig.handle || 'Instagram');
+  $$('[data-year]').forEach(el => el.textContent = new Date().getFullYear());
+  $('[data-where]').innerHTML = CONFIG.locations.map(l => `<li>${esc(l.city)}</li>`).join('');
+  $('[data-foot-locs]').innerHTML = CONFIG.locations.map(l => `<li><a href="${esc(mapsUrl(l))}" target="_blank" rel="noopener">${esc(l.city)} · ${esc(l.address)}</a></li>`).join('');
+  const mq = CONFIG.marquee.map(w => `<span>${esc(w)}</span>`).join('');
+  $('[data-marquee]').innerHTML = mq + mq;
+
+  /* ---------------- smooth scroll + nav ---------------- */
+  let lenis = null;
+  if (ANIM && window.Lenis) {
+    lenis = new Lenis({ duration: 1.1, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true });
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add(t => lenis.raf(t * 1000));
+    gsap.ticker.lagSmoothing(0);
+  }
+  const goTo = t => { if (lenis) lenis.scrollTo(t, { offset: -80, duration: 1.3 }); else { const y = typeof t === 'number' ? t : t.getBoundingClientRect().top + scrollY - 80; scrollTo({ top: y, behavior: RM ? 'auto' : 'smooth' }); } };
+  $$('a[href^="#"]').forEach(a => a.addEventListener('click', e => {
+    const id = a.getAttribute('href'); if (id === '#') return;
+    const t = id === '#top' ? 0 : $(id); if (t === null) return;
+    e.preventDefault(); goTo(t);
+  }));
+  const nav = $('.nav');
+  const navSync = () => nav.classList.toggle('scrolled', scrollY > 30);
+  navSync(); addEventListener('scroll', navSync, { passive: true });
+
+  /* =============================================================
+     THE STETHOSCOPE: drag it to the heart
+     ============================================================= */
+  const Steth = (() => {
+    const exam = $('[data-exam]'), torso = $('[data-torso]'), tube = $('[data-tube]'), chest = $('[data-chest]');
+    const ecg = $('[data-ecg]'), bpmEl = $('[data-bpm]'), statusEl = $('[data-status]');
+    const heartEl = $('[data-heart]'), ring = $('[data-ring]'), found = $('[data-found]'), coach = $('[data-coach]'), coachText = $('[data-coach-text]');
+    const word = $('[data-heartword]');
+    if (!FINE) coachText.textContent = 'Drag the stethoscope to the heart';
+    const tc = tube.getContext('2d'), ec = ecg.getContext('2d');
+    const DPR = Math.min(window.devicePixelRatio || 1, 2);
+    let W = 0, H = 0, MON = 78, heart = { x: 0, y: 0 }, J = { x: 0, y: 0 }, ROPE = 340;
+    const N = 22; let pts = [];
+    const st = { drag: null, stuck: false, s: 0, lock: 0, celebrated: false, engaged: false, idle: 0, visible: true, started: false, beatT: 0 };
+
+    function measure() {
+      const r = exam.getBoundingClientRect();
+      W = r.width; H = r.height;
+      MON = parseFloat(getComputedStyle(exam).getPropertyValue('--mon')) || 78;
+      [tube].forEach(c => { c.width = W * DPR; c.height = H * DPR; });
+      const er = ecg.getBoundingClientRect(); ecg.width = Math.max(1, er.width * DPR); ecg.height = Math.max(1, er.height * DPR);
+      // heart position: map the SVG point into exam pixels
+      const vbW = 600, vbH = 560, aw = W, ah = H - MON, sc = Math.min(aw / vbW, ah / vbH);
+      const ox = (aw - vbW * sc) / 2, oy = (ah - vbH * sc) / 2;
+      heart = { x: ox + 302 * sc, y: oy + 236 * sc };
+      J = { x: W * (W < 520 ? .82 : .84), y: H * .13 };
+      ROPE = clamp((H - MON) * .64, 220, 380);
+      if (!pts.length) {
+        const seg = ROPE / (N - 1);
+        pts = Array.from({ length: N }, (_, i) => ({ x: J.x - 10 + i * 1.5, y: J.y + i * seg, px: J.x - 10 + i * 1.5, py: J.y + i * seg }));
+      }
+    }
+    const end = () => pts[N - 1];
+
+    function step() {
+      const seg = ROPE / (N - 1), g = .45, damp = .985;
+      pts[0].x = J.x; pts[0].y = J.y; pts[0].px = J.x; pts[0].py = J.y;
+      for (let i = 1; i < N; i++) {
+        const p = pts[i]; const vx = (p.x - p.px) * damp, vy = (p.y - p.py) * damp;
+        p.px = p.x; p.py = p.y; p.x += vx; p.y += vy + g;
+      }
+      const e = end();
+      if (st.drag) { e.x = st.drag.tx; e.y = st.drag.ty; }
+      else if (st.stuck) { e.x += (heart.x - e.x) * .35; e.y += (heart.y - e.y) * .35; e.px = e.x; e.py = e.y; }
+      for (let k = 0; k < 16; k++) {
+        for (let i = 0; i < N - 1; i++) {
+          const a = pts[i], b = pts[i + 1];
+          const dx = b.x - a.x, dy = b.y - a.y, d = Math.hypot(dx, dy) || .001;
+          if (d <= seg) continue;                  // rope, not a rod: only pull when stretched
+          const diff = (d - seg) / d;
+          const aFixed = i === 0, bFixed = (i + 1 === N - 1) && (st.drag || st.stuck);
+          if (aFixed && bFixed) continue;
+          const wa = aFixed ? 0 : bFixed ? 1 : .5, wb = bFixed ? 0 : aFixed ? 1 : .5;
+          a.x += dx * diff * wa; a.y += dy * diff * wa; b.x -= dx * diff * wb; b.y -= dy * diff * wb;
+        }
+        for (let i = 1; i < N; i++) { const p = pts[i]; p.x = clamp(p.x, 14, W - 14); p.y = clamp(p.y, 14, H - MON - 14); }
+      }
+    }
+
+    function drawTube() {
+      tc.setTransform(DPR, 0, 0, DPR, 0, 0);
+      tc.clearRect(0, 0, W, H);
+      // ear tubes + earpieces
+      const L = { x: J.x - 34, y: J.y - 50 }, R = { x: J.x + 30, y: J.y - 54 };
+      tc.lineCap = 'round'; tc.lineJoin = 'round';
+      tc.strokeStyle = '#a7b3ba'; tc.lineWidth = 4;
+      tc.beginPath(); tc.moveTo(J.x - 4, J.y); tc.quadraticCurveTo(J.x - 30, J.y - 16, L.x, L.y); tc.stroke();
+      tc.beginPath(); tc.moveTo(J.x + 4, J.y); tc.quadraticCurveTo(J.x + 28, J.y - 20, R.x, R.y); tc.stroke();
+      tc.fillStyle = '#1c2024';
+      [L, R].forEach(p => { tc.beginPath(); tc.ellipse(p.x, p.y, 6, 8, 0, 0, Math.PI * 2); tc.fill(); });
+      // main tube
+      const path = () => {
+        tc.beginPath(); tc.moveTo(pts[0].x, pts[0].y);
+        for (let i = 1; i < N - 1; i++) { const mx = (pts[i].x + pts[i + 1].x) / 2, my = (pts[i].y + pts[i + 1].y) / 2; tc.quadraticCurveTo(pts[i].x, pts[i].y, mx, my); }
+        tc.lineTo(end().x, end().y);
+      };
+      tc.strokeStyle = 'rgba(0,0,0,.12)'; tc.lineWidth = 10; tc.save(); tc.translate(2, 5); path(); tc.stroke(); tc.restore();
+      tc.strokeStyle = '#1d2125'; tc.lineWidth = 8; path(); tc.stroke();
+      tc.strokeStyle = 'rgba(255,255,255,.16)'; tc.lineWidth = 2; tc.save(); tc.translate(-1.5, -1.5); path(); tc.stroke(); tc.restore();
+      // Y junction
+      tc.fillStyle = '#c3ccd1'; tc.beginPath(); tc.arc(J.x, J.y, 7, 0, Math.PI * 2); tc.fill();
+      tc.fillStyle = '#8c989f'; tc.beginPath(); tc.arc(J.x, J.y, 3, 0, Math.PI * 2); tc.fill();
+    }
+
+    // ECG sweep
+    let sweepX = 0, lastY = null, phase = 0;
+    const ecgShape = p => {
+      const bump = (c, w, a) => a * Math.exp(-Math.pow((p - c) / w, 2));
+      return bump(.16, .03, .12) - bump(.265, .008, .14) + bump(.285, .009, 1) - bump(.305, .01, .28) + bump(.48, .05, .26);
+    };
+    function drawEcg(dt) {
+      const w = ecg.width, h = ecg.height, mid = h * .55, amp = h * .42;
+      const speed = 150 * DPR;
+      const steps = Math.max(1, Math.round(speed * dt));
+      ec.lineWidth = 2 * DPR; ec.lineCap = 'round'; ec.strokeStyle = '#4fd3e2'; ec.shadowColor = 'rgba(79,211,226,.8)'; ec.shadowBlur = 6 * DPR;
+      for (let k = 0; k < steps; k++) {
+        phase = (phase + (72 / 60) / speed) % 1;
+        const s = st.s;
+        const noise = (Math.random() - .5) * (s < .15 ? .03 : .06 * (1 - s));
+        const v = s < .12 ? noise : ecgShape(phase) * Math.pow(s, 1.3) + noise;
+        const y = mid - v * amp;
+        ec.clearRect(sweepX, 0, 14 * DPR, h);
+        if (lastY !== null && sweepX > 0) { ec.beginPath(); ec.moveTo(sweepX - 1, lastY); ec.lineTo(sweepX, y); ec.stroke(); }
+        lastY = y; sweepX += 1;
+        if (sweepX >= w) { sweepX = 0; lastY = null; }
+      }
+      ec.shadowBlur = 0;
+    }
+
+    function setStatus() {
+      const s = st.s;
+      bpmEl.textContent = s > .85 ? '72' : s > .4 ? '··' : '--';
+      statusEl.textContent = s < .12 ? (st.engaged ? 'No signal. Find the heart.' : 'No signal yet') : s < .5 ? 'Getting warmer…' : s < .85 ? 'Almost. A little closer.' : 'Heartbeat found';
+      heartEl.style.opacity = (s * s * .95).toFixed(3);
+      heartEl.classList.toggle('beat', s > .5);
+      chest.classList.toggle('pulse', s > .6);
+      word.classList.toggle('beat', s > .85);
+    }
+
+    function celebrate() {
+      st.celebrated = true;
+      if (ANIM) {
+        gsap.fromTo(found, { opacity: 0, y: 16, scale: .94 }, { opacity: 1, y: 0, scale: 1, duration: .6, ease: 'back.out(2)' });
+        gsap.to(found, { opacity: 0, y: -10, duration: .5, delay: 4.2 });
+        for (let i = 0; i < 7; i++) {
+          const hEl = document.createElement('div');
+          hEl.className = 'floatheart';
+          hEl.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.3 3 4.5 6.7 4.5c2.2 0 3.6 1.2 4.3 2.4.7-1.2 2.1-2.4 4.3-2.4 3.7 0 5.8 3.8 4.3 7.3C19.5 16.4 12 21 12 21z"/></svg>';
+          hEl.style.left = (heart.x - 11) + 'px'; hEl.style.top = (heart.y - 11) + 'px';
+          exam.appendChild(hEl);
+          gsap.fromTo(hEl, { scale: .3, opacity: 1 }, { x: (Math.random() - .5) * 220, y: -120 - Math.random() * 140, scale: .7 + Math.random() * .8, opacity: 0, rotation: (Math.random() - .5) * 60, duration: 1.6 + Math.random() * .8, ease: 'power2.out', delay: i * .06, onComplete: () => hEl.remove() });
+        }
+      } else { found.style.opacity = 1; }
+    }
+
+    // input
+    const toLocal = e => { const r = exam.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; };
+    const engage = () => { if (!st.engaged) { st.engaged = true; coach.classList.remove('on'); ring.classList.remove('hint'); } };
+    chest.addEventListener('pointerdown', e => {
+      e.preventDefault(); engage();
+      const p = toLocal(e), en = end();
+      st.drag = { ox: p.x - en.x, oy: p.y - en.y, tx: en.x, ty: en.y };
+      st.stuck = false; chest.classList.add('held');
+      try { chest.setPointerCapture(e.pointerId); } catch (_) {}
+    });
+    chest.addEventListener('pointermove', e => { if (!st.drag) return; const p = toLocal(e); st.drag.tx = clamp(p.x - st.drag.ox, 30, W - 30); st.drag.ty = clamp(p.y - st.drag.oy, 30, H - MON - 30); });
+    const release = () => {
+      if (!st.drag) return;
+      st.drag = null; chest.classList.remove('held');
+      const e = end();
+      if (Math.hypot(e.x - heart.x, e.y - heart.y) < 60) st.stuck = true;   // it rests on the chest
+    };
+    chest.addEventListener('pointerup', release); chest.addEventListener('pointercancel', release);
+    chest.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); engage(); st.stuck = !st.stuck; } });
+
+    // loop
+    let last = 0;
+    const frame = now => {
+      requestAnimationFrame(frame);
+      if (!st.visible || document.hidden || !W) { last = now; return; }
+      const dt = last ? Math.min(.05, (now - last) / 1000) : .016; last = now;
+      step(); drawTube();
+      const e = end();
+      chest.style.transform = `translate(${e.x}px, ${e.y}px)`;
+      const d = Math.hypot(e.x - heart.x, e.y - heart.y);
+      const target = clamp(1 - (d - 14) / (Math.min(W, H) * .42), 0, 1);
+      st.s += (target - st.s) * .12;
+      drawEcg(dt); setStatus();
+      if (st.s > .85) { st.lock += dt; if (st.lock > 1 && !st.celebrated) celebrate(); } else { st.lock = 0; if (st.s < .25 && st.celebrated) st.celebrated = false; }
+      // coach follows the chest piece until first touch
+      if (!st.engaged && st.started) {
+        const cw = coach.offsetWidth, ch = coach.offsetHeight;
+        const cx = clamp(e.x - cw - 30, 10, W - cw - 10), cy = clamp(e.y - ch / 2 - 34, 40, H - MON - ch - 10);
+        coach.style.transform = `translate(${cx}px, ${cy}px)`;
+        st.idle += dt;
+        if (st.idle > 3.2 && ANIM) { st.idle = 0; e.px -= 16; e.py += 4; ring.classList.add('hint'); }
+      }
+    };
+
+    new ResizeObserver(() => { measure(); }).observe(exam);
+    new IntersectionObserver(([en]) => { st.visible = en.isIntersecting; }).observe(exam);
+    measure();
+    requestAnimationFrame(frame);
+
+    if (RM) { st.stuck = true; st.engaged = true; }
+    const start = () => { st.started = true; if (!st.engaged) coach.classList.add('on'); };
+    return { start };
+  })();
+
+  /* =============================================================
+     LOADER + HERO INTRO
+     ============================================================= */
+  const loader = $('.loader');
+  const heroIn = () => {
+    if (!ANIM) { Steth.start(); return; }
+    gsap.timeline()
+      .from('.hero h1 .ln > span', { yPercent: 110, duration: 1.05, ease: 'expo.out', stagger: .09 })
+      .from('[data-hero-in]', { y: 22, opacity: 0, duration: .9, ease: 'power3.out', stagger: .07 }, .2)
+      .add(() => Steth.start(), .9);
+  };
+  if (loader && ANIM) {
+    let done = false;
+    const finish = () => { if (done) return; done = true; loader.remove(); };
+    const tl = gsap.timeline({ onComplete: finish });
+    tl.to('.loader path', { strokeDashoffset: 0, duration: .9, ease: 'power2.inOut' })
+      .to(loader, { yPercent: -100, duration: .7, ease: 'expo.inOut' }, '+=.1')
+      .add(heroIn, '-=.35');
+    loader.addEventListener('click', () => tl.progress(1));
+    setTimeout(() => { if (!done) tl.progress(1); }, 4000);
+  } else { if (loader) loader.remove(); heroIn(); }
+
+  /* =============================================================
+     AGES: pinned scroll through the years
+     ============================================================= */
+  (() => {
+    const stagesEl = $('[data-stages]'), ageEl = $('[data-age]'), fam = $('[data-family]');
+    stagesEl.innerHTML = CONFIG.stages.map(s => `<div class="stage"><h3><span>${esc(s.label)}</span>${esc(s.title)}</h3><ul>${s.items.map(i => `<li>${esc(i)}</li>`).join('')}</ul></div>`).join('');
+    // simple family figures, smallest to tallest (a stroller for the baby, a cane for grandpa)
+    const FIGS = [
+      `<g class="fig" transform="translate(70 0)"><rect class="acc" x="-34" y="282" width="68" height="40" rx="16"/><path class="b" d="M-34 300 a34 22 0 0 1 68 0z"/><circle class="h" cx="0" cy="282" r="13"/><circle class="b" cx="-22" cy="330" r="9"/><circle class="b" cx="22" cy="330" r="9"/><path class="b" d="M34 300 L52 258 L58 260 L40 302z"/></g>`,
+      `<g class="fig" transform="translate(210 0)"><circle class="h" cx="0" cy="214" r="22"/><path class="b" d="M-30 342 L-28 258 C-28 246 -20 240 -10 240 L10 240 C20 240 28 246 28 258 L30 342 L12 342 L10 300 L-10 300 L-12 342z"/><rect class="acc" x="-22" y="262" width="44" height="12" rx="6"/></g>`,
+      `<g class="fig" transform="translate(370 0)"><circle class="h" cx="0" cy="134" r="27"/><path class="b" d="M-42 352 L-40 206 C-40 186 -28 176 -12 176 L12 176 C28 176 40 186 40 206 L42 352 L18 352 L14 268 L-14 268 L-18 352z"/><path class="acc" d="M-10 178 L0 214 L10 178z"/></g>`,
+      `<g class="fig" transform="translate(530 0)"><circle class="h" cx="-4" cy="150" r="26"/><path class="b" d="M-44 352 L-40 220 C-40 200 -28 190 -12 190 L8 190 C24 190 34 202 36 220 L40 352 L16 352 L12 280 L-16 280 L-20 352z"/><path class="acc" d="M40 236 L56 236 L56 354 L50 354 L50 242 L40 242z"/><path class="h" d="M-30 136 C-26 118 18 118 22 136 C10 128 -18 128 -30 136z" style="fill:#e9eef0"/></g>`
+    ];
+    fam.insertAdjacentHTML('afterbegin', FIGS.join(''));
+    const figs = $$('.fig', fam), stages = $$('.stage', stagesEl), line = $('.ecgline', fam);
+    const setOn = idx => figs.forEach((f, i) => f.classList.toggle('on', i <= idx));
+    if (!ANIM) { stagesEl.classList.add('stack-stages'); setOn(3); ageEl.textContent = '0–100'; line.style.strokeDashoffset = 0; return; }
+    const mm = gsap.matchMedia();
+    mm.add('(min-width: 901px)', () => {
+      $('.ages').classList.add('pinned');
+      const o = { age: 0 };
+      const tl = gsap.timeline({ scrollTrigger: { trigger: '.ages', start: 'top top', end: '+=240%', pin: '.ages-pin', scrub: .6, anticipatePin: 1,
+        onUpdate: self => { const idx = Math.min(3, Math.floor(self.progress * 4 - .0001)); setOn(Math.max(0, idx)); } } });
+      const upd = () => { ageEl.textContent = Math.round(o.age); };
+      [6, 18, 50, 85].forEach((a, i) => tl.to(o, { age: a, ease: 'none', duration: 1, onUpdate: upd }, i));
+      tl.to(line, { strokeDashoffset: 0, ease: 'none', duration: 4 }, 0);
+      stages.forEach((s, i) => { if (!i) return; tl.to(stages[i - 1], { autoAlpha: 0, y: -18, duration: .25 }, i - .1).fromTo(s, { autoAlpha: 0, y: 22 }, { autoAlpha: 1, y: 0, duration: .3 }, i); });
+      figs.forEach((f, i) => tl.from(f, { y: 30, opacity: 0, duration: .4, ease: 'power2.out' }, i));
+      setOn(0);
+      return () => { $('.ages').classList.remove('pinned'); gsap.set(stages, { clearProps: 'all' }); };
+    });
+    mm.add('(max-width: 900px)', () => {
+      stagesEl.classList.add('stack-stages'); ageEl.textContent = '0–85';
+      gsap.to(line, { strokeDashoffset: 0, duration: 1.6, ease: 'power2.inOut', scrollTrigger: { trigger: fam, start: 'top 80%' } });
+      ScrollTrigger.create({ trigger: fam, start: 'top 80%', onEnter: () => figs.forEach((f, i) => setTimeout(() => f.classList.add('on'), i * 250)) });
+      return () => stagesEl.classList.remove('stack-stages');
+    });
+  })();
+
+  /* =============================================================
+     TRIAGE: where should I go?
+     ============================================================= */
+  (() => {
+    const T = CONFIG.triage;
+    const order = [['er', 'Something serious'], ['uc', T.uc.title], ['fd', T.fd.title]];
+    $('[data-groups]').innerHTML = order.map(([k, title]) => `
+      <div class="group ${k}"><h3><i></i>${esc(title)}</h3><div class="chips">${T[k].items.map((it, i) => `<button class="chip" type="button" data-cat="${k}" data-i="${i}" aria-pressed="false">${TICK}${esc(it)}</button>`).join('')}</div></div>`).join('');
+    const v = $('[data-verdict]'), lbl = $('[data-v-lbl]'), h = $('[data-v-h]'), p = $('[data-v-p]'), ctas = $('[data-v-ctas]'), clear = $('[data-clear]');
+    const dm = ig.dm || ig.url;
+    function render() {
+      const on = $$('.chip[aria-pressed="true"]');
+      const cats = new Set(on.map(b => b.dataset.cat));
+      v.classList.remove('er', 'uc', 'fd');
+      clear.hidden = !on.length;
+      if (cats.has('er')) {
+        v.classList.add('er'); lbl.textContent = 'Go now';
+        h.textContent = 'Call 911.';
+        p.textContent = 'These can be signs of an emergency. Don’t drive yourself and don’t wait for a clinic.';
+        ctas.innerHTML = `<a class="btn light" href="tel:911">Call 911</a>`;
+      } else if (cats.has('uc')) {
+        v.classList.add('uc'); lbl.textContent = 'Today';
+        h.textContent = 'Come in for urgent care today.';
+        p.textContent = 'That’s exactly what same-day care is for. Head to whichever clinic is closest.';
+        ctas.innerHTML = `<a class="btn teal" href="#locations" data-go>Find the closest clinic ${ARROW}</a>`;
+      } else if (cats.has('fd')) {
+        v.classList.add('fd'); lbl.textContent = 'Book it';
+        h.textContent = 'Book with your family doctor.';
+        p.textContent = 'Not an emergency, but worth a proper visit. Message us and we’ll get you scheduled.';
+        ctas.innerHTML = (dm ? `<a class="btn light" href="${esc(dm)}" target="_blank" rel="noopener">Message us ${ARROW}</a>` : '') + `<a class="btn ghost" href="#locations" data-go style="--fg:#fff;border-color:rgba(255,255,255,.3)">Locations</a>`;
+      } else {
+        lbl.textContent = 'Your answer'; h.textContent = 'Tap what’s going on.';
+        p.textContent = 'Pick one or more. If anything feels seriously wrong, don’t wait: call 911.'; ctas.innerHTML = '';
+      }
+      $$('[data-go]', ctas).forEach(a => a.addEventListener('click', e => { e.preventDefault(); goTo($('#locations')); }));
+      if (ANIM && on.length) gsap.fromTo(h, { y: 10, opacity: 0 }, { y: 0, opacity: 1, duration: .4, ease: 'power2.out' });
+    }
+    $$('.chip').forEach(b => b.addEventListener('click', () => { b.setAttribute('aria-pressed', String(b.getAttribute('aria-pressed') !== 'true')); render(); }));
+    clear.addEventListener('click', () => { $$('.chip').forEach(b => b.setAttribute('aria-pressed', 'false')); render(); });
+  })();
+
+  /* =============================================================
+     LOCATIONS: cards, a little map and "closest to me"
+     ============================================================= */
+  (() => {
+    const L = CONFIG.locations;
+    $('[data-locs]').innerHTML = L.map((l, i) => `
+      <article class="loc" data-loc="${i}" data-reveal>
+        <span class="n">${i + 1}</span>
+        <h3>${esc(l.city)}</h3>
+        <p>${esc(l.address)}, ${esc(l.city)}, ${esc(l.state)}${l.hours ? ` · ${esc(l.hours)}` : ''}</p>
+        <span class="go"><a class="btn sm" href="${esc(mapsUrl(l))}" target="_blank" rel="noopener">Directions ${ARROW}</a>${l.phone ? ` <a class="btn sm ghost" href="tel:${esc(l.phone.replace(/[^\d+]/g, ''))}">Call</a>` : ''}</span>
+      </article>`).join('');
+    const anyHours = L.some(l => l.hours);
+    $('[data-hours-note]').innerHTML = anyHours ? '' : `Hours can change around holidays. ${ig.url ? `Check <a href="${esc(ig.url)}" target="_blank" rel="noopener">our Instagram</a> or message us before you head over.` : 'Message us before you head over.'}`;
+    // map: plot the clinics by their real relative positions
+    const lats = L.map(l => l.lat), lngs = L.map(l => l.lng);
+    const minLa = Math.min(...lats), maxLa = Math.max(...lats), minLn = Math.min(...lngs), maxLn = Math.max(...lngs);
+    const X = ln => 90 + (ln - minLn) / ((maxLn - minLn) || 1) * 320, Y = la => 340 - (la - minLa) / ((maxLa - minLa) || 1) * 260;
+    const map = $('[data-map]');
+    let svg = `<defs><pattern id="g" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M30 0H0v30" fill="none" stroke="#cfd9dd" stroke-width="1"/></pattern></defs><rect width="500" height="420" fill="url(#g)"/>`;
+    svg += `<g fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round"><path d="M0 120 L500 150 M0 300 L500 260 M140 0 L120 420 M330 0 L360 420"/></g>`;
+    svg += `<polyline points="${L.map(l => X(l.lng) + ',' + Y(l.lat)).join(' ')}" fill="none" stroke="#19b3c6" stroke-width="2" stroke-dasharray="6 8" opacity=".7"/>`;
+    svg += L.map((l, i) => `<g class="pin" data-pin="${i}" transform="translate(${X(l.lng)} ${Y(l.lat)})"><circle class="pulse" r="22"><animate attributeName="r" values="12;28;12" dur="2.6s" repeatCount="indefinite" begin="${i * .5}s"/><animate attributeName="opacity" values="1;0;1" dur="2.6s" repeatCount="indefinite" begin="${i * .5}s"/></circle><circle class="dot" r="10"/><text x="${i === 2 ? -16 : 16}" y="-14" text-anchor="${i === 2 ? 'end' : 'start'}">${i + 1} · ${esc(l.city.toUpperCase())}</text></g>`).join('');
+    map.innerHTML = svg;
+    const msg = $('[data-loc-msg]');
+    const miles = (a, b) => { const R = 3958.8, t = x => x * Math.PI / 180, dLa = t(b.lat - a.lat), dLn = t(b.lng - a.lng); const h = Math.sin(dLa / 2) ** 2 + Math.cos(t(a.lat)) * Math.cos(t(b.lat)) * Math.sin(dLn / 2) ** 2; return 2 * R * Math.asin(Math.sqrt(h)); };
+    $('[data-locate]').addEventListener('click', () => {
+      if (!navigator.geolocation) { msg.textContent = 'Your browser can’t share location. Pick the city closest to you.'; return; }
+      msg.textContent = 'Finding you…';
+      navigator.geolocation.getCurrentPosition(pos => {
+        const me = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+        const ds = L.map(l => miles(me, l)); const best = ds.indexOf(Math.min(...ds));
+        $$('.loc').forEach((el, i) => { el.classList.toggle('nearest', i === best); const old = $('.near', el); if (old) old.remove(); });
+        const card = $(`[data-loc="${best}"]`); card.insertAdjacentHTML('afterbegin', '<span class="near">Closest to you</span>');
+        $$('.pin').forEach((p, i) => p.classList.toggle('hot', i === best));
+        msg.textContent = `${L[best].city} is about ${Math.max(1, Math.round(ds[best]))} mile${Math.round(ds[best]) === 1 ? '' : 's'} away.`;
+        if (ANIM) gsap.fromTo(card, { scale: .98 }, { scale: 1, duration: .6, ease: 'elastic.out(1,.5)' });
+      }, () => { msg.textContent = 'No problem. Pick the city closest to you.'; }, { timeout: 9000, maximumAge: 600000 });
+    });
+  })();
+
+  /* =============================================================
+     TEAM + INSTAGRAM
+     ============================================================= */
+  $('[data-people]').innerHTML = CONFIG.team.map(t => `
+    <article class="person" data-reveal>
+      <div class="ph"><img src="${esc(t.img)}" alt="${esc(t.alt)}" loading="lazy" width="520" height="520"></div>
+      <div class="txt"><h3>${esc(t.name)}</h3><span class="role">${esc(t.role)}</span><p>${esc(t.text)}</p></div>
+    </article>`).join('');
+  (() => {
+    const fr = $('[data-ig-embed]');
+    if (!fr || !ig.url) { if (fr) fr.closest('.phone').remove(); return; }
+    const load = () => { if (fr.src) return; fr.src = ig.url.replace(/\/?$/, '/') + 'embed/'; fr.addEventListener('load', () => { const ph = $('.phone-ph'); if (ph) ph.remove(); }); };
+    if ('IntersectionObserver' in window) new IntersectionObserver((es, o) => { if (es[0].isIntersecting) { load(); o.disconnect(); } }, { rootMargin: '600px' }).observe(fr); else load();
+  })();
+
+  /* =============================================================
+     reveals, closing heartbeat, magnetic buttons
+     ============================================================= */
+  if (ANIM) {
+    ScrollTrigger.batch('[data-reveal]', { start: 'top 90%', onEnter: els => gsap.to(els, { opacity: 1, y: 0, duration: .9, ease: 'power3.out', stagger: .07, overwrite: true }) });
+    gsap.to('.heart-ecg path', { strokeDashoffset: 0, duration: 2, ease: 'power2.inOut', scrollTrigger: { trigger: '.closing', start: 'top 70%' } });
+  } else { $$('[data-reveal]').forEach(e => { e.style.opacity = 1; e.style.transform = 'none'; }); const hp = $('.heart-ecg path'); if (hp) hp.style.strokeDashoffset = 0; }
+  if (FINE && ANIM) {
+    $$('[data-magnetic]').forEach(el => {
+      el.addEventListener('pointermove', e => { const r = el.getBoundingClientRect(); gsap.to(el, { x: (e.clientX - r.left - r.width / 2) * .2, y: (e.clientY - r.top - r.height / 2) * .28, duration: .4, ease: 'power3.out' }); });
+      el.addEventListener('pointerleave', () => gsap.to(el, { x: 0, y: 0, duration: .6, ease: 'elastic.out(1,.4)' }));
+    });
+  }
+  addEventListener('load', () => { if (HAS_G) ScrollTrigger.refresh(); });
+  })();
+  </script>
+</body>
+</html>
