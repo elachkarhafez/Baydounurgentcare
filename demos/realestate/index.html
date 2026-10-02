@@ -240,7 +240,7 @@ html:not(.cursor-live) .c-dot{opacity:0}
 .detail-media{position:relative;overflow:hidden;background:#d9cdbb}
 .detail-illo{position:absolute;inset:0}
 .detail-illo svg{width:100%;height:100%}
-.detail-cap{position:absolute;left:24px;bottom:22px;padding:8px 12px;background:rgba(247,244,238,.92);font:500 10px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase}
+.detail-cap{position:absolute;left:24px;top:24px;padding:8px 12px;background:rgba(247,244,238,.92);font:500 10px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase}
 .detail-body{position:relative;overflow-y:auto;overscroll-behavior:contain;padding:96px clamp(24px,5vw,80px) 64px;display:flex;flex-direction:column;gap:22px}
 .detail-close{position:absolute;top:24px;right:24px;display:flex;align-items:center;gap:10px;height:42px;padding:0 18px;border:1px solid var(--rule);border-radius:999px;font:500 13px/1 var(--sans);background:var(--bone)}
 .detail-close:hover{border-color:var(--char)}
@@ -254,7 +254,9 @@ html:not(.cursor-live) .c-dot{opacity:0}
 .d-specs div{padding:16px 0 16px 16px;border-left:1px solid var(--rule)}
 .d-specs div:first-child{border-left:0;padding-left:0}
 .d-specs dt{font:500 10px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
-.d-specs dd{margin:10px 0 0;font:400 22px/1 var(--serif)}
+.d-specs dd{margin:10px 0 0;font:400 22px/1 var(--serif);font-variant-numeric:lining-nums}
+#d-index{margin-top:auto}
+.d-note{margin-bottom:auto}
 .d-desc{color:var(--ink2);max-width:34em;line-height:1.7}
 .d-feat{display:grid;grid-template-columns:1fr 1fr;gap:10px 24px}
 .d-feat li{position:relative;padding-left:20px;font-size:14.5px;color:var(--ink2)}
@@ -285,6 +287,7 @@ input[type=range]:focus-visible::-webkit-slider-thumb{outline:2px solid var(--br
 .fin-card::before{content:"";position:absolute;right:-30%;top:-40%;width:80%;height:120%;background:radial-gradient(closest-side,rgba(201,154,106,.22),rgba(201,154,106,0));pointer-events:none}
 .fin-label{font:500 11px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:rgba(247,244,238,.66)}
 .fin-pay{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:14px}
+.hero-tag,.card-price,.d-price{font-variant-numeric:lining-nums tabular-nums}
 .fin-num{font:300 clamp(64px,7.6vw,124px)/.9 var(--serif);letter-spacing:-.02em;font-variant-numeric:lining-nums tabular-nums}
 .fin-per{font:400 15px var(--sans);color:rgba(247,244,238,.66)}
 .fin-mid{display:grid;grid-template-columns:auto 1fr;gap:clamp(20px,3vw,44px);align-items:center}
@@ -1073,7 +1076,8 @@ if (hasG && window.Lenis && !reduce) {
   lenis = new Lenis({ duration: 1.15, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true });
   lenis.on('scroll', ScrollTrigger.update);
   gsap.ticker.add(t => lenis.raf(t * 1000));
-  gsap.ticker.lagSmoothing(0);
+  // keep GSAP from skipping the intro if the first frames stall; switched to lagSmoothing(0) once the loader is done
+  gsap.ticker.lagSmoothing(400, 33);
 }
 if (hasG) ScrollTrigger.config({ ignoreMobileResize: true });
 const scrollToEl = (el, off = 0) => {
@@ -1465,6 +1469,7 @@ const Build = (() => {
   const lineMat = new T.MeshBasicMaterial({ color: lin('#f6dcb6'), transparent: true, opacity: 1, toneMapped: false, depthWrite: false });
   const thinMat = new T.MeshBasicMaterial({ color: lin('#d9b48a'), transparent: true, opacity: .9, toneMapped: false, depthWrite: false });
   const glowMat = new T.MeshBasicMaterial({ map: new T.CanvasTexture(glowC), color: lin('#e0a060'), transparent: true, opacity: .55, blending: T.AdditiveBlending, depthWrite: false, toneMapped: false });
+  const lineGlowC = lineMat.color.clone(), thinGlowC = thinMat.color.clone(), lineInkC = lin('#5b4a39');
   const strips = [];
   const strip = (x1, z1, x2, z2, w, mat, glow) => {
     const dx = x2 - x1, dz = z2 - z1, len = Math.hypot(dx, dz), th = Math.atan2(-dz, dx);
@@ -1491,7 +1496,7 @@ const Build = (() => {
   strip(-13, 13, 11, 13, .035, thinMat, false); strip(-13, 12.5, -13, 13.5, .035, thinMat, false); strip(11, 12.5, 11, 13.5, .035, thinMat, false);
   strip(13.5, -7, 13.5, 11, .035, thinMat, false); strip(13, -7, 14, -7, .035, thinMat, false); strip(13, 11, 14, 11, .035, thinMat, false);
   const NS = strips.length;
-  strips.forEach((s, i) => { s.a = .004 + (i / NS) * .17; s.b = s.a + .045; });
+  strips.forEach((s, i) => { s.a = -.055 + (i / NS) * .205; s.b = s.a + .045; });
   // door arcs
   const arcMat = thinMat.clone(); arcMat.opacity = 0;
   [[-3, -1.2, 1, Math.PI * 1.5], [3, 0, 1, Math.PI], [6.5, -1, .9, Math.PI * .5]].forEach(a => { const g = new T.RingGeometry(a[2] - .025, a[2] + .025, 24, 1, a[3], Math.PI / 2); g.rotateX(-Math.PI / 2); const m = new T.Mesh(g, arcMat); m.position.set(a[0], .03, a[1]); plan.add(m); });
@@ -1686,8 +1691,10 @@ const Build = (() => {
     // plan
     const planFade = 1 - seg(p, .27, .38);
     strips.forEach(s => { const e = easeInOut(seg(p, s.a, s.b)); const sx = Math.max(.0001, s.len * e); s.core.scale.x = sx; s.core.visible = e > 0; if (s.gl) { s.gl.scale.x = sx; s.gl.visible = e > 0; } });
-    lineMat.opacity = planFade; thinMat.opacity = .9 * planFade; glowMat.opacity = .42 * planFade * (1 - seg(p, .22, .3) * .6);
-    const lab = seg(p, .14, .21) * planFade; labelMats.forEach(m => { m.opacity = lab; }); arcMat.opacity = lab * .9;
+    const ink = seg(p, .21, .29);
+    lineMat.color.copy(lineGlowC).lerp(lineInkC, ink); thinMat.color.copy(thinGlowC).lerp(lineInkC, ink);
+    lineMat.opacity = planFade * lerp(1, .55, ink); thinMat.opacity = .9 * planFade * lerp(1, .5, ink); glowMat.opacity = .42 * (1 - seg(p, .2, .27));
+    const lab = seg(p, .14, .21) * (1 - seg(p, .22, .28)); labelMats.forEach(m => { m.opacity = lab; }); arcMat.opacity = lab * .9;
     plan.visible = planFade > 0;
     gridMat.opacity = .6 * (1 - seg(p, .22, .33));
     gridMesh.visible = gridMat.opacity > 0;
@@ -1714,7 +1721,7 @@ const Build = (() => {
     trees.forEach(tr => { const e = backOut(seg(p, tr.a, tr.a + .1)); tr.g.scale.setScalar(Math.max(.0001, e)); tr.g.visible = e > .001; });
     // camera
     const c = camAt(p);
-    const fit = Math.max(1, 1.18 / aspect);
+    const fit = Math.max(1, 1.18 / aspect) * (aspect < 1 ? lerp(.8, 1, seg(p, .18, .4)) : 1);
     const th = c.th + Math.sin(time * .12) * .025 + smx * .05, ph = c.ph + smy * .02, r = c.r * fit;
     const tx = -2, tz = 1;
     camera.position.set(tx + Math.sin(th) * Math.cos(ph) * r, c.ty + Math.sin(ph) * r, tz + Math.cos(th) * Math.cos(ph) * r);
@@ -1751,6 +1758,7 @@ const Build = (() => {
 
 function uiUpdate(p, env) {
   const sec = $('#plan');
+  p = clamp(p, 0, 1);
   const stage = Math.min(3, Math.floor(p * 4 + .0001));
   const stepsEls = $$('.step', sec);
   if (uiUpdate._s !== stage) {
@@ -1787,7 +1795,9 @@ if (reduce || !hasG) {
     pin: true, scrub: true, anticipatePin: 1, invalidateOnRefresh: true,
     onUpdate: s => Build.setProgress(s.progress), onRefresh: () => Build.resize && Build.resize()
   });
-  Build.setProgress(0);
+  Build.setProgress(-.06);
+  // pre-roll: start drawing the plan while the section scrolls into view
+  ScrollTrigger.create({ trigger: sec, start: 'top bottom', end: 'top top', onUpdate: s => { if (s.progress < 1) Build.setProgress(-.06 * (1 - s.progress)); } });
 
   // generic reveals
   $$('[data-lines]').forEach(el => gsap.to($$('.ln>span', el), { y: 0, duration: 1.3, ease: 'expo.out', stagger: .1, scrollTrigger: { trigger: el, start: 'top 88%', once: true } }));
@@ -1842,17 +1852,40 @@ if (hasG && !reduce) gsap.set('.hero [data-in]', { opacity: 0, y: 24 });
   const done = () => { document.documentElement.classList.remove('loading'); };
   if (!L || reduce || !hasG) { L && L.remove(); done(); heroIn(); return; }
   lenis && lenis.stop();
-  const tl = gsap.timeline({ onComplete: () => { L.remove(); done(); lenis && lenis.start(); ScrollTrigger.refresh(); } });
+  const tl = gsap.timeline({ paused: true, onComplete: () => { L.remove(); done(); gsap.ticker.lagSmoothing(0); lenis && lenis.start(); ScrollTrigger.refresh(); } });
   tl.to('.loader-mark [data-d]', { strokeDashoffset: 0, duration: .85, ease: 'power2.inOut', stagger: .08 })
     .from('.loader-word span', { yPercent: 110, duration: .6, ease: 'expo.out', stagger: .018 }, .3)
     .to('.loader-center', { opacity: 0, y: -14, duration: .35, ease: 'power2.in' }, '+=.08')
     .to('.loader-top', { yPercent: -100, duration: .85, ease: 'expo.inOut' }, '-=.12')
     .to('.loader-bot', { yPercent: 100, duration: .85, ease: 'expo.inOut' }, '<')
     .add(heroIn, '-=.6');
+  // start once the page is actually painting smoothly
+  const go = () => requestAnimationFrame(() => requestAnimationFrame(() => tl.play()));
+  (document.fonts && document.fonts.ready ? Promise.race([document.fonts.ready, new Promise(r => setTimeout(r, 900))]) : Promise.resolve()).then(go);
 })();
 
 // keep things in sync after full load (fonts can change layout)
 addEventListener('load', () => { hasG && ScrollTrigger.refresh(); });
+})();
+</script>
+<style>
+  /* Studio badge: never covers content. Phones: sits in the footer. Desktop: fades in after the first screen. */
+  .eb-foot{position:static!important;display:flex!important;width:max-content;max-width:calc(100% - 32px);margin:18px auto 22px!important;transform:none!important;opacity:1!important}
+  .eb-hide{opacity:0!important;pointer-events:none!important;transform:translateY(8px)!important}
+  .eb-anim{transition:opacity .4s,transform .4s!important}
+</style>
+<script>
+(function () {
+  const place = () => {
+    const b = document.querySelector('.badge'), f = document.querySelector('footer');
+    if (!b || !f) return false;
+    if (matchMedia('(max-width: 760px)').matches) { f.appendChild(b); b.classList.add('eb-foot'); return true; }
+    b.classList.add('eb-anim');
+    const sync = () => b.classList.toggle('eb-hide', scrollY < innerHeight * .6 || scrollY + innerHeight > document.documentElement.scrollHeight - 140);
+    sync(); addEventListener('scroll', sync, { passive: true });
+    return true;
+  };
+  if (!place()) addEventListener('load', place);
 })();
 </script>
 </body>
