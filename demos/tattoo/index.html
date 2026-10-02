@@ -92,6 +92,9 @@ html.fine input[type=text], html.fine input[type=email], html.fine textarea{curs
 
 /* ---------- nav ---------- */
 .nav{position:fixed;top:0;left:0;right:0;z-index:80;display:flex;align-items:center;gap:40px;padding:16px var(--gutter);height:76px;pointer-events:none;mix-blend-mode:difference;color:#ece4d4}
+.nav{transition:transform .6s var(--ease),opacity .4s}
+.nav.hide{transform:translateY(-100%);opacity:0}
+.nav:focus-within{transform:none;opacity:1}
 .nav-cta{position:fixed;top:16px;right:var(--gutter);z-index:82;display:flex;align-items:center;gap:10px}
 .nav > *{pointer-events:auto}
 .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:#ece4d4}
@@ -1667,6 +1670,11 @@ $$('a[href^="#"]').forEach(a => a.addEventListener("click", e => {
   const h = a.getAttribute("href"); if (h.length < 2 || !$(h)) return;
   e.preventDefault(); closeMenu(); go(h);
 }));
+// hide brand/links while scrolling down, bring back on the way up
+(function () {
+  const nav = $("#nav"); let lastY = scrollY;
+  addEventListener("scroll", () => { const y = scrollY; if (Math.abs(y - lastY) < 6) return; nav.classList.toggle("hide", y > lastY && y > 160 && !document.body.classList.contains("menu-open")); lastY = y; }, { passive: true });
+})();
 // mobile menu
 const menuBtn = $("#menuBtn");
 function closeMenu() { root.classList.remove("menu-open"); document.body.classList.remove("menu-open"); menuBtn.setAttribute("aria-expanded", "false"); menuBtn.setAttribute("aria-label", "Open menu"); lenis && lenis.start(); }
@@ -1993,6 +2001,26 @@ function intro() {
 })();
 
 addEventListener("load", () => HAS_GSAP && ScrollTrigger.refresh());
+})();
+</script>
+<style>
+  /* Studio badge: never covers content. Phones: sits in the footer. Desktop: fades in after the first screen. */
+  .eb-foot{position:static!important;display:flex!important;width:max-content;max-width:calc(100% - 32px);margin:18px auto 22px!important;transform:none!important;opacity:1!important}
+  .eb-hide{opacity:0!important;pointer-events:none!important;transform:translateY(8px)!important}
+  .eb-anim{transition:opacity .4s,transform .4s!important}
+</style>
+<script>
+(function () {
+  const place = () => {
+    const b = document.querySelector('#badge'), f = document.querySelector('footer');
+    if (!b || !f) return false;
+    if (matchMedia('(max-width: 760px)').matches) { f.appendChild(b); b.classList.add('eb-foot'); return true; }
+    b.classList.add('eb-anim');
+    const sync = () => b.classList.toggle('eb-hide', scrollY < innerHeight * .6 || scrollY + innerHeight > document.documentElement.scrollHeight - 140);
+    sync(); addEventListener('scroll', sync, { passive: true });
+    return true;
+  };
+  if (!place()) addEventListener('load', place);
 })();
 </script>
 </body>
