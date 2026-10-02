@@ -43,6 +43,7 @@ Pick **one signature interaction**: a playable piece of the business itself, bui
 - It must be **interactive**: cursor, drag, hold, click or scroll. Not just a looping video.
 - It should have a **payoff**: a headline that swaps at 100% clean, a "PR!" at five reps, the burger restacking.
 - It needs a **mobile version** (touch or drag, or auto-play) and a **static fallback** (reduced motion, no WebGL).
+- It must be **obvious in the first two seconds**. Put a bold callout right on or next to it that names the action ("Grab the photo & shake it", with a hand icon and an arrow pointing at it), use touch wording on phones, and add an idle nudge: if nobody touches it for ~3s, it wiggles. Hide the callout for good after the first interaction. Small grey hint text under the piece is not enough; a real visitor missed it.
 
 Then pick two supporting pieces:
 - **One scroll story**: a pinned, scrubbed section that walks through their process (the six-step detail, the skin fade by guard number, the ritual).
