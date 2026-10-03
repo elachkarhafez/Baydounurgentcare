@@ -1,0 +1,686 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="robots" content="noai, noimageai">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DSP Studios | Wedding Photography &amp; Videography</title>
+  <meta name="description" content="DSP Studios: wedding photography and videography by one coordinated team. Unlimited professionally edited images, cinematic long-form films, drone, live streaming and multi-day coverage. Available for travel.">
+  <meta name="theme-color" content="#f4efe7">
+  <meta property="og:title" content="DSP Studios">
+  <meta property="og:description" content="More than photos. Memories you'll relive for a lifetime.">
+  <meta property="og:image" content="img/p6.webp">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..800;1,6..96,400..700&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="preload" as="image" href="img/p6.webp">
+  <style>
+    /* ------------------------------------------------------------
+       DSP STUDIOS · design tokens
+       Editorial and quiet, so their photographs do the talking:
+       ivory paper, ink black (their logo is black), and one
+       champagne accent pulled from the gold in their bridal work.
+       Bodoni Moda for fashion-magazine headlines, Manrope to read.
+       ------------------------------------------------------------ */
+    :root {
+      --bg: #f4efe7;
+      --bg-2: #ebe3d6;
+      --ink: #15120f;
+      --muted: #6b6359;
+      --line: rgba(21,18,15,.14);
+      --champ: #a5814c;
+      --dark: #100e0c;
+      --serif: "Bodoni Moda", "Didot", Georgia, serif;
+      --sans: "Manrope", system-ui, sans-serif;
+      --pad: clamp(18px, 4vw, 60px);
+      --ease: cubic-bezier(.65,.05,.25,1);
+      --ease-out: cubic-bezier(.16,1,.3,1);
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    html.lenis, html.lenis body { height: auto; }
+    .lenis.lenis-smooth { scroll-behavior: auto !important; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font: 400 16px/1.65 var(--sans); overflow-x: clip; -webkit-font-smoothing: antialiased; }
+    img, svg { display: block; max-width: 100%; }
+    img { height: auto; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+    input, textarea { font: inherit; color: inherit; }
+    :focus-visible { outline: 1.5px solid var(--champ); outline-offset: 3px; }
+    ::selection { background: var(--ink); color: var(--bg); }
+    [hidden] { display: none !important; }
+    .wrap { padding: 0 var(--pad); }
+    .eyebrow { font: 500 11.5px/1.3 var(--sans); letter-spacing: .32em; text-transform: uppercase; color: var(--muted); }
+    .eyebrow b { color: var(--champ); font-weight: 600; }
+    h1, h2, h3 { margin: 0; font-family: var(--serif); font-weight: 400; letter-spacing: -.02em; line-height: .98; }
+    h2 { font-size: clamp(44px, 6.4vw, 108px); }
+    em { font-style: italic; }
+    h1 em, h2 em { color: var(--champ); }
+    .line { display: block; overflow: hidden; padding-bottom: .08em; }
+    .line > span { display: inline-block; will-change: transform; }
+    .lede { color: var(--muted); font-size: clamp(15.5px, 1.15vw, 17.5px); max-width: 46ch; margin: 22px 0 0; }
+
+    .btn { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 12px; height: 54px; padding: 0 30px; border: 1px solid var(--ink); border-radius: 999px; font: 500 12px/1 var(--sans); letter-spacing: .24em; text-transform: uppercase; overflow: hidden; isolation: isolate; white-space: nowrap; transition: color .5s var(--ease); }
+    .btn::before { content: ""; position: absolute; inset: 0; background: var(--ink); border-radius: inherit; transform: translateY(101%); transition: transform .6s var(--ease); z-index: -1; }
+    .btn.solid { background: var(--ink); color: var(--bg); }
+    .btn.solid::before { background: var(--champ); }
+    .btn svg { width: 14px; height: 14px; transition: transform .45s var(--ease); }
+    @media (hover: hover) { .btn:hover { color: var(--bg); } .btn:hover::before { transform: none; } .btn:hover svg { transform: translateX(3px); } }
+    .btn.sm { height: 44px; padding: 0 22px; font-size: 11px; }
+
+    /* logo: their black disc with DSP and a lens, redrawn */
+    .mark { display: inline-flex; align-items: center; gap: 12px; }
+    .mark svg { width: 40px; height: 40px; }
+    .mark b { font: 500 13px/1 var(--sans); letter-spacing: .38em; }
+
+    /* intro */
+    .intro { position: fixed; inset: 0; z-index: 100; background: var(--dark); color: var(--bg); display: grid; place-items: center; }
+    .intro .lens { width: min(180px, 42vw); }
+    .intro .word { position: absolute; bottom: 12vh; left: 0; right: 0; text-align: center; font: 400 clamp(28px, 4vw, 44px)/1 var(--serif); letter-spacing: .3em; }
+    html:not(.js) .intro, html.rm .intro { display: none; }
+
+    header { position: fixed; top: 0; left: 0; right: 0; z-index: 50; transition: background .5s var(--ease), border-color .5s; border-bottom: 1px solid transparent; }
+    header.scrolled { background: rgba(244,239,231,.86); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); border-color: var(--line); }
+    header .wrap { height: 78px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 18px; }
+    header nav { display: flex; gap: 30px; }
+    header nav a { font: 500 11.5px/1 var(--sans); letter-spacing: .26em; text-transform: uppercase; color: var(--muted); transition: color .3s; }
+    header nav a:hover { color: var(--ink); }
+    header .right { display: flex; justify-content: flex-end; }
+    @media (max-width: 900px) { header nav { display: none; } header .wrap { grid-template-columns: 1fr auto; height: 66px; } }
+
+    /* ---------- hero + viewfinder (signature) ---------- */
+    .hero { position: relative; min-height: 100svh; padding: 120px 0 70px; display: grid; align-items: center; }
+    .hero-grid { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: clamp(30px, 5vw, 90px); align-items: center; }
+    .hero h1 { font-size: clamp(50px, 5.7vw, 104px); }
+    .hero h1 .i { font-style: italic; color: var(--champ); }
+    .hero .ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 36px; }
+    .hero .meta { display: flex; flex-wrap: wrap; gap: 8px 28px; margin-top: 40px; padding-top: 22px; border-top: 1px solid var(--line); max-width: 560px; }
+    .hero .meta span { font-size: 13.5px; color: var(--muted); }
+    .hero .meta b { display: block; color: var(--ink); font: 400 21px/1.1 var(--serif); margin-bottom: 4px; }
+
+    .cam { position: relative; justify-self: end; width: 100%; max-width: min(460px, calc((100svh - 300px) * .8)); }
+    .vf { position: relative; aspect-ratio: 4 / 5; background: var(--dark); border-radius: 4px; overflow: hidden; box-shadow: 0 50px 100px -40px rgba(21,18,15,.55); user-select: none; -webkit-user-select: none; }
+    .vf .shot { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .vf .ui { position: absolute; inset: 0; pointer-events: none; color: #fff; z-index: 4; }
+    .vf .corner { position: absolute; width: 26px; height: 26px; border: 1.5px solid rgba(255,255,255,.85); }
+    .vf .c1 { left: 16px; top: 16px; border-right: 0; border-bottom: 0; } .vf .c2 { right: 16px; top: 16px; border-left: 0; border-bottom: 0; }
+    .vf .c3 { left: 16px; bottom: 16px; border-right: 0; border-top: 0; } .vf .c4 { right: 16px; bottom: 16px; border-left: 0; border-top: 0; }
+    .vf .focus { position: absolute; left: 50%; top: 42%; width: 64px; height: 64px; margin: -32px; border: 1.5px solid rgba(255,255,255,.7); border-radius: 2px; transition: border-color .2s; }
+    .vf .focus.lock { border-color: #7dff9b; }
+    .vf .top { position: absolute; left: 0; right: 0; top: 0; padding: 18px 52px; display: flex; justify-content: space-between; align-items: center; font: 600 11px/1 var(--sans); letter-spacing: .2em; text-shadow: 0 1px 6px rgba(0,0,0,.5); }
+    .vf .rec { display: inline-flex; align-items: center; gap: 8px; opacity: 0; transition: opacity .3s; }
+    .vf .rec i { width: 9px; height: 9px; border-radius: 50%; background: #ff3b30; animation: blink 1s steps(2) infinite; }
+    @keyframes blink { 50% { opacity: .15; } }
+    .vf.film .rec { opacity: 1; }
+    .vf .bar { position: absolute; left: 0; right: 0; height: 12%; background: #000; z-index: 3; transform: scaleY(0); transition: transform .7s var(--ease); }
+    .vf .bar.t { top: 0; transform-origin: top; } .vf .bar.b { bottom: 0; transform-origin: bottom; }
+    .vf.film .bar { transform: scaleY(1); }
+    .vf.film .top { top: 12%; }
+    .vf .iris { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 5; pointer-events: none; }
+    .vf .flash { position: absolute; inset: 0; background: #fff; opacity: 0; z-index: 6; pointer-events: none; }
+    .cam-bar { display: flex; justify-content: space-between; align-items: center; gap: 14px; margin-top: 16px; }
+    .modes { display: inline-flex; padding: 4px; border: 1px solid var(--line); border-radius: 999px; position: relative; }
+    .modes button { position: relative; z-index: 1; height: 36px; padding: 0 18px; font: 600 11px/1 var(--sans); letter-spacing: .22em; text-transform: uppercase; color: var(--muted); transition: color .4s; }
+    .modes button[aria-pressed="true"] { color: var(--bg); }
+    .modes .pill { position: absolute; top: 4px; bottom: 4px; left: 4px; border-radius: 999px; background: var(--ink); transition: transform .5s var(--ease), width .5s var(--ease); }
+    .shutter { position: relative; width: 66px; height: 66px; border-radius: 50%; border: 1.5px solid var(--ink); display: grid; place-items: center; transition: transform .2s; }
+    .shutter i { width: 50px; height: 50px; border-radius: 50%; background: var(--ink); transition: transform .2s var(--ease), background .3s; }
+    .shutter:active i { transform: scale(.86); }
+    .shutter.rec i { background: #e0322a; border-radius: 10px; width: 30px; height: 30px; }
+    .count { font: 400 22px/1 var(--serif); font-variant-numeric: tabular-nums; min-width: 4.4em; text-align: right; }
+    .count small { font: 500 10.5px/1 var(--sans); letter-spacing: .22em; color: var(--muted); display: block; margin-top: 6px; text-transform: uppercase; }
+    .callout { position: absolute; z-index: 8; right: 74px; bottom: 14px; display: inline-flex; align-items: center; gap: 10px; padding: 11px 16px; background: var(--champ); color: #fff; border-radius: 999px; font: 600 11.5px/1 var(--sans); letter-spacing: .18em; text-transform: uppercase; white-space: nowrap; box-shadow: 0 12px 30px rgba(165,129,76,.35); transition: opacity .5s var(--ease), transform .5s var(--ease); pointer-events: none; }
+    .callout::after { content: ""; position: absolute; right: -6px; top: 50%; margin-top: -6px; border: 6px solid transparent; border-right: 0; border-left-color: var(--champ); }
+    .cam.touched .callout { opacity: 0; transform: translateX(-8px); }
+    .strip { display: flex; gap: 8px; margin-top: 16px; min-height: 64px; align-items: center; }
+    .strip .th { width: 48px; height: 60px; flex: none; border-radius: 2px; overflow: hidden; box-shadow: 0 6px 14px rgba(21,18,15,.18); background: #ddd; }
+    .strip .th img { width: 100%; height: 100%; object-fit: cover; }
+    .strip .empty { font-size: 13px; color: var(--muted); }
+    .strip-note { margin-top: 10px; font: italic 400 17px/1.3 var(--serif); color: var(--champ); opacity: 0; transform: translateY(6px); transition: opacity .6s var(--ease), transform .6s var(--ease); }
+    .strip-note.on { opacity: 1; transform: none; }
+    @media (max-width: 900px) {
+      .hero { padding: 96px 0 60px; }
+      .hero-grid { grid-template-columns: 1fr; }
+      .cam { justify-self: stretch; max-width: none; }
+      .hero h1 { font-size: clamp(46px, 13.4vw, 76px); }
+      .callout { right: -4px; bottom: 80px; font-size: 10.5px; padding: 10px 13px; }
+      .callout::after { right: 28px; top: auto; bottom: -6px; margin-top: 0; border: 6px solid transparent; border-bottom: 0; border-top-color: var(--champ); }
+    }
+
+    /* statement */
+    .statement { padding: clamp(110px, 15vw, 220px) 0; background: var(--dark); color: var(--bg); }
+    .statement .eyebrow { color: rgba(244,239,231,.55); margin-bottom: 34px; }
+    .statement p.big { margin: 0; font: 400 clamp(30px, 4vw, 66px)/1.12 var(--serif); letter-spacing: -.015em; max-width: 22ch; }
+    .statement .w { opacity: .14; }
+    .statement .w.hl { font-style: italic; color: #d6b98a; }
+
+    /* gallery rail */
+    .gallery { position: relative; background: var(--dark); color: var(--bg); overflow: hidden; }
+    .g-pin { height: 100svh; display: flex; align-items: center; }
+    .g-rail { display: flex; align-items: center; gap: clamp(16px, 2vw, 30px); padding: 0 var(--pad); will-change: transform; }
+    .g-intro { flex: none; width: clamp(280px, 28vw, 420px); padding-right: 20px; }
+    .g-intro .eyebrow { color: rgba(244,239,231,.55); }
+    .g-intro p { color: rgba(244,239,231,.6); margin-top: 20px; max-width: 34ch; }
+    .g-item { flex: none; position: relative; overflow: hidden; border-radius: 2px; background: #1d1a17; }
+    .g-item img { position: absolute; inset: -8% -10%; width: 120%; height: 116%; max-width: none; object-fit: cover; }
+    .g-item.t { width: clamp(240px, 24vw, 380px); aspect-ratio: 2 / 3; }
+    .g-item.m { width: clamp(260px, 28vw, 440px); aspect-ratio: 4 / 5; }
+    .g-item.s { width: clamp(180px, 16vw, 260px); aspect-ratio: 3 / 4; align-self: flex-end; margin-bottom: 6vh; }
+    .g-item.w { width: clamp(340px, 38vw, 600px); aspect-ratio: 3 / 2; align-self: flex-start; margin-top: 6vh; }
+    .g-progress { position: absolute; left: var(--pad); right: var(--pad); bottom: 34px; height: 1px; background: rgba(244,239,231,.18); }
+    .g-progress i { position: absolute; inset: 0; background: #d6b98a; transform: scaleX(0); transform-origin: left; }
+    @media (max-width: 900px) {
+      .gallery { padding: 90px 0; }
+      .g-pin { height: auto; display: block; }
+      .g-rail { display: grid; grid-auto-flow: column; grid-auto-columns: 74%; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: var(--pad); scrollbar-width: none; padding-bottom: 6px; }
+      .g-rail::-webkit-scrollbar { display: none; }
+      .g-intro { grid-column: 1 / -1; display: none; }
+      .g-item { width: auto !important; aspect-ratio: 4 / 5 !important; margin: 0 !important; align-self: auto !important; scroll-snap-align: start; }
+      .g-item img { inset: 0; width: 100%; height: 100%; }
+      .g-progress { display: none; }
+      .g-mhead { padding: 0 var(--pad) 34px; }
+    }
+    @media (min-width: 901px) { .g-mhead { display: none; } }
+
+    /* services */
+    .services { padding: clamp(110px, 14vw, 200px) 0; }
+    .sec-head { display: flex; justify-content: space-between; align-items: end; gap: 30px; flex-wrap: wrap; margin-bottom: clamp(44px, 6vw, 80px); }
+    .sec-head .eyebrow { display: block; margin-bottom: 22px; }
+    .svc-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(18px, 2.4vw, 34px); }
+    .svc { border-top: 1px solid var(--ink); padding-top: 26px; }
+    .svc .n { font: italic 400 18px/1 var(--serif); color: var(--champ); }
+    .svc h3 { font-size: clamp(32px, 3vw, 46px); margin-top: 18px; }
+    .svc p { color: var(--muted); margin: 14px 0 0; font-size: 15px; }
+    .svc ul { list-style: none; margin: 22px 0 0; padding: 0; }
+    .svc li { padding: 13px 0; border-top: 1px solid var(--line); font-size: 15px; display: flex; gap: 12px; }
+    .svc li::before { content: ""; width: 6px; height: 6px; margin-top: 9px; border-radius: 50%; background: var(--champ); flex: none; }
+    .svc-photo { margin-top: clamp(50px, 6vw, 80px); display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 14px; }
+    .svc-photo figure { margin: 0; overflow: hidden; border-radius: 2px; }
+    .svc-photo img { width: 100%; height: 100%; object-fit: cover; aspect-ratio: 4 / 5; }
+    .svc-photo figure:first-child img { aspect-ratio: auto; height: 100%; }
+    @media (max-width: 900px) { .svc-grid { grid-template-columns: 1fr; } .svc-photo { grid-template-columns: 1fr 1fr; } .svc-photo figure:first-child { grid-column: 1 / -1; } .svc-photo figure:first-child img { aspect-ratio: 3 / 2; } }
+
+    /* approach */
+    .approach { padding: 0 0 clamp(110px, 14vw, 200px); }
+    .ap-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(18px, 2.4vw, 34px); }
+    .ap figure { margin: 0 0 24px; overflow: hidden; border-radius: 2px; aspect-ratio: 3 / 4; }
+    .ap figure img { width: 100%; height: 100%; object-fit: cover; }
+    .ap .eyebrow { display: block; }
+    .ap h3 { font-size: clamp(28px, 2.6vw, 40px); margin-top: 12px; }
+    .ap p { color: var(--muted); margin: 12px 0 0; font-size: 15px; }
+    @media (max-width: 900px) { .ap-grid { grid-template-columns: 1fr; gap: 50px; } }
+
+    /* values */
+    .values { padding: clamp(100px, 13vw, 180px) 0; background: var(--bg-2); }
+    .vrow { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 30px; align-items: baseline; padding: clamp(24px, 3vw, 40px) 0; border-top: 1px solid var(--line); }
+    .vrow:last-child { border-bottom: 1px solid var(--line); }
+    .vrow h3 { font-size: clamp(48px, 7vw, 120px); font-style: italic; }
+    .vrow p { color: var(--muted); max-width: 44ch; margin: 0; }
+    @media (max-width: 900px) { .vrow { grid-template-columns: 1fr; gap: 10px; } }
+
+    /* inquiry */
+    .inquire { padding: clamp(110px, 14vw, 200px) 0; }
+    .iq-grid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: clamp(30px, 5vw, 90px); align-items: start; }
+    .field { margin-top: 30px; }
+    .field:first-child { margin-top: 0; }
+    .field > .eyebrow { display: block; margin-bottom: 12px; }
+    .two { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .inp { width: 100%; height: 52px; background: none; border: 0; border-bottom: 1px solid rgba(21,18,15,.3); outline: none; font-size: 17px; border-radius: 0; transition: border-color .3s; }
+    .inp:focus { border-color: var(--champ); }
+    .inp::placeholder { color: #a39a8f; }
+    .opts { display: flex; flex-wrap: wrap; gap: 8px; }
+    .opt input { position: absolute; opacity: 0; pointer-events: none; }
+    .opt span { display: inline-block; padding: 11px 18px; border: 1px solid rgba(21,18,15,.25); border-radius: 999px; font-size: 14px; cursor: pointer; transition: background .3s, color .3s, border-color .3s; }
+    .opt:hover span { border-color: var(--ink); }
+    .opt input:checked + span { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+    .opt input:focus-visible + span { outline: 1.5px solid var(--champ); outline-offset: 2px; }
+    .letter { position: sticky; top: 100px; background: #fffdf9; border: 1px solid var(--line); border-radius: 4px; padding: clamp(24px, 3vw, 40px); box-shadow: 0 40px 80px -50px rgba(21,18,15,.35); }
+    .letter .to { font-size: 12.5px; color: var(--muted); letter-spacing: .04em; display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; padding-bottom: 16px; border-bottom: 1px solid var(--line); }
+    .letter .subj { font: italic 400 22px/1.25 var(--serif); margin: 18px 0 0; }
+    .letter .body { white-space: pre-wrap; font-size: 15px; line-height: 1.7; margin-top: 16px; color: #2f2a25; overflow-wrap: anywhere; }
+    .letter .acts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 26px; }
+    .letter .acts .btn { padding: 0 12px; }
+    .letter .acts .wide { grid-column: 1 / -1; }
+    .letter .note { margin: 12px 0 0; font-size: 13px; color: var(--muted); min-height: 1em; }
+    @media (max-width: 900px) { .iq-grid, .two { grid-template-columns: 1fr; } .letter { position: relative; top: 0; } }
+
+    /* closing */
+    .closing { position: relative; color: var(--bg); text-align: center; overflow: hidden; }
+    .closing .bg { position: absolute; inset: 0; }
+    .closing .bg img { width: 100%; height: 120%; object-fit: cover; filter: brightness(.42); }
+    .closing .inner { position: relative; padding: clamp(140px, 18vw, 260px) var(--pad); }
+    .closing h2 { font-size: clamp(42px, 6.2vw, 104px); max-width: 16ch; margin: 0 auto; }
+    .closing h2 em { color: #e3c999; }
+    .closing p { color: rgba(244,239,231,.75); max-width: 40ch; margin: 24px auto 34px; }
+    .closing .btn { border-color: var(--bg); color: var(--bg); }
+    .closing .btn::before { background: var(--bg); }
+    @media (hover: hover) { .closing .btn:hover { color: var(--ink); } }
+    footer { background: var(--dark); color: rgba(244,239,231,.6); }
+    footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 14px 24px; padding-top: 28px; padding-bottom: 32px; font-size: 13.5px; }
+    footer nav { display: flex; flex-wrap: wrap; gap: 8px 24px; }
+    footer a:hover { color: var(--bg); }
+
+    .cursor { position: fixed; left: 0; top: 0; z-index: 90; width: 8px; height: 8px; margin: -4px; border-radius: 50%; background: #fff; mix-blend-mode: difference; pointer-events: none; opacity: 0; transition: width .4s var(--ease), height .4s var(--ease), margin .4s var(--ease); }
+    .cursor.big { width: 54px; height: 54px; margin: -27px; }
+    @media not all and (hover: hover) and (pointer: fine) { .cursor { display: none; } }
+  </style>
+  <script>document.documentElement.classList.add('js');if(matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('rm');</script>
+</head>
+<body>
+  <template id="lens-tpl">
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <circle cx="50" cy="50" r="48" fill="#0d0c0b"/>
+      <circle cx="50" cy="50" r="48" fill="none" stroke="rgba(244,239,231,.25)" stroke-width="1"/>
+      <text x="50" y="44" text-anchor="middle" font-family="Bodoni Moda, Didot, serif" font-size="26" fill="#f4efe7" letter-spacing="1">DSP</text>
+      <circle cx="50" cy="66" r="12" fill="#1c1a18" stroke="#3a3632" stroke-width="2"/>
+      <circle cx="50" cy="66" r="6" fill="#2b2f3a"/><circle cx="47" cy="63" r="2" fill="#9fb3d4" opacity=".8"/>
+    </svg>
+  </template>
+
+  <div class="intro" aria-hidden="true">
+    <svg class="lens" viewBox="0 0 200 200" data-intro-iris>
+      <circle cx="100" cy="100" r="96" fill="none" stroke="rgba(244,239,231,.35)" stroke-width="1"/>
+      <g data-blades></g>
+    </svg>
+    <div class="word">DSP STUDIOS</div>
+  </div>
+
+  <header>
+    <div class="wrap">
+      <a class="mark" href="#top" aria-label="DSP Studios, back to top"><span data-lens></span><b>DSP STUDIOS</b></a>
+      <nav aria-label="Sections"><a href="#work">Work</a><a href="#services">Services</a><a href="#approach">Approach</a><a href="#inquire">Inquire</a></nav>
+      <div class="right"><a class="btn sm solid" href="#inquire">Get a quote</a></div>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero" id="top">
+      <div class="wrap hero-grid">
+        <div>
+          <p class="eyebrow" data-in><b>DSP Studios</b> · Wedding photography &amp; film</p>
+          <h1 style="margin-top:24px">
+            <span class="line"><span>More than photos.</span></span>
+            <span class="line"><span class="i">Memories you’ll</span></span>
+            <span class="line"><span class="i">relive for a lifetime.</span></span>
+          </h1>
+          <p class="lede" data-in>One coordinated team for photography and film, so nothing is missed and every moment is captured with intention. Based in the city, available for travel.</p>
+          <div class="ctas" data-in>
+            <a class="btn solid" href="#inquire">Get a quote <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M1 7h11M8 3l4 4-4 4"/></svg></a>
+            <a class="btn" href="#work">View the work</a>
+          </div>
+          <div class="meta" data-in><span><b>Photo + film</b>One team, in sync</span><span><b>Unlimited</b>Fully edited images</span><span><b>Multi-day</b>Every event covered</span></div>
+        </div>
+
+        <div class="cam" data-cam data-in>
+          <div class="vf" data-vf>
+            <img class="shot" data-a src="img/p6.webp" width="934" height="1400" alt="A couple dancing on a Manhattan street, photographed by DSP Studios">
+            <img class="shot" data-b src="img/p11.webp" width="1050" height="1400" alt="" style="opacity:0">
+            <div class="bar t"></div><div class="bar b"></div>
+            <svg class="iris" data-iris viewBox="0 0 100 125" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><mask id="irisMask"><rect width="100" height="125" fill="#fff"/><polygon data-hole fill="#000"/></mask></defs><rect width="100" height="125" fill="#050505" mask="url(#irisMask)"/></svg>
+            <div class="flash" data-flash></div>
+            <div class="ui" aria-hidden="true">
+              <span class="corner c1"></span><span class="corner c2"></span><span class="corner c3"></span><span class="corner c4"></span>
+              <span class="focus" data-focus></span>
+              <div class="top"><span data-mode-l>PHOTO</span><span class="rec"><i></i><span data-tc>00:00:00:00</span></span><span data-frame>01 / 15</span></div>
+            </div>
+          </div>
+          <div class="cam-bar">
+            <div class="modes" role="group" aria-label="Camera mode"><span class="pill" aria-hidden="true"></span><button type="button" aria-pressed="true" data-mode="photo">Photo</button><button type="button" aria-pressed="false" data-mode="film">Film</button></div>
+            <div style="position:relative;display:flex;align-items:center;gap:16px">
+              <span class="callout" data-callout>Tap to take the shot</span>
+              <button class="shutter" type="button" data-shutter aria-label="Take the shot"><i></i></button>
+            </div>
+          </div>
+          <div class="strip" data-strip aria-live="polite"><span class="empty" data-empty>Your gallery starts here.</span></div>
+          <p class="strip-note" data-strip-note>Unlimited images, every one fully edited. Never raw files.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- STATEMENT -->
+    <section class="statement">
+      <div class="wrap">
+        <p class="eyebrow">Our philosophy</p>
+        <p class="big" data-words>We believe wedding photographers are more than vendors. We are <span class="hl-g">the storytellers of your most meaningful day,</span> preserving not just how it looked, but how it felt.</p>
+      </div>
+    </section>
+
+    <!-- GALLERY -->
+    <section class="gallery" id="work">
+      <div class="g-mhead"><p class="eyebrow" style="color:rgba(244,239,231,.55)">Portfolio</p><h2 style="margin-top:18px">A glimpse of <em>the stories.</em></h2></div>
+      <div class="g-pin">
+        <div class="g-rail" data-rail>
+          <div class="g-intro">
+            <p class="eyebrow">Portfolio</p>
+            <h2 style="margin-top:22px">A glimpse of <em>the stories.</em></h2>
+            <p>Each image is a celebration we were honored to document, across diverse settings and cultures.</p>
+          </div>
+        </div>
+      </div>
+      <div class="g-progress" aria-hidden="true"><i data-gbar></i></div>
+    </section>
+
+    <!-- SERVICES -->
+    <section class="services" id="services">
+      <div class="wrap">
+        <div class="sec-head">
+          <div><span class="eyebrow">Complete wedding coverage</span><h2><span class="line"><span>Photo and film,</span></span><span class="line"><span><em>one studio.</em></span></span></h2></div>
+          <p class="lede" style="margin:0">Photography, videography and production under one roof. Our team works together all day, so your story is told cohesively across both.</p>
+        </div>
+        <div class="svc-grid" data-svcs></div>
+        <div class="svc-photo">
+          <figure><img src="img/p3.webp" width="934" height="1400" alt="Couple at night with city towers lit behind them" loading="lazy"></figure>
+          <figure><img src="img/p8.webp" width="934" height="1400" alt="Hands with wedding rings over a bridal bouquet" loading="lazy"></figure>
+          <figure><img src="img/p9.webp" width="500" height="750" alt="Gold bridal bangles and jewelry detail" loading="lazy"></figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- APPROACH -->
+    <section class="approach" id="approach">
+      <div class="wrap">
+        <div class="sec-head">
+          <div><span class="eyebrow">Our approach</span><h2><span class="line"><span>Calm, prepared,</span></span><span class="line"><span><em>in the background.</em></span></span></h2></div>
+        </div>
+        <div class="ap-grid" data-ap></div>
+      </div>
+    </section>
+
+    <!-- VALUES -->
+    <section class="values">
+      <div class="wrap" data-values></div>
+    </section>
+
+    <!-- INQUIRE -->
+    <section class="inquire" id="inquire">
+      <div class="wrap">
+        <div class="sec-head">
+          <div><span class="eyebrow">Get a quote</span><h2><span class="line"><span>Tell us about</span></span><span class="line"><span><em>your day.</em></span></span></h2></div>
+          <p class="lede" style="margin:0">Pick what you need and we’ll write the note for you. Send it by email or text, and we’ll get back to you within 24–48 hours.</p>
+        </div>
+        <div class="iq-grid">
+          <form data-form onsubmit="return false">
+            <div class="field"><div class="two">
+              <label><span class="eyebrow" style="display:block;margin-bottom:6px">Your names</span><input class="inp" name="names" placeholder="e.g. Aisha &amp; Omar"></label>
+              <label><span class="eyebrow" style="display:block;margin-bottom:6px">Wedding date</span><input class="inp" name="date" placeholder="Month / year, or exact date"></label>
+            </div></div>
+            <div class="field"><span class="eyebrow">Coverage</span><div class="opts" data-cov></div></div>
+            <div class="field"><span class="eyebrow">Which events?</span><div class="opts" data-events></div></div>
+            <div class="field"><span class="eyebrow">Add-ons</span><div class="opts" data-adds></div></div>
+            <div class="field"><div class="two">
+              <label><span class="eyebrow" style="display:block;margin-bottom:6px">Venue or city</span><input class="inp" name="where" placeholder="Where is it?"></label>
+              <label><span class="eyebrow" style="display:block;margin-bottom:6px">Guest count</span><input class="inp" name="guests" placeholder="Roughly"></label>
+            </div></div>
+          </form>
+          <aside class="letter" aria-live="polite">
+            <div class="to"><span>To: <span data-email-disp></span></span><span data-phone-disp></span></div>
+            <p class="subj" data-subj></p>
+            <div class="body" data-body></div>
+            <div class="acts">
+              <a class="btn solid wide" data-mail href="#">Send by email <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M1 7h11M8 3l4 4-4 4"/></svg></a>
+              <a class="btn sm" data-sms href="#">Text it</a>
+              <button class="btn sm" type="button" data-copy>Copy</button>
+            </div>
+            <p class="note" data-note></p>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- CLOSING -->
+    <section class="closing">
+      <div class="bg"><img data-cbg src="img/p2.webp" width="934" height="1400" alt="" loading="lazy"></div>
+      <div class="inner">
+        <p class="eyebrow" style="color:rgba(244,239,231,.6)">Let’s connect</p>
+        <h2 style="margin-top:22px">Your wedding lasts a day. The memories deserve to <em>last forever.</em></h2>
+        <p>Ready to capture your special day? We’d love to hear about your vision.</p>
+        <a class="btn" href="#inquire">Get a quote</a>
+      </div>
+    </section>
+  </main>
+  <footer>
+    <div class="wrap">
+      <span>© <span data-year>2026</span> DSP Studios · Wedding photography &amp; videography</span>
+      <nav aria-label="Footer"><a data-ig href="#" target="_blank" rel="noopener">@dspstudios_usa</a><a data-mail-plain href="#">Email</a><a data-tel href="#"></a></nav>
+    </div>
+  </footer>
+  <div class="cursor" data-cursor aria-hidden="true"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+  <script>
+  /* =============================================================
+     CONFIG: from dspstudios.us and @dspstudios_usa.
+     ============================================================= */
+  const CONFIG = {
+    name: 'DSP Studios',
+    email: 'booking.dsphotography@gmail.com',
+    phone: '(917) 673-5058',
+    instagram: 'https://www.instagram.com/dspstudios_usa/',
+    // portfolio images, in the order the viewfinder and the rail use them
+    photos: [
+      { src: 'img/p6.webp', w: 934, h: 1400, alt: 'A couple dancing on a Manhattan street', size: 't' },
+      { src: 'img/p11.webp', w: 1050, h: 1400, alt: 'Bride and groom forehead to forehead by the water', size: 'm' },
+      { src: 'img/p3.webp', w: 934, h: 1400, alt: 'Couple at night with city towers lit behind them', size: 's' },
+      { src: 'img/p12.webp', w: 1120, h: 1400, alt: 'Couple on a marble staircase, bride in a red lehenga', size: 't' },
+      { src: 'img/p4.webp', w: 934, h: 1400, alt: 'Bride in pink with her bridesmaids peeking through the door', size: 'm' },
+      { src: 'img/p15.webp', w: 1050, h: 1400, alt: 'Mehndi embrace, bride in pink and gold with floral jewelry', size: 's' },
+      { src: 'img/p7.webp', w: 1400, h: 934, alt: 'Groom lifted by his groomsmen at night', size: 'w' },
+      { src: 'img/p1.webp', w: 934, h: 1400, alt: 'Couple in autumn color', size: 't' },
+      { src: 'img/p13.webp', w: 1050, h: 1400, alt: 'Couple at sunset over the water', size: 'm' },
+      { src: 'img/p2.webp', w: 934, h: 1400, alt: 'Black and white portrait of the groom kissing the bride’s hand', size: 's' },
+      { src: 'img/p14.webp', w: 1050, h: 1400, alt: 'Couple framed through a carved banister', size: 't' },
+      { src: 'img/p5.webp', w: 500, h: 750, alt: 'Bride in a red lehenga laughing with the groom in a garden', size: 'm' },
+      { src: 'img/p10.webp', w: 1050, h: 1400, alt: 'Couple at a garden swing', size: 's' },
+      { src: 'img/p8.webp', w: 934, h: 1400, alt: 'Hands with rings over a bouquet', size: 't' },
+      { src: 'img/p9.webp', w: 500, h: 750, alt: 'Gold bridal jewelry detail', size: 's' }
+    ],
+    services: [
+      { name: 'Photography', d: 'Real moments as they unfold, from portraits to candid interactions, in a consistent visual style. Every image delivered is professionally edited. We never deliver raw files.', items: ['Unlimited professionally edited images', 'Couple and family portraits', 'Full event and candid coverage', 'Online gallery to view, share and download'] },
+      { name: 'Videography', d: 'Our film team works alongside the photographers to capture motion, sound and emotion. Long-form films aren’t cut to a fixed length. The goal is the full story.', items: ['Cinematic long-form wedding film', 'Highlight film of the day', 'Short teaser for social'] },
+      { name: 'Enhancements', d: 'As a one-stop studio we scale coverage to your size, timeline and priorities.', items: ['Second photographers or videographers', 'Drone coverage where permitted', 'Live streaming for remote guests', 'Extended and multi-day events', 'Custom production requests'] }
+    ],
+    approach: [
+      { k: 'Before', t: 'Planning together', d: 'Professional coverage begins long before the day: thoughtful planning, timeline coordination and clear communication.', img: 'img/p4.webp' },
+      { k: 'On the day', t: 'Quietly everywhere', d: 'We work calmly and efficiently in the background, letting moments unfold naturally while staying ready for anything.', img: 'img/p7.webp' },
+      { k: 'After', t: 'Finished, never raw', d: 'A cohesive collection of edited imagery and film that feels complete, intentional and true to your celebration.', img: 'img/p13.webp' }
+    ],
+    values: [
+      { t: 'Authenticity', d: 'Real moments, genuine emotion and honest connection. Nothing forced or staged, in both photo and film.' },
+      { t: 'Artistry', d: 'Every frame is intentional. Technical precision and creative vision, refined, cinematic and timeless.' },
+      { t: 'Connection', d: 'Understanding your vision and priorities, so your wedding is documented in a way that feels personal and true to you.' }
+    ],
+    coverage: ['Photo + film', 'Photography only', 'Videography only'],
+    events: ['Engagement', 'Mehndi / sangeet', 'Ceremony / nikah', 'Reception', 'Multi-day wedding'],
+    adds: ['Second shooter', 'Drone', 'Live streaming', 'Teaser for social']
+  };
+  </script>
+  <script>
+  (() => {
+  'use strict';
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+  const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const FINE = matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const HAS_G = !!(window.gsap && window.ScrollTrigger);
+  const ANIM = HAS_G && !RM;
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  if (HAS_G) gsap.registerPlugin(ScrollTrigger);
+  if (!HAS_G) { const i = $('.intro'); if (i) i.remove(); }
+
+  const TEL = '+1' + CONFIG.phone.replace(/\D/g, '').slice(-10);
+  $$('[data-lens]').forEach(e => e.innerHTML = $('#lens-tpl').innerHTML);
+  $$('[data-ig]').forEach(a => a.href = CONFIG.instagram);
+  $$('[data-tel]').forEach(a => { a.href = 'tel:' + TEL; a.textContent = CONFIG.phone; });
+  $$('[data-mail-plain]').forEach(a => a.href = 'mailto:' + CONFIG.email);
+  $('[data-email-disp]').textContent = CONFIG.email; $('[data-phone-disp]').textContent = CONFIG.phone;
+  $$('[data-year]').forEach(e => e.textContent = new Date().getFullYear());
+
+  /* ---------------- content from CONFIG ---------------- */
+  const P = CONFIG.photos;
+  $('[data-rail]').insertAdjacentHTML('beforeend', P.map(p => `<figure class="g-item ${p.size}" style="margin:0"><img src="${esc(p.src)}" width="${p.w}" height="${p.h}" alt="${esc(p.alt)}" loading="lazy"></figure>`).join(''));
+  $('[data-svcs]').innerHTML = CONFIG.services.map((s, k) => `<article class="svc"><span class="n">0${k + 1}</span><h3>${esc(s.name)}</h3><p>${esc(s.d)}</p><ul>${s.items.map(i => `<li>${esc(i)}</li>`).join('')}</ul></article>`).join('');
+  $('[data-ap]').innerHTML = CONFIG.approach.map(a => `<div class="ap"><figure><img src="${esc(a.img)}" width="934" height="1400" alt="" loading="lazy"></figure><span class="eyebrow"><b>${esc(a.k)}</b></span><h3>${esc(a.t)}</h3><p>${esc(a.d)}</p></div>`).join('');
+  $('[data-values]').innerHTML = `<p class="eyebrow" style="margin-bottom:34px">What we value</p>` + CONFIG.values.map(v => `<div class="vrow"><h3>${esc(v.t)}.</h3><p>${esc(v.d)}</p></div>`).join('');
+
+  /* ---------------- header + smooth scroll ---------------- */
+  const header = $('header');
+  const hs = () => header.classList.toggle('scrolled', scrollY > 30); hs(); addEventListener('scroll', hs, { passive: true });
+  let lenis = null;
+  if (ANIM && window.Lenis) { lenis = new Lenis({ duration: 1.3, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true }); lenis.on('scroll', ScrollTrigger.update); gsap.ticker.add(t => lenis.raf(t * 1000)); gsap.ticker.lagSmoothing(0); }
+  const go = t => { const off = -(header.offsetHeight); if (lenis) lenis.scrollTo(t, { duration: 1.6, offset: t === 0 ? 0 : off }); else if (t === 0) scrollTo({ top: 0 }); else scrollTo({ top: t.getBoundingClientRect().top + scrollY + off, behavior: RM ? 'auto' : 'smooth' }); };
+  document.addEventListener('click', e => { const a = e.target.closest('a[href^="#"]'); if (!a) return; const id = a.getAttribute('href'); if (id === '#') return; const t = id === '#top' ? 0 : $(id); if (t === null) return; e.preventDefault(); go(t); });
+
+  /* =============================================================
+     SIGNATURE: the viewfinder. Photo mode takes a shot with a real
+     aperture iris; Film mode letterboxes and rolls with timecode.
+     ============================================================= */
+  const Cam = (() => {
+    const cam = $('[data-cam]'), vf = $('[data-vf]'), A = $('[data-a]'), B = $('[data-b]'), hole = $('[data-hole]'), flash = $('[data-flash]');
+    const strip = $('[data-strip]'), frameEl = $('[data-frame]'), tc = $('[data-tc]'), shutter = $('[data-shutter]'), focus = $('[data-focus]');
+    let idx = 0, shots = 0, mode = 'photo', busy = false, touched = false, front = A, back = B, filmT0 = 0, filmTimer = null, nudge = null;
+    // hexagonal aperture hole in a 100x125 box
+    const setIris = (r, rot = 0) => { const pts = []; for (let i = 0; i < 6; i++) { const a = rot + i * Math.PI / 3; pts.push((50 + Math.cos(a) * r).toFixed(2) + ',' + (62.5 + Math.sin(a) * r).toFixed(2)); } hole.setAttribute('points', pts.join(' ')); };
+    setIris(140);
+    const frame = () => { frameEl.textContent = String(idx + 1).padStart(2, '0') + ' / ' + String(P.length).padStart(2, '0'); };
+    frame();
+    const show = (n, how) => {
+      idx = (n + P.length) % P.length; back.src = P[idx].src; back.alt = P[idx].alt;
+      const nb = back; back = front; front = nb;
+      if (how === 'cut' || !ANIM) { front.style.opacity = 1; back.style.opacity = 0; }
+      else { gsap.to(front, { opacity: 1, duration: 1.1, ease: 'power2.inOut' }); gsap.to(back, { opacity: 0, duration: 1.1, ease: 'power2.inOut' }); gsap.fromTo(front, { scale: 1.04 }, { scale: 1.14, duration: 4.4, ease: 'none' }); }
+      frame();
+    };
+    const touch = () => { if (touched) return; touched = true; cam.classList.add('touched'); if (nudge) { nudge.kill(); gsap.set(shutter, { clearProps: 'transform' }); } };
+    const addThumb = (p) => {
+      const e = $('[data-empty]'); if (e) e.remove();
+      const t = document.createElement('div'); t.className = 'th'; t.innerHTML = `<img src="${esc(p.src)}" alt="">`;
+      strip.prepend(t); while (strip.children.length > 7) strip.lastElementChild.remove();
+      if (ANIM) { const vr = vf.getBoundingClientRect(), tr = t.getBoundingClientRect(); gsap.from(t, { x: vr.left + vr.width / 2 - tr.left - tr.width / 2, y: vr.top + vr.height / 2 - tr.top - tr.height / 2, scale: 4, rotation: -8, duration: .9, ease: 'expo.out' }); }
+      if (shots >= 5) $('[data-strip-note]').classList.add('on');
+    };
+    const shoot = () => {
+      touch();
+      if (mode === 'film') { setMode('photo'); return; }
+      if (busy) return; busy = true;
+      const p = P[idx]; shots++;
+      if (!ANIM) { addThumb(p); show(idx + 1, 'cut'); busy = false; return; }
+      focus.classList.add('lock');
+      const o = { r: 140, rot: 0 };
+      gsap.timeline({ onComplete: () => { busy = false; focus.classList.remove('lock'); } })
+        .fromTo(focus, { scale: 1.35 }, { scale: 1, duration: .22, ease: 'power3.out' })
+        .to(o, { r: 0, rot: .9, duration: .16, ease: 'power3.in', onUpdate: () => setIris(o.r, o.rot) }, .2)
+        .add(() => { addThumb(p); show(idx + 1, 'cut'); }, .36)
+        .fromTo(flash, { opacity: .7 }, { opacity: 0, duration: .5, ease: 'power2.out' }, .37)
+        .to(o, { r: 140, rot: 0, duration: .45, ease: 'expo.out', onUpdate: () => setIris(o.r, o.rot) }, .4);
+    };
+    const tick = () => { if (mode !== 'film') return; const t = (performance.now() - filmT0) / 1000; const f = Math.floor((t % 1) * 24); const s = Math.floor(t); tc.textContent = `00:${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}:${String(f).padStart(2, '0')}`; requestAnimationFrame(tick); };
+    const pill = $('.modes .pill'), mbtn = $$('[data-mode]');
+    const placePill = () => { const b = mbtn.find(x => x.dataset.mode === mode); pill.style.width = b.offsetWidth + 'px'; pill.style.transform = `translateX(${b.offsetLeft - 4}px)`; };
+    const setMode = m => {
+      touch(); mode = m; vf.classList.toggle('film', m === 'film'); shutter.classList.toggle('rec', m === 'film');
+      shutter.setAttribute('aria-label', m === 'film' ? 'Stop recording' : 'Take the shot');
+      $('[data-mode-l]').textContent = m === 'film' ? 'FILM' : 'PHOTO';
+      mbtn.forEach(b => b.setAttribute('aria-pressed', b.dataset.mode === m)); placePill();
+      clearInterval(filmTimer);
+      if (m === 'film') { filmT0 = performance.now(); tick(); if (!RM) filmTimer = setInterval(() => { if (!document.hidden) show(idx + 1, 'fade'); }, 3200); }
+    };
+    mbtn.forEach(b => b.addEventListener('click', () => setMode(b.dataset.mode)));
+    shutter.addEventListener('click', shoot);
+    vf.addEventListener('click', () => { if (mode === 'photo') shoot(); });
+    addEventListener('resize', placePill); document.fonts && document.fonts.ready.then(placePill); placePill();
+    if (ANIM) {
+      const io = new IntersectionObserver(([e]) => { if (!e.isIntersecting || touched || nudge) return; nudge = gsap.timeline({ repeat: -1, repeatDelay: 2.2, delay: 3.4 }).to(shutter, { scale: 1.14, duration: .25, ease: 'power2.out' }).to(shutter, { scale: 1, duration: .6, ease: 'elastic.out(1,.4)' }); }, { threshold: .5 });
+      io.observe(cam);
+    }
+    return { shoot, setMode, state: () => ({ idx, shots, mode }) };
+  })();
+  window.__cam = Cam;
+  // warm the cache so a shot never cuts to a blank frame
+  addEventListener('load', () => P.forEach(p => { const i = new Image(); i.src = p.src; }));
+
+  /* =============================================================
+     INQUIRY: writes the note, sends by email or text
+     ============================================================= */
+  (() => {
+    const f = $('[data-form]'), note = $('[data-note]');
+    const opt = (n, t, v, c) => `<label class="opt"><input type="${t}" name="${n}" value="${esc(v)}"${c ? ' checked' : ''}><span>${esc(v)}</span></label>`;
+    $('[data-cov]').innerHTML = CONFIG.coverage.map((v, k) => opt('cov', 'radio', v, !k)).join('');
+    $('[data-events]').innerHTML = CONFIG.events.map(v => opt('ev', 'checkbox', v)).join('');
+    $('[data-adds]').innerHTML = CONFIG.adds.map(v => opt('add', 'checkbox', v)).join('');
+    const g = n => $$(`input[name="${n}"]:checked`, f).map(i => i.value);
+    const subject = () => `Wedding inquiry${f.date.value.trim() ? ' · ' + f.date.value.trim() : ''}`;
+    const body = () => {
+      const names = f.names.value.trim();
+      return [`Hi DSP Studios,`, '', `We’d love to talk about coverage for our wedding.`, '',
+        `Names: ${names || '(your names)'}`, `Date: ${f.date.value.trim() || '(date)'}`, `Coverage: ${g('cov')[0]}`,
+        `Events: ${g('ev').join(', ') || 'Not sure yet'}`, ...(g('add').length ? [`Add-ons: ${g('add').join(', ')}`] : []),
+        `Venue / city: ${f.where.value.trim() || '(where)'}`, `Guests: ${f.guests.value.trim() || '(approx.)'}`, '', `Thank you!`].join('\n');
+    };
+    const render = () => {
+      $('[data-subj]').textContent = subject(); $('[data-body]').textContent = body();
+      $('[data-mail]').href = `mailto:${CONFIG.email}?subject=${encodeURIComponent(subject())}&body=${encodeURIComponent(body())}`;
+      $('[data-sms]').href = `sms:${TEL}?&body=${encodeURIComponent(body())}`;
+    };
+    f.addEventListener('input', render); f.addEventListener('change', render); render();
+    $('[data-copy]').addEventListener('click', async () => { let ok = false; try { await navigator.clipboard.writeText(subject() + '\n\n' + body()); ok = true; } catch (_) {} note.textContent = ok ? `Copied. Send it to ${CONFIG.email} or ${CONFIG.phone}.` : body(); });
+  })();
+
+  /* =============================================================
+     MOTION
+     ============================================================= */
+  const big = $('[data-words]');
+  (function split(node, hl) { [...node.childNodes].forEach(n => { if (n.nodeType === 3) { const fr = document.createDocumentFragment(); n.textContent.split(/(\s+)/).forEach(t => { if (!t) return; if (/^\s+$/.test(t)) fr.appendChild(document.createTextNode(t)); else { const s = document.createElement('span'); s.className = 'w' + (hl ? ' hl' : ''); s.textContent = t; fr.appendChild(s); } }); n.replaceWith(fr); } else if (n.nodeType === 1) split(n, hl || n.classList.contains('hl-g')); }); })(big, false);
+
+  if (!ANIM) { const i = $('.intro'); if (i) i.remove(); $$('.w', big).forEach(w => w.style.opacity = 1); return; }
+
+  // intro: an aperture of six blades opens
+  (() => {
+    const g = $('[data-blades]'); let s = '';
+    for (let i = 0; i < 6; i++) s += `<path d="M100 100 L196 100 A96 96 0 0 0 148 16.9 Z" fill="#2b2723" stroke="rgba(244,239,231,.5)" stroke-width="1" transform="rotate(${i * 60} 100 100)" data-blade/>`;
+    g.innerHTML = s;
+  })();
+  gsap.set('.hero h1 .line > span', { yPercent: 110 });
+  gsap.set('[data-in]', { opacity: 0, y: 20 });
+  const tl = gsap.timeline();
+  tl.from('.intro .word', { opacity: 0, letterSpacing: '.6em', duration: 1.1, ease: 'expo.out' }, .1)
+    .to('[data-blade]', { rotation: '+=40', svgOrigin: '100 100', scale: .2, opacity: 0, transformOrigin: '100px 100px', duration: 1, ease: 'expo.inOut', stagger: .03 }, .5)
+    .to('.intro', { clipPath: 'circle(0% at 50% 50%)', duration: 1, ease: 'expo.inOut', onComplete: () => { const el = $('.intro'); if (el) el.remove(); } }, 1.25)
+    .to('.hero h1 .line > span', { yPercent: 0, duration: 1.3, ease: 'expo.out', stagger: .1 }, 1.7)
+    .to('[data-in]', { opacity: 1, y: 0, duration: 1.1, ease: 'expo.out', stagger: .08 }, 1.85)
+    .from('.vf', { clipPath: 'inset(50% 50% 50% 50%)', duration: 1.4, ease: 'expo.inOut' }, 1.7);
+  gsap.set('.intro', { clipPath: 'circle(75% at 50% 50%)' });
+  $('.intro').addEventListener('click', () => tl.progress(1));
+
+  $$('main .line > span').forEach(el => { if (el.closest('.hero')) return; gsap.from(el, { yPercent: 110, duration: 1.3, ease: 'expo.out', scrollTrigger: { trigger: el.parentElement, start: 'top 92%' } }); });
+  gsap.to($$('.w', big), { opacity: 1, stagger: .05, ease: 'none', scrollTrigger: { trigger: big, start: 'top 80%', end: 'bottom 45%', scrub: true } });
+  const rise = (sel, trig, st = .1) => gsap.from(sel, { opacity: 0, y: 40, duration: 1.2, ease: 'expo.out', stagger: st, scrollTrigger: { trigger: trig, start: 'top 85%' } });
+  rise('.svc', '.svc-grid'); rise('.ap', '.ap-grid', .14); rise('.vrow', '[data-values]', .1); rise('.letter', '.iq-grid');
+  $$('.svc-photo figure, .ap figure').forEach(f => { gsap.from(f, { clipPath: 'inset(100% 0% 0% 0%)', duration: 1.4, ease: 'expo.inOut', scrollTrigger: { trigger: f, start: 'top 88%' } }); gsap.from($('img', f), { scale: 1.3, duration: 2, ease: 'expo.out', scrollTrigger: { trigger: f, start: 'top 88%' } }); });
+  gsap.fromTo('[data-cbg]', { yPercent: -10 }, { yPercent: 0, ease: 'none', scrollTrigger: { trigger: '.closing', start: 'top bottom', end: 'bottom top', scrub: true } });
+
+  const mm = gsap.matchMedia();
+  mm.add('(min-width: 901px)', () => {
+    const rail = $('[data-rail]'), items = $$('.g-item', rail);
+    const dist = () => Math.max(0, rail.scrollWidth - innerWidth);
+    const tw = gsap.to(rail, { x: () => -dist(), ease: 'none', scrollTrigger: { trigger: '.gallery', start: 'top top', end: () => '+=' + dist(), pin: '.g-pin', scrub: .8, invalidateOnRefresh: true, anticipatePin: 1, onUpdate: s => gsap.set('[data-gbar]', { scaleX: s.progress }) } });
+    items.forEach(it => {
+      gsap.fromTo($('img', it), { xPercent: -6 }, { xPercent: 6, ease: 'none', scrollTrigger: { trigger: it, containerAnimation: tw, start: 'left right', end: 'right left', scrub: true } });
+      gsap.from(it, { clipPath: 'inset(0% 0% 0% 100%)', duration: 1.2, ease: 'expo.out', scrollTrigger: { trigger: it, containerAnimation: tw, start: 'left 92%' } });
+    });
+    return () => gsap.set(rail, { clearProps: 'transform' });
+  });
+
+  if (FINE) {
+    const c = $('[data-cursor]'); const qx = gsap.quickTo(c, 'x', { duration: .2, ease: 'power3' }), qy = gsap.quickTo(c, 'y', { duration: .2, ease: 'power3' });
+    addEventListener('pointermove', e => { qx(e.clientX); qy(e.clientY); c.style.opacity = 1; }, { passive: true });
+    document.addEventListener('pointerover', e => c.classList.toggle('big', !!e.target.closest('a, button, .opt, [data-vf]')));
+  }
+  addEventListener('load', () => ScrollTrigger.refresh());
+  document.fonts && document.fonts.ready.then(() => ScrollTrigger.refresh());
+  })();
+  </script>
+</body>
+</html>
