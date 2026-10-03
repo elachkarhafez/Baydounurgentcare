@@ -27,7 +27,7 @@ Get, or decide yourself, these five things. Ask the user only for what you can't
 
 ## Phase 2: Brand read
 
-- If there's an Instagram handle or site, try to look at it: bio, highlights, post themes, colours, how they talk, what customers comment on. If the platform blocks fetching, say so and work from what the user gives you (screenshots, bio text). Never invent quotes, reviews, awards or stats and present them as real.
+- If there's an Instagram handle or site, try to look at it. For Instagram, if the `/embed/` page says the profile "may be broken", call `https://i.instagram.com/api/v1/users/web_profile_info/?username=<handle>` with header `x-ig-app-id: 936619743392459`: it returns the bio, the latest 12 posts with captions, full-size image URLs and reel `video_url`s. Pull frames from reels with ffmpeg for real before/after shots. Look at: bio, highlights, post themes, colours, how they talk, what customers comment on. If the platform blocks fetching, say so and work from what the user gives you (screenshots, bio text). Never invent quotes, reviews, awards or stats and present them as real.
 - Write a 5-line brief before designing:
   - **Who comes here and why** (one line)
   - **The feeling** in three words (e.g. "warm, old-school, precise")
