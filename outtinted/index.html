@@ -1,0 +1,843 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Out Tinted | Nano Ceramic Window Tint in Dearborn Heights, MI</title>
+  <meta name="description" content="Out Tinted: nano ceramic and ceramic window tint for cars, SUVs and trucks in Dearborn Heights, Michigan. Premium tint, premium results. Call or DM 313-888-2221.">
+  <meta name="theme-color" content="#05070d">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,500;0,600;1,700;1,800&family=Barlow:wght@400;500;600;700&family=Chakra+Petch:wght@500;600&display=swap" rel="stylesheet">
+  <style>
+    /* ------------------------------------------------------------
+       OUT TINTED · design tokens
+       Material world: tint film, rubber squeegee, heat gun,
+       hexagon garage LEDs, glossy paint under electric-blue light,
+       wet asphalt at night (straight from their flyers).
+       ------------------------------------------------------------ */
+    :root {
+      --bg: #05070d;
+      --bg-2: #0a0f1d;
+      --panel: #0f1528;
+      --ink: #eef2ff;
+      --muted: #8b94b0;
+      --line: rgba(160,180,255,.14);
+      --blue: #2550ff;
+      --blue-2: #4d7dff;
+      --glow: rgba(55,100,255,.55);
+      --chrome: #c9d2e3;
+      --display: "Kanit", system-ui, sans-serif;
+      --sans: "Barlow", system-ui, sans-serif;
+      --tech: "Chakra Petch", ui-monospace, monospace;
+      --pad: clamp(16px, 4vw, 56px);
+      --max: 1320px;
+      --ease: cubic-bezier(.2,.7,.1,1);
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    html.lenis, html.lenis body { height: auto; }
+    .lenis.lenis-smooth { scroll-behavior: auto !important; }
+    .lenis.lenis-stopped { overflow: hidden; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font: 17px/1.6 var(--sans); overflow-x: clip; -webkit-font-smoothing: antialiased; }
+    img, svg { display: block; max-width: 100%; }
+    a { color: inherit; }
+    button, input { font: inherit; color: inherit; }
+    :focus-visible { outline: 2px solid var(--blue-2); outline-offset: 3px; }
+    ::selection { background: var(--blue); color: #fff; }
+    [hidden] { display: none !important; }
+    .wrap { width: 100%; max-width: var(--max); margin: 0 auto; padding: 0 var(--pad); }
+    .eyebrow { font: 600 12.5px/1.3 var(--tech); letter-spacing: .2em; text-transform: uppercase; color: var(--blue-2); margin: 0 0 16px; }
+    h1, h2, h3 { font-family: var(--display); font-weight: 700; font-style: italic; letter-spacing: -.01em; margin: 0; text-transform: uppercase; }
+    h2 { font-size: clamp(40px, 5.6vw, 84px); line-height: .92; }
+    h2 em, h1 em { font-style: italic; color: var(--blue-2); text-shadow: 0 0 30px var(--glow); }
+
+    /* logo built from their mark */
+    .logo { display: inline-flex; flex-direction: column; align-items: flex-start; text-decoration: none; line-height: 1; }
+    .logo svg { width: 92px; height: 14px; margin-left: 18px; color: var(--blue); }
+    .logo b { font: italic 800 25px/1 var(--display); letter-spacing: -.01em; text-transform: uppercase; }
+    .logo b span { background: linear-gradient(180deg, #ffffff, #9aa6bd); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .logo b i { font-style: italic; color: var(--blue); }
+    .logo small { font: 600 8.5px/1 var(--tech); letter-spacing: .32em; color: var(--muted); margin: 3px 0 0 4px; }
+
+    .btn { --bg: var(--blue); --fg: #fff; display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 52px; padding: 0 26px; background: var(--bg); color: var(--fg); border: 1px solid transparent; font: italic 700 17px/1 var(--display); text-transform: uppercase; letter-spacing: .02em; text-decoration: none; cursor: pointer; clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%); transition: background .25s, color .25s, box-shadow .25s; will-change: transform; }
+    .btn svg { width: 18px; height: 18px; flex: none; }
+    .btn:hover { --bg: #3a63ff; box-shadow: 0 0 30px var(--glow); }
+    .btn.ghost { --bg: rgba(255,255,255,.06); --fg: var(--ink); }
+    .btn.ghost:hover { --bg: rgba(255,255,255,.12); }
+    .btn.white { --bg: #fff; --fg: #05070d; }
+    .btn.white:hover { --bg: #dfe6ff; }
+    .btn.sm { min-height: 42px; padding: 0 18px; font-size: 15px; }
+
+    /* ---------------- loader: the screen gets tinted ---------------- */
+    .loader { position: fixed; inset: 0; z-index: 100; background: #e9eefc; overflow: hidden; display: grid; place-items: center; }
+    .loader .film { position: absolute; left: 0; right: 0; top: 0; height: 100%; background: #04060c; transform: translateY(-101%); box-shadow: 0 6px 0 var(--blue), 0 0 50px var(--blue); }
+    .loader .logo { position: relative; z-index: 2; transform: scale(1.8); opacity: 0; }
+    .rm .loader { display: none; }
+
+    /* ---------------- nav ---------------- */
+    .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 40; transition: background .35s, box-shadow .35s; }
+    .nav.scrolled { background: rgba(5,7,13,.82); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); box-shadow: 0 1px 0 var(--line); }
+    .nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 20px; height: 78px; }
+    .nav-links { display: flex; gap: 28px; }
+    .nav-links a { font: 600 13px/1 var(--tech); letter-spacing: .14em; text-transform: uppercase; text-decoration: none; color: #c9d0e6; padding: 6px 0; position: relative; }
+    .nav-links a::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--blue); transform: scaleX(0); transform-origin: right; transition: transform .35s var(--ease); box-shadow: 0 0 10px var(--blue); }
+    .nav-links a:hover::after { transform: scaleX(1); transform-origin: left; }
+    @media (max-width: 940px) { .nav-links { display: none; } .nav .wrap { height: 66px; } .logo b { font-size: 21px; } }
+
+    /* ---------------- hero ---------------- */
+    .hero { position: relative; min-height: 100svh; padding: 92px 0 30px; display: flex; flex-direction: column; justify-content: center; overflow-x: clip; }
+    .hero-top { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 24px; align-items: end; margin-bottom: 14px; }
+    .hero h1 { font-size: clamp(44px, 5.6vw, 86px); line-height: .9; }
+    .hero h1 .ln { display: block; overflow: hidden; padding: 0 .08em .04em 0; }
+    .hero h1 .ln > span { display: inline-block; }
+    .hero h1 .swap { display: grid; }
+    .hero h1 .swap > span { grid-area: 1 / 1; }
+    .hero h1 .after { opacity: 0; }
+    .hero-side { max-width: 320px; justify-self: end; }
+    .hero-side p { font-size: 16px !important; }
+    .hero-side p { margin: 0 0 18px; color: #b9c1da; font-size: 17px; }
+    .hero-side .ctas { display: flex; flex-wrap: wrap; gap: 10px; }
+    @media (max-width: 900px) { .hero-top { grid-template-columns: 1fr; } .hero-side { justify-self: start; } }
+
+    .stage { position: relative; width: 100%; max-width: max(320px, calc((100svh - 400px) * 2.44)); margin: 0 auto; border-radius: 22px; overflow: hidden; background: radial-gradient(90% 70% at 50% 0%, #121b3a 0%, #070a15 55%, #04060b 100%); box-shadow: 0 0 0 1px var(--line), 0 50px 100px -50px rgba(40,80,255,.5); user-select: none; -webkit-user-select: none; }
+    .stage svg.scene { width: 100%; height: auto; aspect-ratio: 1000 / 410; }
+    .stage .squeegee { position: absolute; left: 0; top: 0; width: 46px; height: 120px; margin: -60px 0 0 -23px; padding: 0; border: 0; background: none; cursor: grab; touch-action: none; z-index: 4; }
+    .stage .squeegee.held { cursor: grabbing; }
+    .stage .squeegee svg { width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 6px 10px rgba(0,0,0,.6)); }
+    .coach { position: absolute; left: 0; top: 0; z-index: 5; display: flex; align-items: center; gap: 4px; pointer-events: none; opacity: 0; transition: opacity .45s; }
+    .coach.on { opacity: 1; }
+    .coach.narrow .coach-arrow { display: none; }
+    .coach-pill { display: inline-flex; align-items: center; gap: 10px; padding: 9px 16px 9px 9px; background: #fff; color: #05070d; font: 600 15px/1.2 var(--sans); white-space: nowrap; clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%); animation: coachBob 2.4s ease-in-out infinite; }
+    .coach-pill i { width: 32px; height: 32px; background: var(--blue); display: grid; place-items: center; flex: none; clip-path: polygon(5px 0, 100% 0, calc(100% - 5px) 100%, 0 100%); }
+    .coach-pill i svg { width: 19px; height: 19px; color: #fff; transform-origin: 50% 85%; animation: coachHand 1.3s ease-in-out infinite; }
+    .coach-arrow { width: 42px; height: 30px; color: #fff; flex: none; filter: drop-shadow(0 0 6px var(--blue)); }
+    @keyframes coachBob { 50% { transform: translateY(-4px); } }
+    @keyframes coachHand { 0%, 55%, 100% { transform: rotate(0); } 12% { transform: rotate(-18deg); } 24% { transform: rotate(16deg); } 36% { transform: rotate(-10deg); } }
+    .stamp { position: absolute; left: 50%; top: 42%; z-index: 6; transform: translate(-50%, -50%) rotate(-8deg); pointer-events: none; opacity: 0; text-align: center; }
+    .stamp b { display: block; font: italic 800 clamp(40px, 7vw, 96px)/.9 var(--display); text-transform: uppercase; color: #fff; text-shadow: 0 0 30px var(--blue), 0 0 70px var(--blue); -webkit-text-stroke: 2px var(--blue); white-space: nowrap; }
+    .stamp span { display: inline-block; margin-top: 10px; background: var(--blue); color: #fff; font: 600 13px/1 var(--tech); letter-spacing: .2em; text-transform: uppercase; padding: 7px 12px; }
+    .controls { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 14px 22px; align-items: center; margin: 14px auto 0; max-width: max(320px, calc((100svh - 400px) * 2.44)); }
+    .seg { display: inline-flex; background: var(--panel); box-shadow: inset 0 0 0 1px var(--line); padding: 4px; gap: 4px; }
+    .seg button { border: 0; background: transparent; color: #c9d0e6; height: 40px; padding: 0 16px; font: italic 700 15px/1 var(--display); text-transform: uppercase; cursor: pointer; transition: background .2s, color .2s; }
+    .seg button[aria-pressed="true"] { background: var(--blue); color: #fff; box-shadow: 0 0 20px var(--glow); }
+    .shades { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; justify-content: center; }
+    .shades .lbl { font: 600 12px/1 var(--tech); letter-spacing: .16em; text-transform: uppercase; color: var(--muted); margin-right: 4px; }
+    .shade { position: relative; width: 58px; height: 40px; border: 0; cursor: pointer; background: linear-gradient(180deg, rgba(200,215,255,.55), rgba(120,140,190,.4)); box-shadow: inset 0 0 0 1px rgba(255,255,255,.18); clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%); font: 600 13px/1 var(--tech); color: #fff; }
+    .shade::before { content: ""; position: absolute; inset: 0; background: #02040a; opacity: var(--o); }
+    .shade span { position: relative; text-shadow: 0 1px 2px rgba(0,0,0,.8); }
+    .shade[aria-pressed="true"] { box-shadow: inset 0 0 0 2px var(--blue-2), 0 0 18px var(--glow); }
+    .readout { font: 500 13px/1.35 var(--tech); color: #c9d0e6; text-align: right; min-width: 210px; }
+    .readout b { display: block; font: italic 700 22px/1 var(--display); color: #fff; text-transform: uppercase; }
+    .peel { background: none; border: 0; color: var(--muted); font: 500 12.5px/1 var(--tech); letter-spacing: .1em; text-transform: uppercase; text-decoration: underline; cursor: pointer; padding: 6px 0 0; }
+    @media (max-width: 900px) {
+      .controls { grid-template-columns: 1fr; }
+      .shades { justify-content: flex-start; }
+      .readout { text-align: left; min-width: 0; }
+      .shade { width: 52px; }
+    }
+    @media (max-width: 520px) { .coach-pill { font-size: 13.5px; padding: 7px 12px 7px 7px; } .coach-pill i { width: 28px; height: 28px; } .seg button { padding: 0 12px; } }
+
+    /* ---------------- marquee ---------------- */
+    .marquee { overflow: hidden; padding: 18px 0; background: var(--blue); transform: skewY(-1.5deg); margin: 30px 0; box-shadow: 0 0 60px var(--glow); }
+    .marquee-track { display: flex; width: max-content; animation: mq 40s linear infinite; }
+    .marquee-track span { display: inline-flex; align-items: center; gap: 26px; padding-right: 26px; font: italic 800 clamp(22px, 2.6vw, 34px)/1 var(--display); text-transform: uppercase; white-space: nowrap; color: #fff; }
+    .marquee-track span::after { content: ""; width: 26px; height: 8px; background: #fff; transform: skewX(-25deg); }
+    @keyframes mq { to { transform: translateX(-50%); } }
+
+    /* ---------------- process (pinned) ---------------- */
+    .process { position: relative; }
+    .proc-pin { min-height: 100vh; padding: clamp(80px, 10vw, 120px) 0; display: flex; flex-direction: column; justify-content: center; }
+    .proc-grid { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.2fr); gap: clamp(30px, 5vw, 80px); align-items: center; margin-top: clamp(30px, 4vw, 50px); }
+    .steps { list-style: none; margin: 0; padding: 0; position: relative; }
+    .step .n { font: 600 13px/1 var(--tech); letter-spacing: .2em; color: var(--blue-2); }
+    .step h3 { font-size: clamp(34px, 3.8vw, 56px); line-height: .95; margin: 10px 0 12px; }
+    .step p { margin: 0; color: #b9c1da; max-width: 26em; }
+    .stack-steps .step + .step { margin-top: 28px; padding-top: 26px; border-top: 1px solid var(--line); }
+    .pinned .steps { min-height: 220px; }
+    .pinned .step { position: absolute; inset: 0 0 auto 0; opacity: 0; visibility: hidden; }
+    .pinned .step:first-child { opacity: 1; visibility: visible; }
+    .proc-bar { display: none; height: 3px; background: var(--line); margin-top: 34px; }
+    .proc-bar i { display: block; height: 100%; background: var(--blue); transform-origin: left; transform: scaleX(0); box-shadow: 0 0 12px var(--blue); }
+    .pinned .proc-bar { display: block; }
+    .glass svg { width: 100%; height: auto; overflow: visible; }
+    @media (max-width: 900px) { .proc-grid { grid-template-columns: 1fr; } .proc-pin { min-height: 0; } }
+
+    /* ---------------- quote ---------------- */
+    .quote { padding: clamp(80px, 11vw, 150px) 0; background: linear-gradient(180deg, var(--bg), var(--bg-2)); }
+    .quote-head { max-width: 760px; margin-bottom: clamp(30px, 4vw, 50px); }
+    .quote-head p { color: #b9c1da; margin: 18px 0 0; }
+    .q { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: clamp(20px, 3vw, 40px); align-items: start; }
+    .qf { display: grid; gap: 24px; }
+    .qf fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+    .qf legend, .qf .lbl { font: 600 12px/1 var(--tech); letter-spacing: .16em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; padding: 0; display: block; }
+    .opts { display: flex; flex-wrap: wrap; gap: 8px; }
+    .opt { position: relative; }
+    .opt input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; }
+    .opt span { display: inline-flex; align-items: center; height: 44px; padding: 0 16px; background: var(--panel); box-shadow: inset 0 0 0 1px var(--line); font: 600 15px/1 var(--sans); clip-path: polygon(7px 0, 100% 0, calc(100% - 7px) 100%, 0 100%); transition: background .2s; pointer-events: none; }
+    .opt input:checked + span { background: var(--blue); box-shadow: 0 0 22px var(--glow); }
+    .opt input:focus-visible + span { box-shadow: inset 0 0 0 2px #fff; }
+    .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .field { width: 100%; height: 48px; padding: 0 16px; border: 0; background: var(--panel); box-shadow: inset 0 0 0 1px var(--line); color: var(--ink); font-size: 16px; outline: none; }
+    .field:focus { box-shadow: inset 0 0 0 2px var(--blue-2); }
+    .field::placeholder { color: #66708c; }
+    .ticket { position: sticky; top: 100px; background: #0c1222; box-shadow: inset 0 0 0 1px var(--line), 0 40px 80px -40px rgba(40,80,255,.45); }
+    .ticket-top { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; border-bottom: 1px dashed rgba(160,180,255,.25); }
+    .ticket-top b { font: italic 800 20px/1 var(--display); text-transform: uppercase; }
+    .ticket-top span { font: 600 11.5px/1 var(--tech); letter-spacing: .16em; color: var(--muted); text-transform: uppercase; }
+    .ticket .msg { margin: 20px; padding: 16px 18px; background: var(--blue); color: #fff; font-size: 15.5px; line-height: 1.5; border-radius: 18px 18px 4px 18px; white-space: pre-wrap; }
+    .ticket .price { margin: 0 20px; padding: 14px 0; border-top: 1px solid var(--line); font-size: 14.5px; color: #b9c1da; }
+    .ticket .price b { font: italic 800 30px/1 var(--display); color: #fff; margin-right: 8px; }
+    .ticket .acts { display: flex; flex-wrap: wrap; gap: 10px; padding: 6px 20px 22px; }
+    @media (max-width: 900px) { .q { grid-template-columns: 1fr; } .ticket { position: static; } }
+    @media (max-width: 480px) { .row2 { grid-template-columns: 1fr; } }
+
+    /* ---------------- work ---------------- */
+    .work { padding: clamp(80px, 10vw, 140px) 0; }
+    .work-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 20px; margin-bottom: clamp(30px, 4vw, 50px); }
+    .cars { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+    .car { position: relative; overflow: hidden; background: var(--panel); clip-path: polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%); }
+    .car img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; object-position: 50% 62%; transition: transform 1s var(--ease), filter .6s; filter: saturate(.9) contrast(1.05); }
+    .car:hover img { transform: scale(1.05); filter: saturate(1.05) contrast(1.08); }
+    .car figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: 50px 22px 18px; background: linear-gradient(transparent, rgba(3,5,10,.92)); }
+    .car figcaption b { display: block; font: italic 800 22px/1 var(--display); text-transform: uppercase; }
+    .car figcaption span { font: 600 12px/1.3 var(--tech); letter-spacing: .12em; text-transform: uppercase; color: var(--blue-2); }
+    @media (max-width: 1000px) { .cars { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+    /* ---------------- closing ---------------- */
+    .closing { position: relative; padding: clamp(110px, 15vw, 200px) 0; text-align: center; overflow: hidden; }
+    .closing::before { content: ""; position: absolute; inset: 0; background: radial-gradient(60% 60% at 50% 100%, rgba(37,80,255,.45), transparent 70%), linear-gradient(180deg, var(--bg-2), #03050a); }
+    .closing .wrap { position: relative; }
+    .closing h2 { font-size: clamp(54px, 10vw, 170px); line-height: .86; }
+    .closing p { color: #b9c1da; margin: 26px auto 32px; font-size: 18px; max-width: 30em; }
+    .closing .ctas { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+    .closing .facts { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 30px; margin-top: 40px; font: 600 12.5px/1.4 var(--tech); letter-spacing: .14em; text-transform: uppercase; color: #9aa3c0; }
+    .closing .facts span::before { content: "▸ "; color: var(--blue-2); }
+
+    footer { padding: 34px 0; border-top: 1px solid var(--line); font-size: 14px; color: var(--muted); }
+    footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 18px 30px; }
+    footer nav { display: flex; flex-wrap: wrap; gap: 22px; }
+    footer a { text-decoration: none; } footer a:hover { color: #fff; }
+
+    .js [data-reveal] { opacity: 0; transform: translateY(24px); }
+    .rm [data-reveal] { opacity: 1 !important; transform: none !important; }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    }
+  </style>
+  <script>document.documentElement.classList.add('js');if(matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('rm');</script>
+</head>
+<body>
+  <div class="loader" aria-hidden="true">
+    <div class="film"></div>
+    <span class="logo"><svg viewBox="0 0 92 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M2 12 C14 4 34 1 52 2 C66 3 78 7 90 12"/></svg><b><span>OUT</span> <i>TINTED</i></b><small>VEHICLE CUSTOMIZATION</small></span>
+  </div>
+
+  <header class="nav">
+    <div class="wrap">
+      <a class="logo" href="#top" aria-label="Out Tinted, back to top"><svg viewBox="0 0 92 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M2 12 C14 4 34 1 52 2 C66 3 78 7 90 12"/></svg><b><span>OUT</span> <i>TINTED</i></b><small>VEHICLE CUSTOMIZATION</small></a>
+      <nav class="nav-links" aria-label="Sections">
+        <a href="#process">The process</a>
+        <a href="#quote">Get a quote</a>
+        <a href="#work">Recent work</a>
+      </nav>
+      <a class="btn sm" data-tel href="#quote" data-magnetic><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg><span data-phone-label>Call or DM</span></a>
+    </div>
+  </header>
+
+  <main>
+    <!-- ======================= HERO ======================= -->
+    <section class="hero" id="top">
+      <div class="wrap">
+        <div class="hero-top">
+          <div>
+            <p class="eyebrow" data-hero-in>Nano ceramic window tint · Dearborn Heights, MI</p>
+            <h1 aria-label="Tint your ride. Elevate every drive." data-h1>
+              <span class="ln" aria-hidden="true"><span>Tint your ride.</span></span>
+              <span class="ln swap" aria-hidden="true"><span class="before"><em>Elevate every drive.</em></span><span class="after"><em>You got out tinted.</em></span></span>
+            </h1>
+          </div>
+          <div class="hero-side" data-hero-in>
+            <p>Nano ceramic and ceramic tint for sedans, SUVs and trucks. Premium tint, premium results, and a fast reply when you call or DM.</p>
+            <div class="ctas">
+              <a class="btn" href="#quote" data-magnetic>Get a quote <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4"/></svg></a>
+              <a class="btn ghost" href="#work">See the work</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="stage" data-stage data-hero-in>
+          <svg class="scene" viewBox="0 30 1000 410" data-scene aria-hidden="true"></svg>
+          <button class="squeegee" type="button" data-squeegee aria-label="Squeegee. Drag it across the windows to apply tint, or press the arrow keys.">
+            <svg viewBox="0 0 46 120">
+              <rect x="17" y="0" width="12" height="54" rx="5" fill="#d7deef"/>
+              <rect x="15" y="44" width="16" height="12" rx="3" fill="#9aa6c2"/>
+              <path d="M6 56 H40 L36 66 H10 Z" fill="#2550ff"/>
+              <rect x="20.5" y="66" width="5" height="54" fill="#1a1f2e"/>
+              <rect x="20.5" y="66" width="2" height="54" fill="#4d7dff" opacity=".9"/>
+            </svg>
+          </button>
+          <div class="coach" data-coach aria-hidden="true">
+            <span class="coach-pill"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 13V6.5a1.5 1.5 0 0 1 3 0V12M11 11V5a1.5 1.5 0 0 1 3 0v6M14 11V6.5a1.5 1.5 0 0 1 3 0V14c0 4-2.5 7-6.5 7-2.6 0-4.4-1.6-5.6-3.8L3.4 14.4a1.4 1.4 0 0 1 2.3-1.6L8 15"/></svg></i><span data-coach-text>Drag the squeegee across the windows</span></span>
+            <svg class="coach-arrow" viewBox="0 0 42 30" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8c10 0 24 3 33 14"/><path d="M26 22l10 1 1-10"/></svg>
+          </div>
+          <div class="stamp" data-stamp aria-hidden="true"><b>Out tinted</b><span data-stamp-sub>5% · nano ceramic</span></div>
+        </div>
+
+        <div class="controls" data-hero-in>
+          <div class="seg" role="group" aria-label="Vehicle" data-bodies></div>
+          <div class="shades" role="group" aria-label="Tint shade"><span class="lbl">Shade</span><span data-shades style="display:contents"></span></div>
+          <div class="readout" aria-live="polite"><b data-read-h>0% applied</b><span data-read-p>Pick a shade, then pull the film across.</span><br><button class="peel" type="button" data-peel hidden>Peel it off</button></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="marquee" aria-hidden="true"><div class="marquee-track" data-marquee></div></div>
+
+    <!-- ======================= PROCESS (pinned) ======================= -->
+    <section class="process" id="process">
+      <div class="proc-pin">
+        <div class="wrap">
+          <p class="eyebrow" data-reveal>The process</p>
+          <h2 data-reveal>How a car gets <em>out tinted.</em></h2>
+          <div class="proc-grid">
+            <div>
+              <ol class="steps" data-steps></ol>
+              <div class="proc-bar"><i></i></div>
+            </div>
+            <div class="glass" aria-hidden="true">
+              <svg viewBox="0 0 1000 520" data-glass>
+                <defs>
+                  <linearGradient id="gGlass" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b9c8ef"/><stop offset="1" stop-color="#6c7fae"/></linearGradient>
+                  <linearGradient id="gTint" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a0f22"/><stop offset="1" stop-color="#02040a"/></linearGradient>
+                  <clipPath id="cWin"><path d="M150 110 Q500 40 850 110 L930 400 Q500 450 70 400 Z"/></clipPath>
+                  <clipPath id="cSweep"><rect data-sweep x="40" y="0" width="0" height="520"/></clipPath>
+                </defs>
+                <path d="M130 92 Q500 18 870 92 L956 414 Q500 474 44 414 Z" fill="#0d1428" stroke="#26325a" stroke-width="3"/>
+                <path d="M150 110 Q500 40 850 110 L930 400 Q500 450 70 400 Z" fill="url(#gGlass)"/>
+                <g clip-path="url(#cWin)">
+                  <path d="M240 90 L420 90 L240 440 L60 440 Z" fill="#fff" opacity=".22"/>
+                  <path d="M470 90 L520 90 L340 440 L290 440 Z" fill="#fff" opacity=".14"/>
+                  <g data-dirt fill="#5b5140" opacity=".75">
+                    <circle cx="260" cy="200" r="7"/><circle cx="330" cy="290" r="5"/><circle cx="560" cy="170" r="6"/><circle cx="640" cy="330" r="8"/><circle cx="760" cy="230" r="5"/><circle cx="420" cy="360" r="6"/><circle cx="700" cy="150" r="4"/><circle cx="210" cy="340" r="5"/>
+                  </g>
+                  <rect data-wipe x="-300" y="60" width="160" height="420" fill="#fff" opacity=".35" transform="skewX(-18)"/>
+                  <g data-tintsheet opacity="0"><rect x="40" y="60" width="920" height="420" fill="url(#gTint)" opacity=".55"/></g>
+                  <g data-fingers opacity="0" stroke="#fff" stroke-width="4" stroke-linecap="round" fill="none" opacity=".6">
+                    <path d="M200 120 C210 150 200 180 210 210"/><path d="M300 104 C312 136 300 168 312 198"/><path d="M700 104 C688 136 700 168 688 198"/><path d="M800 120 C790 150 800 180 790 210"/>
+                  </g>
+                  <g clip-path="url(#cSweep)"><rect x="40" y="40" width="920" height="440" fill="url(#gTint)" opacity=".93"/><path d="M240 90 L420 90 L240 440 L60 440 Z" fill="#7fa0ff" opacity=".1"/></g>
+                  <g data-drops fill="#cfe0ff" opacity="0"><circle cx="300" cy="250" r="5"/><circle cx="480" cy="300" r="4"/><circle cx="620" cy="220" r="5"/><circle cx="740" cy="320" r="4"/><circle cx="410" cy="190" r="3"/></g>
+                </g>
+                <path data-cut d="M150 110 Q500 40 850 110 L930 400 Q500 450 70 400 Z" fill="none" stroke="#4d7dff" stroke-width="3" stroke-dasharray="1" stroke-dashoffset="1" pathLength="1"/>
+                <g data-heat opacity="0" stroke="#ff8a3d" stroke-width="3" fill="none" stroke-linecap="round">
+                  <path d="M470 40 C460 20 480 10 470 -10"/><path d="M500 40 C490 20 510 10 500 -10"/><path d="M530 40 C520 20 540 10 530 -10"/>
+                  <rect x="470" y="40" width="60" height="26" rx="6" fill="#2a2f44" stroke="none"/><rect x="490" y="66" width="20" height="50" rx="6" fill="#2550ff" stroke="none"/>
+                </g>
+                <g data-blade transform="translate(40 0)" opacity="0"><rect x="-6" y="30" width="12" height="460" rx="4" fill="#4d7dff"/><rect x="-14" y="236" width="28" height="60" rx="6" fill="#d7deef"/></g>
+                <g data-check opacity="0"><circle cx="500" cy="260" r="58" fill="#2550ff"/><path d="M470 262 l22 22 l42 -48" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></g>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================= QUOTE ======================= -->
+    <section class="quote" id="quote">
+      <div class="wrap">
+        <div class="quote-head">
+          <p class="eyebrow" data-reveal>Get a quote</p>
+          <h2 data-reveal>Build your tint. <em>Text it in.</em></h2>
+          <p data-reveal>Pick your ride and your shade and the message writes itself. One tap sends it to the shop.</p>
+        </div>
+        <div class="q" data-reveal>
+          <form class="qf" onsubmit="return false" data-qf>
+            <fieldset><legend>Vehicle</legend><div class="opts" data-q-body></div></fieldset>
+            <fieldset><legend>Film</legend><div class="opts" data-q-film></div></fieldset>
+            <fieldset><legend>Shade</legend><div class="opts" data-q-shade></div></fieldset>
+            <fieldset><legend>Windows</legend><div class="opts" data-q-cov></div></fieldset>
+            <div class="row2">
+              <div><label class="lbl" for="qcar">Year, make &amp; model</label><input id="qcar" class="field" data-q-car placeholder="2024 Charger" autocomplete="off"></div>
+              <div><label class="lbl" for="qname">Your name</label><input id="qname" class="field" data-q-name placeholder="Optional" autocomplete="given-name"></div>
+            </div>
+          </form>
+          <aside class="ticket" aria-label="Your quote request">
+            <div class="ticket-top"><b>Out Tinted</b><span>Quote request</span></div>
+            <div class="msg" data-q-msg aria-live="polite"></div>
+            <p class="price" data-q-price></p>
+            <div class="acts" data-q-acts></div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================= WORK ======================= -->
+    <section class="work" id="work">
+      <div class="wrap">
+        <div class="work-head">
+          <div>
+            <p class="eyebrow" data-reveal>Recent work</p>
+            <h2 data-reveal>Came in. <em>Got out tinted.</em></h2>
+          </div>
+          <a class="btn ghost" data-ig href="#" target="_blank" rel="noopener" data-reveal>More on Instagram <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4"/></svg></a>
+        </div>
+        <div class="cars" data-cars></div>
+      </div>
+    </section>
+
+    <!-- ======================= CLOSING ======================= -->
+    <section class="closing" aria-labelledby="closing-h">
+      <div class="wrap">
+        <p class="eyebrow" data-reveal>Spots fill fast</p>
+        <h2 id="closing-h" data-reveal>Get <em>out tinted.</em></h2>
+        <p data-reveal>Call or DM for the fastest reply. Dearborn Heights and all of Metro Detroit.</p>
+        <div class="ctas" data-reveal data-close-ctas></div>
+        <div class="facts" data-reveal><span>Nano ceramic</span><span>Ceramic</span><span>Sedans · SUVs · Trucks</span><span>Dearborn Heights, MI</span></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <a class="logo" href="#top" aria-label="Back to top"><svg viewBox="0 0 92 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M2 12 C14 4 34 1 52 2 C66 3 78 7 90 12"/></svg><b><span>OUT</span> <i>TINTED</i></b><small>VEHICLE CUSTOMIZATION</small></a>
+      <nav aria-label="Footer"><a href="#process">Process</a><a href="#quote">Quote</a><a href="#work">Work</a><a data-ig href="#" target="_blank" rel="noopener">Instagram</a></nav>
+      <span>&copy; <span data-year></span> Out Tinted · <span data-phone-text></span></span>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+
+  <script>
+  /* =============================================================
+     CONFIG: every shop detail lives here.
+     ============================================================= */
+  const CONFIG = {
+    name: 'Out Tinted',
+    phone: '313-888-2221',
+    city: 'Dearborn Heights, MI',
+    instagram: { handle: '@outtinted', url: 'https://www.instagram.com/outtinted/', dm: 'https://ig.me/m/outtinted' },
+    // last posted prices (summer sale, "all around with windshield"); set to null once they change
+    lastPosted: { label: 'Summer sale price (ended Sept 1)', coverage: 'all', prices: { sedan: 220, suv: 230, truck: 240 } },
+    bodies: [
+      { id: 'sedan', label: 'Sedan' },
+      { id: 'suv',   label: 'SUV' },
+      { id: 'truck', label: 'Truck' }
+    ],
+    shades: [
+      { v: 5,  o: .94, name: 'Limo',    note: 'Who’s driving? Nobody knows.' },
+      { v: 20, o: .82, name: 'Dark',    note: 'Dark and clean. Faces disappear from the street.' },
+      { v: 35, o: .66, name: 'Classic', note: 'The everyday look. Privacy without the blackout.' },
+      { v: 50, o: .5,  name: 'Light',   note: 'Subtle shade, still cuts the glare.' },
+      { v: 70, o: .3,  name: 'Clear-ish', note: 'Barely there. Ceramic still blocks the heat.' }
+    ],
+    films: ['Nano ceramic', 'Ceramic'],
+    coverage: [
+      { id: 'all',   label: 'All around + windshield' },
+      { id: 'sides', label: 'All around, no windshield' },
+      { id: 'front', label: 'Front two windows' },
+      { id: 'shield', label: 'Windshield only' }
+    ],
+    work: [
+      { img: 'img/tundra.jpg',    title: '2026 Toyota Tundra', note: 'Nano ceramic special' },
+      { img: 'img/trackhawk.jpg', title: '2018 Trackhawk',     note: 'Ceramic tint all around' },
+      { img: 'img/is350.jpg',     title: 'Lexus IS350',        note: 'Blacked out · nano ceramic' },
+      { img: 'img/m340.jpg',      title: '2025 BMW M340i',     note: 'Fresh tint' }
+    ],
+    steps: [
+      { title: 'Prep the glass', text: 'Every window gets cleaned spotless first. Dust under film is the enemy.' },
+      { title: 'Cut to fit',     text: 'Film is cut to the exact shape of your glass, edge to edge.' },
+      { title: 'Heat shrink',    text: 'Curved glass like the back window gets heat-formed so the film lays perfectly flat.' },
+      { title: 'Squeegee',       text: 'Water and air get pushed out from the middle, out to the edges. Clean, no bubbles.' },
+      { title: 'Let it cure',    text: 'Keep the windows up for a few days while it sets. Then enjoy the shade.' }
+    ],
+    marquee: ['Premium tint. Premium results.', 'Nano ceramic', 'Tint your ride', 'Elevate every drive', '5% · 20% · 35% · 50%', 'Dearborn Heights', 'Call or DM · fast reply']
+  };
+  </script>
+
+  <script>
+  (() => {
+  'use strict';
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+  const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const FINE = matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const HAS_G = !!(window.gsap && window.ScrollTrigger);
+  const ANIM = HAS_G && !RM;
+  const NS = 'http://www.w3.org/2000/svg';
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  if (HAS_G) gsap.registerPlugin(ScrollTrigger);
+  const ARROW = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4"/></svg>';
+  const PHONE_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>';
+  const MSG_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg>';
+
+  /* ---------------- bind CONFIG ---------------- */
+  const ig = CONFIG.instagram || {};
+  const digits = (CONFIG.phone || '').replace(/[^\d]/g, '');
+  const tel = digits ? 'tel:+1' + digits.slice(-10) : '';
+  const smsTo = body => digits ? `sms:+1${digits.slice(-10)}?&body=${encodeURIComponent(body)}` : (ig.dm || '#quote');
+  $$('[data-tel]').forEach(a => { if (tel) a.href = tel; });
+  $$('[data-phone-label]').forEach(el => el.textContent = CONFIG.phone || 'Call or DM');
+  $$('[data-phone-text]').forEach(el => el.textContent = CONFIG.phone ? `Call or DM ${CONFIG.phone}` : CONFIG.city);
+  $$('[data-ig]').forEach(a => { if (ig.url) a.href = ig.url; else { a.removeAttribute('target'); a.href = '#quote'; } });
+  $$('[data-year]').forEach(el => el.textContent = new Date().getFullYear());
+  const mq = CONFIG.marquee.map(w => `<span>${esc(w)}</span>`).join('');
+  $('[data-marquee]').innerHTML = mq + mq;
+  $('[data-close-ctas]').innerHTML = (tel ? `<a class="btn" href="${tel}" data-magnetic>${PHONE_SVG}Call ${esc(CONFIG.phone)}</a><a class="btn white" href="${esc(smsTo('Hi Out Tinted! I want to get my car tinted.'))}">${MSG_SVG}Text us</a>` : '') + (ig.dm ? `<a class="btn ghost" href="${esc(ig.dm)}" target="_blank" rel="noopener">DM ${esc(ig.handle || '')}</a>` : '');
+
+  /* ---------------- smooth scroll + nav ---------------- */
+  let lenis = null;
+  if (ANIM && window.Lenis) {
+    lenis = new Lenis({ duration: 1.1, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true });
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add(t => lenis.raf(t * 1000));
+    gsap.ticker.lagSmoothing(0);
+  }
+  const goTo = t => { if (lenis) lenis.scrollTo(t, { offset: -80, duration: 1.3 }); else { const y = typeof t === 'number' ? t : t.getBoundingClientRect().top + scrollY - 80; scrollTo({ top: y, behavior: RM ? 'auto' : 'smooth' }); } };
+  $$('a[href^="#"]').forEach(a => a.addEventListener('click', e => {
+    const id = a.getAttribute('href'); if (id === '#') return;
+    const t = id === '#top' ? 0 : $(id); if (t === null) return;
+    e.preventDefault(); goTo(t);
+  }));
+  const nav = $('.nav');
+  const navSync = () => nav.classList.toggle('scrolled', scrollY > 30);
+  navSync(); addEventListener('scroll', navSync, { passive: true });
+
+  /* =============================================================
+     THE CAR: drag the squeegee to lay the film
+     ============================================================= */
+  const BODIES = {
+    sedan: {
+      body: 'M84 318 C64 300 60 262 72 238 C78 226 92 220 124 210 C176 198 236 192 296 186 C336 150 384 120 444 110 C520 98 600 99 660 112 C702 122 742 150 772 176 C842 184 902 192 936 205 C958 213 970 234 966 262 C964 290 954 312 930 318 L834 318 A76 76 0 1 0 686 318 L309 318 A76 76 0 1 0 161 318 Z',
+      win: ['M322 186 C352 160 392 132 428 123 L412 185 Z', 'M424 185 L442 121 C482 112 520 109 556 108 L556 182 Z', 'M572 181 L572 108 C608 108 638 112 656 117 C690 132 720 154 742 175 Z'],
+      wheels: [235, 760], wr: 58, wy: 300, driver: [632, 138], wheelX: 690,
+      lines: 'M564 186 L566 300 M418 190 L416 296 M470 214 L500 214 M620 210 L650 210',
+      head: 'M906 206 C926 208 944 214 954 222 L934 228 C922 222 910 216 906 206 Z', tail: 'M76 236 C82 226 98 220 116 214 L112 232 C100 236 86 240 76 236 Z'
+    },
+    suv: {
+      body: 'M78 318 C60 300 56 250 64 206 L88 128 C94 104 112 92 142 90 L636 88 C672 88 696 98 716 114 L788 172 C858 178 918 186 946 198 C966 208 972 234 968 264 C966 292 956 312 932 318 L836 318 A80 80 0 1 0 684 318 L316 318 A80 80 0 1 0 164 318 Z',
+      win: ['M110 176 L126 116 C132 106 140 102 154 102 L252 102 L252 176 Z', 'M268 176 L268 102 L468 102 L468 174 Z', 'M484 174 L484 102 L636 102 C658 102 674 110 690 122 L760 170 Z'],
+      wheels: [240, 760], wr: 62, wy: 296, driver: [610, 126], wheelX: 690,
+      lines: 'M476 180 L478 300 M260 182 L262 296 M330 206 L362 206 M540 204 L572 204 M96 92 L630 90',
+      head: 'M914 196 C934 200 952 208 960 218 L940 226 C928 218 916 210 914 196 Z', tail: 'M66 206 L84 150 L92 152 L76 212 Z'
+    },
+    truck: {
+      body: 'M70 318 L66 200 C66 192 72 188 80 188 L336 188 L340 96 C342 86 348 82 360 82 L640 82 C664 82 682 90 696 102 L772 168 C852 174 914 180 944 192 C964 200 972 226 968 258 C966 288 956 312 932 318 L846 318 A80 80 0 1 0 694 318 L306 318 A80 80 0 1 0 154 318 Z',
+      win: ['M356 172 L356 98 L502 98 L502 172 Z', 'M518 172 L518 98 L640 98 C658 98 670 104 682 114 L754 170 Z'],
+      wheels: [230, 770], wr: 62, wy: 296, driver: [600, 124], wheelX: 700,
+      lines: 'M80 198 L330 198 M76 204 L76 300 M510 178 L512 300 M560 200 L592 200 M400 200 L432 200 M340 186 L340 300',
+      head: 'M914 192 C934 196 952 204 960 214 L940 222 C928 214 916 206 914 192 Z', tail: 'M68 206 L80 206 L80 246 L68 246 Z'
+    }
+  };
+  const Car = (() => {
+    const scene = $('[data-scene]'), stage = $('[data-stage]'), sq = $('[data-squeegee]'), coach = $('[data-coach]'), stamp = $('[data-stamp]');
+    const readH = $('[data-read-h]'), readP = $('[data-read-p]'), peel = $('[data-peel]');
+    if (!FINE) $('[data-coach-text]').textContent = 'Drag the squeegee across the windows';
+    const st = { body: 'sedan', shade: CONFIG.shades[0], p: 0, done: false, drag: null, engaged: false, idle: 0, started: false };
+    let range = { min: 0, max: 1, top: 0, belt: 0 };
+
+    // static garage: hex lights, wall LEDs, glossy floor
+    const hexes = [];
+    for (let r = 0; r < 2; r++) for (let c = 0; c < 9; c++) {
+      const cx = 70 + c * 108 + (r % 2) * 54, cy = 24 + r * 46, R = 26;
+      const pts = Array.from({ length: 6 }, (_, k) => { const a = Math.PI / 3 * k + Math.PI / 6; return (cx + R * Math.cos(a)).toFixed(1) + ',' + (cy + R * .55 * Math.sin(a)).toFixed(1); }).join(' ');
+      hexes.push(`<polygon points="${pts}"/>`);
+    }
+    scene.innerHTML = `
+      <defs>
+        <linearGradient id="paint" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4f78ff"/><stop offset=".45" stop-color="#1f3fd6"/><stop offset="1" stop-color="#0a1660"/></linearGradient>
+        <linearGradient id="glassG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#cbd8ff" stop-opacity=".55"/><stop offset="1" stop-color="#7d8fbf" stop-opacity=".35"/></linearGradient>
+        <linearGradient id="tintG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b1230"/><stop offset="1" stop-color="#010207"/></linearGradient>
+        <radialGradient id="rimG"><stop offset="0" stop-color="#3c4256"/><stop offset=".7" stop-color="#1b1f2c"/><stop offset="1" stop-color="#0d0f16"/></radialGradient>
+        <linearGradient id="floorG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0d1430"/><stop offset="1" stop-color="#04060c"/></linearGradient>
+        <linearGradient id="reflFade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".35"/><stop offset=".6" stop-color="#fff" stop-opacity="0"/></linearGradient>
+        <mask id="reflMask"><rect x="0" y="360" width="1000" height="160" fill="url(#reflFade)"/></mask>
+        <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <clipPath id="winClip"></clipPath>
+        <clipPath id="filmClip"><rect data-film x="0" y="0" width="0" height="520"/></clipPath>
+      </defs>
+      <g fill="none" stroke="#dfe8ff" stroke-width="3" opacity=".85" filter="url(#glow)">${hexes.join('')}</g>
+      <rect x="0" y="120" width="1000" height="240" fill="#060912"/>
+      <g opacity=".5" stroke="#121a33" stroke-width="2">${Array.from({ length: 12 }, (_, i) => `<line x1="${i * 90}" y1="120" x2="${i * 90}" y2="360"/>`).join('')}</g>
+      <rect x="0" y="352" width="1000" height="6" fill="#2550ff" filter="url(#glow)" opacity=".9"/>
+      <rect x="0" y="358" width="1000" height="162" fill="url(#floorG)"/>
+      <ellipse cx="510" cy="366" rx="430" ry="18" fill="#000" opacity=".7"/>
+      <g data-carwrap><g id="car" data-car></g></g>
+      <use href="#car" transform="translate(0 724) scale(1 -1)" mask="url(#reflMask)" opacity=".5"/>
+    `;
+    const carG = $('[data-car]'), winClip = $('#winClip', scene), film = $('[data-film]', scene), carWrap = $('[data-carwrap]', scene);
+
+    function drawCar() {
+      const b = BODIES[st.body];
+      const wins = b.win.map(d => `<path d="${d}"/>`).join('');
+      winClip.innerHTML = wins;
+      const [dx, dy] = b.driver;
+      const wheel = x => `<g transform="translate(${x} ${b.wy})"><circle r="${b.wr}" fill="#07080c"/><circle r="${b.wr * .7}" fill="url(#rimG)"/>${Array.from({ length: 5 }, (_, k) => { const a = k * 72 * Math.PI / 180; return `<line x1="0" y1="0" x2="${(Math.cos(a) * b.wr * .66).toFixed(1)}" y2="${(Math.sin(a) * b.wr * .66).toFixed(1)}" stroke="#9aa6c2" stroke-width="7" stroke-linecap="round"/>`; }).join('')}<rect x="${b.wr * .25}" y="${-b.wr * .38}" width="10" height="22" rx="3" fill="#2550ff"/><circle r="9" fill="#c9d2e3"/></g>`;
+      carG.innerHTML = `
+        <path d="${b.body}" fill="url(#paint)"/>
+        <path d="${b.body}" fill="none" stroke="#7da0ff" stroke-width="2" opacity=".55"/>
+        <path d="${b.lines}" fill="none" stroke="#0a1350" stroke-width="2.5" stroke-linecap="round" opacity=".8"/>
+        <path d="M120 222 C300 196 600 186 930 214" fill="none" stroke="#fff" stroke-width="5" opacity=".22" stroke-linecap="round"/>
+        <g clip-path="url(#winClip)">
+          <rect x="0" y="60" width="1000" height="160" fill="#0b1124"/>
+          <g fill="#56648c"><circle cx="${dx}" cy="${dy}" r="16"/><path d="M${dx - 30} ${dy + 52} C${dx - 30} ${dy + 26} ${dx - 18} ${dy + 18} ${dx} ${dy + 18} C${dx + 18} ${dy + 18} ${dx + 30} ${dy + 26} ${dx + 30} ${dy + 52} Z"/></g>
+          <ellipse cx="${dx + 46}" cy="${dy + 26}" rx="6" ry="20" fill="none" stroke="#56648c" stroke-width="5"/>
+          <rect x="0" y="60" width="1000" height="160" fill="url(#glassG)"/>
+          <g clip-path="url(#filmClip)"><rect data-tint x="0" y="60" width="1000" height="160" fill="url(#tintG)" opacity="${st.shade.o}"/></g>
+          <path d="M340 60 L420 60 L330 220 L250 220 Z M480 60 L506 60 L416 220 L390 220 Z M620 60 L690 60 L600 220 L530 220 Z" fill="#fff" opacity=".1"/>
+          <rect data-edge x="0" y="60" width="3" height="160" fill="#cfe0ff" opacity="0"/>
+        </g>
+        <g fill="none" stroke="#0a0f22" stroke-width="5" stroke-linejoin="round">${wins}</g>
+        <path d="${b.head}" fill="#e8f3ff" filter="url(#glow)"/>
+        <path d="${b.tail}" fill="#ff2a3d" filter="url(#glow)"/>
+        ${b.wheels.map(wheel).join('')}
+      `;
+      // window extents for the film
+      const xs = b.win.join(' ').match(/-?\d+(\.\d+)?/g).map(Number);
+      const xv = xs.filter((_, i) => i % 2 === 0), yv = xs.filter((_, i) => i % 2 === 1);
+      range = { min: Math.min(...xv), max: Math.max(...xv), top: Math.min(...yv), belt: Math.max(...yv) };
+      setP(st.p, true);
+    }
+
+    const svgToPx = (x, y) => {
+      const m = scene.getScreenCTM(), r = stage.getBoundingClientRect();
+      if (!m) return { x: 0, y: 0 };
+      return { x: m.a * x + m.c * y + m.e - r.left, y: m.b * x + m.d * y + m.f - r.top };
+    };
+    const pxToSvgX = clientX => { const m = scene.getScreenCTM(); return m ? (clientX - m.e) / m.a : 0; };
+
+    function place() {
+      const x = range.min + st.p * (range.max - range.min);
+      const pt = svgToPx(x, (range.top + range.belt) / 2);
+      sq.style.transform = `translate(${pt.x}px, ${pt.y}px)`;
+      if (!st.engaged && st.started) {
+        const cw = coach.offsetWidth, ch = coach.offsetHeight, sw = stage.clientWidth;
+        const narrow = sw < 640;
+        coach.classList.toggle('narrow', narrow);
+        const cx = narrow ? (sw - cw) / 2 : clamp(pt.x - cw - 30, 8, sw - cw - 8), cy = narrow ? 8 : clamp(pt.y - ch - 46, 8, stage.clientHeight - ch - 8);
+        coach.style.transform = `translate(${cx}px, ${cy}px)`;
+      }
+    }
+
+    function setP(p, silent) {
+      st.p = clamp(p, 0, 1);
+      const w = st.p * (range.max - range.min);
+      film.setAttribute('x', range.min); film.setAttribute('width', w);
+      const edge = $('[data-edge]', carG);
+      if (edge) { edge.setAttribute('x', range.min + w - 1.5); edge.setAttribute('opacity', st.p > 0 && st.p < 1 ? .9 : 0); }
+      place();
+      if (silent) return;
+      const pct = Math.round(st.p * 100);
+      if (!st.done) { readH.textContent = `${pct}% applied`; readP.textContent = pct ? 'Keep pulling. All the way to the front.' : 'Pick a shade, then pull the film across.'; }
+      if (st.p >= .985 && !st.done) finish();
+    }
+
+    function finish() {
+      st.done = true; setP(1, true);
+      readH.textContent = `${st.shade.v}% · ${st.shade.name}`; readP.textContent = st.shade.note; peel.hidden = false;
+      $('[data-stamp-sub]').textContent = `${st.shade.v}% · nano ceramic`;
+      $('[data-h1]').setAttribute('aria-label', 'Tint your ride. You got out tinted.');
+      if (ANIM) {
+        gsap.fromTo(stamp, { opacity: 0, scale: 2.4 }, { opacity: 1, scale: 1, duration: .45, ease: 'power4.in', onComplete: () => {
+          gsap.fromTo(stage, { x: -8 }, { x: 0, duration: .5, ease: 'elastic.out(1.2,.3)' });
+          gsap.to(stamp, { opacity: 0, duration: .6, delay: 2.4 });
+        } });
+        gsap.to('.hero h1 .before', { yPercent: -100, opacity: 0, duration: .6, ease: 'power3.in' });
+        gsap.fromTo('.hero h1 .after', { yPercent: 100, opacity: 0 }, { yPercent: 0, opacity: 1, duration: .7, ease: 'expo.out', delay: .35 });
+      } else { $('.hero h1 .before').style.opacity = 0; $('.hero h1 .after').style.cssText = 'opacity:1;transform:none'; }
+      Quote.sync({ body: st.body, shade: st.shade.v });
+    }
+    function reset() {
+      st.done = false; peel.hidden = true;
+      if (ANIM) gsap.to(st, { p: 0, duration: .7, ease: 'power2.inOut', onUpdate: () => setP(st.p, true), onComplete: () => setP(0) });
+      else setP(0);
+      $('[data-h1]').setAttribute('aria-label', 'Tint your ride. Elevate every drive.');
+      if (ANIM) { gsap.to('.hero h1 .after', { yPercent: 100, opacity: 0, duration: .4 }); gsap.to('.hero h1 .before', { yPercent: 0, opacity: 1, duration: .6, delay: .2 }); }
+      else { $('.hero h1 .before').style.opacity = 1; $('.hero h1 .after').style.cssText = ''; }
+    }
+    peel.addEventListener('click', reset);
+
+    // squeegee drag
+    const engage = () => { if (!st.engaged) { st.engaged = true; coach.classList.remove('on'); } };
+    sq.addEventListener('pointerdown', e => { e.preventDefault(); engage(); st.drag = { off: pxToSvgX(e.clientX) - (range.min + st.p * (range.max - range.min)) }; sq.classList.add('held'); try { sq.setPointerCapture(e.pointerId); } catch (_) {} });
+    sq.addEventListener('pointermove', e => { if (!st.drag) return; const x = pxToSvgX(e.clientX) - st.drag.off; setP((x - range.min) / (range.max - range.min)); });
+    const up = () => { st.drag = null; sq.classList.remove('held'); };
+    sq.addEventListener('pointerup', up); sq.addEventListener('pointercancel', up);
+    sq.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowUp') { e.preventDefault(); engage(); setP(st.p + .1); }
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') { e.preventDefault(); engage(); if (!st.done) setP(st.p - .1); }
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); engage(); setP(1); }
+    });
+
+    // body + shade controls
+    $('[data-bodies]').innerHTML = CONFIG.bodies.map((b, i) => `<button type="button" data-body="${esc(b.id)}" aria-pressed="${i === 0}">${esc(b.label)}</button>`).join('');
+    $('[data-shades]').innerHTML = CONFIG.shades.map((s, i) => `<button class="shade" type="button" data-shade="${s.v}" style="--o:${s.o}" aria-pressed="${i === 0}" aria-label="${s.v}% ${esc(s.name)}"><span>${s.v}%</span></button>`).join('');
+    function setBody(id, fromQuote) {
+      if (!BODIES[id] || id === st.body) return;
+      st.body = id;
+      $$('[data-body]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.body === id)));
+      if (ANIM) gsap.timeline().to(carWrap, { x: 1100, duration: .35, ease: 'power2.in', onComplete: drawCar }).fromTo(carWrap, { x: -1100 }, { x: 0, duration: .55, ease: 'power3.out' });
+      else drawCar();
+      if (!fromQuote) Quote.sync({ body: id });
+    }
+    function setShade(v, fromQuote) {
+      const s = CONFIG.shades.find(x => x.v === +v); if (!s) return;
+      st.shade = s;
+      $$('[data-shade]').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.shade === s.v)));
+      const t = $('[data-tint]', carG);
+      if (t) { if (ANIM) gsap.to(t, { attr: { opacity: s.o }, duration: .5 }); else t.setAttribute('opacity', s.o); }
+      if (st.done) { readH.textContent = `${s.v}% · ${s.name}`; readP.textContent = s.note; }
+      if (!fromQuote) Quote.sync({ shade: s.v });
+    }
+    $$('[data-body]').forEach(b => b.addEventListener('click', () => setBody(b.dataset.body)));
+    $$('[data-shade]').forEach(b => b.addEventListener('click', () => setShade(b.dataset.shade)));
+
+    // keep the squeegee + coach glued to the car; nudge when idle
+    let last = 0;
+    const tick = now => {
+      requestAnimationFrame(tick);
+      const dt = last ? Math.min(.05, (now - last) / 1000) : .016; last = now;
+      place();
+      if (st.started && !st.engaged && ANIM) {
+        st.idle += dt;
+        if (st.idle > 3) { st.idle = 0; gsap.fromTo(sq.firstElementChild, { rotation: 0, x: 0 }, { keyframes: [{ rotation: 12, x: 10 }, { rotation: -8, x: -4 }, { rotation: 6, x: 6 }, { rotation: 0, x: 0 }], duration: .8, ease: 'power1.inOut', transformOrigin: '50% 60%' }); }
+      }
+    };
+    drawCar(); requestAnimationFrame(tick);
+    new ResizeObserver(place).observe(stage);
+    if (RM) { st.engaged = true; }
+    const start = () => { st.started = true; if (!st.engaged) coach.classList.add('on'); };
+    return { start, setBody, setShade };
+  })();
+
+  /* =============================================================
+     QUOTE: builds the text message for the shop
+     ============================================================= */
+  const Quote = (() => {
+    const form = $('[data-qf]');
+    const radios = (name, items, cur) => items.map(it => `<label class="opt"><input type="radio" name="${name}" value="${esc(it.v)}" ${String(it.v) === String(cur) ? 'checked' : ''}><span>${esc(it.l)}</span></label>`).join('');
+    $('[data-q-body]').innerHTML = radios('body', CONFIG.bodies.map(b => ({ v: b.id, l: b.label })), 'sedan');
+    $('[data-q-film]').innerHTML = radios('film', CONFIG.films.map(f => ({ v: f, l: f })), CONFIG.films[0]);
+    $('[data-q-shade]').innerHTML = radios('shade', CONFIG.shades.map(s => ({ v: s.v, l: `${s.v}% ${s.name}` })), 5);
+    $('[data-q-cov]').innerHTML = radios('cov', CONFIG.coverage.map(c => ({ v: c.id, l: c.label })), 'all');
+    const msgEl = $('[data-q-msg]'), priceEl = $('[data-q-price]'), acts = $('[data-q-acts]');
+    let lock = false;
+    function render() {
+      const body = form.body.value, film = form.film.value, shade = form.shade.value, cov = CONFIG.coverage.find(c => c.id === form.cov.value);
+      const car = $('[data-q-car]').value.trim(), name = $('[data-q-name]').value.trim();
+      const bodyLabel = CONFIG.bodies.find(b => b.id === body).label.toLowerCase();
+      const what = car ? `my ${car} (${bodyLabel})` : `my ${bodyLabel}`;
+      const m = `Hi Out Tinted!${name ? ` This is ${name}.` : ''} I’m looking to get ${what} tinted: ${film.toLowerCase()}, ${shade}%, ${cov.label.toLowerCase()}. What’s your price and when’s your next open spot?`;
+      msgEl.textContent = m;
+      const lp = CONFIG.lastPosted;
+      if (lp && lp.coverage === cov.id && lp.prices[body]) priceEl.innerHTML = `<b>$${lp.prices[body]}</b>${esc(lp.label)} for ${esc(bodyLabel === 'suv' ? 'SUVs' : bodyLabel + 's')}, all around with windshield. Text for today’s price.`;
+      else priceEl.textContent = 'Text or call for today’s price on this setup.';
+      acts.innerHTML = (digits ? `<a class="btn" href="${esc(smsTo(m))}">${MSG_SVG}Text this to the shop</a><a class="btn ghost" href="${tel}">${PHONE_SVG}Call</a>` : '') + (ig.dm ? `<a class="btn ghost" href="${esc(ig.dm)}" target="_blank" rel="noopener">DM</a>` : '');
+      if (!lock) { lock = true; Car.setBody(body, true); Car.setShade(shade, true); lock = false; }
+    }
+    form.addEventListener('input', render); form.addEventListener('change', render);
+    const sync = ({ body, shade }) => {
+      if (body) { const r = form.querySelector(`input[name="body"][value="${body}"]`); if (r) r.checked = true; }
+      if (shade) { const r = form.querySelector(`input[name="shade"][value="${shade}"]`); if (r) r.checked = true; }
+      lock = true; render(); lock = false;
+    };
+    return { sync, render };
+  })();
+  Quote.sync({});
+
+  /* =============================================================
+     LOADER + HERO INTRO
+     ============================================================= */
+  if (window.gsap) gsap.set('.hero h1 .after', { yPercent: 100, opacity: 0 });
+  const loader = $('.loader');
+  const heroIn = () => {
+    if (!ANIM) { Car.start(); return; }
+    gsap.timeline()
+      .from('.hero h1 .ln > span:not(.after)', { yPercent: 110, duration: 1, ease: 'expo.out', stagger: .1 })
+      .from('[data-hero-in]', { y: 24, opacity: 0, duration: .9, ease: 'power3.out', stagger: .08 }, .15)
+      .from('[data-carwrap]', { x: -1100, duration: 1.1, ease: 'expo.out' }, .3)
+      .add(() => Car.start(), 1.2);
+  };
+  if (loader && ANIM) {
+    let done = false;
+    const finish = () => { if (done) return; done = true; loader.remove(); };
+    const tl = gsap.timeline({ onComplete: finish });
+    tl.to('.loader .film', { yPercent: 101, duration: .75, ease: 'power3.inOut' })
+      .to('.loader .logo', { opacity: 1, scale: 1.4, duration: .4, ease: 'power2.out' }, '-=.1')
+      .to(loader, { opacity: 0, duration: .45, ease: 'power1.in' }, '+=.25')
+      .add(heroIn, '-=.3');
+    loader.addEventListener('click', () => tl.progress(1));
+    setTimeout(() => { if (!done) tl.progress(1); }, 4000);
+  } else { if (loader) loader.remove(); heroIn(); }
+
+  /* =============================================================
+     PROCESS: a back window, start to finish
+     ============================================================= */
+  (() => {
+    const stepsEl = $('[data-steps]');
+    stepsEl.innerHTML = CONFIG.steps.map((s, i) => `<li class="step"><span class="n">STEP ${String(i + 1).padStart(2, '0')}</span><h3>${esc(s.title)}</h3><p>${esc(s.text)}</p></li>`).join('');
+    const steps = $$('.step', stepsEl), g = $('[data-glass]');
+    const q = s => $(s, g);
+    const build = (tl, at = 0) => {
+      tl.to(q('[data-wipe]'), { attr: { x: 1100 }, duration: .8, ease: 'power1.inOut' }, at)
+        .to(q('[data-dirt]'), { opacity: 0, duration: .5 }, at + .3)
+        .to(q('[data-tintsheet]'), { opacity: 1, duration: .4 }, at + 1)
+        .to(q('[data-cut]'), { strokeDashoffset: 0, duration: .8, ease: 'none' }, at + 1.1)
+        .to(q('[data-heat]'), { opacity: 1, duration: .3 }, at + 2)
+        .to(q('[data-fingers]'), { opacity: .6, duration: .2 }, at + 2)
+        .to(q('[data-heat]'), { x: 260, duration: .8, ease: 'sine.inOut' }, at + 2.1)
+        .to(q('[data-fingers]'), { opacity: 0, duration: .6 }, at + 2.3)
+        .to(q('[data-heat]'), { opacity: 0, duration: .2 }, at + 2.9)
+        .to(q('[data-blade]'), { opacity: 1, duration: .1 }, at + 3)
+        .to(q('[data-sweep]'), { attr: { width: 920 }, duration: .9, ease: 'none' }, at + 3)
+        .to(q('[data-blade]'), { x: 920, duration: .9, ease: 'none' }, at + 3)
+        .to(q('[data-tintsheet]'), { opacity: 0, duration: .3 }, at + 3.6)
+        .to(q('[data-blade]'), { opacity: 0, duration: .15 }, at + 3.9)
+        .to(q('[data-drops]'), { opacity: 1, duration: .2 }, at + 4)
+        .to(q('[data-drops]'), { opacity: 0, duration: .6 }, at + 4.3)
+        .to(q('[data-check]'), { opacity: 1, duration: .3 }, at + 4.5);
+      return tl;
+    };
+    if (!ANIM) {
+      stepsEl.classList.add('stack-steps');
+      q('[data-dirt]').setAttribute('opacity', 0); q('[data-sweep]').setAttribute('width', 920); q('[data-cut]').style.strokeDashoffset = 0; q('[data-check]').setAttribute('opacity', 1);
+      return;
+    }
+    const mm = gsap.matchMedia();
+    mm.add('(min-width: 901px)', () => {
+      $('.process').classList.add('pinned');
+      const tl = gsap.timeline({ scrollTrigger: { trigger: '.process', start: 'top top', end: '+=280%', pin: '.proc-pin', scrub: .6, anticipatePin: 1 } });
+      build(tl, 0);
+      tl.to('.proc-bar i', { scaleX: 1, ease: 'none', duration: 5 }, 0);
+      steps.forEach((s, i) => { if (!i) return; tl.to(steps[i - 1], { autoAlpha: 0, y: -18, duration: .2 }, i - .1).fromTo(s, { autoAlpha: 0, y: 22 }, { autoAlpha: 1, y: 0, duration: .25 }, i); });
+      return () => { $('.process').classList.remove('pinned'); gsap.set(steps, { clearProps: 'all' }); };
+    });
+    mm.add('(max-width: 900px)', () => {
+      stepsEl.classList.add('stack-steps');
+      const tl = gsap.timeline({ paused: true }); build(tl, 0);
+      ScrollTrigger.create({ trigger: g, start: 'top 70%', onEnter: () => tl.play() });
+      return () => stepsEl.classList.remove('stack-steps');
+    });
+  })();
+
+  /* =============================================================
+     WORK + reveals + magnetic buttons
+     ============================================================= */
+  $('[data-cars]').innerHTML = CONFIG.work.map(w => `<figure class="car" data-reveal style="margin:0"><img src="${esc(w.img)}" alt="${esc(w.title)} after tint" loading="lazy" width="800" height="1066"><figcaption><b>${esc(w.title)}</b><span>${esc(w.note)}</span></figcaption></figure>`).join('');
+  if (ANIM) {
+    ScrollTrigger.batch('[data-reveal]', { start: 'top 90%', onEnter: els => gsap.to(els, { opacity: 1, y: 0, duration: .9, ease: 'power3.out', stagger: .07, overwrite: true }) });
+  } else $$('[data-reveal]').forEach(e => { e.style.opacity = 1; e.style.transform = 'none'; });
+  if (FINE && ANIM) {
+    $$('[data-magnetic]').forEach(el => {
+      el.addEventListener('pointermove', e => { const r = el.getBoundingClientRect(); gsap.to(el, { x: (e.clientX - r.left - r.width / 2) * .2, y: (e.clientY - r.top - r.height / 2) * .28, duration: .4, ease: 'power3.out' }); });
+      el.addEventListener('pointerleave', () => gsap.to(el, { x: 0, y: 0, duration: .6, ease: 'elastic.out(1,.4)' }));
+    });
+  }
+  addEventListener('load', () => { if (HAS_G) ScrollTrigger.refresh(); });
+  })();
+  </script>
+</body>
+</html>
