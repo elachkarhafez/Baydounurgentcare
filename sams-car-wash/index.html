@@ -1,0 +1,701 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sam’s Car Wash | Tunnel Car Wash in Madison Heights, MI</title>
+  <meta name="description" content="Sam’s Car Wash at 404 W 11 Mile Rd, Madison Heights, MI. Now open. Sam’s Pass unlimited monthly washes, plus Sam’s Mart, fuel and EV charging in one stop.">
+  <meta name="theme-color" content="#0f2448">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800;900&family=Pacifico&display=swap" rel="stylesheet">
+  <style>
+    /* ------------------------------------------------------------
+       SAM'S CAR WASH · design tokens
+       Material world: candy-red facade, navy badge logo, white
+       script, soap bubbles, triple foam, tunnel brushes, wet floor.
+       ------------------------------------------------------------ */
+    :root {
+      --bg: #f4f7fb;
+      --paper: #ffffff;
+      --ink: #0f2448;
+      --muted: #5a6680;
+      --line: rgba(15,36,72,.12);
+      --red: #e4171f;
+      --red-2: #ff3b42;
+      --navy: #0f2448;
+      --navy-2: #1b3a6e;
+      --sky: #5fc3ff;
+      --display: "Rubik", system-ui, sans-serif;
+      --script: "Pacifico", cursive;
+      --pad: clamp(16px, 4vw, 56px);
+      --max: 1280px;
+      --ease: cubic-bezier(.2,.7,.1,1);
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    html.lenis, html.lenis body { height: auto; }
+    .lenis.lenis-smooth { scroll-behavior: auto !important; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font: 17px/1.6 var(--display); overflow-x: clip; -webkit-font-smoothing: antialiased; }
+    img, svg, iframe { display: block; max-width: 100%; }
+    a { color: inherit; }
+    button { font: inherit; color: inherit; }
+    :focus-visible { outline: 3px solid var(--sky); outline-offset: 3px; }
+    [hidden] { display: none !important; }
+    .wrap { width: 100%; max-width: var(--max); margin: 0 auto; padding: 0 var(--pad); }
+    .eyebrow { font: 800 13px/1.3 var(--display); letter-spacing: .14em; text-transform: uppercase; color: var(--red); margin: 0 0 14px; }
+    h1, h2, h3 { font-family: var(--display); font-weight: 900; margin: 0; letter-spacing: -.02em; text-transform: uppercase; line-height: .95; }
+    h2 { font-size: clamp(38px, 5.4vw, 76px); }
+    .script { font-family: var(--script); font-weight: 400; text-transform: none; letter-spacing: 0; color: var(--red); }
+
+    /* their badge logo */
+    .badge { display: inline-flex; flex-direction: column; align-items: center; justify-content: center; text-decoration: none; background: var(--navy); color: #fff; padding: 6px 16px 7px; border: 2.5px solid #fff; box-shadow: 0 0 0 2.5px var(--navy); clip-path: polygon(10% 0, 90% 0, 100% 35%, 100% 70%, 50% 100%, 0 70%, 0 35%); line-height: 1; min-width: 118px; }
+    .badge b { font: 400 26px/1.05 var(--script); }
+    .badge small { font: 900 11px/1 var(--display); letter-spacing: .08em; margin: -2px 0 8px; }
+
+    .btn { --bg: var(--red); --fg: #fff; display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 52px; padding: 0 26px; border-radius: 999px; background: var(--bg); color: var(--fg); border: 2px solid transparent; font: 800 16px/1 var(--display); text-transform: uppercase; letter-spacing: .02em; text-decoration: none; cursor: pointer; transition: background .2s, transform .2s, box-shadow .2s; will-change: transform; }
+    .btn svg { width: 18px; height: 18px; }
+    .btn:hover { --bg: #c90f17; }
+    .btn.navy { --bg: var(--navy); } .btn.navy:hover { --bg: #071733; }
+    .btn.ghost { --bg: transparent; --fg: var(--navy); border-color: rgba(15,36,72,.25); }
+    .btn.ghost:hover { --bg: rgba(15,36,72,.05); }
+    .btn.white { --bg: #fff; --fg: var(--navy); } .btn.white:hover { --bg: #e9f1ff; }
+    .btn.sm { min-height: 42px; padding: 0 18px; font-size: 14px; }
+
+    /* ---------------- top banner (live opening offer) ---------------- */
+    .promo { background: var(--red); color: #fff; text-align: center; font: 800 14px/1.3 var(--display); padding: 9px 16px; letter-spacing: .02em; position: relative; z-index: 41; }
+    .promo b { background: #fff; color: var(--red); padding: 2px 8px; border-radius: 4px; margin-right: 6px; }
+
+    /* ---------------- nav ---------------- */
+    .nav { position: sticky; top: 0; z-index: 40; background: rgba(244,247,251,.9); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
+    .nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 18px; height: 78px; }
+    .nav-links { display: flex; gap: 26px; }
+    .nav-links a { font: 700 14px/1 var(--display); text-transform: uppercase; letter-spacing: .06em; text-decoration: none; }
+    .nav-links a:hover { color: var(--red); }
+    @media (max-width: 900px) { .nav-links { display: none; } .nav .wrap { height: 70px; } .badge { min-width: 100px; } .badge b { font-size: 22px; } }
+
+    /* ---------------- hero ---------------- */
+    .hero { padding: clamp(22px, 3vw, 36px) 0 30px; }
+    .hero-top { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 22px; align-items: end; margin-bottom: 18px; }
+    .hero h1 { font-size: clamp(42px, 4.8vw, 74px); }
+    .hero h1 .swap { display: grid; }
+    .hero h1 .swap > span { grid-area: 1 / 1; }
+    .hero h1 .after { opacity: 0; }
+    .hero h1 .script { font-size: .9em; line-height: 1.15; }
+    .hero-side { max-width: 340px; justify-self: end; }
+    .hero-side p { margin: 0 0 14px; color: var(--muted); }
+    .status { display: inline-flex; align-items: center; gap: 8px; font: 800 13px/1 var(--display); text-transform: uppercase; letter-spacing: .08em; color: var(--navy); background: #fff; padding: 8px 12px; border-radius: 999px; box-shadow: 0 0 0 1px var(--line); }
+    .status i { width: 9px; height: 9px; border-radius: 50%; background: #1fbf55; box-shadow: 0 0 0 4px rgba(31,191,85,.18); }
+    @media (max-width: 900px) { .hero-top { grid-template-columns: 1fr; } .hero-side { justify-self: start; } }
+
+    .tunnel { position: relative; width: 100%; max-width: max(320px, calc((100svh - 360px) * 2.9)); margin: 0 auto; border-radius: 22px; overflow: hidden; background: #dfe7f1; box-shadow: 0 0 0 1px var(--line), 0 40px 80px -45px rgba(15,36,72,.5); user-select: none; -webkit-user-select: none; }
+    .tunnel svg { width: 100%; height: auto; aspect-ratio: 1100 / 380; }
+    .stamp { position: absolute; left: 50%; top: 40%; transform: translate(-50%, -50%) rotate(-6deg); pointer-events: none; opacity: 0; text-align: center; }
+    .stamp b { display: block; font: 900 clamp(34px, 6vw, 80px)/.9 var(--display); text-transform: uppercase; color: #fff; -webkit-text-stroke: 2px var(--navy); text-shadow: 0 6px 0 var(--navy); }
+    .stamp em { display: block; font: 400 clamp(30px, 5vw, 66px)/1 var(--script); color: var(--red); font-style: normal; text-shadow: 0 0 0 #fff, 0 3px 0 #fff; }
+
+    .wash-ui { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 16px 22px; align-items: center; margin: 16px auto 0; max-width: max(320px, calc((100svh - 360px) * 2.9)); }
+    .tiers { display: inline-flex; flex-wrap: wrap; gap: 6px; padding: 5px; background: #fff; border-radius: 999px; box-shadow: 0 0 0 1px var(--line); }
+    .tiers button { border: 0; background: transparent; height: 40px; padding: 0 16px; border-radius: 999px; font: 800 14px/1 var(--display); text-transform: uppercase; color: var(--navy); cursor: pointer; }
+    .tiers button[aria-pressed="true"] { background: var(--navy); color: #fff; }
+    .tiers button.special { font: 400 16px/1 var(--script); text-transform: none; }
+    .stations { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; list-style: none; margin: 0; padding: 0; }
+    .stations li { font: 700 12.5px/1 var(--display); text-transform: uppercase; letter-spacing: .04em; padding: 8px 11px; border-radius: 999px; background: #fff; box-shadow: 0 0 0 1px var(--line); color: var(--muted); transition: background .25s, color .25s, opacity .25s; }
+    .stations li.off { opacity: .35; text-decoration: line-through; }
+    .stations li.live { background: var(--sky); color: var(--navy); box-shadow: none; }
+    .stations li.done { background: var(--navy); color: #fff; box-shadow: none; }
+    .holdwrap { position: relative; }
+    .hold { position: relative; overflow: hidden; min-width: 250px; height: 64px; border: 0; border-radius: 999px; background: var(--red); color: #fff; font: 900 19px/1 var(--display); text-transform: uppercase; letter-spacing: .02em; cursor: pointer; touch-action: none; box-shadow: 0 10px 0 #a50d13, 0 18px 30px -10px rgba(228,23,31,.6); transition: transform .12s, box-shadow .12s; -webkit-tap-highlight-color: transparent; }
+    .hold .fill { position: absolute; inset: 0; background: var(--navy); transform-origin: left; transform: scaleX(0); }
+    .hold span { position: relative; display: inline-flex; align-items: center; gap: 10px; }
+    .hold svg { width: 24px; height: 24px; }
+    .hold.down { transform: translateY(7px); box-shadow: 0 3px 0 #a50d13, 0 8px 18px -8px rgba(228,23,31,.6); }
+    .hold.nudge { animation: nudge .7s ease-in-out; }
+    @keyframes nudge { 0%,100% { transform: none; } 20% { transform: rotate(-3deg) scale(1.04); } 40% { transform: rotate(3deg) scale(1.04); } 60% { transform: rotate(-2deg); } }
+    .coach { position: absolute; right: 0; bottom: calc(100% + 10px); z-index: 3; display: flex; flex-direction: column; align-items: flex-end; pointer-events: none; transition: opacity .4s; }
+    .coach.gone { opacity: 0; }
+    .coach-pill { display: inline-flex; align-items: center; gap: 10px; padding: 9px 16px 9px 9px; border-radius: 999px; background: var(--navy); color: #fff; font: 700 15px/1.2 var(--display); white-space: nowrap; animation: bob 2.2s ease-in-out infinite; box-shadow: 0 12px 24px -10px rgba(15,36,72,.6); }
+    .coach-pill i { width: 30px; height: 30px; border-radius: 50%; background: var(--red); display: grid; place-items: center; }
+    .coach-pill i svg { width: 18px; height: 18px; color: #fff; }
+    .coach-arrow { width: 30px; height: 26px; color: var(--navy); margin-right: 60px; }
+    @keyframes bob { 50% { transform: translateY(-4px); } }
+    .again { display: block; margin: 10px auto 0; background: none; border: 0; color: var(--muted); font: 700 13px/1 var(--display); text-transform: uppercase; letter-spacing: .08em; text-decoration: underline; cursor: pointer; }
+    @media (max-width: 980px) {
+      .wash-ui { grid-template-columns: 1fr; }
+      .stations { justify-content: flex-start; }
+      .holdwrap { margin-top: 56px; }
+      .hold { width: 100%; }
+      .coach { right: 50%; transform: translateX(50%); align-items: center; }
+      .coach-arrow { margin: 0; }
+    }
+
+    /* ---------------- marquee ---------------- */
+    .marquee { overflow: hidden; padding: 16px 0; background: var(--navy); color: #fff; margin-top: 40px; }
+    .marquee-track { display: flex; width: max-content; animation: mq 38s linear infinite; }
+    .marquee-track span { display: inline-flex; align-items: center; gap: 24px; padding-right: 24px; font: 900 clamp(20px, 2.4vw, 30px)/1 var(--display); text-transform: uppercase; white-space: nowrap; }
+    .marquee-track span:nth-child(3n+2) { font: 400 clamp(24px, 2.8vw, 36px)/1.3 var(--script); text-transform: none; color: var(--red-2); }
+    .marquee-track span::after { content: ""; width: 14px; height: 14px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #fff, #b8e4ff 60%, #5fc3ff); }
+    @keyframes mq { to { transform: translateX(-50%); } }
+
+    /* ---------------- opening ---------------- */
+    .opening { padding: clamp(70px, 9vw, 120px) 0; }
+    .open-card { position: relative; overflow: hidden; border-radius: 26px; background: var(--red); color: #fff; padding: clamp(28px, 5vw, 60px); display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 30px; align-items: center; }
+    .open-card .eyebrow { color: #fff; opacity: .85; }
+    .open-card h2 { font-size: clamp(40px, 6vw, 84px); }
+    .open-card h2 .script { color: #fff; white-space: nowrap; }
+    .open-card p { margin: 18px 0 0; font-size: 18px; max-width: 30em; }
+    .count { display: flex; gap: 12px; justify-content: flex-end; flex-wrap: wrap; position: relative; z-index: 1; }
+    .count div { background: rgba(255,255,255,.14); border-radius: 18px; padding: 16px 18px; min-width: 104px; text-align: center; box-shadow: inset 0 0 0 1px rgba(255,255,255,.25); }
+    .count b { display: block; font: 900 46px/1 var(--display); }
+    .count small { font: 700 12px/1 var(--display); text-transform: uppercase; letter-spacing: .1em; opacity: .85; }
+    .bubbles { position: absolute; inset: 0; pointer-events: none; }
+    .bubbles i { position: absolute; border-radius: 50%; background: radial-gradient(circle at 32% 30%, rgba(255,255,255,.95), rgba(255,255,255,.25) 40%, rgba(255,255,255,.08) 70%); box-shadow: inset 0 0 0 1px rgba(255,255,255,.4); }
+    @media (max-width: 860px) { .open-card { grid-template-columns: 1fr; } .count { justify-content: flex-start; } }
+
+    /* ---------------- washes ---------------- */
+    .washes { padding: clamp(40px, 6vw, 80px) 0 clamp(70px, 9vw, 120px); }
+    .w-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .8fr); gap: 24px; align-items: end; margin-bottom: 36px; }
+    .w-head > p { margin: 0; color: var(--muted); justify-self: end; max-width: 28em; }
+    .w-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+    .wcard { position: relative; border-radius: 22px; padding: 28px 26px; background: #fff; box-shadow: 0 0 0 1px var(--line); display: flex; flex-direction: column; gap: 10px; }
+    .wcard .lvl { display: flex; gap: 5px; }
+    .wcard .lvl i { width: 22px; height: 22px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #fff, #b8e4ff 55%, #5fc3ff); box-shadow: inset 0 0 0 1px rgba(15,36,72,.15); }
+    .wcard .lvl i.off { background: #e6ebf2; }
+    .wcard h3 { font-size: 34px; }
+    .wcard h3.script { font-size: 38px; line-height: 1.3; }
+    .wcard p { margin: 0; color: var(--muted); }
+    .wcard .tag { position: absolute; top: 18px; right: 18px; font: 800 11px/1 var(--display); text-transform: uppercase; letter-spacing: .1em; background: var(--red); color: #fff; padding: 6px 9px; border-radius: 999px; }
+    .wcard.top { background: var(--navy); color: #fff; box-shadow: none; }
+    .wcard.top p { color: #c6d2ea; }
+    .wcard .btn { margin-top: auto; align-self: flex-start; }
+    .w-note { margin-top: 16px; color: var(--muted); font-size: 14.5px; }
+    @media (max-width: 900px) { .w-grid { grid-template-columns: 1fr; } .w-head { grid-template-columns: 1fr; } .w-head > p { justify-self: start; } }
+
+    /* ---------------- pass ---------------- */
+    .pass { padding: clamp(70px, 9vw, 120px) 0; background: var(--navy); color: #fff; position: relative; overflow: hidden; }
+    .pass .wrap { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(30px, 6vw, 80px); align-items: center; }
+    .pass .eyebrow { color: var(--red-2); }
+    .pass h2 .script { color: var(--red-2); }
+    .pass p { color: #c6d2ea; font-size: 18px; max-width: 30em; }
+    .perks { list-style: none; margin: 26px 0 30px; padding: 0; display: grid; gap: 12px; }
+    .perks li { display: flex; align-items: center; gap: 14px; font: 700 18px/1.2 var(--display); }
+    .perks li i { width: 44px; height: 44px; border-radius: 50%; background: var(--red); display: grid; place-items: center; flex: none; }
+    .perks li i svg { width: 22px; height: 22px; }
+    .card3d { perspective: 1000px; justify-self: center; width: min(100%, 440px); }
+    .pcard { position: relative; aspect-ratio: 1.586; border-radius: 22px; padding: 26px; background: linear-gradient(135deg, #ff3b42, #c50f17 55%, #8d0a10); box-shadow: 0 40px 80px -30px rgba(0,0,0,.6), inset 0 0 0 1px rgba(255,255,255,.25); transform: rotateY(-14deg) rotateX(8deg); transition: transform .2s; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; }
+    .pcard::after { content: ""; position: absolute; inset: 0; background: linear-gradient(115deg, transparent 35%, rgba(255,255,255,.28) 50%, transparent 65%); transform: translateX(var(--sx, -40%)); }
+    .pcard .badge { align-self: flex-start; transform: scale(.85); transform-origin: left top; }
+    .pcard .off { font: 900 clamp(42px, 6vw, 64px)/.9 var(--display); }
+    .pcard .off small { display: block; font: 800 13px/1.2 var(--display); text-transform: uppercase; letter-spacing: .1em; margin-top: 8px; }
+    .pcard .num { font: 600 14px/1 var(--display); letter-spacing: .2em; opacity: .85; }
+    @media (max-width: 860px) { .pass .wrap { grid-template-columns: 1fr; } }
+
+    /* ---------------- one stop ---------------- */
+    .stop { padding: clamp(70px, 9vw, 120px) 0; }
+    .stop-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 36px; }
+    .stop-card { border-radius: 22px; overflow: hidden; background: #fff; box-shadow: 0 0 0 1px var(--line); }
+    .stop-card .ic { height: 120px; display: grid; place-items: center; background: linear-gradient(135deg, #fff2f2, #ffe2e3); }
+    .stop-card:nth-child(2) .ic { background: linear-gradient(135deg, #eef4ff, #dce8ff); }
+    .stop-card:nth-child(3) .ic { background: linear-gradient(135deg, #eafaf0, #d3f3df); }
+    .stop-card .ic svg { width: 56px; height: 56px; color: var(--navy); }
+    .stop-card div.t { padding: 22px 24px 26px; }
+    .stop-card h3 { font-size: 26px; }
+    .stop-card p { margin: 8px 0 0; color: var(--muted); }
+    .photos { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 16px; margin-top: 16px; }
+    .photos figure { margin: 0; border-radius: 22px; overflow: hidden; position: relative; background: #dfe7f1; }
+    .photos img { width: 100%; height: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+    .photos figcaption { position: absolute; left: 14px; bottom: 12px; background: #fff; color: var(--navy); font: 800 12px/1 var(--display); text-transform: uppercase; letter-spacing: .08em; padding: 7px 10px; border-radius: 999px; }
+    @media (max-width: 900px) { .stop-grid { grid-template-columns: 1fr; } .photos { grid-template-columns: 1fr; } }
+
+    /* ---------------- visit ---------------- */
+    .visit { padding: 0 0 clamp(70px, 9vw, 120px); }
+    .visit .box { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); border-radius: 26px; overflow: hidden; background: #fff; box-shadow: 0 0 0 1px var(--line); }
+    .visit .info { padding: clamp(26px, 4vw, 50px); }
+    .visit .addr { font: 900 clamp(30px, 3.2vw, 44px)/1 var(--display); text-transform: uppercase; margin: 14px 0 6px; }
+    .visit .addr small { display: block; font: 600 18px/1.4 var(--display); text-transform: none; color: var(--muted); margin-top: 8px; }
+    .visit .ctas { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
+    .mapbox { position: relative; min-height: 340px; background: #dfe7f1; }
+    .mapbox iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+    .mapbox .ph { position: absolute; inset: 0; display: grid; place-items: center; color: var(--muted); font: 700 13px/1 var(--display); text-transform: uppercase; letter-spacing: .1em; }
+    @media (max-width: 860px) { .visit .box { grid-template-columns: 1fr; } }
+
+    footer { padding: 30px 0 40px; border-top: 1px solid var(--line); font-size: 14px; color: var(--muted); }
+    footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px 28px; }
+    footer nav { display: flex; flex-wrap: wrap; gap: 20px; }
+    footer a { text-decoration: none; } footer a:hover { color: var(--red); }
+
+    .js [data-reveal] { opacity: 0; transform: translateY(22px); }
+    .rm [data-reveal] { opacity: 1 !important; transform: none !important; }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }
+  </style>
+  <script>document.documentElement.classList.add('js');if(matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('rm');</script>
+</head>
+<body>
+  <div class="promo" data-promo hidden></div>
+  <header class="nav">
+    <div class="wrap">
+      <a class="badge" href="#top" aria-label="Sam’s Car Wash, back to top"><b>Sam’s</b><small>CAR WASH</small></a>
+      <nav class="nav-links" aria-label="Sections">
+        <a href="#washes">Washes</a>
+        <a href="#pass">Sam’s Pass</a>
+        <a href="#stop">Mart &amp; EV</a>
+        <a href="#visit">Visit</a>
+      </nav>
+      <a class="btn sm" href="#visit" data-dir data-magnetic>Get directions</a>
+    </div>
+  </header>
+
+  <main>
+    <!-- ======================= HERO ======================= -->
+    <section class="hero" id="top">
+      <div class="wrap">
+        <div class="hero-top">
+          <div>
+            <p class="eyebrow">Madison Heights, MI · 404 W 11 Mile Rd</p>
+            <h1 aria-label="Dirty car? Send it through." data-h1>
+              <span style="display:block">Dirty car?</span>
+              <span class="swap" aria-hidden="true"><span class="before">Send it through.</span><span class="after"><span class="script">Fresh out of Sam’s.</span></span></span>
+            </h1>
+          </div>
+          <div class="hero-side">
+            <p>A brand-new tunnel wash on 11 Mile, with Sam’s Mart, fuel and EV charging in the same stop.</p>
+            <span class="status"><i aria-hidden="true"></i><span data-status>Now open</span></span>
+          </div>
+        </div>
+
+        <div class="tunnel" data-tunnel>
+          <svg viewBox="0 0 1100 380" data-scene role="img" aria-label="A dirty car on the conveyor at the entrance of Sam’s Car Wash tunnel."></svg>
+          <div class="stamp" data-stamp aria-hidden="true"><b>Squeaky clean</b><em>Fresh out of Sam’s</em></div>
+        </div>
+
+        <div class="wash-ui">
+          <div class="tiers" role="group" aria-label="Pick your wash" data-tiers></div>
+          <ul class="stations" data-stations aria-label="Wash stations"></ul>
+          <div class="holdwrap">
+            <div class="coach" data-coach aria-hidden="true">
+              <span class="coach-pill"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 13V6.5a1.5 1.5 0 0 1 3 0V12M11 11V5a1.5 1.5 0 0 1 3 0v6M14 11V6.5a1.5 1.5 0 0 1 3 0V14c0 4-2.5 7-6.5 7-2.6 0-4.4-1.6-5.6-3.8L3.4 14.4a1.4 1.4 0 0 1 2.3-1.6L8 15"/></svg></i><span data-coach-text>Hold the button to wash the car</span></span>
+              <svg class="coach-arrow" viewBox="0 0 30 26" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 2v20M7 15l8 8 8-8"/></svg>
+            </div>
+            <button class="hold" type="button" data-hold aria-label="Hold to drive the car through the wash"><i class="fill" data-fill></i><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 16c-1.7 0-3-1.3-3-3 0-1.4 1-2.6 2.3-2.9C6.7 7.2 9.1 5 12 5s5.3 2.2 5.7 5.1C19 10.4 20 11.6 20 13c0 1.7-1.3 3-3 3"/><path d="M8 19l1-2M12 20l1-3M16 19l1-2"/></svg><span data-hold-text>Hold to wash</span></span></button>
+            <button class="again" type="button" data-again hidden>Run it again</button>
+          </div>
+        </div>
+      </div>
+      <div class="marquee" aria-hidden="true"><div class="marquee-track" data-marquee></div></div>
+    </section>
+
+    <!-- ======================= OPENING ======================= -->
+    <section class="opening" id="opening" data-opening>
+      <div class="wrap">
+        <div class="open-card" data-reveal>
+          <div class="bubbles" data-bubbles aria-hidden="true"></div>
+          <div style="position:relative;z-index:1">
+            <p class="eyebrow" data-open-eyebrow>Grand opening</p>
+            <h2 data-open-h>Grand opening <span class="script">Oct 5</span></h2>
+            <p data-open-p></p>
+          </div>
+          <div class="count" data-count aria-live="polite"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================= WASHES ======================= -->
+    <section class="washes" id="washes">
+      <div class="wrap">
+        <div class="w-head">
+          <div>
+            <p class="eyebrow" data-reveal>Pick your wash</p>
+            <h2 data-reveal>Three ways to <span class="script">shine.</span></h2>
+          </div>
+          <p data-reveal>Same names you’ll see on the board at the tunnel entrance. Pick at the pay station and roll on through.</p>
+        </div>
+        <div class="w-grid" data-wcards></div>
+        <p class="w-note" data-reveal>Prices and what’s in each package are on the board at the pay station.</p>
+      </div>
+    </section>
+
+    <!-- ======================= PASS ======================= -->
+    <section class="pass" id="pass">
+      <div class="wrap">
+        <div>
+          <p class="eyebrow" data-reveal>Sam’s Pass</p>
+          <h2 data-reveal>Wash as often as <span class="script">you want.</span></h2>
+          <p data-reveal>Sam’s Pass is our unlimited monthly wash membership. One simple monthly payment, and your car looks its best all month long.</p>
+          <ul class="perks" data-reveal>
+            <li><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M7 9a3 3 0 1 0 0 6c3 0 7-6 10-6a3 3 0 1 1 0 6c-3 0-7-6-10-6"/></svg></i>Unlimited washes</li>
+            <li><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg></i>Convenient monthly billing</li>
+            <li><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12V4h8l9 9-8 8z"/><circle cx="7.5" cy="8.5" r="1.5"/></svg></i>Great value</li>
+          </ul>
+          <a class="btn" href="#visit" data-reveal data-magnetic>Join at Sam’s <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4"/></svg></a>
+        </div>
+        <div class="card3d" data-reveal>
+          <div class="pcard" data-pcard>
+            <span class="badge"><b>Sam’s</b><small>CAR WASH</small></span>
+            <div class="off">50% off<small>your first month · limited time</small></div>
+            <span class="num">SAM’S PASS · UNLIMITED</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================= ONE STOP ======================= -->
+    <section class="stop" id="stop">
+      <div class="wrap">
+        <p class="eyebrow" data-reveal>One stop</p>
+        <h2 data-reveal>Fuel. Snacks. <span class="script">A fresh wash.</span></h2>
+        <div class="stop-grid">
+          <article class="stop-card" data-reveal><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 16c-1.7 0-3-1.3-3-3 0-1.4 1-2.6 2.3-2.9C6.7 7.2 9.1 5 12 5s5.3 2.2 5.7 5.1C19 10.4 20 11.6 20 13c0 1.7-1.3 3-3 3"/><path d="M8 19l1-2M12 20l1-3M16 19l1-2"/></svg></div><div class="t"><h3>Sam’s Car Wash</h3><p>Drive-through tunnel wash. Basic, Works and Sam’s Special.</p></div></article>
+          <article class="stop-card" data-reveal><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h16l-1.5 11a2 2 0 0 1-2 1.7h-9A2 2 0 0 1 5.5 19z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg></div><div class="t"><h3>Sam’s Mart</h3><p>Fuel and convenience, right next to the wash. <a data-mart href="https://www.instagram.com/samsmartmi/" target="_blank" rel="noopener">@samsmartmi</a></p></div></article>
+          <article class="stop-card" data-reveal><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2L5 14h6l-1 8 8-12h-6z"/></svg></div><div class="t"><h3>EV chargers</h3><p>Charge up while you grab a snack or get a wash.</p></div></article>
+        </div>
+        <div class="photos">
+          <figure data-reveal><img src="img/aerial.jpg" alt="Aerial view of Sam’s Car Wash, Sam’s Mart and the EV chargers on 11 Mile Rd" loading="lazy" width="720" height="620"><figcaption>All in one spot</figcaption></figure>
+          <figure data-reveal><img src="img/storefront.jpg" alt="Red Sam’s Car Wash facade with the OPEN sign" loading="lazy" width="600" height="580"><figcaption>Now open</figcaption></figure>
+          <figure data-reveal><img src="img/tunnel-sign.jpg" alt="Tunnel entrance with the Sam’s Car Wash sign and the wash menu board" loading="lazy" width="720" height="320"><figcaption>The tunnel</figcaption></figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================= VISIT ======================= -->
+    <section class="visit" id="visit">
+      <div class="wrap">
+        <div class="box" data-reveal>
+          <div class="info">
+            <p class="eyebrow">Visit</p>
+            <h2>Roll <span class="script">on in.</span></h2>
+            <p class="addr" data-addr></p>
+            <div class="ctas" data-visit-ctas></div>
+          </div>
+          <div class="mapbox"><span class="ph">Loading map…</span><iframe data-map title="Map to Sam’s Car Wash" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <a class="badge" href="#top" aria-label="Back to top"><b>Sam’s</b><small>CAR WASH</small></a>
+      <nav aria-label="Footer"><a href="#washes">Washes</a><a href="#pass">Sam’s Pass</a><a href="#stop">Mart &amp; EV</a><a href="#visit">Visit</a><a data-ig href="#" target="_blank" rel="noopener">Instagram</a></nav>
+      <span>&copy; <span data-year></span> Sam’s Car Wash · Madison Heights, MI</span>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+  <script>
+  /* =============================================================
+     CONFIG: every business detail lives here.
+     ============================================================= */
+  const CONFIG = {
+    name: 'Sam’s Car Wash',
+    address: { street: '404 W 11 Mile Rd', city: 'Madison Heights', state: 'MI', zip: '48071' },
+    instagram: { handle: '@samscarwashmi', url: 'https://www.instagram.com/samscarwashmi/', dm: 'https://ig.me/m/samscarwashmi' },
+    phone: '',
+    // opening: soft open Mon Sept 28, grand opening Oct 5, free washes for the first 10 days
+    softOpen: '2026-09-28', grandOpen: '2026-10-05', freeUntil: '2026-10-07',
+    passOffer: '50% off your first month (limited time)',
+    tiers: [
+      { id: 'basic',   label: 'Basic',        title: 'Basic Wash',   blurb: 'The everyday clean. In, out, done.', lvl: 1, stations: ['soak', 'brush', 'rinse', 'dry'] },
+      { id: 'works',   label: 'Works',        title: 'Works Wash',   blurb: 'More foam, more clean. The works.', lvl: 2, stations: ['soak', 'foam', 'brush', 'rinse', 'dry'] },
+      { id: 'special', label: 'Sam’s Special', title: 'Sam’s Special', blurb: 'Everything we’ve got, finished with the shine.', lvl: 3, stations: ['soak', 'foam', 'brush', 'rinse', 'shine', 'dry'], top: true }
+    ],
+    marquee: ['Now open', 'Fresh out of Sam’s', 'Sam’s Pass', 'Unlimited washes', 'Madison Heights we love you', 'Fuel', 'EV charging', 'Sam’s Mart', '404 W 11 Mile Rd']
+  };
+  </script>
+  <script>
+  (() => {
+  'use strict';
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+  const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const FINE = matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const HAS_G = !!(window.gsap && window.ScrollTrigger);
+  const ANIM = HAS_G && !RM;
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  if (HAS_G) gsap.registerPlugin(ScrollTrigger);
+  const PIN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>';
+
+  /* ---------------- bind CONFIG ---------------- */
+  const ig = CONFIG.instagram || {}, A = CONFIG.address;
+  const full = `${A.street}, ${A.city}, ${A.state} ${A.zip}`;
+  const maps = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent('Sam’s Car Wash ' + full);
+  $$('[data-dir]').forEach(a => { a.href = maps; a.target = '_blank'; a.rel = 'noopener'; });
+  $$('[data-ig]').forEach(a => { if (ig.url) a.href = ig.url; });
+  $$('[data-year]').forEach(e => e.textContent = new Date().getFullYear());
+  $('[data-addr]').innerHTML = `${esc(A.street)}<small>${esc(A.city)}, ${esc(A.state)} ${esc(A.zip)}</small>`;
+  $('[data-visit-ctas]').innerHTML = `<a class="btn" href="${esc(maps)}" target="_blank" rel="noopener">${PIN}Get directions</a>` + (CONFIG.phone ? `<a class="btn navy" href="tel:${esc(CONFIG.phone.replace(/[^\d+]/g, ''))}">Call</a>` : '') + (ig.dm ? `<a class="btn ghost" href="${esc(ig.dm)}" target="_blank" rel="noopener">DM ${esc(ig.handle)}</a>` : '');
+  const mq = CONFIG.marquee.map(w => `<span>${esc(w)}</span>`).join('');
+  $('[data-marquee]').innerHTML = mq + mq;
+
+  /* ---------------- opening dates (updates itself) ---------------- */
+  const day = s => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
+  const now = new Date(), today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const grand = day(CONFIG.grandOpen), freeEnd = day(CONFIG.freeUntil), soft = day(CONFIG.softOpen);
+  const free = today >= soft && today <= freeEnd;
+  const promo = $('[data-promo]');
+  if (free) { promo.hidden = false; promo.innerHTML = `<b>FREE</b>Free car washes through ${freeEnd.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} to celebrate our opening`; }
+  else if (today < soft) { promo.hidden = false; promo.textContent = `Opening ${soft.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}`; }
+  $('[data-status]').textContent = today < soft ? 'Opening soon' : today < grand ? 'Now open · soft opening' : 'Now open';
+  (() => {
+    const h = $('[data-open-h]'), p = $('[data-open-p]'), eb = $('[data-open-eyebrow]'), cnt = $('[data-count]');
+    const sec = $('[data-opening]');
+    const days = Math.round((grand - today) / 864e5);
+    if (today < grand) {
+      eb.textContent = 'Soft opening · now washing';
+      h.innerHTML = `Grand opening <span class="script">${grand.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>`;
+      p.textContent = `We’re already washing during our soft opening. Stop in now and try the wash before the big day.${free ? ' Washes are FREE for the first 10 days.' : ''}`;
+      const tick = () => {
+        const ms = Math.max(0, grand - new Date());
+        const d = Math.floor(ms / 864e5), hh = Math.floor(ms / 36e5) % 24, mm = Math.floor(ms / 6e4) % 60;
+        cnt.innerHTML = [[d, 'days'], [hh, 'hours'], [mm, 'min']].map(([v, l]) => `<div><b>${v}</b><small>${l}</small></div>`).join('');
+      };
+      tick(); setInterval(tick, 30000);
+    } else if (free || days >= -2) {
+      eb.textContent = 'We’re open';
+      h.innerHTML = `Grand opening <span class="script">is here.</span>`;
+      p.textContent = free ? `Thank you, Madison Heights! Car washes are FREE through ${freeEnd.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })} to celebrate our opening. Come get one.` : 'Thank you, Madison Heights! Come see us on 11 Mile.';
+      cnt.innerHTML = free ? `<div><b>FREE</b><small>washes now</small></div>` : '';
+    } else { sec.remove(); }
+    const bb = $('[data-bubbles]');
+    if (bb) bb.innerHTML = Array.from({ length: 14 }, (_, i) => { const s = 18 + (i * 37) % 70; return `<i style="width:${s}px;height:${s}px;left:${(i * 53) % 100}%;top:${(i * 29) % 100}%"></i>`; }).join('');
+    if (bb && ANIM) $$('i', bb).forEach((b, i) => gsap.to(b, { y: -30 - (i % 4) * 12, x: (i % 2 ? 10 : -10), duration: 3 + (i % 5), repeat: -1, yoyo: true, ease: 'sine.inOut' }));
+  })();
+
+  /* ---------------- smooth scroll ---------------- */
+  let lenis = null;
+  if (ANIM && window.Lenis) { lenis = new Lenis({ duration: 1.05, smoothWheel: true }); lenis.on('scroll', ScrollTrigger.update); gsap.ticker.add(t => lenis.raf(t * 1000)); gsap.ticker.lagSmoothing(0); }
+  $$('a[href^="#"]').forEach(a => a.addEventListener('click', e => {
+    const id = a.getAttribute('href'); if (id === '#' || a.hasAttribute('data-dir')) return;
+    const t = id === '#top' ? 0 : $(id); if (t === null) return;
+    e.preventDefault(); if (lenis) lenis.scrollTo(t, { offset: -90 }); else (t === 0 ? scrollTo({ top: 0 }) : t.scrollIntoView({ behavior: RM ? 'auto' : 'smooth' }));
+  }));
+
+  /* =============================================================
+     THE TUNNEL: hold to drive the car through the wash
+     ============================================================= */
+  const STN = [
+    { id: 'soak',  label: 'Pre-soak',     x: 240 },
+    { id: 'foam',  label: 'Triple foam',  x: 355 },
+    { id: 'brush', label: 'Brushes',      x: 480 },
+    { id: 'rinse', label: 'Rinse',        x: 605 },
+    { id: 'shine', label: 'Shine',        x: 715 },
+    { id: 'dry',   label: 'Dryer',        x: 840 }
+  ];
+  const Wash = (() => {
+    const svg = $('[data-scene]'), tunnel = $('[data-tunnel]'), stamp = $('[data-stamp]');
+    const holdBtn = $('[data-hold]'), fill = $('[data-fill]'), coach = $('[data-coach]'), again = $('[data-again]'), holdText = $('[data-hold-text]');
+    if (!FINE) $('[data-coach-text]').textContent = 'Press & hold the button to wash';
+    const BODY = 'M84 318 C64 300 60 262 72 238 C78 226 92 220 124 210 C176 198 236 192 296 186 C336 150 384 120 444 110 C520 98 600 99 660 112 C702 122 742 150 772 176 C842 184 902 192 936 205 C958 213 970 234 966 262 C964 290 954 312 930 318 L834 318 A76 76 0 1 0 686 318 L309 318 A76 76 0 1 0 161 318 Z';
+    const WIN = ['M322 186 C352 160 392 132 428 123 L412 185 Z', 'M424 185 L442 121 C482 112 520 109 556 108 L556 182 Z', 'M572 181 L572 108 C608 108 638 112 656 117 C690 132 720 154 742 175 Z'];
+    const S = .34, CAR_W = 1000 * S, CAR_Y = 178;
+    const endX = 690;
+    const st = { x: 30, v: 0, holding: false, done: false, dirt: 1, foam: 0, wet: 0, shine: 0, tier: CONFIG.tiers[2], engaged: false, idle: 0, passed: new Set(), spin: 0 };
+
+    // seeded mud spots on the body
+    let seed = 11; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    const mud = Array.from({ length: 70 }, () => { const x = 90 + rnd() * 860, y = 200 + rnd() * 110; return `<circle cx="${x.toFixed(0)}" cy="${y.toFixed(0)}" r="${(3 + rnd() * 9).toFixed(1)}"/>`; }).join('');
+    const foamDots = Array.from({ length: 46 }, (_, i) => { const x = 140 + rnd() * 780, y = (x > 300 && x < 760 ? 110 : 190) + rnd() * 40; const c = ['#ff6b6b', '#ffffff', '#6aa8ff'][i % 3]; return `<circle cx="${x.toFixed(0)}" cy="${y.toFixed(0)}" r="${(14 + rnd() * 18).toFixed(0)}" fill="${c}"/>`; }).join('');
+    const drops = Array.from({ length: 30 }, () => `<ellipse cx="${(120 + rnd() * 800).toFixed(0)}" cy="${(140 + rnd() * 160).toFixed(0)}" rx="4" ry="6"/>`).join('');
+    const sparkle = (x, y, s) => `<path transform="translate(${x} ${y}) scale(${s})" d="M0 -14 L3 -3 L14 0 L3 3 L0 14 L-3 3 L-14 0 L-3 -3 Z" fill="#fff"/>`;
+
+    // scene
+    const stationArt = {
+      soak: x => `<g data-st="soak"><rect x="${x - 4}" y="40" width="8" height="250" fill="#9fb0c6"/><rect x="${x - 50}" y="40" width="100" height="8" rx="4" fill="#9fb0c6"/>${[-36, -12, 12, 36].map(d => `<circle cx="${x + d}" cy="52" r="5" fill="#5fc3ff"/>`).join('')}<g data-fx fill="#bfe6ff" opacity="0">${Array.from({ length: 18 }, (_, i) => `<circle cx="${x - 50 + (i * 23) % 100}" cy="${70 + (i * 41) % 200}" r="${2 + i % 3}"/>`).join('')}</g></g>`,
+      foam: x => `<g data-st="foam"><rect x="${x - 60}" y="34" width="120" height="16" rx="8" fill="#e4171f"/>${[-40, 0, 40].map((d, i) => `<rect x="${x + d - 6}" y="50" width="12" height="16" rx="3" fill="${['#ff6b6b', '#ffffff', '#6aa8ff'][i]}" stroke="#c9d3e0"/>`).join('')}<g data-fx opacity="0">${Array.from({ length: 24 }, (_, i) => `<circle cx="${x - 60 + (i * 31) % 120}" cy="${70 + (i * 37) % 180}" r="${5 + i % 6}" fill="${['#ff8a8a', '#ffffff', '#8bbcff'][i % 3]}" opacity=".85"/>`).join('')}</g></g>`,
+      brush: x => `<g data-st="brush"><rect x="${x - 90}" y="30" width="180" height="10" fill="#7d8ca3"/><g data-brushes><rect x="${x - 82}" y="60" width="34" height="232" rx="17" fill="url(#brushPat)"/><rect x="${x + 48}" y="60" width="34" height="232" rx="17" fill="url(#brushPat)"/><rect x="${x - 70}" y="42" width="140" height="30" rx="15" fill="url(#brushPatH)"/></g></g>`,
+      rinse: x => `<g data-st="rinse"><path d="M${x - 70} 290 V60 Q${x} 26 ${x + 70} 60 V290" fill="none" stroke="#9fb0c6" stroke-width="8"/><g data-fx stroke="#7fd0ff" stroke-width="3" opacity="0" stroke-linecap="round">${Array.from({ length: 10 }, (_, i) => `<path d="M${x - 60 + i * 13} 64 l${(i - 5) * 2} 70"/>`).join('')}</g></g>`,
+      shine: x => `<g data-st="shine"><rect x="${x - 46}" y="36" width="92" height="14" rx="7" fill="#0f2448"/><text x="${x}" y="47" text-anchor="middle" font-family="Rubik, sans-serif" font-weight="800" font-size="9" fill="#fff" letter-spacing="1">SHINE</text><g data-fx opacity="0">${sparkle(x - 30, 100, .7)}${sparkle(x + 24, 140, 1)}${sparkle(x - 6, 190, .6)}</g></g>`,
+      dry: x => `<g data-st="dry"><rect x="${x - 70}" y="30" width="140" height="30" rx="10" fill="#0f2448"/><path d="M${x - 58} 60 h116 l-14 16 h-88 z" fill="#1b3a6e"/><g data-fx stroke="#c9e8ff" stroke-width="3" fill="none" opacity="0" stroke-linecap="round">${Array.from({ length: 6 }, (_, i) => `<path d="M${x - 50 + i * 20} 84 q6 30 -2 60 q-6 30 4 60"/>`).join('')}</g></g>`
+    };
+    svg.innerHTML = `
+      <defs>
+        <linearGradient id="paint" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a64b8"/><stop offset=".5" stop-color="#1b3a6e"/><stop offset="1" stop-color="#0b1a36"/></linearGradient>
+        <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#eef2f7"/><stop offset="1" stop-color="#d6dee9"/></linearGradient>
+        <pattern id="brushPat" width="34" height="16" patternUnits="userSpaceOnUse"><rect width="34" height="16" fill="#e4171f"/><rect y="8" width="34" height="8" fill="#ff5a60"/></pattern>
+        <pattern id="brushPatH" width="16" height="30" patternUnits="userSpaceOnUse"><rect width="16" height="30" fill="#1b3a6e"/><rect x="8" width="8" height="30" fill="#3a64b8"/></pattern>
+        <pattern id="grate" width="14" height="14" patternUnits="userSpaceOnUse"><rect width="14" height="14" fill="#5d6675"/><path d="M0 0H14M0 0V14" stroke="#3a414c" stroke-width="3"/></pattern>
+        <clipPath id="bodyClip"><path d="${BODY}"/></clipPath>
+        <clipPath id="winClip">${WIN.map(d => `<path d="${d}"/>`).join('')}</clipPath>
+        <linearGradient id="shineG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".7"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+      </defs>
+      <rect width="1100" height="380" fill="url(#wall)"/>
+      <rect y="0" width="1100" height="26" fill="#c3ccd8"/>
+      ${Array.from({ length: 12 }, (_, i) => `<rect x="${i * 100 + 30}" y="8" width="60" height="8" rx="4" fill="#fff"/>`).join('')}
+      <rect y="290" width="1100" height="90" fill="#aeb8c6"/>
+      <rect y="300" width="1100" height="34" fill="url(#grate)"/>
+      <rect y="300" width="1100" height="4" fill="#ff7a1a"/><rect y="330" width="1100" height="4" fill="#ff7a1a"/>
+      <g data-stations-art>${STN.map(s => `<g transform="translate(${s.x} 0) scale(.72 1) translate(${-s.x} 0)">${stationArt[s.id](s.x)}</g>`).join('')}</g>
+      <g data-car transform="translate(${st.x} ${CAR_Y}) scale(${S})">
+        <ellipse cx="520" cy="330" rx="430" ry="16" fill="#000" opacity=".25"/>
+        <path d="${BODY}" fill="url(#paint)"/>
+        <g clip-path="url(#winClip)"><rect x="0" y="90" width="1000" height="110" fill="#2c3b55"/><rect x="0" y="90" width="1000" height="110" fill="#bcd3f2" opacity=".35"/><circle cx="632" cy="140" r="16" fill="#6c7d99"/><path d="M602 190 C602 164 614 156 632 156 C650 156 662 164 662 190 Z" fill="#6c7d99"/></g>
+        <g fill="none" stroke="#0b1428" stroke-width="5" stroke-linejoin="round">${WIN.map(d => `<path d="${d}"/>`).join('')}</g>
+        <path d="M120 222 C300 196 600 186 930 214" fill="none" stroke="#fff" stroke-width="5" opacity=".2" stroke-linecap="round"/>
+        <g clip-path="url(#bodyClip)">
+          <rect data-dirtfill x="0" y="80" width="1000" height="260" fill="#8a6a43" opacity=".55"/>
+          <g data-mud fill="#5c4127" opacity="1">${mud}</g>
+          <rect data-sheen x="-300" y="80" width="260" height="260" fill="url(#shineG)" opacity="0" transform="skewX(-20)"/>
+        </g>
+        <path d="M906 206 C926 208 944 214 954 222 L934 228 C922 222 910 216 906 206 Z" fill="#f4f6ff"/>
+        <path d="M76 236 C82 226 98 220 116 214 L112 232 C100 236 86 240 76 236 Z" fill="#ff2a3d"/>
+        <g data-foam opacity="0">${foamDots}</g>
+        <g data-drops fill="#d8efff" opacity="0">${drops}</g>
+        ${[235, 760].map(x => `<g transform="translate(${x} 300)"><circle r="58" fill="#0a0c12"/><g data-wheel><circle r="40" fill="#3b4252"/>${Array.from({ length: 5 }, (_, k) => { const a = k * 72 * Math.PI / 180; return `<line x2="${(Math.cos(a) * 38).toFixed(1)}" y2="${(Math.sin(a) * 38).toFixed(1)}" stroke="#c5ccd8" stroke-width="7" stroke-linecap="round"/>`; }).join('')}</g><circle r="9" fill="#e4171f"/><circle data-tire r="58" fill="none" stroke="#fff" stroke-width="3" opacity="0"/></g>`).join('')}
+        <g data-sparkles opacity="0">${sparkle(300, 150, 1.6)}${sparkle(640, 120, 1.2)}${sparkle(860, 200, 1.4)}${sparkle(160, 230, 1)}</g>
+      </g>
+      <g>
+        <path d="M0 0 H70 V300 H0 Z" fill="#e4171f"/>
+        <path d="M0 0 H130 Q150 0 150 20 V40 H0 Z" fill="#e4171f"/>
+        <g transform="translate(14 46)"><rect width="48" height="236" rx="6" fill="#fff" opacity=".12"/></g>
+        ${Array.from({ length: 7 }, (_, i) => `<circle cx="${20 + (i * 17) % 46}" cy="${70 + i * 32}" r="${6 + i % 3 * 4}" fill="#fff" opacity=".35"/>`).join('')}
+      </g>
+      <g transform="translate(1030 0)"><rect width="70" height="300" fill="#e4171f"/>${Array.from({ length: 6 }, (_, i) => `<circle cx="${18 + (i * 19) % 44}" cy="${60 + i * 38}" r="${5 + i % 3 * 4}" fill="#fff" opacity=".35"/>`).join('')}</g>
+    `;
+    const car = $('[data-car]', svg), mudG = $('[data-mud]', svg), dirtFill = $('[data-dirtfill]', svg), foamG = $('[data-foam]', svg), dropsG = $('[data-drops]', svg), sheen = $('[data-sheen]', svg), sparkles = $('[data-sparkles]', svg);
+    const wheels = $$('[data-wheel]', svg), tires = $$('[data-tire]', svg);
+    const brushPat = $('#brushPat', svg), brushPatH = $('#brushPatH', svg);
+    const listEl = $('[data-stations]');
+
+    // tiers + station list
+    $('[data-tiers]').innerHTML = CONFIG.tiers.map(t => `<button type="button" data-tier="${t.id}" class="${t.id === 'special' ? 'special' : ''}" aria-pressed="${t.id === st.tier.id}">${esc(t.label)}</button>`).join('');
+    const renderStations = () => {
+      listEl.innerHTML = STN.map(s => `<li data-li="${s.id}" class="${st.tier.stations.includes(s.id) ? '' : 'off'}">${esc(s.label)}</li>`).join('');
+      STN.forEach(s => { const g = $(`[data-st="${s.id}"]`, svg); if (g) g.setAttribute('opacity', st.tier.stations.includes(s.id) ? 1 : .22); });
+    };
+    renderStations();
+    $$('[data-tier]').forEach(b => b.addEventListener('click', () => {
+      st.tier = CONFIG.tiers.find(t => t.id === b.dataset.tier);
+      $$('[data-tier]').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+      renderStations();
+      if (st.done || st.x > 60) reset();
+    }));
+
+    const engage = () => { if (!st.engaged) { st.engaged = true; coach.classList.add('gone'); } };
+    const down = e => { if (e) e.preventDefault(); if (st.done) return; engage(); st.holding = true; holdBtn.classList.add('down'); holdText.textContent = 'Washing…'; };
+    const upFn = () => { st.holding = false; holdBtn.classList.remove('down'); if (!st.done) holdText.textContent = st.x > 60 ? 'Keep holding' : 'Hold to wash'; };
+    holdBtn.addEventListener('pointerdown', e => { down(e); try { holdBtn.setPointerCapture(e.pointerId); } catch (_) {} });
+    holdBtn.addEventListener('pointerup', upFn); holdBtn.addEventListener('pointercancel', upFn); holdBtn.addEventListener('lostpointercapture', upFn);
+    holdBtn.addEventListener('keydown', e => { if ((e.key === ' ' || e.key === 'Enter') && !e.repeat) down(e); });
+    holdBtn.addEventListener('keyup', e => { if (e.key === ' ' || e.key === 'Enter') upFn(); });
+    holdBtn.addEventListener('contextmenu', e => e.preventDefault());
+
+    function finish() {
+      st.done = true; st.holding = false; st.v = 0; holdBtn.classList.remove('down');
+      st.dirt = 0; st.foam = 0; st.wet = 0; if (st.tier.stations.includes('shine')) st.shine = 1;
+      STN.forEach(s => { const li = $(`[data-li="${s.id}"]`, listEl); if (li && st.tier.stations.includes(s.id)) li.className = 'done'; });
+      holdText.textContent = 'Squeaky clean'; again.hidden = false;
+      svg.setAttribute('aria-label', 'The car rolled out of Sam’s Car Wash clean and shiny.');
+      $('[data-h1]').setAttribute('aria-label', 'Dirty car? Fresh out of Sam’s.');
+      if (ANIM) {
+        gsap.fromTo(stamp, { opacity: 0, scale: 2.2 }, { opacity: 1, scale: 1, duration: .45, ease: 'power4.in', onComplete: () => { gsap.fromTo(tunnel, { y: -6 }, { y: 0, duration: .5, ease: 'elastic.out(1.2,.3)' }); gsap.to(stamp, { opacity: 0, duration: .6, delay: 2.2 }); } });
+        gsap.to('.hero h1 .before', { yPercent: -100, opacity: 0, duration: .5, ease: 'power3.in' });
+        gsap.fromTo('.hero h1 .after', { yPercent: 100, opacity: 0 }, { yPercent: 0, opacity: 1, duration: .7, ease: 'expo.out', delay: .3 });
+      } else { $('.hero h1 .before').style.opacity = 0; $('.hero h1 .after').style.cssText = 'opacity:1;transform:none'; stamp.style.opacity = 1; }
+    }
+    function reset() {
+      Object.assign(st, { x: 30, v: 0, done: false, dirt: 1, foam: 0, wet: 0, shine: 0 });
+      st.passed.clear(); again.hidden = true; holdText.textContent = 'Hold to wash';
+      $('[data-h1]').setAttribute('aria-label', 'Dirty car? Send it through.');
+      if (ANIM) { gsap.to('.hero h1 .after', { yPercent: 100, opacity: 0, duration: .3 }); gsap.to('.hero h1 .before', { yPercent: 0, opacity: 1, duration: .5, delay: .15 }); }
+      else { $('.hero h1 .before').style.opacity = 1; $('.hero h1 .after').style.cssText = ''; }
+      if (ANIM) gsap.from(car, { opacity: 0, duration: .4 });
+    }
+    again.addEventListener('click', reset);
+
+    let last = 0, visible = true;
+    new IntersectionObserver(([e]) => { visible = e.isIntersecting; }).observe(tunnel);
+    const frame = now => {
+      requestAnimationFrame(frame);
+      const dt = last ? Math.min(.05, (now - last) / 1000) : .016; last = now;
+      if (!visible || document.hidden) return;
+      // motion
+      const target = st.holding ? 260 : 0;
+      st.v += (target - st.v) * Math.min(1, dt * (st.holding ? 3 : 6));
+      if (!st.done) st.x += st.v * dt;
+      if (!st.done && st.x >= endX) finish();
+      const cx = st.x + CAR_W / 2;
+      // stations
+      STN.forEach(s => {
+        const on = st.tier.stations.includes(s.id) && Math.abs(cx - s.x) < CAR_W * .5 && !st.done;
+        const g = $(`[data-st="${s.id}"]`, svg), fx = g && $('[data-fx]', g);
+        if (fx) fx.setAttribute('opacity', on && st.v > 5 ? 1 : 0);
+        const li = $(`[data-li="${s.id}"]`, listEl);
+        if (li && st.tier.stations.includes(s.id)) {
+          if (on && st.v > 5) li.className = 'live';
+          if (cx > s.x + CAR_W * .5) { li.className = 'done'; st.passed.add(s.id); }
+          if (cx < s.x - CAR_W * .5 && !st.passed.has(s.id)) li.className = '';
+        }
+        if (!on || st.v < 5) return;
+        const k = dt * (st.v / 260);
+        if (s.id === 'soak') st.dirt = Math.max(.55, st.dirt - k * .35);
+        if (s.id === 'foam') st.foam = Math.min(1, st.foam + k * 1.6);
+        if (s.id === 'brush') { st.dirt = Math.max(0, st.dirt - k * 1.1); st.spin += dt * 900; }
+        if (s.id === 'rinse') { st.foam = Math.max(0, st.foam - k * 2); st.dirt = Math.max(0, st.dirt - k * .6); st.wet = Math.min(1, st.wet + k * 2); }
+        if (s.id === 'shine') st.shine = Math.min(1, st.shine + k * 1.6);
+        if (s.id === 'dry') st.wet = Math.max(0, st.wet - k * 1.6);
+      });
+      // basic/no-foam: soap still comes off with the brushes
+      if (!st.tier.stations.includes('rinse')) st.foam = 0;
+      st.spin += dt * 40;
+      brushPat.setAttribute('patternTransform', `translate(0 ${(st.spin % 16).toFixed(1)})`);
+      brushPatH.setAttribute('patternTransform', `translate(${(st.spin % 16).toFixed(1)} 0)`);
+      // car
+      car.setAttribute('transform', `translate(${st.x.toFixed(1)} ${CAR_Y + (st.v > 20 ? Math.sin(now / 60) * .6 : 0)}) scale(${S})`);
+      wheels.forEach(w => w.setAttribute('transform', `rotate(${(st.x * 2.2) % 360})`));
+      dirtFill.setAttribute('opacity', (st.dirt * .55).toFixed(3));
+      mudG.setAttribute('opacity', st.dirt.toFixed(3));
+      foamG.setAttribute('opacity', st.foam.toFixed(3));
+      dropsG.setAttribute('opacity', st.wet.toFixed(3));
+      const clean = 1 - st.dirt;
+      const sx = ((now / 8) % 1600) - 300;
+      sheen.setAttribute('x', sx.toFixed(0)); sheen.setAttribute('opacity', (clean > .95 ? .25 + st.shine * .5 : 0).toFixed(2));
+      tires.forEach(t => t.setAttribute('opacity', (st.shine * .8).toFixed(2)));
+      sparkles.setAttribute('opacity', st.done ? (.6 + Math.sin(now / 200) * .4).toFixed(2) : '0');
+      // progress
+      fill.style.transform = `scaleX(${clamp((st.x - 30) / (endX - 30), 0, 1).toFixed(3)})`;
+      // idle nudge
+      if (!st.engaged && started && ANIM) { st.idle += dt; if (st.idle > 3) { st.idle = 0; holdBtn.classList.remove('nudge'); void holdBtn.offsetWidth; holdBtn.classList.add('nudge'); } }
+    };
+    let started = false;
+    requestAnimationFrame(frame);
+    if (RM) { coach.classList.add('gone'); }
+    return { start: () => { started = true; } };
+  })();
+  if (ANIM) gsap.set('.hero h1 .after', { yPercent: 100, opacity: 0 });
+  setTimeout(() => Wash.start(), 600);
+
+  /* =============================================================
+     WASH CARDS, PASS CARD, MAP, reveals
+     ============================================================= */
+  $('[data-wcards]').innerHTML = CONFIG.tiers.map(t => `
+    <article class="wcard ${t.top ? 'top' : ''}" data-reveal>
+      ${t.top ? '<span class="tag">Top wash</span>' : ''}
+      <div class="lvl" aria-hidden="true">${[1, 2, 3].map(n => `<i class="${n <= t.lvl ? '' : 'off'}"></i>`).join('')}</div>
+      <h3 class="${t.id === 'special' ? 'script' : ''}">${esc(t.title)}</h3>
+      <p>${esc(t.blurb)}</p>
+      <a class="btn ${t.top ? '' : 'navy'} sm" href="#top" data-try="${t.id}">Try it in the tunnel</a>
+    </article>`).join('');
+  $$('[data-try]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); const b = $(`[data-tier="${a.dataset.try}"]`); if (b) b.click(); if (lenis) lenis.scrollTo(0); else scrollTo({ top: 0, behavior: RM ? 'auto' : 'smooth' }); }));
+  (() => {
+    const pc = $('[data-pcard]'); if (!pc || !FINE || RM) return;
+    pc.parentElement.addEventListener('pointermove', e => { const r = pc.getBoundingClientRect(); const px = (e.clientX - r.left) / r.width - .5, py = (e.clientY - r.top) / r.height - .5; pc.style.transform = `rotateY(${px * 24}deg) rotateX(${-py * 18}deg)`; pc.style.setProperty('--sx', `${px * 120}%`); });
+    pc.parentElement.addEventListener('pointerleave', () => { pc.style.transform = ''; pc.style.setProperty('--sx', '-40%'); });
+  })();
+  (() => {
+    const fr = $('[data-map]');
+    const load = () => { if (fr.src) return; fr.src = 'https://www.google.com/maps?q=' + encodeURIComponent('Sam’s Car Wash, ' + full) + '&output=embed'; fr.addEventListener('load', () => { const ph = $('.mapbox .ph'); if (ph) ph.remove(); }); };
+    new IntersectionObserver((es, o) => { if (es[0].isIntersecting) { load(); o.disconnect(); } }, { rootMargin: '500px' }).observe(fr);
+  })();
+  if (ANIM) ScrollTrigger.batch('[data-reveal]', { start: 'top 90%', onEnter: els => gsap.to(els, { opacity: 1, y: 0, duration: .8, ease: 'power3.out', stagger: .06, overwrite: true }) });
+  else $$('[data-reveal]').forEach(e => { e.style.opacity = 1; e.style.transform = 'none'; });
+  if (FINE && ANIM) $$('[data-magnetic]').forEach(el => {
+    el.addEventListener('pointermove', e => { const r = el.getBoundingClientRect(); gsap.to(el, { x: (e.clientX - r.left - r.width / 2) * .2, y: (e.clientY - r.top - r.height / 2) * .28, duration: .4 }); });
+    el.addEventListener('pointerleave', () => gsap.to(el, { x: 0, y: 0, duration: .6, ease: 'elastic.out(1,.4)' }));
+  });
+  addEventListener('load', () => { if (HAS_G) ScrollTrigger.refresh(); });
+  })();
+  </script>
+</body>
+</html>
