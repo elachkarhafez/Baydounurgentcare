@@ -105,6 +105,7 @@ Then **look at the screenshots** (desktop 1440×900 and phone 390×844) and fix:
 - Overlapping elements, text colliding with the signature piece, unreadable contrast.
 - A hero that doesn't read in the first second on a phone.
 - Floating badges or toasts covering content.
+- Squashed or stretched photos. If an `<img>` has `width`/`height` attributes and you size it with CSS `aspect-ratio`, you must also set `height: auto`, or the height attribute wins and the photo turns into a tall sliver (this happened on Out Tinted's phone gallery). On phones, prefer a swipeable row of large cards over two skinny columns.
 
 Also script the signature interaction itself in Playwright (drag, hold, click) and confirm the payoff fires. Clicks only count once you've seen the result.
 
