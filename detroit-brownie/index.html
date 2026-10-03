@@ -1,0 +1,766 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="robots" content="noai, noimageai">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Detroit Brownie Co. | Small-Batch Brownies &amp; Cookies in Detroit</title>
+  <meta name="description" content="Detroit Brownie Co.: small-batch brownies and cookies. Snickers, Reese's, Oreo, Espresso, Biscoff, S'mores, Double Chocolate and Plain. Build a box and DM to pre-order for pickup.">
+  <meta name="theme-color" content="#0c0806">
+  <meta property="og:title" content="Detroit Brownie Co.">
+  <meta property="og:description" content="The bigger the better. Build your brownie box and DM to pre-order.">
+  <meta property="og:image" content="img/oreo.webp">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Questrial&display=swap" rel="stylesheet">
+  <link rel="preload" as="image" href="img/oreo.webp">
+  <style>
+    /* ------------------------------------------------------------
+       DETROIT BROWNIE CO. · design tokens
+       Their feed: one pool of warm light on dark wood, a brownie
+       in the middle, and a black-and-white skyline logo. So: near-
+       black backgrounds, cream type, caramel as the one accent,
+       and the grey compartment tray they pack orders in.
+       Oswald = the condensed "BROWNIE" of the logo.
+       Questrial = the geometric lettering on their menu board.
+       ------------------------------------------------------------ */
+    :root {
+      --bg: #0c0806;
+      --bg-2: #140d09;
+      --wood: #2a1a11;
+      --ink: #f4ece0;
+      --muted: #a8988a;
+      --dim: #5d5047;
+      --line: rgba(244,236,224,.12);
+      --caramel: #d58c3f;
+      --tray: #555a60;
+      --tray-2: #3f4348;
+      --display: "Oswald", "Arial Narrow", sans-serif;
+      --sans: "Questrial", "Century Gothic", system-ui, sans-serif;
+      --pad: clamp(16px, 4vw, 56px);
+      --ease: cubic-bezier(.65,.05,.25,1);
+      --ease-out: cubic-bezier(.16,1,.3,1);
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    html.lenis, html.lenis body { height: auto; }
+    .lenis.lenis-smooth { scroll-behavior: auto !important; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font: 400 16.5px/1.6 var(--sans); overflow-x: clip; -webkit-font-smoothing: antialiased; }
+    img, svg { display: block; max-width: 100%; }
+    img { height: auto; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+    input { font: inherit; color: inherit; }
+    :focus-visible { outline: 2px solid var(--caramel); outline-offset: 3px; }
+    ::selection { background: var(--caramel); color: var(--bg); }
+    [hidden] { display: none !important; }
+    .wrap { padding: 0 var(--pad); }
+    .label { font: 400 12px/1.3 var(--sans); letter-spacing: .3em; text-transform: uppercase; color: var(--caramel); }
+    .muted { color: var(--muted); }
+    h1, h2, h3 { margin: 0; font-family: var(--display); font-weight: 600; text-transform: uppercase; line-height: .9; letter-spacing: .005em; }
+    h2 { font-size: clamp(44px, 7vw, 116px); }
+    h2 em, h1 em { font-style: normal; color: var(--caramel); }
+    .line { display: block; overflow: hidden; padding-bottom: .05em; }
+    .line > span { display: inline-block; will-change: transform; }
+    .lede { color: var(--muted); font-size: clamp(16px, 1.2vw, 18px); max-width: 44ch; margin: 22px 0 0; }
+
+    .btn { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 12px; height: 54px; padding: 0 28px; border: 1px solid rgba(244,236,224,.3); border-radius: 999px; font: 500 14px/1 var(--display); letter-spacing: .16em; text-transform: uppercase; overflow: hidden; isolation: isolate; white-space: nowrap; transition: color .45s var(--ease), border-color .45s var(--ease), transform .3s var(--ease); }
+    .btn::before { content: ""; position: absolute; inset: 0; background: var(--ink); border-radius: inherit; transform: translateY(101%); transition: transform .55s var(--ease); z-index: -1; }
+    .btn.solid { background: var(--caramel); border-color: var(--caramel); color: #1a0d05; }
+    .btn.cream { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+    .btn.cream::before { background: var(--caramel); }
+    .btn svg { width: 15px; height: 15px; flex: none; transition: transform .45s var(--ease); }
+    .btn:active { transform: scale(.97); }
+    @media (hover: hover) {
+      .btn:hover { color: var(--bg); border-color: var(--ink); }
+      .btn:hover::before { transform: none; }
+      .btn.cream:hover { border-color: var(--caramel); }
+      .btn:hover svg { transform: translateX(3px); }
+    }
+    .btn.sm { height: 44px; padding: 0 20px; font-size: 13px; }
+
+    /* logo (redrawn from their mark) */
+    .logo { display: block; color: var(--ink); }
+    .logo > svg { width: 100%; height: auto; overflow: visible; }
+    .logo .ring { fill: none; stroke: currentColor; stroke-width: 3; }
+    .logo .sky { fill: currentColor; }
+    .logo .t1 { font: 500 15px/1 var(--display); letter-spacing: .32em; fill: currentColor; }
+    .logo .t2 { font: 700 44px/1 var(--display); letter-spacing: .01em; fill: currentColor; }
+    .logo .t3 { font: 500 12px/1 var(--display); letter-spacing: .2em; fill: currentColor; }
+
+    /* intro */
+    .intro { position: fixed; inset: 0; z-index: 100; background: #070504; display: grid; place-items: center; }
+    .intro .logo { width: min(240px, 54vw); }
+    html:not(.js) .intro, html.rm .intro { display: none; }
+
+    /* header */
+    header { position: sticky; top: 0; z-index: 50; border-bottom: 1px solid transparent; transition: background .5s var(--ease), border-color .5s var(--ease); }
+    header.scrolled { background: rgba(12,8,6,.8); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); border-color: var(--line); }
+    header .wrap { height: 76px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 18px; }
+    header .brand { width: 58px; }
+    header nav { display: flex; gap: 32px; }
+    header nav a { font: 400 12.5px/1 var(--sans); letter-spacing: .24em; text-transform: uppercase; color: var(--muted); transition: color .3s; }
+    header nav a:hover { color: var(--ink); }
+    header .right { display: flex; justify-content: flex-end; }
+    @media (max-width: 860px) { header nav { display: none; } header .wrap { grid-template-columns: auto 1fr; height: 64px; } header .brand { width: 48px; } }
+
+    /* ---------- hero ---------- */
+    .hero { position: relative; min-height: calc(100svh - 76px); display: grid; align-items: center; padding: 20px 0 80px; overflow: hidden; }
+    .hero-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(26px, 5vw, 90px); align-items: center; }
+    .hero h1 { font-size: clamp(64px, 8.6vw, 150px); font-weight: 700; line-height: .84; }
+    .hero h1 .sm { display: block; font-size: .36em; font-weight: 300; letter-spacing: .02em; color: var(--muted); margin-bottom: .18em; }
+    .hero .ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px; }
+    .hero .note { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 8px 26px; color: var(--muted); font-size: 14px; }
+    .hero .note span::before { content: "— "; color: var(--caramel); }
+    .stage { position: relative; aspect-ratio: 1; width: 100%; max-width: 640px; justify-self: end; border-radius: 50%; touch-action: pan-y; }
+    .stage .ph { position: absolute; inset: 0; border-radius: 50%; overflow: hidden; }
+    .stage img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .stage .dark { filter: brightness(.32) saturate(.8); }
+    .stage .lit { -webkit-mask-image: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), #000 0, #000 18%, transparent 46%); mask-image: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), #000 0, #000 18%, transparent 46%); filter: brightness(1.12) saturate(1.05); }
+    .stage .rim { position: absolute; inset: -1px; border-radius: 50%; box-shadow: inset 0 0 120px 40px var(--bg); pointer-events: none; }
+    .stage .hint { position: absolute; left: 50%; bottom: -6px; translate: -50% 100%; display: inline-flex; gap: 10px; align-items: center; color: var(--muted); font-size: 12px; letter-spacing: .24em; text-transform: uppercase; white-space: nowrap; transition: opacity .6s; }
+    .stage .hint i { width: 8px; height: 8px; border-radius: 50%; background: var(--caramel); box-shadow: 0 0 14px var(--caramel); }
+    .stage.used .hint { opacity: 0; }
+    .hero .crumbs { position: absolute; inset: 0; pointer-events: none; }
+    .hero .crumbs i { position: absolute; top: -10px; width: 5px; height: 4px; border-radius: 2px; background: #3a2316; opacity: .8; }
+    @media (max-width: 860px) {
+      .hero { min-height: auto; padding: 18px 0 72px; }
+      .hero-grid { grid-template-columns: 1fr; }
+      .stage { order: -1; max-width: 300px; justify-self: center; width: 64%; margin: 0 auto 40px; }
+      .hero h1 { font-size: clamp(54px, 16vw, 90px); }
+      .hero .lede { margin-top: 16px; }
+      .hero .ctas { margin-top: 24px; }
+    }
+
+    /* marquee */
+    .marquee { overflow: hidden; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 20px 0; white-space: nowrap; background: var(--bg-2); }
+    .marquee .track { display: inline-flex; align-items: center; will-change: transform; }
+    .marquee span { font: 600 clamp(26px, 3.4vw, 50px)/1 var(--display); text-transform: uppercase; padding: 0 .5em; }
+    .marquee span.o { color: transparent; -webkit-text-stroke: 1px rgba(244,236,224,.5); }
+    .marquee b { width: 10px; height: 10px; border-radius: 2px; background: var(--caramel); transform: rotate(45deg); flex: none; }
+
+    /* ---------- flavors (pinned story) ---------- */
+    .flavors { position: relative; }
+    .fl-pin { min-height: 100svh; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(30px, 6vw, 100px); align-items: center; padding: 90px var(--pad); }
+    .fl-photos { position: relative; aspect-ratio: 1; border-radius: 4px; overflow: hidden; background: var(--wood); box-shadow: 0 50px 120px -40px #000; }
+    .fl-photos figure { position: absolute; inset: 0; margin: 0; clip-path: inset(100% 0 0 0); }
+    .fl-photos figure.on { clip-path: inset(0 0 0 0); }
+    .fl-photos img { width: 100%; height: 100%; object-fit: cover; }
+    .fl-photos .tag { position: absolute; left: 18px; bottom: 18px; z-index: 3; padding: 8px 12px; background: rgba(12,8,6,.7); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); border-radius: 99px; font-size: 12px; letter-spacing: .22em; text-transform: uppercase; }
+    .fl-copy .big { position: relative; height: clamp(110px, 13vw, 210px); margin-top: 26px; }
+    .fl-copy .big h3 { position: absolute; inset: 0; font-size: clamp(76px, 10.5vw, 176px); font-weight: 700; line-height: .86; }
+    .fl-copy .cap { position: relative; min-height: 4.8em; margin-top: 20px; }
+    .fl-copy .cap p { position: absolute; inset: 0; margin: 0; font: 300 clamp(20px, 1.9vw, 28px)/1.3 var(--display); letter-spacing: .01em; }
+    .fl-copy .cap p small { display: block; color: var(--muted); font: 400 13px/1.4 var(--sans); letter-spacing: .02em; margin-top: 10px; }
+    .fl-list { margin-top: 34px; display: flex; flex-wrap: wrap; gap: 8px; }
+    .fl-list span { padding: 8px 14px; border: 1px solid var(--line); border-radius: 99px; font-size: 12.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); transition: background .4s, color .4s, border-color .4s; }
+    .fl-list span.on { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+    .flavors:not(.pinned) .fl-photos, .flavors:not(.pinned) .fl-copy .big, .flavors:not(.pinned) .fl-copy .cap { display: none; }
+    .fl-stack { display: none; }
+    .flavors:not(.pinned) .fl-stack { display: grid; gap: 34px; margin-top: 40px; }
+    .fl-card img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 4px; }
+    .fl-card h3 { font-size: 44px; margin-top: 18px; }
+    .fl-card p { margin: 8px 0 0; color: var(--muted); }
+    .fl-card p q { color: var(--ink); font-family: var(--display); font-weight: 300; font-size: 21px; quotes: "“" "”"; display: block; margin-bottom: 4px; }
+    @media (max-width: 860px) { .fl-pin { grid-template-columns: 1fr; padding: 90px var(--pad); } }
+
+    /* ---------- box builder (signature) ---------- */
+    .build { padding: clamp(100px, 13vw, 180px) 0; background: radial-gradient(70% 50% at 50% 0%, rgba(213,140,63,.09), transparent 70%), var(--bg-2); }
+    .sec-head { display: flex; justify-content: space-between; align-items: end; gap: 30px; flex-wrap: wrap; margin-bottom: clamp(36px, 5vw, 64px); }
+    .sec-head .label { display: block; margin-bottom: 20px; }
+    .build-grid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: clamp(30px, 5vw, 80px); align-items: start; }
+    .sizes { display: flex; flex-wrap: wrap; gap: 8px; }
+    .size { padding: 14px 20px; border: 1px solid rgba(244,236,224,.2); border-radius: 14px; text-align: left; transition: background .35s var(--ease), color .35s var(--ease), border-color .35s; }
+    .size b { display: block; font: 600 22px/1 var(--display); text-transform: uppercase; }
+    .size span { display: block; margin-top: 6px; font-size: 13px; color: var(--muted); }
+    .size[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+    .size[aria-pressed="true"] span { color: #6d5e52; }
+    .tray-wrap { position: relative; margin-top: 26px; }
+    .tray { position: relative; padding: clamp(12px, 1.8vw, 20px); border-radius: 18px; background: linear-gradient(160deg, #61666c, var(--tray) 40%, var(--tray-2)); box-shadow: 0 40px 90px -30px #000, inset 0 2px 0 rgba(255,255,255,.14), inset 0 -3px 0 rgba(0,0,0,.25); display: grid; gap: clamp(8px, 1.2vw, 14px); grid-template-columns: repeat(var(--cols, 3), 1fr); }
+    .slot { position: relative; aspect-ratio: 1; border-radius: 10px; background: linear-gradient(160deg, #43474c, #50555a); box-shadow: inset 0 6px 14px rgba(0,0,0,.45), inset 0 -2px 0 rgba(255,255,255,.08); overflow: visible; }
+    .slot .tile { position: absolute; inset: 7%; cursor: pointer; }
+    .slot .tile svg { width: 100%; height: 100%; filter: drop-shadow(0 6px 6px rgba(0,0,0,.45)); }
+    .slot .tile .x { position: absolute; top: -6px; right: -6px; width: 24px; height: 24px; border-radius: 50%; background: var(--bg); color: var(--ink); display: grid; place-items: center; font-size: 13px; opacity: 0; transform: scale(.6); transition: opacity .25s, transform .25s; }
+    @media (hover: hover) { .slot .tile:hover .x { opacity: 1; transform: none; } }
+    .slot.next::after { content: ""; position: absolute; inset: 22%; border: 2px dashed rgba(244,236,224,.22); border-radius: 8px; animation: breathe 1.8s infinite; }
+    @keyframes breathe { 50% { opacity: .35; } }
+    .lid { position: absolute; inset: -6px; z-index: 5; border-radius: 20px; background: radial-gradient(80% 60% at 50% 40%, #2c1d14, #1a110c); box-shadow: 0 40px 90px -20px #000, inset 0 0 0 2px rgba(244,236,224,.06); display: grid; place-items: center; text-align: center; opacity: 0; visibility: hidden; pointer-events: none; }
+    .tray-wrap.closed .lid { visibility: visible; }
+    .lid .logo { width: clamp(110px, 18vw, 170px); margin: 0 auto; }
+    .lid .packed { margin-top: 16px; font: 600 clamp(28px, 3vw, 40px)/1 var(--display); text-transform: uppercase; color: var(--caramel); }
+    .lid .sum { margin: 12px auto 0; color: var(--muted); font-size: 14px; max-width: 30ch; }
+    .lid button { margin-top: 18px; pointer-events: auto; font-size: 12.5px; letter-spacing: .2em; text-transform: uppercase; border-bottom: 1px solid var(--dim); padding-bottom: 4px; color: var(--muted); }
+    .tray-wrap.closed .lid { pointer-events: auto; }
+    .count-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 18px; flex-wrap: wrap; }
+    .count-row .count { font: 500 15px/1 var(--display); letter-spacing: .14em; text-transform: uppercase; }
+    .count-row .count b { color: var(--caramel); font-weight: 600; }
+    .count-row .acts { display: flex; gap: 16px; }
+    .count-row .acts button { font-size: 12.5px; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--dim); padding-bottom: 3px; }
+    .count-row .acts button:hover { color: var(--ink); }
+    .picker { position: relative; }
+    .callout { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 14px; padding: 11px 16px; background: var(--caramel); color: #1a0d05; border-radius: 99px; font: 600 14px/1 var(--display); letter-spacing: .12em; text-transform: uppercase; box-shadow: 0 12px 30px rgba(213,140,63,.25); transition: opacity .5s var(--ease), transform .5s var(--ease); }
+    .callout svg { width: 18px; height: 18px; }
+    .picker.touched .callout { opacity: 0; transform: translateY(6px); pointer-events: none; height: 0; padding: 0; margin: 0; overflow: hidden; }
+    .chips { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+    .chip { display: grid; justify-items: center; gap: 8px; padding: 12px 6px 12px; border: 1px solid var(--line); border-radius: 14px; background: rgba(244,236,224,.02); transition: border-color .3s, background .3s, transform .3s var(--ease); }
+    .chip svg { width: 58%; aspect-ratio: 1; filter: drop-shadow(0 5px 5px rgba(0,0,0,.4)); transition: transform .4s var(--ease-out); }
+    .chip span { font-size: 11.5px; letter-spacing: .12em; text-transform: uppercase; text-align: center; line-height: 1.25; }
+    .chip:hover { border-color: rgba(244,236,224,.4); background: rgba(244,236,224,.05); }
+    .chip:hover svg { transform: translateY(-3px) rotate(-4deg); }
+    .chip:active { transform: scale(.95); }
+    .chip:disabled { opacity: .4; cursor: not-allowed; }
+    .order { margin-top: 34px; border: 1px solid var(--line); border-radius: 20px; background: rgba(12,8,6,.6); overflow: hidden; }
+    .order .sec { padding: 22px 22px 0; }
+    .order .sec > .label { color: var(--muted); display: block; margin-bottom: 12px; }
+    .opts { display: flex; flex-wrap: wrap; gap: 8px; }
+    .opt input { position: absolute; opacity: 0; pointer-events: none; }
+    .opt span { display: inline-block; padding: 10px 14px; border: 1px solid rgba(244,236,224,.2); border-radius: 99px; font-size: 13px; letter-spacing: .06em; cursor: pointer; transition: background .3s, color .3s, border-color .3s; }
+    .opt span em { font-style: normal; color: var(--caramel); }
+    .opt input:checked + span { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+    .opt input:checked + span em { color: #8a4f19; }
+    .opt input:focus-visible + span { outline: 2px solid var(--caramel); outline-offset: 2px; }
+    .order .two { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .inp { width: 100%; height: 50px; background: none; border: 0; border-bottom: 1px solid rgba(244,236,224,.22); outline: none; font-size: 17px; border-radius: 0; transition: border-color .3s; }
+    .inp:focus { border-color: var(--caramel); }
+    .inp::placeholder { color: var(--dim); }
+    .order .msg { margin: 22px 22px 0; padding: 14px 16px; background: #3797f0; color: #fff; border-radius: 20px 20px 6px 20px; font-size: 14.5px; line-height: 1.45; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .order .msg-to { margin: 22px 22px 0; font-size: 12px; color: var(--muted); letter-spacing: .08em; }
+    .order .msg-to + .msg { margin-top: 8px; }
+    .order .total { display: flex; justify-content: space-between; align-items: end; gap: 12px; padding: 22px; margin-top: 22px; border-top: 1px solid var(--line); }
+    .order .total .n { font: 600 clamp(46px, 4.4vw, 64px)/.85 var(--display); font-variant-numeric: tabular-nums; }
+    .order .total .n sup { font-size: .4em; color: var(--muted); vertical-align: top; position: relative; top: .2em; }
+    .order .total small { color: var(--muted); font-size: 13px; text-align: right; max-width: 22ch; }
+    .order .acts { display: grid; grid-template-columns: 1fr auto; gap: 8px; padding: 0 22px 22px; }
+    .order .note { padding: 0 22px 20px; font-size: 13px; color: var(--muted); min-height: 1em; margin: 0; }
+    @media (max-width: 860px) {
+      .build-grid { grid-template-columns: 1fr; }
+      .chips { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+      .chip { padding: 10px 2px; border-radius: 12px; }
+      .chip span { font-size: 10px; letter-spacing: .06em; }
+      .order .two { grid-template-columns: 1fr; gap: 0; }
+      .size { padding: 12px 14px; }
+    }
+
+    /* ---------- menu board ---------- */
+    .menu { padding: clamp(100px, 13vw, 180px) 0; }
+    .board { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; align-items: start; }
+    .mcard { background: var(--ink); color: #120c08; border-radius: 4px; overflow: hidden; }
+    .mcard h3 { background: #0f0a07; color: var(--ink); padding: 18px 22px; font-size: 26px; font-weight: 500; letter-spacing: .08em; text-align: center; }
+    .mcard table { width: 100%; border-collapse: collapse; }
+    .mcard td { padding: 16px 22px; font-size: 17px; letter-spacing: .08em; text-transform: uppercase; border-top: 1px solid rgba(18,12,8,.12); }
+    .mcard tr:first-child td { border-top: 0; }
+    .mcard td:last-child { text-align: right; font: 600 22px/1 var(--display); letter-spacing: 0; }
+    .mcard .fl { padding: 18px 22px 22px; text-align: center; font-size: 15px; letter-spacing: .1em; text-transform: uppercase; line-height: 2; }
+    .mcard .fl b { display: block; font-weight: 400; color: #8a4f19; letter-spacing: .24em; font-size: 12px; margin-top: 4px; }
+    .menu .fine { margin-top: 18px; color: var(--muted); font-size: 13.5px; }
+    @media (max-width: 860px) { .board { grid-template-columns: 1fr; } }
+
+    /* ---------- how to order ---------- */
+    .how { padding: 0 0 clamp(100px, 12vw, 170px); }
+    .how-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: clamp(30px, 6vw, 100px); align-items: center; }
+    .how .photo { position: relative; border-radius: 4px; overflow: hidden; aspect-ratio: 1; }
+    .how .photo img { width: 100%; height: 100%; object-fit: cover; }
+    .how .photo span { position: absolute; left: 18px; bottom: 18px; padding: 8px 12px; background: rgba(12,8,6,.7); border-radius: 99px; font-size: 12px; letter-spacing: .2em; text-transform: uppercase; }
+    .steps { list-style: none; margin: 36px 0 0; padding: 0; counter-reset: s; }
+    .steps li { display: grid; grid-template-columns: 60px 1fr; gap: 18px; padding: 24px 0; border-top: 1px solid var(--line); counter-increment: s; }
+    .steps li::before { content: "0" counter(s); font: 600 34px/1 var(--display); color: var(--caramel); }
+    .steps h3 { font-size: 28px; font-weight: 500; }
+    .steps p { margin: 8px 0 0; color: var(--muted); }
+    @media (max-width: 860px) { .how-grid { grid-template-columns: 1fr; } }
+
+    /* ---------- closing ---------- */
+    .closing { position: relative; text-align: center; padding: clamp(110px, 14vw, 200px) 0 0; overflow: hidden; background: radial-gradient(60% 50% at 50% 30%, rgba(213,140,63,.1), transparent 70%); }
+    .closing h2 { font-size: clamp(48px, 8vw, 132px); }
+    .closing p.sub { color: var(--muted); max-width: 40ch; margin: 24px auto 36px; }
+    .closing .ctas { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+    .foot-word { margin: clamp(80px, 11vw, 150px) 0 0; font: 700 clamp(28px, 10vw, 200px)/.8 var(--display); text-transform: uppercase; white-space: nowrap; color: transparent; -webkit-text-stroke: 1px rgba(244,236,224,.2); background: linear-gradient(90deg, var(--ink), var(--caramel)) no-repeat; -webkit-background-clip: text; background-clip: text; background-size: 0% 100%; }
+    footer { border-top: 1px solid var(--line); margin-top: 34px; }
+    footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 14px 24px; padding-top: 24px; padding-bottom: 28px; font-size: 13px; color: var(--muted); }
+    footer a:hover { color: var(--ink); }
+
+    .cursor { position: fixed; left: 0; top: 0; z-index: 90; width: 10px; height: 10px; margin: -5px; border-radius: 50%; background: var(--caramel); pointer-events: none; opacity: 0; transition: width .35s var(--ease), height .35s var(--ease), margin .35s var(--ease), opacity .3s; mix-blend-mode: screen; }
+    .cursor.big { width: 44px; height: 44px; margin: -22px; opacity: .5 !important; }
+    @media not all and (hover: hover) and (pointer: fine) { .cursor { display: none; } }
+  </style>
+  <script>document.documentElement.classList.add('js');if(matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('rm');</script>
+</head>
+<body>
+  <!-- Logo: redrawn from their round skyline mark -->
+  <template id="logo-tpl">
+    <svg viewBox="0 0 200 200" aria-hidden="true">
+      <circle class="ring" cx="100" cy="100" r="96"/>
+      <path class="sky" d="M30 82 L30 74 L38 74 L38 66 L44 66 L44 72 L50 72 L50 58 L56 58 L56 52 L60 52 L60 58 L64 58 L64 70 L70 70 L70 62 L76 62 L76 50 L80 46 L84 50 L84 64 L88 64 L88 40 L93 40 L93 34 L97 34 L97 26 L103 26 L103 34 L107 34 L107 40 L112 40 L112 64 L116 64 L116 54 L122 54 L122 60 L128 60 L128 46 L134 46 L134 66 L140 66 L140 60 L146 60 L146 70 L152 70 L152 64 L158 64 L158 74 L164 74 L164 70 L170 70 L170 82 Z"/>
+      <text class="t1" x="100" y="104" text-anchor="middle">DETROIT</text>
+      <text class="t2" x="100" y="146" text-anchor="middle">BROWNIE</text>
+      <text class="t3" x="100" y="168" text-anchor="middle">CO.</text>
+    </svg>
+  </template>
+
+  <div class="intro" aria-hidden="true"><span class="logo" data-logo></span></div>
+
+  <header>
+    <div class="wrap">
+      <a class="brand logo" href="#top" aria-label="Detroit Brownie Co., back to top" data-logo></a>
+      <nav aria-label="Sections">
+        <a href="#flavors">Flavors</a>
+        <a href="#box">Build a box</a>
+        <a href="#menu">Menu</a>
+        <a href="#order">How to order</a>
+      </nav>
+      <div class="right"><a class="btn sm cream" href="#box">Order</a></div>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero" id="top">
+      <div class="crumbs" aria-hidden="true" data-crumbs></div>
+      <div class="wrap hero-grid">
+        <div>
+          <p class="label" data-in>Small-batch brownies · Detroit</p>
+          <h1 style="margin-top:22px">
+            <span class="line"><span><span class="sm">The bigger</span></span></span>
+            <span class="line"><span>the <em>better.</em></span></span>
+          </h1>
+          <p class="lede" data-in>Thick, fudgy brownies and cookies, baked in small batches and packed by hand. Eight flavors, from Biscoff to S’mores. Build your box and DM us to pre-order for pickup.</p>
+          <div class="ctas" data-in>
+            <a class="btn solid" href="#box">Build your box <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4"/></svg></a>
+            <a class="btn" data-dm href="#" target="_blank" rel="noopener">DM to order</a>
+          </div>
+          <div class="note" data-in><span>Brownies from $4</span><span>Packs of 4, 6 or 12</span><span>Pre-order &amp; pickup</span></div>
+        </div>
+        <div class="stage" data-stage data-in aria-label="An Oreo brownie on a wood board under a spotlight. Move across it to move the light.">
+          <div class="ph">
+            <img class="dark" src="img/oreo.webp" width="1000" height="1000" alt="">
+            <img class="lit" src="img/oreo.webp" width="1000" height="1000" alt="Oreo brownie on a wood board">
+          </div>
+          <div class="rim" aria-hidden="true"></div>
+          <span class="hint" aria-hidden="true"><i></i><span data-hint>Move the light</span></span>
+        </div>
+      </div>
+    </section>
+
+    <div class="marquee" aria-hidden="true"><div class="track" data-marquee></div></div>
+
+    <!-- FLAVORS -->
+    <section class="flavors" id="flavors" data-flavors>
+      <div class="fl-pin">
+        <div class="fl-photos" data-fl-photos></div>
+        <div class="fl-copy">
+          <span class="label">The lineup</span>
+          <h2 style="margin-top:20px"><span class="line"><span>Eight flavors.</span></span></h2>
+          <div class="big" data-fl-names></div>
+          <div class="cap" data-fl-caps></div>
+          <div class="fl-list" data-fl-list></div>
+          <div class="fl-stack" data-fl-stack></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BOX BUILDER -->
+    <section class="build" id="box">
+      <div class="wrap">
+        <div class="sec-head">
+          <div>
+            <span class="label">Build a box</span>
+            <h2><span class="line"><span>Pack your</span></span><span class="line"><span><em>own box.</em></span></span></h2>
+          </div>
+          <p class="lede" style="margin:0">Pick a size, drop in any mix of flavors, and we’ll write the order for you. Send it in a DM and we’ll set up your pickup.</p>
+        </div>
+        <div class="build-grid">
+          <div>
+            <div class="sizes" role="group" aria-label="Box size" data-sizes></div>
+            <div class="tray-wrap" data-tray-wrap>
+              <div class="tray" data-tray aria-label="Your brownie box"></div>
+              <div class="lid" data-lid aria-hidden="true">
+                <div>
+                  <span class="logo" data-logo></span>
+                  <div class="packed">Packed.</div>
+                  <p class="sum" data-sum></p>
+                  <button type="button" data-open>Open the box</button>
+                </div>
+              </div>
+            </div>
+            <div class="count-row">
+              <span class="count" aria-live="polite"><b data-filled>0</b> of <span data-cap>6</span> packed</span>
+              <span class="acts"><button type="button" data-surprise>Surprise me</button><button type="button" data-clear>Clear</button></span>
+            </div>
+          </div>
+          <div>
+            <div class="picker" data-picker>
+              <span class="callout"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3v12M4 10l5 5 5-5"/></svg><span data-call>Tap a flavor to drop it in</span></span>
+              <div class="chips" data-chips></div>
+            </div>
+            <div class="order" id="order-card">
+              <div class="sec"><span class="label">Add cookies?</span><div class="opts" data-ck-qty></div></div>
+              <div class="sec" data-ck-fl-wrap hidden><span class="label">Cookie flavor</span><div class="opts" data-ck-fl></div></div>
+              <div class="sec">
+                <div class="two">
+                  <label><span class="label" style="color:var(--muted)">Your name</span><input class="inp" data-name placeholder="First name" autocomplete="given-name"></label>
+                  <label><span class="label" style="color:var(--muted)">Pickup day</span><input class="inp" data-day placeholder="e.g. Saturday afternoon"></label>
+                </div>
+              </div>
+              <p class="msg-to">Your DM to @detroitbrownieco</p>
+              <div class="msg" data-msg></div>
+              <div class="total">
+                <div><span class="label" style="color:var(--muted);font-size:11px">Total</span><div class="n" style="margin-top:10px"><sup>$</sup><span data-total>0</span></div></div>
+                <small data-total-note>Pack a box to see your total.</small>
+              </div>
+              <div class="acts">
+                <a class="btn solid" data-send href="#" target="_blank" rel="noopener">DM the order <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4"/></svg></a>
+                <button class="btn" type="button" data-copy>Copy</button>
+              </div>
+              <p class="note" data-note></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MENU -->
+    <section class="menu" id="menu">
+      <div class="wrap">
+        <div class="sec-head">
+          <div>
+            <span class="label">The menu</span>
+            <h2><span class="line"><span>Simple prices.</span></span><span class="line"><span><em>Big brownies.</em></span></span></h2>
+          </div>
+        </div>
+        <div class="board" data-board></div>
+        <p class="fine">Prices from our last posted menu. DM to confirm current flavors and pickup times.</p>
+      </div>
+    </section>
+
+    <!-- HOW TO ORDER -->
+    <section class="how" id="order">
+      <div class="wrap how-grid">
+        <div class="photo"><img src="img/tray.webp" width="656" height="656" alt="A grey compartment tray packed with assorted Detroit Brownie Co. brownies" loading="lazy"><span>Packed to order</span></div>
+        <div>
+          <span class="label">How to order</span>
+          <h2 style="margin-top:20px"><span class="line"><span>DMs are</span></span><span class="line"><span><em>open.</em></span></span></h2>
+          <ol class="steps">
+            <li><div><h3>Build your box</h3><p>Pick 4, 6 or 12 and mix any flavors. Add cookies if you want them.</p></div></li>
+            <li><div><h3>Send the DM</h3><p>Your order gets written for you. Send it to @detroitbrownieco on Instagram.</p></div></li>
+            <li><div><h3>Pick it up</h3><p>We confirm your pre-order and set up a pickup time in Detroit.</p></div></li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- CLOSING -->
+    <section class="closing">
+      <div class="wrap">
+        <p class="label">One more thing</p>
+        <h2 style="margin-top:22px"><span class="line"><span>But wait,</span></span><span class="line"><span>there’s <em>s’more.</em></span></span></h2>
+        <p class="sub">New flavors drop on our Instagram first. Follow along, or just DM us your order.</p>
+        <div class="ctas">
+          <a class="btn solid" href="#box">Build your box</a>
+          <a class="btn" data-ig href="#" target="_blank" rel="noopener">@detroitbrownieco</a>
+        </div>
+        <div class="foot-word" aria-hidden="true" data-footword>Detroit Brownie Co.</div>
+      </div>
+      <footer>
+        <div class="wrap">
+          <span>© <span data-year>2026</span> Detroit Brownie Co. · Detroit, MI</span>
+          <span><a data-ig href="#" target="_blank" rel="noopener">Instagram</a> · Pre-order by DM</span>
+        </div>
+      </footer>
+    </section>
+  </main>
+  <div class="cursor" data-cursor aria-hidden="true"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+  <script>
+  /* =============================================================
+     CONFIG: from @detroitbrownieco (their menu post + captions).
+     ============================================================= */
+  const CONFIG = {
+    name: 'Detroit Brownie Co.',
+    instagram: { handle: 'detroitbrownieco', url: 'https://www.instagram.com/detroitbrownieco/', dm: 'https://ig.me/m/detroitbrownieco' },
+    single: 4,
+    packs: [ { n: 4, price: 15 }, { n: 6, price: 25 }, { n: 12, price: 45 } ],
+    cookies: { single: 3.5, packs: [ { n: 1, price: 3.5 }, { n: 4, price: 15 }, { n: 6, price: 20 } ], flavors: ['Double Chocolate', 'Peanut Butter', 'Espresso', 'Mix'] },
+    flavors: [
+      { id: 'smores', name: 'S’mores', img: 'img/smores.webp', cap: 'But wait, there’s s’more!', note: 'Toasted marshmallow on a fudgy base, graham on the side.' },
+      { id: 'oreo', name: 'Oreo', img: 'img/oreo.webp', cap: 'The bigger the better.', note: 'Loaded with crushed Oreo, top to bottom.' },
+      { id: 'biscoff', name: 'Biscoff', img: 'img/biscoff.webp', cap: 'Biscoff anyone?', note: 'Cookie butter and Lotus crumbs on top.' },
+      { id: 'espresso', name: 'Espresso', img: 'img/espresso.webp', cap: '✨ Espresso yourself ✨', note: 'Real coffee in the batter. Rise and grind.' },
+      { id: 'snickers', name: 'Snickers' },
+      { id: 'reeses', name: 'Reese’s' },
+      { id: 'double', name: 'Double Chocolate' },
+      { id: 'plain', name: 'Plain' }
+    ]
+  };
+  </script>
+  <script>
+  (() => {
+  'use strict';
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+  const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const FINE = matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const HAS_G = !!(window.gsap && window.ScrollTrigger);
+  const ANIM = HAS_G && !RM;
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const money = v => (Math.round(v * 100) / 100).toFixed(v % 1 ? 2 : 0);
+  if (HAS_G) gsap.registerPlugin(ScrollTrigger);
+  if (!HAS_G) { const i = $('.intro'); if (i) i.remove(); }
+
+  const ig = CONFIG.instagram;
+  $$('[data-logo]').forEach(el => el.innerHTML = $('#logo-tpl').innerHTML);
+  $$('[data-ig]').forEach(a => a.href = ig.url);
+  $$('[data-dm]').forEach(a => a.href = ig.dm);
+  $$('[data-year]').forEach(e => e.textContent = new Date().getFullYear());
+
+  /* ---------------- drawn brownie tiles, one look per flavor ---------------- */
+  const rng = seed => () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
+  let uid = 0;
+  const tile = (fid, seed = 7) => {
+    const r = rng(seed * 97 + fid.length * 13 + 1), id = 'b' + (uid++);
+    let top = '';
+    const dots = (n, fn) => { for (let i = 0; i < n; i++) top += fn(10 + r() * 80, 10 + r() * 80, i); };
+    const drizzle = (col, w) => { let d = 'M8 ' + (18 + r() * 10); for (let y = 18; y < 92; y += 12) d += ` Q ${50 + (r() - .5) * 30} ${y + 6}, ${y % 24 ? 92 : 8} ${y + 10 + r() * 4}`; top += `<path d="${d}" fill="none" stroke="${col}" stroke-width="${w}" stroke-linecap="round" opacity=".9"/>`; };
+    switch (fid) {
+      case 'snickers': drizzle('#c98a3e', 4); dots(14, (x, y) => `<ellipse cx="${x}" cy="${y}" rx="3.4" ry="2.6" fill="#caa06c" transform="rotate(${r() * 180} ${x} ${y})"/>`); break;
+      case 'reeses': dots(7, (x, y) => `<rect x="${x - 6}" y="${y - 5}" width="12" height="10" rx="3" fill="#e5822b" transform="rotate(${r() * 90} ${x} ${y})"/><circle cx="${x}" cy="${y}" r="2.6" fill="#d9a35b"/>`); break;
+      case 'oreo': dots(16, (x, y) => `<path d="M${x} ${y} l${3 + r() * 5} ${-2 + r() * 4} l${-2 - r() * 4} ${3 + r() * 3} z" fill="#141210"/>`); dots(7, (x, y) => `<circle cx="${x}" cy="${y}" r="${1.4 + r() * 1.6}" fill="#efe7da"/>`); break;
+      case 'espresso': dots(6, (x, y) => `<g transform="rotate(${r() * 180} ${x} ${y})"><ellipse cx="${x}" cy="${y}" rx="5" ry="3.6" fill="#4a2a17"/><path d="M${x - 4} ${y} Q ${x} ${y - 1.6} ${x + 4} ${y}" stroke="#2a160b" stroke-width="1.1" fill="none"/></g>`); dots(30, (x, y) => `<circle cx="${x}" cy="${y}" r=".8" fill="#8a6a52" opacity=".7"/>`); break;
+      case 'biscoff': drizzle('#c47a3a', 5); dots(12, (x, y) => `<rect x="${x - 3}" y="${y - 2}" width="${4 + r() * 4}" height="${3 + r() * 3}" rx="1" fill="#b8722f" transform="rotate(${r() * 90} ${x} ${y})"/>`); break;
+      case 'smores': dots(5, (x, y) => `<g><ellipse cx="${x}" cy="${y}" rx="9" ry="7" fill="#f2e2c4"/><ellipse cx="${x + 1}" cy="${y - 2}" rx="6" ry="3.6" fill="#c98944" opacity=".7"/></g>`); dots(5, (x, y) => `<rect x="${x - 4}" y="${y - 3}" width="8" height="6" rx="1" fill="#c99a5b" transform="rotate(${r() * 90} ${x} ${y})"/>`); break;
+      case 'double': dots(13, (x, y) => `<path d="M${x} ${y - 3.5} Q ${x + 3.4} ${y + 2.4} ${x} ${y + 2.6} Q ${x - 3.4} ${y + 2.4} ${x} ${y - 3.5}" fill="#120a06"/>`); drizzle('#1a0e08', 3); break;
+      default: break;
+    }
+    let crack = '';
+    for (let i = 0; i < 5; i++) { const x = 14 + r() * 60, y = 14 + r() * 60; crack += `<path d="M${x} ${y} l${8 + r() * 14} ${(r() - .5) * 10} l${6 + r() * 8} ${(r() - .5) * 12}" stroke="rgba(255,236,214,.13)" stroke-width="1.2" fill="none"/>`; }
+    return `<svg viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4a2c1c"/><stop offset=".55" stop-color="#2f1a10"/><stop offset="1" stop-color="#1f110a"/></linearGradient><radialGradient id="${id}s" cx=".3" cy=".25" r=".7"><stop offset="0" stop-color="rgba(255,230,200,.22)"/><stop offset="1" stop-color="rgba(255,230,200,0)"/></radialGradient></defs><rect x="3" y="3" width="94" height="94" rx="11" fill="url(#${id})"/><rect x="3" y="3" width="94" height="94" rx="11" fill="url(#${id}s)"/>${crack}${top}<rect x="3.5" y="3.5" width="93" height="93" rx="10.5" fill="none" stroke="rgba(0,0,0,.35)"/></svg>`;
+  };
+  const F = Object.fromEntries(CONFIG.flavors.map(f => [f.id, f]));
+
+  /* ---------------- header + smooth scroll ---------------- */
+  const header = $('header');
+  const hs = () => header.classList.toggle('scrolled', scrollY > 30); hs(); addEventListener('scroll', hs, { passive: true });
+  let lenis = null;
+  if (ANIM && window.Lenis) { lenis = new Lenis({ duration: 1.2, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true }); lenis.on('scroll', ScrollTrigger.update); gsap.ticker.add(t => lenis.raf(t * 1000)); gsap.ticker.lagSmoothing(0); }
+  const go = t => { const off = -(header.offsetHeight + 8); if (lenis) lenis.scrollTo(t, { duration: 1.4, offset: t === 0 ? 0 : off }); else if (t === 0) scrollTo({ top: 0 }); else scrollTo({ top: t.getBoundingClientRect().top + scrollY + off, behavior: RM ? 'auto' : 'smooth' }); };
+  document.addEventListener('click', e => { const a = e.target.closest('a[href^="#"]'); if (!a) return; const id = a.getAttribute('href'); if (id === '#') return; const t = id === '#top' ? 0 : $(id); if (t === null) return; e.preventDefault(); go(t); });
+
+  /* =============================================================
+     HERO: their spotlight-on-wood look; you move the light
+     ============================================================= */
+  (() => {
+    const st = $('[data-stage]'); let tx = .5, ty = .45, x = .5, y = .45, used = false, t0 = performance.now();
+    if (!FINE) $('[data-hint]').textContent = 'Drag to move the light';
+    const set = (cx, cy) => { const r = st.getBoundingClientRect(); tx = Math.max(0, Math.min(1, (cx - r.left) / r.width)); ty = Math.max(0, Math.min(1, (cy - r.top) / r.height)); if (!used) { used = true; st.classList.add('used'); } };
+    st.addEventListener('pointermove', e => { if (e.pointerType === 'mouse' || e.buttons) set(e.clientX, e.clientY); });
+    st.addEventListener('pointerdown', e => set(e.clientX, e.clientY));
+    const io = new IntersectionObserver(([e]) => { vis = e.isIntersecting; }); let vis = true; io.observe(st);
+    const loop = now => {
+      if (vis && !document.hidden) {
+        if (!used) { const k = (now - t0) / 1000; tx = .5 + Math.cos(k * .7) * .2; ty = .46 + Math.sin(k * .9) * .14; }
+        x += (tx - x) * .08; y += (ty - y) * .08;
+        st.style.setProperty('--mx', (x * 100).toFixed(2) + '%'); st.style.setProperty('--my', (y * 100).toFixed(2) + '%');
+      }
+      if (!RM) requestAnimationFrame(loop);
+    };
+    if (RM) { st.style.setProperty('--mx', '50%'); st.style.setProperty('--my', '45%'); } else requestAnimationFrame(loop);
+    // a few drifting crumbs
+    if (ANIM) {
+      const box = $('[data-crumbs]');
+      for (let i = 0; i < 14; i++) { const c = document.createElement('i'); c.style.left = (Math.random() * 100) + '%'; box.appendChild(c);
+        gsap.to(c, { y: () => innerHeight + 40, x: () => (Math.random() - .5) * 120, rotation: () => Math.random() * 360, duration: () => 9 + Math.random() * 10, ease: 'none', repeat: -1, delay: -Math.random() * 16 }); }
+    }
+  })();
+
+  /* marquee words */
+  $('[data-marquee]').innerHTML = [0, 1].map(() => CONFIG.flavors.map((f, k) => `<span${k % 2 ? ' class="o"' : ''}>${esc(f.name)}</span><b></b>`).join('')).join('');
+
+  /* =============================================================
+     FLAVORS: pinned photo story (desktop), stacked (phone)
+     ============================================================= */
+  const shots = CONFIG.flavors.filter(f => f.img);
+  $('[data-fl-photos]').innerHTML = shots.map((f, k) => `<figure class="${k ? '' : 'on'}"><img src="${esc(f.img)}" width="1000" height="1000" alt="${esc(f.name)} brownie" loading="lazy"></figure>`).join('') + '<span class="tag">From our feed</span>';
+  $('[data-fl-names]').innerHTML = shots.map(f => `<h3>${esc(f.name)}</h3>`).join('');
+  $('[data-fl-caps]').innerHTML = shots.map(f => `<p>“${esc(f.cap)}”<small>${esc(f.note)}</small></p>`).join('');
+  $('[data-fl-list]').innerHTML = CONFIG.flavors.map(f => `<span data-fid="${esc(f.id)}">${esc(f.name)}</span>`).join('');
+  $('[data-fl-stack]').innerHTML = shots.map(f => `<article class="fl-card"><img src="${esc(f.img)}" width="1000" height="1000" alt="${esc(f.name)} brownie" loading="lazy"><h3>${esc(f.name)}</h3><p><q>${esc(f.cap)}</q>${esc(f.note)}</p></article>`).join('');
+  const flOn = k => $$('[data-fl-list] span').forEach(s => s.classList.toggle('on', s.dataset.fid === shots[k].id));
+  flOn(0);
+
+  /* =============================================================
+     SIGNATURE: pack your own box in their grey compartment tray
+     ============================================================= */
+  const Box = (() => {
+    let size = 1, slots = [], touched = false, closed = false, nudge = null;
+    const tray = $('[data-tray]'), wrap = $('[data-tray-wrap]'), picker = $('[data-picker]');
+    $('[data-sizes]').innerHTML = CONFIG.packs.map((p, k) => `<button class="size" type="button" aria-pressed="${k === size}" data-size="${k}"><b>${p.n} pack</b><span>$${money(p.price)}</span></button>`).join('');
+    $('[data-chips]').innerHTML = CONFIG.flavors.map((f, k) => `<button class="chip" type="button" data-add="${esc(f.id)}" aria-label="Add a ${esc(f.name)} brownie">${tile(f.id, k + 3)}<span>${esc(f.name)}</span></button>`).join('');
+    if (!FINE) $('[data-call]').textContent = 'Tap a flavor to drop it in';
+    if (ANIM) gsap.set('[data-lid]', { yPercent: -115, rotation: -3 });
+    const cap = () => CONFIG.packs[size].n;
+    const cols = () => ({ 4: 2, 6: 3, 12: 4 })[cap()];
+    const draw = () => {
+      tray.style.setProperty('--cols', cols());
+      tray.style.maxWidth = cap() === 4 ? '420px' : '';
+      tray.innerHTML = Array.from({ length: cap() }, (_, i) => `<div class="slot${i === slots.length ? ' next' : ''}" data-slot="${i}">${slots[i] ? `<div class="tile" role="button" tabindex="0" aria-label="Remove ${esc(F[slots[i].f].name)}" data-rm="${i}">${tile(slots[i].f, slots[i].s)}<span class="x" aria-hidden="true">×</span></div>` : ''}</div>`).join('');
+      $('[data-filled]').textContent = slots.length; $('[data-cap]').textContent = cap();
+      $$('[data-add]').forEach(b => b.disabled = slots.length >= cap());
+      Order.render();
+    };
+    const touch = () => { if (touched) return; touched = true; picker.classList.add('touched'); if (nudge) { nudge.kill(); gsap.set('[data-add]', { clearProps: 'transform' }); } };
+    const summary = () => { const c = {}; slots.forEach(s => c[s.f] = (c[s.f] || 0) + 1); return Object.entries(c).map(([f, n]) => `${n} ${F[f].name}`).join(', '); };
+    const close = () => {
+      if (closed) return; closed = true; wrap.classList.add('closed'); $('[data-lid]').setAttribute('aria-hidden', 'false');
+      $('[data-sum]').textContent = `${cap()} brownies: ${summary()}`;
+      if (ANIM) gsap.fromTo('[data-lid]', { yPercent: -115, rotation: -3, opacity: 0 }, { yPercent: 0, rotation: 0, opacity: 1, duration: .9, ease: 'expo.out', delay: .35 }).then(() => gsap.fromTo('[data-tray-wrap]', { y: 0 }, { y: 6, duration: .12, yoyo: true, repeat: 1 }));
+      else $('[data-lid]').style.opacity = 1;
+    };
+    const open = () => {
+      if (!closed) return; closed = false; wrap.classList.remove('closed'); $('[data-lid]').setAttribute('aria-hidden', 'true');
+      if (ANIM) gsap.to('[data-lid]', { yPercent: -115, rotation: -3, opacity: 0, duration: .6, ease: 'expo.in' }); else $('[data-lid]').style.opacity = 0;
+    };
+    const add = (fid, quiet) => {
+      if (slots.length >= cap()) return;
+      touch(); slots.push({ f: fid, s: Math.floor(Math.random() * 1e6) + 1 }); const i = slots.length - 1; draw();
+      const el = $(`[data-slot="${i}"] .tile`, tray);
+      if (ANIM && el && !quiet) gsap.fromTo(el, { y: -90, scale: 1.15, rotation: (Math.random() - .5) * 30, opacity: 0 }, { y: 0, rotation: 0, opacity: 1, duration: .55, ease: 'power3.in', onComplete: () => gsap.fromTo(el, { scaleY: .82, scaleX: 1.12 }, { scaleY: 1, scaleX: 1, duration: .6, ease: 'elastic.out(1,.4)' }) });
+      if (slots.length === cap()) close();
+    };
+    const remove = i => { open(); slots.splice(i, 1); draw(); };
+    $('[data-sizes]').addEventListener('click', e => { const b = e.target.closest('[data-size]'); if (!b) return; size = +b.dataset.size; $$('[data-size]').forEach(x => x.setAttribute('aria-pressed', x === b)); open(); slots = slots.slice(0, cap()); draw(); if (slots.length === cap()) close(); });
+    $('[data-chips]').addEventListener('click', e => { const b = e.target.closest('[data-add]'); if (b) add(b.dataset.add); });
+    tray.addEventListener('click', e => { const t = e.target.closest('[data-rm]'); if (t) remove(+t.dataset.rm); });
+    tray.addEventListener('keydown', e => { const t = e.target.closest('[data-rm]'); if (t && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); remove(+t.dataset.rm); } });
+    $('[data-surprise]').addEventListener('click', () => { touch(); open(); const ids = CONFIG.flavors.map(f => f.id); let k = 0; const step = () => { if (slots.length >= cap()) return; add(ids[Math.floor(Math.random() * ids.length)]); k++; setTimeout(step, ANIM ? 140 : 0); }; step(); });
+    $('[data-clear]').addEventListener('click', () => { open(); slots = []; draw(); });
+    $('[data-open]').addEventListener('click', open);
+    // idle nudge: chips bounce if nobody has touched them ~3s after they're on screen
+    if (ANIM) {
+      const io = new IntersectionObserver(([e]) => {
+        if (!e.isIntersecting || touched || nudge) return;
+        nudge = gsap.timeline({ repeat: -1, repeatDelay: 2.6, delay: 3 }).to('[data-add]', { y: -8, duration: .22, ease: 'power2.out', stagger: .05 }).to('[data-add]', { y: 0, duration: .5, ease: 'bounce.out', stagger: .05 }, .18);
+      }, { threshold: .6 });
+      io.observe(picker);
+    }
+    return { draw, get: () => ({ size, slots, cap: cap(), price: CONFIG.packs[size].price, summary: summary() }), add };
+  })();
+
+  /* order message + totals */
+  const Order = (() => {
+    const q = $('[data-ck-qty]'), fl = $('[data-ck-fl]'), msgEl = $('[data-msg]'), note = $('[data-note]');
+    q.innerHTML = `<label class="opt"><input type="radio" name="ck" value="-1" checked><span>No cookies</span></label>` + CONFIG.cookies.packs.map((p, k) => `<label class="opt"><input type="radio" name="ck" value="${k}"><span>${p.n === 1 ? '1 cookie' : p.n + ' pack'} <em>$${money(p.price)}</em></span></label>`).join('');
+    fl.innerHTML = CONFIG.cookies.flavors.map((f, k) => `<label class="opt"><input type="radio" name="ckf" value="${esc(f)}"${k ? '' : ' checked'}><span>${esc(f)}</span></label>`).join('');
+    let shown = 0;
+    const roll = (to) => { const el = $('[data-total]'); if (!ANIM) { el.textContent = money(to); shown = to; return; } const o = { v: shown }; gsap.to(o, { v: to, duration: .7, ease: 'expo.out', onUpdate: () => el.textContent = money(o.v) }); shown = to; };
+    const message = () => {
+      const b = Box.get(), ck = +($('input[name="ck"]:checked') || { value: -1 }).value;
+      const name = $('[data-name]').value.trim(), day = $('[data-day]').value.trim();
+      const L = ['Hi Detroit Brownie Co.! I’d like to pre-order:', ''];
+      if (b.slots.length) L.push(`${b.cap} pack of brownies${b.slots.length < b.cap ? ` (${b.slots.length} picked so far)` : ''}: ${b.summary}`);
+      else L.push(`${b.cap} pack of brownies (flavors: surprise me)`);
+      if (ck >= 0) { const p = CONFIG.cookies.packs[ck]; L.push(`${p.n === 1 ? '1 cookie' : p.n + ' pack of cookies'}: ${($('input[name="ckf"]:checked') || {}).value || 'Mix'}`); }
+      L.push('', `Name: ${name || '(your name)'}`, `Pickup: ${day || '(day / time)'}`);
+      return L.join('\n');
+    };
+    const render = () => {
+      if (!$('[data-name]')) return;
+      const b = Box.get(), ck = +($('input[name="ck"]:checked') || { value: -1 }).value;
+      $('[data-ck-fl-wrap]').hidden = ck < 0;
+      const total = b.price + (ck >= 0 ? CONFIG.cookies.packs[ck].price : 0);
+      roll(total);
+      $('[data-total-note]').textContent = b.slots.length === b.cap ? 'Box packed. Send the DM to lock it in.' : `${b.cap - b.slots.length} more to pick, or let us choose.`;
+      msgEl.textContent = message();
+    };
+    const copy = async () => { try { await navigator.clipboard.writeText(message()); return true; } catch (_) { return false; } };
+    $('#order-card').addEventListener('input', render); $('#order-card').addEventListener('change', render);
+    $('[data-copy]').addEventListener('click', async () => { note.textContent = (await copy()) ? 'Copied. Paste it into a DM to @detroitbrownieco.' : message(); });
+    $('[data-send]').href = ig.dm;
+    $('[data-send]').addEventListener('click', async () => { note.textContent = (await copy()) ? 'Order copied. Paste it into the DM that just opened.' : 'Opening Instagram. Copy the order above into the DM.'; });
+    return { render };
+  })();
+  Box.draw();
+
+  /* menu board */
+  $('[data-board]').innerHTML = `
+    <div class="mcard"><h3>Brownies</h3><table>
+      <tr><td>Single</td><td>$${money(CONFIG.single)}</td></tr>
+      ${CONFIG.packs.map(p => `<tr><td>${p.n} pack</td><td>$${money(p.price)}</td></tr>`).join('')}
+    </table></div>
+    <div class="mcard"><h3>Cookies</h3><table>
+      ${CONFIG.cookies.packs.map(p => `<tr><td>${p.n === 1 ? 'Single' : p.n + ' pack'}</td><td>$${money(p.price)}</td></tr>`).join('')}
+    </table></div>
+    <div class="mcard"><h3>Flavors</h3><div class="fl"><b>Brownies</b>${CONFIG.flavors.map(f => esc(f.name)).join('<br>')}<b style="margin-top:14px">Cookies</b>${CONFIG.cookies.flavors.filter(f => f !== 'Mix').map(esc).join('<br>')}</div></div>`;
+
+  /* =============================================================
+     MOTION
+     ============================================================= */
+  const flavSec = $('[data-flavors]');
+  if (!ANIM) {
+    const i = $('.intro'); if (i) i.remove();
+    $('[data-footword]').style.backgroundSize = '100% 100%';
+    return;
+  }
+  // intro: logo stamps in, curtain lifts
+  gsap.set('.hero h1 .line > span', { yPercent: 110 });
+  gsap.set('[data-in]', { opacity: 0, y: 18 });
+  const tl = gsap.timeline();
+  tl.from('.intro .ring', { scale: .6, opacity: 0, transformOrigin: '50% 50%', duration: .8, ease: 'expo.out' })
+    .from('.intro .sky', { scaleY: 0, transformOrigin: '50% 100%', duration: .7, ease: 'expo.out' }, .2)
+    .from('.intro text', { opacity: 0, y: 10, duration: .6, ease: 'expo.out', stagger: .08 }, .35)
+    .to('.intro .logo', { scale: .9, opacity: 0, duration: .5, ease: 'expo.in' }, 1.35)
+    .to('.intro', { yPercent: -100, duration: .9, ease: 'expo.inOut', onComplete: () => { const el = $('.intro'); if (el) el.remove(); } }, 1.6)
+    .to('.hero h1 .line > span', { yPercent: 0, duration: 1.3, ease: 'expo.out', stagger: .1 }, 1.95)
+    .to('[data-in]', { opacity: 1, y: 0, duration: 1.1, ease: 'expo.out', stagger: .08 }, 2.1)
+    .from('.stage .ph', { scale: .85, rotation: -8, duration: 1.6, ease: 'expo.out' }, 2.05);
+  $('.intro').addEventListener('click', () => tl.progress(1));
+
+  gsap.to('.stage', { yPercent: 12, rotation: 6, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+
+  $$('main .line > span').forEach(el => { if (el.closest('.hero')) return; gsap.from(el, { yPercent: 110, duration: 1.2, ease: 'expo.out', scrollTrigger: { trigger: el.parentElement, start: 'top 92%' } }); });
+  const rise = (sel, trig, st = .08) => gsap.from(sel, { opacity: 0, y: 34, duration: 1.1, ease: 'expo.out', stagger: st, scrollTrigger: { trigger: trig, start: 'top 86%' } });
+  rise('.mcard', '.board', .1); rise('.steps li', '.steps', .1); rise('.chip', '.chips', .04);
+  gsap.from('.how .photo', { clipPath: 'inset(0% 0% 100% 0%)', duration: 1.4, ease: 'expo.inOut', scrollTrigger: { trigger: '.how .photo', start: 'top 85%' } });
+  gsap.from('.tray', { y: 40, opacity: 0, rotation: -2, duration: 1.2, ease: 'expo.out', scrollTrigger: { trigger: '.tray', start: 'top 88%' } });
+
+  // marquee with scroll velocity
+  (() => {
+    const tr = $('[data-marquee]'); let x = 0, v = 0, w = 0;
+    const measure = () => { w = tr.scrollWidth / 2; }; measure(); addEventListener('resize', measure); document.fonts && document.fonts.ready.then(measure);
+    ScrollTrigger.create({ onUpdate: s => { v = Math.max(-12, Math.min(12, s.getVelocity() / 300)); } });
+    gsap.ticker.add(() => { v *= .92; x -= .7 + Math.abs(v); if (w && x <= -w) x += w; tr.style.transform = `translate3d(${x}px,0,0)`; });
+  })();
+
+  const mm = gsap.matchMedia();
+  mm.add('(min-width: 861px)', () => {
+    flavSec.classList.add('pinned');
+    const figs = $$('[data-fl-photos] figure'), names = $$('[data-fl-names] h3'), caps = $$('[data-fl-caps] p'), N = figs.length;
+    gsap.set(names.slice(1), { yPercent: 110, opacity: 0 }); gsap.set(caps.slice(1), { opacity: 0, y: 16 });
+    let cur = 0;
+    const ftl = gsap.timeline({ scrollTrigger: { trigger: flavSec, start: 'top top', end: '+=' + (N * 75) + '%', pin: '.fl-pin', scrub: .6, anticipatePin: 1,
+      onUpdate: s => { const k = Math.min(N - 1, Math.floor(s.progress * N - .0001)); if (k !== cur && k >= 0) { cur = k; flOn(k); } } } });
+    for (let k = 1; k < N; k++) {
+      ftl.fromTo(figs[k], { clipPath: 'inset(100% 0% 0% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: .6, ease: 'power2.inOut' }, k - .3)
+        .fromTo($('img', figs[k]), { scale: 1.2 }, { scale: 1, duration: .6 }, k - .3)
+        .to(names[k - 1], { yPercent: -110, opacity: 0, duration: .35 }, k - .3).to(names[k], { yPercent: 0, opacity: 1, duration: .4 }, k - .2)
+        .to(caps[k - 1], { opacity: 0, y: -16, duration: .3 }, k - .3).to(caps[k], { opacity: 1, y: 0, duration: .35 }, k - .15);
+      figs[k].classList.add('on');
+    }
+    ftl.to({}, { duration: .4 });
+    return () => { flavSec.classList.remove('pinned'); gsap.set([...names, ...caps, ...figs], { clearProps: 'all' }); figs.forEach((f, k) => f.classList.toggle('on', !k)); };
+  });
+
+  gsap.to('[data-footword]', { backgroundSize: '100% 100%', ease: 'none', scrollTrigger: { trigger: '[data-footword]', start: 'top 95%', end: 'max', scrub: true } });
+
+  if (FINE) {
+    const cur = $('[data-cursor]');
+    const qx = gsap.quickTo(cur, 'x', { duration: .2, ease: 'power3' }), qy = gsap.quickTo(cur, 'y', { duration: .2, ease: 'power3' });
+    addEventListener('pointermove', e => { qx(e.clientX); qy(e.clientY); if (!cur.classList.contains('big')) cur.style.opacity = 1; }, { passive: true });
+    document.addEventListener('pointerover', e => { const on = !!e.target.closest('a, button, .opt, .tile, [data-stage]'); cur.classList.toggle('big', on); if (!on) cur.style.opacity = 1; });
+  }
+  addEventListener('load', () => ScrollTrigger.refresh());
+  document.fonts && document.fonts.ready.then(() => ScrollTrigger.refresh());
+  })();
+  </script>
+</body>
+</html>
