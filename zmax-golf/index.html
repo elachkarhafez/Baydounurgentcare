@@ -1,0 +1,659 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="robots" content="noai, noimageai">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Z. Max Golf Studio | Private Golf Lessons in Houston, TX</title>
+  <meta name="description" content="Z. Max Golf Studio: private golf lessons in Houston on Trackman, for juniors, adults and competitive players. 8743 Knight Rd Ste A. Call or text 832-586-2586.">
+  <meta name="theme-color" content="#0a0d0b">
+  <meta property="og:title" content="Z. Max Golf Studio">
+  <meta property="og:description" content="Houston's #1 private golf lesson studio. Step into the bay and hit a shot.">
+  <meta property="og:image" content="img/medals.webp">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  <style>
+    /* ------------------------------------------------------------
+       Z. MAX GOLF STUDIO · design tokens
+       An indoor bay at night: black walls, the glow of the
+       simulator screen, turf underfoot, and the gold crown from
+       their logo for everything that wins.
+       ------------------------------------------------------------ */
+    :root {
+      --bg: #0a0d0b;
+      --bg-2: #101512;
+      --panel: #141a16;
+      --ink: #f1f4ef;
+      --muted: #97a39a;
+      --dim: #4e5a52;
+      --line: rgba(241,244,239,.1);
+      --gold: #f2c230;
+      --turf: #3fbf6b;
+      --tracer: #ffd84a;
+      --display: "Unbounded", system-ui, sans-serif;
+      --sans: "Inter", system-ui, sans-serif;
+      --mono: "JetBrains Mono", ui-monospace, monospace;
+      --pad: clamp(16px, 4vw, 56px);
+      --ease: cubic-bezier(.65,.05,.25,1);
+      --ease-out: cubic-bezier(.16,1,.3,1);
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    html.lenis, html.lenis body { height: auto; }
+    .lenis.lenis-smooth { scroll-behavior: auto !important; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font: 400 16px/1.6 var(--sans); overflow-x: clip; -webkit-font-smoothing: antialiased; }
+    img, svg, canvas { display: block; max-width: 100%; }
+    img { height: auto; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+    input { font: inherit; color: inherit; }
+    :focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+    ::selection { background: var(--gold); color: var(--bg); }
+    [hidden] { display: none !important; }
+    .wrap { padding: 0 var(--pad); }
+    .label { font: 600 11.5px/1.3 var(--sans); letter-spacing: .26em; text-transform: uppercase; color: var(--gold); }
+    h1, h2, h3 { margin: 0; font-family: var(--display); font-weight: 800; line-height: .98; letter-spacing: -.035em; }
+    h2 { font-size: clamp(36px, 5.4vw, 88px); }
+    h2 em, h1 em { font-style: normal; color: var(--gold); }
+    .line { display: block; overflow: hidden; padding-bottom: .06em; }
+    .line > span { display: inline-block; will-change: transform; }
+    .lede { color: var(--muted); font-size: clamp(15.5px, 1.15vw, 17.5px); max-width: 46ch; margin: 20px 0 0; }
+
+    .btn { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 12px; height: 54px; padding: 0 26px; border: 1px solid rgba(241,244,239,.3); border-radius: 999px; font: 600 14px/1 var(--sans); letter-spacing: .02em; overflow: hidden; isolation: isolate; white-space: nowrap; transition: color .4s var(--ease), border-color .4s var(--ease), transform .2s; }
+    .btn::before { content: ""; position: absolute; inset: 0; background: var(--ink); border-radius: inherit; transform: translateY(101%); transition: transform .55s var(--ease); z-index: -1; }
+    .btn.gold { background: var(--gold); color: #1a1403; border-color: var(--gold); }
+    .btn svg { width: 15px; height: 15px; transition: transform .4s var(--ease); }
+    .btn:active { transform: scale(.97); }
+    @media (hover: hover) { .btn:hover { color: var(--bg); border-color: var(--ink); } .btn:hover::before { transform: none; } .btn:hover svg { transform: translateX(3px); } }
+    .btn.sm { height: 44px; padding: 0 18px; font-size: 13px; }
+
+    /* crown logo */
+    .crown { display: inline-flex; align-items: center; gap: 12px; }
+    .crown svg { width: 40px; height: 30px; color: var(--gold); }
+    .crown b { font: 800 14px/1 var(--display); letter-spacing: -.01em; }
+    .crown b small { display: block; font: 600 9.5px/1 var(--sans); letter-spacing: .3em; color: var(--gold); margin-top: 4px; }
+
+    header { position: fixed; left: 0; right: 0; top: 0; z-index: 50; transition: background .5s var(--ease), border-color .5s; border-bottom: 1px solid transparent; }
+    header.scrolled { background: rgba(10,13,11,.82); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); border-color: var(--line); }
+    header .wrap { height: 74px; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+    header nav { display: flex; gap: 28px; }
+    header nav a { font: 500 13.5px/1 var(--sans); color: var(--muted); transition: color .3s; }
+    header nav a:hover { color: var(--ink); }
+    @media (max-width: 900px) { header nav { display: none; } header .wrap { height: 64px; } }
+
+    /* ---------- hero + simulator (signature) ---------- */
+    .hero { position: relative; padding: 110px 0 70px; overflow: hidden; }
+    .hero::before { content: ""; position: absolute; inset: 0; background: radial-gradient(60% 50% at 70% 60%, rgba(63,191,107,.12), transparent 70%), radial-gradient(40% 30% at 20% 10%, rgba(242,194,48,.08), transparent 70%); pointer-events: none; }
+    .hero-top { position: relative; display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: clamp(20px, 4vw, 60px); align-items: end; }
+    .hero h1 { font-size: clamp(38px, 5.6vw, 92px); }
+    .hero .side .ctas { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+    .bay { position: relative; margin-top: clamp(28px, 4vw, 48px); display: grid; grid-template-columns: minmax(0, 1fr) 270px; gap: 14px; }
+    .screen { position: relative; border-radius: 14px; overflow: hidden; background: #0d1210; box-shadow: 0 0 0 1px var(--line), 0 40px 120px -30px rgba(63,191,107,.25), 0 60px 120px -40px #000; aspect-ratio: 16 / 8.2; touch-action: none; user-select: none; -webkit-user-select: none; cursor: grab; }
+    .screen:active { cursor: grabbing; }
+    .screen canvas { width: 100%; height: 100%; }
+    .screen .hud { position: absolute; left: 16px; top: 14px; display: flex; gap: 10px; flex-wrap: wrap; pointer-events: none; }
+    .chip { padding: 6px 10px; border-radius: 6px; background: rgba(10,13,11,.66); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); font: 500 11.5px/1 var(--mono); letter-spacing: .04em; color: #dfe7e1; }
+    .chip b { color: var(--gold); font-weight: 500; }
+    .callout { position: absolute; left: 50%; bottom: 22%; translate: -50% 0; display: inline-flex; align-items: center; gap: 10px; padding: 12px 18px; background: var(--gold); color: #1a1403; border-radius: 999px; font: 700 13px/1 var(--sans); letter-spacing: .02em; white-space: nowrap; box-shadow: 0 14px 34px rgba(242,194,48,.3); pointer-events: none; transition: opacity .5s var(--ease), transform .5s var(--ease); }
+    .callout svg { width: 18px; height: 18px; }
+    .bay.touched .callout { opacity: 0; transform: translateY(10px); }
+    .ghost { position: absolute; width: 34px; height: 34px; border-radius: 50%; border: 2px solid rgba(255,255,255,.9); background: rgba(255,255,255,.18); pointer-events: none; opacity: 0; }
+    .verdict { position: absolute; left: 50%; top: 18%; translate: -50% 0; text-align: center; pointer-events: none; opacity: 0; }
+    .verdict b { display: block; font: 800 clamp(24px, 3.4vw, 50px)/1 var(--display); letter-spacing: -.03em; text-shadow: 0 6px 30px rgba(0,0,0,.45); }
+    .verdict span { display: block; margin-top: 8px; font: 500 13px/1 var(--mono); color: #fff; text-shadow: 0 2px 10px rgba(0,0,0,.6); }
+    .verdict svg { width: 54px; height: 40px; color: var(--gold); margin: 0 auto 10px; filter: drop-shadow(0 6px 20px rgba(242,194,48,.5)); }
+    .data { border-radius: 14px; background: var(--panel); box-shadow: 0 0 0 1px var(--line); padding: 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-content: start; }
+    .data .row { display: contents; }
+    .data .radar, .data .best { grid-column: 1 / -1; }
+    .data .radar { margin-top: 4px; }
+    .stat { padding: 10px 12px; border-radius: 10px; background: rgba(241,244,239,.03); box-shadow: inset 0 0 0 1px var(--line); }
+    .stat small { display: block; font: 500 10px/1 var(--sans); letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+    .stat b { display: block; margin-top: 8px; font: 500 22px/1 var(--mono); font-variant-numeric: tabular-nums; }
+    .stat b i { font-style: normal; font-size: 12px; color: var(--muted); margin-left: 3px; }
+    .stat.big b { color: var(--gold); }
+    .radar { position: relative; aspect-ratio: 1; border-radius: 10px; background: radial-gradient(circle, rgba(63,191,107,.08), transparent 70%), rgba(241,244,239,.02); box-shadow: inset 0 0 0 1px var(--line); }
+    .radar canvas { width: 100%; height: 100%; }
+    .radar small { position: absolute; left: 10px; top: 8px; font: 500 10px/1 var(--sans); letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+    .data .best { font-size: 12.5px; color: var(--muted); display: flex; justify-content: space-between; }
+    .data .best b { color: var(--ink); font-family: var(--mono); font-weight: 500; }
+    .bay-note { margin-top: 12px; font-size: 12.5px; color: var(--dim); }
+    @media (max-width: 1000px) {
+      .hero-top { grid-template-columns: 1fr; }
+      .bay { grid-template-columns: 1fr; }
+      .screen { aspect-ratio: 4 / 3.4; }
+      .data { grid-template-columns: repeat(3, 1fr); }
+      .data .radar { grid-column: 1 / 3; }
+      .data .best { grid-column: 3; align-self: end; flex-direction: column; gap: 6px; }
+      .stat b { font-size: 18px; }
+    }
+    @media (max-width: 600px) { .hero { padding: 88px 0 60px; } .data .radar { grid-column: 1 / -1; max-width: 240px; justify-self: center; width: 100%; } .data .best { grid-column: 1 / -1; flex-direction: row; } }
+
+    /* marquee */
+    .marquee { overflow: hidden; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 20px 0; white-space: nowrap; }
+    .marquee .track { display: inline-flex; align-items: center; will-change: transform; }
+    .marquee span { font: 800 clamp(24px, 3.2vw, 46px)/1 var(--display); letter-spacing: -.03em; padding: 0 .5em; }
+    .marquee span.o { color: transparent; -webkit-text-stroke: 1px rgba(241,244,239,.45); }
+    .marquee i { width: 12px; height: 12px; border-radius: 50%; background: #fff; box-shadow: inset -2px -2px 0 rgba(0,0,0,.15); flex: none; }
+
+    /* lessons */
+    .lessons { padding: clamp(100px, 13vw, 180px) 0; }
+    .sec-head { display: flex; justify-content: space-between; align-items: end; gap: 30px; flex-wrap: wrap; margin-bottom: clamp(36px, 5vw, 64px); }
+    .sec-head .label { display: block; margin-bottom: 20px; }
+    .les-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+    .les { position: relative; padding: clamp(24px, 2.6vw, 36px); border-radius: 18px; background: var(--panel); box-shadow: inset 0 0 0 1px var(--line); overflow: hidden; min-height: 320px; display: flex; flex-direction: column; }
+    .les::after { content: ""; position: absolute; right: -60px; bottom: -60px; width: 200px; height: 200px; border-radius: 50%; background: radial-gradient(circle, rgba(63,191,107,.18), transparent 70%); }
+    .les .n { font: 500 13px/1 var(--mono); color: var(--gold); }
+    .les h3 { font-size: clamp(24px, 2.2vw, 34px); margin-top: 24px; }
+    .les p { color: var(--muted); margin: 14px 0 0; font-size: 15px; }
+    .les ul { list-style: none; padding: 0; margin: auto 0 0; padding-top: 22px; display: flex; flex-wrap: wrap; gap: 6px; }
+    .les li { padding: 6px 11px; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--line); font-size: 12.5px; color: #cfd8d1; }
+    @media (max-width: 900px) { .les-grid { grid-template-columns: 1fr; } .les { min-height: 0; } }
+
+    /* wins */
+    .wins { padding: clamp(100px, 13vw, 180px) 0; background: var(--bg-2); }
+    .win-grid { display: grid; grid-template-columns: 1.2fr 1fr 1fr; grid-template-rows: auto auto; gap: 14px; }
+    .win { position: relative; margin: 0; border-radius: 16px; overflow: hidden; background: var(--panel); isolation: isolate; }
+    .win img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 15%; aspect-ratio: 3 / 4; transition: transform 1.2s var(--ease); }
+    .win:first-child { grid-row: span 2; }
+    .win:first-child img { aspect-ratio: auto; }
+    .win figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: 50px 16px 14px; background: linear-gradient(to top, rgba(10,13,11,.9), transparent); font-size: 13.5px; color: #dfe7e1; }
+    .win figcaption b { display: block; font: 700 15px/1.2 var(--display); letter-spacing: -.02em; color: var(--gold); margin-bottom: 4px; }
+    .win:hover img { transform: scale(1.04); }
+    .win-note { margin-top: 18px; color: var(--muted); font-size: 14px; }
+    @media (max-width: 900px) {
+      .win-grid { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 76%; grid-template-rows: none; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: var(--pad); margin: 0 calc(-1 * var(--pad)); padding: 0 var(--pad) 6px; scrollbar-width: none; }
+      .win-grid::-webkit-scrollbar { display: none; }
+      .win { scroll-snap-align: start; }
+      .win:first-child { grid-row: auto; }
+      .win:first-child img { aspect-ratio: 3 / 4; }
+    }
+
+    /* studio */
+    .studio { padding: clamp(100px, 13vw, 180px) 0; }
+    .feat-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; border-top: 1px solid var(--line); }
+    .feat { padding: 28px 22px 0 0; }
+    .feat svg { width: 40px; height: 40px; color: var(--gold); }
+    .feat h3 { font-size: 20px; margin-top: 20px; letter-spacing: -.02em; }
+    .feat p { color: var(--muted); margin: 10px 0 0; font-size: 14.5px; }
+    @media (max-width: 900px) { .feat-grid { grid-template-columns: 1fr 1fr; gap: 24px 16px; } }
+
+    /* book */
+    .book { padding: clamp(100px, 13vw, 180px) 0; background: var(--bg-2); }
+    .book-grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: clamp(30px, 5vw, 90px); align-items: start; }
+    .field { margin-top: 28px; } .field:first-child { margin-top: 0; }
+    .field > .label { display: block; color: var(--muted); margin-bottom: 12px; }
+    .opts { display: flex; flex-wrap: wrap; gap: 8px; }
+    .opt input { position: absolute; opacity: 0; pointer-events: none; }
+    .opt span { display: inline-block; padding: 11px 16px; border-radius: 999px; box-shadow: inset 0 0 0 1px rgba(241,244,239,.2); font-size: 14px; cursor: pointer; transition: background .3s, color .3s, box-shadow .3s; }
+    .opt:hover span { box-shadow: inset 0 0 0 1px rgba(241,244,239,.5); }
+    .opt input:checked + span { background: var(--gold); color: #1a1403; box-shadow: none; }
+    .opt input:focus-visible + span { outline: 2px solid var(--gold); outline-offset: 2px; }
+    .two { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .inp { width: 100%; height: 52px; background: none; border: 0; border-bottom: 1px solid rgba(241,244,239,.22); outline: none; font-size: 17px; border-radius: 0; transition: border-color .3s; }
+    .inp:focus { border-color: var(--gold); }
+    .inp::placeholder { color: var(--dim); }
+    .preview { position: sticky; top: 100px; border-radius: 22px; background: var(--panel); box-shadow: inset 0 0 0 1px var(--line); overflow: hidden; }
+    .preview .to { display: flex; justify-content: space-between; gap: 10px; padding: 16px 20px; border-bottom: 1px solid var(--line); font-size: 13px; color: var(--muted); }
+    .preview .to b { color: var(--ink); font-weight: 500; }
+    .preview .body { padding: 22px 18px; min-height: 230px; display: flex; flex-direction: column; }
+    .preview .m { align-self: flex-end; max-width: 92%; background: #0a84ff; color: #fff; padding: 12px 15px; border-radius: 20px 20px 6px 20px; font-size: 15px; line-height: 1.45; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .preview .acts { display: grid; grid-template-columns: 1fr auto; gap: 8px; padding: 0 18px 10px; }
+    .preview .acts2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 0 18px 12px; }
+    .preview .note { padding: 0 18px 18px; margin: 0; font-size: 13px; color: var(--muted); min-height: 1em; }
+    @media (max-width: 900px) { .book-grid, .two { grid-template-columns: 1fr; } .preview { position: relative; top: 0; } }
+
+    /* visit */
+    .visit { padding: clamp(100px, 13vw, 170px) 0 clamp(70px, 9vw, 120px); }
+    .visit-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(30px, 6vw, 100px); align-items: start; }
+    .addr { margin-top: 26px; font: 700 clamp(20px, 2vw, 28px)/1.3 var(--display); letter-spacing: -.02em; }
+    .visit .links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
+    .hours { border-top: 1px solid var(--line); }
+    .hours .status { display: inline-flex; align-items: center; gap: 10px; margin: 22px 0 14px; font-size: 14px; color: var(--muted); }
+    .hours .status i { width: 8px; height: 8px; border-radius: 50%; background: var(--dim); }
+    .hours .status.open i { background: var(--turf); box-shadow: 0 0 0 4px rgba(63,191,107,.18); }
+    .hours table { width: 100%; border-collapse: collapse; }
+    .hours td { padding: 12px 0; border-top: 1px solid var(--line); font-size: 15px; }
+    .hours td:last-child { text-align: right; color: var(--muted); font-family: var(--mono); font-size: 14px; }
+    .hours tr.today td { color: var(--gold); }
+    .hours p { font-size: 13px; color: var(--dim); }
+    @media (max-width: 900px) { .visit-grid { grid-template-columns: 1fr; } }
+
+    .closing { text-align: center; padding: clamp(110px, 14vw, 200px) 0 0; position: relative; overflow: hidden; }
+    .closing::before { content: ""; position: absolute; left: 50%; top: 40%; width: 900px; height: 900px; translate: -50% -50%; background: radial-gradient(circle, rgba(242,194,48,.12), transparent 60%); pointer-events: none; }
+    .closing h2 { font-size: clamp(40px, 7vw, 120px); position: relative; }
+    .closing p { color: var(--muted); max-width: 40ch; margin: 22px auto 34px; position: relative; }
+    .closing .ctas { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; position: relative; }
+    .closing .bigcrown { width: clamp(80px, 9vw, 130px); color: var(--gold); margin: 0 auto 26px; position: relative; }
+    footer { border-top: 1px solid var(--line); margin-top: clamp(80px, 10vw, 140px); }
+    footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 14px 24px; padding-top: 24px; padding-bottom: 30px; font-size: 13.5px; color: var(--muted); }
+    footer nav { display: flex; gap: 20px; flex-wrap: wrap; }
+    footer a:hover { color: var(--ink); }
+  </style>
+  <script>document.documentElement.classList.add('js');if(matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('rm');</script>
+</head>
+<body>
+  <template id="crown-tpl"><svg viewBox="0 0 64 48" fill="currentColor" aria-hidden="true"><path d="M4 14 L18 26 L32 6 L46 26 L60 14 L54 40 L10 40 Z"/><rect x="10" y="42" width="44" height="5" rx="1.5"/><circle cx="4" cy="12" r="3.5"/><circle cx="32" cy="5" r="3.5"/><circle cx="60" cy="12" r="3.5"/></svg></template>
+
+  <header>
+    <div class="wrap">
+      <a class="crown" href="#top" aria-label="Z. Max Golf Studio, back to top"><span data-crown></span><b>Z. MAX<small>GOLF STUDIO</small></b></a>
+      <nav aria-label="Sections"><a href="#lessons">Lessons</a><a href="#wins">Student wins</a><a href="#studio">The studio</a><a href="#visit">Visit</a></nav>
+      <a class="btn sm gold" href="#book">Book a lesson</a>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO + SIM -->
+    <section class="hero" id="top">
+      <div class="wrap">
+        <div class="hero-top">
+          <div>
+            <p class="label" data-in>Private golf lessons · Houston, TX</p>
+            <h1 style="margin-top:18px">
+              <span class="line"><span>Houston’s #1 private</span></span>
+              <span class="line"><span><em>golf lesson</em> studio.</span></span>
+            </h1>
+          </div>
+          <div class="side" data-in>
+            <p class="lede" style="margin:0">One-on-one coaching on Trackman for every level, from young kids to university players. Step into the bay below and take a swing.</p>
+            <div class="ctas"><a class="btn gold" href="#book">Book a lesson <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4"/></svg></a><a class="btn" data-tel href="#">Call the studio</a></div>
+          </div>
+        </div>
+
+        <div class="bay" data-bay data-in>
+          <div class="screen" data-screen tabindex="0" role="application" aria-label="Golf simulator. Drag back from the ball and release to hit a 7-iron at the flag 150 yards away. With a keyboard, hold Space and release.">
+            <canvas data-sim></canvas>
+            <div class="hud" aria-hidden="true"><span class="chip">7 IRON</span><span class="chip">PIN <b>150</b> YDS</span><span class="chip">SHOT <b data-shotn>0</b></span></div>
+            <span class="callout" data-callout><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3v12M5 11l4 4 4-4"/></svg><span data-call-t>Pull back &amp; release to swing</span></span>
+            <span class="ghost" data-ghost aria-hidden="true"></span>
+            <div class="verdict" data-verdict aria-live="polite"><svg data-vcrown viewBox="0 0 64 48" fill="currentColor" aria-hidden="true"><path d="M4 14 L18 26 L32 6 L46 26 L60 14 L54 40 L10 40 Z"/><rect x="10" y="42" width="44" height="5" rx="1.5"/></svg><b data-vt></b><span data-vs></span></div>
+          </div>
+          <aside class="data" aria-label="Shot data">
+            <div class="row"><div class="stat"><small>Ball speed</small><b data-k="speed">--<i>mph</i></b></div><div class="stat"><small>Launch</small><b data-k="launch">--<i>°</i></b></div><div class="stat"><small>Spin</small><b data-k="spin">--<i>rpm</i></b></div></div>
+            <div class="row"><div class="stat"><small>Carry</small><b data-k="carry">--<i>yds</i></b></div><div class="stat"><small>Side</small><b data-k="side">--<i>yds</i></b></div><div class="stat big"><small>To pin</small><b data-k="pin">--<i>yds</i></b></div></div>
+            <div class="radar"><small>Dispersion</small><canvas data-radar></canvas></div>
+            <div class="best"><span>Best to pin</span><b data-best>--</b></div>
+          </aside>
+        </div>
+        <p class="bay-note">A just-for-fun simulator built for this page. The real thing is a Trackman bay at the studio.</p>
+      </div>
+    </section>
+
+    <div class="marquee" aria-hidden="true"><div class="track" data-marquee></div></div>
+
+    <!-- LESSONS -->
+    <section class="lessons" id="lessons">
+      <div class="wrap">
+        <div class="sec-head">
+          <div><span class="label">Private lessons</span><h2><span class="line"><span>Coaching for</span></span><span class="line"><span><em>every golfer.</em></span></span></h2></div>
+          <p class="lede" style="margin:0">Every lesson is one-on-one and built around your swing, measured on Trackman so you can see exactly what’s changing.</p>
+        </div>
+        <div class="les-grid" data-lessons></div>
+      </div>
+    </section>
+
+    <!-- WINS -->
+    <section class="wins" id="wins">
+      <div class="wrap">
+        <div class="sec-head">
+          <div><span class="label">Student wins</span><h2><span class="line"><span>Our juniors</span></span><span class="line"><span><em>bring it home.</em></span></span></h2></div>
+          <p class="lede" style="margin:0">League championships, national events and Drive, Chip &amp; Putt ribbons. A few recent results from our students, straight from our Instagram.</p>
+        </div>
+        <div class="win-grid" data-wins></div>
+        <p class="win-note">Follow <a data-ig href="#" target="_blank" rel="noopener" style="color:var(--gold)">@z.max_golf_studio</a> for every result.</p>
+      </div>
+    </section>
+
+    <!-- STUDIO -->
+    <section class="studio" id="studio">
+      <div class="wrap">
+        <div class="sec-head">
+          <div><span class="label">The studio</span><h2><span class="line"><span>Indoors. Every</span></span><span class="line"><span><em>day of the year.</em></span></span></h2></div>
+          <p class="lede" style="margin:0">No heat, no rain delays, no waiting on a range. A private bay where the only thing that matters is your swing.</p>
+        </div>
+        <div class="feat-grid" data-feats></div>
+      </div>
+    </section>
+
+    <!-- BOOK -->
+    <section class="book" id="book">
+      <div class="wrap">
+        <div class="sec-head">
+          <div><span class="label">Book a lesson</span><h2><span class="line"><span>Tell us about</span></span><span class="line"><span><em>your game.</em></span></span></h2></div>
+          <p class="lede" style="margin:0">Pick a few answers and we’ll write the text. Send it and the studio will get back to you with times.</p>
+        </div>
+        <div class="book-grid">
+          <form data-form onsubmit="return false">
+            <div class="field"><span class="label">Who’s the lesson for?</span><div class="opts" data-who></div></div>
+            <div class="field"><span class="label">Experience</span><div class="opts" data-lvl></div></div>
+            <div class="field"><span class="label">Main goal</span><div class="opts" data-goal></div></div>
+            <div class="field"><span class="label">Best times</span><div class="opts" data-when></div></div>
+            <div class="field"><div class="two">
+              <label><span class="label" style="display:block;color:var(--muted);margin-bottom:6px">Golfer’s name</span><input class="inp" name="name" placeholder="First name" autocomplete="given-name"></label>
+              <label><span class="label" style="display:block;color:var(--muted);margin-bottom:6px">Age (juniors)</span><input class="inp" name="age" inputmode="numeric" placeholder="Optional"></label>
+            </div></div>
+          </form>
+          <aside class="preview" aria-live="polite">
+            <div class="to"><span>To: <b>Z. Max Golf Studio</b></span><span data-phone></span></div>
+            <div class="body"><div class="m" data-msg></div></div>
+            <div class="acts"><a class="btn gold" data-send href="#">Send the text <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4"/></svg></a><a class="btn" data-tel href="#">Call</a></div>
+            <div class="acts2"><button class="btn sm" type="button" data-copy>Copy text</button><a class="btn sm" data-dm href="#" target="_blank" rel="noopener">DM on Instagram</a></div>
+            <p class="note" data-note></p>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- VISIT -->
+    <section class="visit" id="visit">
+      <div class="wrap visit-grid">
+        <div>
+          <span class="label">Visit the studio</span>
+          <h2 style="margin-top:20px"><span class="line"><span>Come hit</span></span><span class="line"><span><em>a few.</em></span></span></h2>
+          <p class="addr" data-addr></p>
+          <div class="links"><a class="btn gold" data-map href="#" target="_blank" rel="noopener">Directions</a><a class="btn" data-tel href="#">Call</a><a class="btn" href="#book">Text</a></div>
+        </div>
+        <div class="hours">
+          <div class="status" data-status><i></i><span data-status-t>Hours</span></div>
+          <table data-hours></table>
+          <p>Lessons by appointment. Hours from public listings, so call to confirm.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="closing">
+      <div class="wrap">
+        <div class="bigcrown" data-crown></div>
+        <h2><span class="line"><span>Lower scores</span></span><span class="line"><span>start <em>here.</em></span></span></h2>
+        <p>Private, one-on-one coaching in Houston. Juniors, adults and competitive players welcome.</p>
+        <div class="ctas"><a class="btn gold" href="#book">Book a lesson</a><a class="btn" data-ig href="#" target="_blank" rel="noopener">@z.max_golf_studio</a></div>
+      </div>
+      <footer><div class="wrap"><span>© <span data-year>2026</span> Z. Max Golf Studio · Houston, Texas</span><nav aria-label="Footer"><a data-ig href="#" target="_blank" rel="noopener">Instagram</a><a data-tel href="#" data-tel-text></a><a data-map href="#" target="_blank" rel="noopener">Directions</a></nav></div></footer>
+    </section>
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+  <script>
+  /* =============================================================
+     CONFIG: from @z.max_golf_studio and public business listings.
+     ============================================================= */
+  const CONFIG = {
+    name: 'Z. Max Golf Studio',
+    phone: '(832) 586-2586',
+    address: '8743 Knight Rd, Ste A, Houston, TX 77054',
+    instagram: { url: 'https://www.instagram.com/z.max_golf_studio/', dm: 'https://ig.me/m/z.max_golf_studio' },
+    timezone: 'America/Chicago',
+    hours: { 0: [10, 18], 1: [10, 18], 2: [10, 18], 3: [10, 18], 4: [10, 18], 5: [10, 18], 6: [10, 18] },
+    lessons: [
+      { t: 'Juniors', d: 'From a first swing to tournament golf. Fundamentals, course skills and the confidence to compete.', tags: ['Young kids', 'Junior tour', 'Drive, Chip & Putt'] },
+      { t: 'Adults', d: 'New to the game or stuck at the same score. Clear fixes, measured on Trackman, that hold up on the course.', tags: ['Beginners', 'Breaking 100 / 90', 'Consistency'] },
+      { t: 'Competitive', d: 'For players chasing tournaments and college golf. Detailed numbers, a plan, and accountability.', tags: ['Tournament prep', 'University players', 'Data-driven'] }
+    ],
+    wins: [
+      { img: 'img/medals.webp', t: 'PGA junior medals', d: 'Two of our juniors on the podium.' },
+      { img: 'img/champ1.webp', t: 'Junior Tour league champion', d: 'Medal and two awards in one season.' },
+      { img: 'img/dcp.webp', t: 'Drive, Chip & Putt', d: '1st overall.' },
+      { img: 'img/tour.webp', t: 'Junior Tour nationals', d: 'Competing at the Summer National Championship.' },
+      { img: 'img/champ2.webp', t: 'League champion', d: 'Another title for the studio.' }
+    ],
+    feats: [
+      { t: 'Trackman', d: 'Ball speed, launch, spin and carry on every swing, so progress is measured, not guessed.', i: 'radar' },
+      { t: 'Private coaching', d: 'One-on-one lessons built around your game, at your pace.', i: 'person' },
+      { t: 'All ages', d: 'Young kids, adults and university players all train here.', i: 'flag' },
+      { t: 'Climate controlled', d: 'Indoors in Houston. Practice year-round, whatever the weather.', i: 'sun' }
+    ],
+    who: ['Me', 'My child', 'My teen'],
+    level: ['Brand new', 'Beginner', 'Intermediate', 'Competitive'],
+    goals: ['First lessons', 'Lower my scores', 'Junior tournaments', 'College golf', 'Fix my swing'],
+    when: ['Weekdays', 'Weekends', 'Flexible']
+  };
+  </script>
+  <script>
+  (() => {
+  'use strict';
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+  const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const FINE = matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const HAS_G = !!(window.gsap && window.ScrollTrigger);
+  const ANIM = HAS_G && !RM;
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  if (HAS_G) gsap.registerPlugin(ScrollTrigger);
+
+  const TEL = '+1' + CONFIG.phone.replace(/\D/g, '').slice(-10);
+  $$('[data-crown]').forEach(e => e.innerHTML = $('#crown-tpl').innerHTML);
+  $$('[data-tel]').forEach(a => a.href = 'tel:' + TEL);
+  $$('[data-tel-text]').forEach(a => a.textContent = CONFIG.phone);
+  $$('[data-ig]').forEach(a => a.href = CONFIG.instagram.url);
+  $$('[data-dm]').forEach(a => a.href = CONFIG.instagram.dm);
+  $$('[data-map]').forEach(a => a.href = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent('Z. Max Golf Studio ' + CONFIG.address));
+  $('[data-addr]').innerHTML = esc(CONFIG.address).replace(', Houston', '<br>Houston');
+  $('[data-phone]').textContent = CONFIG.phone;
+  $$('[data-year]').forEach(e => e.textContent = new Date().getFullYear());
+
+  /* content */
+  $('[data-marquee]').innerHTML = [0, 1].map(() => ['Private lessons', 'Trackman', 'Juniors', 'All ages', 'Houston'].map((w, k) => `<span${k % 2 ? ' class="o"' : ''}>${w}</span><i></i>`).join('')).join('');
+  $('[data-lessons]').innerHTML = CONFIG.lessons.map((l, k) => `<article class="les"><span class="n">0${k + 1}</span><h3>${esc(l.t)}</h3><p>${esc(l.d)}</p><ul>${l.tags.map(t => `<li>${esc(t)}</li>`).join('')}</ul></article>`).join('');
+  $('[data-wins]').innerHTML = CONFIG.wins.map(w => `<figure class="win"><img src="${esc(w.img)}" width="900" height="1200" alt="${esc(w.t)}: a Z. Max Golf Studio junior" loading="lazy"><figcaption><b>${esc(w.t)}</b>${esc(w.d)}</figcaption></figure>`).join('');
+  const ICON = { radar: '<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="20" cy="20" r="16"/><circle cx="20" cy="20" r="9"/><path d="M20 20 L33 11"/><circle cx="27" cy="14" r="2" fill="currentColor"/></svg>', person: '<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="20" cy="12" r="6"/><path d="M8 36c1-8 6-12 12-12s11 4 12 12"/></svg>', flag: '<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 36V4l16 7-16 7"/><ellipse cx="18" cy="36" rx="12" ry="2.5"/></svg>', sun: '<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 20h4M30 20h4M20 6v4M20 30v4"/><rect x="11" y="13" width="18" height="14" rx="3"/><path d="M15 21h10"/></svg>' };
+  $('[data-feats]').innerHTML = CONFIG.feats.map(f => `<div class="feat">${ICON[f.i]}<h3>${esc(f.t)}</h3><p>${esc(f.d)}</p></div>`).join('');
+
+  /* hours + status */
+  (() => {
+    const D = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const fmt = h => (h % 12 || 12) + (h >= 12 ? 'pm' : 'am');
+    let d = new Date().getDay(), h = new Date().getHours() + new Date().getMinutes() / 60;
+    try { const p = new Intl.DateTimeFormat('en-US', { timeZone: CONFIG.timezone, weekday: 'short', hour: 'numeric', minute: 'numeric', hourCycle: 'h23' }).formatToParts(new Date()); const g = t => p.find(x => x.type === t).value; d = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(g('weekday')); h = +g('hour') + (+g('minute')) / 60; } catch (_) {}
+    $('[data-hours]').innerHTML = [1, 2, 3, 4, 5, 6, 0].map(k => { const x = CONFIG.hours[k]; return `<tr${k === d ? ' class="today"' : ''}><td>${D[k]}</td><td>${x ? fmt(x[0]) + ' – ' + fmt(x[1]) : 'Closed'}</td></tr>`; }).join('');
+    const t = CONFIG.hours[d], open = t && h >= t[0] && h < t[1];
+    $('[data-status]').classList.toggle('open', !!open);
+    $('[data-status-t]').textContent = open ? 'Open now · until ' + fmt(t[1]) : (t && h < t[0] ? 'Opens today at ' + fmt(t[0]) : 'Closed now · opens 10am');
+  })();
+
+  /* header + smooth scroll */
+  const header = $('header');
+  const hs = () => header.classList.toggle('scrolled', scrollY > 30); hs(); addEventListener('scroll', hs, { passive: true });
+  let lenis = null;
+  if (ANIM && window.Lenis) { lenis = new Lenis({ duration: 1.2, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true }); lenis.on('scroll', ScrollTrigger.update); gsap.ticker.add(t => lenis.raf(t * 1000)); gsap.ticker.lagSmoothing(0); }
+  const go = t => { const off = -header.offsetHeight; if (lenis) lenis.scrollTo(t, { duration: 1.4, offset: t === 0 ? 0 : off }); else if (t === 0) scrollTo({ top: 0 }); else scrollTo({ top: t.getBoundingClientRect().top + scrollY + off, behavior: RM ? 'auto' : 'smooth' }); };
+  document.addEventListener('click', e => { const a = e.target.closest('a[href^="#"]'); if (!a) return; const id = a.getAttribute('href'); if (id === '#') return; const t = id === '#top' ? 0 : $(id); if (t === null) return; e.preventDefault(); go(t); });
+
+  /* =============================================================
+     SIGNATURE: the Trackman-style bay. Pull back, release, and the
+     ball flies at a pin 150 yards out with a tracer and shot data.
+     ============================================================= */
+  const Sim = (() => {
+    const scr = $('[data-screen]'), cv = $('[data-sim]'), ctx = cv.getContext('2d'), bay = $('[data-bay]');
+    const rcv = $('[data-radar]'), rctx = rcv.getContext('2d');
+    const DPR = Math.min(devicePixelRatio || 1, 2);
+    let W = 0, H = 0, RW = 0;
+    const PIN = 150, CAMH = 3.2, Z0 = 9;
+    let f = 0, hor = 0;
+    const state = { phase: 'idle', drag: null, ball: null, trail: [], shots: [], best: null, touched: false, n: 0 };
+    const size = () => {
+      const r = scr.getBoundingClientRect(); W = r.width; H = r.height; cv.width = W * DPR; cv.height = H * DPR; ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+      f = H * 1.05; hor = H * .4;
+      const rr = rcv.getBoundingClientRect(); RW = rr.width; rcv.width = RW * DPR; rcv.height = RW * DPR; rctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+      draw(); radar();
+    };
+    const P = (x, y, z) => { const d = z + Z0; return [W / 2 + x * f / d, hor + (CAMH - y) * f / d, f / d]; };
+    const tee = () => P(0, 0, 0);
+    // ---- scene ----
+    const scene = () => {
+      const g = ctx.createLinearGradient(0, 0, 0, hor); g.addColorStop(0, '#6fb6f2'); g.addColorStop(1, '#d6ecff'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, hor + 1);
+      // tree line
+      ctx.fillStyle = '#2f5a35'; ctx.beginPath(); ctx.moveTo(0, hor);
+      for (let x = 0; x <= W + 20; x += 18) ctx.lineTo(x, hor - 6 - Math.abs(Math.sin(x * .05) * 10) - Math.abs(Math.sin(x * .013)) * 14);
+      ctx.lineTo(W, hor); ctx.closePath(); ctx.fill();
+      // rough
+      const rg = ctx.createLinearGradient(0, hor, 0, H); rg.addColorStop(0, '#3a7a3b'); rg.addColorStop(1, '#2c6a2f'); ctx.fillStyle = rg; ctx.fillRect(0, hor, W, H - hor);
+      // fairway with mowing stripes
+      const fw = 16;
+      for (let z = 0; z < 320; z += 10) {
+        const a = P(-fw, 0, z), b = P(fw, 0, z), c = P(fw * 1.05, 0, z + 10), d = P(-fw * 1.05, 0, z + 10);
+        ctx.fillStyle = (z / 10) % 2 ? '#5dbb4f' : '#67c556';
+        ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.lineTo(c[0], c[1]); ctx.lineTo(d[0], d[1]); ctx.closePath(); ctx.fill();
+      }
+      // green
+      ctx.fillStyle = '#86dc72'; ctx.beginPath();
+      for (let i = 0; i <= 40; i++) { const a = i / 40 * Math.PI * 2, p = P(Math.cos(a) * 14, 0, PIN + Math.sin(a) * 11); i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]); }
+      ctx.closePath(); ctx.fill();
+      // yardage markers
+      ctx.font = `600 ${Math.max(10, H * .022)}px JetBrains Mono, monospace`; ctx.textAlign = 'center';
+      [50, 100].forEach(z => { const p = P(-fw - 6, 0, z); ctx.fillStyle = 'rgba(255,255,255,.85)'; ctx.fillText(z, p[0], p[1]); });
+      // flag
+      const base = P(0, 0, PIN), top = P(0, 3.2, PIN);
+      ctx.strokeStyle = '#f4f4f4'; ctx.lineWidth = Math.max(1, base[2] * .06); ctx.beginPath(); ctx.moveTo(base[0], base[1]); ctx.lineTo(top[0], top[1]); ctx.stroke();
+      ctx.fillStyle = '#f2c230'; ctx.beginPath(); ctx.moveTo(top[0], top[1]); ctx.lineTo(top[0] + base[2] * 1.2, top[1] + base[2] * .35); ctx.lineTo(top[0], top[1] + base[2] * .7); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = 'rgba(0,0,0,.35)'; ctx.beginPath(); ctx.ellipse(base[0], base[1], base[2] * .3, base[2] * .1, 0, 0, Math.PI * 2); ctx.fill();
+      // previous landing spots
+      state.shots.forEach((s, i) => { const p = P(s.x, 0, s.z); ctx.fillStyle = i === state.shots.length - 1 ? '#fff' : 'rgba(255,255,255,.5)'; ctx.beginPath(); ctx.arc(p[0], p[1], Math.max(1.5, p[2] * .09), 0, Math.PI * 2); ctx.fill(); });
+      // mat at the bottom
+      const t = tee(); ctx.fillStyle = 'rgba(20,30,22,.55)'; ctx.beginPath(); ctx.ellipse(t[0], t[1] + 4, W * .09, H * .025, 0, 0, Math.PI * 2); ctx.fill();
+    };
+    const drawBall = (x, y, z) => { const p = P(x, y, z), s = P(x, 0, z); const r = Math.max(2, p[2] * .14);
+      ctx.fillStyle = 'rgba(0,0,0,.28)'; ctx.beginPath(); ctx.ellipse(s[0], s[1], r * 1.1, r * .35, 0, 0, Math.PI * 2); ctx.fill();
+      const g = ctx.createRadialGradient(p[0] - r * .3, p[1] - r * .3, r * .1, p[0], p[1], r); g.addColorStop(0, '#fff'); g.addColorStop(1, '#cfd5d0'); ctx.fillStyle = g; ctx.beginPath(); ctx.arc(p[0], p[1], r, 0, Math.PI * 2); ctx.fill(); };
+    const draw = () => {
+      if (!W) return;
+      ctx.clearRect(0, 0, W, H); scene();
+      // tracer
+      if (state.trail.length > 1) {
+        ctx.save(); ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.shadowColor = 'rgba(255,216,74,.9)'; ctx.shadowBlur = 14;
+        ctx.strokeStyle = '#ffd84a'; ctx.lineWidth = Math.max(2, H * .006); ctx.beginPath();
+        state.trail.forEach((q, i) => { const p = P(q[0], q[1], q[2]); i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]); }); ctx.stroke(); ctx.restore();
+      }
+      if (state.ball) drawBall(state.ball[0], state.ball[1], state.ball[2]); else drawBall(0, .06, 0);
+      // pull-back aim line
+      if (state.drag) {
+        const t = tee(), { dx, dy } = state.drag, pw = power(dy);
+        ctx.save(); ctx.strokeStyle = 'rgba(255,255,255,.85)'; ctx.setLineDash([6, 6]); ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(t[0], t[1]); ctx.lineTo(t[0] + dx, t[1] + dy); ctx.stroke(); ctx.setLineDash([]);
+        // aim arrow (opposite direction)
+        const ax = t[0] - dx * 1.4, ay = t[1] - Math.max(60, dy * 2.2);
+        ctx.strokeStyle = 'rgba(242,194,48,.95)'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(t[0], t[1] - 10); ctx.lineTo(ax, ay); ctx.stroke();
+        // power meter
+        const mw = Math.min(220, W * .3), mx = W / 2 - mw / 2, my = H - 26;
+        ctx.fillStyle = 'rgba(10,13,11,.6)'; ctx.fillRect(mx, my, mw, 8); ctx.fillStyle = pw > 1 ? '#ff6b4a' : '#f2c230'; ctx.fillRect(mx, my, mw * Math.min(1, pw / 1.15), 8);
+        ctx.fillStyle = 'rgba(255,255,255,.9)'; ctx.fillRect(mx + mw * (.83 / 1.15) - 1, my - 4, 2, 16);
+        ctx.restore();
+      }
+    };
+    const radar = () => {
+      if (!RW) return; const c = rctx, R = RW / 2; c.clearRect(0, 0, RW, RW);
+      c.strokeStyle = 'rgba(241,244,239,.12)'; c.lineWidth = 1; [5, 10, 20].forEach(y => { c.beginPath(); c.arc(R, R, R * .9 * y / 20, 0, Math.PI * 2); c.stroke(); });
+      c.fillStyle = 'rgba(241,244,239,.4)'; c.font = '500 9px JetBrains Mono, monospace'; c.textAlign = 'left'; [5, 10, 20].forEach(y => c.fillText(y, R + 3, R - R * .9 * y / 20 + 10));
+      c.fillStyle = '#f2c230'; c.beginPath(); c.arc(R, R, 3, 0, Math.PI * 2); c.fill();
+      state.shots.forEach((s, i) => { const k = R * .9 / 20; const x = R + clamp(s.x, -22, 22) * k, y = R - clamp(s.z - PIN, -22, 22) * k; c.fillStyle = i === state.shots.length - 1 ? '#fff' : 'rgba(255,255,255,.45)'; c.beginPath(); c.arc(x, y, i === state.shots.length - 1 ? 4 : 3, 0, Math.PI * 2); c.fill(); });
+    };
+    const power = dy => clamp(dy / (H * .42), 0, 1.15);
+    const setStat = (k, v, u) => { const el = $(`[data-k="${k}"]`); el.innerHTML = `${v}<i>${u}</i>`; };
+    const verdict = (pin, s) => {
+      const v = $('[data-verdict]'), vt = $('[data-vt]'), vs = $('[data-vs]'), cr = $('[data-vcrown]');
+      let title, sub = `${pin.toFixed(1)} yds from the pin`;
+      const lr = s.x > 2 ? 'right' : s.x < -2 ? 'left' : '', ls = s.z - PIN > 6 ? 'long' : PIN - s.z > 6 ? 'short' : '';
+      if (pin < 5) title = 'Pin seeker!'; else if (pin < 10) title = 'Tour-level dart.'; else if (pin < 20) title = 'On the dance floor.'; else title = ([ls, lr].filter(Boolean).join(' & ') || 'Off target') + '.';
+      if (pin >= 20) title = title.charAt(0).toUpperCase() + title.slice(1);
+      vt.textContent = title; vs.textContent = sub; cr.style.display = pin < 5 ? 'block' : 'none';
+      if (ANIM) gsap.fromTo(v, { opacity: 0, y: 14, scale: .9 }, { opacity: 1, y: 0, scale: 1, duration: .6, ease: 'back.out(2)' }); else v.style.opacity = 1;
+    };
+    const hideVerdict = () => { const v = $('[data-verdict]'); if (ANIM) gsap.to(v, { opacity: 0, duration: .25 }); else v.style.opacity = 0; };
+    const swing = (pw, aim) => {
+      if (state.phase === 'flying') return;
+      touch(); hideVerdict(); state.phase = 'flying'; state.trail = []; state.n++; $('[data-shotn]').textContent = state.n;
+      const rnd = (Math.random() - .5);
+      const speed = 62 + pw * 68 + rnd * 2;               // mph
+      const launch = 15.5 + pw * 3.5 + rnd;                // deg
+      const spin = Math.round(8600 - pw * 2400 + rnd * 300);
+      const carry = speed * 1.27 * (1 - Math.max(0, pw - 1) * .25);
+      const side = carry * Math.tan(aim * 7 * Math.PI / 180) + aim * 6 + rnd * 3;
+      const apex = carry * .14 + 6, roll = 2 + Math.random() * 4;
+      setStat('speed', speed.toFixed(1), 'mph'); setStat('launch', launch.toFixed(1), '°'); setStat('spin', spin.toLocaleString(), 'rpm');
+      setStat('carry', '--', 'yds'); setStat('side', '--', 'yds'); setStat('pin', '--', 'yds');
+      const T = (RM || !HAS_G) ? 0 : 2.4, end = () => {
+        const z = carry + roll, x = side * 1.04, pin = Math.hypot(z - PIN, x);
+        state.ball = [x, 0, z]; state.shots.push({ x, z }); if (state.shots.length > 12) state.shots.shift();
+        setStat('carry', carry.toFixed(1), 'yds'); setStat('side', (x >= 0 ? 'R ' : 'L ') + Math.abs(x).toFixed(1), 'yds'); setStat('pin', pin.toFixed(1), 'yds');
+        if (state.best == null || pin < state.best) state.best = pin; $('[data-best]').textContent = state.best.toFixed(1) + ' yds';
+        state.phase = 'done'; draw(); radar(); verdict(pin, { x, z });
+        window.__lastShot = { carry, x, z, pin };
+      };
+      if (!T) { state.trail = Array.from({ length: 30 }, (_, i) => { const t = i / 29; return [side * t * t, 4 * apex * t * (1 - t), carry * t]; }); end(); return; }
+      const o = { t: 0 };
+      gsap.to(o, { t: 1, duration: T, ease: 'none', onUpdate: () => { const t = o.t; const pt = [side * t * t, 4 * apex * t * (1 - t), carry * (1 - Math.pow(1 - t, 1.35))]; state.ball = pt; state.trail.push(pt); draw(); }, onComplete: () => { const r = { k: 0 }; gsap.to(r, { k: 1, duration: .5, ease: 'power2.out', onUpdate: () => { state.ball = [side * (1 + .04 * r.k), 0, carry + roll * r.k]; draw(); }, onComplete: end }); } });
+    };
+    const touch = () => { if (state.touched) return; state.touched = true; bay.classList.add('touched'); if (ghostTl) { ghostTl.kill(); gsap.set('[data-ghost]', { opacity: 0 }); } };
+    // pointer: pull back and release
+    let start = null;
+    scr.addEventListener('pointerdown', e => { if (state.phase === 'flying') return; touch(); start = { x: e.clientX, y: e.clientY }; state.drag = { dx: 0, dy: 0 }; if (state.phase === 'done') { state.ball = null; state.trail = []; state.phase = 'idle'; hideVerdict(); } try { scr.setPointerCapture(e.pointerId); } catch (_) {} draw(); });
+    scr.addEventListener('pointermove', e => { if (!start) return; state.drag = { dx: e.clientX - start.x, dy: Math.max(0, e.clientY - start.y) }; draw(); });
+    const release = () => { if (!start) return; const { dx, dy } = state.drag; start = null; state.drag = null; const pw = power(dy); if (pw < .12) { draw(); return; } swing(pw, clamp(-dx / (W * .25), -1, 1)); };
+    scr.addEventListener('pointerup', release); scr.addEventListener('pointercancel', () => { start = null; state.drag = null; draw(); });
+    // keyboard: hold space to charge, release to swing straight
+    let kT = 0;
+    scr.addEventListener('keydown', e => { if (e.code !== 'Space' && e.key !== 'Enter') return; e.preventDefault(); if (!kT) { kT = performance.now(); touch(); } const pw = clamp((performance.now() - kT) / 1400, 0, 1.15); state.drag = { dx: 0, dy: pw * H * .42 }; draw(); });
+    scr.addEventListener('keyup', e => { if (e.code !== 'Space' && e.key !== 'Enter') return; const pw = clamp((performance.now() - kT) / 1400, 0, 1.15); kT = 0; state.drag = null; if (pw > .12) swing(pw, 0); });
+    if (!FINE) $('[data-call-t]').textContent = 'Drag down & let go to swing';
+    // idle nudge: a ghost finger pulls back from the ball
+    let ghostTl = null;
+    const nudge = () => {
+      if (!ANIM || state.touched || ghostTl) return;
+      const t = tee(), g = $('[data-ghost]');
+      gsap.set(g, { left: t[0] - 17, top: t[1] - 17 });
+      ghostTl = gsap.timeline({ repeat: -1, repeatDelay: 1.6, delay: 2.4 }).to(g, { opacity: 1, duration: .25 }).to(g, { y: H * .26, x: -W * .02, duration: .9, ease: 'power2.inOut' }).to(g, { opacity: 0, scale: .6, duration: .25 }).set(g, { y: 0, x: 0, scale: 1 });
+    };
+    new IntersectionObserver(([e]) => { if (e.isIntersecting) nudge(); }, { threshold: .4 }).observe(scr);
+    addEventListener('resize', size); document.fonts && document.fonts.ready.then(size);
+    size();
+    return { swing, state };
+  })();
+  window.__sim = Sim;
+
+  /* =============================================================
+     BOOK: writes the text
+     ============================================================= */
+  (() => {
+    const f = $('[data-form]'), note = $('[data-note]');
+    const opt = (n, v, c) => `<label class="opt"><input type="radio" name="${n}" value="${esc(v)}"${c ? ' checked' : ''}><span>${esc(v)}</span></label>`;
+    $('[data-who]').innerHTML = CONFIG.who.map((v, k) => opt('who', v, !k)).join('');
+    $('[data-lvl]').innerHTML = CONFIG.level.map((v, k) => opt('lvl', v, k === 1)).join('');
+    $('[data-goal]').innerHTML = CONFIG.goals.map((v, k) => opt('goal', v, k === 1)).join('');
+    $('[data-when]').innerHTML = CONFIG.when.map((v, k) => opt('when', v, k === 2)).join('');
+    const g = n => (f.querySelector(`input[name="${n}"]:checked`) || {}).value;
+    const text = () => {
+      const name = f.name.value.trim(), age = f.age.value.trim(), who = g('who');
+      const forLine = who === 'Me' ? 'for myself' : `for ${who.toLowerCase()}${age ? ' (age ' + age + ')' : ''}`;
+      return [`Hi Z. Max Golf Studio! I’m interested in private lessons ${forLine}.`, '', `Golfer: ${name || '(name)'}`, `Experience: ${g('lvl')}`, `Goal: ${g('goal')}`, `Best times: ${g('when')}`, '', 'What times do you have open?'].join('\n');
+    };
+    const render = () => { const m = text(); $('[data-msg]').textContent = m; $('[data-send]').href = `sms:${TEL}?&body=${encodeURIComponent(m)}`; };
+    f.addEventListener('input', render); f.addEventListener('change', render); render();
+    const copy = async () => { try { await navigator.clipboard.writeText(text()); return true; } catch (_) { return false; } };
+    $('[data-copy]').addEventListener('click', async () => { note.textContent = (await copy()) ? `Copied. Paste it into a text to ${CONFIG.phone}.` : text(); });
+    $('[data-dm]').addEventListener('click', async () => { if (await copy()) note.textContent = 'Copied. Paste it into the DM.'; });
+    $('[data-send]').addEventListener('click', () => { if (FINE) note.textContent = `Opening Messages. No Messages on this computer? Text ${CONFIG.phone} from your phone, or use Copy.`; });
+  })();
+
+  /* =============================================================
+     MOTION
+     ============================================================= */
+  if (!ANIM) return;
+  gsap.set('.hero h1 .line > span', { yPercent: 110 }); gsap.set('[data-in]', { opacity: 0, y: 20 });
+  gsap.timeline({ delay: .15 }).to('.hero h1 .line > span', { yPercent: 0, duration: 1.2, ease: 'expo.out', stagger: .1 }).to('[data-in]', { opacity: 1, y: 0, duration: 1, ease: 'expo.out', stagger: .1 }, .25);
+  $$('main .line > span').forEach(el => { if (el.closest('.hero')) return; gsap.from(el, { yPercent: 110, duration: 1.2, ease: 'expo.out', scrollTrigger: { trigger: el.parentElement, start: 'top 92%' } }); });
+  const rise = (sel, trig, st = .08) => gsap.from(sel, { opacity: 0, y: 40, duration: 1.1, ease: 'expo.out', stagger: st, scrollTrigger: { trigger: trig, start: 'top 86%' } });
+  rise('.les', '.les-grid', .1); rise('.win', '.win-grid', .08); rise('.feat', '.feat-grid', .08); rise('.preview', '.book-grid');
+  gsap.from('.closing .bigcrown', { y: -40, rotation: -12, opacity: 0, duration: 1.2, ease: 'back.out(2)', scrollTrigger: { trigger: '.closing', start: 'top 75%' } });
+  (() => {
+    const tr = $('[data-marquee]'); let x = 0, v = 0, w = 0;
+    const m = () => { w = tr.scrollWidth / 2; }; m(); addEventListener('resize', m); document.fonts && document.fonts.ready.then(m);
+    ScrollTrigger.create({ onUpdate: s => { v = clamp(s.getVelocity() / 300, -12, 12); } });
+    gsap.ticker.add(() => { v *= .92; x -= .8 + Math.abs(v); if (w && x <= -w) x += w; tr.style.transform = `translate3d(${x}px,0,0)`; });
+  })();
+  addEventListener('load', () => ScrollTrigger.refresh());
+  })();
+  </script>
+</body>
+</html>
