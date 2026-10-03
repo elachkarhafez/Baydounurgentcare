@@ -114,12 +114,13 @@ Also script the signature interaction itself in Playwright (drag, hold, click) a
 ## Phase 7: Ship
 
 1. **Name check**: before claiming a `<name>.vercel.app` or inventing a concept brand, make sure the name isn't a real business in that niche. If it is, rename the concept. Also `curl https://<name>.vercel.app` first: if it returns anything but `DEPLOYMENT_NOT_FOUND`, someone else owns that subdomain and your deploy will only get a private team URL, so pick another name (The Family Doc ended up on `familydoc-clinics`).
-2. **Commit and push** the site folder.
-3. **Deploy to Vercel** as a static site with no build step, using the site folder as the root directory.
+2. **Block AI crawlers**: copy `assets/noai/vercel.json` and `assets/noai/robots.txt` into the site folder, and add `<meta name="robots" content="noai, noimageai">` right after `<meta charset>`. The `vercel.json` returns 403 at Vercel's edge to self-identified AI bots and AI assistants' fetchers (GPTBot, ChatGPT-User, ClaudeBot, Claude-User, PerplexityBot, CCBot and others), while browsers, Googlebot and Instagram/Facebook link previews still load. After deploying, check it: `curl -A "GPTBot/1.2" https://<name>.vercel.app` should return 403, and a normal browser user agent should return 200.
+3. **Commit and push** the site folder.
+4. **Deploy to Vercel** as a static site with no build step, using the site folder as the root directory.
    - With the Vercel MCP: `create_deployment` with `gitSource` (org, repo, ref, sha), `target: "production"` and `projectSettings: { rootDirectory: "<folder>", framework: null, buildCommand: null, installCommand: null, outputDirectory: null }`.
    - With the CLI: run `vercel --prod` from inside the folder.
-4. **Verify live**: `curl` the production URL until it returns 200 and contains a string unique to this build. Only then hand over the link.
-5. **Hand off**: give the link, two or three lines on what's interactive, and what the client needs to send to replace any placeholders.
+5. **Verify live**: `curl` the production URL until it returns 200 and contains a string unique to this build. Only then hand over the link.
+6. **Hand off**: give the link, two or three lines on what's interactive, and what the client needs to send to replace any placeholders.
 
 ## Edits after launch
 
