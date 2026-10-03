@@ -37,6 +37,8 @@ Get, or decide yourself, these five things. Ask the user only for what you can't
 
 ## Phase 3: The concept (most important step)
 
+> **Read the room first.** A playful toy is right for food, gyms, car shops and local service brands. For fashion, luxury, design-led and premium brands it reads as gimmicky (the first C4U menswear version, a drag-clothes-onto-a-rug game, was rejected as "stupid"). For those, the signature is the *experience*: editorial layout, their best photography huge, and slick motion (curtain intro, clip-path image reveals, a pinned horizontal collection rail, scroll-zoom detail shots, word-by-word text reveals). If unsure which way a client leans, ask.
+
 Pick **one signature interaction**: a playable piece of the business itself, built in code, that sits in or near the hero. Rules:
 
 - It must be **the product or the craft**, not generic decoration. A barber pole that spins toward your cursor, a dirty car you scrub clean, a barbell you grind to lockout, a burger that stacks and explodes, a cinnamon roll you can turn, a floor plan that builds into a house as you scroll, ink that swirls in water.
