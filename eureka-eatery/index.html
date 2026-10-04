@@ -101,7 +101,7 @@
     .hero-art .card { position: absolute; inset: 6% 8% 10% 6%; border-radius: 34px; overflow: hidden; border: 4px solid var(--ink); box-shadow: 14px 14px 0 var(--ink); transform: rotate(3deg); background: var(--red); }
     .hero-art .card img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; }
     .hero-art .stk { position: absolute; display: grid; place-items: center; text-align: center; font-family: var(--display); line-height: .9; text-transform: uppercase; border: 3px solid var(--ink); box-shadow: 5px 5px 0 var(--ink); }
-    .hero-art .s1 { left: -2%; bottom: 8%; width: 150px; height: 150px; border-radius: 50%; background: var(--mint); font-size: 25px; transform: rotate(-10deg); }
+    .hero-art .s1 { left: -2%; top: 2%; width: 150px; height: 150px; border-radius: 50%; background: var(--mint); font-size: 25px; transform: rotate(-10deg); }
     .hero-art .s2 { right: 0; top: 2%; padding: 12px 16px; border-radius: 14px; background: var(--yellow); font-size: 22px; transform: rotate(8deg); }
     .shape { position: absolute; pointer-events: none; z-index: 1; }
     @media (max-width: 980px) { .hero { padding: 96px 0 50px; } .hero-grid { grid-template-columns: 1fr; } .hero-art { width: min(100%, 460px); margin: 10px auto 0; } .hero-art .s1 { width: 112px; height: 112px; font-size: 19px; } .hero-art .s2 { font-size: 17px; } }
@@ -210,6 +210,21 @@
     }
     .hero-art .s3 { right: -3%; bottom: 22%; width: 124px; height: 124px; border-radius: 50%; background: var(--pink); font-size: 22px; transform: rotate(-8deg); z-index: 2; }
     @media (max-width: 980px) { .hero-art .s3 { width: 96px; height: 96px; font-size: 17px; right: -2%; } }
+
+
+    /* ---------- mascot + bouncing ! ---------- */
+    .mascot { display: block; width: 100%; height: auto; overflow: visible; }
+    .m-hero { position: absolute; left: -9%; bottom: -7%; width: 42%; z-index: 3; }
+    .m-bubble { position: absolute; left: 52%; top: -16%; padding: 9px 13px; border: 3px solid var(--ink); border-radius: 16px; background: #fff; box-shadow: 4px 4px 0 var(--ink); font: 400 clamp(15px, 1.4vw, 20px)/1 var(--display); text-transform: uppercase; white-space: nowrap; transform: scale(0); transform-origin: 10% 100%; }
+    .m-bubble::after { content: ""; position: absolute; left: 16px; bottom: -11px; width: 16px; height: 16px; background: #fff; border-right: 3px solid var(--ink); border-bottom: 3px solid var(--ink); transform: rotate(45deg) skew(10deg, 10deg); }
+    .bang-layer { position: fixed; inset: 0; z-index: 70; pointer-events: none; overflow: hidden; }
+    .bang { position: absolute; left: 0; top: 0; overflow: visible; transform-origin: 50% 80%; visibility: hidden; will-change: transform; }
+    .bang-sh { position: absolute; left: 0; top: 0; height: 12px; border-radius: 50%; background: rgba(20,20,20,.22); visibility: hidden; }
+    .puff { position: absolute; left: 0; top: 0; width: 12px; height: 12px; border-radius: 50%; background: #fff; border: 2.5px solid var(--ink); opacity: 0; }
+    footer .big { display: flex; align-items: flex-end; }
+    .f-mascot { display: block; width: .98em; height: 1.3em; margin: 0 0 -.06em .02em; }
+    .f-mascot .mascot { width: 100%; height: 100%; }
+    @media (max-width: 980px) { .m-hero { left: -4%; bottom: -8%; width: 40%; } .m-bubble { font-size: 13px; padding: 7px 10px; } }
 
     /* ---------- the hits ---------- */
     .hits { padding: clamp(90px, 11vw, 160px) 0; background: var(--cream); position: relative; }
@@ -368,6 +383,7 @@
           <div class="stk s1" data-px="22" data-pop>7 heat<br>levels</div>
           <div class="stk s2" data-px="16" data-pop>Halal!</div>
           <a class="stk s3" href="#rolls" data-px="28" data-pop>Sticky<br>rolls!</a>
+          <div class="m-hero" data-mascot="hero"><div class="m-bubble" data-bubble>Hey! Come back!</div></div>
         </div>
       </div>
     </section>
@@ -551,11 +567,12 @@
   <footer>
     <div class="check" aria-hidden="true"></div>
     <div class="wrap">
-      <div class="big">Eureka<span>!</span></div>
+      <div class="big">Eureka<span class="f-mascot" data-mascot="foot" aria-label="!"></span></div>
       <nav aria-label="Footer"><a data-order href="#locations" target="_blank" rel="noopener">Order</a><a data-ig href="#" target="_blank" rel="noopener">Instagram</a><a href="https://www.facebook.com/Eurekagyro/" target="_blank" rel="noopener">Facebook</a><a href="https://www.yelp.com/biz/eureka-eatery-monroe" target="_blank" rel="noopener">Yelp</a><a href="https://www.eurekaeatery.com/work-for-us" target="_blank" rel="noopener">Jobs</a></nav>
       <small>© <span data-year>2026</span> Eureka Eatery · Monroe · Garden City · Dearborn · Perrysburg</small>
     </div>
   </footer>
+  <div class="bang-layer" aria-hidden="true"><div class="bang-sh" data-bsh></div><svg class="bang" data-bang viewBox="68 9 116 335"><g fill="#5fe1cf" stroke="#141414" stroke-width="8" stroke-linejoin="round"><path d="M122 9 L184 22 L142 240 L88 232 Z"/><path d="M80 254 L156 260 L150 344 L68 337 Z"/></g></svg></div>
   <nav class="mbar" aria-label="Quick actions" data-mbar><a class="btn red" data-order href="#locations" target="_blank" rel="noopener">Order now</a><a class="btn" href="#locations">Locations</a></nav>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
@@ -761,6 +778,35 @@
   const drips = () => { const svg = $('[data-drip]'), W = Math.max(320, rollsSec.clientWidth); let s = 21; const r = () => (s = s * 16807 % 2147483647) / 2147483647; let d = `M-4 -4 H${W + 4} V22`; for (let x = W; x > 0;) { const w = 24 + r() * 26, len = r() < .7 ? 18 + r() * 52 : 6; d += ` L${x.toFixed(1)} 22 C${x.toFixed(1)} ${(22 + len * .7).toFixed(1)} ${(x - w * .1).toFixed(1)} ${(22 + len).toFixed(1)} ${(x - w / 2).toFixed(1)} ${(22 + len).toFixed(1)} C${(x - w * .9).toFixed(1)} ${(22 + len).toFixed(1)} ${(x - w).toFixed(1)} ${(22 + len * .7).toFixed(1)} ${(x - w).toFixed(1)} 22`; x -= w + 14 + r() * 50; } d += ' L-4 22 Z'; svg.setAttribute('viewBox', `0 0 ${W} 90`); svg.firstElementChild.setAttribute('d', d); };
   drips(); let dW = innerWidth; addEventListener('resize', () => { if (innerWidth !== dW) { dW = innerWidth; drips(); } });
 
+
+  /* =============================================================
+     MASCOT: their cool rooster from the logo, drawn in SVG so every
+     part can move (head, comb, shades, eyes, tail, tapping foot).
+     The ! he leans on is its own group, so it can leave him.
+     ============================================================= */
+  const MASCOT = id => `<svg class="mascot" viewBox="40 0 280 370" aria-hidden="true"><defs><clipPath id="lens-${id}"><path d="M180 78 L216 74 L214 90 Q206 100 192 98 Q180 96 180 86 Z"/><path d="M228 72 L264 68 L262 82 Q256 92 244 92 Q230 90 228 82 Z"/></clipPath></defs>
+    <g class="m-bang" fill="#5fe1cf" stroke="#141414" stroke-width="8" stroke-linejoin="round"><path d="M122 9 L184 22 L142 240 L88 232 Z"/><path d="M80 254 L156 260 L150 344 L68 337 Z"/></g>
+    <g class="m-lean"><g stroke="#141414" stroke-width="5" stroke-linejoin="round" stroke-linecap="round" transform="rotate(-4 250 340)">
+      <g class="m-tail" fill="#e33b2e" stroke-width="4"><path d="M170 214 C152 202 132 204 126 212 C142 216 154 224 166 232 Z"/><path d="M168 226 C148 226 130 236 130 246 C146 240 158 240 172 240 Z"/><path d="M172 238 C158 248 148 260 152 268 C162 258 174 254 182 252 Z"/></g>
+      <path d="M248 292 L261 292 L261 328 L250 328 Z" fill="#e33b2e" stroke-width="4"/><path d="M238 332 C250 323 272 324 290 332 L293 339 C276 336 262 338 244 343 Z" fill="#e33b2e" stroke-width="4"/>
+      <path fill="#fff" d="M168 120 C150 138 145 176 151 204 C157 232 178 252 198 266 C204 286 210 300 222 305 C236 310 248 302 254 294 C266 302 278 292 277 278 C285 256 293 230 293 206 C293 180 281 156 263 140 C251 130 239 124 228 120 Z"/><path fill="none" d="M232 268 C244 276 252 284 254 294"/>
+      <path d="M216 299 L229 303 L212 331 L201 326 Z" fill="#e33b2e" stroke-width="4"/>
+      <g class="m-foot"><path d="M182 334 C192 322 212 324 220 336 L213 349 L205 340 L201 353 L193 342 L186 351 Z" fill="#e33b2e" stroke-width="4"/></g>
+      <path fill="none" d="M160 132 q8 2 10 10 M156 150 q8 0 12 8 M268 236 q-10 10 -24 12"/>
+      <path fill="#fff" d="M182 182 C196 170 232 166 264 174 C280 178 284 192 270 198 C246 202 212 202 190 198 C178 196 174 188 182 182 Z"/>
+      <path fill="#fff" d="M232 168 C252 158 284 164 296 180 C302 192 292 204 278 200 C264 196 248 190 236 186 C226 182 224 172 232 168 Z"/>
+      <path fill="none" d="M196 198 l-4 8 M210 200 l-2 8 M282 200 l2 9 M292 196 l6 7"/>
+      <g transform="translate(25.8 15) scale(.88)"><g class="m-head">
+        <g class="m-comb"><path fill="#fff" d="M184 60 C170 46 178 28 194 36 C194 16 218 14 222 30 C230 14 254 22 246 40 C262 44 258 66 238 62 Z"/></g>
+        <path fill="#fff" d="M160 98 C154 70 176 50 206 50 C234 50 256 64 258 88 C260 110 248 126 228 132 C204 138 168 128 160 98 Z"/>
+        <path fill="#fff" d="M218 120 C206 126 210 144 224 140 C230 150 248 142 242 128 Z"/>
+        <path d="M212 98 C224 88 248 92 264 106 C250 114 228 116 212 110 Z" fill="#e33b2e"/><path fill="none" d="M214 106 Q228 116 244 110"/><circle cx="228" cy="98" r="2.5" fill="#141414" stroke="none"/>
+        <g class="m-eyes" stroke-width="3.5"><g class="m-eyeL"><ellipse cx="198" cy="85" rx="9" ry="10" fill="#fff"/><circle cx="200" cy="86" r="4" fill="#141414" stroke="none"/></g><g class="m-eyeR"><ellipse cx="246" cy="79" rx="8" ry="9" fill="#fff"/><circle cx="248" cy="80" r="3.6" fill="#141414" stroke="none"/></g></g>
+        <g class="m-shades-r"><g class="m-shades"><path fill="none" stroke-width="6" d="M154 84 L264 72"/><path d="M180 78 L216 74 L214 90 Q206 100 192 98 Q180 96 180 86 Z" fill="#5fe1cf"/><path d="M228 72 L264 68 L262 82 Q256 92 244 92 Q230 90 228 82 Z" fill="#5fe1cf"/><g clip-path="url(#lens-${id})"><rect class="m-glint" x="150" y="40" width="14" height="80" fill="#fff" opacity=".85" stroke="none" transform="rotate(22 157 80)"/></g></g></g>
+      </g></g>
+    </g></g></svg>`;
+  $$('[data-mascot]').forEach(el => el.insertAdjacentHTML('afterbegin', MASCOT(el.dataset.mascot)));
+
   /* ---------- header, smooth scroll, phone bar ---------- */
   const header = $('header'), mbar = $('[data-mbar]');
   const hs = () => { header.classList.toggle('scrolled', scrollY > 30); mbar.classList.toggle('on', scrollY > innerHeight * .7 && scrollY + innerHeight < document.documentElement.scrollHeight - 200); };
@@ -796,6 +842,65 @@
   $$('.shape').forEach((s, i) => gsap.to(s, { rotation: i % 2 ? -12 : 12, y: i % 2 ? 10 : -10, duration: 3 + i, ease: 'sine.inOut', yoyo: true, repeat: -1 }));
   gsap.to('[data-art] .s1', { rotation: 10, duration: 2.4, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: 3 });
   if (FINE) { const px = $$('[data-px]').map(e => ({ d: +e.dataset.px, x: gsap.quickTo(e, 'x', { duration: 1, ease: 'power3' }), y: gsap.quickTo(e, 'y', { duration: 1, ease: 'power3' }) })); $('.hero').addEventListener('pointermove', e => { const nx = e.clientX / innerWidth - .5, ny = e.clientY / innerHeight - .5; px.forEach(p => { p.x(nx * p.d * 2); p.y(ny * p.d * 2); }); }); }
+
+
+  /* =============================================================
+     MASCOT IN MOTION. Both roosters nod along to a beat, tap a foot,
+     flick the tail, catch a glint on the shades and sometimes peek
+     over them. Scrolling launches the hero's ! off the page: it flips
+     out, then hops down the screen, bouncing off the side walls with
+     squash and stretch, a shadow and dust puffs on every landing. At
+     the very bottom it flies into the footer and lands by the rooster.
+     ============================================================= */
+  $$('[data-mascot]').forEach((root, n) => {
+    const q = c => $(c, root), beat = .42;
+    gsap.to(q('.m-head'), { rotation: 4, y: 2, transformOrigin: '45% 95%', duration: beat, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: n * .21 });
+    gsap.to(q('.m-comb'), { rotation: -8, transformOrigin: '50% 100%', duration: beat, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: .1 + n * .21 });
+    gsap.to(q('.m-tail'), { rotation: -10, transformOrigin: '100% 60%', duration: beat * 2, ease: 'sine.inOut', yoyo: true, repeat: -1 });
+    gsap.timeline({ repeat: -1, delay: n * .21 }).to(q('.m-foot'), { rotation: -16, transformOrigin: '85% 15%', duration: .12, ease: 'power2.out' }).to(q('.m-foot'), { rotation: 0, duration: .16, ease: 'power2.in' }).to({}, { duration: beat * 2 - .28 });
+    gsap.fromTo(q('.m-glint'), { x: 0 }, { x: 130, duration: .6, ease: 'power2.inOut', repeat: -1, repeatDelay: 3.4, delay: 2.6 + n });
+    gsap.timeline({ repeat: -1, repeatDelay: 5.5, delay: 4 + n * 2 })
+      .to(q('.m-shades'), { y: 11, duration: .35, ease: 'power2.out' })
+      .to(q('.m-eyeR'), { scaleY: .1, transformOrigin: '50% 50%', duration: .09, yoyo: true, repeat: 1 }, '+=.35')
+      .to(q('.m-shades'), { y: 0, duration: .35, ease: 'back.out(2.2)' }, '+=.4');
+  });
+  const reactOf = (root, bubble) => { const tl = gsap.timeline({ paused: true })
+      .to($('.m-lean', root), { rotation: -10, transformOrigin: '72% 100%', duration: 1, ease: 'power2.inOut' }, 0)
+      .to($('.m-shades-r', root), { y: -17, rotation: -10, transformOrigin: '50% 50%', duration: .5, ease: 'back.out(2)' }, 0)
+      .to($('.m-eyes', root), { scale: 1.18, transformOrigin: '50% 50%', duration: .4, ease: 'back.out(3)' }, .05);
+    if (bubble) tl.fromTo(bubble, { scale: 0, rotation: -12 }, { scale: 1, rotation: -4, duration: .45, ease: 'back.out(2.4)' }, .3);
+    return tl; };
+  const heroM = $('[data-mascot="hero"]'), footM = $('[data-mascot="foot"]');
+  const heroReact = reactOf(heroM, $('[data-bubble]')), footReact = reactOf(footM);
+  footReact.progress(1);
+  gsap.from(heroM, { y: 80, rotation: -14, opacity: 0, duration: 1, ease: 'back.out(1.7)', delay: 2.3 });
+
+  const bang = $('[data-bang]'), bsh = $('[data-bsh]'), hBang = $('.m-bang', heroM), fBang = $('.m-bang', footM), layer = $('.bang-layer');
+  const puffs = Array.from({ length: 9 }, () => { const d = document.createElement('i'); d.className = 'puff'; layer.appendChild(d); return d; });
+  let pi = 0; const puff = (x, y) => { for (let k = 0; k < 3; k++) { const d = puffs[pi++ % puffs.length]; gsap.fromTo(d, { x: x - 6, y: y - 6, scale: .4, opacity: 1 }, { x: x - 6 + (k - 1) * 24, y: y - 12 - k * 4, scale: 1.15, opacity: 0, duration: .55, ease: 'power2.out', overwrite: true }); } };
+  const lerp = (a, b, t) => a + (b - a) * t, eio = t => t < .5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2;
+  let sv = scrollY, lastHop = -1, home = null;
+  gsap.ticker.add(() => {
+    sv += (scrollY - sv) * .2; if (Math.abs(scrollY - sv) < .4) sv = scrollY;
+    const W = innerWidth, H = innerHeight, max = Math.max(1, document.documentElement.scrollHeight - H);
+    const mob = W < 700, BW = mob ? 26 : 40, BH = BW * 335 / 116, m = 10, ground = H - (mob ? 94 : 22) - BH;
+    const hr = hBang.getBoundingClientRect(), S0 = clamp(hr.top + scrollY + hr.height * .5 - H * .72, 0, max * .3), L0 = H * .55, L1 = H * .8, span = Math.max(1, max - S0 - L0 - L1), hops = Math.max(6, Math.round(span / (H * .5)));
+    const usable = Math.max(1, W - 2 * m - BW), dx = Math.min(W * .34, 360);
+    const at = q => { const s = clamp(q, 0, 1) * hops, i = Math.min(hops - 1, Math.floor(s)), f = s - i, d = (s * dx + usable * .5) % (2 * usable), d0 = (i * dx + usable * .5) % (2 * usable), dir = d0 < usable ? 1 : -1;
+      const air = 4 * f * (1 - f), k = Math.max(0, 1 - Math.min(f, 1 - f) / .09), hh = Math.min(H * .4, 340) * (i % 3 === 2 ? 1.3 : 1);
+      return { x: m + (d < usable ? d : 2 * usable - d), y: ground - hh * air, rot: i % 2 ? dir * 360 * f : dir * 16 * Math.sin(f * 6.283), sx: 1 + .3 * k, sy: 1 - .34 * k, w: BW, i, air }; };
+    let st, ph = 1;
+    if (sv < S0 + L0) { const t = eio(clamp((sv - S0) / L0, 0, 1)), r = hr, b = at(0); st = { x: lerp(r.left, b.x, t), y: lerp(r.top, b.y, t) - Math.sin(t * Math.PI) * H * .28, rot: -360 * t, sx: 1, sy: 1, w: lerp(r.width, b.w, t), air: 1 }; ph = 0; heroReact.progress(clamp((sv - S0) / (L0 * .4), 0, 1)); }
+    else if (sv > max - L1) { const t = eio(clamp((sv - (max - L1)) / L1, 0, 1)), r = fBang.getBoundingClientRect(), a = at(1); st = { x: lerp(a.x, r.left, t), y: lerp(a.y, r.top, t) - Math.sin(t * Math.PI) * H * .3, rot: 360 * t, sx: 1, sy: 1, w: lerp(a.w, r.width, t), air: 1 }; ph = 2; heroReact.progress(1); }
+    else { st = at((sv - S0 - L0) / span); heroReact.progress(1); if (lastHop !== -1 && st.i !== lastHop) puff(st.x + BW / 2, ground + BH); }
+    lastHop = ph === 1 ? st.i : -1;
+    const atHome = sv >= max - 1.5, out = sv > S0 + 1.5 && !atHome;
+    bang.style.visibility = out ? 'visible' : 'hidden';
+    hBang.style.opacity = sv > S0 + 1.5 ? 0 : 1; fBang.style.opacity = atHome ? 1 : 0;
+    if (out) { bang.style.width = st.w + 'px'; bang.style.height = st.w * 335 / 116 + 'px'; bang.style.transform = `translate3d(${st.x.toFixed(1)}px,${st.y.toFixed(1)}px,0) rotate(${st.rot.toFixed(1)}deg) scale(${st.sx.toFixed(3)},${st.sy.toFixed(3)})`; }
+    if (ph === 1 && out) { const sw = BW * 1.5 * (1 - .55 * st.air); bsh.style.visibility = 'visible'; bsh.style.width = sw + 'px'; bsh.style.opacity = .9 * (1 - .7 * st.air); bsh.style.transform = `translate3d(${(st.x + BW / 2 - sw / 2).toFixed(1)}px,${(ground + BH - 6).toFixed(1)}px,0)`; } else bsh.style.visibility = 'hidden';
+    if (atHome !== home) { if (home !== null) { if (atHome) { gsap.to(footReact, { progress: 0, duration: .5, ease: 'power2.out' }); gsap.fromTo(footM, { y: 0 }, { y: -18, duration: .18, ease: 'power2.out', yoyo: true, repeat: 1 }); gsap.fromTo($('.m-glint', footM), { x: 0 }, { x: 130, duration: .5, delay: .25 }); } else gsap.to(footReact, { progress: 1, duration: .4 }); } else footReact.progress(atHome ? 0 : 1); home = atHome; }
+  });
 
   // idle demo: crank the heat up to Hot and back, until someone touches it
   const runDemo = () => { if (touched) return; const o = { v: cur }; demo = gsap.timeline({ onComplete: () => { if (!touched) gsap.delayedCall(5, runDemo); } }); demo.to(o, { v: 3, duration: 1.6, ease: 'power1.inOut', onUpdate: () => setHeat(o.v) }).to(o, { v: 0, duration: 1, delay: .9, ease: 'power1.inOut', onUpdate: () => setHeat(o.v) }); };
