@@ -1,0 +1,743 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="robots" content="noai, noimageai">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SUGO Pasta Bar | Fresh Pasta in Ann Arbor · Coming Soon</title>
+  <meta name="description" content="SUGO Pasta Bar is coming to 203 Fourth Avenue, Ann Arbor. Handmade pasta, seasonal ingredients, great drinks and good people, from the team behind Osteria Carlina and Bar Mario in New York.">
+  <meta name="theme-color" content="#f3ead9">
+  <meta property="og:title" content="SUGO Pasta Bar · Ann Arbor">
+  <meta property="og:description" content="Something delicious is coming to Ann Arbor. Fresh pasta, great drinks, good people.">
+  <meta property="og:image" content="img/bowl.webp">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Outfit:wght@400;500;600;700;800&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    /* ------------------------------------------------------------
+       SUGO PASTA BAR · design tokens
+       From their own posts: warm cream paper, a forest-green SUGO
+       in an oval, terracotta "Pasta Bar", olive branches, pen-sketch
+       skylines and handwritten notes. Italian poster typography:
+       Playfair for the headlines, Outfit for the wordmark and labels,
+       Caveat for the little handwritten asides.
+       ------------------------------------------------------------ */
+    :root {
+      --paper: #f3ead9;
+      --paper-2: #ebdfc8;
+      --cream: #faf5ea;
+      --ink: #1c1a15;
+      --muted: #6f6656;
+      --line: rgba(28,26,21,.14);
+      --green: #1f3d2c;
+      --green-2: #2e5640;
+      --tomato: #b5401f;
+      --ochre: #c8893a;
+      --olive: #7c8a52;
+      --serif: "Playfair Display", Georgia, serif;
+      --sans: "Outfit", system-ui, sans-serif;
+      --hand: "Caveat", cursive;
+      --pad: clamp(18px, 4.4vw, 64px);
+      --ease: cubic-bezier(.65,.05,.25,1);
+      --ease-out: cubic-bezier(.16,1,.3,1);
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    html.lenis, html.lenis body { height: auto; }
+    .lenis.lenis-smooth { scroll-behavior: auto !important; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font: 400 17px/1.6 var(--sans); overflow-x: clip; -webkit-font-smoothing: antialiased; }
+    /* paper grain over everything, very subtle */
+    body::after { content: ""; position: fixed; inset: 0; z-index: 300; pointer-events: none; opacity: .32; mix-blend-mode: multiply; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .45  0 0 0 0 .38  0 0 0 0 .28  0 0 0 .22 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
+    img, svg { display: block; max-width: 100%; }
+    img { height: auto; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+    :focus-visible { outline: 2px solid var(--tomato); outline-offset: 3px; }
+    ::selection { background: var(--green); color: var(--cream); }
+    .wrap { padding: 0 var(--pad); }
+    .label { font: 600 12px/1.3 var(--sans); letter-spacing: .32em; text-transform: uppercase; color: var(--green); }
+    .hand { font-family: var(--hand); font-weight: 500; color: var(--green-2); }
+    h1, h2, h3 { margin: 0; font-family: var(--serif); font-weight: 700; line-height: .96; letter-spacing: -.015em; }
+    h2 { font-size: clamp(42px, 6.4vw, 108px); }
+    h1 em, h2 em, h3 em { font-style: italic; font-weight: 500; color: var(--tomato); }
+    .line { display: block; overflow: hidden; padding-bottom: .08em; }
+    .line > span { display: inline-block; will-change: transform; }
+    .lede { color: var(--muted); font-size: clamp(16px, 1.2vw, 19px); max-width: 44ch; margin: 22px 0 0; }
+
+    .btn { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 12px; height: 56px; padding: 0 30px; border-radius: 999px; border: 1.5px solid var(--green); color: var(--green); font: 600 14px/1 var(--sans); letter-spacing: .12em; text-transform: uppercase; overflow: hidden; isolation: isolate; white-space: nowrap; transition: color .45s var(--ease), transform .2s; }
+    .btn::before { content: ""; position: absolute; inset: 0; background: var(--green); border-radius: inherit; transform: translateY(101%); transition: transform .55s var(--ease); z-index: -1; }
+    .btn.solid { background: var(--green); color: var(--cream); }
+    .btn.solid::before { background: var(--tomato); }
+    .btn svg { width: 16px; height: 16px; flex: none; }
+    .btn:active { transform: scale(.97); }
+    @media (hover: hover) { .btn:hover { color: var(--cream); } .btn:hover::before { transform: none; } }
+    .btn.sm { height: 44px; padding: 0 20px; font-size: 12.5px; }
+
+    /* SUGO wordmark */
+    .wm { display: inline-block; color: var(--green); }
+    .wm svg { width: 100%; height: auto; overflow: visible; }
+    .wm .o { fill: none; stroke: var(--ochre); stroke-width: 2.4; }
+    .wm .t1 { font: 800 50px/1 var(--sans); letter-spacing: .09em; fill: var(--green); }
+    .wm .t2 { font: 600 12.5px/1 var(--sans); letter-spacing: .42em; fill: var(--tomato); }
+
+    /* olive branch */
+    .olive { position: absolute; pointer-events: none; color: var(--olive); }
+    .olive svg { width: 100%; height: auto; }
+
+    /* ---------- intro ---------- */
+    .intro { position: fixed; inset: 0; z-index: 250; background: var(--paper); display: grid; place-items: center; }
+    .intro .wm { width: min(360px, 70vw); }
+    .intro .tag { position: absolute; bottom: 12vh; left: 0; right: 0; text-align: center; font: 500 clamp(26px, 3vw, 36px)/1 var(--hand); color: var(--green-2); }
+    html:not(.js) .intro, html.rm .intro { display: none; }
+
+    header { position: fixed; left: 0; right: 0; top: 0; z-index: 60; transition: background .5s var(--ease), box-shadow .5s; }
+    header.scrolled { background: rgba(243,234,217,.86); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); box-shadow: 0 1px 0 var(--line); }
+    header .wrap { height: 82px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px; }
+    header nav { display: flex; gap: 30px; }
+    header nav a { font: 500 12.5px/1 var(--sans); letter-spacing: .22em; text-transform: uppercase; color: var(--muted); transition: color .3s; }
+    header nav a:hover { color: var(--green); }
+    header .wm { width: 110px; justify-self: center; }
+    header .right { display: flex; justify-content: flex-end; }
+    header .soon { display: inline-flex; align-items: center; gap: 9px; font: 600 12px/1 var(--sans); letter-spacing: .2em; text-transform: uppercase; color: var(--tomato); }
+    header .soon i { width: 8px; height: 8px; border-radius: 50%; background: var(--tomato); animation: pulse 2s infinite; }
+    @keyframes pulse { 50% { box-shadow: 0 0 0 6px rgba(181,64,31,0); } 0% { box-shadow: 0 0 0 0 rgba(181,64,31,.4); } }
+    @media (max-width: 900px) { header nav { display: none; } header .wrap { grid-template-columns: auto 1fr; height: 68px; } header .wm { width: 92px; justify-self: start; } }
+
+    /* ---------- hero ---------- */
+    .hero { position: relative; min-height: 100svh; padding: 120px 0 60px; display: grid; align-items: center; overflow: hidden; text-align: center; }
+    .hero .kicker { display: inline-flex; align-items: center; gap: 14px; }
+    .hero .kicker::before, .hero .kicker::after { content: ""; width: 40px; height: 1.5px; background: var(--ochre); }
+    .hero .script { display: block; font: 500 clamp(30px, 3.4vw, 52px)/1 var(--hand); color: var(--green-2); margin-top: 22px; }
+    .hero h1 { font-size: clamp(54px, 9.4vw, 168px); line-height: .9; margin-top: 8px; color: var(--tomato); text-transform: uppercase; font-weight: 800; letter-spacing: -.01em; }
+    .hero h1 .sub { display: block; font-size: .42em; color: var(--green); letter-spacing: .02em; margin-bottom: .1em; font-weight: 700; }
+    .hero .dish { position: relative; width: min(860px, 92vw); margin: clamp(10px, 2vw, 26px) auto 0; aspect-ratio: 800 / 300; }
+    .hero .dish img { width: 100%; height: 100%; object-fit: cover; -webkit-mask-image: radial-gradient(ellipse 52% 56% at 50% 50%, #000 62%, transparent 100%); mask-image: radial-gradient(ellipse 52% 56% at 50% 50%, #000 62%, transparent 100%); }
+    .hero .steam { position: absolute; left: 0; right: 0; top: -30%; height: 70%; pointer-events: none; }
+    .hero .three { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px 22px; margin-top: 8px; font: 600 13px/1 var(--sans); letter-spacing: .26em; text-transform: uppercase; color: var(--green); }
+    .hero .three span::before { content: "•"; color: var(--ochre); margin-right: 22px; }
+    .hero .three span:first-child::before { display: none; }
+    .hero .ctas { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 30px; }
+    .hero .note { position: absolute; font: 500 clamp(22px, 2vw, 30px)/1.05 var(--hand); color: var(--green-2); transform: rotate(-8deg); }
+    .hero .note.n1 { left: 6%; top: 24%; }
+    .hero .note.n2 { right: 6%; top: 32%; transform: rotate(7deg); text-align: right; }
+    .hero .note svg { width: 22px; height: 20px; display: inline-block; vertical-align: middle; color: var(--tomato); }
+    .hero .olive.o1 { left: -40px; top: 90px; width: clamp(160px, 16vw, 260px); transform: rotate(18deg); }
+    .hero .olive.o2 { right: -50px; bottom: 40px; width: clamp(170px, 18vw, 280px); transform: rotate(200deg); }
+    @media (max-width: 900px) {
+      .hero { padding: 100px 0 50px; }
+      .hero .note { display: none; }
+      .hero .dish { width: 116vw; margin-left: -8vw; }
+      .hero .three span::before { margin-right: 12px; }
+      .hero .three { gap: 8px 12px; font-size: 11.5px; letter-spacing: .18em; }
+    }
+
+    /* marquee */
+    .marquee { overflow: hidden; background: var(--green); color: var(--cream); padding: 22px 0; white-space: nowrap; }
+    .marquee .track { display: inline-flex; align-items: center; will-change: transform; }
+    .marquee span { font: italic 500 clamp(26px, 3.4vw, 50px)/1 var(--serif); padding: 0 .5em; }
+    .marquee span.h { font: 500 clamp(30px, 3.8vw, 56px)/1 var(--hand); color: #e5c48e; }
+    .marquee svg { width: 30px; height: 30px; color: var(--ochre); flex: none; }
+
+    /* ---------- statement ---------- */
+    .statement { position: relative; padding: clamp(120px, 16vw, 230px) 0; text-align: center; }
+    .statement .label { display: block; margin-bottom: 34px; }
+    .statement p.big { margin: 0 auto; max-width: 21ch; font: 500 clamp(30px, 4vw, 64px)/1.15 var(--serif); letter-spacing: -.01em; }
+    .statement .w { opacity: .14; }
+    .statement .w.hl { font-style: italic; color: var(--tomato); }
+    .statement .sign { display: inline-block; margin-top: 34px; font: 500 clamp(26px, 2.4vw, 34px)/1 var(--hand); color: var(--green-2); }
+
+    /* ---------- the making (signature) ---------- */
+    .making { position: relative; background: var(--cream); }
+    .mk-pin { position: relative; height: 100svh; display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); align-items: center; gap: clamp(20px, 4vw, 70px); padding: 90px var(--pad) 40px; overflow: hidden; }
+    .mk-copy { position: relative; z-index: 2; }
+    .mk-copy .num { font: italic 500 clamp(18px, 1.4vw, 22px)/1 var(--serif); color: var(--ochre); }
+    .mk-copy .num b { font-weight: 500; color: var(--tomato); }
+    .mk-steps { position: relative; height: clamp(230px, 28vw, 340px); margin-top: 18px; }
+    .mk-step { position: absolute; inset: 0; }
+    .mk-step .it { font: 800 clamp(54px, 7vw, 120px)/.9 var(--serif); color: var(--green); letter-spacing: -.02em; }
+    .mk-step .en { display: block; margin-top: 12px; font: 500 clamp(26px, 2.4vw, 36px)/1 var(--hand); color: var(--tomato); }
+    .mk-step p { margin: 18px 0 0; color: var(--muted); max-width: 40ch; }
+    .mk-dots { display: flex; gap: 8px; margin-top: 26px; }
+    .mk-dots i { width: 28px; height: 3px; border-radius: 3px; background: var(--line); overflow: hidden; position: relative; }
+    .mk-dots i b { position: absolute; inset: 0; background: var(--tomato); transform: scaleX(0); transform-origin: left; }
+    .mk-stage { position: relative; width: 100%; max-width: 640px; justify-self: center; aspect-ratio: 1; }
+    .mk-stage svg { width: 100%; height: 100%; overflow: hidden; }
+    .mk-hint { position: absolute; left: var(--pad); bottom: 24px; font: 500 12px/1 var(--sans); letter-spacing: .26em; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; gap: 12px; }
+    .mk-hint i { width: 1.5px; height: 30px; background: var(--line); position: relative; overflow: hidden; }
+    .mk-hint i::after { content: ""; position: absolute; left: 0; right: 0; height: 40%; background: var(--tomato); animation: drip 1.8s var(--ease) infinite; }
+    @keyframes drip { from { transform: translateY(-100%); } to { transform: translateY(260%); } }
+    .making:not(.pinned) .mk-pin { height: auto; display: block; padding: 90px var(--pad); }
+    .making:not(.pinned) .mk-steps { height: auto; }
+    .making:not(.pinned) .mk-step { position: relative; margin-bottom: 40px; }
+    .making:not(.pinned) .mk-dots, .making:not(.pinned) .mk-hint { display: none; }
+    @media (max-width: 900px) {
+      .mk-pin { grid-template-columns: 1fr; grid-template-rows: auto 1fr; padding: 76px var(--pad) 26px; gap: 0; align-content: start; }
+      .mk-stage { order: -1; width: min(100%, 46svh); max-width: none; }
+      .mk-steps { height: clamp(190px, 30svh, 260px); margin-top: 8px; }
+      .mk-step .it { font-size: clamp(44px, 12vw, 64px); }
+      .mk-step .en { font-size: 26px; margin-top: 6px; }
+      .mk-step p { margin-top: 10px; font-size: 15.5px; }
+      .mk-copy .num { display: none; }
+      .mk-dots { margin-top: 4px; }
+      .mk-hint { display: none; }
+    }
+
+    /* ---------- from NY to MI ---------- */
+    .route { position: relative; padding: clamp(110px, 14vw, 200px) 0; overflow: hidden; }
+    .route-head { text-align: center; }
+    .route-head .label { display: block; margin-bottom: 22px; }
+    .route-head h2 { text-transform: uppercase; color: var(--green); font-weight: 800; }
+    .route-head h2 .to { display: block; font: 500 .45em/1 var(--hand); text-transform: none; color: var(--tomato); margin: .12em 0; }
+    .map { position: relative; margin: clamp(40px, 6vw, 80px) auto 0; max-width: 1100px; }
+    .map svg { width: 100%; height: auto; overflow: visible; }
+    .map .sk { fill: none; stroke: var(--green); stroke-width: 1.4; stroke-linejoin: round; stroke-linecap: round; }
+    .map .route-path { fill: none; stroke: var(--tomato); stroke-width: 2.6; stroke-linecap: round; stroke-dasharray: 2 9; }
+    .map .pin text { font: 600 13px/1 var(--sans); letter-spacing: .2em; fill: var(--green); }
+    .map .pin .big { font: 800 20px/1 var(--serif); letter-spacing: 0; }
+    .places { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: clamp(40px, 5vw, 70px); }
+    .place { padding: 28px 26px; border-radius: 4px; background: var(--cream); box-shadow: 0 0 0 1px var(--line); position: relative; }
+    .place .where { font: 600 11.5px/1 var(--sans); letter-spacing: .26em; text-transform: uppercase; color: var(--ochre); }
+    .place h3 { font-size: clamp(28px, 2.6vw, 40px); margin-top: 14px; color: var(--green); }
+    .place p { color: var(--muted); margin: 12px 0 0; font-size: 15.5px; }
+    .place.new { background: var(--green); color: var(--cream); box-shadow: none; }
+    .place.new h3 { color: var(--cream); }
+    .place.new p { color: rgba(250,245,234,.75); }
+    .place.new .where { color: #e5c48e; }
+    .place .stamp { position: absolute; right: 18px; top: 18px; font: 700 26px/1 var(--hand); color: #e5c48e; transform: rotate(8deg); }
+    @media (max-width: 900px) { .places { grid-template-columns: 1fr; } }
+
+    /* ---------- expect ---------- */
+    .expect { padding: clamp(110px, 14vw, 200px) 0; background: var(--paper-2); }
+    .sec-head { display: flex; justify-content: space-between; align-items: end; gap: 30px; flex-wrap: wrap; margin-bottom: clamp(44px, 6vw, 80px); }
+    .sec-head .label { display: block; margin-bottom: 20px; }
+    .ex-list { border-top: 1.5px solid var(--green); }
+    .ex { position: relative; display: grid; grid-template-columns: 100px minmax(0, 1fr) minmax(0, 1.1fr); gap: 24px; align-items: baseline; padding: clamp(24px, 3vw, 38px) 0; border-bottom: 1px solid var(--line); overflow: hidden; }
+    .ex::before { content: ""; position: absolute; inset: 0; background: var(--green); transform: scaleY(0); transform-origin: bottom; transition: transform .6s var(--ease); z-index: 0; }
+    .ex > * { position: relative; z-index: 1; transition: color .5s var(--ease); }
+    .ex .n { font: italic 500 22px/1 var(--serif); color: var(--ochre); }
+    .ex h3 { font-size: clamp(34px, 4.4vw, 72px); font-weight: 800; color: var(--green); }
+    .ex h3 small { display: block; font: 500 clamp(22px, 2vw, 30px)/1 var(--hand); color: var(--tomato); margin-top: 6px; }
+    .ex p { margin: 0; color: var(--muted); max-width: 44ch; }
+    @media (hover: hover) { .ex:hover::before { transform: scaleY(1); } .ex:hover h3, .ex:hover p { color: var(--cream); } .ex:hover small { color: #e5c48e; } }
+    @media (max-width: 900px) { .ex { grid-template-columns: 1fr; gap: 10px; } }
+
+    /* ---------- quote ---------- */
+    .quote { position: relative; padding: clamp(120px, 15vw, 220px) 0; text-align: center; overflow: hidden; }
+    .quote blockquote { margin: 0 auto; max-width: 20ch; font: italic 500 clamp(36px, 5.2vw, 88px)/1.08 var(--serif); color: var(--green); }
+    .quote blockquote b { font-weight: 800; font-style: normal; color: var(--tomato); }
+    .quote figcaption { margin-top: 34px; font: 600 12.5px/1.6 var(--sans); letter-spacing: .26em; text-transform: uppercase; color: var(--muted); }
+    .quote .olive.o3 { left: 4%; top: 18%; width: clamp(120px, 12vw, 200px); transform: rotate(-30deg); }
+    .quote .olive.o4 { right: 4%; bottom: 14%; width: clamp(120px, 12vw, 200px); transform: rotate(150deg); }
+
+    /* ---------- the door / visit ---------- */
+    .visit { padding: clamp(100px, 13vw, 180px) 0; background: var(--cream); }
+    .v-grid { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: clamp(30px, 6vw, 110px); align-items: center; }
+    .door { position: relative; border-radius: 300px 300px 4px 4px; overflow: hidden; aspect-ratio: 3 / 4; box-shadow: 0 50px 100px -50px rgba(31,61,44,.6); }
+    .door img { width: 100%; height: 100%; object-fit: cover; }
+    .door .cap { position: absolute; left: 50%; bottom: 18px; translate: -50% 0; padding: 10px 16px; border-radius: 999px; background: rgba(250,245,234,.92); font: 500 22px/1 var(--hand); color: var(--green); white-space: nowrap; }
+    .v-copy h2 { color: var(--green); }
+    .addr { margin-top: 30px; font: 700 clamp(26px, 2.6vw, 38px)/1.2 var(--serif); }
+    .addr small { display: block; margin-top: 8px; font: 500 15px/1.4 var(--sans); color: var(--muted); }
+    .opening { display: inline-flex; align-items: center; gap: 14px; margin-top: 30px; padding: 14px 22px; border-radius: 999px; background: var(--tomato); color: var(--cream); font: 600 13px/1 var(--sans); letter-spacing: .2em; text-transform: uppercase; }
+    .v-copy .links { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+    @media (max-width: 900px) { .v-grid { grid-template-columns: 1fr; } .door { max-width: 420px; margin: 0 auto; width: 100%; } }
+
+    /* ---------- closing ---------- */
+    .closing { position: relative; text-align: center; padding: clamp(120px, 16vw, 230px) 0 0; overflow: hidden; }
+    .closing .hand { font-size: clamp(34px, 4vw, 60px); color: var(--tomato); }
+    .closing h2 { margin-top: 10px; color: var(--green); }
+    .closing p { color: var(--muted); max-width: 42ch; margin: 24px auto 34px; }
+    .closing .ctas { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+    .closing .giant { margin-top: clamp(80px, 11vw, 160px); font: 800 clamp(90px, 31vw, 520px)/.76 var(--sans); letter-spacing: .04em; color: transparent; -webkit-text-stroke: 1.5px rgba(31,61,44,.22); background: linear-gradient(90deg, var(--green), var(--green-2)) no-repeat; -webkit-background-clip: text; background-clip: text; background-size: 0% 100%; white-space: nowrap; }
+    footer { position: relative; background: var(--green); color: rgba(250,245,234,.72); }
+    footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 14px 26px; padding-top: 28px; padding-bottom: 32px; font-size: 14px; }
+    footer nav { display: flex; gap: 22px; flex-wrap: wrap; }
+    footer a:hover { color: var(--cream); }
+
+    .cursor { position: fixed; left: 0; top: 0; z-index: 280; width: 10px; height: 10px; margin: -5px; border-radius: 50%; background: var(--tomato); pointer-events: none; opacity: 0; transition: width .4s var(--ease), height .4s var(--ease), margin .4s var(--ease), background .4s; }
+    .cursor.big { width: 56px; height: 56px; margin: -28px; background: rgba(181,64,31,.18); }
+    @media not all and (hover: hover) and (pointer: fine) { .cursor { display: none; } }
+    html.rm .statement .w { opacity: 1; }
+  </style>
+  <script>document.documentElement.classList.add('js');if(matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('rm');</script>
+</head>
+<body>
+  <template id="wm-tpl">
+    <svg viewBox="0 0 240 120" aria-hidden="true">
+      <ellipse class="o" cx="120" cy="60" rx="114" ry="54"/>
+      <text class="t1" x="120" y="68" text-anchor="middle">SUGO</text>
+      <text class="t2" x="122" y="90" text-anchor="middle">PASTA BAR</text>
+    </svg>
+  </template>
+  <template id="olive-tpl">
+    <svg viewBox="0 0 220 120" fill="currentColor" aria-hidden="true">
+      <path d="M4 112 C 60 92, 120 60, 214 10" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+      <g opacity=".9">
+        <ellipse cx="44" cy="88" rx="22" ry="6" transform="rotate(-50 44 88)"/><ellipse cx="58" cy="102" rx="22" ry="6" transform="rotate(10 58 102)"/>
+        <ellipse cx="84" cy="70" rx="24" ry="6.5" transform="rotate(-55 84 70)"/><ellipse cx="102" cy="84" rx="24" ry="6.5" transform="rotate(8 102 84)"/>
+        <ellipse cx="128" cy="48" rx="24" ry="6.5" transform="rotate(-60 128 48)"/><ellipse cx="146" cy="62" rx="24" ry="6.5" transform="rotate(4 146 62)"/>
+        <ellipse cx="170" cy="28" rx="22" ry="6" transform="rotate(-62 170 28)"/><ellipse cx="188" cy="38" rx="22" ry="6" transform="rotate(0 188 38)"/>
+      </g>
+      <circle cx="116" cy="74" r="6" fill="#3d4a22"/><circle cx="160" cy="48" r="5.5" fill="#3d4a22"/>
+    </svg>
+  </template>
+  <template id="heart-tpl"><svg viewBox="0 0 22 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 18 C 2 11, 1 5, 5 3 C 8 1.5, 10 3.5, 11 6 C 12 3.5, 14 1.5, 17 3 C 21 5, 20 11, 11 18 Z"/></svg></template>
+
+  <div class="intro" aria-hidden="true" data-intro>
+    <span class="wm" data-wm></span>
+    <div class="tag" data-intro-tag>Good pasta, brighter days.</div>
+  </div>
+
+  <header>
+    <div class="wrap">
+      <nav aria-label="Sections"><a href="#making">The pasta</a><a href="#story">Our story</a><a href="#expect">The table</a></nav>
+      <a class="wm" href="#top" aria-label="SUGO Pasta Bar, back to top" data-wm></a>
+      <div class="right"><a class="soon" href="#visit"><i aria-hidden="true"></i>Coming soon</a></div>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero" id="top">
+      <span class="olive o1" data-olive data-sway></span>
+      <span class="olive o2" data-olive data-sway></span>
+      <span class="note n1" data-in>Good pasta,<br>brighter days <span data-heart></span></span>
+      <span class="note n2" data-in>Same passion,<br>new adventures <span data-heart></span></span>
+      <div class="wrap">
+        <span class="label kicker" data-in>Kerrytown · Ann Arbor</span>
+        <span class="script" data-in>Something delicious</span>
+        <h1>
+          <span class="line"><span class="sub">is coming to</span></span>
+          <span class="line"><span>Ann Arbor</span></span>
+        </h1>
+        <div class="dish" data-dish>
+          <svg class="steam" viewBox="0 0 800 220" preserveAspectRatio="none" aria-hidden="true"><g fill="none" stroke="rgba(255,255,255,.75)" stroke-width="6" stroke-linecap="round" data-steam><path d="M330 220 C 300 170, 360 130, 330 70"/><path d="M400 220 C 370 160, 430 120, 400 40"/><path d="M470 220 C 440 170, 500 130, 470 70"/></g></svg>
+          <img src="img/bowl.webp" width="800" height="300" alt="A bowl of fresh pasta in red sauce with grated cheese">
+        </div>
+        <div class="three" data-in><span>Fresh pasta</span><span>Great drinks</span><span>Good people</span></div>
+        <div class="ctas" data-in>
+          <a class="btn solid" data-ig href="#" target="_blank" rel="noopener">Follow for opening day</a>
+          <a class="btn" href="#making">See how it’s made</a>
+        </div>
+      </div>
+    </section>
+
+    <div class="marquee" aria-hidden="true"><div class="track" data-marquee></div></div>
+
+    <!-- STATEMENT -->
+    <section class="statement">
+      <div class="wrap">
+        <span class="label">A note from the team</span>
+        <p class="big" data-words>We’re here to make <span class="hl-g">homemade pasta,</span> cook the recipes we love, and create a place that <span class="hl-g">feels good to be in.</span></p>
+        <span class="sign">— SUGO</span>
+      </div>
+    </section>
+
+    <!-- THE MAKING -->
+    <section class="making" id="making" data-making>
+      <div class="mk-pin">
+        <div class="mk-copy">
+          <span class="label">Handmade, in house</span>
+          <div class="num" style="margin-top:22px">Step <b data-mk-n>1</b> of 6</div>
+          <div class="mk-steps" data-mk-steps></div>
+          <div class="mk-dots" data-mk-dots aria-hidden="true"></div>
+        </div>
+        <div class="mk-stage" aria-label="Fresh pasta being made by hand, from flour to a finished bowl with sauce" role="img">
+          <svg viewBox="0 0 600 600" data-scene>
+            <defs>
+              <radialGradient id="board" cx="45%" cy="40%" r="70%"><stop offset="0" stop-color="#e2bd8a"/><stop offset=".7" stop-color="#cf9f68"/><stop offset="1" stop-color="#b98650"/></radialGradient>
+              <radialGradient id="dough" cx="38%" cy="32%" r="75%"><stop offset="0" stop-color="#ffe7a8"/><stop offset=".6" stop-color="#f4c86a"/><stop offset="1" stop-color="#d9a243"/></radialGradient>
+              <radialGradient id="yolk" cx="35%" cy="30%" r="70%"><stop offset="0" stop-color="#ffd35c"/><stop offset=".7" stop-color="#f59a0e"/><stop offset="1" stop-color="#d77800"/></radialGradient>
+              <radialGradient id="sauce" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#e05a30"/><stop offset=".7" stop-color="#b5401f"/><stop offset="1" stop-color="#8a2c14"/></radialGradient>
+              <linearGradient id="sheet" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbe2a0"/><stop offset="1" stop-color="#ecc067"/></linearGradient>
+              <radialGradient id="bowl" cx="50%" cy="45%" r="60%"><stop offset=".7" stop-color="#ffffff"/><stop offset="1" stop-color="#e7e1d6"/></radialGradient>
+              <radialGradient id="flour" cx="40%" cy="30%" r="75%"><stop offset="0" stop-color="#ffffff"/><stop offset=".65" stop-color="#f7f1e4"/><stop offset="1" stop-color="#e6dcc7"/></radialGradient>
+              <filter id="soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="6"/></filter>
+              <clipPath id="sheetClip"><rect x="110" y="170" width="380" height="260" rx="22"/></clipPath>
+            </defs>
+            <!-- wood board -->
+            <g data-board>
+              <circle cx="300" cy="306" r="270" fill="rgba(60,40,20,.18)" filter="url(#soft)"/>
+              <circle cx="300" cy="300" r="268" fill="url(#board)"/>
+              <g stroke="rgba(120,80,40,.18)" stroke-width="2" fill="none"><path d="M60 250 Q 300 230 540 260"/><path d="M50 320 Q 300 300 550 330"/><path d="M70 390 Q 300 370 530 400"/><path d="M110 180 Q 300 170 490 190"/><path d="M120 450 Q 300 440 480 460"/></g>
+              <circle cx="300" cy="300" r="268" fill="none" stroke="rgba(110,70,30,.35)" stroke-width="3"/>
+            </g>
+            <!-- 1 flour -->
+            <g data-flour>
+              <ellipse cx="300" cy="378" rx="170" ry="20" fill="rgba(60,40,20,.22)" filter="url(#soft)" data-mound/>
+              <path data-mound d="M128 374 C 142 318, 196 246, 262 230 C 286 224, 314 224, 338 230 C 404 246, 458 318, 472 374 C 410 394, 190 394, 128 374 Z" fill="url(#flour)"/>
+              <path d="M196 330 C 220 290, 252 264, 290 254" fill="none" stroke="rgba(255,255,255,.9)" stroke-width="8" stroke-linecap="round" opacity=".7"/>
+              <path d="M330 300 C 370 310, 410 336, 440 368" fill="none" stroke="rgba(190,176,150,.35)" stroke-width="10" stroke-linecap="round"/>
+              <g data-specks></g>
+            </g>
+            <!-- 2 well + eggs -->
+            <ellipse data-well cx="300" cy="300" rx="78" ry="42" fill="#efe7d6" stroke="rgba(190,175,150,.6)" stroke-width="4"/>
+            <g data-eggs>
+              <g data-egg><ellipse cx="276" cy="298" rx="34" ry="26" fill="rgba(255,255,255,.85)"/><circle cx="276" cy="296" r="15" fill="url(#yolk)"/></g>
+              <g data-egg><ellipse cx="326" cy="292" rx="32" ry="24" fill="rgba(255,255,255,.85)"/><circle cx="326" cy="290" r="14" fill="url(#yolk)"/></g>
+              <g data-egg><ellipse cx="300" cy="318" rx="30" ry="22" fill="rgba(255,255,255,.85)"/><circle cx="300" cy="316" r="13" fill="url(#yolk)"/></g>
+            </g>
+            <!-- 3 dough ball -->
+            <g data-dough>
+              <ellipse cx="300" cy="372" rx="120" ry="20" fill="rgba(60,40,20,.25)" filter="url(#soft)"/>
+              <circle data-ball cx="300" cy="300" r="110" fill="url(#dough)"/>
+              <ellipse cx="262" cy="252" rx="34" ry="18" fill="rgba(255,255,255,.45)" transform="rotate(-28 262 252)"/>
+            </g>
+            <!-- 4 sheet + pin -->
+            <g data-sheetg>
+              <rect data-sheet x="110" y="170" width="380" height="260" rx="22" fill="url(#sheet)"/>
+              <g clip-path="url(#sheetClip)" data-cuts stroke="rgba(170,115,40,.55)" stroke-width="3"></g>
+            </g>
+            <g data-pin>
+              <rect x="60" y="270" width="480" height="58" rx="29" fill="#d7a66b"/>
+              <rect x="60" y="270" width="480" height="20" rx="10" fill="rgba(255,255,255,.22)"/>
+              <rect x="10" y="286" width="70" height="26" rx="13" fill="#b9874d"/><rect x="520" y="286" width="70" height="26" rx="13" fill="#b9874d"/>
+            </g>
+            <!-- 5 knife -->
+            <g data-knife>
+              <path d="M0 -150 L 22 -150 L 26 120 Q 12 150 0 120 Z" fill="#e9eef2" stroke="#9aa6b1" stroke-width="2"/>
+              <rect x="-6" y="-250" width="34" height="104" rx="10" fill="#2a1d13"/>
+              <circle cx="11" cy="-220" r="4" fill="#c8893a"/><circle cx="11" cy="-180" r="4" fill="#c8893a"/>
+            </g>
+            <!-- 6 bowl -->
+            <g data-bowlg>
+              <circle cx="300" cy="312" r="250" fill="rgba(60,40,20,.2)" filter="url(#soft)"/>
+              <circle cx="300" cy="300" r="246" fill="url(#bowl)"/>
+              <circle cx="300" cy="300" r="190" fill="#f6f2ea" stroke="rgba(0,0,0,.05)" stroke-width="3"/>
+              <circle cx="300" cy="300" r="246" fill="none" stroke="rgba(31,61,44,.15)" stroke-width="2"/>
+              <circle cx="300" cy="300" r="232" fill="none" stroke="#1f3d2c" stroke-width="2" stroke-dasharray="3 9" opacity=".5"/>
+            </g>
+            <g data-nest fill="none" stroke-linecap="round"></g>
+            <g data-sugo>
+              <path d="M300 214 C 330 206, 352 226, 372 236 C 400 250, 396 282, 386 304 C 396 334, 372 356, 346 364 C 322 386, 286 380, 264 368 C 232 366, 214 340, 220 312 C 204 288, 216 252, 244 238 C 260 220, 280 218, 300 214 Z" fill="url(#sauce)"/>
+              <circle cx="336" cy="330" r="7" fill="#8a2c14" opacity=".5"/><circle cx="262" cy="320" r="5" fill="#8a2c14" opacity=".5"/>
+              <path d="M262 262 Q 290 242 324 250" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="6" stroke-linecap="round"/>
+              <g data-drips fill="#b5401f"><circle cx="250" cy="372" r="10"/><circle cx="378" cy="340" r="8"/><circle cx="214" cy="290" r="7"/></g>
+            </g>
+            <g data-basil>
+              <path d="M300 290 C 320 250, 360 246, 372 262 C 350 290, 322 298, 300 290 Z" fill="#3c7a3a"/><path d="M300 290 Q 336 270 366 262" stroke="#2a5a28" stroke-width="2" fill="none"/>
+              <path d="M298 292 C 270 262, 236 262, 228 280 C 252 302, 280 304, 298 292 Z" fill="#4a8a44"/><path d="M298 292 Q 262 278 232 280" stroke="#2f6a2c" stroke-width="2" fill="none"/>
+            </g>
+            <g data-cheese></g>
+          </svg>
+        </div>
+        <span class="mk-hint" aria-hidden="true"><i></i>Keep scrolling</span>
+      </div>
+    </section>
+
+    <!-- FROM NY TO MI -->
+    <section class="route" id="story">
+      <div class="wrap">
+        <div class="route-head">
+          <span class="label">Same passion, new adventures</span>
+          <h2><span class="line"><span>From New York</span></span><span class="to">to</span><span class="line"><span>Michigan</span></span></h2>
+          <p class="lede" style="margin:24px auto 0">SUGO comes from Moreno and Christina Cerutti, the family behind Osteria Carlina and Bar Mario in New York, with 30 years in hospitality. Now they’re bringing it to Ann Arbor.</p>
+        </div>
+        <div class="map">
+          <svg viewBox="0 0 1100 330" data-map aria-hidden="true">
+            <!-- NYC sketch skyline -->
+            <g class="sk" data-sk-ny transform="translate(820 70)">
+              <path d="M0 220 V150 H20 V120 H34 V150 H44 V96 H58 V60 L64 20 L70 60 V96 H84 V140 H100 V110 H118 V150 H130 V80 H150 V150 H164 V126 H180 V220"/>
+              <path d="M48 110 H54 M48 130 H54 M136 100 H144 M136 120 H144 M104 126 H112 M104 140 H112 M8 170 H14 M168 150 H174"/>
+              <path d="M-20 220 H 220"/>
+            </g>
+            <!-- Ann Arbor sketch: Burton tower + trees -->
+            <g class="sk" data-sk-a2 transform="translate(70 70)">
+              <path d="M70 220 V70 H80 V40 H112 V70 H122 V220"/>
+              <path d="M80 70 H112 M86 90 H106 M86 110 H106 M86 130 H106 M86 150 H106 M86 50 H106"/>
+              <path d="M20 220 C 0 200, 4 160, 30 150 C 26 130, 52 118, 62 134 C 74 140, 70 176, 56 196 Z"/>
+              <path d="M140 220 C 130 194, 140 160, 164 160 C 168 140, 196 140, 200 162 C 222 170, 214 206, 196 220"/>
+              <path d="M38 220 V196 M176 220 V190"/>
+              <path d="M-20 220 H 240"/>
+            </g>
+            <defs><clipPath id="routeClip"><rect data-rc x="1100" y="0" width="0" height="330"/></clipPath></defs>
+            <path class="route-path" data-route clip-path="url(#routeClip)" d="M 900 150 C 760 20, 420 20, 200 140"/>
+            <g class="pin" data-pin-ny transform="translate(910 30)"><text class="big" x="0" y="0" text-anchor="middle">NYC</text></g>
+            <g class="pin" data-pin-a2 transform="translate(166 30)"><text class="big" x="0" y="0" text-anchor="middle">ANN ARBOR</text></g>
+            <g data-heart-a2 transform="translate(186 128)"><path d="M11 18 C 2 11, 1 5, 5 3 C 8 1.5, 10 3.5, 11 6 C 12 3.5, 14 1.5, 17 3 C 21 5, 20 11, 11 18 Z" fill="#b5401f"/></g>
+          </svg>
+        </div>
+        <div class="places">
+          <div class="place"><span class="where">New York · Tribeca &amp; West Village</span><h3>Osteria Carlina</h3><p>The Ceruttis’ osteria in New York, the roots SUGO grows from.</p></div>
+          <div class="place"><span class="where">New York</span><h3>Bar Mario</h3><p>Their second New York spot, part of the same family.</p></div>
+          <div class="place new"><span class="stamp">new!</span><span class="where">Ann Arbor · Fourth Ave</span><h3>SUGO Pasta Bar</h3><p>Fresh pasta, great drinks, good people. Coming soon to Kerrytown.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXPECT -->
+    <section class="expect" id="expect">
+      <div class="wrap">
+        <div class="sec-head">
+          <div><span class="label">What’s on the table</span><h2><span class="line"><span>Simple food,</span></span><span class="line"><span><em>done right.</em></span></span></h2></div>
+          <p class="lede" style="margin:0">Inspired by Italy: handmade pasta, seasonal ingredients and a high-energy open kitchen you can watch from your seat.</p>
+        </div>
+        <div class="ex-list" data-ex></div>
+      </div>
+    </section>
+
+    <!-- QUOTE -->
+    <section class="quote">
+      <span class="olive o3" data-olive data-sway></span>
+      <span class="olive o4" data-olive data-sway></span>
+      <div class="wrap">
+        <figure style="margin:0">
+          <blockquote>“Think <b>slow food</b> executed fast, with discipline and consistency.”</blockquote>
+          <figcaption>Moreno Cerutti · Founder</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- VISIT -->
+    <section class="visit" id="visit">
+      <div class="wrap v-grid">
+        <figure class="door" style="margin:0"><img src="img/door.webp" width="900" height="1200" alt="The door at 203 Fourth Avenue with the SUGO Pasta Bar coming soon sign" loading="lazy"><span class="cap">Our name on the door ♡</span></figure>
+        <div class="v-copy">
+          <span class="label">Find us soon</span>
+          <h2 style="margin-top:20px"><span class="line"><span>Okay, it’s starting</span></span><span class="line"><span><em>to feel real.</em></span></span></h2>
+          <p class="addr">203 Fourth Avenue<small>Downtown Ann Arbor, by Kerrytown</small></p>
+          <span class="opening">Opening soon</span>
+          <div class="links">
+            <a class="btn solid" data-ig href="#" target="_blank" rel="noopener">Follow @sugoannarbor</a>
+            <a class="btn" data-map href="#" target="_blank" rel="noopener">Directions</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CLOSING -->
+    <section class="closing">
+      <div class="wrap">
+        <span class="hand">More soon!</span>
+        <h2><span class="line"><span>Good pasta,</span></span><span class="line"><span><em>brighter days.</em></span></span></h2>
+        <p>Follow along for opening day, the first menu and everything happening behind the scenes on Fourth Avenue.</p>
+        <div class="ctas"><a class="btn solid" data-ig href="#" target="_blank" rel="noopener">Follow on Instagram</a><a class="btn" data-dm href="#" target="_blank" rel="noopener">Send us a message</a></div>
+        <div class="giant" aria-hidden="true" data-giant>SUGO</div>
+      </div>
+      <footer><div class="wrap"><span>© <span data-year>2026</span> SUGO Pasta Bar · 203 Fourth Ave, Ann Arbor, MI</span><nav aria-label="Footer"><a data-ig href="#" target="_blank" rel="noopener">Instagram</a><a href="https://www.osteriacarlina.com" target="_blank" rel="noopener">Osteria Carlina NYC</a><a data-map href="#" target="_blank" rel="noopener">Directions</a></nav></div></footer>
+    </section>
+  </main>
+  <div class="cursor" data-cursor aria-hidden="true"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+  <script>
+  /* =============================================================
+     CONFIG: from @sugoannarbor and press about the opening.
+     ============================================================= */
+  const CONFIG = {
+    name: 'SUGO Pasta Bar',
+    address: '203 Fourth Avenue, Ann Arbor, MI',
+    instagram: { url: 'https://www.instagram.com/sugoannarbor/', dm: 'https://ig.me/m/sugoannarbor' },
+    steps: [
+      { it: 'Farina', en: 'the flour', d: 'It starts with a mound of good flour on a wooden board. Nothing fancy, just the right flour.' },
+      { it: 'Uova', en: 'the eggs', d: 'A well in the middle, eggs cracked straight in. This is where the color comes from.' },
+      { it: 'Impasto', en: 'the dough', d: 'Mixed and kneaded by hand until it turns smooth, golden and soft.' },
+      { it: 'Sfoglia', en: 'the sheet', d: 'Rolled out thin under the pin, one even sheet of pasta.' },
+      { it: 'Taglio', en: 'the cut', d: 'Cut into ribbons by hand. No two quite the same, and that’s the point.' },
+      { it: 'Sugo', en: 'the sauce', d: 'Twirled into the bowl and finished with sugo. That’s Italian for sauce, and it’s our name.' }
+    ],
+    expect: [
+      { t: 'Fresh pasta', s: 'handmade', d: 'Made by hand in house. The center of everything we do.' },
+      { t: 'Fritti', s: 'fried appetizers', d: 'Something golden and crispy to start the table off right.' },
+      { t: 'Seasonal', s: 'what’s good now', d: 'Ingredients that follow the seasons, so the plates change with them.' },
+      { t: 'Dolci', s: 'simple desserts', d: 'A little something sweet to end on. Simple, the Italian way.' },
+      { t: 'Da bere', s: 'great drinks', d: 'Great drinks to go with good pasta and good people.' }
+    ]
+  };
+  </script>
+  <script>
+  (() => {
+  'use strict';
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+  const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const FINE = matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const HAS_G = !!(window.gsap && window.ScrollTrigger);
+  const ANIM = HAS_G && !RM;
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  if (HAS_G) gsap.registerPlugin(ScrollTrigger);
+
+  $$('[data-wm]').forEach(e => e.innerHTML = $('#wm-tpl').innerHTML);
+  $$('[data-olive]').forEach(e => e.innerHTML = $('#olive-tpl').innerHTML);
+  $$('[data-heart]').forEach(e => e.innerHTML = $('#heart-tpl').innerHTML);
+  $$('[data-ig]').forEach(a => a.href = CONFIG.instagram.url);
+  $$('[data-dm]').forEach(a => a.href = CONFIG.instagram.dm);
+  $$('[data-map]').forEach(a => a.href = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(CONFIG.address));
+  $$('[data-year]').forEach(e => e.textContent = new Date().getFullYear());
+
+  const OLV = '<svg viewBox="0 0 30 30" fill="currentColor"><ellipse cx="15" cy="15" rx="12" ry="4.5" transform="rotate(-35 15 15)"/></svg>';
+  $('[data-marquee]').innerHTML = [0, 1].map(() => [['Fresh pasta', ''], ['Good pasta, brighter days', 'h'], ['Great drinks', ''], ['Italian roots, brighter tomorrows', 'h'], ['Good people', '']].map(([w, c]) => `<span class="${c}">${w}</span>${OLV}`).join('')).join('');
+  $('[data-ex]').innerHTML = CONFIG.expect.map((e, k) => `<div class="ex"><span class="n">0${k + 1}</span><h3>${esc(e.t)}<small>${esc(e.s)}</small></h3><p>${esc(e.d)}</p></div>`).join('');
+  $('[data-mk-steps]').innerHTML = CONFIG.steps.map(s => `<div class="mk-step"><div class="it">${esc(s.it)}</div><span class="en">${esc(s.en)}</span><p>${esc(s.d)}</p></div>`).join('');
+  $('[data-mk-dots]').innerHTML = CONFIG.steps.map(() => '<i><b></b></i>').join('');
+
+  /* scene details generated once */
+  (() => {
+    let seed = 5; const rnd = () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
+    let s = ''; for (let i = 0; i < 90; i++) { const a = rnd() * Math.PI, r = 30 + rnd() * 150; const x = 300 + Math.cos(a) * r * (rnd() > .5 ? 1 : -1), y = 360 - Math.sin(a) * r * .6 - rnd() * 20; s += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(1.2 + rnd() * 2.6).toFixed(1)}" fill="#fffdf6" data-sp/>`; }
+    $('[data-specks]').innerHTML = s;
+    let c = ''; for (let i = 1; i < 12; i++) { const x = 110 + i * (380 / 12); c += `<line x1="${x.toFixed(1)}" y1="160" x2="${x.toFixed(1)}" y2="440" data-cut/>`; }
+    $('[data-cuts]').innerHTML = c;
+    // nest: concentric wobbly loops of tagliatelle
+    let n = ''; for (let k = 0; k < 7; k++) { const r0 = 40 + k * 22; let d = ''; for (let a = 0; a <= 360; a += 12) { const rr = r0 + Math.sin((a + k * 40) * Math.PI / 60) * 6; const x = 300 + Math.cos(a * Math.PI / 180) * rr, y = 300 + Math.sin(a * Math.PI / 180) * rr * .95; d += (a ? ' L' : 'M') + x.toFixed(1) + ' ' + y.toFixed(1); } n += `<path d="${d}" stroke="${k % 2 ? '#f1c46a' : '#f7d585'}" stroke-width="${17 - k * .6}" data-loop/><path d="${d}" stroke="rgba(170,115,40,.28)" stroke-width="2" transform="translate(2 4)" data-loop/>`; }
+    $('[data-nest]').innerHTML = n;
+    let ch = ''; for (let i = 0; i < 46; i++) { const a = rnd() * 6.28, r = rnd() * 110; ch += `<rect x="${(300 + Math.cos(a) * r).toFixed(1)}" y="${(300 + Math.sin(a) * r).toFixed(1)}" width="${(3 + rnd() * 4).toFixed(1)}" height="${(2 + rnd() * 3).toFixed(1)}" fill="#fff7dc" transform="rotate(${(rnd() * 90).toFixed(0)} ${(300 + Math.cos(a) * r).toFixed(1)} ${(300 + Math.sin(a) * r).toFixed(1)})" data-ch/>`; }
+    $('[data-cheese]').innerHTML = ch;
+  })();
+
+  /* header + smooth scroll */
+  const header = $('header');
+  const hs = () => header.classList.toggle('scrolled', scrollY > 30); hs(); addEventListener('scroll', hs, { passive: true });
+  let lenis = null;
+  if (ANIM && window.Lenis) { lenis = new Lenis({ duration: 1.35, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true }); lenis.on('scroll', ScrollTrigger.update); gsap.ticker.add(t => lenis.raf(t * 1000)); gsap.ticker.lagSmoothing(0); }
+  const go = t => { const off = -header.offsetHeight; if (lenis) lenis.scrollTo(t, { duration: 1.6, offset: t === 0 ? 0 : off }); else if (t === 0) scrollTo({ top: 0 }); else scrollTo({ top: t.getBoundingClientRect().top + scrollY + off, behavior: RM ? 'auto' : 'smooth' }); };
+  document.addEventListener('click', e => { const a = e.target.closest('a[href^="#"]'); if (!a) return; const id = a.getAttribute('href'); if (id === '#') return; const t = id === '#top' ? 0 : $(id); if (t === null) return; e.preventDefault(); go(t); });
+
+  /* statement words */
+  const big = $('[data-words]');
+  (function split(node, hl) { [...node.childNodes].forEach(n => { if (n.nodeType === 3) { const fr = document.createDocumentFragment(); n.textContent.split(/(\s+)/).forEach(t => { if (!t) return; if (/^\s+$/.test(t)) fr.appendChild(document.createTextNode(t)); else { const s = document.createElement('span'); s.className = 'w' + (hl ? ' hl' : ''); s.textContent = t; fr.appendChild(s); } }); n.replaceWith(fr); } else if (n.nodeType === 1) split(n, hl || n.classList.contains('hl-g')); }); })(big, false);
+
+  const making = $('[data-making]');
+  /* final-state scene for no-animation */
+  const finalScene = () => { ['[data-flour]', '[data-well]', '[data-eggs]', '[data-dough]', '[data-sheetg]', '[data-pin]', '[data-knife]', '[data-board]'].forEach(s => { const e = $(s); if (e) e.style.display = 'none'; }); };
+  if (!ANIM) { const i = $('[data-intro]'); if (i) i.remove(); finalScene(); return; }
+
+  /* =============================================================
+     INTRO: the oval draws itself, SUGO rises, the oval opens up
+     into the page.
+     ============================================================= */
+  gsap.set('.hero h1 .line > span', { yPercent: 110 }); gsap.set('[data-in]', { opacity: 0, y: 20 }); gsap.set('[data-dish]', { opacity: 0, scale: .9, y: 30 });
+  const intro = $('[data-intro]'), iov = $('.intro .o'), L = 2 * Math.PI * Math.sqrt((114 * 114 + 54 * 54) / 2);
+  gsap.set(iov, { strokeDasharray: L, strokeDashoffset: L });
+  gsap.set(intro, { clipPath: 'ellipse(150% 150% at 50% 50%)' });
+  const itl = gsap.timeline({ onComplete: () => intro.remove() });
+  itl.to(iov, { strokeDashoffset: 0, duration: 1.1, ease: 'power2.inOut' })
+    .from('.intro .t1', { y: 18, opacity: 0, duration: .8, ease: 'expo.out' }, .35)
+    .from('.intro .t2', { opacity: 0, letterSpacing: '.9em', duration: .8, ease: 'expo.out' }, .6)
+    .from('[data-intro-tag]', { opacity: 0, y: 12, duration: .7, ease: 'expo.out' }, .9)
+    .to('.intro > *', { opacity: 0, y: -12, duration: .45, ease: 'expo.in' }, 1.9)
+    .to(intro, { clipPath: 'ellipse(0% 0% at 50% 50%)', duration: 1, ease: 'expo.inOut' }, 2.05)
+    .to('.hero h1 .line > span', { yPercent: 0, duration: 1.3, ease: 'expo.out', stagger: .12 }, 2.4)
+    .to('[data-in]', { opacity: 1, y: 0, duration: 1.1, ease: 'expo.out', stagger: .07 }, 2.5)
+    .to('[data-dish]', { opacity: 1, scale: 1, y: 0, duration: 1.6, ease: 'expo.out' }, 2.55)
+    .from('.hero .olive', { opacity: 0, scale: .6, duration: 1.4, ease: 'expo.out', stagger: .1 }, 2.6);
+  intro.addEventListener('click', () => itl.progress(1));
+
+  // ambient
+  $$('[data-sway]').forEach((o, k) => gsap.to(o.firstElementChild, { rotation: k % 2 ? -4 : 4, transformOrigin: '0% 100%', duration: 3.4 + k * .4, ease: 'sine.inOut', yoyo: true, repeat: -1 }));
+  gsap.to('[data-steam] path', { y: -24, opacity: 0, duration: 2.6, ease: 'sine.in', repeat: -1, stagger: { each: .7, repeat: -1 } });
+  gsap.to('[data-dish] img', { yPercent: 10, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+  gsap.to('.hero h1', { yPercent: -20, opacity: .2, ease: 'none', scrollTrigger: { trigger: '.hero', start: '30% top', end: 'bottom top', scrub: true } });
+
+  // marquee with velocity
+  (() => {
+    const tr = $('[data-marquee]'); let x = 0, v = 0, w = 0;
+    const m = () => { w = tr.scrollWidth / 2; }; m(); addEventListener('resize', m); document.fonts && document.fonts.ready.then(m);
+    ScrollTrigger.create({ onUpdate: s => { v = clamp(s.getVelocity() / 300, -12, 12); } });
+    gsap.ticker.add(() => { v *= .92; x -= .6 + Math.abs(v); if (w && x <= -w) x += w; tr.style.transform = `translate3d(${x}px,0,0)`; });
+  })();
+
+  // reveals
+  $$('main .line > span').forEach(el => { if (el.closest('.hero')) return; gsap.from(el, { yPercent: 110, duration: 1.3, ease: 'expo.out', scrollTrigger: { trigger: el.parentElement, start: 'top 92%' } }); });
+  gsap.to($$('.w', big), { opacity: 1, stagger: .05, ease: 'none', scrollTrigger: { trigger: big, start: 'top 80%', end: 'bottom 50%', scrub: true } });
+  gsap.from('.statement .sign', { opacity: 0, x: -20, duration: 1, scrollTrigger: { trigger: '.statement .sign', start: 'top 90%' } });
+  const rise = (sel, trig, st = .08) => gsap.from(sel, { opacity: 0, y: 44, duration: 1.2, ease: 'expo.out', stagger: st, scrollTrigger: { trigger: trig, start: 'top 86%' } });
+  rise('.place', '.places', .12); rise('.ex', '.ex-list', .07);
+  gsap.from('.door', { clipPath: 'inset(100% 0% 0% 0% round 300px 300px 4px 4px)', duration: 1.6, ease: 'expo.inOut', scrollTrigger: { trigger: '.door', start: 'top 82%' } });
+  gsap.from('.door img', { scale: 1.3, duration: 2.2, ease: 'expo.out', scrollTrigger: { trigger: '.door', start: 'top 82%' } });
+  gsap.from('.quote blockquote', { opacity: 0, y: 40, duration: 1.4, ease: 'expo.out', scrollTrigger: { trigger: '.quote', start: 'top 75%' } });
+  gsap.to('[data-giant]', { backgroundSize: '100% 100%', ease: 'none', scrollTrigger: { trigger: '[data-giant]', start: 'top 95%', end: 'max', scrub: true } });
+
+  // NY → MI route draws as you scroll
+  (() => {
+    const sk = $$('.map .sk path'); sk.forEach(p => { const l = p.getTotalLength(); p.style.strokeDasharray = l; p.style.strokeDashoffset = l; });
+    const mtl = gsap.timeline({ scrollTrigger: { trigger: '.map', start: 'top 80%', end: 'bottom 45%', scrub: .8 } });
+    mtl.to($$('[data-sk-ny] path'), { strokeDashoffset: 0, duration: 1, stagger: .1 }, 0)
+      .from('[data-pin-ny]', { opacity: 0, y: 10, duration: .4 }, .3)
+      .to('[data-rc]', { attr: { x: 150, width: 950 }, duration: 1.2, ease: 'none' }, .9)
+      .to($$('[data-sk-a2] path'), { strokeDashoffset: 0, duration: 1, stagger: .08 }, 1.6)
+      .from('[data-pin-a2]', { opacity: 0, y: 10, duration: .4 }, 2)
+      .from('[data-heart-a2]', { scale: 0, transformOrigin: '11px 10px', duration: .4, ease: 'back.out(3)' }, 2.2);
+  })();
+
+  /* =============================================================
+     SIGNATURE: the making. A pinned, scroll-scrubbed scene that
+     goes flour → eggs → dough → sheet → cut → sugo.
+     ============================================================= */
+  const mm = gsap.matchMedia();
+  mm.add('(min-width: 0px)', () => {
+    making.classList.add('pinned');
+    const steps = $$('.mk-step'), dots = $$('[data-mk-dots] b'), N = steps.length, nEl = $('[data-mk-n]');
+    gsap.set(steps.slice(1), { autoAlpha: 0, y: 30 });
+    // initial scene
+    gsap.set('[data-sp]', { y: -260, opacity: 0 });
+    gsap.set('[data-mound]', { scaleY: 0, transformOrigin: '300px 376px' });
+    gsap.set('[data-well]', { scale: 0, transformOrigin: '300px 300px', opacity: 0 });
+    gsap.set('[data-egg]', { y: -320, opacity: 0 });
+    gsap.set('[data-dough]', { scale: .2, opacity: 0, transformOrigin: '300px 300px' });
+    gsap.set('[data-sheetg]', { scaleX: .3, scaleY: .4, opacity: 0, transformOrigin: '300px 300px' });
+    gsap.set('[data-pin]', { x: -620, opacity: 0 });
+    gsap.set('[data-cut]', { attr: { y2: 160 } });
+    gsap.set('[data-knife]', { x: 70, y: -340, opacity: 0 });
+    gsap.set('[data-bowlg]', { scale: .7, opacity: 0, transformOrigin: '300px 300px' });
+    const loops = $$('[data-loop]'); loops.forEach(p => { const l = p.getTotalLength(); p.style.strokeDasharray = l; p.style.strokeDashoffset = l; }); gsap.set(loops, { opacity: 0 });
+    gsap.set('[data-sugo]', { scale: 0, transformOrigin: '300px 300px' });
+    gsap.set('[data-basil]', { scale: 0, rotation: -40, transformOrigin: '300px 291px' });
+    gsap.set('[data-ch]', { y: -120, opacity: 0 });
+    let cur = 0;
+    const tl = gsap.timeline({ defaults: { ease: 'none' }, scrollTrigger: { trigger: making, start: 'top top', end: () => '+=' + (innerHeight * 5.4), pin: '.mk-pin', scrub: .7, anticipatePin: 1, invalidateOnRefresh: true,
+      onUpdate: s => { const k = clamp(Math.floor(s.progress * N - .0001), 0, N - 1); dots.forEach((d, i) => gsap.set(d, { scaleX: i < k ? 1 : i === k ? (s.progress * N - k) : 0 })); if (k !== cur) { cur = k; nEl.textContent = k + 1; } } } });
+    const at = k => k; // one unit per step
+    // 1 flour
+    tl.to('[data-sp]', { y: 0, opacity: 1, duration: .55, stagger: { each: .004, from: 'random' }, ease: 'power2.in' }, at(0) + .05)
+      .to('[data-mound]', { scaleY: 1, duration: .5, ease: 'power2.out' }, at(0) + .3);
+    // 2 well + eggs
+    tl.to('[data-well]', { scale: 1, opacity: 1, duration: .3, ease: 'back.out(2)' }, at(1))
+      .to('[data-egg]', { y: 0, opacity: 1, duration: .35, stagger: .15, ease: 'bounce.out' }, at(1) + .25);
+    // 3 dough
+    tl.to(['[data-flour]', '[data-well]', '[data-eggs]'], { scale: .4, opacity: 0, transformOrigin: '300px 300px', duration: .35, ease: 'power2.in' }, at(2))
+      .to('[data-dough]', { scale: 1, opacity: 1, duration: .35, ease: 'back.out(1.6)' }, at(2) + .25)
+      .to('[data-ball]', { attr: { r: 122 }, scaleX: 1.12, scaleY: .88, transformOrigin: '300px 300px', duration: .12, yoyo: true, repeat: 3, ease: 'sine.inOut' }, at(2) + .55);
+    // 4 sheet
+    tl.to('[data-dough]', { scaleX: 1.6, scaleY: .5, opacity: 0, duration: .3, ease: 'power2.in' }, at(3))
+      .to('[data-sheetg]', { scaleX: 1, scaleY: 1, opacity: 1, duration: .55, ease: 'power2.out' }, at(3) + .15)
+      .to('[data-pin]', { opacity: 1, duration: .05 }, at(3) + .1)
+      .to('[data-pin]', { x: 620, duration: .8, ease: 'power1.inOut' }, at(3) + .12)
+      .to('[data-pin]', { opacity: 0, duration: .06 }, at(3) + .9);
+    // 5 cut
+    tl.to('[data-knife]', { opacity: 1, duration: .05 }, at(4));
+    $$('[data-cut]').forEach((c, i) => {
+      const x = 110 + (i + 1) * (380 / 12);
+      tl.to('[data-knife]', { x: x - 11, y: 100, duration: .035, ease: 'power2.in' }, at(4) + .05 + i * .072)
+        .to(c, { attr: { y2: 440 }, duration: .04 }, at(4) + .06 + i * .072)
+        .to('[data-knife]', { y: 40, duration: .03 }, at(4) + .09 + i * .072);
+    });
+    tl.to('[data-knife]', { x: 640, y: -200, opacity: 0, duration: .15 }, at(4) + .9);
+    // 6 sugo
+    tl.to(['[data-sheetg]', '[data-board]'], { opacity: 0, scale: .85, transformOrigin: '300px 300px', duration: .3 }, at(5))
+      .to('[data-bowlg]', { scale: 1, opacity: 1, duration: .35, ease: 'back.out(1.4)' }, at(5) + .1)
+      .to(loops, { opacity: 1, duration: .01 }, at(5) + .24)
+      .to(loops, { strokeDashoffset: 0, duration: .35, stagger: .02 }, at(5) + .25)
+      .to('[data-sugo]', { scale: 1, duration: .25, ease: 'back.out(1.8)' }, at(5) + .55)
+      .to('[data-basil]', { scale: 1, rotation: 0, duration: .2, ease: 'back.out(2.5)' }, at(5) + .75)
+      .to('[data-ch]', { y: 0, opacity: 1, duration: .2, stagger: .002 }, at(5) + .8);
+    // copy swaps
+    steps.forEach((s, k) => { if (!k) return; tl.to(steps[k - 1], { autoAlpha: 0, y: -26, duration: .08 }, at(k) - .08).to(s, { autoAlpha: 1, y: 0, duration: .1 }, at(k)); });
+    tl.to({}, { duration: .3 }, N);
+    return () => making.classList.remove('pinned');
+  });
+
+  if (FINE) {
+    const c = $('[data-cursor]'); const qx = gsap.quickTo(c, 'x', { duration: .2, ease: 'power3' }), qy = gsap.quickTo(c, 'y', { duration: .2, ease: 'power3' });
+    addEventListener('pointermove', e => { qx(e.clientX); qy(e.clientY); c.style.opacity = 1; }, { passive: true });
+    document.addEventListener('pointerover', e => c.classList.toggle('big', !!e.target.closest('a, button, .ex')));
+  }
+  addEventListener('load', () => ScrollTrigger.refresh());
+  document.fonts && document.fonts.ready.then(() => ScrollTrigger.refresh());
+  })();
+  </script>
+</body>
+</html>
