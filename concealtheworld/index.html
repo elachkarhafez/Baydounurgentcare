@@ -356,7 +356,7 @@
     .f-col { display: grid; gap: 12px; align-content: start; }
     .f-col .lbl { color: rgba(239,235,228,.45); margin-bottom: 6px; }
     .f-col a, .f-col button { justify-self: start; font-size: 15px; color: rgba(239,235,228,.85); }
-    .f-word { margin-top: clamp(60px, 9vw, 140px); display: flex; justify-content: space-between; overflow: hidden; font: 300 clamp(64px, 18.5vw, 340px)/.8 var(--serif); }
+    .f-word { margin-top: clamp(60px, 9vw, 140px); display: flex; justify-content: space-between; overflow: hidden; font: 300 clamp(60px, 17vw, 280px)/.8 var(--serif); }
     .f-word span { display: inline-block; }
     .f-bot { margin-top: 30px; padding-top: 20px; border-top: 1px solid rgba(239,235,228,.14); display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; color: rgba(239,235,228,.5); font-size: 12px; }
     @media (max-width: 900px) { .f-top { grid-template-columns: 1fr 1fr; } .f-top > div:first-child { grid-column: 1 / -1; } }
@@ -930,7 +930,9 @@
   gsap.fromTo('[data-igt]', { x: 0 }, { x: () => -(($('[data-igt]').scrollWidth / 2) - innerWidth * .5), ease: 'none', scrollTrigger: { trigger: '.ig', start: 'top bottom', end: 'bottom top', scrub: .6, invalidateOnRefresh: true } });
 
   /* footer wordmark rises letter by letter */
+  const fitWord = () => { const el = $('[data-fword]'); el.style.fontSize = ''; const spans = $$('span', el); const need = spans.reduce((a, s) => a + s.getBoundingClientRect().width, 0) * 1.06, have = el.clientWidth; if (need > have) el.style.fontSize = (parseFloat(getComputedStyle(el).fontSize) * have / need).toFixed(1) + 'px'; };
   const fw = $('[data-fword]'); fw.innerHTML = [...fw.textContent].map(c => `<span>${c}</span>`).join('');
+  fitWord(); addEventListener('resize', fitWord); if (document.fonts) document.fonts.ready.then(fitWord);
   gsap.from($$('span', fw), { yPercent: 105, duration: 1.4, ease: 'expo.out', stagger: .035, scrollTrigger: { trigger: fw, start: 'top 95%' } });
 
   /* active nav link */
