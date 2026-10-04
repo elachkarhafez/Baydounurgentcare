@@ -93,27 +93,44 @@
     .trust svg { width: 16px; height: 16px; color: var(--aqua); }
     .hero .ctas { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
 
+    /* ---------- before / after slider (signature) ---------- */
     .rug { position: relative; }
-    .stage { position: relative; aspect-ratio: 5 / 4; border-radius: 22px; overflow: hidden; background: #cbbfae; box-shadow: 0 0 0 1px var(--line), 0 40px 90px -36px rgba(18,48,106,.45); touch-action: none; user-select: none; -webkit-user-select: none; cursor: none; }
+    .stage { position: relative; aspect-ratio: 5 / 4; border-radius: 22px; overflow: hidden; background: #cbbfae; box-shadow: 0 0 0 1px var(--line), 0 40px 90px -36px rgba(18,48,106,.45); touch-action: pan-y; user-select: none; -webkit-user-select: none; cursor: ew-resize; --p: 100%; }
     .stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
-    .stage .dirt { transition: opacity 1.2s var(--ease); }
-    .wand { position: absolute; left: 0; top: 0; z-index: 4; pointer-events: none; will-change: transform; }
-    .wand svg { overflow: visible; }
-    .tag { position: absolute; z-index: 3; translate: -50% -50%; padding: 5px 10px; border-radius: 999px; background: rgba(255,255,255,.92); box-shadow: 0 6px 16px rgba(14,29,54,.18); font: 700 11.5px/1 var(--sans); color: var(--ink); white-space: nowrap; pointer-events: none; transition: opacity .5s, transform .5s var(--ease); }
-    .tag.gone { opacity: 0; transform: scale(.7); }
-    .callout { position: absolute; z-index: 5; left: 50%; top: 48%; translate: -50% 0; display: inline-flex; align-items: center; gap: 10px; padding: 12px 18px; border-radius: 999px; background: var(--navy); color: #fff; font: 700 14px/1 var(--sans); white-space: nowrap; box-shadow: 0 16px 34px rgba(18,48,106,.35); pointer-events: none; transition: opacity .5s var(--ease), transform .5s var(--ease); }
-    .callout svg { width: 18px; height: 18px; color: var(--aqua); }
-    .rug.touched .callout { opacity: 0; transform: translateY(-8px); }
-    .fresh { position: absolute; z-index: 6; left: 50%; top: 50%; translate: -50% -50%; width: clamp(150px, 34%, 220px); aspect-ratio: 1; border-radius: 50%; background: var(--white); box-shadow: 0 30px 70px -20px rgba(18,48,106,.5), 0 0 0 6px rgba(63,196,212,.35); display: grid; place-items: center; text-align: center; opacity: 0; scale: .6; pointer-events: none; transition: opacity .6s var(--ease-out), scale .8s var(--ease-out); }
+    .stage .dirty { clip-path: inset(0 calc(100% - var(--p)) 0 0); }
+    .stage .tag { position: absolute; z-index: 3; translate: -50% -50%; padding: 5px 10px; border-radius: 999px; background: rgba(255,255,255,.92); box-shadow: 0 6px 16px rgba(14,29,54,.18); font: 700 11.5px/1 var(--sans); color: var(--ink); white-space: nowrap; pointer-events: none; transition: opacity .35s, transform .35s var(--ease); }
+    .stage .tag.gone { opacity: 0; transform: scale(.7); }
+    .stage .side { position: absolute; top: 14px; z-index: 4; padding: 7px 12px; border-radius: 999px; font: 800 11.5px/1 var(--sans); letter-spacing: .16em; text-transform: uppercase; pointer-events: none; transition: opacity .3s; }
+    .stage .side.b { left: 14px; background: rgba(14,29,54,.75); color: #fff; }
+    .stage .side.a { right: 14px; background: var(--aqua); color: var(--ink); }
+    .stage .div { position: absolute; top: 0; bottom: 0; left: var(--p); z-index: 5; width: 4px; margin-left: -2px; background: #fff; box-shadow: 0 0 0 1px rgba(14,29,54,.08), 0 0 24px rgba(63,196,212,.7); pointer-events: none; }
+    .stage .knob { position: absolute; left: 50%; top: 50%; width: 64px; height: 64px; margin: -32px; border-radius: 50%; background: var(--white); box-shadow: 0 12px 30px rgba(14,29,54,.3), 0 0 0 5px rgba(63,196,212,.45); display: grid; place-items: center; color: var(--blue); transition: transform .25s var(--ease); }
+    .stage .knob svg { width: 30px; height: 30px; }
+    .stage.grab .knob { transform: scale(.9); }
+    .stage .shine { position: absolute; inset: 0; z-index: 4; pointer-events: none; background: linear-gradient(100deg, transparent 35%, rgba(255,255,255,.55) 50%, transparent 65%); transform: translateX(-120%); }
+    .callout { position: absolute; z-index: 6; left: 50%; bottom: 16px; translate: -50% 0; display: inline-flex; align-items: center; gap: 10px; padding: 12px 18px; border-radius: 999px; background: var(--navy); color: #fff; font: 700 14px/1 var(--sans); white-space: nowrap; box-shadow: 0 16px 34px rgba(18,48,106,.35); pointer-events: none; transition: opacity .5s var(--ease), transform .5s var(--ease); }
+    .callout svg { width: 20px; height: 20px; color: var(--aqua); }
+    .rug.touched .callout { opacity: 0; transform: translateY(8px); }
+    .fresh { position: absolute; z-index: 7; left: 50%; top: 50%; translate: -50% -50%; width: clamp(150px, 34%, 220px); aspect-ratio: 1; border-radius: 50%; background: var(--white); box-shadow: 0 30px 70px -20px rgba(18,48,106,.5), 0 0 0 6px rgba(63,196,212,.35); display: grid; place-items: center; text-align: center; opacity: 0; scale: .6; pointer-events: none; transition: opacity .6s var(--ease-out), scale .8s var(--ease-out); }
     .fresh b { display: block; font: italic 900 clamp(30px, 4vw, 46px)/1 var(--display); color: var(--blue); letter-spacing: -.03em; }
     .fresh small { display: block; margin-top: 6px; font: 700 10.5px/1.3 var(--sans); letter-spacing: .2em; text-transform: uppercase; color: var(--muted); }
     .rug.done .fresh { opacity: 1; scale: 1; }
+    .rug.done .stage .side, .rug.done .stage .div { opacity: 0; }
     .meter { display: flex; align-items: center; gap: 14px; margin-top: 16px; }
     .meter .bar { flex: 1; height: 8px; border-radius: 99px; background: var(--white); box-shadow: inset 0 0 0 1px var(--line); overflow: hidden; }
-    .meter .bar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--aqua), var(--blue)); border-radius: inherit; transition: width .25s; }
+    .meter .bar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--aqua), var(--blue)); border-radius: inherit; }
     .meter b { font: 800 22px/1 var(--display); color: var(--navy); min-width: 3.4em; text-align: right; font-variant-numeric: tabular-nums; }
     .meter .st { font: 600 13px/1 var(--sans); color: var(--muted); white-space: nowrap; }
     .meter button { font: 600 13px/1 var(--sans); color: var(--blue); border-bottom: 1.5px solid currentColor; padding-bottom: 2px; }
+
+    /* ---------- logo intro ---------- */
+    .intro { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; background: var(--white); }
+    .intro .wipe { position: absolute; inset: 0; background: var(--aqua); transform: scaleY(0); transform-origin: bottom; }
+    .intro .mark { position: relative; width: min(440px, 78vw); }
+    .intro .mark svg { width: 100%; height: auto; overflow: visible; }
+    .intro .gleam { position: absolute; inset: -10% -5%; background: linear-gradient(100deg, transparent 40%, rgba(255,255,255,.95) 50%, transparent 60%); mix-blend-mode: overlay; transform: translateX(-120%); pointer-events: none; }
+    .intro .bubbles i { position: absolute; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff, rgba(155,227,236,.5) 60%, rgba(63,196,212,.15)); box-shadow: inset 0 0 0 1px rgba(63,196,212,.35); }
+    html:not(.js) .intro, html.rm .intro { display: none; }
     @media (max-width: 960px) {
       .hero { padding: 92px 0 60px; }
       .hero-grid { grid-template-columns: 1fr; }
@@ -239,6 +256,21 @@
     </svg>
   </template>
 
+  <div class="intro" aria-hidden="true" data-intro>
+    <div class="wipe" data-wipe></div>
+    <div class="bubbles" data-bubbles></div>
+    <div class="mark">
+      <svg viewBox="0 0 230 70">
+        <defs><linearGradient id="lgi" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a7fd8"/><stop offset="1" stop-color="#12306a"/></linearGradient></defs>
+        <path data-sw1 d="M8 46 C 60 64, 170 64, 222 40" fill="none" stroke="#3fc4d4" stroke-width="4" stroke-linecap="round"/>
+        <path data-sw2 d="M14 14 C 70 0, 160 0, 218 18" fill="none" stroke="#9be3ec" stroke-width="2.5" stroke-linecap="round"/>
+        <g data-word><text x="115" y="43" text-anchor="middle" font-family="Archivo, sans-serif" font-style="italic" font-weight="900" font-size="34" fill="url(#lgi)" letter-spacing="-.5">SWEEPERS</text></g>
+        <text data-sub x="115" y="60" text-anchor="middle" font-family="Inter, sans-serif" font-weight="600" font-size="8.5" fill="#56657a" letter-spacing="3">CARPET CLEANING</text>
+      </svg>
+      <div class="gleam" data-gleam></div>
+    </div>
+  </div>
+
   <header>
     <div class="wrap">
       <a class="logo" href="#top" aria-label="Sweepers Carpet Cleaning, back to top" data-logo></a>
@@ -257,7 +289,7 @@
             <span class="line"><span>Your carpet,</span></span>
             <span class="line"><span class="swap"><span class="before"><em>like new</em> again.</span><span class="after" aria-hidden="true"><em>fresh</em> as day one.</span></span></span>
           </h1>
-          <p class="lede" data-in>Carpet, upholstery, mattresses, rugs and hardwood, plus cleaning and restoration for homes and businesses across Detroit. Grab the wand and try it.</p>
+          <p class="lede" data-in>Carpet, upholstery, mattresses, rugs and hardwood, plus cleaning and restoration for homes and businesses across Detroit. Slide the carpet to see the difference.</p>
           <div class="trust" data-in>
             <span><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1l2 4.2 4.6.6-3.4 3.2.9 4.6L8 11.4 3.9 13.6l.9-4.6L1.4 5.8 6 5.2z"/></svg>IICRC Certified</span>
             <span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M2 8l6-5 6 5M4 7v6h8V7"/></svg>Residential</span>
@@ -270,17 +302,18 @@
         </div>
 
         <div class="rug" data-rug data-in>
-          <div class="stage" data-stage role="application" tabindex="0" aria-label="A stained carpet. Drag the cleaning wand across it to clean it. With a keyboard, press Enter to clean one stripe.">
-            <canvas data-base></canvas>
-            <canvas data-lines></canvas>
-            <canvas class="dirt" data-dirt></canvas>
+          <div class="stage" data-stage role="slider" tabindex="0" aria-label="Before and after carpet cleaning. Slide to compare." aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+            <canvas data-clean></canvas>
+            <canvas class="dirty" data-dirty></canvas>
             <div data-tags></div>
-            <div class="wand" data-wand aria-hidden="true"></div>
-            <span class="callout" data-callout><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 15V3M5 7l4-4 4 4"/></svg><span data-call-t>Drag the wand to clean</span></span>
+            <span class="side b">Before</span><span class="side a">After</span>
+            <div class="shine" data-shine aria-hidden="true"></div>
+            <div class="div" aria-hidden="true"><span class="knob"><svg viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 9l-6 6 6 6M19 9l6 6-6 6"/></svg></span></div>
+            <span class="callout" data-callout><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l-4 4 4 4M14 6l4 4-4 4M2 10h16"/></svg><span data-call-t>Slide to clean</span></span>
             <div class="fresh" aria-hidden="true"><div><b>Fresh.</b><small>Sweepers clean</small></div></div>
           </div>
           <div class="meter">
-            <span class="st" data-stains aria-live="polite">0 of 4 stains lifted</span>
+            <span class="st" data-stains aria-live="polite">0 of 4 stains gone</span>
             <div class="bar" aria-hidden="true"><i data-bar></i></div>
             <b data-pct>0%</b>
             <button type="button" data-reset hidden>Again</button>
@@ -475,156 +508,102 @@
   document.addEventListener('click', e => { const a = e.target.closest('a[href^="#"]'); if (!a) return; const id = a.getAttribute('href'); if (id === '#') return; const t = id === '#top' ? 0 : $(id); if (t === null) return; e.preventDefault(); go(t); });
 
   /* =============================================================
-     SIGNATURE: clean the carpet. The wand lifts the dirt and
-     leaves alternating light/dark "fresh lines" by pass direction.
+     SIGNATURE: before / after. One easy sideways swipe on any
+     device; it plays itself once so nobody has to figure it out.
      ============================================================= */
   const Rug = (() => {
-    const rug = $('[data-rug]'), st = $('[data-stage]'), wand = $('[data-wand]');
-    const base = $('[data-base]'), lines = $('[data-lines]'), dirt = $('[data-dirt]');
-    const bx = base.getContext('2d'), lx = lines.getContext('2d'), dx = dirt.getContext('2d');
+    const rug = $('[data-rug]'), st = $('[data-stage]');
+    const cc = $('[data-clean]'), dc = $('[data-dirty]'), cx = cc.getContext('2d'), dx = dc.getContext('2d');
     const DPR = Math.min(devicePixelRatio || 1, 2);
-    let W = 0, H = 0, head = 0, depth = 0, napUp = null, napDn = null;
-    const GX = 48, GY = 40; let grid = new Uint8Array(GX * GY), covered = 0;
+    let W = 0, H = 0, p = 100, done = false, touched = false, intro = null, nudge = null;
     const STAINS = [
-      { k: 'Coffee', x: .28, y: .32, r: .11, c: [92, 58, 30] },
-      { k: 'Red wine', x: .7, y: .27, r: .1, c: [112, 26, 40] },
-      { k: 'Muddy boots', x: .36, y: .72, r: .13, c: [70, 54, 36], prints: true },
-      { k: 'Pet accident', x: .74, y: .68, r: .1, c: [150, 122, 50] }
+      { k: 'Coffee', x: .26, y: .34, r: .11, c: [92, 58, 30] },
+      { k: 'Red wine', x: .7, y: .28, r: .1, c: [112, 26, 40] },
+      { k: 'Muddy boots', x: .4, y: .7, r: .13, c: [70, 54, 36], prints: true },
+      { k: 'Pet accident', x: .76, y: .68, r: .1, c: [150, 122, 50] }
     ];
-    let lifted = new Set(), done = false, touched = false, demoTl = null;
-    // seeded noise
     let seed = 7; const rnd = () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
-    const mk = () => { const c = document.createElement('canvas'); c.width = W * DPR; c.height = H * DPR; const x = c.getContext('2d'); x.setTransform(DPR, 0, 0, DPR, 0, 0); return [c, x]; };
-    const carpet = (x, tone, napDir) => {
-      // loop-pile texture: base fill + thousands of tiny tufts
+    const carpet = (x, tone, nap) => {
       x.fillStyle = `rgb(${203 + tone},${191 + tone},${174 + tone})`; x.fillRect(0, 0, W, H);
-      seed = 11;
-      const n = Math.round(W * H / 9);
-      for (let i = 0; i < n; i++) {
-        const px = rnd() * W, py = rnd() * H, l = rnd();
-        const v = l < .5 ? -18 : 14; const a = .08 + rnd() * .12;
-        x.fillStyle = `rgba(${v < 0 ? '60,48,34' : '255,250,240'},${a})`;
-        x.fillRect(px, py, 1.4, 1.4 + (napDir ? 1.6 : 0));
-      }
-      if (napDir) { // nap sheen
-        const g = x.createLinearGradient(0, 0, 0, H);
-        g.addColorStop(0, napDir > 0 ? 'rgba(255,255,255,.10)' : 'rgba(40,30,20,.06)');
-        g.addColorStop(1, napDir > 0 ? 'rgba(255,255,255,.04)' : 'rgba(40,30,20,.10)');
-        x.fillStyle = g; x.fillRect(0, 0, W, H);
-      }
+      seed = 11; const n = Math.round(W * H / 9);
+      for (let i = 0; i < n; i++) { const px = rnd() * W, py = rnd() * H, l = rnd(); x.fillStyle = `rgba(${l < .5 ? '60,48,34' : '255,250,240'},${.08 + rnd() * .12})`; x.fillRect(px, py, 1.4, 1.4 + (nap ? 1.6 : 0)); }
     };
-    const blob = (x, cx, cy, r, col, a) => {
-      x.save(); x.translate(cx, cy);
-      for (let k = 0; k < 3; k++) {
-        x.beginPath(); const pts = 14;
-        for (let i = 0; i <= pts; i++) { const t = i / pts * Math.PI * 2, rr = r * (.7 + rnd() * .45) * (1 - k * .25); const px = Math.cos(t) * rr, py = Math.sin(t) * rr * .82; i ? x.lineTo(px, py) : x.moveTo(px, py); }
-        x.closePath(); x.fillStyle = `rgba(${col[0]},${col[1]},${col[2]},${a * (k ? .55 : .7)})`; x.filter = `blur(${2 + k * 2}px)`; x.fill();
-      }
+    const blob = (x, cxp, cyp, r, col) => {
+      x.save(); x.translate(cxp, cyp);
+      for (let k = 0; k < 3; k++) { x.beginPath(); for (let i = 0; i <= 14; i++) { const t = i / 14 * Math.PI * 2, rr = r * (.7 + rnd() * .45) * (1 - k * .25); const px = Math.cos(t) * rr, py = Math.sin(t) * rr * .82; i ? x.lineTo(px, py) : x.moveTo(px, py); } x.closePath(); x.fillStyle = `rgba(${col},${k ? .5 : .65})`; x.filter = `blur(${2 + k * 2}px)`; x.fill(); }
       x.restore(); x.filter = 'none';
     };
-    const paintDirt = () => {
-      dx.globalCompositeOperation = 'source-over'; dx.clearRect(0, 0, W, H);
-      // overall dull, grayed traffic grime with a darker traffic lane
-      dx.fillStyle = 'rgba(120,104,84,.42)'; dx.fillRect(0, 0, W, H);
-      const lane = dx.createLinearGradient(0, H * .2, 0, H); lane.addColorStop(0, 'rgba(70,58,44,0)'); lane.addColorStop(1, 'rgba(70,58,44,.22)'); dx.fillStyle = lane; dx.fillRect(W * .3, 0, W * .4, H);
-      seed = 41;
-      for (let i = 0; i < 260; i++) { dx.fillStyle = `rgba(60,48,34,${.05 + rnd() * .12})`; const r = 1 + rnd() * 3; dx.beginPath(); dx.arc(rnd() * W, rnd() * H, r, 0, 7); dx.fill(); }
+    const draw = () => {
+      // AFTER: clean carpet with alternating fresh lines
+      carpet(cx, 0, 1);
+      const stripe = Math.max(46, W / 8);
+      for (let i = 0; i * stripe < W; i++) { cx.fillStyle = i % 2 ? 'rgba(60,44,28,.07)' : 'rgba(255,255,255,.13)'; cx.fillRect(i * stripe, 0, stripe, H); }
+      const g = cx.createLinearGradient(0, 0, W, H); g.addColorStop(0, 'rgba(255,255,255,.12)'); g.addColorStop(1, 'rgba(255,255,255,0)'); cx.fillStyle = g; cx.fillRect(0, 0, W, H);
+      // BEFORE: same carpet, dull, grimy, stained
+      carpet(dx, 0, 0);
+      dx.fillStyle = 'rgba(120,104,84,.45)'; dx.fillRect(0, 0, W, H);
+      const lane = dx.createLinearGradient(0, H * .2, 0, H); lane.addColorStop(0, 'rgba(70,58,44,0)'); lane.addColorStop(1, 'rgba(70,58,44,.24)'); dx.fillStyle = lane; dx.fillRect(W * .25, 0, W * .45, H);
+      seed = 41; for (let i = 0; i < 260; i++) { dx.fillStyle = `rgba(60,48,34,${.05 + rnd() * .12})`; dx.beginPath(); dx.arc(rnd() * W, rnd() * H, 1 + rnd() * 3, 0, 7); dx.fill(); }
       STAINS.forEach(s => {
         const R = s.r * Math.min(W, H) * 1.25;
         if (s.prints) { for (let i = 0; i < 4; i++) { const px = W * (s.x - .1 + i * .07), py = H * (s.y + (i % 2 ? .05 : -.04)); dx.save(); dx.translate(px, py); dx.rotate(-.3); dx.fillStyle = `rgba(${s.c},.55)`; dx.filter = 'blur(1.5px)'; dx.beginPath(); dx.ellipse(0, 0, R * .22, R * .38, 0, 0, 7); dx.fill(); dx.beginPath(); dx.ellipse(0, R * .5, R * .18, R * .16, 0, 0, 7); dx.fill(); dx.restore(); dx.filter = 'none'; } }
-        else blob(dx, W * s.x, H * s.y, R, s.c, .9);
+        else blob(dx, W * s.x, H * s.y, R, s.c);
       });
     };
     const size = () => {
       const r = st.getBoundingClientRect(); W = r.width; H = r.height;
-      [base, lines, dirt].forEach(c => { c.width = W * DPR; c.height = H * DPR; c.getContext('2d').setTransform(DPR, 0, 0, DPR, 0, 0); });
-      head = clamp(W * .2, 70, 150); depth = clamp(H * .045, 14, 26);
-      carpet(bx, 0, 0);
-      [napUp] = mk(); carpet(napUp.getContext('2d'), 10, 1);
-      [napDn] = mk(); carpet(napDn.getContext('2d'), -6, -1);
-      lx.clearRect(0, 0, W, H); grid = new Uint8Array(GX * GY); covered = 0; lifted = new Set();
-      paintDirt(); drawWand(W / 2, H * .82); placeTags(); report();
+      [cc, dc].forEach(c => { c.width = W * DPR; c.height = H * DPR; c.getContext('2d').setTransform(DPR, 0, 0, DPR, 0, 0); });
+      draw();
     };
-    // tags
-    const tagBox = $('[data-tags]');
-    const placeTags = () => { tagBox.innerHTML = STAINS.map((s, i) => `<span class="tag" data-tag="${i}" style="left:${s.x * 100}%;top:${(s.y - s.r - .05) * 100}%">${esc(s.k)}</span>`).join(''); };
-    // wand graphic
-    wand.innerHTML = `<svg width="200" height="260" viewBox="-100 -240 200 260"><path d="M0 -6 C 4 -70, -30 -120, 10 -238" fill="none" stroke="#12306a" stroke-width="7" stroke-linecap="round"/><rect x="-5" y="-30" width="10" height="26" rx="3" fill="#b9c4d0"/><g data-head><rect x="-60" y="-6" width="120" height="18" rx="5" fill="#dfe6ee" stroke="#8796a8" stroke-width="1.5"/><rect x="-56" y="8" width="112" height="4" rx="2" fill="#3fc4d4"/></g></svg>`;
-    const headG = $('[data-head]', wand);
-    const drawWand = (x, y) => { const s = head / 120; headG.setAttribute('transform', `scale(${s} 1)`); wand.style.transform = `translate(${x - 100}px, ${y - 240 + 0}px)`; };
-    // a stamp of the wand head at (x, y) moving in direction dir (+1 up / -1 down)
-    const stamp = (x, y, w, h, dir) => {
-      const rx = clamp(x - w / 2, 0, W), ry = clamp(y - h / 2, 0, H), rw = Math.min(w, W - rx), rh = Math.min(h, H - ry);
-      if (rw <= 0 || rh <= 0) return;
-      const src = dir > 0 ? napUp : napDn;
-      lx.drawImage(src, rx * DPR, ry * DPR, rw * DPR, rh * DPR, rx, ry, rw, rh);
-      dx.globalCompositeOperation = 'destination-out'; dx.fillStyle = '#000'; dx.fillRect(rx, ry, rw, rh); dx.globalCompositeOperation = 'source-over';
-      const gx0 = Math.floor(rx / W * GX), gx1 = Math.min(GX - 1, Math.floor((rx + rw) / W * GX - 1e-6)), gy0 = Math.floor(ry / H * GY), gy1 = Math.min(GY - 1, Math.floor((ry + rh) / H * GY - 1e-6));
-      for (let gy = gy0; gy <= gy1; gy++) for (let gx = gx0; gx <= gx1; gx++) { const i = gy * GX + gx; if (!grid[i]) { grid[i] = 1; covered++; } }
-    };
-    const cellsIn = (cx, cy, r) => { let t = 0, c = 0; for (let gy = 0; gy < GY; gy++) for (let gx = 0; gx < GX; gx++) { const x = (gx + .5) / GX, y = (gy + .5) / GY; if (Math.hypot((x - cx) * W, (y - cy) * H) < r) { t++; if (grid[gy * GX + gx]) c++; } } return t ? c / t : 1; };
-    let lastReport = 0;
-    const report = (force) => {
-      const now = performance.now(); if (!force && now - lastReport < 120) return; lastReport = now;
-      const pct = Math.round(covered / (GX * GY) * 100);
-      STAINS.forEach((s, i) => { if (!lifted.has(i) && cellsIn(s.x, s.y, s.r * Math.min(W, H) * 1.1) > .82) { lifted.add(i); const t = $(`[data-tag="${i}"]`); if (t) t.classList.add('gone'); } });
-      $('[data-pct]').textContent = (done ? 100 : pct) + '%'; $('[data-bar]').style.width = (done ? 100 : pct) + '%';
-      $('[data-stains]').textContent = `${lifted.size} of ${STAINS.length} stains lifted`;
-      if (!done && pct >= 86 && lifted.size === STAINS.length) finish();
+    $('[data-tags]').innerHTML = STAINS.map((s, i) => `<span class="tag" data-tag="${i}" style="left:${s.x * 100}%;top:${(s.y - s.r - .05) * 100}%">${esc(s.k)}</span>`).join('');
+    const tags = $$('[data-tag]');
+    const set = v => {
+      p = clamp(v, 0, 100); st.style.setProperty('--p', p + '%');
+      const clean = Math.round(100 - p);
+      st.setAttribute('aria-valuenow', clean); st.setAttribute('aria-valuetext', clean + '% cleaned');
+      let gone = 0; STAINS.forEach((s, i) => { const g = s.x * 100 > p + 2; tags[i].classList.toggle('gone', g); if (g) gone++; });
+      $('[data-stains]').textContent = `${gone} of ${STAINS.length} stains gone`;
+      $('[data-pct]').textContent = clean + '%'; $('[data-bar]').style.width = clean + '%';
+      if (!done && p <= 4 && touched) finish();
     };
     const finish = () => {
-      done = true; rug.classList.add('done'); dirt.style.opacity = 0; $('[data-reset]').hidden = false;
-      $$('[data-tag]').forEach(t => t.classList.add('gone')); report(true);
+      done = true; set(0); rug.classList.add('done'); $('[data-reset]').hidden = false;
       const b = $('.hero h1 .before'), a = $('.hero h1 .after');
-      if (ANIM) { gsap.to(b, { yPercent: -100, opacity: 0, duration: .6, ease: 'expo.in' }); gsap.fromTo(a, { yPercent: 100, opacity: 0 }, { yPercent: 0, opacity: 1, duration: .8, ease: 'expo.out', delay: .45 }); }
+      if (ANIM) { gsap.fromTo('[data-shine]', { xPercent: -120 }, { xPercent: 120, duration: 1.1, ease: 'power2.inOut' }); gsap.to(b, { yPercent: -100, opacity: 0, duration: .6, ease: 'expo.in' }); gsap.fromTo(a, { yPercent: 100, opacity: 0 }, { yPercent: 0, opacity: 1, duration: .8, ease: 'expo.out', delay: .45 }); }
       else { b.style.opacity = 0; a.style.opacity = 1; }
       window.__rugDone = true;
     };
-    const reset = () => {
-      done = false; rug.classList.remove('done'); dirt.style.transition = 'none'; dirt.style.opacity = 1; void dirt.offsetWidth; dirt.style.transition = ''; $('[data-reset]').hidden = true;
+    $('[data-reset]').addEventListener('click', () => {
+      done = false; rug.classList.remove('done'); $('[data-reset]').hidden = true;
       const b = $('.hero h1 .before'), a = $('.hero h1 .after'); if (ANIM) { gsap.set(b, { yPercent: 0, opacity: 1 }); gsap.set(a, { opacity: 0 }); } else { b.style.opacity = 1; a.style.opacity = 0; }
-      size();
+      if (ANIM) gsap.to({ v: p }, { v: 100, duration: .8, ease: 'power3.inOut', onUpdate() { set(this.targets()[0].v); } }); else set(100);
+    });
+    const touch = () => { if (touched) return; touched = true; rug.classList.add('touched'); if (intro) intro.kill(); if (nudge) nudge.kill(); };
+    // pointer: axis-locked so vertical swipes still scroll the page on phones
+    const fromX = x => { const r = st.getBoundingClientRect(); set((x - r.left) / r.width * 100); };
+    let start = null, axis = null;
+    st.addEventListener('pointerdown', e => { if (done) return; start = [e.clientX, e.clientY]; axis = e.pointerType === 'mouse' ? 'x' : null; if (axis) { touch(); st.classList.add('grab'); fromX(e.clientX); } try { st.setPointerCapture(e.pointerId); } catch (_) {} });
+    st.addEventListener('pointermove', e => { if (!start || done) return; if (!axis) { const ax = Math.abs(e.clientX - start[0]), ay = Math.abs(e.clientY - start[1]); if (ax < 6 && ay < 6) return; axis = ax > ay ? 'x' : 'y'; if (axis === 'x') { touch(); st.classList.add('grab'); } } if (axis === 'x') fromX(e.clientX); });
+    const end = e => { if (start && !axis && e.type === 'pointerup' && !done) { touch(); fromX(e.clientX); } start = null; axis = null; st.classList.remove('grab'); if (!done && p <= 4) finish(); };
+    st.addEventListener('pointerup', end); st.addEventListener('pointercancel', end);
+    st.addEventListener('keydown', e => { const k = { ArrowLeft: -8, ArrowRight: 8, Home: -100, End: 100 }[e.key]; if (k == null || done) return; e.preventDefault(); touch(); set(p + k); });
+    if (!FINE) $('[data-call-t]').textContent = 'Swipe to clean';
+    // it plays itself once (dirty → halfway), then nudges until someone tries it
+    let played = false;
+    const play = () => {
+      if (played) return;
+      if (!ANIM) { played = true; set(50); return; }
+      // wait until the slider is actually on screen (it's below the fold on phones)
+      const r = st.getBoundingClientRect(), vis = Math.min(r.bottom, innerHeight) - Math.max(r.top, 0); if (vis < r.height * .75) { const io = new IntersectionObserver(([e]) => { if (e.intersectionRatio >= .75) { io.disconnect(); play(); } }, { threshold: .75 }); io.observe(st); return; }
+      played = true;
+      const o = { v: 100 };
+      intro = gsap.timeline({ onComplete: () => { intro = null; if (!touched) nudge = gsap.timeline({ repeat: -1, repeatDelay: 2.4, delay: 2 }).to(o, { v: 42, duration: .5, ease: 'power2.inOut', onUpdate: () => !touched && set(o.v) }).to(o, { v: 50, duration: .9, ease: 'elastic.out(1,.45)', onUpdate: () => !touched && set(o.v) }); } })
+        .to(o, { v: 8, duration: 1.4, ease: 'power3.inOut', onUpdate: () => set(o.v) })
+        .to(o, { v: 50, duration: 1, ease: 'power3.inOut', onUpdate: () => set(o.v) }, '+=.25');
     };
-    $('[data-reset]').addEventListener('click', reset);
-    // steam puffs
-    let lastPuff = 0;
-    const puff = (x, y) => { if (!ANIM) return; const n = performance.now(); if (n - lastPuff < 70) return; lastPuff = n; const p = document.createElement('i'); p.style.cssText = `position:absolute;left:${x + (Math.random() - .5) * head}px;top:${y}px;width:22px;height:22px;margin:-11px;border-radius:50%;background:rgba(255,255,255,.75);filter:blur(5px);pointer-events:none;z-index:3`; st.appendChild(p); gsap.to(p, { y: -40 - Math.random() * 30, scale: 2.2, opacity: 0, duration: .9, ease: 'power2.out', onComplete: () => p.remove() }); };
-    // drag
-    let drag = null;
-    const pos = e => { const r = st.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
-    const touch = () => { if (touched) return; touched = true; rug.classList.add('touched'); if (demoTl) { demoTl.kill(); demoTl = null; } };
-    const segment = (x0, y0, x1, y1) => {
-      const ddx = x1 - x0, ddy = y1 - y0, dist = Math.hypot(ddx, ddy); if (!dist) return;
-      const vertical = Math.abs(ddy) >= Math.abs(ddx) * .6;
-      const dir = vertical ? (ddy < 0 ? 1 : -1) : (ddx > 0 ? 1 : -1);
-      const steps = Math.max(1, Math.ceil(dist / (depth * .5)));
-      for (let i = 1; i <= steps; i++) { const t = i / steps; stamp(x0 + ddx * t, y0 + ddy * t, head, depth, dir); }
-      puff(x1, y1 + depth);
-    };
-    st.addEventListener('pointerdown', e => { touch(); if (done) return; const [x, y] = pos(e); drag = [x, y]; stamp(x, y, head, depth, 1); drawWand(x, y); report(); try { st.setPointerCapture(e.pointerId); } catch (_) {} });
-    st.addEventListener('pointermove', e => { const [x, y] = pos(e); drawWand(x, y); if (!drag || done) return; segment(drag[0], drag[1], x, y); drag = [x, y]; report(); });
-    const up = () => { drag = null; report(true); };
-    st.addEventListener('pointerup', up); st.addEventListener('pointercancel', up);
-    st.addEventListener('pointerleave', () => { if (!drag) drawWand(W / 2, H * .82); });
-    // keyboard: Enter cleans the next stripe
-    let kcol = 0;
-    st.addEventListener('keydown', e => { if (e.key !== 'Enter' && e.key !== ' ') return; e.preventDefault(); touch(); if (done) return; const n = Math.ceil(W / head); const x = (kcol % n + .5) * (W / n), dir = kcol % 2 ? -1 : 1; segment(x, dir > 0 ? H : 0, x, dir > 0 ? 0 : H); kcol++; report(true); });
-    if (!FINE) $('[data-call-t]').textContent = 'Drag the wand to clean';
-    // demo: one pass up and one pass down if nobody touches it
-    const demo = () => {
-      if (!ANIM || touched || demoTl) return;
-      const x1 = W * .5 - head * .5, x2 = W * .5 + head * .5; const o = { x: x1, y: H * .95 }; let prev = [o.x, o.y];
-      const step = () => { if (touched) return; segment(prev[0], prev[1], o.x, o.y); prev = [o.x, o.y]; drawWand(o.x, o.y); report(); };
-      demoTl = gsap.timeline({ delay: 2.6 })
-        .to(o, { y: H * .5, duration: 1, ease: 'power1.inOut', onUpdate: step })
-        .add(() => { prev = [x2, H * .5]; o.x = x2; o.y = H * .5; })
-        .to(o, { y: H * .95, duration: 1, ease: 'power1.inOut', onUpdate: step })
-        .add(() => { drawWand(W / 2, H * .82); $('[data-call-t]').textContent = 'Your turn: drag the wand'; demoTl = null; });
-    };
-    new IntersectionObserver(([e]) => { if (e.isIntersecting) demo(); }, { threshold: .5 }).observe(st);
     let rT; addEventListener('resize', () => { clearTimeout(rT); rT = setTimeout(() => { if (Math.abs(st.getBoundingClientRect().width - W) > 2) size(); }, 200); });
-    size();
-    return { size, state: () => ({ pct: Math.round(covered / (GX * GY) * 100), lifted: lifted.size, done }) };
+    size(); set(100);
+    return { set, play, state: () => ({ clean: Math.round(100 - p), done }) };
   })();
   window.__rug = Rug;
 
@@ -655,9 +634,29 @@
   /* =============================================================
      MOTION
      ============================================================= */
-  if (!ANIM) return;
+  if (!ANIM) { const i = $('[data-intro]'); if (i) i.remove(); Rug.play(); return; }
+  // logo intro: swooshes draw, SWEEPERS sweeps in, a gleam, bubbles, aqua wipe
   gsap.set('.hero h1 .line > span', { yPercent: 110 }); gsap.set('[data-in]', { opacity: 0, y: 20 });
-  gsap.timeline({ delay: .1 }).to('.hero h1 .line > span', { yPercent: 0, duration: 1.2, ease: 'expo.out', stagger: .1 }).to('[data-in]', { opacity: 1, y: 0, duration: 1, ease: 'expo.out', stagger: .08 }, .2);
+  const introEl = $('[data-intro]');
+  ['[data-sw1]', '[data-sw2]'].forEach(sel => { const el = $(sel, introEl), L = el.getTotalLength(); el.style.strokeDasharray = L; el.style.strokeDashoffset = L; });
+  const bub = $('[data-bubbles]'); for (let i = 0; i < 16; i++) { const b = document.createElement('i'), s = 10 + Math.random() * 34; b.style.cssText = `width:${s}px;height:${s}px;left:${10 + Math.random() * 80}%;top:${60 + Math.random() * 30}%`; bub.appendChild(b); }
+  const itl = gsap.timeline({ onComplete: () => { introEl.remove(); Rug.play(); } });
+  itl.fromTo('[data-word]', { xPercent: -30, skewX: -20, opacity: 0 }, { xPercent: 0, skewX: 0, opacity: 1, duration: .8, ease: 'expo.out', transformOrigin: '50% 50%' }, .1)
+    .to('[data-sw1]', { strokeDashoffset: 0, duration: .8, ease: 'power2.inOut' }, .25)
+    .to('[data-sw2]', { strokeDashoffset: 0, duration: .7, ease: 'power2.inOut' }, .4)
+    .from('[data-sub]', { opacity: 0, letterSpacing: 9, duration: .7, ease: 'expo.out' }, .55)
+    .from('[data-bubbles] i', { y: 60, scale: 0, opacity: 0, duration: 1.1, ease: 'back.out(2)', stagger: .03 }, .3)
+    .to('[data-bubbles] i', { y: -260, opacity: 0, duration: 1.2, ease: 'power1.in', stagger: .02 }, 1.1)
+    .fromTo('[data-gleam]', { xPercent: -120 }, { xPercent: 120, duration: .7, ease: 'power2.inOut' }, 1.05)
+    .to('.intro .mark', { scale: 1.06, duration: .3, ease: 'power2.out' }, 1.5)
+    .to('.intro .mark', { scale: .85, opacity: 0, duration: .4, ease: 'expo.in' }, 1.8)
+    .to('[data-wipe]', { scaleY: 1, duration: .45, ease: 'expo.in' }, 1.85)
+    .set('[data-wipe]', { transformOrigin: 'top' }, 2.3)
+    .to(introEl, { backgroundColor: 'rgba(255,255,255,0)', duration: .01 }, 2.3)
+    .to('[data-wipe]', { scaleY: 0, duration: .6, ease: 'expo.inOut' }, 2.3)
+    .to('.hero h1 .line > span', { yPercent: 0, duration: 1.2, ease: 'expo.out', stagger: .1 }, 2.45)
+    .to('[data-in]', { opacity: 1, y: 0, duration: 1, ease: 'expo.out', stagger: .08 }, 2.6);
+  introEl.addEventListener('click', () => itl.progress(1));
   $$('main .line > span').forEach(el => { if (el.closest('.hero')) return; gsap.from(el, { yPercent: 110, duration: 1.2, ease: 'expo.out', scrollTrigger: { trigger: el.parentElement, start: 'top 92%' } }); });
   const rise = (sel, trig, st = .07) => gsap.from(sel, { opacity: 0, y: 40, duration: 1.1, ease: 'expo.out', stagger: st, scrollTrigger: { trigger: trig, start: 'top 86%' } });
   rise('.svc', '.svc-grid', .06); rise('.step', '.steps', .1); rise('.cert li', '.cert ul', .1); rise('details.q', '.faq-list', .06); rise('.preview', '.q-grid');
