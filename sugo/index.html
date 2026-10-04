@@ -18,15 +18,16 @@
        SUGO PASTA BAR · design tokens
        From their own posts: warm cream paper, a forest-green SUGO
        in an oval, terracotta "Pasta Bar", olive branches, pen-sketch
-       skylines and handwritten notes. Italian poster typography:
-       Playfair for the headlines, Outfit for the wordmark and labels,
-       Caveat for the little handwritten asides.
+       skylines and handwritten notes. Everything drawn on the page
+       is ink line work with loose watercolor washes, like the plates
+       in an old Italian cookbook.
        ------------------------------------------------------------ */
     :root {
       --paper: #f3ead9;
       --paper-2: #ebdfc8;
       --cream: #faf5ea;
       --ink: #1c1a15;
+      --inkl: #2a3326;
       --muted: #6f6656;
       --line: rgba(28,26,21,.14);
       --green: #1f3d2c;
@@ -62,16 +63,27 @@
     h1 em, h2 em, h3 em { font-style: italic; font-weight: 500; color: var(--tomato); }
     .line { display: block; overflow: hidden; padding-bottom: .08em; }
     .line > span { display: inline-block; will-change: transform; }
+    .ch { display: inline-block; will-change: transform; }
     .lede { color: var(--muted); font-size: clamp(16px, 1.2vw, 19px); max-width: 44ch; margin: 22px 0 0; }
 
-    .btn { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 12px; height: 56px; padding: 0 30px; border-radius: 999px; border: 1.5px solid var(--green); color: var(--green); font: 600 14px/1 var(--sans); letter-spacing: .12em; text-transform: uppercase; overflow: hidden; isolation: isolate; white-space: nowrap; transition: color .45s var(--ease), transform .2s; }
+    /* ink drawings: one shared look for every illustration */
+    svg.ink .ln { fill: none; stroke: var(--inkc, var(--inkl)); stroke-width: var(--sw, 1.9); stroke-linecap: round; stroke-linejoin: round; }
+    svg.ink .ln.t { stroke-width: calc(var(--sw, 1.9) * .66); }
+    svg.ink .ln.ht { stroke-width: calc(var(--sw, 1.9) * .46); opacity: .62; }
+    svg.ink .ln.gh { stroke-width: calc(var(--sw, 1.9) * .5); opacity: .3; }
+    svg.ink .ln.ar { stroke: var(--tomato); stroke-width: calc(var(--sw, 1.9) * .82); }
+    svg.ink .dt { fill: var(--inkc, var(--inkl)); fill-opacity: .55; }
+    svg.ink .ch { fill: #fffaf0; stroke: var(--inkc, var(--inkl)); stroke-width: .6; }
+    svg.ink .wa { fill-opacity: .9; }
+    svg.ink .hw { font: 500 28px/1 var(--hand); fill: var(--tomato); }
+
+    .btn { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 12px; height: 56px; padding: 0 30px; border-radius: 999px; border: 1.5px solid var(--green); color: var(--green); font: 600 14px/1 var(--sans); letter-spacing: .12em; text-transform: uppercase; overflow: hidden; isolation: isolate; white-space: nowrap; transition: color .45s var(--ease); }
     .btn::before { content: ""; position: absolute; inset: 0; background: var(--green); border-radius: inherit; transform: translateY(101%); transition: transform .55s var(--ease); z-index: -1; }
     .btn.solid { background: var(--green); color: var(--cream); }
     .btn.solid::before { background: var(--tomato); }
     .btn svg { width: 16px; height: 16px; flex: none; }
-    .btn:active { transform: scale(.97); }
+    .btn:active { scale: .97; }
     @media (hover: hover) { .btn:hover { color: var(--cream); } .btn:hover::before { transform: none; } }
-    .btn.sm { height: 44px; padding: 0 20px; font-size: 12.5px; }
 
     /* SUGO wordmark */
     .wm { display: inline-block; color: var(--green); }
@@ -81,25 +93,32 @@
     .wm .t2 { font: 600 12.5px/1 var(--sans); letter-spacing: .42em; fill: var(--tomato); }
 
     /* olive branch */
-    .olive { position: absolute; pointer-events: none; color: var(--olive); }
-    .olive svg { width: 100%; height: auto; }
+    .olive { position: absolute; pointer-events: none; }
+    .olive svg { width: 100%; height: auto; --inkc: #3c4a24; --sw: 1.5; }
 
     /* ---------- intro ---------- */
-    .intro { position: fixed; inset: 0; z-index: 250; background: var(--paper); display: grid; place-items: center; }
-    .intro .wm { width: min(360px, 70vw); }
-    .intro .tag { position: absolute; bottom: 12vh; left: 0; right: 0; text-align: center; font: 500 clamp(26px, 3vw, 36px)/1 var(--hand); color: var(--green-2); }
+    .intro { position: fixed; inset: 0; z-index: 250; background: var(--paper); display: grid; place-items: center; overflow: hidden; }
+    .intro .wm { position: relative; z-index: 2; width: min(380px, 72vw); }
+    .intro .tag { position: absolute; z-index: 2; top: calc(50% + min(120px, 21vw)); left: 0; right: 0; text-align: center; font: 500 clamp(26px, 3vw, 36px)/1 var(--hand); color: var(--green-2); }
+    .intro .swoosh { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+    .intro .swoosh path { fill: none; stroke-linecap: round; }
+    .intro .sw1 { stroke: var(--tomato); stroke-width: 74; }
+    .intro .sw2 { stroke: #f0c76a; stroke-width: 30; }
     html:not(.js) .intro, html.rm .intro { display: none; }
 
     header { position: fixed; left: 0; right: 0; top: 0; z-index: 60; transition: background .5s var(--ease), box-shadow .5s; }
     header.scrolled { background: rgba(243,234,217,.86); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); box-shadow: 0 1px 0 var(--line); }
     header .wrap { height: 82px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px; }
     header nav { display: flex; gap: 30px; }
-    header nav a { font: 500 12.5px/1 var(--sans); letter-spacing: .22em; text-transform: uppercase; color: var(--muted); transition: color .3s; }
+    header nav a { position: relative; font: 500 12.5px/1 var(--sans); letter-spacing: .22em; text-transform: uppercase; color: var(--muted); transition: color .3s; }
+    header nav a::after { content: ""; position: absolute; left: 0; right: .22em; bottom: -7px; height: 1.5px; background: var(--tomato); transform: scaleX(0); transform-origin: right; transition: transform .5s var(--ease); }
     header nav a:hover { color: var(--green); }
+    header nav a:hover::after { transform: scaleX(1); transform-origin: left; }
     header .wm { width: 110px; justify-self: center; }
     header .right { display: flex; justify-content: flex-end; }
     header .soon { display: inline-flex; align-items: center; gap: 9px; font: 600 12px/1 var(--sans); letter-spacing: .2em; text-transform: uppercase; color: var(--tomato); }
     header .soon i { width: 8px; height: 8px; border-radius: 50%; background: var(--tomato); animation: pulse 2s infinite; }
+    header .prog { position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--tomato); transform: scaleX(0); transform-origin: left; }
     @keyframes pulse { 50% { box-shadow: 0 0 0 6px rgba(181,64,31,0); } 0% { box-shadow: 0 0 0 0 rgba(181,64,31,.4); } }
     @media (max-width: 900px) { header nav { display: none; } header .wrap { grid-template-columns: auto 1fr; height: 68px; } header .wm { width: 92px; justify-self: start; } }
 
@@ -107,48 +126,66 @@
     .hero { position: relative; min-height: 100svh; padding: 120px 0 60px; display: grid; align-items: center; overflow: hidden; text-align: center; }
     .hero .kicker { display: inline-flex; align-items: center; gap: 14px; }
     .hero .kicker::before, .hero .kicker::after { content: ""; width: 40px; height: 1.5px; background: var(--ochre); }
-    .hero .script { display: block; font: 500 clamp(30px, 3.4vw, 52px)/1 var(--hand); color: var(--green-2); margin-top: 22px; }
-    .hero h1 { font-size: clamp(54px, 9.4vw, 168px); line-height: .9; margin-top: 8px; color: var(--tomato); text-transform: uppercase; font-weight: 800; letter-spacing: -.01em; }
+    .hero .script { display: block; width: fit-content; margin: 22px auto 0; font: 500 clamp(30px, 3.4vw, 52px)/1.1 var(--hand); color: var(--green-2); }
+    .hero h1 { font-size: clamp(54px, 9.4vw, 168px); line-height: .9; margin-top: 4px; color: var(--tomato); text-transform: uppercase; font-weight: 800; letter-spacing: -.01em; }
     .hero h1 .sub { display: block; font-size: .42em; color: var(--green); letter-spacing: .02em; margin-bottom: .1em; font-weight: 700; }
     .hero .dish { position: relative; width: min(860px, 92vw); margin: clamp(10px, 2vw, 26px) auto 0; aspect-ratio: 800 / 300; }
     .hero .dish img { width: 100%; height: 100%; object-fit: cover; -webkit-mask-image: radial-gradient(ellipse 52% 56% at 50% 50%, #000 62%, transparent 100%); mask-image: radial-gradient(ellipse 52% 56% at 50% 50%, #000 62%, transparent 100%); }
-    .hero .steam { position: absolute; left: 0; right: 0; top: -30%; height: 70%; pointer-events: none; }
+    .hero .steam { position: absolute; left: 0; right: 0; top: -34%; height: 74%; pointer-events: none; filter: blur(4px); z-index: 2; }
     .hero .three { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px 22px; margin-top: 8px; font: 600 13px/1 var(--sans); letter-spacing: .26em; text-transform: uppercase; color: var(--green); }
     .hero .three span::before { content: "•"; color: var(--ochre); margin-right: 22px; }
     .hero .three span:first-child::before { display: none; }
     .hero .ctas { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 30px; }
-    .hero .note { position: absolute; font: 500 clamp(22px, 2vw, 30px)/1.05 var(--hand); color: var(--green-2); transform: rotate(-8deg); }
+    .hero .note { position: absolute; font: 500 clamp(22px, 2vw, 30px)/1.05 var(--hand); color: var(--green-2); rotate: -8deg; }
     .hero .note.n1 { left: 6%; top: 24%; }
-    .hero .note.n2 { right: 6%; top: 32%; transform: rotate(7deg); text-align: right; }
+    .hero .note.n2 { right: 6%; top: 32%; rotate: 7deg; text-align: right; }
     .hero .note svg { width: 22px; height: 20px; display: inline-block; vertical-align: middle; color: var(--tomato); }
-    .hero .olive.o1 { left: -40px; top: 90px; width: clamp(160px, 16vw, 260px); transform: rotate(18deg); }
-    .hero .olive.o2 { right: -50px; bottom: 40px; width: clamp(170px, 18vw, 280px); transform: rotate(200deg); }
+    .hero .olive.o1 { left: -40px; top: 90px; width: clamp(170px, 17vw, 270px); rotate: 18deg; }
+    .hero .olive.o2 { right: -50px; bottom: 40px; width: clamp(180px, 19vw, 290px); rotate: 200deg; }
+    .hero .mini { position: absolute; bottom: 23%; width: clamp(170px, 14vw, 230px); text-align: center; }
+    .hero .mini.l { left: 4.5%; }
+    .hero .mini.r { right: 4.5%; width: clamp(130px, 10.5vw, 170px); }
+    .hero .mini svg { width: 100%; height: auto; --sw: 1.7; }
+    .hero .mini span { display: block; margin-top: 10px; font: 700 16px/1 var(--serif); letter-spacing: .06em; color: var(--green); text-transform: uppercase; }
+    .hero .mini span small { display: block; margin-top: 6px; font: 600 10px/1 var(--sans); letter-spacing: .3em; color: var(--tomato); }
+    @media (max-width: 1199px) { .hero .mini { display: none; } }
     @media (max-width: 900px) {
       .hero { padding: 100px 0 50px; }
       .hero .note { display: none; }
+      .hero h1 { font-size: 12.2vw; }
       .hero .dish { width: 116vw; margin-left: -8vw; }
       .hero .three span::before { margin-right: 12px; }
       .hero .three { gap: 8px 12px; font-size: 11.5px; letter-spacing: .18em; }
     }
 
-    /* marquee */
-    .marquee { overflow: hidden; background: var(--green); color: var(--cream); padding: 22px 0; white-space: nowrap; }
+    /* crossing ribbons */
+    .ribbons { position: relative; height: clamp(160px, 15vw, 230px); overflow: hidden; }
+    .ribbons .marquee { position: absolute; left: -6%; right: -6%; top: 50%; }
+    .ribbons .r1 { z-index: 2; transform: translateY(-50%) rotate(-3deg); box-shadow: 0 20px 40px -24px rgba(31,61,44,.6); }
+    .ribbons .r2 { z-index: 1; background: var(--tomato); transform: translateY(-50%) rotate(2.6deg); }
+    .ribbons .r2 span.h { color: #f6d9b0; }
+    .marquee { overflow: hidden; background: var(--green); color: var(--cream); padding: 20px 0; white-space: nowrap; }
     .marquee .track { display: inline-flex; align-items: center; will-change: transform; }
-    .marquee span { font: italic 500 clamp(26px, 3.4vw, 50px)/1 var(--serif); padding: 0 .5em; }
-    .marquee span.h { font: 500 clamp(30px, 3.8vw, 56px)/1 var(--hand); color: #e5c48e; }
-    .marquee svg { width: 30px; height: 30px; color: var(--ochre); flex: none; }
+    .marquee span { font: italic 500 clamp(24px, 3vw, 46px)/1 var(--serif); padding: 0 .5em; }
+    .marquee span.h { font: 500 clamp(28px, 3.4vw, 52px)/1 var(--hand); color: #e5c48e; }
+    .marquee svg { width: 28px; height: 28px; color: var(--ochre); flex: none; }
+    .ribbons .r2 svg { color: #f6d9b0; }
 
     /* ---------- statement ---------- */
-    .statement { position: relative; padding: clamp(120px, 16vw, 230px) 0; text-align: center; }
+    .statement { position: relative; padding: clamp(110px, 15vw, 220px) 0; text-align: center; }
     .statement .label { display: block; margin-bottom: 34px; }
-    .statement p.big { margin: 0 auto; max-width: 21ch; font: 500 clamp(30px, 4vw, 64px)/1.15 var(--serif); letter-spacing: -.01em; }
+    .statement p.big { margin: 0 auto; max-width: 21ch; font: 500 clamp(30px, 4vw, 64px)/1.18 var(--serif); letter-spacing: -.01em; }
     .statement .w { opacity: .14; }
     .statement .w.hl { font-style: italic; color: var(--tomato); }
+    .statement .mk { position: relative; display: inline-block; white-space: nowrap; }
+    .statement .mk-svg { position: absolute; pointer-events: none; overflow: visible; --inkc: var(--tomato); --sw: 3.2; }
+    .statement .mk-svg.u { left: -3%; width: 106%; bottom: -.16em; height: .3em; }
+    .statement .mk-svg.o { left: -16%; top: -12%; width: 132%; height: 124%; --sw: 2.6; }
     .statement .sign { display: inline-block; margin-top: 34px; font: 500 clamp(26px, 2.4vw, 34px)/1 var(--hand); color: var(--green-2); }
 
     /* ---------- the making (signature) ---------- */
     .making { position: relative; background: var(--cream); }
-    .mk-pin { position: relative; height: 100svh; display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); align-items: center; gap: clamp(20px, 4vw, 70px); padding: 90px var(--pad) 40px; overflow: hidden; }
+    .mk-pin { position: relative; height: 100svh; display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); align-items: center; gap: clamp(20px, 4vw, 70px); padding: 90px var(--pad) 40px; overflow: hidden; }
     .mk-copy { position: relative; z-index: 2; }
     .mk-copy .num { font: italic 500 clamp(18px, 1.4vw, 22px)/1 var(--serif); color: var(--ochre); }
     .mk-copy .num b { font-weight: 500; color: var(--tomato); }
@@ -160,8 +197,13 @@
     .mk-dots { display: flex; gap: 8px; margin-top: 26px; }
     .mk-dots i { width: 28px; height: 3px; border-radius: 3px; background: var(--line); overflow: hidden; position: relative; }
     .mk-dots i b { position: absolute; inset: 0; background: var(--tomato); transform: scaleX(0); transform-origin: left; }
-    .mk-stage { position: relative; width: 100%; max-width: 640px; justify-self: center; aspect-ratio: 1; }
-    .mk-stage svg { width: 100%; height: 100%; overflow: hidden; }
+    .mk-stage { position: relative; width: 100%; max-width: 660px; max-height: calc(100svh - 130px); justify-self: center; aspect-ratio: 1; }
+    .mk-stage svg { width: 100%; height: 100%; overflow: hidden; filter: drop-shadow(0 34px 46px rgba(31,61,44,.14)); }
+    .plate .fr { fill: none; stroke: var(--inkl); stroke-width: 1.3; }
+    .plate .fr.t { stroke-width: .6; }
+    .plate .cap { font: 600 11px/1 var(--sans); letter-spacing: .34em; fill: var(--green); }
+    .plate .cap.b { font-size: 12.5px; fill: var(--tomato); }
+    .plate .orn { fill: var(--ochre); }
     .mk-hint { position: absolute; left: var(--pad); bottom: 24px; font: 500 12px/1 var(--sans); letter-spacing: .26em; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; gap: 12px; }
     .mk-hint i { width: 1.5px; height: 30px; background: var(--line); position: relative; overflow: hidden; }
     .mk-hint i::after { content: ""; position: absolute; left: 0; right: 0; height: 40%; background: var(--tomato); animation: drip 1.8s var(--ease) infinite; }
@@ -169,15 +211,16 @@
     .making:not(.pinned) .mk-pin { height: auto; display: block; padding: 90px var(--pad); }
     .making:not(.pinned) .mk-steps { height: auto; }
     .making:not(.pinned) .mk-step { position: relative; margin-bottom: 40px; }
-    .making:not(.pinned) .mk-dots, .making:not(.pinned) .mk-hint { display: none; }
+    .making:not(.pinned) .mk-dots, .making:not(.pinned) .mk-hint, .making:not(.pinned) .num { display: none; }
+    .making:not(.pinned) .mk-stage { margin-top: 30px; }
     @media (max-width: 900px) {
-      .mk-pin { grid-template-columns: 1fr; grid-template-rows: auto 1fr; padding: 76px var(--pad) 26px; gap: 0; align-content: start; }
-      .mk-stage { order: -1; width: min(100%, 46svh); max-width: none; }
-      .mk-steps { height: clamp(190px, 30svh, 260px); margin-top: 8px; }
+      .mk-pin { grid-template-columns: 1fr; grid-template-rows: auto 1fr; padding: 74px var(--pad) 24px; gap: 0; align-content: start; }
+      .mk-stage { order: -1; width: min(100%, 47svh); max-width: none; }
+      .mk-steps { height: clamp(190px, 30svh, 260px); margin-top: 10px; }
       .mk-step .it { font-size: clamp(44px, 12vw, 64px); }
       .mk-step .en { font-size: 26px; margin-top: 6px; }
       .mk-step p { margin-top: 10px; font-size: 15.5px; }
-      .mk-copy .num { display: none; }
+      .mk-copy .label, .mk-copy .num { display: none; }
       .mk-dots { margin-top: 4px; }
       .mk-hint { display: none; }
     }
@@ -188,22 +231,34 @@
     .route-head .label { display: block; margin-bottom: 22px; }
     .route-head h2 { text-transform: uppercase; color: var(--green); font-weight: 800; }
     .route-head h2 .to { display: block; font: 500 .45em/1 var(--hand); text-transform: none; color: var(--tomato); margin: .12em 0; }
-    .map { position: relative; margin: clamp(40px, 6vw, 80px) auto 0; max-width: 1100px; }
-    .map svg { width: 100%; height: auto; overflow: visible; }
-    .map .sk { fill: none; stroke: var(--green); stroke-width: 1.4; stroke-linejoin: round; stroke-linecap: round; }
-    .map .route-path { fill: none; stroke: var(--tomato); stroke-width: 2.6; stroke-linecap: round; stroke-dasharray: 2 9; }
-    .map .pin text { font: 600 13px/1 var(--sans); letter-spacing: .2em; fill: var(--green); }
-    .map .pin .big { font: 800 20px/1 var(--serif); letter-spacing: 0; }
+    .map { position: relative; margin: clamp(40px, 6vw, 80px) auto 0; max-width: 1180px; }
+    .map svg { width: 100%; height: auto; overflow: visible; --sw: 1.5; }
+    .map .rp { fill: none; stroke: var(--tomato); stroke-width: 2.6; stroke-linecap: round; stroke-dasharray: 2 9; }
+    .map .mit .ln { opacity: .55; }
+    .map .lbl { font: 800 24px/1 var(--serif); letter-spacing: .04em; fill: var(--green); }
+    .map .lbl-h { font: 500 23px/1 var(--hand); fill: var(--tomato); }
+    .map .pt { fill: var(--tomato); }
+    @media (max-width: 700px) {
+      .map { margin-left: calc(var(--pad) * -1); margin-right: calc(var(--pad) * -1); }
+      .map svg { --sw: 3; }
+      .map .rp { stroke-width: 5; stroke-dasharray: 4 15; }
+      .map .lbl { font-size: 38px; }
+      .map .lbl-h { display: none; }
+    }
     .places { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: clamp(40px, 5vw, 70px); }
-    .place { padding: 28px 26px; border-radius: 4px; background: var(--cream); box-shadow: 0 0 0 1px var(--line); position: relative; }
+    .place { padding: 26px 26px 30px; border-radius: 4px; background: var(--cream); box-shadow: 0 0 0 1px var(--line); position: relative; transition: transform .6s var(--ease-out), box-shadow .6s; }
+    @media (hover: hover) { .place:hover { transform: translateY(-6px); box-shadow: 0 0 0 1px var(--line), 0 30px 50px -30px rgba(31,61,44,.35); } }
+    .place svg.store { width: 100%; height: auto; margin-bottom: 22px; --sw: 1.4; }
+    .place .sgn { font: 600 10.5px/1 var(--sans); letter-spacing: .26em; fill: var(--inkc, var(--inkl)); }
     .place .where { font: 600 11.5px/1 var(--sans); letter-spacing: .26em; text-transform: uppercase; color: var(--ochre); }
     .place h3 { font-size: clamp(28px, 2.6vw, 40px); margin-top: 14px; color: var(--green); }
     .place p { color: var(--muted); margin: 12px 0 0; font-size: 15.5px; }
     .place.new { background: var(--green); color: var(--cream); box-shadow: none; }
+    .place.new svg.store { --inkc: #f3ead9; }
     .place.new h3 { color: var(--cream); }
     .place.new p { color: rgba(250,245,234,.75); }
     .place.new .where { color: #e5c48e; }
-    .place .stamp { position: absolute; right: 18px; top: 18px; font: 700 26px/1 var(--hand); color: #e5c48e; transform: rotate(8deg); }
+    .place .stamp { position: absolute; right: 18px; top: 14px; font: 700 28px/1 var(--hand); color: #e5c48e; transform: rotate(8deg); }
     @media (max-width: 900px) { .places { grid-template-columns: 1fr; } }
 
     /* ---------- expect ---------- */
@@ -211,36 +266,41 @@
     .sec-head { display: flex; justify-content: space-between; align-items: end; gap: 30px; flex-wrap: wrap; margin-bottom: clamp(44px, 6vw, 80px); }
     .sec-head .label { display: block; margin-bottom: 20px; }
     .ex-list { border-top: 1.5px solid var(--green); }
-    .ex { position: relative; display: grid; grid-template-columns: 100px minmax(0, 1fr) minmax(0, 1.1fr); gap: 24px; align-items: baseline; padding: clamp(24px, 3vw, 38px) 0; border-bottom: 1px solid var(--line); overflow: hidden; }
+    .ex { position: relative; display: grid; grid-template-columns: 120px minmax(0, 1fr) minmax(0, 1.1fr); gap: 24px; align-items: center; padding: clamp(22px, 2.6vw, 34px) 0; border-bottom: 1px solid var(--line); overflow: hidden; }
     .ex::before { content: ""; position: absolute; inset: 0; background: var(--green); transform: scaleY(0); transform-origin: bottom; transition: transform .6s var(--ease); z-index: 0; }
     .ex > * { position: relative; z-index: 1; transition: color .5s var(--ease); }
-    .ex .n { font: italic 500 22px/1 var(--serif); color: var(--ochre); }
+    .ex .n { display: flex; align-items: center; gap: 14px; font: italic 500 20px/1 var(--serif); color: var(--ochre); }
+    .ex .ico { width: 72px; height: 72px; flex: none; --sw: 2; transition: transform .7s var(--ease-out); }
     .ex h3 { font-size: clamp(34px, 4.4vw, 72px); font-weight: 800; color: var(--green); }
     .ex h3 small { display: block; font: 500 clamp(22px, 2vw, 30px)/1 var(--hand); color: var(--tomato); margin-top: 6px; }
     .ex p { margin: 0; color: var(--muted); max-width: 44ch; }
-    @media (hover: hover) { .ex:hover::before { transform: scaleY(1); } .ex:hover h3, .ex:hover p { color: var(--cream); } .ex:hover small { color: #e5c48e; } }
-    @media (max-width: 900px) { .ex { grid-template-columns: 1fr; gap: 10px; } }
+    @media (hover: hover) { .ex:hover::before { transform: scaleY(1); } .ex:hover h3, .ex:hover p { color: var(--cream); } .ex:hover small { color: #e5c48e; } .ex:hover .ico { --inkc: #f3ead9; transform: rotate(-8deg) scale(1.08); } }
+    @media (max-width: 900px) { .ex { grid-template-columns: 1fr; gap: 10px; } .ex .ico { width: 60px; height: 60px; } }
 
     /* ---------- quote ---------- */
     .quote { position: relative; padding: clamp(120px, 15vw, 220px) 0; text-align: center; overflow: hidden; }
     .quote blockquote { margin: 0 auto; max-width: 20ch; font: italic 500 clamp(36px, 5.2vw, 88px)/1.08 var(--serif); color: var(--green); }
     .quote blockquote b { font-weight: 800; font-style: normal; color: var(--tomato); }
+    .quote .qw { display: inline-block; }
     .quote figcaption { margin-top: 34px; font: 600 12.5px/1.6 var(--sans); letter-spacing: .26em; text-transform: uppercase; color: var(--muted); }
-    .quote .olive.o3 { left: 4%; top: 18%; width: clamp(120px, 12vw, 200px); transform: rotate(-30deg); }
-    .quote .olive.o4 { right: 4%; bottom: 14%; width: clamp(120px, 12vw, 200px); transform: rotate(150deg); }
+    .quote .olive.o3 { left: 3%; top: 16%; width: clamp(130px, 13vw, 220px); rotate: -30deg; }
+    .quote .olive.o4 { right: 3%; bottom: 12%; width: clamp(130px, 13vw, 220px); rotate: 150deg; }
+    @media (max-width: 700px) { .quote .olive { width: 110px; } .quote .olive.o3 { top: 3%; left: -10px; } .quote .olive.o4 { bottom: 3%; right: -10px; } }
 
     /* ---------- the door / visit ---------- */
     .visit { padding: clamp(100px, 13vw, 180px) 0; background: var(--cream); }
-    .v-grid { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: clamp(30px, 6vw, 110px); align-items: center; }
-    .door { position: relative; border-radius: 300px 300px 4px 4px; overflow: hidden; aspect-ratio: 3 / 4; box-shadow: 0 50px 100px -50px rgba(31,61,44,.6); }
+    .v-grid { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: clamp(40px, 6vw, 110px); align-items: center; }
+    .door-wrap { position: relative; }
+    .door { position: relative; border-radius: 300px 300px 4px 4px; overflow: hidden; aspect-ratio: 3 / 4; box-shadow: 0 50px 100px -50px rgba(31,61,44,.6); margin: 0; }
     .door img { width: 100%; height: 100%; object-fit: cover; }
     .door .cap { position: absolute; left: 50%; bottom: 18px; translate: -50% 0; padding: 10px 16px; border-radius: 999px; background: rgba(250,245,234,.92); font: 500 22px/1 var(--hand); color: var(--green); white-space: nowrap; }
+    .door-wrap svg.arch { position: absolute; left: -14px; top: -14px; width: calc(100% + 28px); height: calc(100% + 28px); pointer-events: none; overflow: visible; --inkc: var(--ochre); --sw: 1.5; }
     .v-copy h2 { color: var(--green); }
     .addr { margin-top: 30px; font: 700 clamp(26px, 2.6vw, 38px)/1.2 var(--serif); }
     .addr small { display: block; margin-top: 8px; font: 500 15px/1.4 var(--sans); color: var(--muted); }
     .opening { display: inline-flex; align-items: center; gap: 14px; margin-top: 30px; padding: 14px 22px; border-radius: 999px; background: var(--tomato); color: var(--cream); font: 600 13px/1 var(--sans); letter-spacing: .2em; text-transform: uppercase; }
     .v-copy .links { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
-    @media (max-width: 900px) { .v-grid { grid-template-columns: 1fr; } .door { max-width: 420px; margin: 0 auto; width: 100%; } }
+    @media (max-width: 900px) { .v-grid { grid-template-columns: 1fr; } .door-wrap { max-width: 420px; margin: 0 auto; width: calc(100% - 28px); } }
 
     /* ---------- closing ---------- */
     .closing { position: relative; text-align: center; padding: clamp(120px, 16vw, 230px) 0 0; overflow: hidden; }
@@ -262,6 +322,22 @@
   <script>document.documentElement.classList.add('js');if(matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('rm');</script>
 </head>
 <body>
+  <!-- shared watercolor filters: displaced edges + pigment granulation -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <filter id="wc" x="-15%" y="-15%" width="130%" height="130%">
+        <feTurbulence type="fractalNoise" baseFrequency=".035" numOctaves="3" seed="4" result="n"/>
+        <feDisplacementMap in="SourceGraphic" in2="n" scale="9" xChannelSelector="R" yChannelSelector="G" result="d"/>
+        <feTurbulence type="fractalNoise" baseFrequency=".75" numOctaves="2" seed="9" result="g"/>
+        <feColorMatrix in="g" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.1 1.38" result="ga"/>
+        <feComposite in="d" in2="ga" operator="in"/>
+      </filter>
+      <filter id="wcs" x="-15%" y="-15%" width="130%" height="130%">
+        <feTurbulence type="fractalNoise" baseFrequency=".12" numOctaves="2" seed="2" result="n"/>
+        <feDisplacementMap in="SourceGraphic" in2="n" scale="2.6" xChannelSelector="R" yChannelSelector="G"/>
+      </filter>
+    </defs>
+  </svg>
   <template id="wm-tpl">
     <svg viewBox="0 0 240 120" aria-hidden="true">
       <ellipse class="o" cx="120" cy="60" rx="114" ry="54"/>
@@ -269,21 +345,10 @@
       <text class="t2" x="122" y="90" text-anchor="middle">PASTA BAR</text>
     </svg>
   </template>
-  <template id="olive-tpl">
-    <svg viewBox="0 0 220 120" fill="currentColor" aria-hidden="true">
-      <path d="M4 112 C 60 92, 120 60, 214 10" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
-      <g opacity=".9">
-        <ellipse cx="44" cy="88" rx="22" ry="6" transform="rotate(-50 44 88)"/><ellipse cx="58" cy="102" rx="22" ry="6" transform="rotate(10 58 102)"/>
-        <ellipse cx="84" cy="70" rx="24" ry="6.5" transform="rotate(-55 84 70)"/><ellipse cx="102" cy="84" rx="24" ry="6.5" transform="rotate(8 102 84)"/>
-        <ellipse cx="128" cy="48" rx="24" ry="6.5" transform="rotate(-60 128 48)"/><ellipse cx="146" cy="62" rx="24" ry="6.5" transform="rotate(4 146 62)"/>
-        <ellipse cx="170" cy="28" rx="22" ry="6" transform="rotate(-62 170 28)"/><ellipse cx="188" cy="38" rx="22" ry="6" transform="rotate(0 188 38)"/>
-      </g>
-      <circle cx="116" cy="74" r="6" fill="#3d4a22"/><circle cx="160" cy="48" r="5.5" fill="#3d4a22"/>
-    </svg>
-  </template>
   <template id="heart-tpl"><svg viewBox="0 0 22 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 18 C 2 11, 1 5, 5 3 C 8 1.5, 10 3.5, 11 6 C 12 3.5, 14 1.5, 17 3 C 21 5, 20 11, 11 18 Z"/></svg></template>
 
   <div class="intro" aria-hidden="true" data-intro>
+    <svg class="swoosh" viewBox="0 0 1000 1000" preserveAspectRatio="none"><path class="sw1" d="M-80 900 C200 640 380 1000 580 720 S880 300 1090 400"/><path class="sw2" d="M-80 990 C230 740 420 1060 620 800 S900 430 1090 520"/></svg>
     <span class="wm" data-wm></span>
     <div class="tag" data-intro-tag>Good pasta, brighter days.</div>
   </div>
@@ -294,41 +359,47 @@
       <a class="wm" href="#top" aria-label="SUGO Pasta Bar, back to top" data-wm></a>
       <div class="right"><a class="soon" href="#visit"><i aria-hidden="true"></i>Coming soon</a></div>
     </div>
+    <i class="prog" aria-hidden="true"></i>
   </header>
 
   <main>
     <!-- HERO -->
     <section class="hero" id="top">
-      <span class="olive o1" data-olive data-sway></span>
-      <span class="olive o2" data-olive data-sway></span>
-      <span class="note n1" data-in>Good pasta,<br>brighter days <span data-heart></span></span>
-      <span class="note n2" data-in>Same passion,<br>new adventures <span data-heart></span></span>
+      <span class="olive o1" data-olive data-sway data-px="-18"></span>
+      <span class="olive o2" data-olive data-sway data-px="-24"></span>
+      <span class="note n1" data-write data-px="12">Good pasta,<br>brighter days <span data-heart></span></span>
+      <span class="note n2" data-write data-px="12">Same passion,<br>new adventures <span data-heart></span></span>
+      <div class="mini l" aria-hidden="true" data-px="8"><svg class="ink" viewBox="-14 14 350 200" data-mini="ny"></svg><span>New York<small>where it started</small></span></div>
+      <div class="mini r" aria-hidden="true" data-px="8"><svg class="ink" viewBox="-14 14 238 200" data-mini="a2"></svg><span>Ann Arbor<small>what’s next</small></span></div>
       <div class="wrap">
         <span class="label kicker" data-in>Kerrytown · Ann Arbor</span>
-        <span class="script" data-in>Something delicious</span>
+        <span class="script" data-write>Something delicious</span>
         <h1>
           <span class="line"><span class="sub">is coming to</span></span>
-          <span class="line"><span>Ann Arbor</span></span>
+          <span class="line"><span data-chars>Ann Arbor</span></span>
         </h1>
-        <div class="dish" data-dish>
-          <svg class="steam" viewBox="0 0 800 220" preserveAspectRatio="none" aria-hidden="true"><g fill="none" stroke="rgba(255,255,255,.75)" stroke-width="6" stroke-linecap="round" data-steam><path d="M330 220 C 300 170, 360 130, 330 70"/><path d="M400 220 C 370 160, 430 120, 400 40"/><path d="M470 220 C 440 170, 500 130, 470 70"/></g></svg>
+        <div class="dish" data-dish data-px="-10">
+          <svg class="steam" viewBox="0 0 800 220" preserveAspectRatio="none" aria-hidden="true"><g fill="none" stroke="rgba(255,255,255,.8)" stroke-width="9" stroke-linecap="round" data-steam><path d="M330 220 C 300 170, 360 130, 330 70"/><path d="M400 220 C 370 160, 430 120, 400 40"/><path d="M470 220 C 440 170, 500 130, 470 70"/></g></svg>
           <img src="img/bowl.webp" width="800" height="300" alt="A bowl of fresh pasta in red sauce with grated cheese">
         </div>
         <div class="three" data-in><span>Fresh pasta</span><span>Great drinks</span><span>Good people</span></div>
         <div class="ctas" data-in>
-          <a class="btn solid" data-ig href="#" target="_blank" rel="noopener">Follow for opening day</a>
-          <a class="btn" href="#making">See how it’s made</a>
+          <a class="btn solid" data-mag data-ig href="#" target="_blank" rel="noopener">Follow for opening day</a>
+          <a class="btn" data-mag href="#making">See how it’s made</a>
         </div>
       </div>
     </section>
 
-    <div class="marquee" aria-hidden="true"><div class="track" data-marquee></div></div>
+    <div class="ribbons" aria-hidden="true">
+      <div class="marquee r1"><div class="track" data-marquee></div></div>
+      <div class="marquee r2"><div class="track" data-marquee data-rev></div></div>
+    </div>
 
     <!-- STATEMENT -->
     <section class="statement">
       <div class="wrap">
         <span class="label">A note from the team</span>
-        <p class="big" data-words>We’re here to make <span class="hl-g">homemade pasta,</span> cook the recipes we love, and create a place that <span class="hl-g">feels good to be in.</span></p>
+        <p class="big" data-words>We’re here to make <span class="hl-g">homemade <span class="mk" data-mk="u">pasta,</span></span> cook the recipes we love, and create a place that <span class="hl-g">feels <span class="mk" data-mk="o">good</span> to be in.</span></p>
         <span class="sign">— SUGO</span>
       </div>
     </section>
@@ -342,84 +413,8 @@
           <div class="mk-steps" data-mk-steps></div>
           <div class="mk-dots" data-mk-dots aria-hidden="true"></div>
         </div>
-        <div class="mk-stage" aria-label="Fresh pasta being made by hand, from flour to a finished bowl with sauce" role="img">
-          <svg viewBox="0 0 600 600" data-scene>
-            <defs>
-              <radialGradient id="board" cx="45%" cy="40%" r="70%"><stop offset="0" stop-color="#e2bd8a"/><stop offset=".7" stop-color="#cf9f68"/><stop offset="1" stop-color="#b98650"/></radialGradient>
-              <radialGradient id="dough" cx="38%" cy="32%" r="75%"><stop offset="0" stop-color="#ffe7a8"/><stop offset=".6" stop-color="#f4c86a"/><stop offset="1" stop-color="#d9a243"/></radialGradient>
-              <radialGradient id="yolk" cx="35%" cy="30%" r="70%"><stop offset="0" stop-color="#ffd35c"/><stop offset=".7" stop-color="#f59a0e"/><stop offset="1" stop-color="#d77800"/></radialGradient>
-              <radialGradient id="sauce" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#e05a30"/><stop offset=".7" stop-color="#b5401f"/><stop offset="1" stop-color="#8a2c14"/></radialGradient>
-              <linearGradient id="sheet" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbe2a0"/><stop offset="1" stop-color="#ecc067"/></linearGradient>
-              <radialGradient id="bowl" cx="50%" cy="45%" r="60%"><stop offset=".7" stop-color="#ffffff"/><stop offset="1" stop-color="#e7e1d6"/></radialGradient>
-              <radialGradient id="flour" cx="40%" cy="30%" r="75%"><stop offset="0" stop-color="#ffffff"/><stop offset=".65" stop-color="#f7f1e4"/><stop offset="1" stop-color="#e6dcc7"/></radialGradient>
-              <filter id="soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="6"/></filter>
-              <clipPath id="sheetClip"><rect x="110" y="170" width="380" height="260" rx="22"/></clipPath>
-            </defs>
-            <!-- wood board -->
-            <g data-board>
-              <circle cx="300" cy="306" r="270" fill="rgba(60,40,20,.18)" filter="url(#soft)"/>
-              <circle cx="300" cy="300" r="268" fill="url(#board)"/>
-              <g stroke="rgba(120,80,40,.18)" stroke-width="2" fill="none"><path d="M60 250 Q 300 230 540 260"/><path d="M50 320 Q 300 300 550 330"/><path d="M70 390 Q 300 370 530 400"/><path d="M110 180 Q 300 170 490 190"/><path d="M120 450 Q 300 440 480 460"/></g>
-              <circle cx="300" cy="300" r="268" fill="none" stroke="rgba(110,70,30,.35)" stroke-width="3"/>
-            </g>
-            <!-- 1 flour -->
-            <g data-flour>
-              <ellipse cx="300" cy="378" rx="170" ry="20" fill="rgba(60,40,20,.22)" filter="url(#soft)" data-mound/>
-              <path data-mound d="M128 374 C 142 318, 196 246, 262 230 C 286 224, 314 224, 338 230 C 404 246, 458 318, 472 374 C 410 394, 190 394, 128 374 Z" fill="url(#flour)"/>
-              <path d="M196 330 C 220 290, 252 264, 290 254" fill="none" stroke="rgba(255,255,255,.9)" stroke-width="8" stroke-linecap="round" opacity=".7"/>
-              <path d="M330 300 C 370 310, 410 336, 440 368" fill="none" stroke="rgba(190,176,150,.35)" stroke-width="10" stroke-linecap="round"/>
-              <g data-specks></g>
-            </g>
-            <!-- 2 well + eggs -->
-            <ellipse data-well cx="300" cy="300" rx="78" ry="42" fill="#efe7d6" stroke="rgba(190,175,150,.6)" stroke-width="4"/>
-            <g data-eggs>
-              <g data-egg><ellipse cx="276" cy="298" rx="34" ry="26" fill="rgba(255,255,255,.85)"/><circle cx="276" cy="296" r="15" fill="url(#yolk)"/></g>
-              <g data-egg><ellipse cx="326" cy="292" rx="32" ry="24" fill="rgba(255,255,255,.85)"/><circle cx="326" cy="290" r="14" fill="url(#yolk)"/></g>
-              <g data-egg><ellipse cx="300" cy="318" rx="30" ry="22" fill="rgba(255,255,255,.85)"/><circle cx="300" cy="316" r="13" fill="url(#yolk)"/></g>
-            </g>
-            <!-- 3 dough ball -->
-            <g data-dough>
-              <ellipse cx="300" cy="372" rx="120" ry="20" fill="rgba(60,40,20,.25)" filter="url(#soft)"/>
-              <circle data-ball cx="300" cy="300" r="110" fill="url(#dough)"/>
-              <ellipse cx="262" cy="252" rx="34" ry="18" fill="rgba(255,255,255,.45)" transform="rotate(-28 262 252)"/>
-            </g>
-            <!-- 4 sheet + pin -->
-            <g data-sheetg>
-              <rect data-sheet x="110" y="170" width="380" height="260" rx="22" fill="url(#sheet)"/>
-              <g clip-path="url(#sheetClip)" data-cuts stroke="rgba(170,115,40,.55)" stroke-width="3"></g>
-            </g>
-            <g data-pin>
-              <rect x="60" y="270" width="480" height="58" rx="29" fill="#d7a66b"/>
-              <rect x="60" y="270" width="480" height="20" rx="10" fill="rgba(255,255,255,.22)"/>
-              <rect x="10" y="286" width="70" height="26" rx="13" fill="#b9874d"/><rect x="520" y="286" width="70" height="26" rx="13" fill="#b9874d"/>
-            </g>
-            <!-- 5 knife -->
-            <g data-knife>
-              <path d="M0 -150 L 22 -150 L 26 120 Q 12 150 0 120 Z" fill="#e9eef2" stroke="#9aa6b1" stroke-width="2"/>
-              <rect x="-6" y="-250" width="34" height="104" rx="10" fill="#2a1d13"/>
-              <circle cx="11" cy="-220" r="4" fill="#c8893a"/><circle cx="11" cy="-180" r="4" fill="#c8893a"/>
-            </g>
-            <!-- 6 bowl -->
-            <g data-bowlg>
-              <circle cx="300" cy="312" r="250" fill="rgba(60,40,20,.2)" filter="url(#soft)"/>
-              <circle cx="300" cy="300" r="246" fill="url(#bowl)"/>
-              <circle cx="300" cy="300" r="190" fill="#f6f2ea" stroke="rgba(0,0,0,.05)" stroke-width="3"/>
-              <circle cx="300" cy="300" r="246" fill="none" stroke="rgba(31,61,44,.15)" stroke-width="2"/>
-              <circle cx="300" cy="300" r="232" fill="none" stroke="#1f3d2c" stroke-width="2" stroke-dasharray="3 9" opacity=".5"/>
-            </g>
-            <g data-nest fill="none" stroke-linecap="round"></g>
-            <g data-sugo>
-              <path d="M300 214 C 330 206, 352 226, 372 236 C 400 250, 396 282, 386 304 C 396 334, 372 356, 346 364 C 322 386, 286 380, 264 368 C 232 366, 214 340, 220 312 C 204 288, 216 252, 244 238 C 260 220, 280 218, 300 214 Z" fill="url(#sauce)"/>
-              <circle cx="336" cy="330" r="7" fill="#8a2c14" opacity=".5"/><circle cx="262" cy="320" r="5" fill="#8a2c14" opacity=".5"/>
-              <path d="M262 262 Q 290 242 324 250" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="6" stroke-linecap="round"/>
-              <g data-drips fill="#b5401f"><circle cx="250" cy="372" r="10"/><circle cx="378" cy="340" r="8"/><circle cx="214" cy="290" r="7"/></g>
-            </g>
-            <g data-basil>
-              <path d="M300 290 C 320 250, 360 246, 372 262 C 350 290, 322 298, 300 290 Z" fill="#3c7a3a"/><path d="M300 290 Q 336 270 366 262" stroke="#2a5a28" stroke-width="2" fill="none"/>
-              <path d="M298 292 C 270 262, 236 262, 228 280 C 252 302, 280 304, 298 292 Z" fill="#4a8a44"/><path d="M298 292 Q 262 278 232 280" stroke="#2f6a2c" stroke-width="2" fill="none"/>
-            </g>
-            <g data-cheese></g>
-          </svg>
+        <div class="mk-stage" aria-label="Fresh pasta drawn step by step, from a mound of flour to a finished bowl with sauce" role="img">
+          <svg class="ink plate" viewBox="0 0 600 600" data-scene></svg>
         </div>
         <span class="mk-hint" aria-hidden="true"><i></i>Keep scrolling</span>
       </div>
@@ -433,34 +428,11 @@
           <h2><span class="line"><span>From New York</span></span><span class="to">to</span><span class="line"><span>Michigan</span></span></h2>
           <p class="lede" style="margin:24px auto 0">SUGO comes from Moreno and Christina Cerutti, the family behind Osteria Carlina and Bar Mario in New York, with 30 years in hospitality. Now they’re bringing it to Ann Arbor.</p>
         </div>
-        <div class="map">
-          <svg viewBox="0 0 1100 330" data-map aria-hidden="true">
-            <!-- NYC sketch skyline -->
-            <g class="sk" data-sk-ny transform="translate(820 70)">
-              <path d="M0 220 V150 H20 V120 H34 V150 H44 V96 H58 V60 L64 20 L70 60 V96 H84 V140 H100 V110 H118 V150 H130 V80 H150 V150 H164 V126 H180 V220"/>
-              <path d="M48 110 H54 M48 130 H54 M136 100 H144 M136 120 H144 M104 126 H112 M104 140 H112 M8 170 H14 M168 150 H174"/>
-              <path d="M-20 220 H 220"/>
-            </g>
-            <!-- Ann Arbor sketch: Burton tower + trees -->
-            <g class="sk" data-sk-a2 transform="translate(70 70)">
-              <path d="M70 220 V70 H80 V40 H112 V70 H122 V220"/>
-              <path d="M80 70 H112 M86 90 H106 M86 110 H106 M86 130 H106 M86 150 H106 M86 50 H106"/>
-              <path d="M20 220 C 0 200, 4 160, 30 150 C 26 130, 52 118, 62 134 C 74 140, 70 176, 56 196 Z"/>
-              <path d="M140 220 C 130 194, 140 160, 164 160 C 168 140, 196 140, 200 162 C 222 170, 214 206, 196 220"/>
-              <path d="M38 220 V196 M176 220 V190"/>
-              <path d="M-20 220 H 240"/>
-            </g>
-            <defs><clipPath id="routeClip"><rect data-rc x="1100" y="0" width="0" height="330"/></clipPath></defs>
-            <path class="route-path" data-route clip-path="url(#routeClip)" d="M 900 150 C 760 20, 420 20, 200 140"/>
-            <g class="pin" data-pin-ny transform="translate(910 30)"><text class="big" x="0" y="0" text-anchor="middle">NYC</text></g>
-            <g class="pin" data-pin-a2 transform="translate(166 30)"><text class="big" x="0" y="0" text-anchor="middle">ANN ARBOR</text></g>
-            <g data-heart-a2 transform="translate(186 128)"><path d="M11 18 C 2 11, 1 5, 5 3 C 8 1.5, 10 3.5, 11 6 C 12 3.5, 14 1.5, 17 3 C 21 5, 20 11, 11 18 Z" fill="#b5401f"/></g>
-          </svg>
-        </div>
+        <div class="map"><svg class="ink" viewBox="0 0 1100 350" data-map aria-hidden="true"></svg></div>
         <div class="places">
-          <div class="place"><span class="where">New York · Tribeca &amp; West Village</span><h3>Osteria Carlina</h3><p>The Ceruttis’ osteria in New York, the roots SUGO grows from.</p></div>
-          <div class="place"><span class="where">New York</span><h3>Bar Mario</h3><p>Their second New York spot, part of the same family.</p></div>
-          <div class="place new"><span class="stamp">new!</span><span class="where">Ann Arbor · Fourth Ave</span><h3>SUGO Pasta Bar</h3><p>Fresh pasta, great drinks, good people. Coming soon to Kerrytown.</p></div>
+          <div class="place"><svg class="ink store" viewBox="0 0 300 150" data-store="0" aria-hidden="true"></svg><span class="where">New York · Tribeca &amp; West Village</span><h3>Osteria Carlina</h3><p>The Ceruttis’ osteria in New York, the roots SUGO grows from.</p></div>
+          <div class="place"><svg class="ink store" viewBox="0 0 300 150" data-store="1" aria-hidden="true"></svg><span class="where">New York</span><h3>Bar Mario</h3><p>Their second New York spot, part of the same family.</p></div>
+          <div class="place new"><span class="stamp">new!</span><svg class="ink store" viewBox="0 0 300 150" data-store="2" aria-hidden="true"></svg><span class="where">Ann Arbor · Fourth Ave</span><h3>SUGO Pasta Bar</h3><p>Fresh pasta, great drinks, good people. Coming soon to Kerrytown.</p></div>
         </div>
       </div>
     </section>
@@ -478,11 +450,11 @@
 
     <!-- QUOTE -->
     <section class="quote">
-      <span class="olive o3" data-olive data-sway></span>
-      <span class="olive o4" data-olive data-sway></span>
+      <span class="olive o3" data-olive data-sway data-draw></span>
+      <span class="olive o4" data-olive data-sway data-draw></span>
       <div class="wrap">
         <figure style="margin:0">
-          <blockquote>“Think <b>slow food</b> executed fast, with discipline and consistency.”</blockquote>
+          <blockquote data-quote>“Think <b>slow food</b> executed fast, with discipline and consistency.”</blockquote>
           <figcaption>Moreno Cerutti · Founder</figcaption>
         </figure>
       </div>
@@ -491,15 +463,18 @@
     <!-- VISIT -->
     <section class="visit" id="visit">
       <div class="wrap v-grid">
-        <figure class="door" style="margin:0"><img src="img/door.webp" width="900" height="1200" alt="The door at 203 Fourth Avenue with the SUGO Pasta Bar coming soon sign" loading="lazy"><span class="cap">Our name on the door ♡</span></figure>
+        <div class="door-wrap">
+          <figure class="door"><img src="img/door.webp" width="900" height="1200" alt="The door at 203 Fourth Avenue with the SUGO Pasta Bar coming soon sign" loading="lazy"><span class="cap">Our name on the door ♡</span></figure>
+          <svg class="ink arch" aria-hidden="true" data-arch><path class="ln"/></svg>
+        </div>
         <div class="v-copy">
           <span class="label">Find us soon</span>
           <h2 style="margin-top:20px"><span class="line"><span>Okay, it’s starting</span></span><span class="line"><span><em>to feel real.</em></span></span></h2>
           <p class="addr">203 Fourth Avenue<small>Downtown Ann Arbor, by Kerrytown</small></p>
           <span class="opening">Opening soon</span>
           <div class="links">
-            <a class="btn solid" data-ig href="#" target="_blank" rel="noopener">Follow @sugoannarbor</a>
-            <a class="btn" data-map href="#" target="_blank" rel="noopener">Directions</a>
+            <a class="btn solid" data-mag data-ig href="#" target="_blank" rel="noopener">Follow @sugoannarbor</a>
+            <a class="btn" data-mag data-map href="#" target="_blank" rel="noopener">Directions</a>
           </div>
         </div>
       </div>
@@ -511,7 +486,7 @@
         <span class="hand">More soon!</span>
         <h2><span class="line"><span>Good pasta,</span></span><span class="line"><span><em>brighter days.</em></span></span></h2>
         <p>Follow along for opening day, the first menu and everything happening behind the scenes on Fourth Avenue.</p>
-        <div class="ctas"><a class="btn solid" data-ig href="#" target="_blank" rel="noopener">Follow on Instagram</a><a class="btn" data-dm href="#" target="_blank" rel="noopener">Send us a message</a></div>
+        <div class="ctas"><a class="btn solid" data-mag data-ig href="#" target="_blank" rel="noopener">Follow on Instagram</a><a class="btn" data-mag data-dm href="#" target="_blank" rel="noopener">Send us a message</a></div>
         <div class="giant" aria-hidden="true" data-giant>SUGO</div>
       </div>
       <footer><div class="wrap"><span>© <span data-year>2026</span> SUGO Pasta Bar · 203 Fourth Ave, Ann Arbor, MI</span><nav aria-label="Footer"><a data-ig href="#" target="_blank" rel="noopener">Instagram</a><a href="https://www.osteriacarlina.com" target="_blank" rel="noopener">Osteria Carlina NYC</a><a data-map href="#" target="_blank" rel="noopener">Directions</a></nav></div></footer>
@@ -531,11 +506,11 @@
     address: '203 Fourth Avenue, Ann Arbor, MI',
     instagram: { url: 'https://www.instagram.com/sugoannarbor/', dm: 'https://ig.me/m/sugoannarbor' },
     steps: [
-      { it: 'Farina', en: 'the flour', d: 'It starts with a mound of good flour on a wooden board. Nothing fancy, just the right flour.' },
+      { it: 'Farina', en: 'the flour', d: 'It starts with a mound of good flour. Nothing fancy, just the right flour.' },
       { it: 'Uova', en: 'the eggs', d: 'A well in the middle, eggs cracked straight in. This is where the color comes from.' },
       { it: 'Impasto', en: 'the dough', d: 'Mixed and kneaded by hand until it turns smooth, golden and soft.' },
       { it: 'Sfoglia', en: 'the sheet', d: 'Rolled out thin under the pin, one even sheet of pasta.' },
-      { it: 'Taglio', en: 'the cut', d: 'Cut into ribbons by hand. No two quite the same, and that’s the point.' },
+      { it: 'Taglio', en: 'the cut', d: 'Rolled up and cut into ribbons by hand. No two quite the same, and that’s the point.' },
       { it: 'Sugo', en: 'the sauce', d: 'Twirled into the bowl and finished with sugo. That’s Italian for sauce, and it’s our name.' }
     ],
     expect: [
@@ -561,32 +536,193 @@
   if (HAS_G) gsap.registerPlugin(ScrollTrigger);
 
   $$('[data-wm]').forEach(e => e.innerHTML = $('#wm-tpl').innerHTML);
-  $$('[data-olive]').forEach(e => e.innerHTML = $('#olive-tpl').innerHTML);
   $$('[data-heart]').forEach(e => e.innerHTML = $('#heart-tpl').innerHTML);
   $$('[data-ig]').forEach(a => a.href = CONFIG.instagram.url);
   $$('[data-dm]').forEach(a => a.href = CONFIG.instagram.dm);
-  $$('[data-map]').forEach(a => a.href = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(CONFIG.address));
+  $$('[data-map]').forEach(a => { if (a.tagName === 'A') a.href = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(CONFIG.address); });
   $$('[data-year]').forEach(e => e.textContent = new Date().getFullYear());
 
-  const OLV = '<svg viewBox="0 0 30 30" fill="currentColor"><ellipse cx="15" cy="15" rx="12" ry="4.5" transform="rotate(-35 15 15)"/></svg>';
-  $('[data-marquee]').innerHTML = [0, 1].map(() => [['Fresh pasta', ''], ['Good pasta, brighter days', 'h'], ['Great drinks', ''], ['Italian roots, brighter tomorrows', 'h'], ['Good people', '']].map(([w, c]) => `<span class="${c}">${w}</span>${OLV}`).join('')).join('');
-  $('[data-ex]').innerHTML = CONFIG.expect.map((e, k) => `<div class="ex"><span class="n">0${k + 1}</span><h3>${esc(e.t)}<small>${esc(e.s)}</small></h3><p>${esc(e.d)}</p></div>`).join('');
+  /* =============================================================
+     DRAWING KIT: every illustration on the page is built from
+     these. Ink lines (.ln) draw themselves, watercolor washes (.wa)
+     sit slightly off the line like real paint.
+     ============================================================= */
+  let seed = 11; const rnd = () => (seed = seed * 16807 % 2147483647) / 2147483647;
+  const f = n => Math.round(n * 10) / 10;
+  let WF = 'wc', hid = 0;
+  const ln = (d, c = '', a = '') => `<path class="ln${c ? ' ' + c : ''}" d="${d}"${a}/>`;
+  const ol = (d, c = '') => ln(d, c) + ln(d, 'gh', ' transform="translate(1.5 -1.1)"');
+  const wa = (d, fill, a = '') => `<path class="wa" d="${d}" fill="${fill}" filter="url(#${WF})"${a}/>`;
+  const OFF = ' transform="translate(3 2.5)"';
+  const ell = (cx, cy, rx, ry) => { const k = .5523; return `M${f(cx - rx)} ${f(cy)} C${f(cx - rx)} ${f(cy - ry * k)} ${f(cx - rx * k)} ${f(cy - ry)} ${f(cx)} ${f(cy - ry)} C${f(cx + rx * k)} ${f(cy - ry)} ${f(cx + rx)} ${f(cy - ry * k)} ${f(cx + rx)} ${f(cy)} C${f(cx + rx)} ${f(cy + ry * k)} ${f(cx + rx * k)} ${f(cy + ry)} ${f(cx)} ${f(cy + ry)} C${f(cx - rx * k)} ${f(cy + ry)} ${f(cx - rx)} ${f(cy + ry * k)} ${f(cx - rx)} ${f(cy)} Z`; };
+  const smooth = (p, closed = false) => { const n = p.length, g = i => closed ? p[(i + n) % n] : p[clamp(i, 0, n - 1)]; let d = `M${f(p[0][0])} ${f(p[0][1])}`; for (let i = 0; i < (closed ? n : n - 1); i++) { const a = g(i - 1), b = g(i), c = g(i + 1), e = g(i + 2); d += ` C${f(b[0] + (c[0] - a[0]) / 6)} ${f(b[1] + (c[1] - a[1]) / 6)} ${f(c[0] - (e[0] - b[0]) / 6)} ${f(c[1] - (e[1] - b[1]) / 6)} ${f(c[0])} ${f(c[1])}`; } return d + (closed ? ' Z' : ''); };
+  const poly = p => 'M' + p.map(q => f(q[0]) + ' ' + f(q[1])).join(' L') + ' Z';
+  const hatch = (clipD, x0, x1, y0, y1, gap = 7, ang = 62) => { const id = 'hc' + (++hid), dx = (y1 - y0) / Math.tan(ang * Math.PI / 180); let s = `<clipPath id="${id}"><path d="${clipD}"/></clipPath><g clip-path="url(#${id})">`; for (let x = x0; x <= x1; x += gap) { const j = (rnd() - .5) * 2; s += ln(`M${f(x + j)} ${y1} L${f(x + j + dx)} ${y0}`, 'ht'); } return s + '</g>'; };
+  const dots = (n, fn, r0 = .9, r1 = 2, c = 'dt') => { let s = ''; for (let i = 0; i < n; i++) { const [x, y] = fn(); s += `<circle class="${c}" cx="${f(x)}" cy="${f(y)}" r="${f(r0 + rnd() * (r1 - r0))}"/>`; } return s; };
+  const arrow = (x1, y1, cx, cy, x2, y2) => { const a = Math.atan2(y2 - cy, x2 - cx), h = 12; return ln(`M${x1} ${y1} Q${cx} ${cy} ${x2} ${y2} M${f(x2 - h * Math.cos(a - .5))} ${f(y2 - h * Math.sin(a - .5))} L${x2} ${y2} L${f(x2 - h * Math.cos(a + .5))} ${f(y2 - h * Math.sin(a + .5))}`, 'ar'); };
+  const ann = (x, y, txt, arr, anchor = 'start', at = .72) => `<g class="an" data-at="${at}" data-du=".16"><text class="hw" x="${x}" y="${y}" text-anchor="${anchor}">${txt}</text>${arr}</g>`;
+  const egg = (cx, cy, rx, ry, rot = 0) => { const r = rot * Math.PI / 180, p = []; for (let i = 0; i < 28; i++) { const t = i / 28 * 2 * Math.PI, x = Math.sin(t) * rx * (1 - .16 * Math.cos(t)), y = -Math.cos(t) * ry; p.push([cx + x * Math.cos(r) - y * Math.sin(r), cy + x * Math.sin(r) + y * Math.cos(r)]); } return smooth(p, true); };
+  const LEAF = (L, W) => `M0 0 C${f(W * .9)} ${f(-L * .22)} ${f(W * .7)} ${f(-L * .72)} 0 ${-L} C${f(-W * .7)} ${f(-L * .72)} ${f(-W * .9)} ${f(-L * .22)} 0 0 Z`;
+  const canopy = (cx, cy, R) => { const p = []; for (let i = 0; i < 14; i++) { const a = i / 14 * 2 * Math.PI, r = R * (i % 2 ? .84 : 1) * (.94 + rnd() * .12); p.push([cx + Math.cos(a) * r, cy + Math.sin(a) * r * .9]); } return smooth(p, true); };
+  const qB = (a, b, c, t) => [(1 - t) ** 2 * a[0] + 2 * (1 - t) * t * b[0] + t * t * c[0], (1 - t) ** 2 * a[1] + 2 * (1 - t) * t * b[1] + t * t * c[1]];
+  const qD = (a, b, c, t) => [2 * (1 - t) * (b[0] - a[0]) + 2 * t * (c[0] - b[0]), 2 * (1 - t) * (b[1] - a[1]) + 2 * t * (c[1] - b[1])];
+  const deg = (dx, dy) => Math.atan2(dy, dx) * 180 / Math.PI + 90;
+  const GRAIN = 'M0 0 C5 -4 5 -12 0 -16 C-5 -12 -5 -4 0 0 Z';
+  const wheat = (a, b, c) => { let s = ln(`M${a[0]} ${a[1]} Q${b[0]} ${b[1]} ${c[0]} ${c[1]}`); for (let t = .6; t < 1.001; t += .068) { const [x, y] = qB(a, b, c, t), [dx, dy] = qD(a, b, c, t), an = deg(dx, dy); for (const sd of (t > .97 ? [0] : [-1, 1])) s += `<g transform="translate(${f(x)} ${f(y)}) rotate(${f(an + sd * 30)})">${wa(GRAIN, '#dcaa55')}${ln(GRAIN, 't')}${ln('M0 -16 L0 -31', 'ht')}</g>`; } return s; };
+
+  /* olive branch: leaves along a curve, two olives */
+  const olive = () => { WF = 'wcs'; const a = [6, 132], b = [96, 96], c = [234, 14]; let s = ln(`M6 132 Q96 96 234 14`), k = 0; for (let t = .1; t < .99; t += .082, k++) { const [x, y] = qB(a, b, c, t), [dx, dy] = qD(a, b, c, t), an = deg(dx, dy), L = 38 - t * 12; s += `<g transform="translate(${f(x)} ${f(y)}) rotate(${f(an + (k % 2 ? 50 : -50))})">${wa(LEAF(L, 7.5), k % 3 ? '#7c8a52' : '#98a56c')}${ln(LEAF(L, 7.5), 't')}${ln(`M0 -2 L0 ${f(-L * .86)}`, 'ht')}</g>`; } for (const t of [.4, .68]) { const [x, y] = qB(a, b, c, t), [dx, dy] = qD(a, b, c, t), n = Math.hypot(dx, dy), ox = x - dy / n * 16, oy = y + dx / n * 16; s += ln(`M${f(x)} ${f(y)} L${f(ox)} ${f(oy)}`, 't') + wa(ell(ox, oy + 6, 6.5, 8.5), '#3f4d22') + ln(ell(ox, oy + 6, 6.5, 8.5), 't'); } WF = 'wc'; return `<svg class="ink" viewBox="0 0 240 150">${s}</svg>`; };
+  $$('[data-olive]').forEach(e => e.innerHTML = olive());
+
+  /* city sketches (shared by the hero and the map) */
+  const nyc = () => { let s = ''; const win = (x0, x1, y0, y1) => { let d = ''; for (let y = y0; y < y1; y += 9) d += `M${x0} ${y} H${x1} `; return ln(d, 'ht'); };
+    s += ol('M0 200 V140 H18 V118 H34 V200') + win(6, 12, 148, 196) + win(22, 28, 126, 196);
+    s += ol('M40 200 V100 H46 V84 H51 V70 H55 V54 H61 V70 H65 V84 H70 V100 H76 V200') + ln('M58 54 V24') + ln('M50 110 V194 M58 110 V194 M66 110 V194', 'ht');
+    s += ol('M76 200 V150 H96 V200') + win(81, 91, 158, 196);
+    s += ol('M100 200 V96 H128 V200') + ln('M100 96 C100 80 128 80 128 96') + ln('M104 86 C105 72 123 72 124 86') + ln('M108 77 C109 66 119 66 120 77') + ln('M114 66 V40') + ln('M108 104 V194 M114 104 V194 M120 104 V194', 'ht');
+    s += ol('M128 200 V160 H146 V200') + win(133, 141, 168, 196);
+    s += ol('M146 200 L150 70 H170 L174 200') + ln('M150 70 L174 200 M170 70 L146 200', 'ht') + ln('M160 70 V30');
+    s += ol('M174 200 V130 H192 V112 H202 V200') + win(179, 187, 138, 196);
+    const L1 = [249, 98], C1 = [228, 152], E1 = [204, 160], L2 = [249, 98], C2 = [292, 152], E2 = [330, 152];
+    s += ol('M236 200 V96 H262 V200') + ln('M232 96 H266') + ln('M240 150 V124 Q244 112 248 124 V150 M250 150 V124 Q254 112 258 124 V150', 't') + ln('M204 168 H332') + ln('M204 174 H332', 't') + ln(`M249 98 Q228 152 204 160`) + ln(`M249 98 Q292 152 330 152`);
+    let sus = ''; for (const t of [.25, .45, .65, .85]) { const p = qB(L1, C1, E1, t), q = qB(L2, C2, E2, t); sus += `M${f(p[0])} ${f(p[1])} V168 M${f(q[0])} ${f(q[1])} V168 `; } s += ln(sus, 'ht');
+    s += ln('M200 214 q8 -4 16 0 t16 0 t16 0 M244 224 q8 -4 16 0 t16 0 t16 0 t16 0 M286 210 q8 -4 16 0 t16 0', 'ht') + ln('M-10 200 H204');
+    return s; };
+  const a2 = () => { let s = ''; const c1 = canopy(32, 134, 34), c2 = canopy(160, 130, 40);
+    s += wa(c1, '#9aa86e', OFF) + ol(c1) + ln('M32 200 V164 M32 178 L22 166 M32 174 L42 160', 't') + ln('M18 130 C24 120 34 118 42 124 M22 150 C30 144 40 144 48 150', 'ht');
+    s += ol('M68 200 V190 H118 V200') + ol('M74 190 V72 H112 V190') + ol('M78 72 V58 H108 V72') + ol('M84 58 V48 H102 V58') + ln('M88 48 L93 36 L98 48') + ln('M84 82 V188 M102 82 V188', 't') + ln(ell(93, 64, 4.5, 4.5), 't') + ln('M90 100 V128 M96 100 V128 M90 140 V170 M96 140 V170', 'ht');
+    s += wa(c2, '#8c9c5e', OFF) + ol(c2) + ln('M160 200 V170 M160 182 L148 172 M160 180 L172 168', 't') + ln('M142 124 C150 114 164 112 174 118 M146 146 C156 140 168 140 178 146', 'ht');
+    return s + ln('M-10 200 H212'); };
+  WF = 'wcs';
+  $$('[data-mini="ny"]').forEach(e => e.innerHTML = nyc());
+  $$('[data-mini="a2"]').forEach(e => e.innerHTML = a2());
+  WF = 'wc';
+
+  /* Michigan, the lower peninsula, from rough lon/lat */
+  const MI = [[-86.82, 41.76], [-84.8, 41.7], [-83.45, 41.73], [-83.15, 42.05], [-82.95, 42.35], [-82.6, 42.55], [-82.42, 43], [-82.55, 43.5], [-82.7, 43.95], [-83, 44.06], [-83.4, 43.92], [-83.85, 43.62], [-83.65, 44.02], [-83.35, 44.35], [-83.3, 44.85], [-83.45, 45.1], [-83.85, 45.4], [-84.3, 45.63], [-84.75, 45.78], [-85.05, 45.6], [-85, 45.35], [-85.4, 45.2], [-85.6, 45.15], [-85.75, 44.95], [-86.05, 44.9], [-86.25, 44.55], [-86.45, 44.1], [-86.5, 43.6], [-86.35, 43.15], [-86.22, 42.75], [-86.3, 42.35], [-86.6, 41.98]];
+  const MX = lo => 20 + (lo + 87) * 44, MY = la => 26 + (46 - la) * 60;
+  $('[data-map]').innerHTML =
+    `<g class="mit" data-mit>${ln(smooth(MI.map(([lo, la]) => [MX(lo), MY(la)]), true), 't')}</g>` +
+    `<g data-g-a2 transform="translate(250 60)">${a2()}</g>` +
+    `<g data-g-ny transform="translate(738 60)">${nyc()}</g>` +
+    `<defs><clipPath id="routeClip"><rect data-rc x="0" y="-40" width="1100" height="400"/></clipPath></defs>` +
+    `<path class="rp" clip-path="url(#routeClip)" d="M812 108 C680 -40 330 -40 166 232"/>` +
+    `<g data-heart-a2 transform="translate(${f(MX(-83.74) - 11)} ${f(MY(42.28) - 12)})"><path d="M11 18 C 2 11, 1 5, 5 3 C 8 1.5, 10 3.5, 11 6 C 12 3.5, 14 1.5, 17 3 C 21 5, 20 11, 11 18 Z" class="pt"/></g>` +
+    `<g data-lbl-ny><text class="lbl" x="905" y="306" text-anchor="middle">NEW YORK</text><text class="lbl-h" x="905" y="336" text-anchor="middle">Osteria Carlina · Bar Mario</text></g>` +
+    `<g data-lbl-a2><text class="lbl" x="350" y="306" text-anchor="middle">ANN ARBOR</text><text class="lbl-h" x="350" y="336" text-anchor="middle">203 Fourth Ave · Kerrytown</text></g>`;
+
+  /* storefront sketches for the three places */
+  const store = (sign, wall, aw) => { WF = 'wcs'; let s = wa('M20 146 V30 H280 V146 Z', wall, OFF); for (let i = 0; i < 8; i += 2) s += wa(poly([[34 + i * 29, 66], [34 + (i + 1) * 29, 66], [28 + (i + 1) * 30.5, 92], [28 + i * 30.5, 92]]), aw);
+    s += wa('M36 104 H112 V146 H36 Z M188 104 H264 V146 H188 Z', 'rgba(140,170,170,.45)');
+    s += ol('M20 146 V30 H280 V146') + ln('M14 30 H286 M18 22 H282 M14 30 L18 22 M286 30 L282 22') + ln('M40 38 H260 V58 H40 Z', 't') + `<text class="sgn fd" x="150" y="52" text-anchor="middle">${sign}</text>`;
+    s += ol(`M34 66 H266 L272 92 ${'q-15.25 9 -30.5 0 '.repeat(8)}L34 66`); let st = ''; for (let i = 1; i < 8; i++) st += `M${34 + i * 29} 66 L${f(28 + i * 30.5)} 92 `; s += ln(st, 't');
+    s += ol('M36 104 H112 V146 H36 Z') + ln('M74 104 V146 M36 124 H112', 't') + ol('M188 104 H264 V146 H188 Z') + ln('M226 104 V146 M188 124 H264', 't') + ol('M128 146 V100 H172 V146') + ln('M136 108 H164 V128 H136 Z M164 136 v3', 't');
+    const b1 = canopy(120, 138, 9), b2 = canopy(180, 138, 9); s += wa(b1, '#7c8a52') + ln(b1, 't') + wa(b2, '#7c8a52') + ln(b2, 't');
+    WF = 'wc'; return s + ln('M0 146 H300'); };
+  const STORES = [['OSTERIA CARLINA', '#efe2c8', '#c4482a'], ['BAR MARIO', '#e9dcc6', '#2e5640'], ['SUGO', '#f6eedd', '#c8893a']];
+  $$('[data-store]').forEach(e => e.innerHTML = store(...STORES[+e.dataset.store]));
+
+  /* little drawings for the table list */
+  WF = 'wcs';
+  const ICONS = [
+    () => { let s = wa(ell(40, 46, 28, 18), '#f2cf7c'); for (let i = 0; i < 4; i++) { const p = []; for (let j = 0; j < 10; j++) { const a = j / 10 * 2 * Math.PI, r = 1 - .1 * rnd(); p.push([40 + Math.cos(a) * (28 - i * 6.5) * r, 46 + Math.sin(a) * (18 - i * 4.2) * r]); } s += ln(smooth(p, true), i ? 't' : ''); } return s + ln('M13 44 C8 30 20 22 30 30', 't'); },
+    () => wa('M20 32 L40 74 L60 32 Z', '#f3ead9') + wa(ell(30, 24, 9, 9), '#d99a3e') + wa(ell(48, 22, 10, 10), '#d08c35') + wa(ell(39, 13, 8, 8), '#e0a64c') + ol(ell(30, 24, 9, 9)) + ol(ell(48, 22, 10, 10)) + ol(ell(39, 13, 8, 8)) + ol('M20 32 L40 74 L60 32') + ln('M18 32 C30 36 50 36 62 32') + ln('M28 44 L52 44 M33 56 L47 56', 'ht') + dots(9, () => [26 + rnd() * 28, 10 + rnd() * 20], .5, 1),
+    () => { const t = 'M40 30 C58 28 66 40 64 52 C62 66 50 72 40 72 C30 72 18 66 16 52 C14 40 22 28 40 30 Z'; return wa(t, '#c4482a') + ol(t) + ln('M27 40 C23 48 23 58 29 64', 'ht') + wa('M40 30 L30 24 L38 26 L40 18 L43 26 L52 23 L45 30 Z', '#5d8a3a') + ln('M40 30 L30 24 M40 30 L52 23 M40 30 L36 21 M40 30 L45 21 M40 30 C40 22 42 16 47 12', 't'); },
+    () => wa('M14 40 H54 V66 H14 Z', '#efe0bf') + wa('M14 40 L28 28 H68 L54 40 Z', '#8a5a3a') + wa('M54 40 L68 28 V54 L54 66 Z', '#e6d2a8') + ol('M14 40 H54 V66 H14 Z') + ol('M14 40 L28 28 H68 L54 40') + ol('M54 40 L68 28 V54 L54 66') + ln('M14 49 H54 M14 57 H54 M54 49 L68 37 M54 57 L68 45', 't') + dots(10, () => [24 + rnd() * 36, 31 + rnd() * 6], .6, 1.1),
+    () => wa('M29 24 H51 C51 36 47 44 40 45 C33 44 29 36 29 24 Z', '#7d1f17') + ol('M28 12 H52 C54 32 48 44 40 46 C32 44 26 32 28 12 Z') + ln('M29 24 H51', 't') + ol('M40 46 V66') + ol('M28 68 C34 64 46 64 52 68') + ln('M33 16 C32 22 32 28 34 32', 'ht')
+  ];
+  $('[data-ex]').innerHTML = CONFIG.expect.map((e, k) => `<div class="ex"><span class="n">0${k + 1}<svg class="ink ico" viewBox="0 0 80 80" aria-hidden="true">${ICONS[k]()}</svg></span><h3>${esc(e.t)}<small>${esc(e.s)}</small></h3><p>${esc(e.d)}</p></div>`).join('');
+  WF = 'wc';
+
+  /* =============================================================
+     THE PLATE: six cookbook drawings, one per step.
+     ============================================================= */
+  const ROM = ['I', 'II', 'III', 'IV', 'V', 'VI'];
+  const GROUND = (y, a = 112, b = 490) => wa(`M${a} ${y} C220 ${y + 16} 380 ${y + 16} ${b} ${y} C380 ${y - 10} 220 ${y - 10} ${a} ${y} Z`, '#e2d3b6') + ln(`M${a} ${y} C220 ${y + 10} 380 ${y + 10} ${b} ${y}`);
+  const SC = [];
+  { // I · Farina
+    const m = 'M150 440 C196 436 214 352 252 318 C276 296 322 294 346 316 C386 350 404 436 452 440', mz = m + ' C404 452 200 452 150 440 Z';
+    SC.push(GROUND(444) +
+      `<g data-mound>${wa(mz, '#fdf8ec', OFF)}${wa('M332 324 C360 356 380 404 398 444 L452 440 C404 436 386 350 346 316 Z', '#eadcbf', OFF)}${ol(m)}${ln('M214 412 C236 370 256 338 286 322', 't')}${ln('M330 330 C352 352 368 388 380 430', 't')}${ln('M284 305 C296 300 308 300 320 306', 't')}${hatch(mz, 336, 470, 300, 452, 6.5)}${dots(24, () => { const y = 330 + rnd() * 100; return [292 + rnd() * (48 + (y - 330) * .5), y]; })}</g>` +
+      `<g data-fall>${dots(70, () => [130 + rnd() * 340, 441 + (rnd() - .3) * 14])}</g>` +
+      wheat([92, 452], [104, 330], [152, 212]) + wheat([116, 454], [120, 360], [74, 252]) +
+      ann(360, 190, 'start with a mound', arrow(420, 206, 440, 262, 358, 300)));
+  }
+  { // II · Uova
+    const v = 'M140 444 C176 432 196 384 222 366 C240 340 360 340 378 366 C404 384 424 432 460 444 C380 456 220 456 140 444 Z';
+    const wh = smooth([[262, 356], [284, 348], [318, 346], [340, 354], [342, 368], [318, 376], [284, 377], [262, 370]], true);
+    const e1 = egg(514, 398, 30, 40, 12), sh = 'M72 426 L80 416 L88 425 L96 414 L105 424 L113 415 L122 425 L130 426';
+    SC.push(GROUND(446) +
+      wa(v, '#fdf8ec', OFF) + wa('M222 366 C240 340 360 340 378 366 C350 384 250 384 222 366 Z', '#ead9b8', OFF) + wa('M380 368 C404 386 424 432 460 444 L404 448 C396 420 388 392 372 372 Z', '#eadcbf', OFF) +
+      ol('M140 444 C176 432 196 384 222 366') + ol('M460 444 C424 432 404 384 378 366') + ln('M222 366 C240 340 360 340 378 366') + ln('M222 366 C250 384 350 384 378 366', 't') + ln('M190 420 C206 400 214 386 228 378', 't') + hatch(v, 386, 480, 360, 452, 6.5) +
+      `<g data-yolks>${wa(wh, '#fff6dc')}${ln(wh, 't')}${wa(ell(288, 362, 13, 9.5), '#f2a41d')}${ln(ell(288, 362, 13, 9.5), 't')}${wa(ell(318, 358, 12, 9), '#f2a41d')}${ln(ell(318, 358, 12, 9), 't')}${ln('M281 358 C284 355 288 354 291 355 M312 354 C315 351 319 351 322 352', 'ht')}</g>` +
+      `<g data-egg>${wa(e1, '#eed6b0', OFF)}${ol(e1)}${hatch(e1, 516, 560, 356, 442, 5.5)}</g>` +
+      `<g data-shell>${wa(sh + ' C126 452 76 452 72 426 Z', '#eed6b0', OFF)}${ol('M72 426 C76 452 126 452 130 426')}${ln(sh, 't')}</g>` +
+      dots(40, () => [150 + rnd() * 300, 443 + (rnd() - .4) * 12]) +
+      ann(300, 194, 'a well for the eggs', arrow(374, 208, 404, 270, 330, 338), 'middle'));
+  }
+  { // III · Impasto
+    const b = 'M196 420 C182 356 232 300 300 298 C370 298 420 352 406 420 C392 448 210 448 196 420 Z';
+    SC.push(GROUND(446, 120, 480) +
+      `<g data-ball>${wa(b, '#f3d084', OFF)}${wa('M340 316 C392 340 414 384 404 422 C394 440 340 446 300 446 C350 420 372 370 340 316 Z', '#e0ae54', OFF)}${wa(ell(258, 338, 26, 14), '#fff1cf')}${ol(b)}${ln('M236 348 C262 330 300 328 328 340', 't')}${ln('M328 340 C350 350 352 374 330 382 C318 386 306 378 310 368', 't')}${ln('M222 394 C262 414 330 414 382 398', 't')}${hatch(b, 348, 440, 300, 450, 6.5)}${dots(16, () => [236 + rnd() * 90, 318 + rnd() * 40], .7, 1.5)}</g>` +
+      `<g data-scraper>${wa('M438 440 L450 368 L528 378 L516 450 Z', '#cfd7db', OFF)}${wa('M450 368 C454 344 532 352 528 378 Z', '#c99860', OFF)}${ol('M438 440 L450 368 L528 378 L516 450 Z')}${ol('M450 368 C454 344 532 352 528 378')}${ln('M444 410 L520 420', 'ht')}</g>` +
+      dots(46, () => [110 + rnd() * 380, 444 + (rnd() - .4) * 14]) +
+      ann(70, 196, 'knead till it’s smooth', arrow(150, 212, 168, 262, 222, 316)));
+  }
+  { // IV · Sfoglia
+    const s = 'M106 432 C170 424 300 434 424 424 C452 398 476 344 494 300 C400 306 300 298 198 304 C172 352 140 400 106 432 Z';
+    const pin = 'M150 -22 L450 -22 C466 -22 466 22 450 22 L150 22 C134 22 134 -22 150 -22 Z';
+    SC.push(GROUND(456, 80, 520) +
+      `<clipPath id="shc"><rect data-shr x="60" y="286" width="480" height="200"/></clipPath>` +
+      `<g clip-path="url(#shc)"><path class="wa nd" d="${s}" fill="#f6dc94" filter="url(#wc)"${OFF}/><path class="wa nd" d="M424 424 C452 398 476 344 494 300 L470 302 C452 350 432 396 404 424 Z" fill="#e6bd62" filter="url(#wc)"/>${ln(s, 'nd')}${ln('M106 432 C170 430 300 442 424 432 L424 424', 'nd t')}${dots(30, () => [220 + rnd() * 220, 320 + rnd() * 96], .7, 1.5, 'dt nd')}</g>` +
+      `<g data-pinr>${wa(pin, '#d4a46c', OFF)}${ol(pin)}${ln('M150 -22 C162 -22 162 22 150 22', 't')}${ol('M138 -8 L104 -8 C94 -8 94 8 104 8 L138 8')}${ol('M462 -8 L496 -8 C506 -8 506 8 496 8 L462 8')}${ln('M184 -9 C260 -14 330 -5 420 -11', 'ht')}${ln('M200 8 C280 3 360 12 436 6', 'ht')}</g>` +
+      ann(84, 194, 'thin enough to see through', arrow(168, 210, 184, 262, 240, 330)));
+  }
+  { // V · Taglio
+    const board = 'M64 486 L112 318 L548 318 L520 486 Z';
+    const log = 'M130 360 L290 360 C302 360 302 400 290 400 L130 400 C116 400 116 360 130 360 Z';
+    let cuts = ''; for (let i = 0; i < 8; i++) { const x = 158 + i * 16; cuts += ln(`M${x} 360 C${x + 4} 372 ${x + 4} 388 ${x} 400`, 't cut'); }
+    let rib = '', ribw = ''; for (let i = 0; i < 6; i++) { const top = [], bot = []; for (let x = 300; x <= 480; x += 12) { const t = (x - 300) / 180, y = 362 + i * 8.6 + i * t * 8 + Math.sin(x / 22 + i * 1.4) * 6 * t + t * t * 20; top.push([x, y - 4]); bot.push([x, y + 4]); } rib += ln(smooth(top), 't') + ln(smooth(bot), 't') + ln(`M${f(top.at(-1)[0])} ${f(top.at(-1)[1])} L${f(bot.at(-1)[0])} ${f(bot.at(-1)[1])}`, 't'); ribw += wa(poly(top.concat(bot.slice().reverse())), i % 2 ? '#f0c96e' : '#f6d891'); }
+    const blade = 'M0 4 C20 -10 60 -16 150 -16 L150 20 C90 22 30 20 0 4 Z';
+    SC.push(wa(board, '#efe0c4', OFF) + ol(board) + ln('M64 486 L64 496 L520 496 L520 486', 't') + ln('M80 470 L506 470 M96 420 L520 420', 'ht') +
+      `<g data-log>${wa(log, '#f3d488', OFF)}${ol('M130 360 L290 360 C302 360 302 400 290 400 L130 400')}${ln(ell(130, 380, 10, 20))}${ln('M130 372 C123 372 123 389 131 389 C137 389 137 375 131 375', 't')}${hatch(log, 120, 300, 384, 402, 6, 70)}${cuts}</g>` +
+      `<g data-at=".6" data-du=".2">${ribw}${rib}</g>` +
+      `<g data-knife data-at=".16" data-du=".16">${wa(blade, '#d3dade', OFF)}${wa('M150 -12 L210 -12 C220 -12 222 16 210 16 L150 16 Z', '#3b2a1d')}${ol(blade)}${ln('M8 7 C40 15 100 15 146 14', 'ht')}${ol('M150 -12 L210 -12 C220 -12 222 16 210 16 L150 16')}${ln(ell(178, 2, 2.6, 2.6), 't')}${ln(ell(198, 2, 2.6, 2.6), 't')}</g>` +
+      ann(452, 198, 'cut by hand', arrow(470, 214, 500, 290, 452, 380), 'middle', .76));
+  }
+  { // VI · Sugo
+    const rim = ell(300, 340, 190, 54), bz = 'M110 340 C110 280 490 280 490 340 C484 432 400 488 300 490 C200 488 116 432 110 340 Z';
+    const dome = 'M168 344 C176 288 236 250 300 248 C366 250 424 288 432 344';
+    let str = ''; for (let i = 0; i < 12; i++) { const a = 176 + rnd() * 70, b = 424 - rnd() * 70, h = 26 + rnd() * 70, y = 346 - rnd() * 6; str += ln(`M${f(a)} ${f(y)} C${f(a + 14)} ${f(y - h * 1.3)} ${f(b - 14)} ${f(y - h * 1.3)} ${f(b)} ${f(y)}`, 't'); }
+    for (let i = 0; i < 4; i++) { const cx = 250 + i * 34, cy = 302 - (i % 2) * 14; str += ln(ell(cx, cy, 30, 11), 't', ` transform="rotate(${-14 + i * 9} ${cx} ${cy})"`); }
+    const sauce = smooth([[248, 276], [270, 256], [306, 248], [340, 256], [364, 276], [356, 298], [326, 312], [284, 314], [254, 302]], true);
+    SC.push(wa(ell(300, 496, 210, 18), '#e2d3b6') + hatch(ell(300, 496, 210, 18), 300, 520, 478, 514, 7, 40) +
+      wa(bz, '#fffaf0', OFF) + wa('M400 330 C470 340 488 360 480 392 C460 452 400 486 330 490 C420 460 460 410 400 330 Z', '#e7dfcf', OFF) + wa('M134 392 C190 440 410 440 466 392 L450 414 C400 452 200 452 150 414 Z', '#2e5640', OFF) + wa(rim, '#f1ebdf') +
+      ol(rim) + ol('M110 340 C116 432 200 488 300 490 C400 488 484 432 490 340') + ln('M128 340 C128 372 472 372 472 340', 't') + ln('M134 392 C190 440 410 440 466 392') + ln('M150 414 C200 452 400 452 450 414') + ol('M240 484 L234 498 C270 508 330 508 366 498 L360 484') + hatch(bz, 392, 520, 340, 492, 6.5) +
+      `<g data-at=".3" data-du=".24">${wa(dome + ' C424 362 176 362 168 344 Z', '#f3d07e', OFF)}${ol(dome)}${str}</g>` +
+      `<g data-at=".5" data-du=".16">${wa(sauce, '#c0432a', OFF)}${ol(sauce)}${wa(ell(330, 296, 6, 4), '#8a2c14')}${ln('M262 270 C280 258 304 254 324 258', 'ht')}${wa('M254 300 C250 318 256 330 252 336 C248 330 248 318 254 300 Z', '#c0432a')}${ln('M254 302 C250 318 256 330 252 336', 't')}` +
+      `<g transform="translate(302 280) rotate(52)">${wa(LEAF(46, 15), '#5d8a3a')}${ol(LEAF(46, 15))}${ln('M0 -3 L0 -42 M0 -14 L8 -22 M0 -26 L7 -33 M0 -14 L-8 -22 M0 -26 L-7 -33', 'ht')}</g>` +
+      `<g transform="translate(298 282) rotate(-60)">${wa(LEAF(40, 13), '#6c9a45')}${ol(LEAF(40, 13))}${ln('M0 -3 L0 -36', 'ht')}</g></g>` +
+      `<g data-at=".58" data-du=".12">${wa('M350 290 L452 182 C458 176 468 184 462 190 L360 298 Z', '#d3dade', OFF)}${ol('M350 290 L452 182 C458 176 468 184 462 190 L360 298')}</g>` +
+      `<g data-steamw data-at=".66" data-du=".16">${ln('M262 226 C248 206 274 194 262 172 C252 156 268 142 264 126', 't')}${ln('M300 222 C288 200 314 188 302 164 C292 146 310 132 306 112', 't')}${ln('M336 226 C324 206 348 194 338 172 C328 156 344 142 340 128', 't')}</g>` +
+      `<g data-cheese data-at=".72" data-du=".14">${dots(34, () => { const a = rnd() * 6.28, r = rnd() * 44; return [306 + Math.cos(a) * r * 1.3, 282 + Math.sin(a) * r * .6]; }, 1.2, 2.4, 'ch')}</g>` +
+      ann(78, 194, 'finish with sugo ♡', arrow(150, 210, 166, 252, 240, 274), 'start', .78));
+  }
+  $('[data-scene]').innerHTML =
+    `<rect x="14" y="14" width="572" height="572" fill="#fdf9f1"/><rect class="fr" x="24" y="24" width="552" height="552"/><rect class="fr t" x="31" y="31" width="538" height="538"/>` +
+    [[31, 31], [569, 31], [31, 569], [569, 569]].map(([x, y]) => `<path class="orn" d="M${x} ${y - 5} L${x + 5} ${y} L${x} ${y + 5} L${x - 5} ${y} Z"/>`).join('') +
+    `<text class="cap" x="300" y="62" text-anchor="middle">PASTA FRESCA · FATTA A MANO</text><text class="cap b" x="300" y="551" text-anchor="middle" data-cap>TAV. VI · SUGO</text>` +
+    SC.map((s, k) => `<g data-sc="${k}">${s}</g>`).join('');
+
   $('[data-mk-steps]').innerHTML = CONFIG.steps.map(s => `<div class="mk-step"><div class="it">${esc(s.it)}</div><span class="en">${esc(s.en)}</span><p>${esc(s.d)}</p></div>`).join('');
   $('[data-mk-dots]').innerHTML = CONFIG.steps.map(() => '<i><b></b></i>').join('');
 
-  /* scene details generated once */
-  (() => {
-    let seed = 5; const rnd = () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
-    let s = ''; for (let i = 0; i < 90; i++) { const a = rnd() * Math.PI, r = 30 + rnd() * 150; const x = 300 + Math.cos(a) * r * (rnd() > .5 ? 1 : -1), y = 360 - Math.sin(a) * r * .6 - rnd() * 20; s += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(1.2 + rnd() * 2.6).toFixed(1)}" fill="#fffdf6" data-sp/>`; }
-    $('[data-specks]').innerHTML = s;
-    let c = ''; for (let i = 1; i < 12; i++) { const x = 110 + i * (380 / 12); c += `<line x1="${x.toFixed(1)}" y1="160" x2="${x.toFixed(1)}" y2="440" data-cut/>`; }
-    $('[data-cuts]').innerHTML = c;
-    // nest: concentric wobbly loops of tagliatelle
-    let n = ''; for (let k = 0; k < 7; k++) { const r0 = 40 + k * 22; let d = ''; for (let a = 0; a <= 360; a += 12) { const rr = r0 + Math.sin((a + k * 40) * Math.PI / 60) * 6; const x = 300 + Math.cos(a * Math.PI / 180) * rr, y = 300 + Math.sin(a * Math.PI / 180) * rr * .95; d += (a ? ' L' : 'M') + x.toFixed(1) + ' ' + y.toFixed(1); } n += `<path d="${d}" stroke="${k % 2 ? '#f1c46a' : '#f7d585'}" stroke-width="${17 - k * .6}" data-loop/><path d="${d}" stroke="rgba(170,115,40,.28)" stroke-width="2" transform="translate(2 4)" data-loop/>`; }
-    $('[data-nest]').innerHTML = n;
-    let ch = ''; for (let i = 0; i < 46; i++) { const a = rnd() * 6.28, r = rnd() * 110; ch += `<rect x="${(300 + Math.cos(a) * r).toFixed(1)}" y="${(300 + Math.sin(a) * r).toFixed(1)}" width="${(3 + rnd() * 4).toFixed(1)}" height="${(2 + rnd() * 3).toFixed(1)}" fill="#fff7dc" transform="rotate(${(rnd() * 90).toFixed(0)} ${(300 + Math.cos(a) * r).toFixed(1)} ${(300 + Math.sin(a) * r).toFixed(1)})" data-ch/>`; }
-    $('[data-cheese]').innerHTML = ch;
-  })();
+  /* marquee ribbons */
+  const OLV = '<svg viewBox="0 0 30 30" fill="currentColor"><ellipse cx="15" cy="15" rx="12" ry="4.5" transform="rotate(-35 15 15)"/></svg>';
+  $$('[data-marquee]').forEach((t, k) => { const words = k ? [['Pasta fresca', ''], ['Same passion, new adventures', 'h'], ['Fourth Avenue', ''], ['Coming soon', 'h'], ['Kerrytown', '']] : [['Fresh pasta', ''], ['Good pasta, brighter days', 'h'], ['Great drinks', ''], ['Italian roots, brighter tomorrows', 'h'], ['Good people', '']]; t.innerHTML = [0, 1].map(() => words.map(([w, c]) => `<span class="${c}">${w}</span>${OLV}`).join('')).join(''); });
+
+  /* hero: split "Ann Arbor" into letters */
+  const chars = $('[data-chars]'); chars.innerHTML = [...chars.textContent].map(c => `<span class="ch">${c === ' ' ? '&nbsp;' : esc(c)}</span>`).join('');
 
   /* header + smooth scroll */
   const header = $('header');
@@ -596,136 +732,151 @@
   const go = t => { const off = -header.offsetHeight; if (lenis) lenis.scrollTo(t, { duration: 1.6, offset: t === 0 ? 0 : off }); else if (t === 0) scrollTo({ top: 0 }); else scrollTo({ top: t.getBoundingClientRect().top + scrollY + off, behavior: RM ? 'auto' : 'smooth' }); };
   document.addEventListener('click', e => { const a = e.target.closest('a[href^="#"]'); if (!a) return; const id = a.getAttribute('href'); if (id === '#') return; const t = id === '#top' ? 0 : $(id); if (t === null) return; e.preventDefault(); go(t); });
 
-  /* statement words */
+  /* statement words + hand-drawn marks */
   const big = $('[data-words]');
   (function split(node, hl) { [...node.childNodes].forEach(n => { if (n.nodeType === 3) { const fr = document.createDocumentFragment(); n.textContent.split(/(\s+)/).forEach(t => { if (!t) return; if (/^\s+$/.test(t)) fr.appendChild(document.createTextNode(t)); else { const s = document.createElement('span'); s.className = 'w' + (hl ? ' hl' : ''); s.textContent = t; fr.appendChild(s); } }); n.replaceWith(fr); } else if (n.nodeType === 1) split(n, hl || n.classList.contains('hl-g')); }); })(big, false);
+  $$('[data-mk]', big).forEach(m => m.insertAdjacentHTML('beforeend', m.dataset.mk === 'u'
+    ? '<svg class="ink mk-svg u" viewBox="0 0 300 24" preserveAspectRatio="none" aria-hidden="true"><path class="ln" d="M4 14 C60 6 170 4 296 10 M30 20 C110 13 200 13 280 17"/></svg>'
+    : '<svg class="ink mk-svg o" viewBox="0 0 200 100" preserveAspectRatio="none" aria-hidden="true"><path class="ln" d="M150 10 C90 0 14 14 8 50 C4 84 80 96 130 92 C184 88 200 60 190 36 C180 14 140 6 92 8"/></svg>'));
+
+  /* quote words */
+  const qt = $('[data-quote]');
+  (function split(node) { [...node.childNodes].forEach(n => { if (n.nodeType === 3) { const fr = document.createDocumentFragment(); n.textContent.split(/(\s+)/).forEach(t => { if (!t) return; if (/^\s+$/.test(t)) fr.appendChild(document.createTextNode(t)); else { const s = document.createElement('span'); s.className = 'qw'; s.textContent = t; fr.appendChild(s); } }); n.replaceWith(fr); } else if (n.nodeType === 1) split(n); }); })(qt);
+
+  /* arch outline around the door, sized to the real pixels */
+  const arch = $('[data-arch]'), door = $('.door');
+  const sizeArch = () => { const w = door.offsetWidth + 28, h = door.offsetHeight + 28, r = w / 2; arch.setAttribute('viewBox', `0 0 ${f(w)} ${f(h)}`); arch.firstElementChild.setAttribute('d', `M2 ${f(h)} V${f(r)} A${f(r - 2)} ${f(r - 2)} 0 0 1 ${f(w - 2)} ${f(r)} V${f(h)}`); };
+  sizeArch();
 
   const making = $('[data-making]');
-  /* final-state scene for no-animation */
-  const finalScene = () => { ['[data-flour]', '[data-well]', '[data-eggs]', '[data-dough]', '[data-sheetg]', '[data-pin]', '[data-knife]', '[data-board]'].forEach(s => { const e = $(s); if (e) e.style.display = 'none'; }); };
-  if (!ANIM) { const i = $('[data-intro]'); if (i) i.remove(); finalScene(); return; }
+  if (!ANIM) { const i = $('[data-intro]'); if (i) i.remove(); $$('[data-sc]').forEach((g, k) => { if (k < 5) g.style.display = 'none'; }); addEventListener('resize', sizeArch); return; }
+
+  /* draw-on helpers */
+  const prep = root => { const all = (sel) => Array.isArray(root) ? root.flatMap(r => $$(sel, r)) : $$(sel, root); const ls = all('.ln:not(.nd)'); ls.forEach(p => { const L = p.getTotalLength(); p.style.strokeDasharray = `${f(L + 1)} ${f(L + 12)}`; p.style.strokeDashoffset = f(L + 6); }); const fs = all('.wa:not(.nd), .dt:not(.nd), .hw, .fd, .ch'); if (fs.length) gsap.set(fs, { opacity: 0 }); return [ls, fs]; };
+  const drawOn = (root, o = {}) => { const [ls, fs] = prep(root), tl = gsap.timeline({ scrollTrigger: { trigger: o.trigger || root, start: o.start || 'top 85%' } }).to(ls, { strokeDashoffset: 0, duration: o.d || 1.8, ease: 'power2.inOut', stagger: { amount: o.amt || .7 } }); if (fs.length) tl.to(fs, { opacity: 1, duration: .9, stagger: { amount: .3 } }, '-=1'); return tl; };
 
   /* =============================================================
-     INTRO: the oval draws itself, SUGO rises, the oval opens up
-     into the page.
+     INTRO: the oval draws, SUGO is inked in, two ribbons of pasta
+     and sauce sweep across, then the oval opens onto the page.
      ============================================================= */
-  gsap.set('.hero h1 .line > span', { yPercent: 110 }); gsap.set('[data-in]', { opacity: 0, y: 20 }); gsap.set('[data-dish]', { opacity: 0, scale: .9, y: 30 });
-  const intro = $('[data-intro]'), iov = $('.intro .o'), L = 2 * Math.PI * Math.sqrt((114 * 114 + 54 * 54) / 2);
-  gsap.set(iov, { strokeDasharray: L, strokeDashoffset: L });
+  gsap.set('.hero h1 .sub', { yPercent: 110 }); gsap.set('.hero .ch', { yPercent: 115, rotate: 10 });
+  gsap.set('[data-in]', { opacity: 0, y: 20 }); gsap.set('[data-dish]', { opacity: 0, scale: .9, y: 30 });
+  gsap.set('[data-write]', { clipPath: 'inset(-30% 100% -30% -6%)' });
+  const intro = $('[data-intro]'), iov = $('.intro .o'), it1 = $('.intro .t1'), Lo = 2 * Math.PI * Math.sqrt((114 * 114 + 54 * 54) / 2);
+  gsap.set(iov, { strokeDasharray: Lo, strokeDashoffset: Lo });
+  gsap.set(it1, { fillOpacity: 0, stroke: '#1f3d2c', strokeWidth: 1.1, strokeDasharray: 420, strokeDashoffset: 420 });
+  const sws = $$('.swoosh path'); sws.forEach(p => { const L = p.getTotalLength(); gsap.set(p, { strokeDasharray: L, strokeDashoffset: L }); });
   gsap.set(intro, { clipPath: 'ellipse(150% 150% at 50% 50%)' });
+  const [miniL, miniF] = prep($$('.hero .mini svg'));
   const itl = gsap.timeline({ onComplete: () => intro.remove() });
   itl.to(iov, { strokeDashoffset: 0, duration: 1.1, ease: 'power2.inOut' })
-    .from('.intro .t1', { y: 18, opacity: 0, duration: .8, ease: 'expo.out' }, .35)
-    .from('.intro .t2', { opacity: 0, letterSpacing: '.9em', duration: .8, ease: 'expo.out' }, .6)
-    .from('[data-intro-tag]', { opacity: 0, y: 12, duration: .7, ease: 'expo.out' }, .9)
-    .to('.intro > *', { opacity: 0, y: -12, duration: .45, ease: 'expo.in' }, 1.9)
-    .to(intro, { clipPath: 'ellipse(0% 0% at 50% 50%)', duration: 1, ease: 'expo.inOut' }, 2.05)
-    .to('.hero h1 .line > span', { yPercent: 0, duration: 1.3, ease: 'expo.out', stagger: .12 }, 2.4)
-    .to('[data-in]', { opacity: 1, y: 0, duration: 1.1, ease: 'expo.out', stagger: .07 }, 2.5)
-    .to('[data-dish]', { opacity: 1, scale: 1, y: 0, duration: 1.6, ease: 'expo.out' }, 2.55)
-    .from('.hero .olive', { opacity: 0, scale: .6, duration: 1.4, ease: 'expo.out', stagger: .1 }, 2.6);
+    .to(it1, { strokeDashoffset: 0, duration: 1.1, ease: 'power2.inOut' }, .2)
+    .to(it1, { fillOpacity: 1, strokeWidth: 0, duration: .5 }, 1.05)
+    .from('.intro .t2', { opacity: 0, letterSpacing: '.9em', duration: .8, ease: 'expo.out' }, 1)
+    .from('[data-intro-tag]', { opacity: 0, y: 12, duration: .7, ease: 'expo.out' }, 1.15)
+    .to(sws, { strokeDashoffset: 0, duration: .8, ease: 'power3.inOut', stagger: .08 }, 1.75)
+    .to('.intro .wm, .intro .tag', { opacity: 0, y: -12, duration: .4, ease: 'expo.in' }, 2.2)
+    .to(intro, { clipPath: 'ellipse(0% 0% at 50% 50%)', duration: 1, ease: 'expo.inOut' }, 2.3)
+    .to('.hero h1 .sub', { yPercent: 0, duration: 1.2, ease: 'expo.out' }, 2.65)
+    .to('.hero .ch', { yPercent: 0, rotate: 0, duration: 1.3, ease: 'expo.out', stagger: .045 }, 2.7)
+    .to('[data-in]', { opacity: 1, y: 0, duration: 1.1, ease: 'expo.out', stagger: .07 }, 2.75)
+    .to('[data-write]', { clipPath: 'inset(-30% -6% -30% -6%)', duration: 1.3, ease: 'power2.inOut', stagger: .2 }, 2.6)
+    .to('[data-dish]', { opacity: 1, scale: 1, y: 0, duration: 1.6, ease: 'expo.out' }, 2.8)
+    .from('.hero .olive', { opacity: 0, scale: .6, duration: 1.4, ease: 'expo.out', stagger: .1 }, 2.85)
+    .to(miniL, { strokeDashoffset: 0, duration: 1.8, ease: 'power2.inOut', stagger: { amount: .9 } }, 3)
+    .to(miniF, { opacity: 1, duration: .8 }, 4);
   intro.addEventListener('click', () => itl.progress(1));
 
-  // ambient
+  // ambient + scroll on the hero
   $$('[data-sway]').forEach((o, k) => gsap.to(o.firstElementChild, { rotation: k % 2 ? -4 : 4, transformOrigin: '0% 100%', duration: 3.4 + k * .4, ease: 'sine.inOut', yoyo: true, repeat: -1 }));
-  gsap.to('[data-steam] path', { y: -24, opacity: 0, duration: 2.6, ease: 'sine.in', repeat: -1, stagger: { each: .7, repeat: -1 } });
+  gsap.to('[data-steam] path', { y: -26, opacity: 0, duration: 2.8, ease: 'sine.in', repeat: -1, stagger: { each: .8, repeat: -1 } });
   gsap.to('[data-dish] img', { yPercent: 10, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
   gsap.to('.hero h1', { yPercent: -20, opacity: .2, ease: 'none', scrollTrigger: { trigger: '.hero', start: '30% top', end: 'bottom top', scrub: true } });
+  gsap.to('.prog', { scaleX: 1, ease: 'none', scrollTrigger: { start: 0, end: 'max', scrub: .3 } });
+  if (FINE) { const px = $$('[data-px]').map(e => ({ d: +e.dataset.px, x: gsap.quickTo(e, 'x', { duration: 1.2, ease: 'power3' }), y: gsap.quickTo(e, 'y', { duration: 1.2, ease: 'power3' }) })); $('.hero').addEventListener('pointermove', e => { const nx = e.clientX / innerWidth - .5, ny = e.clientY / innerHeight - .5; px.forEach(p => { p.x(nx * p.d * 2); p.y(ny * p.d * 1.4); }); }); }
 
-  // marquee with velocity
+  // two ribbons, both pick up speed with the scroll
   (() => {
-    const tr = $('[data-marquee]'); let x = 0, v = 0, w = 0;
-    const m = () => { w = tr.scrollWidth / 2; }; m(); addEventListener('resize', m); document.fonts && document.fonts.ready.then(m);
+    const ts = $$('[data-marquee]').map(t => ({ t, x: 0, w: 0, rev: t.hasAttribute('data-rev') })); let v = 0;
+    const m = () => ts.forEach(o => { o.w = o.t.scrollWidth / 2; if (o.rev && !o.x) o.x = -o.w; }); m(); addEventListener('resize', m); document.fonts && document.fonts.ready.then(m);
     ScrollTrigger.create({ onUpdate: s => { v = clamp(s.getVelocity() / 300, -12, 12); } });
-    gsap.ticker.add(() => { v *= .92; x -= .6 + Math.abs(v); if (w && x <= -w) x += w; tr.style.transform = `translate3d(${x}px,0,0)`; });
+    gsap.ticker.add(() => { v *= .92; const sp = .6 + Math.abs(v); ts.forEach(o => { if (!o.w) return; if (o.rev) { o.x += sp; if (o.x >= 0) o.x -= o.w; } else { o.x -= sp; if (o.x <= -o.w) o.x += o.w; } o.t.style.transform = `translate3d(${o.x}px,0,0)`; }); });
   })();
+  gsap.from('.ribbons .marquee', { yPercent: 60, opacity: 0, duration: 1.4, ease: 'expo.out', stagger: .12, scrollTrigger: { trigger: '.ribbons', start: 'top 92%' } });
 
   // reveals
-  $$('main .line > span').forEach(el => { if (el.closest('.hero')) return; gsap.from(el, { yPercent: 110, duration: 1.3, ease: 'expo.out', scrollTrigger: { trigger: el.parentElement, start: 'top 92%' } }); });
+  $$('main .line > span').forEach(el => { if (el.closest('.hero')) return; gsap.from(el, { yPercent: 110, rotate: 3, duration: 1.3, ease: 'expo.out', scrollTrigger: { trigger: el.parentElement, start: 'top 92%' } }); });
   gsap.to($$('.w', big), { opacity: 1, stagger: .05, ease: 'none', scrollTrigger: { trigger: big, start: 'top 80%', end: 'bottom 50%', scrub: true } });
+  $$('.mk-svg', big).forEach(sv => { const [ls] = prep(sv); gsap.to(ls, { strokeDashoffset: 0, ease: 'none', stagger: .3, scrollTrigger: { trigger: big, start: 'top 55%', end: 'bottom 40%', scrub: true } }); });
   gsap.from('.statement .sign', { opacity: 0, x: -20, duration: 1, scrollTrigger: { trigger: '.statement .sign', start: 'top 90%' } });
   const rise = (sel, trig, st = .08) => gsap.from(sel, { opacity: 0, y: 44, duration: 1.2, ease: 'expo.out', stagger: st, scrollTrigger: { trigger: trig, start: 'top 86%' } });
   rise('.place', '.places', .12); rise('.ex', '.ex-list', .07);
+  $$('.place svg.store').forEach((s, k) => drawOn(s, { trigger: '.places', start: 'top 80%', d: 1.6, amt: .9 }).delay(k * .15));
+  $$('.ex .ico').forEach(s => drawOn(s, { trigger: s.closest('.ex'), d: 1.4, amt: .4 }));
+  $$('.quote .olive svg').forEach(s => drawOn(s, { trigger: '.quote', start: 'top 70%', d: 1.6, amt: .8 }));
+  gsap.from($$('.qw', qt), { opacity: 0, y: 26, filter: 'blur(10px)', duration: 1.1, ease: 'expo.out', stagger: .05, scrollTrigger: { trigger: '.quote', start: 'top 70%' } });
   gsap.from('.door', { clipPath: 'inset(100% 0% 0% 0% round 300px 300px 4px 4px)', duration: 1.6, ease: 'expo.inOut', scrollTrigger: { trigger: '.door', start: 'top 82%' } });
   gsap.from('.door img', { scale: 1.3, duration: 2.2, ease: 'expo.out', scrollTrigger: { trigger: '.door', start: 'top 82%' } });
-  gsap.from('.quote blockquote', { opacity: 0, y: 40, duration: 1.4, ease: 'expo.out', scrollTrigger: { trigger: '.quote', start: 'top 75%' } });
+  let archDone = false; const [archL] = prep(arch);
+  gsap.to(archL, { strokeDashoffset: 0, duration: 2.4, ease: 'power2.inOut', delay: .5, scrollTrigger: { trigger: '.door', start: 'top 82%' }, onComplete: () => { archDone = true; arch.firstElementChild.style.strokeDasharray = 'none'; } });
+  addEventListener('resize', () => { sizeArch(); if (!archDone) { const p = arch.firstElementChild, L = p.getTotalLength(); p.style.strokeDasharray = `${f(L + 1)} ${f(L + 12)}`; } });
+  gsap.from('.opening', { scale: .6, opacity: 0, duration: 1, ease: 'back.out(2.2)', scrollTrigger: { trigger: '.opening', start: 'top 90%' } });
   gsap.to('[data-giant]', { backgroundSize: '100% 100%', ease: 'none', scrollTrigger: { trigger: '[data-giant]', start: 'top 95%', end: 'max', scrub: true } });
 
-  // NY → MI route draws as you scroll
+  // NY → MI: the cities draw, the route crosses, Michigan appears
   (() => {
-    const sk = $$('.map .sk path'); sk.forEach(p => { const l = p.getTotalLength(); p.style.strokeDasharray = l; p.style.strokeDashoffset = l; });
-    const mtl = gsap.timeline({ scrollTrigger: { trigger: '.map', start: 'top 80%', end: 'bottom 45%', scrub: .8 } });
-    mtl.to($$('[data-sk-ny] path'), { strokeDashoffset: 0, duration: 1, stagger: .1 }, 0)
-      .from('[data-pin-ny]', { opacity: 0, y: 10, duration: .4 }, .3)
-      .to('[data-rc]', { attr: { x: 150, width: 950 }, duration: 1.2, ease: 'none' }, .9)
-      .to($$('[data-sk-a2] path'), { strokeDashoffset: 0, duration: 1, stagger: .08 }, 1.6)
-      .from('[data-pin-a2]', { opacity: 0, y: 10, duration: .4 }, 2)
-      .from('[data-heart-a2]', { scale: 0, transformOrigin: '11px 10px', duration: .4, ease: 'back.out(3)' }, 2.2);
+    const [nyL] = prep($('[data-g-ny]')), [a2L, a2F] = prep($('[data-g-a2]')), [miL] = prep($('[data-mit]'));
+    gsap.set('[data-rc]', { attr: { x: 1100, width: 0 } });
+    const mtl = gsap.timeline({ scrollTrigger: { trigger: '.map', start: 'top 82%', end: 'bottom 45%', scrub: .8 } });
+    mtl.to(nyL, { strokeDashoffset: 0, duration: 1, stagger: { amount: .5 } }, 0)
+      .from('[data-lbl-ny]', { opacity: 0, y: 12, duration: .4 }, .5)
+      .to('[data-rc]', { attr: { x: 140, width: 960 }, duration: 1.2, ease: 'none' }, .9)
+      .to(miL, { strokeDashoffset: 0, duration: .9 }, 1.5)
+      .to(a2L, { strokeDashoffset: 0, duration: 1, stagger: { amount: .4 } }, 1.6).to(a2F, { opacity: 1, duration: .3 }, 2.3)
+      .from('[data-lbl-a2]', { opacity: 0, y: 12, duration: .4 }, 2.1)
+      .from('[data-heart-a2]', { scale: 0, transformOrigin: '50% 50%', duration: .4, ease: 'back.out(3)' }, 2.1);
   })();
 
   /* =============================================================
-     SIGNATURE: the making. A pinned, scroll-scrubbed scene that
-     goes flour → eggs → dough → sheet → cut → sugo.
+     SIGNATURE: the making. A pinned plate where each step is drawn
+     in ink and washed with color as you scroll, then gives way to
+     the next: flour → eggs → dough → sheet → cut → sugo.
      ============================================================= */
   const mm = gsap.matchMedia();
   mm.add('(min-width: 0px)', () => {
     making.classList.add('pinned');
-    const steps = $$('.mk-step'), dots = $$('[data-mk-dots] b'), N = steps.length, nEl = $('[data-mk-n]');
+    const steps = $$('.mk-step'), dots = $$('[data-mk-dots] b'), N = steps.length, nEl = $('[data-mk-n]'), cap = $('[data-cap]');
+    const scenes = $$('[data-sc]');
     gsap.set(steps.slice(1), { autoAlpha: 0, y: 30 });
-    // initial scene
-    gsap.set('[data-sp]', { y: -260, opacity: 0 });
-    gsap.set('[data-mound]', { scaleY: 0, transformOrigin: '300px 376px' });
-    gsap.set('[data-well]', { scale: 0, transformOrigin: '300px 300px', opacity: 0 });
-    gsap.set('[data-egg]', { y: -320, opacity: 0 });
-    gsap.set('[data-dough]', { scale: .2, opacity: 0, transformOrigin: '300px 300px' });
-    gsap.set('[data-sheetg]', { scaleX: .3, scaleY: .4, opacity: 0, transformOrigin: '300px 300px' });
-    gsap.set('[data-pin]', { x: -620, opacity: 0 });
-    gsap.set('[data-cut]', { attr: { y2: 160 } });
-    gsap.set('[data-knife]', { x: 70, y: -340, opacity: 0 });
-    gsap.set('[data-bowlg]', { scale: .7, opacity: 0, transformOrigin: '300px 300px' });
-    const loops = $$('[data-loop]'); loops.forEach(p => { const l = p.getTotalLength(); p.style.strokeDasharray = l; p.style.strokeDashoffset = l; }); gsap.set(loops, { opacity: 0 });
-    gsap.set('[data-sugo]', { scale: 0, transformOrigin: '300px 300px' });
-    gsap.set('[data-basil]', { scale: 0, rotation: -40, transformOrigin: '300px 291px' });
-    gsap.set('[data-ch]', { y: -120, opacity: 0 });
+    prep($('[data-scene]'));
+    cap.textContent = 'TAV. I · ' + CONFIG.steps[0].it.toUpperCase();
     let cur = 0;
-    const tl = gsap.timeline({ defaults: { ease: 'none' }, scrollTrigger: { trigger: making, start: 'top top', end: () => '+=' + (innerHeight * 5.4), pin: '.mk-pin', scrub: .7, anticipatePin: 1, invalidateOnRefresh: true,
-      onUpdate: s => { const k = clamp(Math.floor(s.progress * N - .0001), 0, N - 1); dots.forEach((d, i) => gsap.set(d, { scaleX: i < k ? 1 : i === k ? (s.progress * N - k) : 0 })); if (k !== cur) { cur = k; nEl.textContent = k + 1; } } } });
-    const at = k => k; // one unit per step
-    // 1 flour
-    tl.to('[data-sp]', { y: 0, opacity: 1, duration: .55, stagger: { each: .004, from: 'random' }, ease: 'power2.in' }, at(0) + .05)
-      .to('[data-mound]', { scaleY: 1, duration: .5, ease: 'power2.out' }, at(0) + .3);
-    // 2 well + eggs
-    tl.to('[data-well]', { scale: 1, opacity: 1, duration: .3, ease: 'back.out(2)' }, at(1))
-      .to('[data-egg]', { y: 0, opacity: 1, duration: .35, stagger: .15, ease: 'bounce.out' }, at(1) + .25);
-    // 3 dough
-    tl.to(['[data-flour]', '[data-well]', '[data-eggs]'], { scale: .4, opacity: 0, transformOrigin: '300px 300px', duration: .35, ease: 'power2.in' }, at(2))
-      .to('[data-dough]', { scale: 1, opacity: 1, duration: .35, ease: 'back.out(1.6)' }, at(2) + .25)
-      .to('[data-ball]', { attr: { r: 122 }, scaleX: 1.12, scaleY: .88, transformOrigin: '300px 300px', duration: .12, yoyo: true, repeat: 3, ease: 'sine.inOut' }, at(2) + .55);
-    // 4 sheet
-    tl.to('[data-dough]', { scaleX: 1.6, scaleY: .5, opacity: 0, duration: .3, ease: 'power2.in' }, at(3))
-      .to('[data-sheetg]', { scaleX: 1, scaleY: 1, opacity: 1, duration: .55, ease: 'power2.out' }, at(3) + .15)
-      .to('[data-pin]', { opacity: 1, duration: .05 }, at(3) + .1)
-      .to('[data-pin]', { x: 620, duration: .8, ease: 'power1.inOut' }, at(3) + .12)
-      .to('[data-pin]', { opacity: 0, duration: .06 }, at(3) + .9);
-    // 5 cut
-    tl.to('[data-knife]', { opacity: 1, duration: .05 }, at(4));
-    $$('[data-cut]').forEach((c, i) => {
-      const x = 110 + (i + 1) * (380 / 12);
-      tl.to('[data-knife]', { x: x - 11, y: 100, duration: .035, ease: 'power2.in' }, at(4) + .05 + i * .072)
-        .to(c, { attr: { y2: 440 }, duration: .04 }, at(4) + .06 + i * .072)
-        .to('[data-knife]', { y: 40, duration: .03 }, at(4) + .09 + i * .072);
+    const tl = gsap.timeline({ defaults: { ease: 'none' }, scrollTrigger: { trigger: making, start: 'top top', end: () => '+=' + (innerHeight * 6), pin: '.mk-pin', scrub: .7, anticipatePin: 1, invalidateOnRefresh: true,
+      onUpdate: s => { const k = clamp(Math.floor(s.progress * N - .0001), 0, N - 1); dots.forEach((d, i) => gsap.set(d, { scaleX: i < k ? 1 : i === k ? (s.progress * N - k) : 0 })); if (k !== cur) { cur = k; nEl.textContent = k + 1; cap.textContent = 'TAV. ' + ROM[k] + ' · ' + CONFIG.steps[k].it.toUpperCase(); } } } });
+    scenes.forEach((g, k) => {
+      const lines = new Map(), fills = new Map(), put = (m, o, e) => (m.get(o) || m.set(o, []).get(o)).push(e);
+      $$('.ln:not(.nd):not(.cut)', g).forEach(p => put(lines, p.closest('[data-at], [data-sc]'), p));
+      $$('.wa:not(.nd), .dt:not(.nd), .hw, .ch', g).forEach(p => put(fills, p.closest('[data-at], [data-sc]'), p));
+      const at = o => o === g ? .04 : +o.dataset.at, du = o => o === g ? .46 : +(o.dataset.du || .2);
+      lines.forEach((ls, o) => tl.to(ls, { strokeDashoffset: 0, duration: du(o) * .6, stagger: { amount: du(o) * .4 }, ease: 'power1.inOut' }, k + at(o)));
+      fills.forEach((fs, o) => tl.to(fs, { opacity: 1, duration: .12, stagger: { amount: .08 } }, k + at(o) + du(o) * .72));
+      if (k < N - 1) tl.to(g, { opacity: 0, duration: .08 }, k + .92);
     });
-    tl.to('[data-knife]', { x: 640, y: -200, opacity: 0, duration: .15 }, at(4) + .9);
-    // 6 sugo
-    tl.to(['[data-sheetg]', '[data-board]'], { opacity: 0, scale: .85, transformOrigin: '300px 300px', duration: .3 }, at(5))
-      .to('[data-bowlg]', { scale: 1, opacity: 1, duration: .35, ease: 'back.out(1.4)' }, at(5) + .1)
-      .to(loops, { opacity: 1, duration: .01 }, at(5) + .24)
-      .to(loops, { strokeDashoffset: 0, duration: .35, stagger: .02 }, at(5) + .25)
-      .to('[data-sugo]', { scale: 1, duration: .25, ease: 'back.out(1.8)' }, at(5) + .55)
-      .to('[data-basil]', { scale: 1, rotation: 0, duration: .2, ease: 'back.out(2.5)' }, at(5) + .75)
-      .to('[data-ch]', { y: 0, opacity: 1, duration: .2, stagger: .002 }, at(5) + .8);
+    // per-step motion
+    tl.fromTo('[data-fall] .dt', { y: -170 }, { y: 0, duration: .22, ease: 'power2.in', stagger: { amount: .12, from: 'random' } }, .26);
+    tl.fromTo('[data-yolks]', { y: -230 }, { y: 0, duration: .24, ease: 'bounce.out' }, 1.34)
+      .to('[data-egg]', { rotation: 7, svgOrigin: '514 438', duration: .05, yoyo: true, repeat: 3, ease: 'sine.inOut' }, 1.6);
+    tl.fromTo('[data-scraper]', { x: 70 }, { x: 0, duration: .3, ease: 'power2.out' }, 2.2)
+      .to('[data-ball]', { scaleX: 1.08, scaleY: .92, svgOrigin: '300 446', duration: .05, yoyo: true, repeat: 5, ease: 'sine.inOut' }, 2.5);
+    gsap.set('[data-shr]', { attr: { height: 0 } }); gsap.set('[data-pinr]', { y: 300, rotation: -2, svgOrigin: '300 0' });
+    tl.to('[data-pinr]', { y: 474, rotation: 1, duration: .38, ease: 'power1.inOut' }, 3.42).to('[data-shr]', { attr: { height: 176 }, duration: .38, ease: 'power1.inOut' }, 3.42);
+    gsap.set('[data-knife]', { x: 38, y: 300 });
+    $$('[data-sc="4"] .cut').forEach((c, i) => { const x = 158 + i * 16, t0 = 4.34 + i * .034; tl.to('[data-knife]', { x: x - 120, y: 340, duration: .018, ease: 'power2.in' }, t0).to(c, { strokeDashoffset: 0, duration: .016 }, t0 + .01).to('[data-knife]', { y: 306, duration: .014 }, t0 + .02); });
+    tl.to('[data-knife]', { x: 380, y: 180, opacity: 0, duration: .08 }, 4.62);
+    tl.fromTo('[data-cheese] .ch', { y: -70 }, { y: 0, duration: .14, stagger: { amount: .06, from: 'random' }, ease: 'power2.in' }, 5.76);
+    gsap.to('[data-steamw]', { y: -8, duration: 2.4, ease: 'sine.inOut', yoyo: true, repeat: -1 });
     // copy swaps
-    steps.forEach((s, k) => { if (!k) return; tl.to(steps[k - 1], { autoAlpha: 0, y: -26, duration: .08 }, at(k) - .08).to(s, { autoAlpha: 1, y: 0, duration: .1 }, at(k)); });
+    steps.forEach((s, k) => { if (!k) return; tl.to(steps[k - 1], { autoAlpha: 0, y: -26, duration: .08 }, k - .08).to(s, { autoAlpha: 1, y: 0, duration: .1 }, k); });
     tl.to({}, { duration: .3 }, N);
     return () => making.classList.remove('pinned');
   });
@@ -733,7 +884,9 @@
   if (FINE) {
     const c = $('[data-cursor]'); const qx = gsap.quickTo(c, 'x', { duration: .2, ease: 'power3' }), qy = gsap.quickTo(c, 'y', { duration: .2, ease: 'power3' });
     addEventListener('pointermove', e => { qx(e.clientX); qy(e.clientY); c.style.opacity = 1; }, { passive: true });
-    document.addEventListener('pointerover', e => c.classList.toggle('big', !!e.target.closest('a, button, .ex')));
+    document.addEventListener('pointerover', e => c.classList.toggle('big', !!e.target.closest('a, button, .ex, .place')));
+    // magnetic buttons
+    $$('[data-mag]').forEach(b => { const mx = gsap.quickTo(b, 'x', { duration: .6, ease: 'power3' }), my = gsap.quickTo(b, 'y', { duration: .6, ease: 'power3' }); b.addEventListener('pointermove', e => { const r = b.getBoundingClientRect(); mx((e.clientX - r.left - r.width / 2) * .28); my((e.clientY - r.top - r.height / 2) * .4); }); b.addEventListener('pointerleave', () => { mx(0); my(0); }); });
   }
   addEventListener('load', () => ScrollTrigger.refresh());
   document.fonts && document.fonts.ready.then(() => ScrollTrigger.refresh());
