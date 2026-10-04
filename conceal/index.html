@@ -64,8 +64,6 @@
     @media (hover: hover) { .btn.solid:hover { color: var(--bone); } }
     .btn svg { width: 15px; height: 15px; }
     .wm { font-family: var(--serif); font-weight: 400; letter-spacing: .42em; text-transform: uppercase; }
-    .grain { position: fixed; inset: -50%; z-index: 300; pointer-events: none; opacity: .06; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E"); animation: grain 1s steps(4) infinite; }
-    @keyframes grain { 25% { transform: translate(-3%, 2%); } 50% { transform: translate(2%, -3%); } 75% { transform: translate(-2%, -2%); } }
 
     /* ---------- loader ---------- */
     .loader { position: fixed; inset: 0; z-index: 500; display: grid; place-items: center; cursor: pointer; }
@@ -73,14 +71,20 @@
     .loader .half.t { top: 0; } .loader .half.b { bottom: 0; }
     .l-word { position: relative; z-index: 2; text-align: center; }
     .l-word .big { font: 400 clamp(46px, 9vw, 140px)/1 var(--serif); letter-spacing: .3em; padding-left: .3em; }
+    .l-word .big { overflow: hidden; padding-block: .08em; }
     .l-word .big span { display: inline-block; }
     .l-word .sm { margin-top: 14px; font: 500 12px/1 var(--mono); letter-spacing: .6em; color: var(--stone); }
     html.rm .loader, html:not(.js) .loader { display: none; }
 
     /* ---------- header ---------- */
     header { position: fixed; left: 0; right: 0; top: 0; z-index: 90; transition: transform .5s var(--ease-out), background .5s; }
-    header.scrolled { background: linear-gradient(rgba(11,11,11,.85), rgba(11,11,11,0)); }
+    header.scrolled { background: rgba(11,11,11,.62); -webkit-backdrop-filter: blur(18px) saturate(1.3); backdrop-filter: blur(18px) saturate(1.3); box-shadow: 0 1px 0 rgba(236,232,225,.06); }
     header.hide { transform: translateY(-110%); }
+    header.light { background: rgba(242,239,233,.72); color: var(--ink); box-shadow: 0 1px 0 rgba(20,20,20,.08); }
+    header.light .brand small { color: #7b766e; }
+    header.light .nav nav a { color: rgba(20,20,20,.62); }
+    header.light .btn { color: var(--ink); border-color: rgba(20,20,20,.28); }
+    header { transition: transform .5s var(--ease-out), background .5s, color .5s, box-shadow .5s; }
     .nav { display: flex; align-items: center; justify-content: space-between; gap: 20px; height: 82px; }
     .brand { display: grid; line-height: 1; }
     .brand b { font: 400 21px/1 var(--serif); letter-spacing: .42em; }
@@ -104,13 +108,12 @@
     .sg-step .n { font: 500 11px/1 var(--mono); letter-spacing: .24em; color: var(--stone); }
     .sg-step .acts { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
     .sg-dots { display: flex; gap: 8px; margin-top: 34px; }
-    .sg-dots i { width: 22px; height: 2px; background: rgba(236,232,225,.2); transition: background .4s, width .4s var(--ease-out); }
-    .sg-dots i.on { background: var(--bone); width: 44px; }
+    .sg-dots i { position: relative; width: 34px; height: 2px; border-radius: 2px; background: rgba(236,232,225,.16); overflow: hidden; }
+    .sg-dots i b { position: absolute; inset: 0; background: var(--bone); transform-origin: 0 50%; transform: scaleX(0); }
     .sg-phone { position: relative; display: grid; place-items: center; perspective: 1600px; }
+    .sg-phone::before { content: ""; position: absolute; left: 50%; top: 54%; width: 120%; aspect-ratio: 1; translate: -50% -50%; border-radius: 50%; background: radial-gradient(closest-side, color-mix(in srgb, var(--accent) 55%, transparent), transparent); opacity: .55; pointer-events: none; transition: background 1.2s var(--ease); }
+    .sg-phone::after { content: ""; position: absolute; left: 50%; bottom: -3%; width: 62%; height: 34px; translate: -50% 0; border-radius: 50%; background: radial-gradient(closest-side, rgba(0,0,0,.65), transparent); pointer-events: none; }
     .scramble { display: inline-block; }
-    .ghost { position: absolute; z-index: 1; left: 50%; top: 50%; translate: -50% -50%; font: 300 clamp(140px, 22vw, 360px)/1 var(--serif); letter-spacing: .1em; color: transparent; -webkit-text-stroke: 1px rgba(236,232,225,.08); white-space: nowrap; pointer-events: none; }
-    .floater { position: absolute; z-index: 1; width: clamp(90px, 9vw, 140px); border-radius: 14px; overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,.5); pointer-events: none; }
-    .floater img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
     .try { position: absolute; z-index: 5; left: 50%; bottom: -2%; translate: -50% 0; display: inline-flex; align-items: center; gap: 10px; padding: 10px 16px; border-radius: 999px; background: var(--bone); color: var(--ink); font: 500 11px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; white-space: nowrap; pointer-events: none; box-shadow: 0 14px 30px rgba(0,0,0,.4); }
     .try::before { content: ""; position: absolute; left: 50%; top: -5px; width: 10px; height: 10px; margin-left: -5px; background: var(--bone); transform: rotate(45deg); }
     .try i { width: 8px; height: 8px; border-radius: 50%; background: #2ecc71; box-shadow: 0 0 0 0 rgba(46,204,113,.6); animation: ping 1.8s infinite; }
@@ -124,7 +127,6 @@
       .sg-step .acts { margin-top: 14px; }
       .sg-step .acts .btn { height: 44px; padding: 0 16px; font-size: 10.5px; }
       .sg-dots { margin-top: 14px; }
-      .floater { display: none; }
       .try { bottom: -4%; }
     }
 
@@ -258,11 +260,11 @@
     .mani .eyebrow { color: #7b766e; }
     .mani .eyebrow b { background: var(--ink); }
     .mt { position: relative; margin-top: 34px; font: 300 clamp(30px, 3.6vw, 60px)/1.18 var(--serif); }
-    .mt .w { display: inline-block; filter: blur(var(--b, 10px)); opacity: var(--o, .35); transition: filter .2s, opacity .2s; }
+    .mt .w { display: inline-block; opacity: var(--o, .14); }
     .mt .lens { position: absolute; inset: 0; pointer-events: none; color: var(--ink); -webkit-mask-image: radial-gradient(circle var(--lr, 0px) at var(--lx, -999px) var(--ly, -999px), #000 98%, transparent 100%); mask-image: radial-gradient(circle var(--lr, 0px) at var(--lx, -999px) var(--ly, -999px), #000 98%, transparent 100%); }
-    .mt .lens .w { filter: none; opacity: 1; }
-    .ring-c { position: fixed; left: 0; top: 0; z-index: 400; width: 36px; height: 36px; margin: -18px 0 0 -18px; border-radius: 50%; border: 1px solid rgba(236,232,225,.7); pointer-events: none; mix-blend-mode: difference; display: grid; place-items: center; font: 500 9px/1 var(--mono); letter-spacing: .14em; color: #fff; text-transform: uppercase; transition: width .35s var(--ease-out), height .35s var(--ease-out), margin .35s var(--ease-out), background .35s; }
-    .ring-c.big { width: 84px; height: 84px; margin: -42px 0 0 -42px; background: #fff; color: #000; }
+    .mt .lens .w { opacity: 1; }
+    .ring-c { position: fixed; left: 0; top: 0; z-index: 400; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 999px; background: #fff; pointer-events: none; mix-blend-mode: difference; display: grid; place-items: center; font: 500 9px/1 var(--mono); letter-spacing: .16em; color: transparent; text-transform: uppercase; transition: width .45s var(--ease-out), height .45s var(--ease-out), margin .45s var(--ease-out), color .3s, opacity .3s; }
+    .ring-c.big { width: 64px; height: 64px; margin: -32px 0 0 -32px; color: #000; }
     .mani .sig { margin-top: 40px; font: 500 11px/1 var(--mono); letter-spacing: .24em; text-transform: uppercase; color: #7b766e; }
 
     /* ---------- color lab ---------- */
@@ -295,9 +297,9 @@
     .au .im { position: relative; aspect-ratio: 4 / 5; border-radius: 22px; overflow: hidden; }
     .au .im img { width: 100%; height: 100%; object-fit: cover; transition: transform 1s var(--ease-out), filter .8s; filter: grayscale(.2); }
     .au .ov { position: absolute; inset: 0; display: flex; align-items: flex-end; padding: 22px; background: linear-gradient(transparent 35%, rgba(0,0,0,.75)); }
-    .au q { font: 400 clamp(24px, 2.2vw, 32px)/1.1 var(--serif); font-style: italic; color: #fff; quotes: "“" "”"; filter: blur(8px); opacity: .55; transition: filter .7s var(--ease-out), opacity .7s; }
-    .au.shown q { filter: none; opacity: 1; }
-    @media (hover: hover) { .au:hover q { filter: none; opacity: 1; } .au:hover .im img { transform: scale(1.05); filter: none; } }
+    .au q { font: 400 clamp(24px, 2.2vw, 32px)/1.1 var(--serif); font-style: italic; color: #fff; quotes: "“" "”"; opacity: 0; transform: translateY(18px); transition: opacity .8s var(--ease-out), transform .9s var(--ease-out); }
+    .au.shown q { opacity: 1; transform: none; }
+    @media (hover: hover) { .au:hover q { opacity: 1; transform: none; } .au:hover .im img { transform: scale(1.04); filter: none; } }
     .au .meta { display: flex; justify-content: space-between; margin-top: 12px; font: 500 11px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--stone); }
     .au .meta i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 8px; vertical-align: -1px; }
     @media (max-width: 900px) { .rail { overflow-x: auto; scroll-snap-type: x mandatory; padding-right: var(--pad); scrollbar-width: none; touch-action: pan-x pan-y; } .rail::-webkit-scrollbar { display: none; } .au { flex-basis: 76%; scroll-snap-align: center; } }
@@ -306,7 +308,8 @@
     .look { position: relative; padding: clamp(100px, 11vw, 160px) 0 clamp(120px, 12vw, 180px); background: linear-gradient(var(--ink), #121212); overflow: hidden; overflow: clip; text-align: center; }
     .ring3 { position: relative; height: clamp(360px, 46vw, 620px); margin-top: 40px; perspective: 1800px; touch-action: pan-y; cursor: grab; }
     .ring3 .cyl { position: absolute; left: 50%; top: 50%; width: 0; height: 0; transform-style: preserve-3d; }
-    .ring3 figure { position: absolute; margin: 0; width: var(--cw, 220px); aspect-ratio: 4 / 5; left: calc(var(--cw, 220px) / -2); top: calc(var(--cw, 220px) * -.625); border-radius: 16px; overflow: hidden; -webkit-backface-visibility: hidden; backface-visibility: hidden; filter: grayscale(1); }
+    .ring3 figure { position: absolute; margin: 0; width: var(--cw, 220px); aspect-ratio: 4 / 5; left: calc(var(--cw, 220px) / -2); top: calc(var(--cw, 220px) * -.625); border-radius: 16px; overflow: hidden; -webkit-backface-visibility: hidden; backface-visibility: hidden; }
+    .ring3 figure::after { content: ""; position: absolute; inset: 0; background: #0b0b0b; opacity: var(--d, .6); pointer-events: none; }
     .ring3 figure img { width: 100%; height: 100%; object-fit: cover; }
     .look h2 { position: relative; z-index: 2; }
     .look .hint { margin-top: 18px; font: 500 11px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: var(--stone); }
@@ -386,7 +389,6 @@
 </head>
 <body>
   <script>document.documentElement.classList.add('js');if(matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('rm');</script>
-  <div class="grain" aria-hidden="true"></div>
   <div class="prog" data-prog aria-hidden="true"></div>
 
   <div class="loader" data-loader aria-hidden="true">
@@ -408,7 +410,6 @@
     <section class="stage" id="top" data-stage>
       <div class="sg-pin">
         <canvas class="silk" data-silk aria-hidden="true"></canvas>
-        <div class="ghost" aria-hidden="true" data-ghost>CONCEAL</div>
         <div class="wrap sg-grid">
           <div class="sg-copy" data-sgcopy>
             <div class="sg-step" data-sstep>
@@ -422,13 +423,9 @@
             <div class="sg-step" data-sstep><span class="n">03 / ALIGN</span><h2 style="margin-top:16px">A reminder <i>a day.</i></h2><p class="lede">The words from the Aura tees, one each morning. Hold to reveal it. Swipe for the next.</p></div>
             <div class="sg-step" data-sstep><span class="n">04 / GATHER</span><h2 style="margin-top:16px">We gather <i>to grow.</i></h2><p class="lede">The community lives in the app too, with giving built right in.</p></div>
             <div class="sg-step" data-sstep><span class="n">05 / CHECKOUT</span><h2 style="margin-top:16px">Two taps <i>to yours.</i></h2><p class="lede">The bag hands off to the real Conceal the World checkout with your pieces already in it. Try it.</p></div>
-            <div class="sg-dots" data-sgdots aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i><i></i></div>
+            <div class="sg-dots" data-sgdots aria-hidden="true"><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i></div>
           </div>
           <div class="sg-phone" id="tour" data-sgphone>
-            <div class="floater" style="left:-4%;top:12%" data-floater data-depth="40"><img src="img/p/hoodie_0.webp" alt="" width="533" height="640"></div>
-            <div class="floater" style="right:-2%;top:6%" data-floater data-depth="-30"><img src="img/p/untitled-may13_18-37_0.webp" alt="" width="640" height="640"></div>
-            <div class="floater" style="right:2%;bottom:6%" data-floater data-depth="55"><img src="img/p/hoodie-1_0.webp" alt="" width="533" height="640"></div>
-            <div class="floater" style="left:2%;bottom:10%" data-floater data-depth="-45"><img src="img/p/hoodie-we-gather-to-grow_0.webp" alt="" width="533" height="640"></div>
             <div class="phone" data-phone><div class="screen" data-screen></div><div class="sheen" aria-hidden="true"></div></div>
             <span class="try" data-try><i></i>It works. Tap around</span>
           </div>
@@ -769,7 +766,7 @@
      to the cursor and tinted by the current colourway) and a noise
      displacement wipe between Power Hoodie photos in the lab.
      ============================================================= */
-  const NOISE = 'vec2 hs(vec2 p){p=vec2(dot(p,vec2(127.1,311.7)),dot(p,vec2(269.5,183.3)));return -1.+2.*fract(sin(p)*43758.5453);}float ns(vec2 p){vec2 i=floor(p),f=fract(p),u=f*f*(3.-2.*f);return mix(mix(dot(hs(i),f),dot(hs(i+vec2(1,0)),f-vec2(1,0)),u.x),mix(dot(hs(i+vec2(0,1)),f-vec2(0,1)),dot(hs(i+vec2(1,1)),f-vec2(1,1)),u.x),u.y);}float fbm(vec2 p){float v=0.,a=.5;for(int i=0;i<4;i++){v+=a*ns(p);p=p*2.03+vec2(1.7,9.2);a*=.5;}return v;}';
+  const NOISE = 'vec2 hs(vec2 p){p=vec2(dot(p,vec2(127.1,311.7)),dot(p,vec2(269.5,183.3)));return -1.+2.*fract(sin(p)*43758.5453);}float ns(vec2 p){vec2 i=floor(p),f=fract(p),u=f*f*(3.-2.*f);return mix(mix(dot(hs(i),f),dot(hs(i+vec2(1,0)),f-vec2(1,0)),u.x),mix(dot(hs(i+vec2(0,1)),f-vec2(0,1)),dot(hs(i+vec2(1,1)),f-vec2(1,1)),u.x),u.y);}float fb3(vec2 p){float v=0.,a=.5;for(int i=0;i<3;i++){v+=a*ns(p);p=p*2.03+vec2(1.7,9.2);a*=.5;}return v;}float fbm(vec2 p){float v=0.,a=.5;for(int i=0;i<4;i++){v+=a*ns(p);p=p*2.03+vec2(1.7,9.2);a*=.5;}return v;}';
   const glProg = (cv, frag) => { const gl = cv.getContext('webgl', { antialias: false, alpha: false, premultipliedAlpha: false, preserveDrawingBuffer: false }); if (!gl) return null;
     const sh = (t, src) => { const o = gl.createShader(t); gl.shaderSource(o, src); gl.compileShader(o); if (!gl.getShaderParameter(o, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(o)); return o; };
     const pr = gl.createProgram(); gl.attachShader(pr, sh(gl.VERTEX_SHADER, 'attribute vec2 a;varying vec2 v;void main(){v=a*.5+.5;gl_Position=vec4(a,0.,1.);}')); gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, '#ifdef GL_FRAGMENT_PRECISION_HIGH\nprecision highp float;\n#else\nprecision mediump float;\n#endif\nvarying vec2 v;' + NOISE + frag)); gl.linkProgram(pr); gl.useProgram(pr);
@@ -846,21 +843,21 @@
 
   if (!ANIM) { const l = $('[data-loader]'); if (l) l.remove(); $('[data-asplash]').remove(); $$('.mt .w').forEach(w => { w.style.setProperty('--b', '0px'); w.style.setProperty('--o', '1'); }); $$('[data-au]').forEach(a => a.classList.add('shown')); return; }
 
-  const lenis = window.Lenis ? new Lenis({ lerp: .085, smoothWheel: true, wheelMultiplier: .9 }) : null;
+  const lenis = window.Lenis ? new Lenis({ lerp: .09, smoothWheel: true, wheelMultiplier: .95, touchMultiplier: 1.2 }) : null;
   if (lenis) { lenis.on('scroll', ScrollTrigger.update); gsap.ticker.add(t => lenis.raf(t * 1000)); gsap.ticker.lagSmoothing(0); }
   document.addEventListener('click', e => { const a = e.target.closest('a[href^="#"]'); if (!a) return; const id = a.getAttribute('href'); if (id === '#') return; let t = id === '#top' ? 0 : $(id); if (id === '#tour') { const s = ScrollTrigger.getById('stage'); t = s ? s.start + (s.end - s.start) * .2 : 0; } if (t == null) return; e.preventDefault(); if (lenis) lenis.scrollTo(t, { duration: 1.6 }); else scrollTo({ top: typeof t === 'number' ? t : t.getBoundingClientRect().top + scrollY, behavior: 'smooth' }); });
 
   /* ---------- silk: a lit, domain-warped cloth behind the hero ---------- */
-  const SILKFRAG = 'uniform vec2 res,mo;uniform float t,sc,mob;uniform vec3 c2;float H(vec2 p,vec2 mp){vec2 q=vec2(fbm(p+vec2(0.,t*.07)),fbm(p+vec2(5.2,1.3)-vec2(t*.05,0.)));vec2 d=p-mp;return fbm(p+2.4*q)+.32*exp(-dot(d,d)*2.2);}void main(){vec2 a=vec2(res.x/res.y,1.);vec2 p=(v-.5)*a*1.15+vec2(0.,sc);vec2 mp=(mo-.5)*a*1.15+vec2(0.,sc);float e=.012;float c=H(p,mp),hx=H(p+vec2(e,0.),mp),hy=H(p+vec2(0.,e),mp);vec3 n=normalize(vec3((c-hx)/e,(c-hy)/e,1.4));vec3 L=normalize(vec3((mo-.5)*1.4+vec2(-.25,.45),.8));float df=clamp(dot(n,L),0.,1.);float sp=pow(clamp(dot(reflect(-L,n),vec3(0.,0.,1.)),0.,1.),18.);float lu=dot(c2,vec3(.299,.587,.114));vec3 hi=c2*mix(1.9,.7,smoothstep(.25,.65,lu))+.05;vec3 base=mix(vec3(.028),hi,smoothstep(-.35,.55,c));vec3 col=base*(.22+1.05*df)+sp*(hi*.6+.25)*.55;float vg=mix(smoothstep(1.2,.2,length((v-vec2(.66,.5))*vec2(1.25,1.))),smoothstep(.95,.15,length((v-vec2(.5,.22))*vec2(1.,1.2))),mob);col*=mix(.16,1.,vg);gl_FragColor=vec4(col,1.);}';
+  const SILKFRAG = 'uniform vec2 res,mo;uniform float t,sc,mob;uniform vec3 c2;float H(vec2 p,vec2 mp){vec2 q=vec2(fb3(p+vec2(0.,t*.035)),fb3(p+vec2(5.2,1.3)-vec2(t*.028,0.)));vec2 d=p-mp;return fb3(p+1.7*q)+.2*exp(-dot(d,d)*1.4);}void main(){vec2 a=vec2(res.x/res.y,1.);vec2 p=(v-.5)*a*.8+vec2(0.,sc);vec2 mp=(mo-.5)*a*.8+vec2(0.,sc);float e=.015;float c=H(p,mp),hx=H(p+vec2(e,0.),mp),hy=H(p+vec2(0.,e),mp);vec3 n=normalize(vec3((c-hx)/e,(c-hy)/e,2.4));vec3 L=normalize(vec3((mo-.5)*1.2+vec2(-.2,.5),.9));float df=clamp(dot(n,L),0.,1.);float sp=pow(clamp(dot(reflect(-L,n),vec3(0.,0.,1.)),0.,1.),36.);float lu=dot(c2,vec3(.299,.587,.114));vec3 hi=c2*mix(1.6,.62,smoothstep(.25,.65,lu))+.03;vec3 base=mix(vec3(.026),hi,smoothstep(-.45,.75,c));vec3 col=base*(.4+.75*df)+sp*(hi*.5+.2)*.32;float vg=mix(smoothstep(1.25,.15,length((v-vec2(.68,.5))*vec2(1.2,1.))),smoothstep(.95,.15,length((v-vec2(.5,.22))*vec2(1.,1.2))),mob);col*=mix(.22,1.,vg);col+=(fract(sin(dot(v*res,vec2(12.9898,78.233)))*43758.5453)-.5)*.012;gl_FragColor=vec4(col,1.);}';
   (() => { const cv = $('[data-silk]'); if (!cv) return; try { const G = glProg(cv, SILKFRAG); if (!G) { cv.remove(); return; } const { gl, u } = G;
-    const rs = innerWidth < 900 ? .38 : .5, cur = SILK.to.slice(), M = { x: .68, y: .55, tx: .68, ty: .55 }, t0 = performance.now(); let vis = true;
+    const rs = innerWidth < 900 ? .34 : .42, cur = SILK.to.slice(), M = { x: .68, y: .55, tx: .68, ty: .55 }, t0 = performance.now(); let vis = true;
     const size = () => { cv.width = Math.max(2, Math.round(cv.clientWidth * rs)); cv.height = Math.max(2, Math.round(cv.clientHeight * rs)); gl.viewport(0, 0, cv.width, cv.height); };
     size(); addEventListener('resize', size);
     if (window.IntersectionObserver) new IntersectionObserver(es => es.forEach(e => vis = e.isIntersecting)).observe(cv);
     if (FINE) addEventListener('pointermove', e => { M.tx = e.clientX / innerWidth; M.ty = 1 - e.clientY / innerHeight; }, { passive: true });
     const frame = () => { if (!vis || document.hidden) return; const tt = (performance.now() - t0) / 1000;
-      if (!FINE) { M.tx = .62 + .22 * Math.sin(tt * .35); M.ty = .52 + .18 * Math.cos(tt * .27); }
-      M.x += (M.tx - M.x) * .05; M.y += (M.ty - M.y) * .05; for (let k = 0; k < 3; k++) cur[k] += (SILK.to[k] - cur[k]) * .035;
+      if (!FINE) { M.tx = .6 + .2 * Math.sin(tt * .22); M.ty = .5 + .15 * Math.cos(tt * .17); }
+      M.x += (M.tx - M.x) * .03; M.y += (M.ty - M.y) * .03; for (let k = 0; k < 3; k++) cur[k] += (SILK.to[k] - cur[k]) * .025;
       gl.uniform2f(u('res'), cv.width, cv.height); gl.uniform2f(u('mo'), M.x, M.y); gl.uniform1f(u('t'), tt); gl.uniform1f(u('mob'), innerWidth < 900 ? 1 : 0); gl.uniform1f(u('sc'), scrollY / innerHeight * .22); gl.uniform3f(u('c2'), cur[0], cur[1], cur[2]); gl.drawArrays(gl.TRIANGLES, 0, 3); };
     frame(); if (gl.getError() !== gl.NO_ERROR) throw 0; gsap.ticker.add(frame); requestAnimationFrame(() => cv.classList.add('on'));
   } catch (e) { cv.remove(); } })();
@@ -879,10 +876,9 @@
     // manifesto lens
     mt.addEventListener('pointermove', e => { const r = mt.getBoundingClientRect(); mt.style.setProperty('--lx', (e.clientX - r.left) + 'px'); mt.style.setProperty('--ly', (e.clientY - r.top) + 'px'); if (!lensOn) { lensOn = true; gsap.to(mt, { '--lr': '130px', duration: .5, ease: 'expo.out' }); } });
     mt.addEventListener('pointerleave', () => { lensOn = false; gsap.to(mt, { '--lr': '0px', duration: .4 }); });
-    // phone tilts toward the pointer, floaters drift
-    const fl = $$('[data-floater]').map(f => ({ d: +f.dataset.depth, x: gsap.quickTo(f, 'x', { duration: 1, ease: 'power3' }), y: gsap.quickTo(f, 'y', { duration: 1, ease: 'power3' }) }));
+    // phone tilts toward the pointer
     const rx = gsap.quickTo(phone, 'rotationX', { duration: .8, ease: 'power3' }), ry = gsap.quickTo(phone, 'rotationY', { duration: .8, ease: 'power3' });
-    $('[data-stage]').addEventListener('pointermove', e => { const nx = e.clientX / innerWidth - .5, ny = e.clientY / innerHeight - .5; if (!e.target.closest('[data-app]')) { ry(nx * 16); rx(-ny * 10); } else { ry(0); rx(0); } phone.style.setProperty('--sx', (60 - nx * 90).toFixed(1) + '%'); fl.forEach(f => { f.x(nx * f.d); f.y(ny * f.d); }); });
+    $('[data-stage]').addEventListener('pointermove', e => { const nx = e.clientX / innerWidth - .5, ny = e.clientY / innerHeight - .5; if (!e.target.closest('[data-app]')) { ry(nx * 16); rx(-ny * 10); } else { ry(0); rx(0); } phone.style.setProperty('--sx', (60 - nx * 90).toFixed(1) + '%'); });
   }
 
   /* =============================================================
@@ -890,16 +886,14 @@
      WORLD types in scrambled, then the screen splits open.
      ============================================================= */
   const loader = $('[data-loader]'); $('[data-lbig]').innerHTML = [...'CONCEAL'].map(c => `<span>${c}</span>`).join('');
-  gsap.set('[data-lbig] span', { opacity: 0, filter: 'blur(14px)', y: 20 }); gsap.set('[data-lsm]', { opacity: 0 });
+  gsap.set('[data-lbig] span', { yPercent: 110 }); gsap.set('[data-lsm]', { opacity: 0 });
   const steps = $$('[data-sstep]'), stepW = steps.map(s => maskWords($('h1, h2', s))), stepR = steps.map(s => $$(':scope > :not(h1):not(h2)', s));
-  gsap.set(stepR[0], { opacity: 0, y: 30 }); gsap.set(stepW[0], { yPercent: 115 }); gsap.set(phone, { y: 120, rotationX: 30, opacity: 0 }); gsap.set('[data-floater]', { scale: .6, opacity: 0 }); gsap.set('[data-ghost]', { opacity: 0, scale: 1.2 });
+  gsap.set(stepR[0], { opacity: 0, y: 30 }); gsap.set(stepW[0], { yPercent: 115 }); gsap.set(phone, { y: 120, rotationX: 30, opacity: 0 });
   const intro = gsap.timeline({ paused: true })
-    .to('[data-ghost]', { opacity: 1, scale: 1, duration: 2, ease: 'expo.out' }, 0)
     .to(stepW[0], { yPercent: 0, duration: 1.3, ease: 'expo.out', stagger: .07 }, .1)
     .to(stepR[0], { opacity: 1, y: 0, duration: 1.1, ease: 'expo.out', stagger: .1 }, .3)
     .add(() => scramble($('[data-scramble]'), 'Conceal', 1000), .2)
     .to(phone, { y: 0, rotationX: 0, opacity: 1, duration: 1.4, ease: 'expo.out' }, .25)
-    .to('[data-floater]', { scale: 1, opacity: 1, duration: 1, ease: 'back.out(1.6)', stagger: .1 }, .6)
     .to('[data-asplash] div', { opacity: 0, scale: .9, duration: .5 }, 1.2)
     .to('[data-asplash]', { opacity: 0, duration: .5, onComplete: () => $('[data-asplash]').remove() }, 1.4)
     .from('[data-av="home"] > *', { y: 30, opacity: 0, duration: .7, ease: 'expo.out', stagger: .08 }, 1.5)
@@ -909,22 +903,22 @@
     .to(lc, { v: 100, duration: 1.6, ease: 'power2.inOut', onUpdate: () => { lcEl.textContent = String(Math.round(lc.v)).padStart(3, '0'); } }, 0)
     .to('[data-lline]', { scaleX: 1, duration: 1.6, ease: 'power2.inOut' }, 0)
     .to(['[data-lcount]', '.l-line'], { opacity: 0, duration: .3 }, 1.65)
-    .to('[data-lbig] span', { opacity: 1, filter: 'blur(0px)', y: 0, duration: .8, ease: 'expo.out', stagger: { each: .08, from: 'random' } })
+    .to('[data-lbig] span', { yPercent: 0, duration: 1, ease: 'expo.out', stagger: .055 })
     .add(() => { $('[data-lsm]').style.opacity = 1; $('[data-lsm]').textContent = ''; scramble($('[data-lsm]'), 'THE WORLD', 600); }, .7)
     .to('[data-lbig]', { letterSpacing: '.6em', duration: 1.1, ease: 'power2.inOut' }, .9)
-    .to('[data-lword]', { opacity: 0, filter: 'blur(10px)', duration: .4 }, 1.7)
+    .to('[data-lbig] span', { yPercent: -110, duration: .6, ease: 'power3.in', stagger: .03 }, 1.45)
+    .to('[data-lsm]', { opacity: 0, duration: .3 }, 1.5)
     .to('.loader .half.t', { yPercent: -100, duration: .9, ease: 'expo.inOut' }, 1.8)
     .to('.loader .half.b', { yPercent: 100, duration: .9, ease: 'expo.inOut' }, 1.8)
     .add(() => intro.play(), 1.95);
   loader.addEventListener('click', () => lt.progress(1));
   gsap.to(tryEl, { y: -5, duration: 1, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: 4 });
-  $$('[data-floater]').forEach((f, i) => gsap.to(f.firstElementChild, { y: i % 2 ? 12 : -12, rotation: i % 2 ? 3 : -3, duration: 3 + i * .4, ease: 'sine.inOut', yoyo: true, repeat: -1 }));
 
   /* =============================================================
      THE TOUR: the stage pins and the phone drives itself through
      the app as you scroll. Copy for each step un-blurs in.
      ============================================================= */
-  const dots = $$('[data-sgdots] i'); let stepI = 0;
+  const dots = $$('[data-sgdots] i'), dotF = $$('[data-sgdots] b').map(b => gsap.quickSetter(b, 'scaleX')); let stepI = 0;
   const ACT = [
     () => go('home'),
     () => { go('home'); setTimeout(() => { if (!st.notify) notifyEl.click(); }, 500); },
@@ -944,17 +938,15 @@
     gsap.fromTo(stepR[i], { opacity: 0, y: 22 }, { opacity: 1, y: 0, duration: .8, ease: 'expo.out', stagger: .06, delay: .4 });
     gsap.fromTo(phone, { '--sx': '130%' }, { '--sx': '-30%', duration: 1.3, ease: 'power2.inOut' });
     setAccent(ACC[i]);
-    gsap.fromTo(phone, { rotationY: i % 2 ? -14 : 14 }, { rotationY: 0, duration: 1.2, ease: 'expo.out' });
-    scramble($('[data-ghost]'), ['CONCEAL', 'DROPS', 'SHOP', 'ALIGN', 'GATHER', 'YOURS'][i], 700);
+    gsap.fromTo(phone, { rotationY: i % 2 ? -7 : 7, y: 10 }, { rotationY: 0, y: 0, duration: 1.6, ease: 'expo.out' });
     ACT[i](); };
   gsap.set(steps.slice(1), { autoAlpha: 0 });
   ScrollTrigger.create({ id: 'stage', trigger: '[data-stage]', start: 'top top', end: () => '+=' + innerHeight * 5, pin: '.sg-pin', anticipatePin: 1, invalidateOnRefresh: true,
-    onUpdate: s => setStep(Math.min(5, Math.floor(s.progress * 6))), onToggle: s => mbar.classList.toggle('hide', s.isActive) });
-  gsap.to('[data-ghost]', { xPercent: -8, ease: 'none', scrollTrigger: { trigger: '[data-stage]', start: 'top top', end: () => '+=' + innerHeight * 5, scrub: true } });
+    onUpdate: s => { setStep(Math.min(5, Math.floor(s.progress * 6))); const q = s.progress * 6; dotF.forEach((f, j) => f(clamp(q - j, 0, 1))); }, onToggle: s => mbar.classList.toggle('hide', s.isActive) });
 
   /* manifesto: words un-blur as you scroll through */
   const mws = $$('.w', mtext);
-  ScrollTrigger.create({ trigger: mt, start: 'top 75%', end: 'bottom 45%', scrub: true, onUpdate: s => { const p = s.progress * (mws.length + 6); mws.forEach((w, i) => { const k = clamp(p - i, 0, 6) / 6; w.style.setProperty('--b', (10 * (1 - k)).toFixed(1) + 'px'); w.style.setProperty('--o', (.35 + .65 * k).toFixed(2)); }); } });
+  ScrollTrigger.create({ trigger: mt, start: 'top 75%', end: 'bottom 45%', scrub: true, onUpdate: s => { const p = s.progress * (mws.length + 6); mws.forEach((w, i) => { const k = clamp(p - i, 0, 6) / 6; w.style.setProperty('--o', (.14 + .86 * k).toFixed(2)); }); } });
 
   /* headings */
   $$('main h2').forEach(h => { if (h.closest('[data-sstep]')) return; gsap.fromTo(maskWords(h), { yPercent: 118, rotation: 5 }, { yPercent: 0, rotation: 0, transformOrigin: '0% 100%', duration: 1.3, ease: 'expo.out', stagger: .07, scrollTrigger: { trigger: h, start: 'top 88%' } }); });
@@ -982,23 +974,22 @@
   addEventListener('pointerup', () => { if (!ring.drag) return; ring.drag = null; ringEl.style.cursor = ''; ring.v = .08; });
   let ringOn = false, ringF = false; new IntersectionObserver(es => es.forEach(e => ringOn = e.isIntersecting)).observe(ringEl);
   gsap.ticker.add(() => { if (!ringOn) return; if (!ring.drag) { ring.a += ring.v; ring.v += (.08 - ring.v) * .03; } cyl.style.transform = `translateZ(${(-(cyl._r || 400)).toFixed(0)}px) rotateY(${ring.a.toFixed(2)}deg)`;
-    if ((ringF = !ringF)) $$('[data-fig]', cyl).forEach((f, i) => { const ang = ((i * 360 / LN + ring.a) % 360 + 360) % 360, front = Math.cos(ang * Math.PI / 180); f.style.filter = `grayscale(${(1 - Math.max(0, front) * .9).toFixed(2)}) brightness(${(.45 + Math.max(0, front) * .6).toFixed(2)})`; }); });
+    if ((ringF = !ringF)) $$('[data-fig]', cyl).forEach((f, i) => { const ang = ((i * 360 / LN + ring.a) % 360 + 360) % 360, front = Math.cos(ang * Math.PI / 180); f.style.setProperty('--d', (.78 - Math.max(0, front) * .78).toFixed(2)); }); });
   gsap.from('[data-ring]', { opacity: 0, y: 60, duration: 1.6, ease: 'expo.out', scrollTrigger: { trigger: '[data-ring]', start: 'top 85%' } });
   ring.v = 2.5;
 
   /* mini power: cards bounce in like building blocks */
   gsap.from('[data-mi]', { y: 140, rotation: (i) => (i % 2 ? 10 : -10), opacity: 0, duration: 1.1, ease: 'back.out(1.6)', stagger: .08, scrollTrigger: { trigger: '[data-migrid]', start: 'top 85%' } });
 
-  /* sections rise in as rounded cards and open up to full bleed */
-  ['[data-mani]', '[data-lab]', '[data-minisec]', '[data-get]'].forEach(sel => gsap.fromTo(sel, { clipPath: 'inset(7% 5% 0% 5% round 56px)' }, { clipPath: 'inset(0% 0% 0% 0% round 0px)', ease: 'none', scrollTrigger: { trigger: sel, start: 'top bottom', end: 'top 30%', scrub: .6 } }));
+  /* header turns light over the cream manifesto */
+  ScrollTrigger.create({ trigger: '[data-mani]', start: 'top 60px', end: 'bottom 60px', toggleClass: { targets: header, className: 'light' } });
 
-  /* images lean with scroll speed */
-  const skQ = $$('.mi, .au .im, [data-labimg]').map(e => gsap.quickTo(e, 'skewY', { duration: .6, ease: 'power3' })); let skL = 0;
-  gsap.ticker.add(() => { const k = clamp(sv * -.09, -5, 5); if (Math.abs(k - skL) < .05) return; skL = k; skQ.forEach(q => q(k)); });
+  /* sections rise in as rounded cards and open up to full bleed */
+  ['[data-mani]', '[data-lab]', '[data-minisec]', '[data-get]'].forEach(sel => gsap.fromTo(sel, { clipPath: 'inset(5% 3.5% 0% 3.5% round 32px)' }, { clipPath: 'inset(0% 0% 0% 0% round 0px)', ease: 'none', scrollTrigger: { trigger: sel, start: 'top bottom', end: 'top 30%', scrub: .6 } }));
 
   /* marquee runs on its own and speeds up / reverses with your scroll */
-  let mqX = 0, mqDir = -1, mqOn = false; new IntersectionObserver(es => es.forEach(e => mqOn = e.isIntersecting)).observe(mq);
-  gsap.ticker.add(() => { if (!mqOn) return; if (Math.abs(sv) > .5) mqDir = sv > 0 ? -1 : 1; const w = mq.scrollWidth / 2; mqX += mqDir * (1.1 + Math.min(40, Math.abs(sv)) * .35); if (mqX < -w) mqX += w; if (mqX > 0) mqX -= w; mq.style.transform = `translate3d(${mqX.toFixed(1)}px,0,0) skewX(${clamp(-sv * .25, -10, 10).toFixed(2)}deg)`; });
+  let mqX = 0, mqDir = -1, mqSp = .7, mqOn = false; new IntersectionObserver(es => es.forEach(e => mqOn = e.isIntersecting)).observe(mq);
+  gsap.ticker.add(() => { if (!mqOn) return; if (Math.abs(sv) > .5) mqDir = sv > 0 ? -1 : 1; const w = mq.scrollWidth / 2; mqSp += ((.7 + Math.min(30, Math.abs(sv)) * .22) - mqSp) * .08; mqX += mqDir * mqSp; if (mqX < -w) mqX += w; if (mqX > 0) mqX -= w; mq.style.transform = `translate3d(${mqX.toFixed(2)}px,0,0)`; });
 
   /* reading progress */
   gsap.to('[data-prog]', { scaleX: 1, ease: 'none', scrollTrigger: { start: 0, end: 'max', scrub: .3 } });
@@ -1015,7 +1006,7 @@
   /* footer creed: NO GOD NO PEACE resolves into KNOW GOD KNOW PEACE and back */
   const creed = $('[data-creed]'); let cOn = false, cK = 0; new IntersectionObserver(es => es.forEach(e => cOn = e.isIntersecting)).observe(creed);
   setInterval(() => { if (!cOn) return; cK = 1 - cK; scramble(creed, cK ? 'KNOW GOD KNOW PEACE' : 'NO GOD NO PEACE', 1100); }, 3200);
-  gsap.from(creed, { opacity: 0, filter: 'blur(16px)', letterSpacing: '.3em', duration: 1.6, ease: 'expo.out', scrollTrigger: { trigger: 'footer', start: 'top 85%' } });
+  gsap.from(creed, { opacity: 0, y: 40, duration: 1.6, ease: 'expo.out', scrollTrigger: { trigger: 'footer', start: 'top 85%' } });
 
   addEventListener('load', () => { ScrollTrigger.refresh(); sizePhone(); });
   document.fonts && document.fonts.ready.then(() => { ScrollTrigger.refresh(); sizePhone(); });
