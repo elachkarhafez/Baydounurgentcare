@@ -153,9 +153,17 @@
     .rolls.pinned .r-pin { height: 100vh; height: 100svh; padding: 70px 0 0; }
     .r-grid { width: 100%; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(24px, 4vw, 70px); align-items: center; }
     .r-stage { position: relative; width: min(100%, 66svh, 600px); aspect-ratio: 1; margin: 0 auto; }
-    .roll { width: 100%; height: 100%; overflow: visible; }
-    .roll .sp { fill: none; stroke-linecap: round; stroke-linejoin: round; }
-    .r-photo { position: absolute; right: -6%; bottom: -4%; width: 36%; padding: 8px 8px 30px; background: #fff; border: 3px solid var(--ink); border-radius: 12px; box-shadow: 6px 6px 0 var(--ink); transform: rotate(6deg); }
+    .rr { position: absolute; inset: 0; }
+    .rr-glow { position: absolute; inset: -16%; border-radius: 50%; background: radial-gradient(closest-side, rgba(255,150,60,.6), rgba(255,110,40,.2) 62%, transparent 78%); opacity: 0; }
+    .rr-shadow { position: absolute; inset: 6% 5% 0 9%; border-radius: 50%; background: radial-gradient(closest-side, rgba(110,35,30,.46), rgba(110,35,30,.2) 62%, transparent); transform: translate(3%, 6%); filter: blur(8px); }
+    .rr-idle, .rr-spin { position: absolute; inset: 0; }
+    .rr-photo { display: block; width: 100%; height: 100%; overflow: visible; }
+    .rr-sheen { position: absolute; inset: 0; width: 100%; height: 100%; mix-blend-mode: screen; filter: grayscale(1) brightness(.72) contrast(5); opacity: 0; pointer-events: none;
+      -webkit-mask-image: linear-gradient(115deg, transparent 38%, #000 50%, transparent 62%); mask-image: linear-gradient(115deg, transparent 38%, #000 50%, transparent 62%);
+      -webkit-mask-size: 300% 100%; mask-size: 300% 100%; animation: sheen 4.8s cubic-bezier(.45,.05,.35,1) infinite; }
+    @keyframes sheen { 0% { -webkit-mask-position: 100% 0; mask-position: 100% 0; } 60%, 100% { -webkit-mask-position: 0% 0; mask-position: 0% 0; } }
+    .rr-steam { position: absolute; left: -15%; width: 130%; top: -55%; height: 120%; pointer-events: none; }
+    .r-photo { position: absolute; right: -8%; bottom: -6%; width: 40%; z-index: 2; padding: 8px 8px 30px; background: #fff; border: 3px solid var(--ink); border-radius: 12px; box-shadow: 6px 6px 0 var(--ink); transform: rotate(6deg); }
     .r-photo img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 6px; }
     .r-photo span { position: absolute; left: 0; right: 0; bottom: 7px; text-align: center; font: 400 16px/1 var(--display); text-transform: uppercase; }
     .r-copy h2 { margin-top: 16px; }
@@ -455,26 +463,15 @@
       <div class="r-pin">
         <div class="wrap r-grid">
           <div class="r-stage">
-            <svg class="roll" viewBox="0 0 400 400" role="img" aria-label="A sticky cinnamon roll on a plate: rolled up, baked golden, iced and topped" data-roll>
-              <defs>
-                <radialGradient id="rgDough" gradientUnits="userSpaceOnUse" cx="200" cy="196" r="178"><stop offset="0" stop-color="#fff2d8"/><stop offset=".75" stop-color="#f4d29e"/><stop offset="1" stop-color="#e7b779"/></radialGradient>
-                <radialGradient id="rgBaked" gradientUnits="userSpaceOnUse" cx="200" cy="196" r="178"><stop offset="0" stop-color="#f7c87c"/><stop offset=".6" stop-color="#e29b49"/><stop offset="1" stop-color="#b8662a"/></radialGradient>
-              </defs>
-              <circle cx="200" cy="202" r="194" fill="#fff" stroke="#141414" stroke-width="5"/>
-              <circle cx="200" cy="202" r="166" fill="none" stroke="#f1e2d6" stroke-width="3"/>
-              <circle cx="207" cy="210" r="172" fill="rgba(20,20,20,.12)" data-rshadow/>
-              <g data-rspin><g data-rbody>
-                <path class="sp" data-sp stroke="#141414" stroke-width="48"/>
-                <path class="sp" data-sp stroke="url(#rgDough)" stroke-width="39"/>
-                <path class="sp" data-sp data-baked stroke="url(#rgBaked)" stroke-width="39"/>
-                <path class="sp" data-sp stroke="#fff" stroke-opacity=".34" stroke-width="8" transform="translate(-4 -5)"/>
-                <path class="sp" data-sp-cin stroke="#6e2c0c" stroke-width="8"/>
-              </g></g>
-              <g data-rsteam fill="none" stroke="#141414" stroke-width="5" stroke-linecap="round" opacity="0"><path d="M150 150 q-12 -16 0 -32 t0 -32"/><path d="M200 130 q12 -16 0 -32 t0 -32"/><path d="M250 150 q-12 -16 0 -32 t0 -32"/></g>
-              <path class="sp" data-icing-sh stroke="rgba(20,20,20,.2)" stroke-width="15" transform="translate(3 5)"/>
-              <path class="sp" data-icing stroke="#fffaf0" stroke-width="13"/>
-              <g data-tops></g>
-            </svg>
+            <div class="rr" data-rr role="img" aria-label="A sticky cinnamon roll, glazed and steaming">
+              <div class="rr-glow" data-rglow></div>
+              <div class="rr-shadow" data-rshadow></div>
+              <div class="rr-idle" data-ridle><div class="rr-spin" data-rspin>
+                <svg class="rr-photo" data-rimgsvg viewBox="0 0 722 722"><defs><filter id="rmb" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="14"/></filter><mask id="rmask" maskUnits="userSpaceOnUse" x="-40" y="-40" width="802" height="802"><path data-rmask fill="none" stroke="#fff" stroke-width="160" stroke-linecap="round" filter="url(#rmb)"/></mask></defs><image href="img/roll.webp" width="722" height="722" mask="url(#rmask)"/></svg>
+                <img class="rr-sheen" data-rsheen src="img/roll.webp" alt="" width="722" height="722">
+              </div></div>
+              <canvas class="rr-steam" data-rsteamc></canvas>
+            </div>
             <figure class="r-photo" data-rphoto style="margin:0"><img src="img/biscoff.webp" alt="" width="464" height="485" loading="lazy" data-rimg><span data-rcap>Biscoff</span></figure>
           </div>
           <div class="r-copy">
@@ -485,7 +482,7 @@
               <div class="r-steps">
                 <div class="r-step" data-step><b>01</b><h3>Rolled up tight</h3><p>Soft dough and a fat swirl of cinnamon sugar, rolled into a spiral.</p></div>
                 <div class="r-step" data-step><b>02</b><h3>Baked fresh daily</h3><p>Made fresh every day at our Dearborn spot. Golden outside, gooey in the middle.</p></div>
-                <div class="r-step" data-step><b>03</b><h3>Iced thick</h3><p>A heavy drizzle of icing that sinks into every swirl. That’s the sticky part.</p></div>
+                <div class="r-step" data-step><b>03</b><h3>Glazed till it’s sticky</h3><p>A glossy glaze that soaks into every swirl. That’s the sticky part.</p></div>
                 <div class="r-step" data-step><b>04</b><h3>Loaded with the drop</h3><p>Then it gets this week’s flavor. New ones land all the time.</p></div>
                 <div class="r-bar" data-rbar aria-hidden="true"><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i></div>
               </div>
@@ -720,55 +717,38 @@
 
 
   /* =============================================================
-     SIGNATURE 2: STICKY ROLLS. A cinnamon roll on a plate, drawn in
-     SVG. Scroll rolls the dough up from the middle, bakes it golden,
-     drizzles the icing and drops the toppings on. Then the flavor
-     chips swap the icing color, the toppings and their real photo.
+     SIGNATURE 2: STICKY ROLLS. A photoreal roll, cut out so it can
+     turn. Scroll reveals it along a spiral (rolled up), grades it from
+     pale raw dough to baked gold as it rises, warms it with an oven
+     glow, lets steam drift off it and makes the glaze glisten. Then
+     the flavor chips swap in their real photo of each flavor.
      ============================================================= */
   const rollsSec = $('[data-rolls]'), FL = CONFIG.rolls;
-  const CX = 200, CY = 196, R0 = 12, R1 = 152, TURNS = 3.25, GAP = (R1 - R0) / TURNS;
-  const spiral = (from, to, off) => { const end = 2 * Math.PI * TURNS; let d = ''; for (let th = from * end; th <= to * end + 1e-6; th += .045) { const r = R0 + (R1 - R0) * th / end + off + Math.sin(th * 3) * 1.3; d += (d ? 'L' : 'M') + (CX + r * Math.cos(th)).toFixed(1) + ' ' + (CY + r * Math.sin(th)).toFixed(1); } return d; };
-  $$('[data-sp]').forEach(p => p.setAttribute('d', spiral(0, 1, 0)));
-  $('[data-sp-cin]').setAttribute('d', spiral(.06, 1 - 1 / TURNS, GAP / 2));
-  // icing: a hand drizzle, side to side down the roll with rounded turns at the edges
-  (() => { let s = 11; const r = () => (s = s * 16807 % 2147483647) / 2147483647; let d = '', px = 0, py = 0, left = true;
-    for (let k = 0; k < 9; k++) { const y = 74 + k * 30 + r() * 8, half = Math.sqrt(Math.max(0, 150 * 150 - (y - CY) ** 2)) * (.72 + r() * .12), x = left ? CX - half : CX + half;
-      d += d ? ` C${(px + (x - px) * .3).toFixed(1)} ${(py + 26).toFixed(1)} ${x.toFixed(1)} ${(y - 22).toFixed(1)} ${x.toFixed(1)} ${y.toFixed(1)}` : `M${x.toFixed(1)} ${y.toFixed(1)}`;
-      px = x; py = y; left = !left; }
-    $('[data-icing]').setAttribute('d', d); $('[data-icing-sh]').setAttribute('d', d); })();
-  // toppings for each flavor, scattered with a seeded random so they stay put
-  const TOPS = (() => {
-    const rnd = seed => () => (seed = seed * 16807 % 2147483647) / 2147483647;
-    const at = (r, max) => { const a = r() * 6.283, d = Math.sqrt(r()) * max; return [CX + Math.cos(a) * d, CY + Math.sin(a) * d]; };
-    const g = (x, y, rot, inner) => `<g transform="translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${rot | 0})"><g class="tp">${inner}</g></g>`;
-    const many = (seed, n, max, f) => { const r = rnd(seed); return Array.from({ length: n }, (_, i) => { const [x, y] = at(r, max); return g(x, y, r() * 360, f(r, i)); }).join(''); };
-    return {
-      classic: many(3, 30, 140, r => `<circle r="${(1.6 + r() * 1.6).toFixed(1)}" fill="#8a4318"/>`),
-      biscoff: many(5, 34, 140, r => `<path d="M-5 -3 L3 -5 L6 1 L1 5 L-5 3 Z" transform="scale(${(.7 + r() * .7).toFixed(2)})" fill="${r() < .5 ? '#b5672a' : '#8c4a1b'}" stroke="#141414" stroke-width="1.2"/>`)
-        + g(CX, CY - 6, -8, '<rect x="-46" y="-31" width="92" height="62" rx="10" fill="#c98140" stroke="#141414" stroke-width="3.5"/><rect x="-37" y="-22" width="74" height="44" rx="6" fill="none" stroke="#a5612a" stroke-width="2.5" stroke-dasharray="3 4"/><path d="M-22 0 H22" stroke="#a5612a" stroke-width="6" stroke-linecap="round"/>'),
-      reeses: many(7, 24, 135, (r, i) => i % 3 ? `<path d="M-9 -7 H9 L7 7 H-7 Z" fill="#5a2c12" stroke="#141414" stroke-width="1.6"/><path d="M-5 -6 L-4 6 M0 -6 V6 M5 -6 L4 6" stroke="#7a4220" stroke-width="1.4"/>` : `<rect x="-6" y="-5" width="12" height="10" rx="3" fill="#ff7a1a" stroke="#141414" stroke-width="1.6"/>`),
-      frank: many(9, 40, 140, (r, i) => i % 5 === 0 ? `<circle r="5.5" fill="#ff8a1f" stroke="#141414" stroke-width="1.6"/>` : `<rect x="-7" y="-2.2" width="14" height="4.4" rx="2.2" fill="${['#8f6bff', '#141414', '#ff8a1f', '#fff'][i % 4]}" stroke="#141414" stroke-width="${i % 4 === 3 ? 1.2 : 0}"/>`)
-        + many(10, 4, 110, () => '<path d="M-8 9 V-2 a8 8 0 0 1 16 0 V9 l-4 -3.4 -4 3.4 -4 -3.4 Z" fill="#fff" stroke="#141414" stroke-width="1.8"/><circle cx="-3" cy="-1" r="1.4" fill="#141414"/><circle cx="3" cy="-1" r="1.4" fill="#141414"/>'),
-      straw: many(13, 10, 125, () => '<path d="M0 13 C-15 3 -13 -12 0 -8 C13 -12 15 3 0 13 Z" fill="#e8343d" stroke="#141414" stroke-width="2"/><path d="M0 8 C-8 2 -7 -7 0 -4 C7 -7 8 2 0 8 Z" fill="#ff8f99"/><circle cx="-4" cy="-1" r="1" fill="#ffe08a"/><circle cx="4" cy="0" r="1" fill="#ffe08a"/><circle cx="0" cy="4" r="1" fill="#ffe08a"/>')
-        + many(14, 7, 120, () => '<circle r="9" fill="#fffaf0" stroke="#141414" stroke-width="1.8"/><path d="M-4 -2 q4 -5 8 0" fill="none" stroke="#e9dcc6" stroke-width="2"/>')
-    };
-  })();
-  $('[data-tops]').innerHTML = FL.map(f => `<g data-fl="${f.k}" style="display:none">${TOPS[f.k]}</g>`).join('');
+  // the roll is a photo; a thick spiral mask reveals it from the middle out, like it's being rolled up
+  (() => { const C = 361, T = 3.4, R = 410, end = 2 * Math.PI * T; let d = ''; for (let th = 0; th <= end; th += .05) { const r = R * th / end; d += (d ? 'L' : 'M') + (C + r * Math.cos(th)).toFixed(1) + ' ' + (C + r * Math.sin(th)).toFixed(1); } $('[data-rmask]').setAttribute('d', d); })();
+  // steam: soft sprites drifting up off the roll, only drawn while the section is on screen
+  const steam = { v: ANIM ? 0 : .7 };
+  (() => { const cv = $('[data-rsteamc]'), cx = cv.getContext('2d'), spr = document.createElement('canvas'); spr.width = spr.height = 128;
+    const sg = spr.getContext('2d'), gr = sg.createRadialGradient(64, 64, 0, 64, 64, 64); gr.addColorStop(0, 'rgba(255,255,255,.55)'); gr.addColorStop(.5, 'rgba(255,255,255,.18)'); gr.addColorStop(1, 'rgba(255,255,255,0)'); sg.fillStyle = gr; sg.fillRect(0, 0, 128, 128);
+    let W = 0, H = 0, on = false, ps = []; const size = () => { const r = cv.getBoundingClientRect(), dpr = Math.min(2, devicePixelRatio || 1); W = cv.width = Math.max(1, r.width * dpr); H = cv.height = Math.max(1, r.height * dpr); };
+    size(); addEventListener('resize', size); new IntersectionObserver(es => es.forEach(e => on = e.isIntersecting)).observe(cv);
+    const spawn = () => ({ x: W * (.5 + (Math.random() - .5) * .38), y: H * (.8 + Math.random() * .1), vy: H * (.0018 + Math.random() * .0016), ph: Math.random() * 6.28, s: W * (.025 + Math.random() * .03), life: 0, max: 150 + Math.random() * 110 });
+    const tick = () => { requestAnimationFrame(tick); if (!on) return; cx.clearRect(0, 0, W, H); if (steam.v < .02) return;
+      while (ps.length < 70 * steam.v) ps.push(spawn());
+      ps.forEach((p, i) => { p.life++; p.y -= p.vy; p.ph += .018; p.x += Math.sin(p.ph) * W * .0012; p.s *= 1.008; const t = p.life / p.max, a = Math.sin(Math.PI * Math.min(1, t)) * .32 * steam.v; if (t >= 1) ps[i] = spawn(); cx.globalAlpha = a; cx.drawImage(spr, p.x - p.s * .6, p.y - p.s * 1.5, p.s * 1.2, p.s * 3); });
+      cx.globalAlpha = 1; };
+    if (!RM) tick(); })();
   $('[data-flavors]').innerHTML = FL.map(f => `<button type="button" data-f="${f.k}" aria-pressed="false" style="--c:${f.c}"><i></i>${esc(f.n)}</button>`).join('');
-  const rImg = $('[data-rimg]'), rCap = $('[data-rcap]'), fDesc = $('[data-fdesc]'), rIce = $('[data-icing]');
+  const rImg = $('[data-rimg]'), rCap = $('[data-rcap]'), fDesc = $('[data-fdesc]');
   let flav = null, rTouched = false, rDemo = null;
   const setFlavor = (k, anim) => {
-    if (k === flav) return; const f = FL.find(x => x.k === k), old = flav && $(`[data-fl="${flav}"]`), nu = $(`[data-fl="${k}"]`); flav = k;
+    if (k === flav) return; const f = FL.find(x => x.k === k); flav = k;
     $$('[data-f]').forEach(b => b.setAttribute('aria-pressed', b.dataset.f === k));
     fDesc.textContent = f.d;
     const swap = () => { rImg.src = f.img; rImg.width = f.w; rImg.height = f.h; rCap.textContent = f.cap; };
-    if (!(anim && ANIM)) { if (old) old.style.display = 'none'; nu.style.display = ''; rIce.style.stroke = f.ice; swap(); return; }
-    if (old) gsap.to($$('.tp', old), { scale: 0, opacity: 0, svgOrigin: '0 0', duration: .22, stagger: .003, ease: 'back.in(2)', overwrite: true, onComplete: () => { if (flav !== k) return; old.style.display = 'none'; } });
-    nu.style.display = '';
-    gsap.fromTo($$('.tp', nu), { scale: 0, opacity: 0, svgOrigin: '0 0' }, { scale: 1, opacity: 1, svgOrigin: '0 0', duration: .5, ease: 'back.out(2.4)', stagger: .012, delay: old ? .18 : 0, overwrite: true });
-    gsap.to(rIce, { stroke: f.ice, duration: .4 });
+    if (!(anim && ANIM)) { swap(); return; }
     gsap.timeline().to('[data-rphoto]', { rotation: -10, scale: .85, duration: .18, ease: 'power2.in', onComplete: swap }).to('[data-rphoto]', { rotation: 6, scale: 1, duration: .5, ease: 'back.out(2.6)' });
-    gsap.fromTo('[data-rbody]', { scale: .97, svgOrigin: `${CX} ${CY}` }, { scale: 1, svgOrigin: `${CX} ${CY}`, duration: .5, ease: 'back.out(3)' });
+    gsap.fromTo('[data-rr]', { scale: .97 }, { scale: 1, duration: .6, ease: 'back.out(3)' });
   };
   const rCallout = $('[data-rcallout]');
   const rTouch = () => { if (rTouched) return; rTouched = true; if (rDemo) rDemo.kill(); if (ANIM) gsap.to(rCallout, { opacity: 0, duration: .3, onComplete: () => rCallout.remove() }); else rCallout.remove(); };
@@ -931,33 +911,34 @@
      re-read a half-drawn state as the end value. */
   mm.add('(min-width: 0px)', () => {
     rollsSec.classList.add('pinned');
-    const sp = $$('[data-sp]'), cin = $('[data-sp-cin]'), ices = [$('[data-icing]'), $('[data-icing-sh]')];
-    const L = sp[1].getTotalLength() + 2, LC = cin.getTotalLength() + 2, LI = ices[0].getTotalLength() + 2;
+    const mk = $('[data-rmask]'), LM = mk.getTotalLength() + 2, img = $('[data-rimgsvg]');
+    const RAW = 'saturate(0.62) brightness(1.2) contrast(0.82) sepia(0.38)', BAKED = 'saturate(1) brightness(1) contrast(1) sepia(0)', GLAZED = 'saturate(1.12) brightness(1.03) contrast(1.08) sepia(0)';
     const steps = $$('[data-step]'), bars = $$('[data-rbar] b'), at = [0, 1.05, 1.7, 2.5, 3.05];
     const rDemoGo = () => { if (rTouched || rDemo) return; let i = FL.findIndex(f => f.k === flav); const step = () => { if (rTouched) return; i = (i + 1) % FL.length; setFlavor(FL[i].k, true); rDemo = gsap.delayedCall(2.6, step); }; rDemo = gsap.delayedCall(1.8, step); };
     const tl = gsap.timeline({ defaults: { ease: 'none' }, scrollTrigger: { trigger: rollsSec, start: 'top top', end: () => '+=' + innerHeight * 2.8, pin: '.r-pin', scrub: .6, anticipatePin: 1, invalidateOnRefresh: true,
       onToggle: s => mbar.classList.toggle('hide', s.isActive),
       onUpdate: s => { if (s.progress > .95) rDemoGo(); } } });
-    tl.fromTo(sp, { strokeDasharray: L, strokeDashoffset: L }, { strokeDashoffset: 0, duration: 1, ease: 'power1.inOut' }, 0)
-      .fromTo(cin, { strokeDasharray: LC, strokeDashoffset: LC }, { strokeDashoffset: 0, duration: .9, ease: 'power1.inOut' }, .12)
-      .fromTo('[data-rspin]', { rotation: -220, svgOrigin: `${CX} ${CY}` }, { rotation: 0, svgOrigin: `${CX} ${CY}`, duration: 1, ease: 'power2.out' }, 0)
-      .fromTo('[data-rshadow]', { scale: .2, opacity: 0, svgOrigin: `${CX} ${CY}` }, { scale: 1, opacity: 1, svgOrigin: `${CX} ${CY}`, duration: 1 }, 0)
-      .fromTo('[data-baked]', { opacity: 0 }, { opacity: 1, duration: .6 }, at[1])
-      .fromTo('[data-rbody]', { scale: .94, svgOrigin: `${CX} ${CY}` }, { scale: 1, svgOrigin: `${CX} ${CY}`, duration: .6, ease: 'back.out(2)' }, at[1])
-      .fromTo('[data-rsteam]', { opacity: 0, y: 14 }, { opacity: .55, y: 0, duration: .3 }, at[1] + .05)
-      .fromTo('[data-rsteam]', { opacity: .55, y: 0 }, { opacity: 0, y: -18, duration: .3, immediateRender: false }, at[2] - .1)
-      .fromTo(ices, { strokeDasharray: LI, strokeDashoffset: LI }, { strokeDashoffset: 0, duration: .75, ease: 'power1.inOut' }, at[2])
-      .fromTo('[data-tops]', { opacity: 0, y: -50, scale: 1.2, svgOrigin: `${CX} ${CY}` }, { opacity: 1, y: 0, scale: 1, svgOrigin: `${CX} ${CY}`, duration: .45, ease: 'back.out(1.6)' }, at[3]);
+    tl.fromTo(mk, { strokeDasharray: LM, strokeDashoffset: LM }, { strokeDashoffset: 0, duration: 1, ease: 'power1.inOut' }, 0)
+      .fromTo('[data-rspin]', { rotation: -200 }, { rotation: 0, duration: 1, ease: 'power2.out' }, 0)
+      .fromTo('[data-rshadow]', { scale: .3, opacity: 0 }, { scale: 1, opacity: 1, duration: 1 }, 0)
+      .fromTo(img, { filter: RAW }, { filter: BAKED, duration: .6 }, at[1])
+      .fromTo('[data-rspin]', { scale: .9 }, { scale: 1, duration: .6, ease: 'back.out(1.6)' }, at[1])
+      .fromTo('[data-rglow]', { opacity: 0 }, { opacity: 1, duration: .25 }, at[1])
+      .fromTo('[data-rglow]', { opacity: 1 }, { opacity: 0, duration: .35, immediateRender: false }, at[1] + .35)
+      .fromTo(steam, { v: 0 }, { v: 1, duration: .45 }, at[1] + .1)
+      .fromTo('[data-rsheen]', { opacity: 0 }, { opacity: .9, duration: .3 }, at[2])
+      .fromTo(img, { filter: BAKED }, { filter: GLAZED, duration: .4, immediateRender: false }, at[2])
+      .fromTo('[data-rphoto]', { scale: 0, rotation: -24 }, { scale: 1, rotation: 6, duration: .3, ease: 'back.out(2)' }, at[3] + .05);
     bars.forEach((b, k) => tl.fromTo(b, { scaleX: 0 }, { scaleX: 1, duration: at[k + 1] - at[k] }, at[k]));
     steps.forEach((st, k) => { if (k) tl.fromTo(st, { autoAlpha: 0, y: 22 }, { autoAlpha: 1, y: 0, duration: .18 }, at[k] + .04); tl.fromTo(st, { autoAlpha: 1, y: 0 }, { autoAlpha: 0, y: -22, duration: .16, immediateRender: false }, at[k + 1] - .14); });
     tl.fromTo('[data-rbar]', { autoAlpha: 1 }, { autoAlpha: 0, duration: .16, immediateRender: false }, at[4] - .14)
       .fromTo('[data-rpick]', { autoAlpha: 0, y: 26 }, { autoAlpha: 1, y: 0, duration: .25 }, at[4] + .04)
-      .fromTo('[data-rphoto]', { scale: 0, rotation: -24 }, { scale: 1, rotation: 6, duration: .3, ease: 'back.out(2)' }, at[4] + .08)
       .to({}, { duration: .35 });
     return () => { rollsSec.classList.remove('pinned'); mbar.classList.remove('hide'); };
   });
   gsap.from('[data-drip]', { scaleY: .25, transformOrigin: '50% 0%', duration: 1.4, ease: 'elastic.out(1, .35)', scrollTrigger: { trigger: rollsSec, start: 'top 85%' } });
   gsap.to(rCallout, { y: -5, duration: .9, ease: 'sine.inOut', yoyo: true, repeat: -1 });
+  gsap.to('[data-ridle]', { rotation: 360, duration: 80, ease: 'none', repeat: -1 });
 
   mm.add('(min-width: 0px)', () => {
     story.classList.add('pinned');
