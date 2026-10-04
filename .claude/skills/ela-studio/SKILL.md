@@ -1,6 +1,6 @@
 ---
 name: ela-studio
-description: Build a standout, animated, single-file marketing website for a local business or niche (restaurant, barber, gym, salon, contractor, bakery, real estate, tattoo, detailing, clinic, anything), then QA it and deploy it to Vercel. Use when the user asks for a website for a business, an Instagram handle, or a niche/concept site for the ElaSystems portfolio, or says "make me a site for ...". Covers brand research, the signature-interaction concept, design system, build, mobile/accessibility pass, headless screenshot QA, and deployment.
+description: Build a standout, animated, single-file marketing website for a local business or niche (restaurant, barber, gym, salon, contractor, bakery, real estate, tattoo, detailing, clinic, anything), then QA it and deploy it to Vercel. Use when the user asks for a website for a business, an Instagram handle, or a niche/concept site for the ElaSystems portfolio, or says "make me a site for ...". Also use when the user says a business doesn't want / declined / passed on its site (retire the link and turn it into a generic ElaSystems concept). Covers brand research, the signature-interaction concept, design system, build, mobile/accessibility pass, headless screenshot QA, and deployment.
 ---
 
 # ElaSystems Studio: niche websites that people screenshot
@@ -8,6 +8,7 @@ description: Build a standout, animated, single-file marketing website for a loc
 This is the playbook behind the Baydoun Urgent Care, Stack Shack, Vella Bakehouse, Mr. 2 Weeks, Bagel & Co, Halcyon Cuts, Vantage Detail, Halvark Strength, Lumen Skin, Marrowick Estates and Inkwell & Oak sites. Follow every phase in order. The thing that makes these sites work is not "more animation". It's **one idea that only fits this business**, built properly, wrapped in a site that's genuinely useful.
 
 Reference files (read them when you reach the phase that needs them):
+- `references/declined.md`: what to do when a business says no (generic concept + retire the old link).
 - `references/signatures.md`: catalogue of signature interactions by niche, with how each was built.
 - `references/boilerplate.md`: the HTML skeleton, CDN tags, CONFIG pattern, smooth-scroll setup, ElaSystems badge.
 - `references/design.md`: type pairings, palettes, copy rules, motion rules, anti-patterns.
@@ -121,6 +122,10 @@ Also script the signature interaction itself in Playwright (drag, hold, click) a
    - With the CLI: run `vercel --prod` from inside the folder.
 5. **Verify live**: `curl` the production URL until it returns 200 and contains a string unique to this build. Only then hand over the link.
 6. **Hand off**: give the link, two or three lines on what's interactive, and what the client needs to send to replace any placeholders.
+
+## When a business says no
+
+The user has given standing permission: as soon as they say a business doesn't want its site, follow `references/declined.md` without asking. Rebuild it as a generic ElaSystems concept at a new neutral link, pause the old Vercel project so the business-name URL goes offline, `git rm` the original folder and report the new link.
 
 ## Edits after launch
 
