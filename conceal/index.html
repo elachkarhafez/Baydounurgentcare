@@ -83,17 +83,33 @@
     header.light { background: rgba(242,239,233,.72); color: var(--ink); box-shadow: 0 1px 0 rgba(20,20,20,.08); }
     header.light .brand small { color: #7b766e; }
     header.light .nav nav a { color: rgba(20,20,20,.62); }
-    header.light .btn { color: var(--ink); border-color: rgba(20,20,20,.28); }
+    header.light .btn, header.light .menu-btn { color: var(--ink); border-color: rgba(20,20,20,.28); }
+    header.light .nav nav a.on { color: var(--ink); }
     header { transition: transform .5s var(--ease-out), background .5s, color .5s, box-shadow .5s; }
     .nav { display: flex; align-items: center; justify-content: space-between; gap: 20px; height: 82px; }
     .brand { display: grid; line-height: 1; }
     .brand b { font: 400 21px/1 var(--serif); letter-spacing: .42em; }
     .brand small { margin-top: 4px; font: 500 8.5px/1 var(--mono); letter-spacing: .5em; color: var(--stone); }
     .nav nav { display: flex; gap: 30px; font: 500 11px/1 var(--mono); letter-spacing: .18em; text-transform: uppercase; }
-    .nav nav a { color: rgba(236,232,225,.7); transition: color .3s; }
+    .nav nav a { position: relative; color: rgba(236,232,225,.7); transition: color .3s; }
+    .nav nav a::after { content: ""; position: absolute; left: 0; right: .18em; bottom: -9px; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: 0 50%; transition: transform .6s var(--ease-out); }
+    .nav nav a.on { color: var(--bone); } .nav nav a.on::after { transform: scaleX(1); }
+    .nav-r { display: flex; align-items: center; gap: 10px; }
+    .menu-btn { display: none; position: relative; width: 42px; height: 42px; border-radius: 50%; border: 1px solid rgba(236,232,225,.35); color: inherit; cursor: pointer; }
+    .menu-btn span { position: absolute; left: 13px; right: 13px; height: 1.5px; background: currentColor; transition: transform .5s var(--ease-out), top .5s var(--ease-out); }
+    .menu-btn span:first-child { top: 17px; } .menu-btn span:last-child { top: 23px; }
+    .menu-btn[aria-expanded="true"] span:first-child { top: 20px; transform: rotate(45deg); } .menu-btn[aria-expanded="true"] span:last-child { top: 20px; transform: rotate(-45deg); }
+    .mnav { position: fixed; inset: 0; z-index: 89; display: flex; flex-direction: column; justify-content: space-between; gap: 28px; padding: 90px 0 26px; background: var(--ink); overflow-y: auto; visibility: hidden; opacity: 0; transition: opacity .4s var(--ease-out), visibility 0s .4s; }
+    .mnav.open { visibility: visible; opacity: 1; transition: opacity .4s var(--ease-out); }
+    .mnav > .wrap { width: 100%; }
+    .mnav nav { display: grid; }
+    .mnav nav a { display: flex; align-items: baseline; gap: 16px; padding: 15px 0; border-bottom: 1px solid var(--line); font: 300 clamp(32px, 8.6vw, 50px)/1.05 var(--serif); }
+    .mnav nav a small { font: 500 10px/1 var(--mono); letter-spacing: .2em; color: var(--stone); }
+    .mnav-f .btn { width: 100%; }
+    .mopen .mbar { transform: translateY(150%) !important; }
     @media (hover: hover) { .nav nav a:hover { color: var(--bone); } }
     .nav .btn { height: 42px; padding: 0 18px; font-size: 11px; }
-    @media (max-width: 960px) { .nav nav { display: none; } .nav { height: 66px; } .brand b { font-size: 17px; } .nav .btn { height: 38px; padding: 0 14px; font-size: 10.5px; } }
+    @media (max-width: 960px) { .nav nav { display: none; } .menu-btn { display: block; } .nav { height: 66px; } .brand b { font-size: 17px; } .nav .btn { height: 38px; padding: 0 14px; font-size: 10.5px; } }
 
     /* ---------- the stage: hero + pinned app tour ---------- */
     .stage { position: relative; background: radial-gradient(70% 60% at 70% 50%, color-mix(in srgb, var(--accent) 45%, #0b0b0b), #0b0b0b 72%); transition: background 1s var(--ease); }
@@ -107,8 +123,14 @@
     .sg-step h2 { font-size: clamp(42px, 5vw, 86px); }
     .sg-step .n { font: 500 11px/1 var(--mono); letter-spacing: .24em; color: var(--stone); }
     .sg-step .acts { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
-    .sg-dots { display: flex; gap: 8px; margin-top: 34px; }
-    .sg-dots i { position: relative; width: 34px; height: 2px; border-radius: 2px; background: rgba(236,232,225,.16); overflow: hidden; }
+    .sg-dots { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 6px; margin-top: 30px; }
+    .sg-dots button { display: grid; gap: 10px; padding: 12px 0; text-align: left; color: var(--stone); font: 500 10px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; cursor: pointer; transition: color .3s; }
+    .sg-dots button[aria-current="step"] { color: var(--bone); }
+    @media (hover: hover) { .sg-dots button:hover { color: var(--bone); } }
+    .sg-skip { align-self: center; margin-left: 14px; padding: 10px 14px; border-radius: 999px; border: 1px solid rgba(236,232,225,.22); font: 500 10px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--stone); transition: color .3s, border-color .3s; }
+    @media (hover: hover) { .sg-skip:hover { color: var(--bone); border-color: var(--bone); } }
+    .rm .sg-dots button, html:not(.js) .sg-dots button { display: none; }
+    .sg-dots i { position: relative; width: 58px; height: 2px; border-radius: 2px; background: rgba(236,232,225,.16); overflow: hidden; }
     .sg-dots i b { position: absolute; inset: 0; background: var(--bone); transform-origin: 0 50%; transform: scaleX(0); }
     .sg-phone { position: relative; display: grid; place-items: center; perspective: 1600px; }
     .sg-phone::before { content: ""; position: absolute; left: 50%; top: 54%; width: 120%; aspect-ratio: 1; translate: -50% -50%; border-radius: 50%; background: radial-gradient(closest-side, color-mix(in srgb, var(--accent) 55%, transparent), transparent); opacity: .55; pointer-events: none; transition: background 1.2s var(--ease); }
@@ -126,7 +148,9 @@
       .sg-step .lede { font-size: 14.5px; margin-top: 10px; }
       .sg-step .acts { margin-top: 14px; }
       .sg-step .acts .btn { height: 44px; padding: 0 16px; font-size: 10.5px; }
-      .sg-dots { margin-top: 14px; }
+      .sg-dots { margin-top: 6px; gap: 5px; }
+      .sg-dots i { width: 30px; } .sg-dots span { display: none; } .sg-dots button { padding: 14px 0; }
+      .sg-skip { margin-left: auto; padding: 8px 12px; }
       .try { bottom: -4%; }
     }
 
@@ -292,7 +316,17 @@
     /* ---------- aura rail ---------- */
     .aura { position: relative; padding: clamp(100px, 11vw, 170px) 0; background: var(--ink); overflow: hidden; overflow: clip; }
     .au-head { display: flex; align-items: end; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
-    .rail { display: flex; gap: clamp(14px, 1.6vw, 24px); margin-top: clamp(40px, 5vw, 70px); padding-left: var(--pad); will-change: transform; }
+    .rail { display: flex; gap: clamp(14px, 1.6vw, 24px); margin-top: clamp(40px, 5vw, 64px); padding: 0 var(--pad) 6px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: var(--pad); scrollbar-width: none; overscroll-behavior-x: contain; }
+    .rail::-webkit-scrollbar { display: none; }
+    .rail.drag { scroll-snap-type: none; cursor: grabbing; } .rail.drag * { pointer-events: none; }
+    .au { scroll-snap-align: start; }
+    .au-ctl { display: flex; align-items: center; gap: 18px; }
+    .au-arrows { display: flex; gap: 8px; }
+    .au-arrows button { width: 50px; height: 50px; border-radius: 50%; border: 1px solid rgba(236,232,225,.3); display: grid; place-items: center; color: var(--bone); cursor: pointer; transition: background .35s, color .35s, border-color .35s, opacity .35s; }
+    .au-arrows button svg { width: 18px; height: 18px; }
+    .au-arrows button:disabled { opacity: .3; cursor: default; }
+    @media (hover: hover) { .au-arrows button:not(:disabled):hover { background: var(--bone); color: var(--ink); border-color: var(--bone); } }
+    .au-count { font: 500 11px/1 var(--mono); letter-spacing: .18em; color: var(--stone); }
     .au { flex: 0 0 clamp(260px, 26vw, 380px); text-align: left; }
     .au .im { position: relative; aspect-ratio: 4 / 5; border-radius: 22px; overflow: hidden; }
     .au .im img { width: 100%; height: 100%; object-fit: cover; transition: transform 1s var(--ease-out), filter .8s; filter: grayscale(.2); }
@@ -383,7 +417,6 @@
     .l-line { position: absolute; z-index: 2; left: var(--pad); right: var(--pad); bottom: calc(6% - 14px); height: 1px; background: rgba(236,232,225,.12); }
     .l-line i { position: absolute; inset: 0; background: var(--bone); transform-origin: 0 50%; transform: scaleX(0); }
     .lab-img canvas { opacity: 0; transition: opacity .5s; }
-    @media (min-width: 901px) { .aura { height: 100vh; height: 100svh; min-height: 640px; padding: 0; display: flex; flex-direction: column; justify-content: center; } .rail { margin-top: clamp(28px, 4.5vh, 60px); } .au { flex-basis: clamp(220px, min(24vw, 40vh), 360px); } .rm .rail, html:not(.js) .rail { overflow-x: auto; padding-right: var(--pad); } }
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }
   </style>
 </head>
@@ -400,10 +433,21 @@
   <header data-header>
     <div class="wrap nav">
       <a class="brand" href="#top" aria-label="Conceal the World, back to top"><b>CONCEAL</b><small>THE WORLD · APP</small></a>
-      <nav aria-label="Sections"><a href="#lab" data-scr>The colours</a><a href="#aura" data-scr>Aura</a><a href="#look" data-scr>Lookbook</a><a href="#gather" data-scr>Gather</a><a href="#get" data-scr>Get the app</a></nav>
-      <a class="btn" data-shop href="#" target="_blank" rel="noopener">Shop</a>
+      <nav aria-label="Sections"><a href="#tour" data-scr>The app</a><a href="#lab" data-scr>The colours</a><a href="#aura" data-scr>Aura</a><a href="#look" data-scr>Lookbook</a><a href="#gather" data-scr>Gather</a><a href="#get" data-scr>Get the app</a></nav>
+      <div class="nav-r"><a class="btn" data-shop href="#" target="_blank" rel="noopener">Shop</a><button class="menu-btn" type="button" data-menu aria-expanded="false" aria-controls="mnav" aria-label="Open menu"><span></span><span></span></button></div>
     </div>
   </header>
+  <div class="mnav" id="mnav" data-mnav aria-hidden="true">
+    <nav class="wrap" aria-label="Menu">
+      <a href="#tour" data-ml><small>01</small>The app</a>
+      <a href="#lab" data-ml><small>02</small>The colours</a>
+      <a href="#aura" data-ml><small>03</small>Aura tees</a>
+      <a href="#look" data-ml><small>04</small>Lookbook</a>
+      <a href="#gather" data-ml><small>05</small>Gather</a>
+      <a href="#get" data-ml><small>06</small>Get the app</a>
+    </nav>
+    <div class="wrap mnav-f"><a class="btn solid" data-shop href="#" target="_blank" rel="noopener">Shop the real store</a></div>
+  </div>
 
   <main>
     <!-- STAGE: hero + pinned app tour (the phone is a working prototype) -->
@@ -423,7 +467,7 @@
             <div class="sg-step" data-sstep><span class="n">03 / ALIGN</span><h2 style="margin-top:16px">A reminder <i>a day.</i></h2><p class="lede">The words from the Aura tees, one each morning. Hold to reveal it. Swipe for the next.</p></div>
             <div class="sg-step" data-sstep><span class="n">04 / GATHER</span><h2 style="margin-top:16px">We gather <i>to grow.</i></h2><p class="lede">The community lives in the app too, with giving built right in.</p></div>
             <div class="sg-step" data-sstep><span class="n">05 / CHECKOUT</span><h2 style="margin-top:16px">Two taps <i>to yours.</i></h2><p class="lede">The bag hands off to the real Conceal the World checkout with your pieces already in it. Try it.</p></div>
-            <div class="sg-dots" data-sgdots aria-hidden="true"><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i></div>
+            <div class="sg-dots" data-sgdots role="group" aria-label="Tour steps"><button type="button" data-sgo="0" aria-current="step"><i><b></b></i><span>Intro</span></button><button type="button" data-sgo="1"><i><b></b></i><span>Drops</span></button><button type="button" data-sgo="2"><i><b></b></i><span>Shop</span></button><button type="button" data-sgo="3"><i><b></b></i><span>Align</span></button><button type="button" data-sgo="4"><i><b></b></i><span>Gather</span></button><button type="button" data-sgo="5"><i><b></b></i><span>Bag</span></button><a class="sg-skip" href="#lab">Skip tour ↓</a></div>
           </div>
           <div class="sg-phone" id="tour" data-sgphone>
             <div class="phone" data-phone><div class="screen" data-screen></div><div class="sheen" aria-hidden="true"></div></div>
@@ -463,7 +507,7 @@
 
     <!-- AURA -->
     <section class="aura" id="aura" data-aura>
-      <div class="wrap au-head"><div><span class="eyebrow"><b></b>The Aura tees</span><h2 style="margin-top:16px">Words to <i>wear.</i></h2></div><p class="lede" style="margin:0">Six colours, six reminders. Hover or tap a tee to reveal what it says.</p></div>
+      <div class="wrap au-head"><div><span class="eyebrow"><b></b>The Aura tees</span><h2 style="margin-top:16px">Words to <i>wear.</i></h2></div><div class="au-ctl"><span class="au-count" data-aucount>01 / 06</span><div class="au-arrows"><button type="button" data-aunav="-1" aria-label="Previous tee"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M15 5l-7 7 7 7"/></svg></button><button type="button" data-aunav="1" aria-label="Next tee"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 5l7 7-7 7"/></svg></button></div></div></div>
       <div class="rail" data-rail></div>
     </section>
 
@@ -530,7 +574,7 @@
     </div>
   </footer>
 
-  <nav class="mbar" aria-label="Quick actions" data-mbar><a class="btn solid" data-shop href="#" target="_blank" rel="noopener">Shop now</a><a class="btn" href="#top" data-scr>Try the app</a></nav>
+  <nav class="mbar" aria-label="Quick actions" data-mbar><a class="btn solid" data-shop href="#" target="_blank" rel="noopener">Shop now</a><a class="btn" href="#tour" data-scr>Try the app</a></nav>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
@@ -816,7 +860,19 @@
 
   /* ---------- aura rail ---------- */
   $('[data-rail]').innerHTML = D.aura.map(a => `<button class="au" type="button" data-au><div class="im"><img src="${a.img}" alt="Aura Tee in ${esc(a.c)}" loading="lazy" width="533" height="640"><div class="ov"><q>${esc(a.q)}</q></div></div><div class="meta"><span><i style="background:${a.x}"></i>${esc(a.c)}</span><span>Aura Tee · $25</span></div></button>`).join('');
-  $('[data-rail]').addEventListener('click', e => { const b = e.target.closest('[data-au]'); if (b) b.classList.toggle('shown'); });
+  (() => { const r = $('[data-rail]'), cards = $$('[data-au]', r), cnt = $('[data-aucount]'), [prv, nxt] = $$('[data-aunav]'), pad = n => String(n).padStart(2, '0');
+    r.addEventListener('click', e => { const b = e.target.closest('[data-au]'); if (b) b.classList.toggle('shown'); });
+    const step = () => cards[0].offsetWidth + parseFloat(getComputedStyle(r).columnGap || 16);
+    $$('[data-aunav]').forEach(b => b.addEventListener('click', () => r.scrollBy({ left: +b.dataset.aunav * step(), behavior: RM ? 'auto' : 'smooth' })));
+    const sync = () => { const max = r.scrollWidth - r.clientWidth - 2; prv.disabled = r.scrollLeft < 2; nxt.disabled = r.scrollLeft > max; cnt.textContent = `${pad(Math.min(cards.length, Math.round(r.scrollLeft / step()) + 1))} / ${pad(cards.length)}`; };
+    r.addEventListener('scroll', sync, { passive: true }); addEventListener('resize', sync); sync();
+    // quotes reveal as each tee comes fully into view
+    if (window.IntersectionObserver) { const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('shown'); }), { root: r, threshold: .75 }); cards.forEach(c => io.observe(c)); }
+    // drag to scroll with a mouse
+    let d = null; r.addEventListener('pointerdown', e => { if (e.pointerType !== 'mouse') return; d = { x: e.clientX, l: r.scrollLeft, moved: false }; });
+    addEventListener('pointermove', e => { if (!d) return; const dx = e.clientX - d.x; if (!d.moved && Math.abs(dx) > 6) { d.moved = true; r.classList.add('drag'); } if (d.moved) r.scrollLeft = d.l - dx; });
+    addEventListener('pointerup', () => { if (!d) return; const was = d.moved; d = null; if (!was) return; r.classList.remove('drag'); const i = Math.round(r.scrollLeft / step()); r.scrollTo({ left: i * step(), behavior: 'smooth' }); });
+  })();
 
   /* ---------- marquee ---------- */
   const mq = $('[data-mq]'), MQW = ['Protect who you are', 'No God no peace', 'Move with purpose', 'We gather to grow', 'Know God know peace'];
@@ -837,15 +893,27 @@
   $('[data-gamts]').innerHTML = D.donation.amts.map(a => `<a href="${CONFIG.store}/cart/${a[1]}:1" target="_blank" rel="noopener">Give ${esc(a[0])}</a>`).join('');
 
   /* ---------- header / phone bar ---------- */
-  const header = $('[data-header]'), mbar = $('[data-mbar]'); let lastY = scrollY;
-  const onScroll = () => { const y = scrollY; header.classList.toggle('scrolled', y > 30); header.classList.toggle('hide', y > lastY + 2 && y > innerHeight * 5.2); lastY = y; mbar.classList.toggle('on', y > innerHeight * 5 && y + innerHeight < document.documentElement.scrollHeight - 200); };
+  const header = $('[data-header]'), mbar = $('[data-mbar]'); let lastY = scrollY, LEN = null;
+  const tourEnd = () => { const t = window.ScrollTrigger && ScrollTrigger.getById('stage'); return t ? t.end : innerHeight; };
+  const tourY = i => { const t = ScrollTrigger.getById('stage'); return t.start + (t.end - t.start) * (i ? (i + .5) / 6 : 0); };
+
+  /* phone menu */
+  const menuBtn = $('[data-menu]'), mnav = $('[data-mnav]'); let mOpen = false, wasLight = false;
+  const setMenu = o => { if (o === mOpen) return; mOpen = o; menuBtn.setAttribute('aria-expanded', o); menuBtn.setAttribute('aria-label', o ? 'Close menu' : 'Open menu'); mnav.classList.toggle('open', o); mnav.setAttribute('aria-hidden', !o); document.documentElement.classList.toggle('mopen', o);
+    if (o) { wasLight = header.classList.contains('light'); header.classList.remove('light', 'hide'); if (LEN) LEN.stop(); else document.documentElement.style.overflow = 'hidden'; if (ANIM) gsap.fromTo($$('[data-ml], .mnav-f', mnav), { y: 36, opacity: 0 }, { y: 0, opacity: 1, duration: .8, ease: 'expo.out', stagger: .045, delay: .05 }); }
+    else { if (wasLight) header.classList.add('light'); if (LEN) LEN.start(); else document.documentElement.style.overflow = ''; } };
+  menuBtn.addEventListener('click', () => setMenu(!mOpen));
+  mnav.addEventListener('click', e => { if (e.target.closest('a')) setMenu(false); });
+  addEventListener('keydown', e => { if (e.key === 'Escape' && mOpen) { setMenu(false); menuBtn.focus(); } });
+  const onScroll = () => { const y = scrollY; header.classList.toggle('scrolled', y > 30); header.classList.toggle('hide', !mOpen && y > lastY + 2 && y > tourEnd() + 60); lastY = y; mbar.classList.toggle('on', y > tourEnd() && y + innerHeight < document.documentElement.scrollHeight - 200); };
   onScroll(); addEventListener('scroll', onScroll, { passive: true });
 
   if (!ANIM) { const l = $('[data-loader]'); if (l) l.remove(); $('[data-asplash]').remove(); $$('.mt .w').forEach(w => { w.style.setProperty('--b', '0px'); w.style.setProperty('--o', '1'); }); $$('[data-au]').forEach(a => a.classList.add('shown')); return; }
 
   const lenis = window.Lenis ? new Lenis({ lerp: .09, smoothWheel: true, wheelMultiplier: .95, touchMultiplier: 1.2 }) : null;
+  LEN = lenis;
   if (lenis) { lenis.on('scroll', ScrollTrigger.update); gsap.ticker.add(t => lenis.raf(t * 1000)); gsap.ticker.lagSmoothing(0); }
-  document.addEventListener('click', e => { const a = e.target.closest('a[href^="#"]'); if (!a) return; const id = a.getAttribute('href'); if (id === '#') return; let t = id === '#top' ? 0 : $(id); if (id === '#tour') { const s = ScrollTrigger.getById('stage'); t = s ? s.start + (s.end - s.start) * .2 : 0; } if (t == null) return; e.preventDefault(); if (lenis) lenis.scrollTo(t, { duration: 1.6 }); else scrollTo({ top: typeof t === 'number' ? t : t.getBoundingClientRect().top + scrollY, behavior: 'smooth' }); });
+  document.addEventListener('click', e => { const a = e.target.closest('a[href^="#"]'); if (!a) return; const id = a.getAttribute('href'); if (id === '#') return; let t = id === '#top' ? 0 : $(id); if (id === '#tour') t = ScrollTrigger.getById('stage') ? tourY(1) : 0; if (t == null) return; e.preventDefault(); if (lenis) lenis.scrollTo(t, { duration: 1.6 }); else scrollTo({ top: typeof t === 'number' ? t : t.getBoundingClientRect().top + scrollY, behavior: 'smooth' }); });
 
   /* ---------- silk: a lit, domain-warped cloth behind the hero ---------- */
   const SILKFRAG = 'uniform vec2 res,mo;uniform float t,sc,mob;uniform vec3 c2;float H(vec2 p,vec2 mp){vec2 q=vec2(fb3(p+vec2(0.,t*.035)),fb3(p+vec2(5.2,1.3)-vec2(t*.028,0.)));vec2 d=p-mp;return fb3(p+1.7*q)+.2*exp(-dot(d,d)*1.4);}void main(){vec2 a=vec2(res.x/res.y,1.);vec2 p=(v-.5)*a*.8+vec2(0.,sc);vec2 mp=(mo-.5)*a*.8+vec2(0.,sc);float e=.015;float c=H(p,mp),hx=H(p+vec2(e,0.),mp),hy=H(p+vec2(0.,e),mp);vec3 n=normalize(vec3((c-hx)/e,(c-hy)/e,2.4));vec3 L=normalize(vec3((mo-.5)*1.2+vec2(-.2,.5),.9));float df=clamp(dot(n,L),0.,1.);float sp=pow(clamp(dot(reflect(-L,n),vec3(0.,0.,1.)),0.,1.),36.);float lu=dot(c2,vec3(.299,.587,.114));vec3 hi=c2*mix(1.6,.62,smoothstep(.25,.65,lu))+.03;vec3 base=mix(vec3(.026),hi,smoothstep(-.45,.75,c));vec3 col=base*(.4+.75*df)+sp*(hi*.5+.2)*.32;float vg=mix(smoothstep(1.25,.15,length((v-vec2(.68,.5))*vec2(1.2,1.))),smoothstep(.95,.15,length((v-vec2(.5,.22))*vec2(1.,1.2))),mob);col*=mix(.22,1.,vg);col+=(fract(sin(dot(v*res,vec2(12.9898,78.233)))*43758.5453)-.5)*.012;gl_FragColor=vec4(col,1.);}';
@@ -871,7 +939,7 @@
   /* ---------- cursor ring (fine pointers) ---------- */
   let lensOn = false;
   if (FINE) { const rc = document.createElement('div'); rc.className = 'ring-c'; rc.setAttribute('aria-hidden', 'true'); document.body.appendChild(rc); const qx = gsap.quickTo(rc, 'x', { duration: .35, ease: 'power3' }), qy = gsap.quickTo(rc, 'y', { duration: .35, ease: 'power3' });
-    addEventListener('pointermove', e => { qx(e.clientX); qy(e.clientY); const t = e.target.closest ? e.target : null; const lbl = t && (t.closest('[data-ring]') ? 'Drag' : t.closest('[data-app]') ? 'Tap' : t.closest('[data-au]') ? 'Reveal' : t.closest('[data-mt]') ? '' : null); rc.classList.toggle('big', !!lbl); rc.textContent = lbl || ''; rc.style.opacity = t && t.closest('[data-mt]') ? 0 : 1; }, { passive: true });
+    addEventListener('pointermove', e => { qx(e.clientX); qy(e.clientY); const t = e.target.closest ? e.target : null; const lbl = t && (t.closest('[data-ring]') ? 'Drag' : t.closest('[data-app]') ? 'Tap' : t.closest('[data-au]') ? 'Drag' : t.closest('[data-mt]') ? '' : null); rc.classList.toggle('big', !!lbl); rc.textContent = lbl || ''; rc.style.opacity = t && t.closest('[data-mt]') ? 0 : 1; }, { passive: true });
     $$('.btn').forEach(b => { b.addEventListener('pointermove', e => { const r = b.getBoundingClientRect(); b.style.setProperty('--mx', (e.clientX - r.left) + 'px'); b.style.setProperty('--my', (e.clientY - r.top) + 'px'); }); });
     // manifesto lens
     mt.addEventListener('pointermove', e => { const r = mt.getBoundingClientRect(); mt.style.setProperty('--lx', (e.clientX - r.left) + 'px'); mt.style.setProperty('--ly', (e.clientY - r.top) + 'px'); if (!lensOn) { lensOn = true; gsap.to(mt, { '--lr': '130px', duration: .5, ease: 'expo.out' }); } });
@@ -918,17 +986,17 @@
      THE TOUR: the stage pins and the phone drives itself through
      the app as you scroll. Copy for each step un-blurs in.
      ============================================================= */
-  const dots = $$('[data-sgdots] i'), dotF = $$('[data-sgdots] b').map(b => gsap.quickSetter(b, 'scaleX')); let stepI = 0;
+  let actT; const sgo = $$('[data-sgo]'), dots = $$('[data-sgdots] i'), dotF = $$('[data-sgdots] b').map(b => gsap.quickSetter(b, 'scaleX')); let stepI = 0;
   const ACT = [
     () => go('home'),
-    () => { go('home'); setTimeout(() => { if (!st.notify) notifyEl.click(); }, 500); },
-    () => { go('shop'); setTimeout(() => { openDetail('power'); let n = 0; const cyc = () => { if (stepI !== 2 || cur !== 'detail' || n > 3) return; n++; const b = $$('[data-asw]', det)[(st.det.ci + 1) % POW.cols.length]; if (b) b.click(); setTimeout(cyc, 1300); }; setTimeout(cyc, 1200); }, 450); },
-    () => { go('align'); setTimeout(reveal, 900); },
+    () => { go('home'); setTimeout(() => { if (stepI === 1 && !st.notify) notifyEl.click(); }, 500); },
+    () => { go('shop'); setTimeout(() => { if (stepI !== 2) return; openDetail('power'); let n = 0; const cyc = () => { if (stepI !== 2 || cur !== 'detail' || n > 3) return; n++; const b = $$('[data-asw]', det)[(st.det.ci + 1) % POW.cols.length]; if (b) b.click(); setTimeout(cyc, 1300); }; setTimeout(cyc, 1200); }, 450); },
+    () => { go('align'); setTimeout(() => { if (stepI === 3) reveal(); }, 900); },
     () => go('gather'),
     () => { if (!st.bag.length) { const c = POW.cols.find(inStock), v = c.v.find(x => x[2]); addToBag({ id: v[1], k: 'power', n: POW.n, c: c.c, s: v[0], img: c.img[0], price: POW.price }); } go('bag'); }
   ];
   const ACC = ['#1f4a34', '#2b2b2b', '#6a4430', '#b9a6dc', '#1d2a44', '#3a3a3a'];
-  const setStep = i => { if (i === stepI) return; const pi = stepI, prev = steps[pi], next = steps[i]; stepI = i; dots.forEach((d, j) => d.classList.toggle('on', j === i));
+  const setStep = i => { if (i === stepI) return; const pi = stepI, prev = steps[pi], next = steps[i]; stepI = i; sgo.forEach((d, j) => j === i ? d.setAttribute('aria-current', 'step') : d.removeAttribute('aria-current'));
     gsap.killTweensOf([prev, next, ...stepW[pi], ...stepW[i], ...stepR[pi], ...stepR[i]]);
     gsap.to(stepW[pi], { yPercent: -115, duration: .42, ease: 'power3.in', stagger: .03 });
     gsap.to(stepR[pi], { opacity: 0, y: -14, duration: .3, ease: 'power2.in' });
@@ -939,9 +1007,10 @@
     gsap.fromTo(phone, { '--sx': '130%' }, { '--sx': '-30%', duration: 1.3, ease: 'power2.inOut' });
     setAccent(ACC[i]);
     gsap.fromTo(phone, { rotationY: i % 2 ? -7 : 7, y: 10 }, { rotationY: 0, y: 0, duration: 1.6, ease: 'expo.out' });
-    ACT[i](); };
+    clearTimeout(actT); actT = setTimeout(() => { if (stepI === i) ACT[i](); }, 180); };
   gsap.set(steps.slice(1), { autoAlpha: 0 });
-  ScrollTrigger.create({ id: 'stage', trigger: '[data-stage]', start: 'top top', end: () => '+=' + innerHeight * 5, pin: '.sg-pin', anticipatePin: 1, invalidateOnRefresh: true,
+  $('[data-sgdots]').addEventListener('click', e => { const b = e.target.closest('[data-sgo]'); if (!b || !ScrollTrigger.getById('stage')) return; const y = tourY(+b.dataset.sgo); if (LEN) LEN.scrollTo(y, { duration: 1.1 }); else scrollTo({ top: y, behavior: 'smooth' }); });
+  ScrollTrigger.create({ id: 'stage', trigger: '[data-stage]', start: 'top top', end: () => '+=' + innerHeight * 3.6, pin: '.sg-pin', anticipatePin: 1, invalidateOnRefresh: true,
     onUpdate: s => { setStep(Math.min(5, Math.floor(s.progress * 6))); const q = s.progress * 6; dotF.forEach((f, j) => f(clamp(q - j, 0, 1))); }, onToggle: s => mbar.classList.toggle('hide', s.isActive) });
 
   /* manifesto: words un-blur as you scroll through */
@@ -958,11 +1027,6 @@
   gsap.to('[data-labcall]', { y: -4, duration: .9, ease: 'sine.inOut', yoyo: true, repeat: -1 });
 
   /* aura rail drifts sideways as you scroll (desktop), cards reveal on enter */
-  gsap.matchMedia().add('(min-width: 901px)', () => { const r = $('[data-rail]'), cards = $$('[data-au]', r), dist = () => Math.max(0, r.scrollWidth - innerWidth + 120);
-    gsap.set(cards, { transformPerspective: 1200 }); const fx = cards.map(c => ({ c, ry: gsap.quickSetter(c, 'rotationY', 'deg'), z: gsap.quickSetter(c, 'z', 'px') }));
-    const upd = () => { const cx = innerWidth / 2, x = gsap.getProperty(r, 'x'); fx.forEach(f => { const d = (f.c.offsetLeft + f.c.offsetWidth / 2 + x - cx) / innerWidth; f.ry(clamp(-d * 55, -38, 38)); f.z(-Math.abs(d) * 260); if (Math.abs(d) < .1) f.c.classList.add('shown'); }); };
-    const t = gsap.fromTo(r, { x: 0 }, { x: () => -dist(), ease: 'none', onUpdate: upd, scrollTrigger: { trigger: '[data-aura]', start: 'top top', end: () => '+=' + dist(), pin: true, scrub: .9, anticipatePin: 1, invalidateOnRefresh: true, onRefresh: upd } });
-    upd(); return () => { t.kill(); gsap.set(cards, { clearProps: 'transform' }); }; });
   gsap.from('[data-au]', { y: 80, opacity: 0, rotation: (i) => (i % 2 ? 3 : -3), duration: 1, ease: 'expo.out', stagger: .08, scrollTrigger: { trigger: '[data-rail]', start: 'top 85%' } });
 
   /* lookbook ring: spins on its own, with scroll and with drag */
@@ -980,6 +1044,9 @@
 
   /* mini power: cards bounce in like building blocks */
   gsap.from('[data-mi]', { y: 140, rotation: (i) => (i % 2 ? 10 : -10), opacity: 0, duration: 1.1, ease: 'back.out(1.6)', stagger: .08, scrollTrigger: { trigger: '[data-migrid]', start: 'top 85%' } });
+
+  /* header link for the section you're in */
+  $$('.nav nav a').forEach(a => { const h = a.getAttribute('href'), sec = h === '#tour' ? $('[data-stage]') : $(h); if (sec) ScrollTrigger.create({ trigger: sec, start: 'top 45%', end: 'bottom 45%', onToggle: st => a.classList.toggle('on', st.isActive) }); });
 
   /* header turns light over the cream manifesto */
   ScrollTrigger.create({ trigger: '[data-mani]', start: 'top 60px', end: 'bottom 60px', toggleClass: { targets: header, className: 'light' } });
