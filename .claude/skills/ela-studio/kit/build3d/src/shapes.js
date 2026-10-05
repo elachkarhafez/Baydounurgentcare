@@ -77,6 +77,12 @@ Object.assign(SHAPES, {
   button: (s = 1) => { const g = new THREE.SphereGeometry(.013, 22, 8, 0, Math.PI * 2, 0, Math.PI / 2); g.scale(1, .32, 1); g.scale(s, s, s); return g; },
   // wrapped bonbon: a round body with two pleated, twisted foil ends
   bonbon: (s = 1) => { const b = new THREE.SphereGeometry(.012, 20, 14); b.scale(1.25, .85, 1); const ends = [-1, 1].map(d => { const c = new THREE.ConeGeometry(.0095, .014, 12, 3, true); disp(c, v => { const a = Math.atan2(v.z, v.x), k = 1 + .25 * Math.cos(a * 6); v.x *= k; v.z *= k; }); c.rotateZ(d * Math.PI / 2); c.translate(d * .019, 0, 0); return c.toNonIndexed(); }); const g = mergeGeometries([b.toNonIndexed(), ...ends.map(e => { e.deleteAttribute('uv'); e.setAttribute('uv', new THREE.Float32BufferAttribute(new Float32Array(e.attributes.position.count * 2), 2)); return e; })]); g.computeVertexNormals(); g.scale(s, s, s); return g; },
+  // rigatoni: a ridged pasta tube with real wall thickness, lying on its side
+  rigatoni: (s = 1) => { const R = .011, L = .042, ridge = (g, k) => disp(g, v => { const a = Math.atan2(v.z, v.x), f = 1 + .07 * Math.max(0, Math.cos(a * 14)) * k; v.x *= f; v.z *= f; }); const out = ridge(new THREE.CylinderGeometry(R, R, L, 42, 3, true), 1); const inn = new THREE.CylinderGeometry(R * .74, R * .74, L, 28, 1, true); inn.scale(-1, 1, 1); const caps = [-1, 1].map(d => { const c = new THREE.RingGeometry(R * .74, R * 1.04, 42); c.rotateX(d * -Math.PI / 2); c.translate(0, d * L / 2, 0); return c; }); const g = mergeGeometries([out, inn, ...caps].map(x => { const y = x.index ? x.toNonIndexed() : x; y.deleteAttribute('uv'); return y; })); g.computeVertexNormals(); g.rotateZ(Math.PI / 2); g.rotateY(Math.PI * .2); g.scale(s, s, s); return g; },
+  // basil leaf: pointed oval, cupped, with a centre crease
+  leaf: (s = 1) => { const g = new THREE.PlaneGeometry(.03, .05, 10, 16); disp(g, v => { const t = Math.min(1, Math.max(0, (v.y + .025) / .05)), w = Math.max(0, Math.sin(Math.PI * Math.min(1, t * 1.05))) ** .8 * (1 - .25 * t); v.x *= w; v.z = .006 * (v.x / .015) ** 2 - .004 * Math.abs(v.x) / .015 * 0 - .003 * Math.exp(-((v.x / .0015) ** 2)) + .004 * t * t; }); g.rotateX(-Math.PI / 2); g.scale(s, s, s); return g; },
+  // cheese flake / shaving
+  flake: (s = 1) => { const g = new THREE.BoxGeometry(.014, .0016, .009, 3, 1, 3); disp(g, v => { v.x *= 1 + .3 * noise(v.z * 300, 1, 0); v.y += .001 * noise(v.x * 200, 0, v.z * 200); }); g.scale(s, s, s); return g; },
   // foam candy (Swedish style): a fat two-lobed oval
   foam: (s = 1) => { const a = new THREE.SphereGeometry(.0105, 18, 12); a.scale(1, .7, 1.25); a.translate(0, 0, -.008); const b = new THREE.SphereGeometry(.0095, 18, 12); b.scale(1, .68, 1.1); b.translate(0, 0, .009); const g = mergeGeometries([a, b]); g.computeVertexNormals(); g.scale(s, s, s); return g; }
 });
@@ -100,5 +106,9 @@ Object.assign(NUT_COLORS, {
   sunflower: ['#3d3a36', '#4a4640', '#d9d3c5'],
   baklava: ['#d99a43', '#cf8d36', '#e2a650'],
   nougat: ['#f4ecd8', '#efe4cc'],
-  foam: ['#f25c8a', '#f7f0e6', '#7ac943', '#ffcf3d']
+  foam: ['#f25c8a', '#f7f0e6', '#7ac943', '#ffcf3d'],
+  pasta: ['#f2c96e', '#ecbf5e', '#f5d27f', '#e6b552'],
+  basil: ['#2f7a2a', '#3b8a32', '#2a6b25'],
+  sundried: ['#8e1b14', '#a3261a', '#7a1610'],
+  parmesan: ['#f7efd6', '#f1e4c0', '#fbf5e4']
 });
