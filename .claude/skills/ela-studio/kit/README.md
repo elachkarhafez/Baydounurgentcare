@@ -9,6 +9,10 @@ kit/
     src/engine.js        stage: lights, HDRI, shadows, post, camera path, physics clocks, gating, height map, loop, QA hooks
     src/primitives.js    plate · slab · disc · sheet · dome · sauce · scatter · topper
     src/materials.js     porcelain gold chrome sauce cream crumbSide crumbTop bake meat cheese leaf candy matte
+    src/shapes.js        small pieces: nuts, seeds, candy (bear, fish, worm, licorice, pretzel, bonbon), fruit, coffee, baklava…
+    src/goods.js         composite goods: Dubai cup, chocolate bar, dipped strawberries, dates, cake/cheesecake slice, ice cream, jar, spices, nougat, baklava
+    src/tiles.js         catalog product shots: transparent, studio-lit, auto-framed piles + goods
+    tiles/render.mjs     render a tiles bundle → <id>.webp + sheet.jpg (or --pieces for 2D physics sprites)
     examples/            sundae.js (Fudge Fix), burger.js (proves a new product = a short list)
     template.html        the pinned stage page: captions, step rail, skip, finale, Lenis, phone layout
     build.sh             bundles scene + three.js into one same-origin module (no CDN waterfall)
@@ -50,6 +54,13 @@ st.start();
 - Sauce without `over` pools on whatever is underneath and finds real edges to drip over (burger sauce, syrup on pancakes, glaze on a cake).
 - Captions: template `CONFIG.stepAt[i] - .06` ≈ that layer's trigger.
 - Fallback swap ideas: pancakes = disc ×3 + sauce(syrup '#7a3a0c') + topper(berry); cake slice = slab(top:'crumbTop') + sauce(glaze) + scatter; tacos/sandwiches = disc + sheet + scatter.
+
+## Catalog tiles: show the whole range (any shop)
+A client judges a shop site by whether *their products* are on it. Don't settle for text lists:
+1. Copy `nutsnow/src/tiles.js` → `<site>/src/tiles.js`, edit the ITEMS list (pile of a SHAPE, or a GOODS builder).
+2. `build.sh <site>/src/tiles.js <site>/src/tiles-page/tiles.js`, add an index.html that loads it as a module (assets path is absolute from the repo root), serve the repo.
+3. `node kit/build3d/tiles/render.mjs http://127.0.0.1:8765/<site>/src/tiles-page/index.html $S/tiles` → look at sheet.jpg, fix, re-render (`... $S/tiles id,id` for a subset). `--pieces` renders single-piece sprites.
+4. Copy WebPs to `<site>/img/shop/` (~13 KB each), delete the tiles-page bundle. Nuts Now shows the catalog, tabs, the tub (2D physics with the sprite atlas) and the planner hand-off.
 
 ## QA hooks (every build3d page has them)
 `?p=0.5` jump to a state · `?qa` skip intro · `?freeze` stop clocks · `?t_<layer>=0.4` set a layer's clock (mid-drop frames) · `?F_<layer>=0.2` set a flow · `?dpr=0.5` fast renders · `?low` phone quality.
