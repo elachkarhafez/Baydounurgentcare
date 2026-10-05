@@ -77,7 +77,7 @@ A client judges a shop site by whether *their products* are on it. Don't settle 
 - Render only while something moves; drop DPR, then bloom, if frames run > 21 ms.
 - Fog near/far follow camera distance.
 - Payoff buttons get a 900 ms tap guard.
-- Pinned builds use ElaGate (copy `build3d/gate.js` → `assets/lib/`): `if (gate.check()) return;` first thing in onScroll, `gate.open()` on Skip and on nav links past the section, `gate.arm()` on "build it again". Without it a hard scroll exits mid-build (So Cheesy feedback).
+- Pinned builds use ElaGate (copy `build3d/gate.js` → `assets/lib/`): `if (gate.check()) return;` first thing in onScroll, `gate.open()` on Skip and on nav links past the section, `gate.arm()` on "build it again". Without it a hard scroll exits mid-build (So Cheesy feedback). For builds with long timed phases (flows), pass `busy: () => scene.lag()` so the page waits while the 3D catches up (Shawarmaje: without it a fast scroll left the last steps unplayed off-screen); keep each flow's rate fast enough that the whole build plays in ~8 s, and set the gate rate to about (build span ÷ that time).
 - Phones: one-axis gestures (`touch-action: pan-y`), captions at the bottom, rail at the top.
 - Self-host libs + display fonts, WebP textures, 512 HDR, cache headers on /assets.
 
