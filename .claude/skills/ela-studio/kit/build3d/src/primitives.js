@@ -38,6 +38,31 @@ export function plate(st, o = {}) {
   });
 }
 
+
+/* ---------------- tray: a party tray with radial compartments + a centre bowl (gold by default) ---------------- */
+export function tray(st, o = {}) {
+  const R = o.r || .95, N = o.sections || 6, CR = o.center ?? .27, WH = o.wall || .07, FL = .014;
+  const g = new THREE.Group(); st.dish.add(g);
+  const mat = matOf(st, o.mat || 'gold', o.color); if (o.mat === undefined) { mat.roughness = .38; mat.envMapIntensity = 1.2; mat.normalMap = st.tex('ice_n.webp', false, 10); mat.normalScale = new THREE.Vector2(.35, .35); }
+  const prof = [new THREE.Vector2(0, FL)];
+  for (let r = .05; r < R - .05; r += .05) prof.push(new THREE.Vector2(r, FL));
+  prof.push(new THREE.Vector2(R - .03, FL), new THREE.Vector2(R - .005, FL + WH * .6), new THREE.Vector2(R, WH), new THREE.Vector2(R + .012, WH + .006), new THREE.Vector2(R + .02, WH - .004), new THREE.Vector2(R + .006, WH * .5), new THREE.Vector2(R - .03, 0), new THREE.Vector2(0, 0));
+  const base = new THREE.Mesh(new THREE.LatheGeometry(prof.reverse(), 120), mat); base.castShadow = base.receiveShadow = true; g.add(base);
+  const parts = [base];
+  for (let i = 0; i < N; i++) { const a = i / N * Math.PI * 2 + (o.offset || 0), len = R - .04 - CR, w = new THREE.Mesh(new THREE.BoxGeometry(len, WH * .8, .014), mat); w.position.set(Math.cos(a) * (CR + len / 2), FL + WH * .4, Math.sin(a) * (CR + len / 2)); w.rotation.y = -a; w.castShadow = w.receiveShadow = true; g.add(w); parts.push(w); }
+  if (CR > 0) { const ring = new THREE.Mesh(new THREE.TorusGeometry(CR, .011, 10, 80), mat); ring.rotation.x = Math.PI / 2; ring.scale.z = 3.2; ring.position.y = FL + WH * .4; ring.castShadow = true; g.add(ring); parts.push(ring); }
+  // where each compartment is, for scatter({ where, pile })
+  const sec = i => { const a0 = i / N * Math.PI * 2 + (o.offset || 0), a1 = a0 + Math.PI * 2 / N, am = (a0 + a1) / 2, rm = (CR + R) / 2; return { a0, a1, x: Math.cos(am) * rm, z: Math.sin(am) * rm, r: (R - CR) / 2 }; };
+  const inSec = (i, x, z, m = .03) => { if (i < 0) return Math.hypot(x, z) < CR - m; const s = sec(i), r = Math.hypot(x, z); let a = Math.atan2(z, x) - s.a0; a = ((a % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2); return r > CR + m && r < R - m - .02 && a * r > m && (s.a1 - s.a0 - a) * r > m; };
+  const pileIn = (i, h = .07) => (x, z) => { const s = i < 0 ? { x: 0, z: 0, r: CR } : sec(i), d = Math.hypot(x - s.x, z - s.z) / (s.r * 1.25); return h * Math.max(0, 1 - d * d); };
+  const L = st.add({ name: o.name || 'tray', kind: 'place', trigger: o.trigger ?? .045, after: o.after ?? null, obj: g, settle: 1, sec, inSec, pileIn, sections: N,
+    plan(st) { g.position.set(0, 0, 0); g.rotation.set(0, 0, 0); parts.forEach(m => st.hf.splat(m)); },
+    update(st, s) { const d = 1.15, k = easeOut(s.tau / d), settle = s.tau > d ? .004 * Math.exp(-(s.tau - d) * 9) * Math.sin((s.tau - d) * 40) : 0;
+      g.visible = s.tau > 0; g.position.y = lerp(.75, 0, k) + settle; const tilt = lerp(.18, 0, easeOut(s.tau / (d * .9))); g.rotation.set(tilt, lerp(-1.1, 0, k), tilt * .5); }
+  });
+  return L;
+}
+
 /* ---------------- slab: brownie / cake slice / bread. Rounded, noisy box with crumb + crust materials ---------------- */
 export function slab(st, o = {}) {
   const BW = o.w || .66, BD = o.d || .62, BH = o.h || .3, BR = o.round ?? .032, ROT = o.rot ?? .32, [AX, AZ] = o.at || [0, 0];
@@ -284,7 +309,7 @@ export function sauce(st, o = {}) {
 export function scatter(st, o = {}) {
   const N = o.count || (st.LOW ? 260 : 360), [AX, AZ] = o.at || [0, 0], RAD = o.radius || .31, SPILL = o.spill ?? .12;
   const shapes = { jimmy: () => new THREE.CapsuleGeometry(.0068, .04, 3, 8), seed: () => { const g = new THREE.SphereGeometry(.012, 10, 8); g.scale(1, .45, .62); return g; }, chip: () => new THREE.BoxGeometry(.03, .016, .026), nut: () => new THREE.IcosahedronGeometry(.016, 0) };
-  const geo = (shapes[o.shape || 'jimmy'] || shapes.jimmy)(); if (o.scale) geo.scale(o.scale, o.scale, o.scale);
+  const geo = o.geometry || (shapes[o.shape || 'jimmy'] || shapes.jimmy)(); if (o.scale) geo.scale(o.scale, o.scale, o.scale);
   const mat = o.mat ? matOf(st, o.mat, o.color) : new THREE.MeshPhysicalMaterial({ roughness: .38, clearcoat: .7, clearcoatRoughness: .2, sheen: .2 });
   const im = new THREE.InstancedMesh(geo, mat, N); im.castShadow = im.receiveShadow = true; im.frustumCulled = false; st.dish.add(im);
   const COLS = (o.colors || ['#f06f9b', '#f5c842', '#4fa6e8', '#6cc46b', '#f58a35', '#f3ece0', '#9b74db', '#e8484f']).map(c => new THREE.Color(c));
@@ -296,10 +321,11 @@ export function scatter(st, o = {}) {
       let guard = 0;
       while (D.length < N && guard++ < N * 20) {
         const spill = r() < SPILL, a = r() * Math.PI * 2, rad = spill ? RAD + .05 + r() * .45 : Math.sqrt(r()) * RAD, x = AX + Math.cos(a) * rad, z = AZ + Math.sin(a) * rad;
-        if (Math.hypot(x, z) > .9) continue; if (avoid && Math.hypot(x - avoid.x, z - avoid.z) < avoid.r) continue;
-        const y = st.hf.at(x, z), n = st.hf.normal(x, z); if (!spill && y < (o.minY ?? 0)) continue; if (n.y < .15) continue;
+        if (Math.hypot(x, z) > .9) continue; if (avoid && Math.hypot(x - avoid.x, z - avoid.z) < avoid.r) continue; if (o.where && !o.where(x, z)) continue;
+        let y = st.hf.at(x, z), n = st.hf.normal(x, z); if (!spill && y < (o.minY ?? 0)) continue; if (n.y < .15) continue;
+        if (o.pile) { const e = .01, pz = (a, b) => o.pile(a, b); y += pz(x, z) * (.55 + .45 * r()); n.set(-(pz(x + e, z) - pz(x - e, z)) / (2 * e), 1, -(pz(x, z + e) - pz(x, z - e)) / (2 * e)).normalize(); }
         const t = V(r() - .5, 0, r() - .5).cross(n).normalize(); if (t.lengthSq() < .1) continue;
-        const q = o.shape === 'jimmy' || !o.shape ? new THREE.Quaternion().setFromUnitVectors(up, t) : new THREE.Quaternion().setFromUnitVectors(up, n).multiply(tmpQ.setFromAxisAngle(up, r() * 6));
+        const q = (o.shape === 'jimmy' || !o.shape) && !o.geometry ? new THREE.Quaternion().setFromUnitVectors(up, t) : new THREE.Quaternion().setFromUnitVectors(up, n).multiply(tmpQ.setFromAxisAngle(up, r() * 6));
         D.push({ p: V(x, y, z).addScaledVector(n, .0045), q, q0: new THREE.Quaternion().setFromEuler(new THREE.Euler(r() * 6, r() * 6, r() * 6)), h: 2.2 + r() * 1.6, dx: (r() - .5) * .25, dz: (r() - .5) * .25, rel: spill ? .25 + r() * .75 : r(), spin: 6 + r() * 12, hop: r() < .3 ? .02 + r() * .04 : 0, tau: 0, st: -1 });
         im.setColorAt(D.length - 1, COLS[Math.floor(r() * COLS.length)]);
       }

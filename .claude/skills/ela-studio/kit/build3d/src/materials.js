@@ -24,5 +24,9 @@ export const MAT = {
   leaf: (st, color = '#5fa83a') => new THREE.MeshPhysicalMaterial({ color: C(color), roughness: .42, clearcoat: .5, clearcoatRoughness: .25, sheen: .5, sheenColor: C('#c8f59a'), side: THREE.DoubleSide }),
   // cherries, berries, candy, sprinkles (use white for instanced colors)
   candy: (st, color = '#a50c19') => new THREE.MeshPhysicalMaterial({ color: C(color), roughness: .14, clearcoat: 1, clearcoatRoughness: .03, sheen: .3, sheenColor: C('#ff8a8a'), envMapIntensity: 1.3 }),
+  // roasted nuts (instance colours multiply this white), glossy chocolate, powdered sweets
+  nut: (st, color = '#ffffff') => new THREE.MeshPhysicalMaterial({ color: C(color), roughness: .48, normalMap: st.tex('ice_n.webp', false, 6), normalScale: new THREE.Vector2(.6, .6), clearcoat: .35, clearcoatRoughness: .35, sheen: .4, sheenColor: C('#ffe2b0') }),
+  choc: (st, color = '#ffffff') => new THREE.MeshPhysicalMaterial({ color: C(color), roughness: .22, clearcoat: .8, clearcoatRoughness: .12, metalness: .05 }),
+  powder: (st, color = '#ffffff') => new THREE.MeshPhysicalMaterial({ color: C(color), roughness: .9, sheen: 1, sheenColor: C('#ffffff'), sheenRoughness: .8, normalMap: st.tex('ice_n.webp', false, 8), normalScale: new THREE.Vector2(.8, .8) }),
   matte: (st, color = '#6f5a2a', rough = .55) => new THREE.MeshStandardMaterial({ color: C(color), roughness: rough })
 };
