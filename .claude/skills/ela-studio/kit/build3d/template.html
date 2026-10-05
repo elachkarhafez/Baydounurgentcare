@@ -73,6 +73,7 @@ a{color:inherit}button{font:inherit;color:inherit}
 <script src="assets/lib/gsap.min.js"></script>
 <script src="assets/lib/ScrollTrigger.min.js"></script>
 <script src="assets/lib/lenis.min.js"></script>
+<script src="assets/lib/gate.js"></script>
 <script>
 const CONFIG = {
   // one entry per layer, in build order; stepAt = scroll progress where its caption is centred.
@@ -92,8 +93,9 @@ $('#rail').innerHTML = CONFIG.steps.map((s, i) => `<button type="button" aria-la
   const go = y => lenis ? lenis.scrollTo(y, { duration: 1.6 }) : scrollTo({ top: y, behavior: RM ? 'auto' : 'smooth' });
   const build = $('#build'), steps = $$('.step'), rail = $$('#rail button'), AT = CONFIG.stepAt, N = AT.length;
   const yOf = p => build.offsetTop + p * (build.offsetHeight - innerHeight);
+  const gate = typeof ElaGate !== 'undefined' ? ElaGate({ section: build, lenis, rate: .3 }) : { check: () => false, open() {}, arm() {} };   // hard flicks play the build forward instead of skipping it
   rail.forEach((b, i) => b.addEventListener('click', () => go(yOf(AT[i] + .015))));
-  $('#skip').addEventListener('click', () => go(yOf(1) + 2)); $('#rebuild').addEventListener('click', () => go(0));
+  $('#skip').addEventListener('click', () => { gate.open(); go(yOf(1) + 2); }); $('#rebuild').addEventListener('click', () => { gate.arm(); go(0); });
   let cur = -2;
   const show = (el, on) => { if (HAS_G && !RM) gsap.to(el, { autoAlpha: on ? 1 : 0, y: on ? 0 : 16, duration: on ? .8 : .3, ease: 'expo.out', overwrite: true }); else { el.style.opacity = on ? 1 : 0; el.style.visibility = on ? 'visible' : 'hidden'; } };
   function ui(p) {
@@ -103,7 +105,7 @@ $('#rail').innerHTML = CONFIG.steps.map((s, i) => `<button type="button" aria-la
     $('#cue').style.opacity = p < .02 ? 1 : 0; $('#skip').style.opacity = p > .93 ? 0 : 1;
   }
   if (RM) return ui(1);
-  const onScroll = () => { const r = build.getBoundingClientRect(), p = Math.min(1, Math.max(0, -r.top / (build.offsetHeight - innerHeight))); window.__build3d && window.__build3d.setProgress(p); ui(p); };
+  const onScroll = () => { if (gate.check()) return; const r = build.getBoundingClientRect(), p = Math.min(1, Math.max(0, -r.top / (build.offsetHeight - innerHeight))); window.__build3d && window.__build3d.setProgress(p); ui(p); };
   lenis && lenis.on('scroll', onScroll); addEventListener('scroll', onScroll, { passive: true }); addEventListener('resize', onScroll); onScroll();
   window.__kitSync = onScroll;   // sync once the 3D is up
 })();

@@ -305,6 +305,7 @@ img,svg,canvas{display:block;max-width:100%}a{color:inherit}button{font:inherit;
 <script src="assets/lib/ScrollTrigger.min.js"></script>
 <script src="assets/lib/lenis.min.js"></script>
 <script src="assets/lib/drag.js"></script>
+<script src="assets/lib/gate.js"></script>
 <script>
 const CONFIG = {
   tel: '+13136991272', tz: 'America/Detroit',
@@ -484,11 +485,13 @@ $('#fdRow').innerHTML = CONFIG.feed.map(f => `<a class="reveal" href="https://ww
   let lenis = null;
   if (!RM && typeof Lenis !== 'undefined') { lenis = new Lenis({ lerp: .085 }); if (HAS_G) { lenis.on('scroll', ScrollTrigger.update); gsap.ticker.add(t => lenis.raf(t * 1000)); gsap.ticker.lagSmoothing(0); } else { const f = t => { lenis.raf(t); requestAnimationFrame(f); }; requestAnimationFrame(f); } }
   const go = y => lenis ? lenis.scrollTo(y, { duration: 1.6 }) : scrollTo({ top: y, behavior: RM ? 'auto' : 'smooth' });
-  $$('a[href^="#"]').forEach(a => a.addEventListener('click', e => { const id = a.getAttribute('href'), t = id === '#top' ? null : $(id); e.preventDefault(); go(t ? t.getBoundingClientRect().top + scrollY - 60 : 0); }));
   const build = $('#build'), steps = $$('.step'), rail = $$('#rail button'), AT = CONFIG.stepAt, N = AT.length;
+  // speed limit inside the build: a hard flick plays the burger forward instead of skipping past it
+  const gate = typeof ElaGate !== 'undefined' ? ElaGate({ section: build, lenis, rate: .3 }) : { check: () => false, open() {}, arm() {} };
+  $$('a[href^="#"]').forEach(a => a.addEventListener('click', e => { const id = a.getAttribute('href'), t = id === '#top' ? null : $(id); e.preventDefault(); const y = t ? t.getBoundingClientRect().top + scrollY - 60 : 0; if (y > build.offsetTop + build.offsetHeight - innerHeight) gate.open(); go(y); }));
   const yOf = p => build.offsetTop + p * (build.offsetHeight - innerHeight);
   rail.forEach((b, i) => b.addEventListener('click', () => go(yOf(AT[i] + .03))));
-  $('#skip').addEventListener('click', () => go(yOf(1) + 2)); $('#rebuild').addEventListener('click', () => go(0));
+  $('#skip').addEventListener('click', () => { gate.open(); go(yOf(1) + 2); }); $('#rebuild').addEventListener('click', () => { gate.arm(); go(0); });
   const show = (el, on) => { if (HAS_G && !RM) gsap.to(el, { autoAlpha: on ? 1 : 0, y: on ? 0 : 16, duration: on ? .8 : .3, ease: 'expo.out', overwrite: true }); else { el.style.opacity = on ? 1 : 0; el.style.visibility = on ? 'visible' : 'hidden'; } };
   let cur = -2;
   function ui(p) {
@@ -499,8 +502,8 @@ $('#fdRow').innerHTML = CONFIG.feed.map(f => `<a class="reveal" href="https://ww
     $('#nav').classList.toggle('solid', build.getBoundingClientRect().bottom < 60 || scrollY > innerHeight * .5);
   }
   if (RM) ui(1);
-  else { const onScroll = () => { const r = build.getBoundingClientRect(), p = Math.min(1, Math.max(0, -r.top / (build.offsetHeight - innerHeight))); window.__build3d && window.__build3d.setProgress(p); ui(p); };
-    lenis && lenis.on('scroll', onScroll); addEventListener('scroll', onScroll, { passive: true }); addEventListener('resize', onScroll); onScroll(); window.__kitSync = onScroll; }
+  else { const onScroll = () => { if (gate.check()) return; const r = build.getBoundingClientRect(), p = Math.min(1, Math.max(0, -r.top / (build.offsetHeight - innerHeight))); window.__build3d && window.__build3d.setProgress(p); ui(p); };
+    lenis && lenis.on('scroll', onScroll); addEventListener('scroll', onScroll, { passive: true }); addEventListener('resize', onScroll); onScroll(); window.__kitSync = onScroll; window.__gate = gate; }
   if (HAS_G && !RM) {
     gsap.registerPlugin(ScrollTrigger);
     $$('.reveal').forEach(el => gsap.to(el, { autoAlpha: 1, y: 0, duration: 1, ease: 'expo.out', scrollTrigger: { trigger: el, start: 'top 90%' } }));

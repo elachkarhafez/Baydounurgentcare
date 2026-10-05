@@ -15,6 +15,7 @@ kit/
     tiles/render.mjs     render a tiles bundle → <id>.webp + sheet.jpg (or --pieces for 2D physics sprites)
     examples/            sundae.js (Fudge Fix), burger.js (proves a new product = a short list)
     template.html        the pinned stage page: captions, step rail, skip, finale, Lenis, phone layout
+    gate.js              ElaGate: speed limit for the pinned build (a hard flick plays the build forward, never skips it)
     build.sh             bundles scene + three.js into one same-origin module (no CDN waterfall)
     assets/              studio-512.hdr, stone + crumb + cream textures (WebP)  · gen_textures.py makes more
   intros/intros.js       ElaIntro.drip / .curtain / .fill: compositor-only openers, once per tab, Skip button
@@ -76,6 +77,7 @@ A client judges a shop site by whether *their products* are on it. Don't settle 
 - Render only while something moves; drop DPR, then bloom, if frames run > 21 ms.
 - Fog near/far follow camera distance.
 - Payoff buttons get a 900 ms tap guard.
+- Pinned builds use ElaGate (copy `build3d/gate.js` → `assets/lib/`): `if (gate.check()) return;` first thing in onScroll, `gate.open()` on Skip and on nav links past the section, `gate.arm()` on "build it again". Without it a hard scroll exits mid-build (So Cheesy feedback).
 - Phones: one-axis gestures (`touch-action: pan-y`), captions at the bottom, rail at the top.
 - Self-host libs + display fonts, WebP textures, 512 HDR, cache headers on /assets.
 
