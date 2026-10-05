@@ -37,6 +37,7 @@ function noise(x, y, z) {
 const fbm = (x, y, z, o = 4) => { let a = 0, f = 1, s = .5; for (let i = 0; i < o; i++) { a += noise(x * f, y * f, z * f) * s; f *= 2.03; s *= .5; } return a; };
 
 /* ---------- renderer ---------- */
+const idle = () => new Promise(r => (window.requestIdleCallback ? requestIdleCallback(() => r(), { timeout: 60 }) : setTimeout(r, 0)));
 const canvas = $('#gl');
 let renderer;
 try {
@@ -45,7 +46,7 @@ try {
 } catch (e) { document.documentElement.classList.add('no-gl'); window.__ffReady && window.__ffReady(1); throw e; }
 
 const LOW = MOBILE || QS.has('low');
-let DPR = Math.min(devicePixelRatio || 1, LOW ? 1.5 : 1.75);
+let DPR = Math.min(devicePixelRatio || 1, 1.5);
 if (QS.has('dpr')) DPR = +QS.get('dpr');
 renderer.setPixelRatio(DPR);
 renderer.toneMapping = THREE.NeutralToneMapping;
@@ -62,6 +63,9 @@ const camera = new THREE.PerspectiveCamera(26, 1, 0.05, 60);
 
 /* ---------- loading ---------- */
 const manager = new THREE.LoadingManager();
+// assets can finish while the scene is still being built (we yield between steps), so this has to be set first
+let assetsIn = false, builtIn = false, booted = false;
+manager.onLoad = () => { assetsIn = true; boot(); };
 let loadedFrac = 0;
 manager.onProgress = (u, l, t) => { loadedFrac = l / t; window.__ffProgress && window.__ffProgress(loadedFrac); };
 const tl = new THREE.TextureLoader(manager);
@@ -162,6 +166,7 @@ function setGold(t) {
   gold.geometry.dispose(); gold.geometry = new THREE.LatheGeometry(goldPts, Math.max(3, Math.round(160 * t)), -Math.PI / 2, Math.PI * 2 * t);
 }
 
+await idle();
 /* =========================== BROWNIE =========================== */
 const BW = 0.66, BD = 0.62, BH = 0.30, BR = 0.032, BROT = 0.32;
 const hx = BW / 2, hy = BH / 2, hz = BD / 2;
@@ -186,7 +191,7 @@ const brownie = new THREE.Group(); dish.add(brownie);
 const BROW_REST_Y = PLATE_WELL + hy - 0.003;
 let browMesh;
 {
-  const geo = new THREE.BoxGeometry(BW, BH, BD, 56, 28, 52);
+  const geo = new THREE.BoxGeometry(BW, BH, BD, 44, 22, 40);
   const p = geo.attributes.position, uv = geo.attributes.uv;
   for (let i = 0; i < p.count; i++) { const v = browSurf(p.getX(i), p.getY(i), p.getZ(i)); p.setXYZ(i, v.x, v.y, v.z); }
   // square texels on the cut faces + different offsets per face
@@ -211,6 +216,7 @@ const crumbs = new THREE.InstancedMesh(crumbGeo, new THREE.MeshStandardMaterial(
 crumbs.castShadow = true; crumbs.frustumCulled = false; dish.add(crumbs);
 const crumbData = (() => { const r = rng(9); return [...Array(CRUMBS)].map((_, i) => { const a = r() * Math.PI * 2, sp = .5 + r() * 1.1; const ex = Math.cos(a), ez = Math.sin(a); const lx = clamp(ex * 1.3, -1, 1) * hx, lz = clamp(ez * 1.3, -1, 1) * hz; return { a, sp, x0: lx * Math.cos(BROT) + lz * Math.sin(BROT), z0: -lx * Math.sin(BROT) + lz * Math.cos(BROT), vy: .8 + r() * 1.3, s: .005 + r() * .009, rx: r() * 6, ry: r() * 6, spin: 4 + r() * 10 }; }); })();
 
+await idle();
 /* =========================== ICE CREAM =========================== */
 const SR = 0.25;
 const SCOOP_FLOOR = -0.56;
@@ -253,11 +259,12 @@ function scoopPt(th, ph, out = new THREE.Vector3()) {
   if (y < SCOOP_FLOOR + .06) { const t = sstep(SCOOP_FLOOR + .06, SCOOP_FLOOR - .25, y); y = lerp(y, SCOOP_FLOOR, t); const shrink = lerp(1, .82, sstep(SCOOP_FLOOR, SCOOP_FLOOR - .5, Math.cos(th) * r)); x *= shrink; z *= shrink; y = Math.max(y, SCOOP_FLOOR); }
   return out.set(x, y, z);
 }
+await idle();
 const scoop = new THREE.Group(); dish.add(scoop);
 const scoopInner = new THREE.Group(); scoop.add(scoopInner); scoopInner.scale.setScalar(SR);
 let scoopMesh;
 {
-  const geo = new THREE.SphereGeometry(1, 192, 120);
+  const geo = new THREE.SphereGeometry(1, 144, 96);
   const p = geo.attributes.position, uv = geo.attributes.uv, v = new THREE.Vector3();
   for (let i = 0; i < p.count; i++) {
     const th = uv.getY(i) * -Math.PI + Math.PI, ph = uv.getX(i) * Math.PI * 2 + Math.PI; // three's sphere: phi from -x
@@ -275,12 +282,13 @@ let scoopMesh;
   scoopInner.add(scoopMesh);
 }
 
+await idle();
 /* =========================== HOT FUDGE =========================== */
 const fudgeMat = new THREE.MeshPhysicalMaterial({ color: 0x1e0c05, roughness: .16, clearcoat: 1, clearcoatRoughness: .05, ior: 1.47, envMapIntensity: 1.25, sheen: .2, sheenColor: new THREE.Color('#5a2a12') });
 const meltMat = new THREE.MeshPhysicalMaterial({ color: 0xefe1c3, roughness: .32, clearcoat: .6, clearcoatRoughness: .2, emissive: new THREE.Color('#3b2a17'), emissiveIntensity: .1 });
 
 // fudge cap over the scoop (child of the scoop so it squashes with it)
-const CAP_S = 70, CAP_P = 288;
+const CAP_S = 56, CAP_P = 240;
 const cap = dynGrid(CAP_S, CAP_P + 1, fudgeMat); scoopInner.add(cap);
 const fr = rng(42);
 const DRIPS = [...Array(10)].map((_, i) => ({ ph: (i / 10) * Math.PI * 2 + (fr() - .5) * .45, w: .13 + fr() * .13, len: [.95, .3, .7, .45, 1.0, .2, .62, .85, .35, .55][i] * (.85 + fr() * .3), d: .05 + fr() * .3, bulb: .35 + fr() * .45 }));
@@ -436,9 +444,10 @@ function buildStream(top, bot, F, t) {
   stream.geometry.attributes.position.needsUpdate = true; stream.geometry.computeVertexNormals();
 }
 
+await idle();
 /* =========================== SPRINKLES =========================== */
-const SPR = LOW ? 300 : 420;
-const sprGeo = new THREE.CapsuleGeometry(.0068, .04, 4, 10);
+const SPR = LOW ? 260 : 360;
+const sprGeo = new THREE.CapsuleGeometry(.0068, .04, 3, 8);
 const sprMat = new THREE.MeshPhysicalMaterial({ roughness: .38, clearcoat: .7, clearcoatRoughness: .2, sheen: .2 });
 const sprinkles = new THREE.InstancedMesh(sprGeo, sprMat, SPR);
 sprinkles.castShadow = true; sprinkles.receiveShadow = true; sprinkles.frustumCulled = false;
@@ -446,6 +455,7 @@ dish.add(sprinkles);
 const SPR_COLS = ['#f06f9b', '#f5c842', '#4fa6e8', '#6cc46b', '#f58a35', '#f3ece0', '#9b74db', '#e8484f'].map(c => new THREE.Color(c));
 let SPRD = [];
 
+await idle();
 /* =========================== CHERRY =========================== */
 const CR = 0.072;
 const cherry = new THREE.Group(); dish.add(cherry);
@@ -496,35 +506,51 @@ restPositions();
 
 /* ---------- sprinkle + cherry targets (raycast onto the finished dessert) ---------- */
 function planToppings() {
-  // everything at rest for the raycasts
+  // everything at rest
   plate.position.set(0, 0, 0); plate.rotation.set(0, 0, 0);
   brownie.position.set(0, BROW_REST_Y, 0); brownie.scale.set(1, 1, 1); brownie.rotation.set(0, BROT, 0);
   scoop.position.copy(SC_W); scoop.rotation.set(0, 0, 0); scoopInner.scale.setScalar(SR);
   buildCap(1); setPools(1);
   scene.updateMatrixWorld(true);
-  const targets = [scoopMesh, cap, pool];
-  const ray = new THREE.Raycaster(), down = new THREE.Vector3(0, -1, 0);
-  // the cherry sits on the highest point near the centre
-  ray.set(new THREE.Vector3(SC_W.x + .01, 3, SC_W.z - .015), down);
-  let hit = ray.intersectObjects(targets, false)[0];
-  const cherryY = hit ? hit.point.y : SC_W.y + SR;
-  cherry.userData.rest = new THREE.Vector3(SC_W.x + .01, cherryY - CR * .28, SC_W.z - .015);
-  const r = rng(321), out = [];
+  // a height field of the finished top (scoop + fudge) instead of raycasting thousands of triangles
+  const N = 96, R0 = SR * 1.55, hf = new Float32Array(N * N).fill(-9), v = new THREE.Vector3();
+  const splat = mesh => { const p = mesh.geometry.attributes.position, m = mesh.matrixWorld;
+    for (let i = 0; i < p.count; i++) { v.fromBufferAttribute(p, i).applyMatrix4(m);
+      const ci = Math.round((v.x - SC_W.x + R0) / (2 * R0) * (N - 1)), cj = Math.round((v.z - SC_W.z + R0) / (2 * R0) * (N - 1));
+      if (ci >= 0 && cj >= 0 && ci < N && cj < N && v.y > hf[cj * N + ci]) hf[cj * N + ci] = v.y; } };
+  splat(scoopMesh); splat(cap); splat(pool);
+  for (let pass = 0; pass < 3; pass++) { const c = hf.slice(); for (let j = 1; j < N - 1; j++) for (let i = 1; i < N - 1; i++) if (c[j * N + i] < -8) { let m = -9; for (const [a, b] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) m = Math.max(m, c[(j + b) * N + i + a]); hf[j * N + i] = m; } }
+  const H = (x, z) => { const fi = (x - SC_W.x + R0) / (2 * R0) * (N - 1), fj = (z - SC_W.z + R0) / (2 * R0) * (N - 1);
+    if (fi < 0 || fj < 0 || fi >= N - 1 || fj >= N - 1) return null; const i = Math.floor(fi), j = Math.floor(fj), a = fi - i, b = fj - j;
+    const h00 = hf[j * N + i], h10 = hf[j * N + i + 1], h01 = hf[(j + 1) * N + i], h11 = hf[(j + 1) * N + i + 1];
+    if (Math.min(h00, h10, h01, h11) < -8) return null; return lerp(lerp(h00, h10, a), lerp(h01, h11, a), b); };
+  const cx = SC_W.x + .01, cz = SC_W.z - .015;
+  cherry.userData.rest = new THREE.Vector3(cx, (H(cx, cz) ?? SC_W.y + SR) - CR * .28, cz);
+  const r = rng(321), out = [], e = .006, n = new THREE.Vector3(), up = new THREE.Vector3(0, 1, 0);
   let guard = 0;
   while (out.length < SPR && guard++ < SPR * 20) {
     const spill = r() < .12;
     const a = r() * Math.PI * 2, rad = spill ? .3 + r() * .5 : Math.sqrt(r()) * SR * 1.25;
     const x = SC_W.x + Math.cos(a) * rad, z = SC_W.z + Math.sin(a) * rad;
-    if (Math.hypot(x - cherry.userData.rest.x, z - cherry.userData.rest.z) < CR * .9) continue;
-    ray.set(new THREE.Vector3(x, 3, z), down);
-    hit = ray.intersectObjects(spill ? [...targets, browMesh, plate.children[0]] : targets, false)[0];
-    if (!hit) continue;
-    const n = hit.face.normal.clone().transformDirection(hit.object.matrixWorld).normalize();
+    if (Math.hypot(x - cx, z - cz) < CR * .9) continue;
+    let y = H(x, z);
+    if (y !== null && y > BROW_REST_Y + hy - .05) {
+      const hx1 = H(x + e, z), hx0 = H(x - e, z), hz1 = H(x, z + e), hz0 = H(x, z - e);
+      if (hx1 === null || hx0 === null || hz1 === null || hz0 === null) continue;
+      n.set(-(hx1 - hx0) / (2 * e), 1, -(hz1 - hz0) / (2 * e)).normalize();
+    } else if (spill) {
+      // on the brownie top or the plate
+      const c = Math.cos(-BROT), sn = Math.sin(-BROT), lx = x * c + z * sn, lz = -x * sn + z * c;
+      if (Math.abs(lx) < hx - .03 && Math.abs(lz) < hz - .03) y = BROW_REST_Y + browTopY(lx, lz) + .002;
+      else if (Math.abs(lx) < hx + .02 && Math.abs(lz) < hz + .02) continue;
+      else { const rr = Math.hypot(x, z); if (rr > .9) continue; y = plateTop(rr); }
+      n.copy(up);
+    } else continue;
     if (n.y < .15) continue;
     const t = new THREE.Vector3(r() - .5, 0, r() - .5).cross(n).normalize();
     if (t.lengthSq() < .1) continue;
-    const q = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), t);
-    const p = hit.point.clone().addScaledVector(n, .0045);
+    const q = new THREE.Quaternion().setFromUnitVectors(up, t);
+    const p = new THREE.Vector3(x, y, z).addScaledVector(n, .0045);
     const q0 = new THREE.Quaternion().setFromEuler(new THREE.Euler(r() * 6, r() * 6, r() * 6));
     out.push({ p, q, q0, h: 2.2 + r() * 1.6, dx: (r() - .5) * .25, dz: (r() - .5) * .25, rel: spill ? .25 + r() * .75 : r(), spin: 6 + r() * 12, hop: r() < .3 ? .02 + r() * .04 : 0, tau: 0, st: -1 });
     sprinkles.setColorAt(out.length - 1, SPR_COLS[Math.floor(r() * SPR_COLS.length)]);
@@ -532,7 +558,6 @@ function planToppings() {
   SPRD = out;
   sprinkles.count = out.length;
   sprinkles.instanceColor.needsUpdate = true;
-  buildCap(0); setPools(0);
 }
 
 /* ---------- pools + drips as a function of fudge flow F ---------- */
@@ -794,9 +819,17 @@ canvas.addEventListener('pointerup', endDrag); canvas.addEventListener('pointerc
 
 /* ---------- boot ---------- */
 let running = false, visible = true, ready = false, last = performance.now();
-manager.onLoad = () => {
+async function boot() {
+  if (booted || !assetsIn || !builtIn) return; booted = true;
   resize();
   planToppings();
+  await idle();
+  // show everything once (behind the dark stage) so all shaders + shadow passes compile now, not mid-scroll
+  const vis = [plate, gold, brownie, crumbs, scoop, cap, melt, pool, stream, sprinkles, cherry, spoon, ...SIDE.map(s => s.mesh), ...SIDE.filter(s => s.puddle).map(s => s.puddle)];
+  vis.forEach(o => o.visible = true);
+  try { if (renderer.compileAsync) await renderer.compileAsync(scene, camera); } catch (e) {}
+  composer.render(0);
+  buildCap(0); setPools(0); S.fk = null;
   ready = true;
   window.__ffReady && window.__ffReady();
   if (RM) { S.p = S.target = 1; S.settle = true; for (const k in tau) tau[k] = 9; }
@@ -804,7 +837,7 @@ manager.onLoad = () => {
   for (const k in tau) if (QS.has('t_' + k)) tau[k] = +QS.get('t_' + k);
   if (QS.has('F')) S.F = +QS.get('F');
   start();
-};
+}
 function start() { if (running || !ready) return; running = true; last = performance.now(); busyUntil = last + 4000; requestAnimationFrame(loop); }
 // only render while something is moving; drop effects if the GPU can't keep up
 let busyUntil = 0, lastP = -1, lastF = -1, perfN = 0, perfSum = 0, tier = 0;
@@ -837,5 +870,6 @@ window.__ff = {
   jump: p => { S.p = S.target = p; S.settle = true; for (const k in tau) tau[k] = p >= TRIG[k] ? 9 : 0; S.F = clamp((p - .48) / .2); for (const s of SPRD) s.tau = 0; setTimeout(() => { S.settle = false; }, 50); },
   frame: n => { for (let i = 0; i < (n || 1); i++) frame(1 / 60); }
 };
-window.__ffd = { get SPRD() { return SPRD; }, scoopMesh, cap, pool, scene, tau, S, cherry };
+window.__ffd = { get st() { return { assetsIn, builtIn, booted, ready }; }, get SPRD() { return SPRD; }, scoopMesh, cap, pool, scene, tau, S, cherry };
 window.dispatchEvent(new Event('ff:gl'));
+builtIn = true; boot();

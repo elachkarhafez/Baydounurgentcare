@@ -12,7 +12,9 @@
 <meta property="og:image" content="https://thefudgefix.vercel.app/img/post4.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..400;1,9..144,300..400&family=Leckerli+One&family=Fredoka:wght@700&family=Manrope:wght@400;600;700&family=DM+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="preload" href="assets/fonts/leckerli.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/fredoka-700.woff2" as="font" type="font/woff2" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..400;1,9..144,300..400&family=Manrope:wght@400;600;700&family=DM+Mono:wght@500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <link rel="modulepreload" href="assets/scene.js">
 <link rel="preload" href="assets/studio-512.hdr" as="fetch" crossorigin>
 <link rel="preload" href="assets/brownie_side_n.webp" as="image" crossorigin>
@@ -48,16 +50,24 @@ button{font:inherit;color:inherit}
 .wm i{font:700 .78em/1 var(--round);font-style:normal;color:var(--caramel);letter-spacing:.01em}
 .wm.dark b{color:var(--fudge)}
 
-/* ---------- opening: fudge drips off the logo, floods the screen, then slides away ---------- */
-.loader{position:fixed;inset:0;z-index:100;overflow:hidden}
+/* ---------- opening: fudge drips off the logo, floods the screen, slides away (all compositor transforms) ---------- */
+@font-face{font-family:"Leckerli One";src:url(assets/fonts/leckerli.woff2) format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Fredoka";src:url(assets/fonts/fredoka-700.woff2) format("woff2");font-weight:700;font-display:swap}
+.loader{position:fixed;inset:0;z-index:100;overflow:hidden;pointer-events:none}
 .loader.done{display:none}
-.loader.through{pointer-events:none}
-.ld-cream{position:absolute;inset:0;background:var(--cream)}
-.ld-svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
-.ld-word{font-family:var(--script)}
-.ld-fix{font-family:var(--round);font-weight:700}
-.ld-skip{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);z-index:2;background:none;border:1px solid rgba(43,20,11,.22);border-radius:99px;padding:9px 16px;cursor:pointer;color:#8a5a33;font:500 11px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;transition:opacity .3s}
-.through .ld-skip{opacity:0}
+.ld-cream{position:absolute;inset:0;background:var(--cream);will-change:opacity}
+.ld-drips{position:absolute;inset:0;z-index:1}
+.ld-dclip{position:absolute;overflow:hidden}
+.ld-dclip svg,.ld-drop{position:absolute;left:0;top:0;will-change:transform}
+.ld-drop{border-radius:50%;background:#2b140b}
+.ld-logo{position:absolute;left:0;right:0;top:44%;z-index:2;display:flex;justify-content:center;align-items:baseline;gap:.1em;line-height:1;opacity:0;will-change:transform,opacity}
+.ld-f{font:400 1em/1 "Leckerli One",cursive;color:#2b140b;position:relative}
+.ld-x{font:700 .74em/1 "Fredoka",system-ui,sans-serif;color:#b77a3f}
+.ld-base{display:inline-block;width:0;height:0;vertical-align:baseline}
+.ld-cherry{position:absolute;width:.42em;height:.56em;opacity:0;will-change:transform,opacity}
+.ld-sheet{position:absolute;left:0;top:0;width:100%;z-index:3;will-change:transform;transform:translateY(-200%)}
+.ld-sheet svg{display:block;width:100%;height:100%}
+.ld-skip{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);z-index:4;pointer-events:auto;background:none;border:1px solid rgba(43,20,11,.22);border-radius:99px;padding:9px 16px;cursor:pointer;color:#8a5a33;font:500 11px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase}
 #gl{opacity:0;transition:opacity 1.4s var(--ease)}
 .gl-ready #gl{opacity:1}
 
@@ -260,24 +270,92 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;bac
 </head>
 <body>
 <div class="loader" id="loader" role="status" aria-label="Loading Fudge Fix">
-  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
-    <filter id="ffGoo" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB"><feGaussianBlur in="SourceGraphic" stdDeviation="7"/><feColorMatrix values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -9"/></filter>
-    <filter id="ffSoft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="1.6"/></filter>
-  </defs></svg>
-  <div class="ld-cream" id="ldCream"></div>
-  <svg class="ld-svg" id="ldBack" aria-hidden="true">
-    <g filter="url(#ffGoo)" fill="#2b140b" id="ldDrips"></g>
-    <g filter="url(#ffSoft)" fill="rgba(255,226,200,.38)" id="ldDripsHi"></g>
-    <text class="ld-word" id="ldF" fill="#2b140b" opacity="0">Fudge</text>
-    <text class="ld-fix" id="ldX" fill="#b77a3f" opacity="0">Fix</text>
-    <g id="ldCherry" opacity="0"><g id="ldCherryIn"><path d="M2 -6 C4 -20 10 -30 22 -36" stroke="#5e4a22" stroke-width="2.6" fill="none" stroke-linecap="round"/><circle r="10" fill="#c3162b"/><circle cx="-3.5" cy="-3.5" r="3" fill="rgba(255,255,255,.55)"/></g></g>
-  </svg>
-  <svg class="ld-svg" id="ldFront" aria-hidden="true">
-    <g filter="url(#ffGoo)" fill="#2b140b" id="ldSheet"></g>
-    <g filter="url(#ffSoft)" fill="rgba(255,226,200,.18)" id="ldSheetHi"></g>
-  </svg>
+  <div class="ld-cream" id="ldCream">
+    <div class="ld-drips" id="ldDrips"></div>
+    <div class="ld-logo" id="ldLogo" aria-hidden="true"><span class="ld-f" id="ldF">Fudge<i class="ld-base" id="ldBase"></i></span><span class="ld-x">Fix</span></div>
+    <svg class="ld-cherry" id="ldCherry" viewBox="-12 -40 40 54" aria-hidden="true"><path d="M2 -6 C4 -20 10 -30 22 -36" stroke="#5e4a22" stroke-width="2.6" fill="none" stroke-linecap="round"/><circle r="10" fill="#c3162b"/><circle cx="-3.5" cy="-3.5" r="3" fill="rgba(255,255,255,.55)"/></svg>
+  </div>
+  <div class="ld-sheet" id="ldSheet"></div>
   <button class="ld-skip" id="ldSkip" type="button">Skip</button>
 </div>
+<script>
+/* Opening. Everything that moves is a transform/opacity animation scheduled up front with the
+   Web Animations API, so it runs on the compositor and stays smooth while the 3D boots. */
+(() => {
+  const d = document, L = d.getElementById('loader'), q = new URLSearchParams(location.search);
+  window.__ffReady = () => d.documentElement.classList.add('gl-ready');
+  let revealed = false;
+  const reveal = () => { if (revealed) return; revealed = true; window.__ffIntroDone = true; window.__ffOnReveal && window.__ffOnReveal(); };
+  const finish = () => { L.classList.add('done'); reveal(); };
+  let seen = false; try { seen = sessionStorage.getItem('ffIntro') === '1'; sessionStorage.setItem('ffIntro', '1'); } catch (e) {}
+  if (q.has('qa') || seen || matchMedia('(prefers-reduced-motion: reduce)').matches || !L.animate) { finish(); return; }
+  d.getElementById('ldSkip').addEventListener('click', () => { L.getAnimations({ subtree: true }).forEach(a => a.cancel()); finish(); });
+  const NS = 'http://www.w3.org/2000/svg', F = '#2b140b', HI = 'rgba(255,228,204,.3)';
+  let seed = 11; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const go = () => {
+    const W = innerWidth, H = innerHeight, fs = Math.round(Math.max(72, Math.min(W * (W < 600 ? .21 : .17), 170)));
+    const logo = d.getElementById('ldLogo'); logo.style.fontSize = fs + 'px';
+    const fr = d.getElementById('ldF').getBoundingClientRect(), base = d.getElementById('ldBase').getBoundingClientRect().top;
+    // find the real bottoms of the letters so drips leave from the strokes
+    const c = d.createElement('canvas'), x = c.getContext('2d', { willReadFrequently: true });
+    const cw = Math.ceil(fr.width) + 20, ch = Math.ceil(fs * 2); c.width = cw; c.height = ch;
+    x.font = `400 ${fs}px "Leckerli One"`; x.fillText('Fudge', 10, fs * 1.2);
+    const px = x.getImageData(0, 0, cw, ch).data, bot = new Float32Array(cw).fill(-1e9);
+    for (let col = 0; col < cw; col++) for (let row = ch - 1; row >= 0; row--) if (px[(row * cw + col) * 4 + 3] > 150) { bot[col] = row - fs * 1.2; break; }
+    const TB = 1150, TC = TB + 640, END = TC + 720;
+    const box = d.getElementById('ldDrips');
+    const N = 7;
+    for (let k = 0; k < N; k++) {
+      let best = -1e9, bx = 0; const a = Math.floor(10 + (k + .15) * fr.width / N), b = Math.floor(10 + (k + .85) * fr.width / N);
+      for (let col = a; col < b; col++) if (bot[col] > best) { best = bot[col]; bx = col; }
+      if (best < -fs * .25) continue;
+      const w = Math.max(9, fs * (.07 + rnd() * .05)), r = w * .64, w0 = w * 1.4, w1 = Math.max(7, w * (.72 + rnd() * .14));
+      const cx0 = fr.left + bx - 10, y0 = base + best - w * .8, Hd = H - y0 + r * 2 + 20, bw = Math.ceil(Math.max(w0, 2 * r) + 4), cx = bw / 2;
+      const clip = d.createElement('div'); clip.className = 'ld-dclip';
+      Object.assign(clip.style, { left: (cx0 - cx) + 'px', top: y0 + 'px', width: bw + 'px', height: Hd + 'px' });
+      const sv = d.createElementNS(NS, 'svg'); sv.setAttribute('width', bw); sv.setAttribute('height', Hd); sv.setAttribute('viewBox', `0 0 ${bw} ${Hd}`);
+      const ny = Hd - 2.4 * r;
+      sv.innerHTML = `<path fill="${F}" d="M${cx - w0 / 2} 0 C${cx - w0 / 2} ${Hd * .2} ${cx - w1 / 2} ${Hd * .3} ${cx - w1 / 2} ${ny} C${cx - w1 / 2} ${Hd - 1.6 * r} ${cx - r} ${Hd - 1.5 * r} ${cx - r} ${Hd - r} A${r} ${r} 0 0 0 ${cx + r} ${Hd - r} C${cx + r} ${Hd - 1.5 * r} ${cx + w1 / 2} ${Hd - 1.6 * r} ${cx + w1 / 2} ${ny} C${cx + w1 / 2} ${Hd * .3} ${cx + w0 / 2} ${Hd * .2} ${cx + w0 / 2} 0Z"/>` +
+        `<rect fill="${HI}" x="${cx - w1 * .3}" y="${Hd * .3}" width="${w1 * .14}" height="${Math.max(0, ny - Hd * .3)}" rx="${w1 * .07}"/><circle fill="${HI}" cx="${cx - r * .38}" cy="${Hd - r * 1.25}" r="${r * .22}"/>`;
+      clip.appendChild(sv); box.appendChild(clip);
+      const Lmax = H * (.1 + rnd() * .24), del = 250 + rnd() * 380, dur = 800 + rnd() * 500;
+      sv.animate([{ transform: `translateY(${-Hd}px)` }, { transform: `translateY(${-Hd + Lmax}px)` }], { duration: dur, delay: del, easing: 'cubic-bezier(.2,.75,.25,1)', fill: 'both' });
+      sv.animate([{ transform: `translateY(${-Hd + Lmax}px)` }, { transform: 'translateY(0)' }], { duration: 480, delay: TB, easing: 'cubic-bezier(.55,0,.9,.4)', fill: 'forwards', composite: 'replace' });
+      if (rnd() > .45 && del + dur < TB) {   // a drop lets go of the tip and falls
+        const dr = d.createElement('div'); dr.className = 'ld-drop'; const dd = r * 1.1;
+        Object.assign(dr.style, { width: dd + 'px', height: dd + 'px', left: (cx0 - dd / 2) + 'px', top: (y0 + Lmax - dd * .9) + 'px', opacity: 0 });
+        box.appendChild(dr);
+        dr.animate([{ opacity: 1, transform: 'translateY(0)' }, { opacity: 1, transform: `translateY(${H}px)` }], { duration: 620, delay: del + dur * .8, easing: 'cubic-bezier(.5,0,.85,.4)', fill: 'forwards' });
+      }
+    }
+    // logo + cherry
+    logo.animate([{ opacity: 0, transform: 'translateY(26px)' }, { opacity: 1, transform: 'none' }], { duration: 650, easing: 'cubic-bezier(.2,.8,.2,1)', fill: 'forwards' });
+    const ch2 = d.getElementById('ldCherry'), lr = logo.getBoundingClientRect();
+    Object.assign(ch2.style, { fontSize: fs + 'px', left: (fr.left + fs * .17) + 'px', top: (base - fs * 1.12) + 'px' });
+    ch2.animate([{ opacity: 1, transform: `translateY(${-H * .45}px)`, easing: 'cubic-bezier(.5,0,.9,.5)' }, { opacity: 1, transform: 'translateY(0)', offset: .62, easing: 'cubic-bezier(.2,.7,.4,1)' }, { opacity: 1, transform: `translateY(${-fs * .14}px)`, offset: .8, easing: 'cubic-bezier(.5,0,.9,.5)' }, { opacity: 1, transform: 'translateY(0)' }], { duration: 760, delay: 300, fill: 'both' });
+    // the fudge sheet: drippy bottom edge pours down, then the whole sheet drops away
+    const T = 190, E = 210, SH = T + H + E;
+    const sheet = d.getElementById('ldSheet'); sheet.style.height = SH + 'px';
+    const M = Math.max(5, Math.round(W / 74)), f = 9;
+    let top = `M0 ${T}`, bottom = '', bulbs = '';
+    const cols = [...Array(M)].map((_, i) => ({ x: (i + .5) * W / M + (rnd() - .5) * W / M * .4, w: 18 + rnd() * 18, a: 30 + rnd() * 140, b: 26 + rnd() * 150 }));
+    for (const k of cols) { const l = k.x - k.w / 2, rr = k.x + k.w / 2, sw = k.w * .55, sl = k.x - sw / 2, sr = k.x + sw / 2;
+      top += ` L${sl - f} ${T} Q${sl} ${T} ${sl} ${T - f} L${sl} ${T - k.a + sw / 2} A${sw / 2} ${sw / 2} 0 0 1 ${sr} ${T - k.a + sw / 2} L${sr} ${T - f} Q${sr} ${T} ${sr + f} ${T}`;
+      bulbs += `<circle fill="${F}" cx="${k.x}" cy="${T + H + k.b - k.w * .5}" r="${k.w * .64}"/><circle fill="${HI}" cx="${k.x - k.w * .24}" cy="${T + H + k.b - k.w * .7}" r="${k.w * .14}"/>`; }
+    for (const k of [...cols].reverse()) { const l = k.x - k.w / 2, rr = k.x + k.w / 2, yb = T + H;
+      bottom += ` L${rr + f} ${yb} Q${rr} ${yb} ${rr} ${yb + f} L${rr} ${yb + k.b - k.w / 2} A${k.w / 2} ${k.w / 2} 0 0 1 ${l} ${yb + k.b - k.w / 2} L${l} ${yb + f} Q${l} ${yb} ${l - f} ${yb}`; }
+    sheet.innerHTML = `<svg viewBox="0 0 ${W} ${SH}" preserveAspectRatio="none" aria-hidden="true"><path fill="${F}" d="${top} L${W} ${T} L${W} ${T + H}${bottom} L0 ${T + H}Z"/>${bulbs}</svg>`;
+    sheet.animate([{ transform: `translateY(${-SH}px)` }, { transform: `translateY(${-T}px)` }], { duration: TC - TB, delay: TB, easing: 'cubic-bezier(.6,0,.35,1)', fill: 'forwards' });
+    sheet.animate([{ transform: `translateY(${-T}px)` }, { transform: `translateY(${H + 30}px)` }], { duration: END - TC, delay: TC, easing: 'cubic-bezier(.55,0,.85,.35)', fill: 'forwards' });
+    d.getElementById('ldCream').animate([{ opacity: 1 }, { opacity: 0 }], { duration: 1, delay: TC - 10, fill: 'forwards' });
+    d.getElementById('ldSkip').animate([{ opacity: 1 }, { opacity: 0 }], { duration: 200, delay: TB, fill: 'forwards' });
+    setTimeout(reveal, TC + 60);
+    setTimeout(() => L.classList.add('done'), END + 40);
+  };
+  const fontsIn = d.fonts ? Promise.race([Promise.all([d.fonts.load('400 80px "Leckerli One"'), d.fonts.load('700 60px Fredoka')]), new Promise(r => setTimeout(r, 700))]) : Promise.resolve();
+  fontsIn.then(() => requestAnimationFrame(go), () => requestAnimationFrame(go));
+})();
+</script>
 
 <header class="nav" id="nav">
   <a class="wm" href="#top" aria-label="Fudge Fix home"><b>Fudge</b><i>Fix</i></a>
@@ -405,9 +483,9 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;bac
 </main>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+<script src="assets/lib/gsap.min.js"></script>
+<script src="assets/lib/ScrollTrigger.min.js"></script>
+<script src="assets/lib/lenis.min.js"></script>
 
 <script>
 /* ===================== CONFIG ===================== */
@@ -496,115 +574,7 @@ $('#mq').innerHTML = mq + mq;
 <script>
 /* ===================== PAGE: scroll, steps, loader ===================== */
 (() => {
-  const loader = $('#loader');
-  let glReady = false, revealed = false;
-  const reveal = () => { if (revealed) return; revealed = true; intro(); };
-  window.__ffReady = () => { glReady = true; document.documentElement.classList.add('gl-ready'); };
-  let seen = false; try { seen = sessionStorage.getItem('ffIntro') === '1' && !QS.has('ldt'); sessionStorage.setItem('ffIntro', '1'); } catch {}
-  if (QS.has('qa') || RM || seen) { loader.classList.add('done'); reveal(); }
-  else melt();
-
-  /* The opening: drips grow off the bottom of "Fudge", a wave of fudge pours down over the
-     screen, then the whole sheet slides off the bottom and the site is underneath. */
-  function melt() {
-    const NS = 'http://www.w3.org/2000/svg';
-    const back = $('#ldBack'), front = $('#ldFront'), gB = $('#ldDrips'), gBH = $('#ldDripsHi'), gF = $('#ldSheet'), gFH = $('#ldSheetHi');
-    const tF = $('#ldF'), tX = $('#ldX'), cher = $('#ldCherry'), cherIn = $('#ldCherryIn');
-    const mk = (g, tag) => { const e = document.createElementNS(NS, tag); g.appendChild(e); return e; };
-    const set = (e, o) => { for (const k in o) e.setAttribute(k, o[k]); };
-    let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
-    const cl = v => v < 0 ? 0 : v > 1 ? 1 : v, eOut = t => 1 - Math.pow(1 - cl(t), 3), eIn = t => Math.pow(cl(t), 2.2), eIO = t => { t = cl(t); return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; };
-    let W, H, fs, drips = [], cols = [];
-    function layout() {
-      W = innerWidth; H = innerHeight;
-      for (const sv of [back, front]) sv.setAttribute('viewBox', `0 0 ${W} ${H}`);
-      fs = Math.max(72, Math.min(W * (W < 600 ? .21 : .17), 170));
-      $('#ffGoo feGaussianBlur').setAttribute('stdDeviation', Math.max(4, Math.min(7, fs / 24)).toFixed(1));
-      const c = document.createElement('canvas'), x = c.getContext('2d', { willReadFrequently: true });
-      x.font = `400 ${fs}px "Leckerli One"`; const wF = x.measureText('Fudge').width;
-      x.font = `700 ${fs * .74}px Fredoka`; const wX = x.measureText('Fix').width;
-      const gap = fs * .1, x0 = (W - wF - gap - wX) / 2, by = H * .45 + fs * .3;
-      set(tF, { x: x0, y: by, 'font-size': fs }); set(tX, { x: x0 + wF + gap, y: by, 'font-size': fs * .74 });
-      cher.dataset.x = x0 + fs * .3; cher.dataset.y = by - fs * .84; cher.dataset.s = fs / 100;
-      // find where the letters actually end, so drips grow out of real strokes
-      const cw = Math.ceil(wF) + 20, ch = Math.ceil(fs * 2); c.width = cw; c.height = ch;
-      x.font = `400 ${fs}px "Leckerli One"`; x.fillText('Fudge', 10, fs * 1.2);
-      const d = x.getImageData(0, 0, cw, ch).data, bottom = new Float32Array(cw).fill(-1e9);
-      for (let col = 0; col < cw; col++) for (let row = ch - 1; row >= 0; row--) if (d[(row * cw + col) * 4 + 3] > 150) { bottom[col] = row - fs * 1.2; break; }
-      gB.innerHTML = gBH.innerHTML = gF.innerHTML = gFH.innerHTML = ''; drips = []; cols = [];
-      const N = 7;
-      for (let k = 0; k < N; k++) {
-        let best = -1e9, bx = 0; const a = Math.floor(10 + (k + .15) * wF / N), b = Math.floor(10 + (k + .85) * wF / N);
-        for (let col = a; col < b; col++) if (bottom[col] > best) { best = bottom[col]; bx = col; }
-        if (best < -fs * .25) continue;
-        const w = Math.max(9, fs * (.07 + rnd() * .05));
-        const dr = { x: x0 + bx - 10, y: by + best - w * .8, w, max: H * (.1 + rnd() * .24), sp: .8 + rnd() * .7, del: rnd() * .45,
-          r: mk(gB, 'path'), c: mk(gB, 'circle'), hr: mk(gBH, 'rect'), hc: mk(gBH, 'circle') };
-        if (rnd() > .45) dr.drop = mk(gB, 'circle');
-        drips.push(dr);
-      }
-      const M = Math.ceil(W / 64);
-      for (let i = 0; i <= M; i++) { const w = 22 + rnd() * 30; cols.push({ x: i * W / M + (rnd() - .5) * 24, w, n: rnd(), r: mk(gF, 'rect'), c: mk(gF, 'circle'), hc: mk(gFH, 'circle') }); }
-      gF.insertBefore(sheet, gF.firstChild);
-    }
-    const sheet = document.createElementNS(NS, 'rect');
-    const T0 = performance.now(), G = 2600, FIX_T = QS.has('ldt') ? +QS.get('ldt') : null;
-    let tB = FIX_T !== null ? 1.35 : null, raf = 0, through = false;
-    const dripL = (d, t) => d.max * eOut((t - .35 - d.del * .7) / d.sp);
-    const dropT = d => .35 + d.del * .7 + .689 * d.sp;          // when a tip lets go of a drop
-    $('#ldSkip').addEventListener('click', () => { if (tB === null) tB = (performance.now() - T0) / 1000; });
-    function drawDrip(d, L) {
-      const w = d.w, bulb = w * (.62 + .08 * Math.sin(L * .05));
-      const w0 = w * 1.45, w1 = Math.max(6.5, w * (.62 + .1 * Math.sin(d.x))), y1 = d.y + Math.max(0, L);
-      set(d.r, { d: `M${d.x - w0 / 2} ${d.y} C${d.x - w0 / 2} ${d.y + L * .3} ${d.x - w1 / 2} ${d.y + L * .35} ${d.x - w1 / 2} ${y1} L${d.x + w1 / 2} ${y1} C${d.x + w1 / 2} ${d.y + L * .4} ${d.x + w0 / 2} ${d.y + L * .25} ${d.x + w0 / 2} ${d.y} Z` });
-      set(d.c, { cx: d.x, cy: d.y + L, r: L > 1 ? bulb : 0 });
-      set(d.hr, { x: d.x - w * .26, y: d.y + w * .9, width: w * .13, height: Math.max(0, L - w * 1.2), rx: w * .07 });
-      set(d.hc, { cx: d.x - bulb * .35, cy: d.y + L - bulb * .3, r: L > 6 ? bulb * .2 : 0 });
-    }
-    // everything below is a pure function of time t (and tB, when the pour starts)
-    function render(t) {
-      if (tB === null && t > 1.35 && (glReady || t > 3)) tB = t;
-      const phase = tB === null || t < tB ? 'A' : t < tB + .75 ? 'B' : 'C';
-      if (phase !== 'C') {
-        const a = eOut(t / .7);
-        set(tF, { opacity: cl(t / .35), transform: `translate(0 ${(1 - a) * 24})` }); set(tX, { opacity: cl((t - .12) / .35), transform: `translate(0 ${(1 - eOut((t - .12) / .7)) * 24})` });
-        const ct = cl((t - .35) / .55), bounce = ct < .7 ? 1 - Math.pow(ct / .7, 2) : Math.abs(Math.sin((ct - .7) / .3 * Math.PI)) * .12 * (1 - ct);
-        set(cher, { opacity: cl((t - .35) / .1), transform: `translate(${cher.dataset.x} ${+cher.dataset.y - bounce * H * .3}) scale(${cher.dataset.s})` });
-        for (const d of drips) {
-          let L = dripL(d, Math.min(t, tB ?? t));
-          if (phase === 'B') L += (H - d.y + 120 - L) * eIn((t - tB) / .5);
-          drawDrip(d, L);
-          if (d.drop) { const td = t - dropT(d); set(d.drop, { cx: d.x, cy: d.y + d.max + (td > 0 ? .5 * G * td * td : 0), r: td > 0 ? d.w * .5 : 0 }); }
-        }
-      }
-      if (phase === 'B') {
-        // drips race down while a wave of fudge pours over everything from the top
-        const tb = t - tB, cy = -60 + (H + 280) * eIO(tb / .72), grow = cl(tb / .25);
-        set(sheet, { x: -40, y: -60, width: W + 80, height: Math.max(0, cy + 60) });
-        for (const c of cols) { const len = (34 + 150 * c.n) * grow, r = c.w * .6;
-          set(c.r, { x: c.x - c.w / 2, y: cy - 4, width: c.w, height: len + 4, rx: c.w / 2 }); set(c.c, { cx: c.x, cy: cy + len, r });
-          set(c.hc, { cx: c.x - r * .38, cy: cy + len - r * .32, r: r * .22 }); }
-      } else if (phase === 'C') {
-        // the sheet drops off the bottom, leaving strands that stretch and snap
-        if (!through) { through = true; $('#ldCream').style.display = 'none'; back.style.display = 'none'; loader.classList.add('through'); }
-        const tc = t - tB - .75, ty = -30 + (H + 360) * Math.pow(cl(tc / .8), 2.1);
-        if (tc > .08) reveal();
-        set(sheet, { x: -40, y: ty, width: W + 80, height: H * 2 });
-        for (const c of cols) { const tl = (40 + 170 * c.n) * (1 - eOut(tc / (.45 + c.n * .3))), r = c.w * .32;
-          set(c.r, { x: c.x - r, y: ty - tl, width: r * 2, height: tl + 6, rx: r }); set(c.c, { cx: c.x, cy: ty - tl, r: tl > 2 ? r * 1.15 : 0 }); set(c.hc, { r: 0 }); }
-        if (tc >= .8) return false;
-      }
-      return true;
-    }
-    function frame(now) {
-      if (render(FIX_T !== null ? FIX_T : (now - T0) / 1000)) { if (FIX_T === null) raf = requestAnimationFrame(frame); }
-      else loader.classList.add('done');
-    }
-    const go = () => { layout(); raf = requestAnimationFrame(frame); };
-    const fontsIn = document.fonts ? Promise.race([Promise.all([document.fonts.load('400 80px "Leckerli One"'), document.fonts.load('700 60px Fredoka')]), new Promise(r => setTimeout(r, 1200))]) : Promise.resolve();
-    fontsIn.then(go, go);
-    addEventListener('resize', () => { if (tB === null) layout(); });
-  }
+  if (window.__ffIntroDone) setTimeout(intro, 0); else window.__ffOnReveal = intro;
 
   let lenis = null;
   if (!RM && typeof Lenis !== 'undefined') {
