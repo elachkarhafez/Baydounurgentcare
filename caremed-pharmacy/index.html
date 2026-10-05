@@ -1,0 +1,828 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noai, noimageai">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CareMed Pharmacy | Allen Park, MI | Free same-day delivery &amp; compounding</title>
+<meta name="description" content="Independent pharmacy at 7210 Allen Rd, Allen Park, MI. Prescriptions, compounding, vaccinations, pet medications, auto-injury prescriptions and free same-day delivery. Call 313-645-1111.">
+<meta name="theme-color" content="#f5f7f4">
+<meta property="og:title" content="CareMed Pharmacy | A pharmacy that knows you">
+<meta property="og:description" content="Prescriptions, compounding, vaccinations and free same-day delivery in Allen Park, MI.">
+<meta property="og:image" content="https://caremedpharmacymi.vercel.app/img/post1.jpg">
+<link rel="preload" href="assets/fonts/instrument-italic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/intertight.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:"Instrument Serif";src:url(assets/fonts/instrument.woff2) format("woff2");font-style:normal;font-weight:400;font-display:swap}
+@font-face{font-family:"Instrument Serif";src:url(assets/fonts/instrument-italic.woff2) format("woff2");font-style:italic;font-weight:400;font-display:swap}
+@font-face{font-family:"Inter Tight";src:url(assets/fonts/intertight.woff2) format("woff2");font-weight:400 700;font-display:swap}
+/* Palette from their logo: deep teal-navy bowl, leaf-green ring, porcelain white.
+   Type: Instrument Serif (italic for the warm words) + Inter Tight.
+   Motion: calm and precise. Things settle, nothing bounces hard. */
+:root{
+  --bg:#f5f7f4; --bg-2:#ebf0ed; --paper:#fff; --ink:#0f2a3d; --muted:#566b78; --line:rgba(15,42,61,.12);
+  --navy:#134a72; --teal:#1f6f9a; --green:#7aa83a; --green-2:#a9c96f; --mint:#e4efd9;
+  --serif:"Instrument Serif", Georgia, serif; --sans:"Inter Tight", system-ui, sans-serif;
+  --pad:clamp(16px,4vw,56px); --ease:cubic-bezier(.2,.7,.1,1);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;overflow-x:clip}
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+.lenis.lenis-stopped{overflow:hidden}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 var(--sans);overflow-x:clip;-webkit-font-smoothing:antialiased}
+img,svg{display:block;max-width:100%}
+a{color:inherit}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--green);outline-offset:3px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.wrap{max-width:1280px;margin:0 auto;padding:0 var(--pad)}
+.kicker{display:inline-flex;align-items:center;gap:10px;font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--teal)}
+.kicker::before{content:"";width:22px;height:2px;border-radius:2px;background:var(--green)}
+.h2{font:400 clamp(40px,5.4vw,80px)/1 var(--serif);letter-spacing:-.015em;margin:14px 0 0}
+.h2 em{color:var(--teal)}
+.lead{font-size:clamp(17px,1.3vw,19px);color:var(--muted);max-width:560px}
+.btn{display:inline-flex;align-items:center;gap:10px;border:0;border-radius:99px;padding:15px 22px;font:600 15px/1 var(--sans);text-decoration:none;cursor:pointer;transition:transform .3s var(--ease),background .3s,color .3s,box-shadow .3s;white-space:nowrap}
+.btn svg{width:18px;height:18px}
+.btn-navy{background:var(--navy);color:#fff;box-shadow:0 12px 30px -12px rgba(19,74,114,.6)}
+.btn-navy:hover{background:#0e3a5a;transform:translateY(-2px)}
+.btn-green{background:var(--green);color:#fff}
+.btn-green:hover{background:#6b9632;transform:translateY(-2px)}
+.btn-line{background:transparent;border:1.5px solid var(--line);color:var(--ink)}
+.btn-line:hover{border-color:var(--ink)}
+.btn-white{background:#fff;color:var(--navy)}
+.btn-white:hover{transform:translateY(-2px)}
+.reveal{opacity:0;transform:translateY(26px)}
+.rm .reveal,.no-anim .reveal{opacity:1;transform:none}
+
+/* ---------- loader ---------- */
+.loader{position:fixed;inset:0;z-index:100;background:var(--bg);display:grid;place-items:center;pointer-events:none}
+.loader.done{display:none}
+.ld-mark{width:120px;height:120px}
+.ld-mark .arc{stroke-dasharray:160;stroke-dashoffset:160;animation:draw 1s var(--ease) .1s forwards}
+.ld-mark .bowl{stroke-dasharray:120;stroke-dashoffset:120;animation:draw .9s var(--ease) .25s forwards}
+.ld-mark .cap{transform:translate(-14px,-30px) rotate(-20deg);opacity:0;animation:drop .7s var(--ease) .55s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes drop{to{transform:none;opacity:1}}
+.loader.out{animation:ldout .6s var(--ease) forwards}
+@keyframes ldout{to{opacity:0;transform:scale(1.04)}}
+
+/* ---------- nav ---------- */
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;transition:background .3s,box-shadow .3s}
+.nav.solid{background:rgba(245,247,244,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 1px 0 var(--line)}
+.nav-in{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:14px var(--pad);max-width:1440px;margin:0 auto}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand svg{width:38px;height:38px}
+.brand b{font:700 17px/1 var(--sans);letter-spacing:.06em;color:var(--navy)}
+.brand small{display:block;font:600 9.5px/1 var(--sans);letter-spacing:.32em;color:var(--green);margin-top:4px}
+.nav-links{display:flex;align-items:center;gap:26px}
+.nav-links a:not(.btn){text-decoration:none;font-size:15px;font-weight:500;color:var(--muted);transition:color .2s}
+.nav-links a:not(.btn):hover{color:var(--ink)}
+.status{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--muted)}
+.status i{width:8px;height:8px;border-radius:50%;background:#c2c9cd}
+.status.open i{background:var(--green);box-shadow:0 0 0 4px rgba(122,168,58,.18)}
+.nav .btn{padding:12px 18px;font-size:14px}
+@media (max-width:980px){.nav-links a:not(.btn),.nav .status{display:none}}
+@media (max-width:520px){.brand b{font-size:15px}.nav .btn span{display:none}.nav .btn{padding:12px}}
+
+/* ---------- hero ---------- */
+.hero{position:relative;padding:clamp(110px,14vh,150px) 0 clamp(40px,6vw,80px);overflow:hidden}
+.hero::before{content:"";position:absolute;right:-12vw;top:-10vw;width:62vw;height:62vw;border-radius:50%;background:radial-gradient(closest-side,rgba(122,168,58,.16),rgba(122,168,58,0));pointer-events:none}
+.hero-grid{display:grid;grid-template-columns:1fr 1.02fr;gap:clamp(24px,4vw,60px);align-items:center}
+.hero h1{font:400 clamp(52px,7vw,112px)/.95 var(--serif);letter-spacing:-.025em;margin:18px 0 22px}
+.hero h1 em{color:var(--teal)}
+.hero .lead{margin:0 0 30px}
+.hero-cta{display:flex;flex-wrap:wrap;gap:12px}
+.hero-facts{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:30px;font-size:14px;font-weight:500;color:var(--muted)}
+.hero-facts span{display:inline-flex;align-items:center;gap:8px}
+.hero-facts svg{width:18px;height:18px;color:var(--green)}
+@media (max-width:900px){.hero-grid{grid-template-columns:1fr}.hero{padding-top:100px}}
+
+/* ---------- compounding bench (signature) ---------- */
+.bench{position:relative;background:var(--paper);border-radius:32px;box-shadow:0 40px 90px -40px rgba(15,42,61,.35),0 0 0 1px var(--line);padding:20px 20px 22px;overflow:hidden}
+.bench-top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;position:relative;z-index:3}
+.bench-title{font:600 12px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.forms{display:flex;gap:6px;background:var(--bg-2);padding:4px;border-radius:99px}
+.forms button{border:0;background:transparent;border-radius:99px;padding:9px 14px;font-size:13.5px;font-weight:600;color:var(--muted);cursor:pointer;transition:background .25s,color .25s}
+.forms button[aria-pressed="true"]{background:var(--navy);color:#fff}
+.stagewrap{position:relative;touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:grab}
+.stagewrap.grabbing{cursor:grabbing}
+#benchSvg{width:100%;height:auto;aspect-ratio:520/430}
+.callout{position:absolute;left:6%;top:16%;z-index:4;display:flex;align-items:center;gap:10px;background:var(--ink);color:#fff;padding:11px 15px;border-radius:14px;font-weight:600;font-size:14.5px;box-shadow:0 14px 30px -12px rgba(15,42,61,.6);pointer-events:none;transition:opacity .4s,transform .4s var(--ease)}
+.callout svg{width:20px;height:20px;animation:circ 1.6s ease-in-out infinite}
+.callout::after{content:"";position:absolute;right:-7px;top:50%;margin-top:-7px;border:7px solid transparent;border-left-color:var(--ink);border-right:0}
+.callout.gone{opacity:0;transform:translateY(-6px)}
+@keyframes circ{0%,100%{transform:translate(0,0)}25%{transform:translate(3px,-3px)}50%{transform:translate(6px,0)}75%{transform:translate(3px,3px)}}
+.bench-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;position:relative;z-index:3}
+.meter{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600;color:var(--muted)}
+.meter b{font-variant-numeric:tabular-nums;color:var(--ink);min-width:3.2ch;text-align:right}
+.bench-btns{display:flex;gap:8px}
+.chipbtn{border:1.5px solid var(--line);background:#fff;border-radius:99px;padding:9px 14px;font-size:13.5px;font-weight:600;cursor:pointer;transition:border-color .2s,background .2s}
+.chipbtn:hover{border-color:var(--ink)}
+.chipbtn.hold{background:var(--mint);border-color:var(--green)}
+.payoff{position:absolute;left:20px;right:20px;bottom:18px;z-index:5;background:var(--navy);color:#fff;border-radius:20px;padding:16px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;opacity:0;transform:translateY(16px);pointer-events:none;transition:opacity .5s var(--ease),transform .5s var(--ease)}
+.payoff.on{opacity:1;transform:none}
+.payoff.live{pointer-events:auto}
+.payoff b{display:block;font:400 26px/1.05 var(--serif);font-style:italic}
+.payoff span{font-size:14px;opacity:.85}
+.payoff .btn{padding:11px 16px;font-size:14px}
+@media (max-width:600px){.payoff{left:12px;right:12px;bottom:12px;padding:12px 14px;border-radius:16px}.payoff b{font-size:20px}.payoff span{font-size:13px;display:block;line-height:1.35}.payoff .btn{padding:9px 13px;font-size:13px}}
+
+/* ---------- marquee ---------- */
+.marquee{overflow:hidden;background:var(--navy);color:#fff;padding:18px 0}
+.mq{display:flex;width:max-content;animation:mq 40s linear infinite}
+.mq span{display:flex;align-items:center;gap:40px;padding:0 20px;font:400 clamp(24px,2.6vw,34px)/1 var(--serif);font-style:italic;white-space:nowrap}
+.mq span::after{content:"";width:22px;height:9px;border-radius:9px;background:linear-gradient(90deg,var(--green) 50%,#fff 50%)}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+/* ---------- services bento ---------- */
+.services{padding:clamp(90px,11vw,150px) 0}
+.sv-head{display:flex;justify-content:space-between;align-items:end;gap:30px;flex-wrap:wrap;margin-bottom:48px}
+.bento{display:grid;grid-template-columns:repeat(6,1fr);gap:16px}
+.tile{position:relative;background:var(--paper);border-radius:26px;padding:clamp(22px,2.4vw,32px);box-shadow:0 0 0 1px var(--line);overflow:hidden;display:flex;flex-direction:column;min-height:250px}
+.tile h3{font:400 clamp(28px,2.4vw,36px)/1.05 var(--serif);margin:0 0 10px}
+.tile p{margin:0;color:var(--muted);font-size:16px}
+.tile .ic{width:46px;height:46px;border-radius:14px;background:var(--mint);color:var(--navy);display:grid;place-items:center;margin-bottom:auto}
+.tile .ic svg{width:24px;height:24px}
+.tile .body{margin-top:26px}
+.t-rx{grid-column:span 3}
+.t-del{grid-column:span 3;background:var(--navy);color:#fff}
+.t-del p{color:rgba(255,255,255,.78)}
+.t-del .ic{background:rgba(255,255,255,.12);color:#fff}
+.t-comp{grid-column:span 2}
+.t-vax{grid-column:span 2}
+.t-pet{grid-column:span 2;background:var(--mint)}
+.t-pet .ic{background:#fff}
+.t-auto{grid-column:span 6;display:grid;grid-template-columns:1.1fr 1fr;gap:30px;align-items:center;background:var(--ink);color:#fff;min-height:0}
+.t-auto p{color:rgba(255,255,255,.78)}
+.t-auto h3{font-size:clamp(34px,3.4vw,52px)}
+.t-auto ul{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.t-auto li{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:14px 16px;font-weight:600}
+.t-auto li svg{width:22px;height:22px;color:var(--green-2);flex:none}
+.t-auto .btn{margin-top:22px}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.tags span{font-size:13px;font-weight:600;padding:6px 11px;border-radius:99px;background:var(--bg-2);color:var(--navy)}
+.t-pet .tags span{background:#fff}
+@media (max-width:1000px){.t-rx,.t-del{grid-column:span 6}.t-comp,.t-vax,.t-pet{grid-column:span 3}.t-pet{grid-column:span 6}.t-auto{grid-template-columns:1fr}}
+@media (max-width:640px){.bento>*{grid-column:span 6!important}.tile{min-height:0}.tile .body{margin-top:18px}}
+
+/* ---------- delivery story ---------- */
+.deliver{position:relative;height:420vh;background:var(--bg-2)}
+.dv-stage{position:sticky;top:0;height:100vh;height:100svh;display:grid;grid-template-columns:.85fr 1.15fr;gap:clamp(20px,4vw,60px);align-items:center;padding:80px var(--pad) 40px;max-width:1440px;margin:0 auto}
+.dv-copy{position:relative}
+.dv-steps{position:relative;height:250px;margin-top:30px}
+.dv-step{position:absolute;inset:0;opacity:0;transform:translateY(16px);transition:opacity .5s var(--ease),transform .5s var(--ease)}
+.dv-step.on{opacity:1;transform:none}
+.dv-step .n{font:600 13px/1 var(--sans);letter-spacing:.12em;color:var(--green);text-transform:uppercase}
+.dv-step h3{font:400 clamp(36px,4vw,58px)/1 var(--serif);margin:12px 0 12px}
+.dv-step p{color:var(--muted);margin:0;max-width:420px}
+.dv-dots{display:flex;gap:8px;margin-top:18px}
+.dv-dots i{width:28px;height:4px;border-radius:4px;background:var(--line);transition:background .3s,width .3s}
+.dv-dots i.on{background:var(--green);width:46px}
+.dv-map{position:relative;background:var(--paper);border-radius:28px;box-shadow:0 0 0 1px var(--line),0 40px 80px -40px rgba(15,42,61,.3);overflow:hidden}
+.dv-map svg{width:100%;height:auto}
+@media (max-width:900px){
+  .deliver{height:380vh}
+  .dv-stage{grid-template-columns:1fr;grid-template-rows:auto 1fr;align-content:center;padding-top:76px;gap:14px}
+  .dv-copy{order:2}.dv-map{order:1}
+  .dv-copy>.kicker,.dv-copy>.h2{display:none}
+  .dv-steps{margin-top:0;height:170px}
+  .dv-step h3{font-size:34px;margin:8px 0}
+  .dv-step p{font-size:15px}
+}
+
+/* ---------- request builder ---------- */
+.request{padding:clamp(90px,11vw,150px) 0}
+.rq-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(24px,4vw,60px);margin-top:50px;align-items:start}
+.field{margin-bottom:22px}
+.field>label,.field>.lbl{display:block;font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1.5px solid var(--line);background:#fff;border-radius:99px;padding:10px 15px;font-size:14.5px;font-weight:600;cursor:pointer;transition:background .2s,border-color .2s,color .2s}
+.chip:hover{border-color:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:#fff}
+.inp{width:100%;background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:14px 15px;font:500 16px/1.3 var(--sans);color:var(--ink);transition:border-color .2s}
+.inp:focus{outline:none;border-color:var(--teal)}
+textarea.inp{min-height:96px;resize:vertical}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.ticket{position:sticky;top:96px;background:var(--paper);border-radius:26px;padding:26px;box-shadow:0 0 0 1px var(--line),0 30px 70px -40px rgba(15,42,61,.4)}
+.tk-head{display:flex;align-items:center;justify-content:space-between;padding-bottom:16px;margin-bottom:16px;border-bottom:1px dashed var(--line)}
+.tk-head .brand svg{width:30px;height:30px}
+.tk-msg{white-space:pre-wrap;font-size:15.5px;line-height:1.6;color:var(--ink);min-height:150px;margin:0 0 18px}
+.tk-actions{display:grid;gap:8px}
+.tk-actions .btn{justify-content:center}
+.tk-note{font-size:13px;color:var(--muted);margin:14px 0 0;display:flex;gap:8px}
+.tk-note svg{width:16px;height:16px;flex:none;margin-top:2px;color:var(--green)}
+@media (max-width:900px){.rq-grid{grid-template-columns:1fr}.ticket{position:relative;top:0}.two{grid-template-columns:1fr}}
+
+/* ---------- visit ---------- */
+.visit{padding:0 0 clamp(90px,11vw,150px)}
+.vs-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}
+.vs-photo{position:relative;border-radius:28px;overflow:hidden;min-height:440px;background:#dfe6e2}
+.vs-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.vs-photo .pin{position:absolute;left:18px;bottom:18px;background:#fff;border-radius:16px;padding:12px 14px;font-weight:600;font-size:14px;box-shadow:0 10px 30px -10px rgba(0,0,0,.35)}
+.vs-card{background:var(--paper);border-radius:28px;padding:clamp(24px,3vw,36px);box-shadow:0 0 0 1px var(--line)}
+.vs-card h3{font:400 40px/1 var(--serif);margin:0 0 6px}
+.vs-card address{font-style:normal;color:var(--muted);margin-bottom:18px}
+.hours{width:100%;border-collapse:collapse;margin:16px 0 22px;font-size:15.5px}
+.hours td{padding:9px 0;border-bottom:1px solid var(--line)}
+.hours td:last-child{text-align:right;font-variant-numeric:tabular-nums}
+.hours tr.today td{font-weight:700;color:var(--navy)}
+.hours tr.today td:first-child::after{content:" · today";font-weight:600;color:var(--green)}
+.vs-actions{display:flex;flex-wrap:wrap;gap:10px}
+.big-status{display:inline-flex;align-items:center;gap:10px;padding:9px 14px;border-radius:99px;background:var(--bg-2);font-weight:600;font-size:14px}
+.big-status i{width:9px;height:9px;border-radius:50%;background:#c2c9cd}
+.big-status.open{background:var(--mint)}
+.big-status.open i{background:var(--green)}
+@media (max-width:900px){.vs-grid{grid-template-columns:1fr}.vs-photo{min-height:320px}}
+
+/* ---------- feed ---------- */
+.feed{padding:0 0 clamp(90px,11vw,140px)}
+.fd-row{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:40px}
+.fd-card{display:block;border-radius:20px;overflow:hidden;background:#dfe6e2;aspect-ratio:4/5;box-shadow:0 0 0 1px var(--line)}
+.fd-card img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--ease)}
+.fd-card:hover img{transform:scale(1.04)}
+@media (max-width:900px){.fd-row{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:64%;overflow-x:auto;scroll-snap-type:x mandatory;margin:40px calc(var(--pad)*-1) 0;padding:0 var(--pad);scrollbar-width:none}.fd-row::-webkit-scrollbar{display:none}.fd-card{scroll-snap-align:start}}
+
+/* ---------- close + footer ---------- */
+.close{background:var(--navy);color:#fff;text-align:center;padding:clamp(90px,12vw,170px) var(--pad);position:relative;overflow:hidden}
+.close::before{content:"";position:absolute;left:50%;top:50%;width:min(900px,120vw);aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;border:clamp(24px,4vw,60px) solid rgba(122,168,58,.18);border-left-color:transparent;border-bottom-color:transparent;pointer-events:none}
+.close h2{font:400 clamp(50px,8vw,120px)/.95 var(--serif);letter-spacing:-.02em;margin:0 auto 18px;max-width:12ch;position:relative}
+.close h2 em{color:var(--green-2)}
+.close p{opacity:.85;margin:0 auto 32px;max-width:460px;position:relative}
+.close .hero-cta{justify-content:center;position:relative}
+.foot{background:var(--ink);color:rgba(255,255,255,.75);padding:50px 0 34px;font-size:15px}
+.ft-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:30px}
+.foot .brand b{color:#fff}
+.foot h4{font:600 12px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:#fff;margin:4px 0 14px}
+.foot a{text-decoration:none}
+.foot a:hover{color:#fff}
+.foot p{margin:0 0 6px}
+.ft-bottom{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-top:40px;padding-top:20px;border-top:1px solid rgba(255,255,255,.12);font-size:13px}
+@media (max-width:900px){.ft-grid{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.ft-grid{grid-template-columns:1fr}}
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,30px);opacity:0;z-index:90;background:var(--ink);color:#fff;padding:13px 20px;border-radius:99px;font-weight:600;font-size:14px;transition:opacity .35s,transform .35s var(--ease);pointer-events:none}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}.deliver{height:auto}.dv-stage{position:relative;height:auto}.dv-steps{height:auto}.dv-step{position:relative;opacity:1;transform:none;margin-bottom:24px}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="ringG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1f6f9a"/><stop offset="1" stop-color="#7aa83a"/></linearGradient>
+    <symbol id="mark" viewBox="0 0 100 100">
+      <path d="M38 22 A32 32 0 1 1 78 66" fill="none" stroke="#7aa83a" stroke-width="9" stroke-linecap="round"/>
+      <path d="M24 46 C24 68 38 80 54 80 C64 80 72 75 76 67" fill="none" stroke="#134a72" stroke-width="11" stroke-linecap="round"/>
+      <circle cx="80" cy="66" r="6.5" fill="#134a72"/>
+      <g transform="rotate(42 50 48)"><rect x="40" y="30" width="20" height="38" rx="10" fill="#fff" stroke="#134a72" stroke-width="4"/><path d="M40 49 V40 a10 10 0 0 1 20 0 V49 Z" fill="#7aa83a"/></g>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="loader" id="loader" aria-hidden="true">
+  <svg class="ld-mark" viewBox="0 0 100 100">
+    <path class="arc" d="M38 22 A32 32 0 1 1 78 66" fill="none" stroke="#7aa83a" stroke-width="9" stroke-linecap="round"/>
+    <path class="bowl" d="M24 46 C24 68 38 80 54 80 C64 80 72 75 76 67" fill="none" stroke="#134a72" stroke-width="11" stroke-linecap="round"/>
+    <g class="cap"><g transform="rotate(42 50 48)"><rect x="40" y="30" width="20" height="38" rx="10" fill="#fff" stroke="#134a72" stroke-width="4"/><path d="M40 49 V40 a10 10 0 0 1 20 0 V49 Z" fill="#7aa83a"/></g></g>
+  </svg>
+</div>
+<script>
+(() => { const L = document.getElementById('loader'); let seen = false; try { seen = sessionStorage.getItem('cmIntro') === '1'; sessionStorage.setItem('cmIntro', '1'); } catch (e) {}
+  if (seen || new URLSearchParams(location.search).has('qa') || matchMedia('(prefers-reduced-motion: reduce)').matches) { L.classList.add('done'); return; }
+  setTimeout(() => L.classList.add('out'), 1250); setTimeout(() => L.classList.add('done'), 1900); })();
+</script>
+
+<header class="nav" id="nav">
+  <div class="nav-in">
+    <a class="brand" href="#top" aria-label="CareMed Pharmacy home"><svg aria-hidden="true"><use href="#mark"/></svg><span><b>CAREMED</b><small>PHARMACY</small></span></a>
+    <nav class="nav-links" aria-label="Main">
+      <a href="#services">Services</a>
+      <a href="#compounding">Compounding</a>
+      <a href="#delivery">Delivery</a>
+      <a href="#visit">Visit</a>
+      <span class="status" data-status><i></i><span>Checking hours</span></span>
+      <a class="btn btn-navy" data-tel href="tel:+13136451111"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg><span>313-645-1111</span></a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <div class="kicker">Independent pharmacy · Allen Park, MI</div>
+        <h1>A pharmacy that <em>knows you.</em></h1>
+        <p class="lead">Prescriptions, compounding, vaccinations and free same-day delivery from 7210 Allen Rd. Local care, personal service.</p>
+        <div class="hero-cta">
+          <a class="btn btn-navy" data-tel href="tel:+13136451111"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>Call the pharmacy</a>
+          <a class="btn btn-line" href="#request">Transfer a prescription</a>
+        </div>
+        <div class="hero-facts">
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg>Free same-day delivery</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-4.5-7-11a7 7 0 0 1 14 0c0 6.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>7210 Allen Rd</span>
+          <span class="status" data-status><i></i><span>Checking hours</span></span>
+        </div>
+      </div>
+
+      <div class="bench reveal" id="compounding" aria-label="Interactive: compound a prescription with a mortar and pestle">
+        <div class="bench-top">
+          <span class="bench-title">Compounding bench</span>
+          <div class="forms" role="group" aria-label="Choose a form">
+            <button type="button" data-form="liquid" aria-pressed="true">Liquid</button>
+            <button type="button" data-form="topical" aria-pressed="false">Topical</button>
+            <button type="button" data-form="capsules" aria-pressed="false">Capsules</button>
+          </div>
+        </div>
+        <div class="stagewrap" id="stagewrap">
+          <svg id="benchSvg" viewBox="0 0 520 430" role="img" aria-label="A porcelain mortar full of pills, with a pestle">
+            <defs>
+              <linearGradient id="porc" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#dfe6ea"/><stop offset=".35" stop-color="#ffffff"/><stop offset=".7" stop-color="#f3f6f7"/><stop offset="1" stop-color="#cfd8de"/></linearGradient>
+              <linearGradient id="inner" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c9d3d9"/><stop offset="1" stop-color="#eef2f4"/></linearGradient>
+              <linearGradient id="pestleG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#d9e1e6"/><stop offset=".45" stop-color="#ffffff"/><stop offset="1" stop-color="#cdd6dc"/></linearGradient>
+              <radialGradient id="powderG" cx=".45" cy=".35" r=".7"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#e7e3d8"/></radialGradient>
+              <clipPath id="bowlClip"><ellipse cx="260" cy="232" rx="134" ry="30"/><rect x="126" y="232" width="268" height="60"/></clipPath>
+              <filter id="soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="8"/></filter>
+            </defs>
+            <!-- progress ring (the green ring from the logo) -->
+            <circle cx="260" cy="200" r="168" fill="none" stroke="#e7ede9" stroke-width="12"/>
+            <circle id="ring" cx="260" cy="200" r="168" fill="none" stroke="url(#ringG)" stroke-width="12" stroke-linecap="round" stroke-dasharray="1055.6" stroke-dashoffset="1055.6" transform="rotate(-210 260 200)"/>
+            <ellipse cx="260" cy="392" rx="150" ry="16" fill="#0f2a3d" opacity=".12" filter="url(#soft)"/>
+            <!-- product that rises at the end (behind the bowl front) -->
+            <g id="product" opacity="0"></g>
+            <!-- mortar back + inside -->
+            <path d="M118 232 C118 330 186 372 260 372 C334 372 402 330 402 232 Z" fill="url(#porc)"/>
+            <path d="M150 372 Q260 394 370 372 L362 388 Q260 404 158 388 Z" fill="#dbe3e8"/>
+            <path d="M126 262 C140 300 190 326 260 326 C330 326 380 300 394 262" fill="none" stroke="#134a72" stroke-width="4" opacity=".85"/>
+            <path d="M131 276 C148 310 196 334 260 334 C324 334 372 310 389 276" fill="none" stroke="#7aa83a" stroke-width="3" opacity=".9"/>
+            <ellipse cx="260" cy="232" rx="142" ry="34" fill="#e9eef1"/>
+            <ellipse cx="260" cy="234" rx="132" ry="28" fill="url(#inner)"/>
+            <g clip-path="url(#bowlClip)">
+              <ellipse id="powder" cx="260" cy="250" rx="0" ry="0" fill="url(#powderG)"/>
+              <g id="specks"></g>
+              <g id="pills"></g>
+              <g id="dust"></g>
+            </g>
+            <!-- pestle -->
+            <g id="pestle"><g id="pestleRot">
+              <rect x="-17" y="-188" width="34" height="200" rx="17" fill="url(#pestleG)"/>
+              <rect x="-17" y="-188" width="34" height="56" rx="17" fill="#134a72"/>
+              <rect x="-17" y="-140" width="34" height="8" fill="#7aa83a"/>
+              <ellipse cx="0" cy="6" rx="24" ry="16" fill="url(#pestleG)"/>
+            </g></g>
+            <!-- front lip covers the pestle foot -->
+            <path d="M118 232 C118 252 186 268 260 268 C334 268 402 252 402 232 C402 246 334 262 260 262 C186 262 118 246 118 232 Z" fill="#ffffff"/>
+            <path d="M118 232 A142 34 0 0 0 402 232" fill="none" stroke="#cdd7dd" stroke-width="2"/>
+          </svg>
+          <div class="callout" id="callout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11V5.5a1.5 1.5 0 0 1 3 0V11m0-1.5a1.5 1.5 0 0 1 3 0V11m0-.5a1.5 1.5 0 0 1 3 0v4.5a6 6 0 0 1-6 6h-1a6 6 0 0 1-5-2.7L4.4 15a1.5 1.5 0 0 1 2.4-1.8L9 15"/></svg><span id="calloutText">Grind it: drag in circles</span></div>
+        </div>
+        <div class="bench-foot">
+          <div class="meter"><span id="meterLabel">Ground</span><b id="meterNum">0%</b></div>
+          <div class="bench-btns">
+            <button class="chipbtn" type="button" id="holdBtn">Hold to grind</button>
+            <button class="chipbtn" type="button" id="resetBtn">Start over</button>
+          </div>
+        </div>
+        <div class="payoff" id="payoff" role="status" aria-live="polite">
+          <div><b id="payoffTitle">Made for one person. You.</b><span id="payoffText">That's compounding: your strength, your form.</span></div>
+          <a class="btn btn-white" data-tel href="tel:+13136451111">Ask about compounding</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="marquee" aria-hidden="true"><div class="mq" id="mq"></div></div>
+
+  <section class="services" id="services">
+    <div class="wrap">
+      <div class="sv-head">
+        <div><div class="kicker reveal">What we do</div><h2 class="h2 reveal">Everything a pharmacy should do. <em>Done personally.</em></h2></div>
+        <p class="lead reveal" style="margin:0;max-width:420px">One counter on Allen Rd, a pharmacist who remembers you, and a driver who brings it to your door.</p>
+      </div>
+      <div class="bento" id="bento"></div>
+    </div>
+  </section>
+
+  <section class="deliver" id="delivery" aria-label="How free same-day delivery works">
+    <div class="dv-stage">
+      <div class="dv-copy">
+        <div class="kicker">Free same-day delivery</div>
+        <h2 class="h2">Getting your meds should be <em>the easy part.</em></h2>
+        <div class="dv-steps" id="dvSteps"></div>
+        <div class="dv-dots" id="dvDots"></div>
+      </div>
+      <div class="dv-map">
+        <svg id="map" viewBox="0 0 800 520" role="img" aria-label="Map: a CareMed delivery car drives from 7210 Allen Rd to your door">
+          <rect width="800" height="520" fill="#f2f5f1"/>
+          <g fill="#e1ead9">
+            <path d="M40 330 q60 -40 130 -10 q40 20 20 70 q-30 60 -110 40 q-70 -20 -40 -100z"/>
+            <path d="M560 40 q80 -20 150 20 q40 40 0 80 q-60 40 -130 10 q-60 -40 -20 -110z"/>
+            <circle cx="690" cy="420" r="46"/>
+          </g>
+          <g id="blocks" fill="#e6ebe8"></g>
+          <g stroke="#fff" stroke-linecap="round" fill="none">
+            <path id="streets" stroke-width="14" d="M0 120 H800 M0 250 H800 M0 390 H800 M120 0 V520 M520 0 V520 M680 0 V520"/>
+          </g>
+          <path d="M330 0 V520" stroke="#fff" stroke-width="26"/>
+          <path d="M330 0 V520" stroke="#f3d27a" stroke-width="2" stroke-dasharray="12 12" opacity=".8"/>
+          <text x="342" y="40" font-family="Inter Tight, sans-serif" font-size="15" font-weight="700" fill="#566b78" letter-spacing="1">ALLEN RD</text>
+          <path id="route" d="M330 300 V250 H520 V120 H680 V178" fill="none" stroke="#7aa83a" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" opacity=".25"/>
+          <path id="routeOn" d="M330 300 V250 H520 V120 H680 V178" fill="none" stroke="#7aa83a" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+          <!-- pharmacy -->
+          <g transform="translate(330 300)">
+            <rect x="-48" y="8" width="96" height="54" rx="8" fill="#134a72"/>
+            <rect x="-48" y="8" width="96" height="14" rx="6" fill="#7aa83a"/>
+            <rect x="-30" y="32" width="20" height="30" rx="3" fill="#cfe3f2"/><rect x="0" y="32" width="30" height="18" rx="3" fill="#cfe3f2"/>
+            <circle r="12" fill="#fff" stroke="#134a72" stroke-width="3"/><use href="#mark" x="-9" y="-9" width="18" height="18"/>
+            <g transform="translate(58 34)"><rect x="0" y="-14" width="168" height="30" rx="15" fill="#fff" stroke="rgba(15,42,61,.12)"/><text x="14" y="6" font-family="Inter Tight, sans-serif" font-size="14" font-weight="700" fill="#0f2a3d">CareMed · 7210 Allen Rd</text></g>
+          </g>
+          <!-- home -->
+          <g transform="translate(680 200)" id="home">
+            <path d="M-26 0 L0 -24 L26 0 V30 H-26 Z" fill="#fff" stroke="#134a72" stroke-width="4" stroke-linejoin="round"/>
+            <rect x="-7" y="10" width="14" height="20" rx="2" fill="#134a72"/>
+            <g id="homeTag" opacity="0"><rect x="-58" y="40" width="116" height="30" rx="15" fill="#7aa83a"/><text x="0" y="60" text-anchor="middle" font-family="Inter Tight, sans-serif" font-size="14" font-weight="700" fill="#fff">Delivered ✓</text></g>
+          </g>
+          <!-- car -->
+          <g id="car">
+            <g transform="rotate(90)">
+              <rect x="-15" y="-26" width="30" height="52" rx="10" fill="#134a72"/>
+              <rect x="-11" y="-14" width="22" height="13" rx="3" fill="#cfe3f2"/>
+              <rect x="-11" y="8" width="22" height="9" rx="3" fill="#cfe3f2"/>
+              <rect x="-3" y="-26" width="6" height="52" fill="#7aa83a"/>
+            </g>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <section class="request" id="request">
+    <div class="wrap">
+      <div class="kicker reveal">Start a request</div>
+      <h2 class="h2 reveal">Switching pharmacies takes <em>one call.</em></h2>
+      <p class="lead reveal">Pick what you need and we'll put it in words for you. Read it to us on the phone, or send it on Instagram.</p>
+      <div class="rq-grid">
+        <form id="rqForm" onsubmit="return false" aria-label="Request details">
+          <div class="field"><span class="lbl">What do you need?</span><div class="chips" id="rqChips" role="group" aria-label="Request type"></div></div>
+          <div class="two">
+            <div class="field"><label for="rqName">Your name</label><input class="inp" id="rqName" autocomplete="name" placeholder="First and last name"></div>
+            <div class="field"><label for="rqPhone">Best number</label><input class="inp" id="rqPhone" type="tel" autocomplete="tel" placeholder="(313) 555-0123"></div>
+          </div>
+          <div class="field" id="rqFromWrap"><label for="rqFrom" id="rqFromLbl">Current pharmacy</label><input class="inp" id="rqFrom" placeholder="Name and city of your current pharmacy"></div>
+          <div class="field"><label for="rqNotes">Anything else</label><textarea class="inp" id="rqNotes" placeholder="Medication names, delivery address, best time to call"></textarea></div>
+          <div class="field"><span class="lbl">Delivery?</span><div class="chips" id="rqDel" role="group" aria-label="Delivery">
+            <button type="button" class="chip" aria-pressed="true" data-v="yes">Yes, deliver it</button><button type="button" class="chip" aria-pressed="false" data-v="no">I'll pick up</button></div></div>
+        </form>
+        <aside class="ticket" aria-label="Your request">
+          <div class="tk-head"><span class="brand"><svg aria-hidden="true"><use href="#mark"/></svg><span><b>CAREMED</b><small>PHARMACY</small></span></span><span class="status" data-status><i></i><span>Checking hours</span></span></div>
+          <p class="tk-msg" id="tkMsg"></p>
+          <div class="tk-actions">
+            <a class="btn btn-navy" data-tel href="tel:+13136451111"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>Call 313-645-1111</a>
+            <a class="btn btn-green" id="tkIg" href="https://ig.me/m/caremedpharmacymi" target="_blank" rel="noopener">Send on Instagram</a>
+            <button class="btn btn-line" type="button" id="tkCopy">Copy text</button>
+          </div>
+          <p class="tk-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Nothing you type here is sent anywhere. It stays on your screen until you call or send it yourself.</p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="visit" id="visit">
+    <div class="wrap">
+      <div class="kicker reveal">Visit</div>
+      <h2 class="h2 reveal" style="margin-bottom:40px">Right on <em>Allen Rd.</em></h2>
+      <div class="vs-grid">
+        <div class="vs-photo reveal"><img src="img/post1.jpg" alt="The CareMed Pharmacy storefront on Allen Rd at sunset" width="900" height="900" loading="lazy"><span class="pin">7210 Allen Rd, Allen Park, MI 48101</span></div>
+        <div class="vs-card reveal">
+          <h3>CareMed Pharmacy</h3>
+          <address>7210 Allen Rd<br>Allen Park, MI 48101</address>
+          <span class="big-status" data-status><i></i><span>Checking hours</span></span>
+          <table class="hours" id="hours" aria-label="Opening hours"></table>
+          <div class="vs-actions">
+            <a class="btn btn-navy" data-tel href="tel:+13136451111">Call 313-645-1111</a>
+            <a class="btn btn-line" href="https://www.google.com/maps/search/?api=1&query=CareMed+Pharmacy+7210+Allen+Rd+Allen+Park+MI+48101" target="_blank" rel="noopener">Directions</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="feed">
+    <div class="wrap">
+      <div class="sv-head" style="margin-bottom:0">
+        <div><div class="kicker reveal">On Instagram</div><h2 class="h2 reveal">@caremedpharmacymi</h2></div>
+        <a class="btn btn-line reveal" href="https://www.instagram.com/caremedpharmacymi/" target="_blank" rel="noopener">Follow us</a>
+      </div>
+      <div class="fd-row" id="feedRow"></div>
+    </div>
+  </section>
+
+  <section class="close">
+    <h2 class="reveal">Your health. <em>Our priority.</em></h2>
+    <p class="reveal">Call, transfer, or stop by. We'll take it from there.</p>
+    <div class="hero-cta reveal"><a class="btn btn-white" data-tel href="tel:+13136451111">Call 313-645-1111</a><a class="btn btn-green" href="#request">Start a request</a></div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="ft-grid">
+      <div><span class="brand"><svg aria-hidden="true"><use href="#mark"/></svg><span><b>CAREMED</b><small>PHARMACY</small></span></span><p style="margin-top:16px;max-width:280px">Care you can trust. An independent pharmacy in Allen Park, serving Allen Park, Dearborn and nearby.</p></div>
+      <div><h4>Visit</h4><p>7210 Allen Rd</p><p>Allen Park, MI 48101</p><p><a data-tel href="tel:+13136451111">313-645-1111</a></p></div>
+      <div><h4>Hours</h4><div id="ftHours"></div></div>
+      <div><h4>More</h4><p><a href="#services">Services</a></p><p><a href="#compounding">Compounding</a></p><p><a href="#delivery">Delivery</a></p><p><a href="https://www.instagram.com/caremedpharmacymi/" target="_blank" rel="noopener">Instagram</a></p></div>
+    </div>
+    <div class="ft-bottom"><span>© <span id="yr"></span> CareMed Pharmacy. Allen Park, Michigan.</span><span>This site is for information only and isn't medical advice. Talk to our pharmacist about your medications.</span></div>
+  </div>
+</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="assets/lib/gsap.min.js"></script>
+<script src="assets/lib/ScrollTrigger.min.js"></script>
+<script src="assets/lib/lenis.min.js"></script>
+<script>
+/* ===================== CONFIG ===================== */
+const CONFIG = {
+  name: 'CareMed Pharmacy',
+  phone: '313-645-1111', tel: '+13136451111',
+  address: '7210 Allen Rd, Allen Park, MI 48101',
+  instagram: 'caremedpharmacymi',
+  tz: 'America/Detroit',
+  // 0 = Sunday. [open, close] in 24h, null = closed
+  hours: { 0: null, 1: [9, 18], 2: [9, 18], 3: [9, 18], 4: [9, 18], 5: [9, 18], 6: [10, 15] },
+  services: [
+    { cls: 't-rx', icon: 'rx', title: 'Prescriptions & transfers', text: 'New prescriptions, refills, and switching from another pharmacy. Give us a call with your current pharmacy’s name and we’ll take care of the transfer.', tags: ['New prescriptions', 'Refills', 'Transfers'] },
+    { cls: 't-del', icon: 'truck', title: 'Free same-day delivery', text: 'Your prescriptions, delivered right to your door, the same day. No lines, no trip, no delivery fee.', tags: [] },
+    { cls: 't-comp', icon: 'mortar', title: 'Compounding', text: 'Medication made to order when the off-the-shelf version doesn’t fit.', tags: ['Custom liquids', 'Magic mouthwash', 'Ointments', 'Creams', 'Lotions', 'Custom-strength capsules'] },
+    { cls: 't-vax', icon: 'syringe', title: 'Vaccinations', text: 'Ask at the counter or give us a call to see what we have and when we can fit you in.', tags: [] },
+    { cls: 't-pet', icon: 'paw', title: 'Pet medications', text: 'Your pet’s meds shouldn’t come with a vet-sized price tag. Get their prescriptions filled here, with free delivery.', tags: ['Dogs', 'Cats', 'Free delivery'] }
+  ],
+  auto: { title: 'Car accident? We’ve got your prescriptions covered.', text: 'We accept auto insurance for eligible accident-related prescriptions and make getting your medications simple. Your recovery comes first.', list: ['Auto injury prescriptions', 'We accept auto insurance', 'Free delivery'] },
+  delivery: [
+    { t: 'Call or transfer', p: 'Call 313-645-1111, transfer from your old pharmacy, or have your doctor send it straight to us.' },
+    { t: 'We fill it', p: 'Your prescription gets filled and checked at our counter on Allen Rd.' },
+    { t: 'Out for delivery', p: 'Free, same day. Prescriptions for your pets too.' },
+    { t: 'At your door', p: 'No lines, no trip, no delivery fee. That’s the whole idea.' }
+  ],
+  requests: ['Transfer a prescription', 'Refill', 'Compounding question', 'Pet prescription', 'Auto-injury prescription', 'Vaccination'],
+  feed: [['img/post2.jpg', 'A CareMed pharmacist preparing a prescription bag', 'DeD1oUzuZVn'], ['img/post6.jpg', 'Car accident? We’ve got your prescriptions covered', 'Dd5aHcMx30L'], ['img/post3.jpg', 'Pet medications with free delivery', 'DeDwa_uORlv'], ['img/post4.jpg', 'Free same-day delivery', 'DeDvQUjuYz-'], ['img/post5.jpg', 'Compounding available: liquids, topicals, capsules', 'DeD5j9WuoVi']],
+  marquee: ['Free same-day delivery', 'Compounding', 'Pet prescriptions', 'Auto-injury prescriptions', 'Vaccinations', '7210 Allen Rd', '313-645-1111']
+};
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const FINE = matchMedia('(hover: hover) and (pointer: fine)').matches;
+const HAS_G = typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined';
+if (RM) document.documentElement.classList.add('rm');
+if (!HAS_G) document.documentElement.classList.add('no-anim');
+$('#yr').textContent = new Date().getFullYear();
+const ICONS = {
+  rx: '<path d="M6 4h6a4 4 0 0 1 0 8H6zM6 12v8M10 12l8 8M18 13l-5 6"/>',
+  truck: '<path d="M3 7h11v9H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/>',
+  mortar: '<path d="M4 11h16a8 8 0 0 1-16 0zM8 20h8M14 10l5-7"/>',
+  syringe: '<path d="M18 2l4 4M15 5l4 4M17 7L8 16l-3 1 1-3 9-9M11 9l2 2M9 11l2 2M5 19l-3 3"/>',
+  paw: '<circle cx="6" cy="10" r="2"/><circle cx="10" cy="6" r="2"/><circle cx="14" cy="6" r="2"/><circle cx="18" cy="10" r="2"/><path d="M8 17c0-3 2-5 4-5s4 2 4 5a2.5 2.5 0 0 1-4 2 2.5 2.5 0 0 1-4-2z"/>',
+  check: '<path d="M5 12.5l4 4 10-10"/>'
+};
+const ic = k => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[k]}</svg>`;
+
+/* ---------- render content ---------- */
+$('#bento').innerHTML = CONFIG.services.map(s => `<article class="tile ${s.cls} reveal"><div class="ic">${ic(s.icon)}</div><div class="body"><h3>${esc(s.title)}</h3><p>${esc(s.text)}</p>${s.tags.length ? `<div class="tags">${s.tags.map(t => `<span>${esc(t)}</span>`).join('')}</div>` : ''}</div></article>`).join('') +
+  `<article class="tile t-auto reveal"><div><div class="kicker" style="color:var(--green-2)">Auto injury</div><h3 style="margin-top:12px">${esc(CONFIG.auto.title)}</h3><p>${esc(CONFIG.auto.text)}</p><a class="btn btn-green" data-tel href="tel:${CONFIG.tel}">Call about an auto claim</a></div><ul>${CONFIG.auto.list.map(l => `<li>${ic('check')}${esc(l)}</li>`).join('')}</ul></article>`;
+$('#dvSteps').innerHTML = CONFIG.delivery.map((d, i) => `<div class="dv-step${i === 0 ? ' on' : ''}"><div class="n">Step ${i + 1} of ${CONFIG.delivery.length}</div><h3>${esc(d.t)}</h3><p>${esc(d.p)}</p></div>`).join('');
+$('#dvDots').innerHTML = CONFIG.delivery.map((_, i) => `<i${i === 0 ? ' class="on"' : ''}></i>`).join('');
+$('#feedRow').innerHTML = CONFIG.feed.map(f => `<a class="fd-card reveal" href="https://www.instagram.com/p/${esc(f[2])}/" target="_blank" rel="noopener"><img src="${esc(f[0])}" alt="${esc(f[1])}" width="900" height="1200" loading="lazy"></a>`).join('');
+const mq = CONFIG.marquee.map(m => `<span>${esc(m)}</span>`).join(''); $('#mq').innerHTML = mq + mq;
+
+/* ---------- hours + live status (Detroit time) ---------- */
+(() => {
+  const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const fmt = h => { const ap = h >= 12 ? 'pm' : 'am', hh = ((h + 11) % 12) + 1; return hh + ap; };
+  const now = () => { const p = new Intl.DateTimeFormat('en-US', { timeZone: CONFIG.tz, weekday: 'short', hour: 'numeric', minute: 'numeric', hour12: false }).formatToParts(new Date()); const g = t => p.find(x => x.type === t).value; return { d: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(g('weekday')), h: (+g('hour') % 24) + (+g('minute')) / 60 }; };
+  const order = [1, 2, 3, 4, 5, 6, 0];
+  const n = now();
+  $('#hours').innerHTML = order.map(d => { const h = CONFIG.hours[d]; return `<tr${d === n.d ? ' class="today"' : ''}><td>${days[d]}</td><td>${h ? fmt(h[0]) + ' – ' + fmt(h[1]) : 'Closed'}</td></tr>`; }).join('');
+  $('#ftHours').innerHTML = '<p>Mon–Fri 9am – 6pm</p><p>Sat 10am – 3pm</p><p>Sun closed</p>';
+  const status = () => {
+    const t = now(), h = CONFIG.hours[t.d];
+    let open = false, msg;
+    if (h && t.h >= h[0] && t.h < h[1]) { open = true; msg = `Open now · until ${fmt(h[1])}`; }
+    else {
+      for (let k = 0; k < 8; k++) { const d = (t.d + k) % 7, hh = CONFIG.hours[d]; if (!hh) continue; if (k === 0 && t.h >= hh[0]) continue; msg = `Closed · opens ${k === 0 ? 'today' : k === 1 ? 'tomorrow' : days[d]} ${fmt(hh[0])}`; break; }
+    }
+    $$('[data-status]').forEach(el => { el.classList.toggle('open', open); el.querySelector('span').textContent = msg; });
+  };
+  status(); setInterval(status, 60000);
+})();
+
+/* ---------- request builder ---------- */
+(() => {
+  const st = { type: CONFIG.requests[0], del: 'yes' };
+  $('#rqChips').innerHTML = CONFIG.requests.map(r => `<button type="button" class="chip" aria-pressed="${r === st.type}">${esc(r)}</button>`).join('');
+  const val = id => $('#' + id).value.trim();
+  const build = () => {
+    const transfer = st.type === 'Transfer a prescription';
+    $('#rqFromWrap').style.display = transfer ? '' : 'none';
+    const name = val('rqName'), phone = val('rqPhone'), from = val('rqFrom'), notes = val('rqNotes');
+    const L = [`Hi CareMed! ${name ? `This is ${name}. ` : ''}I'd like help with: ${st.type.toLowerCase()}.`];
+    if (transfer) L.push(`Current pharmacy: ${from || '(name and city)'}`);
+    if (st.type === 'Auto-injury prescription') L.push('This is for an auto accident claim.');
+    if (st.type === 'Pet prescription') L.push('It’s for my pet.');
+    L.push(st.del === 'yes' ? 'Please deliver it (free same-day delivery).' : 'I’ll pick it up at 7210 Allen Rd.');
+    if (notes) L.push(`Notes: ${notes}`);
+    L.push(`Best number: ${phone || '(your number)'}`);
+    $('#tkMsg').textContent = L.join('\n');
+  };
+  $('#rqChips').addEventListener('click', e => { const b = e.target.closest('.chip'); if (!b) return; st.type = b.textContent; $$('.chip', $('#rqChips')).forEach(c => c.setAttribute('aria-pressed', c === b)); build(); });
+  $('#rqDel').addEventListener('click', e => { const b = e.target.closest('.chip'); if (!b) return; st.del = b.dataset.v; $$('.chip', $('#rqDel')).forEach(c => c.setAttribute('aria-pressed', c === b)); build(); });
+  $$('#rqForm input, #rqForm textarea').forEach(i => i.addEventListener('input', build));
+  const toast = m => { const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('on'), 2400); };
+  const copy = async () => { const txt = $('#tkMsg').textContent; try { await navigator.clipboard.writeText(txt); return true; } catch { const ta = document.createElement('textarea'); ta.value = txt; document.body.appendChild(ta); ta.select(); let ok = false; try { ok = document.execCommand('copy'); } catch {} ta.remove(); return ok; } };
+  $('#tkCopy').addEventListener('click', async () => toast(await copy() ? 'Copied' : 'Select the text to copy it'));
+  $('#tkIg').addEventListener('click', () => copy().then(ok => ok && toast('Copied. Paste it in the DM')));
+  build();
+})();
+
+/* ===================== SIGNATURE: the compounding bench ===================== */
+(() => {
+  const svg = $('#benchSvg'), wrap = $('#stagewrap'), NS = 'http://www.w3.org/2000/svg';
+  const pillsG = $('#pills'), dustG = $('#dust'), specksG = $('#specks'), powder = $('#powder'), ring = $('#ring'), pestle = $('#pestle'), pestleRot = $('#pestleRot'), product = $('#product');
+  const CX = 260, CY = 246, RX = 112, RY = 22, RING = 1055.6;
+  let seed = 4; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const el = (tag, attrs, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); parent && parent.appendChild(e); return e; };
+  // pills: capsules (two-tone) and tablets, scattered in the bowl
+  const COLS = [['#7aa83a', '#ffffff'], ['#134a72', '#ffffff'], ['#f2c14e', '#ffffff'], ['#ffffff', '#ffffff'], ['#e8785e', '#ffffff']];
+  const pills = [];
+  for (let i = 0; i < 26; i++) {
+    const a = rnd() * Math.PI * 2, r = Math.sqrt(rnd()) * .86;
+    const x = CX + Math.cos(a) * RX * r, y = CY - 6 + Math.sin(a) * RY * r * 1.1 - rnd() * 10;
+    const cap = rnd() < .55, c = COLS[Math.floor(rnd() * COLS.length)], rot = rnd() * 180, t = rnd() * .72;
+    const g = el('g', {}, pillsG);
+    if (cap) { el('rect', { x: -11, y: -5, width: 22, height: 10, rx: 5, fill: c[1], stroke: 'rgba(15,42,61,.18)', 'stroke-width': 1 }, g); el('path', { d: 'M0 -5 H-6 a5 5 0 0 0 0 10 H0 Z', fill: c[0] }, g); }
+    else { el('ellipse', { rx: 8, ry: 6, fill: c[0] === '#ffffff' ? '#f4f1ea' : c[0], stroke: 'rgba(15,42,61,.18)', 'stroke-width': 1 }, g); el('path', { d: 'M-6 0 H6', stroke: 'rgba(15,42,61,.2)', 'stroke-width': 1 }, g); }
+    // fragments shown while it breaks
+    const fr = el('g', { opacity: 0 }, pillsG);
+    for (let k = 0; k < 3; k++) el('path', { d: `M0 0 l${4 + rnd() * 3} ${-2 - rnd() * 2} l${1 + rnd() * 2} ${4 + rnd() * 2} z`, fill: c[0] === '#ffffff' ? '#f4f1ea' : c[0], transform: `translate(${(rnd() - .5) * 14} ${(rnd() - .5) * 6}) rotate(${rnd() * 360})` }, fr);
+    pills.push({ g, fr, x, y, rot, t });
+  }
+  for (let i = 0; i < 40; i++) el('circle', { cx: CX + (rnd() - .5) * RX * 1.4, cy: CY - 2 + (rnd() - .5) * RY * 1.2, r: .8 + rnd() * 1.2, fill: ['#7aa83a', '#134a72', '#f2c14e', '#e8785e'][i % 4], opacity: .55 }, specksG);
+  // products
+  const PRODUCTS = {
+    liquid: `<g><rect x="-34" y="-96" width="68" height="104" rx="14" fill="#b7682a"/><rect x="-34" y="-96" width="68" height="104" rx="14" fill="url(#porc)" opacity=".12"/><rect x="-18" y="-122" width="36" height="28" rx="6" fill="#134a72"/><rect x="-26" y="-70" width="52" height="54" rx="6" fill="#fff"/><use href="#mark" x="-9" y="-66" width="18" height="18"/><text y="-36" text-anchor="middle" font-family="Inter Tight,sans-serif" font-weight="700" font-size="8.5" fill="#134a72">COMPOUNDED</text><text y="-25" text-anchor="middle" font-family="Inter Tight,sans-serif" font-weight="600" font-size="7.5" fill="#566b78">custom liquid</text><rect x="-24" y="-92" width="6" height="80" rx="3" fill="#fff" opacity=".35"/></g>`,
+    topical: `<g><rect x="-44" y="-58" width="88" height="66" rx="16" fill="#fff" stroke="#d4dde2" stroke-width="2"/><rect x="-48" y="-80" width="96" height="28" rx="10" fill="#134a72"/><rect x="-48" y="-58" width="96" height="6" fill="#7aa83a"/><use href="#mark" x="-10" y="-46" width="20" height="20"/><text y="-12" text-anchor="middle" font-family="Inter Tight,sans-serif" font-weight="700" font-size="9" fill="#134a72">COMPOUNDED</text><text y="0" text-anchor="middle" font-family="Inter Tight,sans-serif" font-weight="600" font-size="8" fill="#566b78">custom cream</text></g>`,
+    capsules: `<g><rect x="-36" y="-92" width="72" height="100" rx="14" fill="#fff" stroke="#d4dde2" stroke-width="2"/><rect x="-30" y="-118" width="60" height="30" rx="8" fill="#134a72"/><rect x="-30" y="-68" width="60" height="48" rx="6" fill="#eef4ea"/><use href="#mark" x="-9" y="-64" width="18" height="18"/><text y="-34" text-anchor="middle" font-family="Inter Tight,sans-serif" font-weight="700" font-size="8.5" fill="#134a72">COMPOUNDED</text><text y="-24" text-anchor="middle" font-family="Inter Tight,sans-serif" font-weight="600" font-size="7" fill="#566b78">custom strength</text><g transform="translate(-16 -6) rotate(-20)"><rect x="-9" y="-4" width="18" height="8" rx="4" fill="#fff" stroke="#134a72" stroke-width="1.2"/><path d="M0 -4 H-5 a4 4 0 0 0 0 8 H0Z" fill="#7aa83a"/></g><g transform="translate(14 -2) rotate(25)"><rect x="-9" y="-4" width="18" height="8" rx="4" fill="#fff" stroke="#134a72" stroke-width="1.2"/><path d="M0 -4 H-5 a4 4 0 0 0 0 8 H0Z" fill="#7aa83a"/></g></g>`
+  };
+  const TEXT = { liquid: ['A liquid made for one person. You.', 'Custom liquids, like magic mouthwash, mixed to order.'], topical: ['A cream made for one person. You.', 'Ointments, creams and lotions in the strength you need.'], capsules: ['Capsules made for one person. You.', 'Custom formulas and strengths, filled by hand.'] };
+  let form = 'liquid';
+  const S = { g: 0, tip: { x: CX, y: CY }, phase: 0, dragging: false, last: null, done: false, touched: false, hold: false, finT: 0, dust: [] };
+  function setForm(f) { form = f; product.innerHTML = PRODUCTS[f]; $('#payoffTitle').textContent = TEXT[f][0]; $('#payoffText').textContent = TEXT[f][1]; }
+  setForm('liquid');
+  $$('.forms button').forEach(b => b.addEventListener('click', () => { $$('.forms button').forEach(x => x.setAttribute('aria-pressed', x === b)); setForm(b.dataset.form); if (S.done) { S.finT = 0; } }));
+
+  function draw(now) {
+    const g = S.g;
+    // ring = the green arc from the logo
+    ring.setAttribute('stroke-dashoffset', (RING * (1 - g * .82)).toFixed(1));
+    // pills break apart, then disappear into the powder
+    for (const p of pills) {
+      const life = Math.max(0, Math.min(1, (g - p.t) / .22));
+      const near = Math.hypot(p.x - S.tip.x, (p.y - S.tip.y) * 2.4) < 34 && (S.dragging || S.hold);
+      const jx = near ? (Math.random() - .5) * 3 : 0, jy = near ? (Math.random() - .5) * 2 : 0;
+      p.g.setAttribute('transform', `translate(${p.x + jx} ${p.y + jy}) rotate(${p.rot}) scale(${life > 0 ? Math.max(0, 1 - life * 1.6) : 1})`);
+      p.g.setAttribute('opacity', life >= .6 ? 0 : 1);
+      p.fr.setAttribute('transform', `translate(${p.x} ${p.y + 2}) scale(${Math.max(0, 1 - life) * 1.1})`);
+      p.fr.setAttribute('opacity', life > 0 && life < 1 ? 1 : 0);
+    }
+    // powder mound grows
+    const m = Math.min(1, g * 1.15);
+    powder.setAttribute('rx', (RX * .92 * Math.sqrt(m)).toFixed(1)); powder.setAttribute('ry', (RY * 1.15 * Math.sqrt(m) + 4 * m).toFixed(1)); powder.setAttribute('cy', (CY + 2 - 6 * m).toFixed(1));
+    specksG.setAttribute('opacity', (m * .9).toFixed(2));
+    // pestle: tip follows the grind point, handle leans out to the upper right
+    let tx = S.tip.x, ty = S.tip.y;
+    let lift = 0;
+    if (S.done) { lift = Math.min(1, S.finT / .5); tx = lerp(tx, 420, lift); ty = lerp(ty, 60, lift); }
+    const lean = 24 + (tx - CX) * .12;
+    pestle.setAttribute('transform', `translate(${tx.toFixed(1)} ${ty.toFixed(1)})`);
+    pestleRot.setAttribute('transform', `rotate(${lean.toFixed(1)})`);
+    pestle.setAttribute('opacity', S.done ? (1 - lift).toFixed(2) : 1);
+    // dust puffs
+    for (const d of S.dust) { d.a -= .025; d.y -= .35; d.r += .25; d.e.setAttribute('cx', d.x); d.e.setAttribute('cy', d.y); d.e.setAttribute('r', d.r); d.e.setAttribute('opacity', Math.max(0, d.a)); }
+    S.dust = S.dust.filter(d => { if (d.a <= 0) { d.e.remove(); return false; } return true; });
+    // payoff: the compounded product rises out of the bowl
+    if (S.done) {
+      const k = Math.max(0, Math.min(1, (S.finT - .35) / .7)), e = 1 - Math.pow(1 - k, 3);
+      product.setAttribute('opacity', Math.min(1, k * 3).toFixed(2));
+      product.setAttribute('transform', `translate(${CX} ${CY - 6 - e * 96}) scale(${(.55 + e * .4).toFixed(3)})`);
+    } else { product.setAttribute('opacity', 0); product.setAttribute('transform', `translate(${CX} ${CY})`); }
+    $('#meterNum').textContent = Math.round(g * 100) + '%';
+  }
+  const lerp = (a, b, t) => a + (b - a) * t;
+  function grind(dist) {
+    if (S.done) return;
+    S.g = Math.min(1, S.g + dist / 2600);
+    if (Math.random() < .5) { const e = el('circle', { fill: '#ffffff', opacity: .8 }, dustG); S.dust.push({ e, x: S.tip.x + (Math.random() - .5) * 20, y: S.tip.y - 4, r: 2 + Math.random() * 3, a: .8 }); }
+    if (S.g >= 1 && !S.done) finish();
+  }
+  function finish() { S.done = true; S.finT = 0; S.dragging = false; $('#payoff').classList.add('on'); clearTimeout(finish.t); finish.t = setTimeout(() => S.done && $('#payoff').classList.add('live'), 900); $('#meterLabel').textContent = 'Ready'; wrap.classList.remove('grabbing'); }
+  function reset() { S.g = 0; S.done = false; S.finT = 0; S.tip = { x: CX, y: CY }; $('#payoff').classList.remove('on', 'live'); $('#meterLabel').textContent = 'Ground'; kick(); }
+  $('#resetBtn').addEventListener('click', reset);
+
+  // map pointer to the inside of the bowl
+  const toSvg = e => { const r = svg.getBoundingClientRect(); return { x: (e.clientX - r.left) / r.width * 520, y: (e.clientY - r.top) / r.height * 430 }; };
+  const clampBowl = p => { const dx = (p.x - CX) / (RX * .82), dy = (p.y - CY) / (RY * .9), d = Math.hypot(dx, dy); return d > 1 ? { x: CX + dx / d * RX * .82, y: CY + dy / d * RY * .9 } : p; };
+  let lastX = 0;
+  wrap.addEventListener('pointerdown', e => { if (S.done) return; S.dragging = true; S.touched = true; hideCallout(); wrap.classList.add('grabbing'); lastX = e.clientX; S.last = toSvg(e); if (e.pointerType !== 'touch') wrap.setPointerCapture(e.pointerId); kick(); });
+  wrap.addEventListener('pointermove', e => {
+    if (!S.dragging || S.done) return;
+    if (e.pointerType === 'touch') {
+      // phones: side-to-side swipes grind; the tip sweeps an ellipse as you go
+      const dx = e.clientX - lastX; lastX = e.clientX;
+      S.phase += dx * .035;
+      S.tip = { x: CX + Math.sin(S.phase) * RX * .7, y: CY + Math.cos(S.phase) * RY * .7 };
+      grind(Math.abs(dx) * 2.4);
+    } else {
+      const p = toSvg(e), q = clampBowl(p);
+      const d = Math.hypot(q.x - S.tip.x, (q.y - S.tip.y) * 2.2);
+      S.tip = q; grind(d);
+    }
+  });
+  const end = () => { S.dragging = false; wrap.classList.remove('grabbing'); };
+  wrap.addEventListener('pointerup', end); wrap.addEventListener('pointercancel', end);
+  // accessible: hold the button and it grinds for you
+  const hb = $('#holdBtn');
+  const holdOn = e => { e.preventDefault(); if (S.done) reset(); S.hold = true; S.touched = true; hideCallout(); hb.classList.add('hold'); kick(); };
+  const holdOff = () => { S.hold = false; hb.classList.remove('hold'); };
+  hb.addEventListener('pointerdown', holdOn); hb.addEventListener('pointerup', holdOff); hb.addEventListener('pointerleave', holdOff); hb.addEventListener('pointercancel', holdOff);
+  hb.addEventListener('keydown', e => { if (e.key === ' ' || e.key === 'Enter') holdOn(e); }); hb.addEventListener('keyup', holdOff);
+  const callout = $('#callout');
+  if (!FINE) $('#calloutText').textContent = 'Grind it: swipe side to side';
+  function hideCallout() { callout.classList.add('gone'); }
+
+  // loop only while something is moving
+  let running = false, last = 0, idleT = 0, demo = 0, visible = true;
+  function kick() { if (!running && visible) { running = true; last = performance.now(); requestAnimationFrame(loop); } }
+  function loop(now) {
+    const dt = Math.min(.05, Math.max(0, (now - last) / 1000)); last = now;
+    if (S.hold && !S.done) { S.phase += dt * 7; S.tip = { x: CX + Math.sin(S.phase) * RX * .7, y: CY + Math.cos(S.phase) * RY * .7 }; grind(dt * 900); }
+    // idle nudge: if nobody has touched it, the pestle does a little demo
+    if (!S.touched && !RM) { idleT += dt; if (idleT > 2.6 && idleT < 4.6) { S.phase += dt * 6; S.tip = { x: CX + Math.sin(S.phase) * RX * .6, y: CY + Math.cos(S.phase) * RY * .6 }; if (S.g < .08) S.g += dt * .03; } if (idleT > 8) idleT = 0; }
+    if (S.done) S.finT += dt;
+    draw(now);
+    const busy = S.dragging || S.hold || S.dust.length || (S.done && S.finT < 1.3) || (!S.touched && !RM);
+    if (busy && visible) requestAnimationFrame(loop); else running = false;
+  }
+  new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible) kick(); }).observe($('#compounding'));
+  if (RM) { S.g = 1; finish(); S.finT = 2; S.touched = true; hideCallout(); }
+  draw(0);
+})();
+
+/* ===================== DELIVERY STORY ===================== */
+(() => {
+  const route = $('#routeOn'), car = $('#car'), L = route.getTotalLength(), steps = $$('.dv-step'), dots = $$('#dvDots i'), tag = $('#homeTag');
+  route.style.strokeDasharray = L; route.style.strokeDashoffset = L;
+  // blocks between the streets
+  const blocks = $('#blocks'); let html = '';
+  const xs = [0, 120, 330, 520, 680, 800], ys = [0, 120, 250, 390, 520];
+  for (let i = 0; i < xs.length - 1; i++) for (let j = 0; j < ys.length - 1; j++) { const x0 = xs[i] + 14, x1 = xs[i + 1] - 14, y0 = ys[j] + 14, y1 = ys[j + 1] - 14; for (let x = x0; x < x1 - 20; x += 34) { html += `<rect x="${x}" y="${y0}" width="24" height="18" rx="3"/><rect x="${x}" y="${y1 - 18}" width="24" height="18" rx="3"/>`; } }
+  blocks.innerHTML = html;
+  let cur = -1;
+  function set(p) {
+    const k = Math.max(0, Math.min(1, (p - .12) / .72));
+    route.style.strokeDashoffset = L * (1 - k);
+    const pt = route.getPointAtLength(L * k), pt2 = route.getPointAtLength(Math.min(L, L * k + 1)), pt0 = route.getPointAtLength(Math.max(0, L * k - 1));
+    const ang = Math.atan2(pt2.y - pt0.y, pt2.x - pt0.x) * 180 / Math.PI;
+    car.setAttribute('transform', `translate(${pt.x.toFixed(1)} ${pt.y.toFixed(1)}) rotate(${ang.toFixed(1)})`);
+    car.style.opacity = k > 0 || p > .05 ? 1 : 0;
+    tag.setAttribute('opacity', k > .98 ? 1 : 0);
+    const i = Math.min(steps.length - 1, Math.floor(p * steps.length * .999));
+    if (i !== cur) { cur = i; steps.forEach((s, n) => s.classList.toggle('on', n === i)); dots.forEach((d, n) => d.classList.toggle('on', n <= i)); }
+  }
+  set(RM ? 1 : 0);
+  if (RM) { $$('.dv-step').forEach(s => s.classList.add('on')); return; }
+  const sec = $('#delivery');
+  const onScroll = () => { const r = sec.getBoundingClientRect(), span = sec.offsetHeight - innerHeight; set(Math.max(0, Math.min(1, -r.top / span))); };
+  addEventListener('scroll', onScroll, { passive: true }); addEventListener('resize', onScroll); onScroll();
+  window.__dvScroll = onScroll;
+})();
+
+/* ===================== PAGE MOTION ===================== */
+(() => {
+  let lenis = null;
+  if (!RM && typeof Lenis !== 'undefined') {
+    lenis = new Lenis({ lerp: .1 });
+    if (HAS_G) { lenis.on('scroll', ScrollTrigger.update); gsap.ticker.add(t => lenis.raf(t * 1000)); gsap.ticker.lagSmoothing(0); }
+    else { const raf = t => { lenis.raf(t); requestAnimationFrame(raf); }; requestAnimationFrame(raf); }
+    lenis.on('scroll', () => window.__dvScroll && window.__dvScroll());
+  }
+  $$('a[href^="#"]').forEach(a => a.addEventListener('click', e => { const id = a.getAttribute('href'); const t = id === '#top' ? document.body : $(id); if (!t) return; e.preventDefault(); const y = id === '#top' ? 0 : t.getBoundingClientRect().top + scrollY - 70; lenis ? lenis.scrollTo(y, { duration: 1.4 }) : scrollTo({ top: y, behavior: RM ? 'auto' : 'smooth' }); }));
+  const nav = $('#nav'); const navState = () => nav.classList.toggle('solid', scrollY > 30); addEventListener('scroll', navState, { passive: true }); navState();
+  if (HAS_G && !RM) {
+    gsap.registerPlugin(ScrollTrigger);
+    $$('.reveal').forEach(el => gsap.to(el, { autoAlpha: 1, y: 0, duration: 1, ease: 'expo.out', scrollTrigger: { trigger: el, start: 'top 90%' } }));
+    const intro = () => gsap.from('.hero .kicker, .hero h1, .hero .lead, .hero .hero-cta, .hero .hero-facts', { y: 28, autoAlpha: 0, duration: 1.1, ease: 'expo.out', stagger: .08 });
+    const L = $('#loader'); if (L.classList.contains('done')) intro(); else setTimeout(intro, 1250);
+    // magnetic primary buttons on mice
+    if (FINE) $$('.btn-navy,.btn-green').forEach(b => { b.addEventListener('mousemove', e => { const r = b.getBoundingClientRect(); gsap.to(b, { x: (e.clientX - r.left - r.width / 2) * .15, y: (e.clientY - r.top - r.height / 2) * .25, duration: .4 }); }); b.addEventListener('mouseleave', () => gsap.to(b, { x: 0, y: 0, duration: .5, ease: 'elastic.out(1,.5)' })); });
+  }
+})();
+</script>
+</body>
+</html>
