@@ -20,7 +20,7 @@ export async function createTiles(o = {}) {
   const scene = new THREE.Scene();
   const env = await new RGBELoader().loadAsync(ASSETS + (o.hdr || 'studio-512.hdr')); env.mapping = THREE.EquirectangularReflectionMapping;
   scene.environment = env; scene.environmentRotation.set(0, o.envRotation ?? 1.2, 0); scene.environmentIntensity = o.envIntensity ?? .7;
-  const key = new THREE.DirectionalLight('#fff4e6', o.key ?? 2.6); key.castShadow = true; key.shadow.mapSize.set(2048, 2048); key.shadow.radius = 9; key.shadow.blurSamples = 20; key.shadow.bias = -.0004; key.shadow.normalBias = .002; scene.add(key, key.target);
+  const key = new THREE.DirectionalLight('#fff4e6', o.key ?? 2.6); key.castShadow = true; key.shadow.mapSize.set(2048, 2048); key.shadow.radius = 9; key.shadow.blurSamples = 20; key.shadow.bias = o.shadowBias ?? -.0004; key.shadow.normalBias = o.normalBias ?? .002; scene.add(key, key.target);
   const rim = new THREE.DirectionalLight('#dfe9ff', o.rim ?? 1.8); scene.add(rim);
   const fill = new THREE.HemisphereLight('#fff6ea', '#3a2a1c', .35); scene.add(fill);
   const floor = new THREE.Mesh(new THREE.PlaneGeometry(4, 4), new THREE.ShadowMaterial({ opacity: o.shadow ?? .34 })); floor.rotation.x = -Math.PI / 2; floor.receiveShadow = true; scene.add(floor);

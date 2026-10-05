@@ -10,8 +10,6 @@
 <meta property="og:title" content="Nuts Now | Fresh roasted traditions">
 <meta property="og:description" content="Fresh roasted nuts, candy and sweets by the pound. 5713 Allen Rd, Allen Park.">
 <meta property="og:image" content="https://nutsnow.vercel.app/img/post1.jpg">
-<link rel="modulepreload" href="assets/scene.js">
-<link rel="preload" href="assets/studio-512.hdr" as="fetch" crossorigin>
 <link rel="preload" href="assets/fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
 <style>
 @font-face{font-family:"Archivo";src:url(assets/fonts/archivo.woff2) format("woff2");font-weight:100 900;font-stretch:62% 125%;font-display:swap}
@@ -48,40 +46,36 @@ img,svg,canvas{display:block;max-width:100%}a{color:inherit}button{font:inherit;
 .nav .btn{padding:12px 16px;font-size:13.5px}
 @media (max-width:940px){.nav-links a:not(.btn),.nav .status{display:none}}
 @media (max-width:480px){.nav .btn span{display:none}.nav .btn{padding:12px}}
-/* build */
-.build{position:relative;height:900vh}
-.stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;background:radial-gradient(110% 90% at 62% 55%,#1a1c12,var(--bg) 70%)}
-#gl{position:absolute;inset:0;width:100%;height:100%;touch-action:pan-y;opacity:0;transition:opacity 1.4s var(--ease)}.gl-ready #gl{opacity:1}
-.fallback{display:none;position:absolute;inset:0}.no-gl .fallback{display:block}.fallback img{width:100%;height:100%;object-fit:cover;opacity:.5}
-.shade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(11,12,8,.9),rgba(11,12,8,.5) 30%,transparent 56%)}
-@media (max-width:820px){.shade{background:linear-gradient(0deg,rgba(11,12,8,.94),rgba(11,12,8,.55) 32%,transparent 54%)}}
-.hero{position:absolute;left:var(--pad);top:50%;transform:translateY(-46%);max-width:min(560px,46vw);z-index:3}
+/* hero: the roaster */
+.hero{position:relative;min-height:100vh;min-height:100svh;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(24px,4vw,70px);align-items:center;padding:110px var(--pad) 60px;max-width:1440px;margin:0 auto}
+.hero::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(60% 60% at 72% 52%,rgba(216,180,108,.16),transparent 70%)}
 .hero h1{font:900 clamp(56px,8vw,132px)/.84 var(--sans);font-stretch:66%;text-transform:uppercase;margin:16px 0 22px}
 .hero h1 span{color:var(--lime);display:block}
-.hero p{color:#cfcdbf;max-width:440px;margin:0 0 28px}
+.hero p{color:#cfcdbf;max-width:460px;margin:0 0 28px}
 .cta{display:flex;gap:12px;flex-wrap:wrap}
-@media (max-width:820px){.hero{top:auto;bottom:92px;transform:none;max-width:none;right:var(--pad)}.hero h1{font-size:clamp(50px,15vw,80px);margin-bottom:12px}.hero p{font-size:15px;margin-bottom:18px}}
-.steps{position:absolute;left:var(--pad);top:50%;transform:translateY(-50%);width:min(440px,40vw);height:270px;margin:0;padding:0;list-style:none;z-index:3;pointer-events:none}
-.step{position:absolute;inset:0;opacity:0;visibility:hidden}
-.step .num{font:900 clamp(78px,9vw,140px)/.8 var(--sans);font-stretch:62%;color:transparent;-webkit-text-stroke:1.5px var(--lime);display:block;margin-bottom:10px}
-.step h2{font:900 clamp(40px,4.6vw,74px)/.88 var(--sans);font-stretch:66%;text-transform:uppercase;margin:0 0 12px}.step h2 em{font-style:normal;color:var(--lime)}
-.step p{margin:0;color:#cfcdbf;max-width:370px}
-@media (max-width:820px){.steps{top:auto;bottom:max(84px,11vh);transform:none;width:auto;right:var(--pad);height:auto;min-height:170px}.step{inset:auto 0 0 0}.step .num{font-size:60px}.step h2{font-size:42px}.step p{font-size:15px}}
-.rail{position:absolute;right:var(--pad);top:50%;transform:translateY(-50%);z-index:4;display:flex;flex-direction:column;gap:5px}
-.rail button{all:unset;cursor:pointer;display:flex;align-items:center;justify-content:flex-end;gap:12px;padding:5px 0;color:rgba(246,243,232,.42);font:700 11px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;transition:color .3s}
-.rail button i{width:20px;height:3px;border-radius:3px;background:currentColor;transition:width .4s var(--ease),background .3s}
-.rail button.on{color:var(--ink)}.rail button.on i{width:42px;background:var(--lime)}.rail button.done i{background:var(--gold)}
-.rail button:focus-visible{outline:2px solid var(--lime);outline-offset:4px}
-@media (min-width:821px) and (max-width:1180px){.rail button span{display:none}}
-@media (max-width:820px){.rail{top:76px;left:var(--pad);transform:none;flex-direction:row;gap:4px}.rail button{flex:1;justify-content:center;padding:8px 0}.rail button span{display:none}.rail button i,.rail button.on i{width:100%}}
-.skip{position:absolute;right:var(--pad);bottom:24px;z-index:4;background:none;border:1px solid var(--line);border-radius:99px;padding:9px 15px;cursor:pointer;color:var(--muted);font:700 11px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;transition:opacity .3s}
-.cue{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);z-index:3;pointer-events:none;white-space:nowrap;display:flex;align-items:center;gap:10px;padding:12px 18px;border-radius:99px;background:rgba(246,243,232,.08);border:1px solid var(--line);font-weight:700;font-size:14px;transition:opacity .3s}
-.cue svg{width:18px;height:18px;animation:nudge 1.6s var(--ease) infinite}@keyframes nudge{0%,100%{transform:translateY(-2px)}50%{transform:translateY(4px)}}
-.finale{position:absolute;left:var(--pad);top:50%;transform:translateY(-50%);z-index:3;opacity:0;visibility:hidden;max-width:min(520px,44vw)}
-.finale h2{font:900 clamp(64px,9vw,150px)/.84 var(--sans);font-stretch:64%;text-transform:uppercase;margin:0 0 16px}.finale h2 span{color:var(--lime)}
-.finale p{color:#cfcdbf;margin:0 0 24px;max-width:380px}
-@media (max-width:820px){.finale{top:auto;bottom:76px;transform:none;max-width:none;right:var(--pad)}.finale h2{font-size:64px}.finale p{font-size:15px;margin-bottom:16px}}
-.rm .build{height:auto}.rm .stage{position:relative}.rm .steps,.rm .rail,.rm .skip,.rm .cue{display:none}
+@media (max-width:900px){.hero{grid-template-columns:1fr;padding-top:84px;gap:22px}.roaster{max-width:min(340px,100%)}.hero h1{font-size:clamp(50px,15vw,80px);margin:12px 0}.hero p{font-size:15px;margin-bottom:18px}.roaster{order:-1}}
+.roaster{position:relative;width:100%;max-width:560px;justify-self:center}
+.drum{position:relative;aspect-ratio:1;width:100%}
+.drum canvas{position:absolute;inset:0;width:100%;height:100%}
+.r-ui{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center;margin-top:18px}
+.hold{all:unset;cursor:pointer;-webkit-user-select:none;user-select:none;touch-action:manipulation;-webkit-touch-callout:none;display:grid;place-items:center;width:104px;height:104px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ff9a4a,#e0521d 60%,#a3330c);color:#fff;font:900 17px/1 var(--sans);font-stretch:70%;letter-spacing:.06em;text-transform:uppercase;text-align:center;box-shadow:0 10px 0 #6e2208,0 24px 40px -10px rgba(224,82,29,.6);transition:transform .12s,box-shadow .12s}
+.hold:focus-visible{outline:2px solid var(--lime);outline-offset:5px}
+.hold.down{transform:translateY(8px);box-shadow:0 2px 0 #6e2208,0 10px 30px -10px rgba(224,82,29,.8)}
+.hold small{display:block;font-size:11px;letter-spacing:.14em;opacity:.85;margin-top:4px}
+.gauge{position:relative}
+.gauge .lbl{display:flex;justify-content:space-between;font:700 11px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:9px}
+.gauge .bar{position:relative;height:16px;border-radius:99px;background:linear-gradient(90deg,#efe3c4,#e2c27a 35%,#c98a3a 55%,#8a4a1c 78%,#2b170c);box-shadow:inset 0 0 0 1px rgba(255,255,255,.1)}
+.gauge .win{position:absolute;top:-6px;bottom:-6px;left:55%;width:20%;border:2px solid var(--lime);border-radius:8px;box-shadow:0 0 0 4px rgba(140,198,63,.15)}
+.gauge .win::after{content:"Golden";position:absolute;left:50%;top:-22px;transform:translateX(-50%);font:800 10.5px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--lime)}
+.gauge .needle{position:absolute;top:-9px;bottom:-9px;width:4px;margin-left:-2px;border-radius:4px;background:#fff;box-shadow:0 0 12px rgba(255,255,255,.7);left:0}
+.verdict{min-height:46px;margin-top:14px;font:900 clamp(22px,2.2vw,30px)/1.05 var(--sans);font-stretch:70%;text-transform:uppercase;color:var(--ink)}
+.verdict.good{color:var(--lime)}.verdict small{display:block;font:500 14px/1.4 var(--sans);font-stretch:100%;text-transform:none;color:var(--muted);margin-top:6px}
+.callout{position:absolute;left:-6%;top:12%;z-index:3;display:flex;align-items:center;gap:12px;padding:12px 16px 12px 12px;border-radius:99px;background:var(--lime);color:#10120a;font:800 14px/1.15 var(--sans);box-shadow:0 18px 30px -12px rgba(0,0,0,.6);pointer-events:none;transition:opacity .5s,transform .5s var(--ease);animation:bob 2.6s ease-in-out infinite}
+.callout i{width:34px;height:34px;border-radius:50%;background:#10120a;color:var(--lime);display:grid;place-items:center;flex:none}.callout svg{width:20px;height:20px}
+.callout small{display:block;font-weight:600;font-size:12px;opacity:.75}.callout.gone{opacity:0;transform:translateY(-10px);animation:none}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@media (max-width:900px){.callout{left:0;top:2%}}
+.r-pay{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;opacity:0;transform:translateY(10px);pointer-events:none;transition:opacity .5s,transform .5s var(--ease)}.r-pay.on{opacity:1;transform:none;pointer-events:auto}
 /* marquee */
 .marquee{overflow:hidden;background:var(--lime);color:#10120a;padding:16px 0}
 .mq{display:flex;width:max-content;animation:mq 36s linear infinite}
@@ -237,22 +231,22 @@ img,svg,canvas{display:block;max-width:100%}a{color:inherit}button{font:inherit;
 </header>
 
 <main id="top">
-  <section class="build" id="build" aria-label="A Nuts Now party tray fills itself as you scroll">
-    <div class="stage" id="stage">
-      <canvas id="gl" role="img" aria-label="A gold party tray filling compartment by compartment with cashews, pistachios, hazelnuts, pecans, chocolates, dates and Turkish delight"></canvas>
-      <div class="fallback"><img src="img/post3.jpg" alt="A gold party tray being filled at Nuts Now"></div>
-      <div class="shade"></div>
-      <div class="hero" id="heroCopy">
-        <div class="tag">Fresh roasted traditions · Allen Park</div>
-        <h1>Fresh roasted. <span>By the pound.</span></h1>
-        <p>Nuts from our own roastery, plus Dubai chocolate, candy, dried fruit, a fresh counter and Middle Eastern sweets. Scroll and we'll fill you a tray.</p>
-        <div class="cta"><a class="btn btn-lime" href="#shop">See everything</a><a class="btn btn-line" href="#visit">Visit a shop</a></div>
+  <section class="hero" id="heroWrap" aria-label="Nuts Now">
+    <div id="heroCopy">
+      <div class="tag">Fresh roasted traditions · Allen Park</div>
+      <h1>Fresh roasted. <span>By the pound.</span></h1>
+      <p>Our family has roasted nuts and seeds in Allen Park for 15+ years. The trick is knowing when to stop. Hold the button, watch them turn, and let go when they're golden.</p>
+      <div class="cta"><a class="btn btn-lime" href="#shop">See everything</a><a class="btn btn-line" href="#visit">Visit a shop</a></div>
+    </div>
+    <div class="roaster" id="roaster">
+      <div class="drum"><canvas id="drumCv" role="img" aria-label="A roasting drum full of raw cashews, pistachios and hazelnuts. Hold the roast button and let go when they turn golden"></canvas></div>
+      <div class="callout" id="rCall" aria-hidden="true"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c2 3 5 5 5 9a5 5 0 0 1-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-5 1-8z"/></svg></i><span>Hold to roast<small>Let go when they're golden</small></span></div>
+      <div class="r-ui">
+        <button class="hold" id="holdBtn" type="button" aria-describedby="verdict">Roast<small>hold</small></button>
+        <div class="gauge" aria-hidden="true"><div class="lbl"><span>Raw</span><span>Dark</span></div><div class="bar"><span class="win"></span><span class="needle" id="needle"></span></div></div>
       </div>
-      <ol class="steps" id="steps" aria-live="polite"></ol>
-      <div class="finale" id="finale"><h2>Your tray. <span>Your mix.</span></h2><p>Every compartment, filled from our bins. That's 7 things. We carry a lot more.</p><div class="cta"><a class="btn btn-lime" href="#shop">See the whole shop</a><button class="btn btn-line" type="button" id="rebuild">Fill it again</button></div></div>
-      <nav class="rail" id="rail" aria-label="Tray compartments"></nav>
-      <button class="skip" id="skip" type="button">Skip</button>
-      <div class="cue" id="cue" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 4v15M6 13l6 6 6-6"/></svg>Scroll to fill the tray</div>
+      <p class="verdict" id="verdict" aria-live="polite">Raw cashews, pistachios &amp; hazelnuts.<small>Hold the button to fire up the roaster.</small></p>
+      <div class="r-pay" id="rPay"><a class="btn btn-lime" href="#shop">Shop the nuts</a><button class="btn btn-line" type="button" id="rAgain">Roast another batch</button></div>
     </div>
   </section>
 
@@ -395,17 +389,6 @@ img,svg,canvas{display:block;max-width:100%}a{color:inherit}button{font:inherit;
 const CONFIG = {
   tel: '+13137685370', tz: 'America/Detroit',
   shops: { ap: { 0: [10, 20], 1: [10, 21], 2: [10, 21], 3: [10, 21], 4: [10, 21], 5: [10, 21], 6: [10, 21] }, dh: { 0: [9, 22], 1: [9, 22], 2: [9, 22], 3: [9, 22], 4: [9, 22], 5: [9, 22], 6: [9, 22] } },
-  steps: [
-    ['Tray', 'The <em>tray.</em>', 'Gold, sectioned, ready for a party. Same kind we fill at the counter.'],
-    ['Cashews', 'Cashews. <em>No. 1.</em>', 'Flavored and roasted cashews are our best seller. They go in first.'],
-    ['Pistachios', '<em>Pistachios.</em>', 'Roasted in the shell, cracked open and impossible to stop eating.'],
-    ['Hazelnuts', '<em>Hazelnuts.</em>', 'Roasted with the skins taken off.'],
-    ['Pecans', '<em>Pecans.</em>', 'Buttery halves, straight from the bins.'],
-    ['Chocolates', '<em>Chocolates.</em>', 'Wrapped specialty pieces, including imports.'],
-    ['Dates', '<em>Dates.</em>', 'Whole, stuffed or unstuffed.'],
-    ['Delight', 'Turkish <em>delight.</em>', 'By the pound, dusted and soft. The centre of every good tray.']
-  ],
-  stepAt: [.06, .135, .252, .369, .486, .603, .72, .837],
   atlas: 'cashews bbq zaatar pistachios pecans hazelnuts walnuts mix pumpkin melon lemon strawberries mango kiwi pineapple baklava delight dates stuffed dubaidates bulkchoc wrapped discs dubaibar dubaicup browniecup dubaiberries gummies sours blue licorice swedish fish pretzels nougat cheesecake cake icecream peanutbutter nutbutters spices coffee'.split(' '),
   tags: { no1: 'No. 1', new: 'New', viral: 'Viral', halal: 'Halal options', flavored: 'Flavored', fresh: 'Made to order' },
   cats: [
@@ -447,10 +430,7 @@ const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [..
 const RM = matchMedia('(prefers-reduced-motion: reduce)').matches, FINE = matchMedia('(hover: hover) and (pointer: fine)').matches, MOBILE = matchMedia('(max-width: 820px)').matches, HAS_G = typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined';
 if (RM) document.documentElement.classList.add('rm'); if (!HAS_G) document.documentElement.classList.add('no-anim');
 $('#yr').textContent = new Date().getFullYear();
-window.__ffReady = () => { document.documentElement.classList.add('gl-ready'); window.__kitSync && window.__kitSync(); };
 
-$('#steps').innerHTML = CONFIG.steps.map((s, i) => `<li class="step"><span class="num">0${i + 1}</span><h2>${s[1]}</h2><p>${esc(s[2])}</p></li>`).join('');
-$('#rail').innerHTML = CONFIG.steps.map((s, i) => `<button type="button" aria-label="Step ${i + 1}: ${esc(s[0])}"><span>${esc(s[0])}</span><i></i></button>`).join('');
 $('#fdRow').innerHTML = CONFIG.feed.map(f => `<a class="reveal" href="https://www.instagram.com/p/${esc(f[1])}/" target="_blank" rel="noopener"><img src="${esc(f[0])}" alt="${esc(f[2])}" width="720" height="1280" loading="lazy"></a>`).join('');
 const mqh = CONFIG.marquee.map(m => `<span>${esc(m)}</span>`).join(''); $('#mq').innerHTML = mqh + mqh;
 
@@ -581,28 +561,115 @@ $('#nvTrack').innerHTML = CONFIG.newv.map(n => n.img
   build();
 })();
 
-/* scroll: the build + page motion */
+/* the roaster: hold to roast, let go when the nuts are golden */
+(() => {
+  const cv = $('#drumCv'), ctx = cv.getContext('2d'), btn = $('#holdBtn'), verdict = $('#verdict'), pay = $('#rPay'), needle = $('#needle'), call = $('#rCall');
+  if (!ctx) return;
+  let S = 0, D = 1, raf = 0, visible = true, holding = false, demo = false, touched = false, roast = 0, omega = .008, ang = 0, done = false, t0 = performance.now(), steam = [], sparks = 0;
+  const WIN = [.55, .75];
+  // three nuts from the catalog sprite atlas (row = item, 3 colour variants per row)
+  const ROWS = ['cashews', 'pistachios', 'hazelnuts'].map(id => CONFIG.atlas.indexOf(id));
+  const atlas = new Image(); let tints = null; atlas.src = 'img/shop/pieces.webp';
+  atlas.onload = () => {
+    const base = document.createElement('canvas'); base.width = atlas.naturalWidth; base.height = atlas.naturalHeight; const bx = base.getContext('2d', { willReadFrequently: true }); bx.drawImage(atlas, 0, 0);
+    const src = bx.getImageData(0, 0, base.width, base.height);
+    const mk = f => { const c = document.createElement('canvas'); c.width = base.width; c.height = base.height; const x = c.getContext('2d'), im = new ImageData(new Uint8ClampedArray(src.data), src.width, src.height), d = im.data; for (let i = 0; i < d.length; i += 4) if (d[i + 3]) { const o = f(d[i], d[i + 1], d[i + 2]); d[i] = o[0]; d[i + 1] = o[1]; d[i + 2] = o[2]; } x.putImageData(im, 0, 0); return c; };
+    const raw = (r, g, b) => { const l = (r * .3 + g * .59 + b * .11); return [l * .5 + 128, l * .48 + 118, l * .36 + 92]; };
+    tints = [mk(raw), mk((r, g, b) => { const q = raw(r, g, b); return [(r + q[0]) / 2, (g + q[1]) / 2, (b + q[2]) / 2]; }), mk((r, g, b) => [Math.min(255, r * 1.02 + 8), g * .86, b * .62]), mk((r, g, b) => [r * .42 + 8, g * .3 + 3, b * .22])];
+    kick();
+  };
+  // nuts tumbling in the drum: verlet circles inside a spinning circle
+  const N = 64, nuts = [...Array(N)].map((_, i) => ({ x: (Math.random() - .5) * .3, y: .1 + Math.random() * .2, px: 0, py: 0, row: ROWS[i % 3], col: (i / 3 | 0) % 3, a: Math.random() * 6.28, s: .92 + Math.random() * .16 }));
+  nuts.forEach(n => { n.px = n.x; n.py = n.y; });
+  const RW = .355, RN = .036;   // window radius, nut radius (fractions of canvas size)
+  function physics() {
+    const g = .00042, lim = RW - RN;
+    for (const n of nuts) { const vx = (n.x - n.px) * .992, vy = (n.y - n.py) * .992; n.px = n.x; n.py = n.y; n.x += vx; n.y += vy + g; }
+    for (let it = 0; it < 3; it++) {
+      for (let i = 0; i < N; i++) { const a = nuts[i];
+        for (let j = i + 1; j < N; j++) { const b = nuts[j], dx = b.x - a.x, dy = b.y - a.y, m = RN * 2 * .9, d2 = dx * dx + dy * dy; if (d2 < m * m && d2 > 1e-9) { const d = Math.sqrt(d2), k = (m - d) / d * .5; a.x -= dx * k; a.y -= dy * k; b.x += dx * k; b.y += dy * k; } }
+        const d = Math.hypot(a.x, a.y); if (d > lim) { const nx = a.x / d, ny = a.y / d; a.x = nx * lim; a.y = ny * lim;
+          // the drum wall drags nuts along with it (that's what makes them tumble)
+          const tx = -ny, ty = nx, vt = (a.x - a.px) * tx + (a.y - a.py) * ty, wall = omega * lim, dv = (wall - vt) * .35; a.px -= tx * dv; a.py -= ty * dv; }
+      }
+    }
+    for (const n of nuts) n.a += ((n.x - n.px) * -n.y + (n.y - n.py) * n.x) * 40 + omega * .5;
+  }
+  function draw() {
+    const c = S / 2; ctx.setTransform(D, 0, 0, D, 0, 0); ctx.clearRect(0, 0, S, S);
+    const heat = holding ? Math.min(1, .35 + roast) : Math.max(0, roast * .4);
+    // fire glow behind the drum
+    const fg = ctx.createRadialGradient(c, c * 1.15, S * .1, c, c * 1.1, S * .52); fg.addColorStop(0, `rgba(255,120,40,${.1 + heat * .45})`); fg.addColorStop(1, 'rgba(255,120,40,0)'); ctx.fillStyle = fg; ctx.fillRect(0, 0, S, S);
+    // drum body
+    const R = S * .46, body = ctx.createRadialGradient(c - R * .3, c - R * .35, R * .1, c, c, R); body.addColorStop(0, '#5b5d55'); body.addColorStop(.55, '#2c2e27'); body.addColorStop(1, '#151611');
+    ctx.fillStyle = body; ctx.beginPath(); ctx.arc(c, c, R, 0, 7); ctx.fill();
+    ctx.strokeStyle = 'rgba(216,180,108,.55)'; ctx.lineWidth = S * .012; ctx.beginPath(); ctx.arc(c, c, R * .965, 0, 7); ctx.stroke();
+    for (let i = 0; i < 24; i++) { const a = i / 24 * 6.283 + ang * .2; ctx.fillStyle = 'rgba(230,220,190,.55)'; ctx.beginPath(); ctx.arc(c + Math.cos(a) * R * .89, c + Math.sin(a) * R * .89, S * .007, 0, 7); ctx.fill(); }
+    // window: warm interior
+    const rw = RW * S, inside = ctx.createRadialGradient(c, c + rw * .3, rw * .1, c, c, rw); inside.addColorStop(0, `rgb(${70 + heat * 120 | 0},${38 + heat * 40 | 0},${18})`); inside.addColorStop(1, '#120c06');
+    ctx.save(); ctx.beginPath(); ctx.arc(c, c, rw, 0, 7); ctx.clip(); ctx.fillStyle = inside; ctx.fillRect(c - rw, c - rw, rw * 2, rw * 2);
+    // spinning vanes
+    ctx.strokeStyle = 'rgba(255,255,255,.07)'; ctx.lineWidth = S * .02; for (let i = 0; i < 3; i++) { const a = ang + i * 2.094; ctx.beginPath(); ctx.moveTo(c + Math.cos(a) * rw * .2, c + Math.sin(a) * rw * .2); ctx.lineTo(c + Math.cos(a) * rw, c + Math.sin(a) * rw); ctx.stroke(); }
+    // nuts, tinted by roast level (crossfade between neighbouring tints)
+    if (tints) { const f = Math.min(2.999, roast * 3), i0 = f | 0, t = f - i0, sz = RN * S * 2.6;
+      for (const n of nuts) { const x = c + n.x * S, y = c + n.y * S; ctx.save(); ctx.translate(x, y); ctx.rotate(n.a); const s = sz * n.s, sx = n.col * 112 + 8, sy = n.row * 112 + 8;
+        ctx.globalAlpha = 1; ctx.drawImage(tints[i0], sx, sy, 96, 96, -s / 2, -s / 2, s, s); if (t > .02) { ctx.globalAlpha = t; ctx.drawImage(tints[i0 + 1], sx, sy, 96, 96, -s / 2, -s / 2, s, s); } ctx.restore(); } ctx.globalAlpha = 1; }
+    // heat shimmer + smoke when it's going too far
+    if (roast > .78) { ctx.fillStyle = `rgba(40,30,25,${(roast - .78) * 1.6})`; ctx.fillRect(c - rw, c - rw, rw * 2, rw * 2); }
+    ctx.restore();
+    // glass: rim + reflection
+    ctx.strokeStyle = '#8c8f84'; ctx.lineWidth = S * .018; ctx.beginPath(); ctx.arc(c, c, rw + S * .009, 0, 7); ctx.stroke();
+    ctx.strokeStyle = 'rgba(255,255,255,.22)'; ctx.lineWidth = S * .025; ctx.lineCap = 'round'; ctx.beginPath(); ctx.arc(c, c, rw * .82, 3.6, 4.4); ctx.stroke(); ctx.lineWidth = S * .01; ctx.beginPath(); ctx.arc(c, c, rw * .82, 4.55, 4.75); ctx.stroke();
+    // steam
+    for (const p of steam) { ctx.fillStyle = `rgba(246,243,232,${Math.max(0, p.a) * .16})`; ctx.beginPath(); ctx.arc(p.x * S, p.y * S, p.r * S, 0, 7); ctx.fill(); }
+    // brand plate
+    ctx.fillStyle = '#8cc63f'; ctx.font = `900 ${S * .036}px Archivo, sans-serif`; ctx.textAlign = 'center'; ctx.fillText('NUTS NOW ROASTERY', c, c + R * .93 - S * .01);
+  }
+  const say = (h, small, good) => { verdict.innerHTML = `${h}<small>${small}</small>`; verdict.classList.toggle('good', !!good); };
+  function judge(auto) {
+    if (demo) return;
+    if (roast < WIN[0]) return say('Still raw.', roast < .2 ? 'Hold the button down. Watch the colour.' : 'Getting there. Hold a little longer.');
+    done = true; pay.classList.add('on');
+    if (roast <= WIN[1]) { say('Golden. Perfect roast.', 'That\'s the colour we pull every batch at the roastery.', true); sparks = 1; }
+    else if (!auto) say('A little dark.', 'Ours never are. Try another batch.');
+    else say('Burnt!', 'Nobody\'s buying those. Roast another batch.');
+  }
+  function loop(now) {
+    const dt = Math.max(0, Math.min(.05, (now - t0) / 1000)); t0 = now;
+    omega += ((holding ? .055 : .008) - omega) * Math.min(1, dt * 3); ang += omega * 1.6;
+    if (holding && !done) { roast = Math.min(1, roast + dt * (demo ? .18 : .2)); if (roast >= 1) { release(true); } }
+    if (holding && roast > .25 && Math.random() < .5) steam.push({ x: .5 + (Math.random() - .5) * .3, y: .2, r: .02 + Math.random() * .02, a: .8 });
+    for (const p of steam) { p.y -= dt * .08; p.r += dt * .03; p.a -= dt * .5; } steam = steam.filter(p => p.a > 0);
+    physics(); draw();
+    needle.style.left = (roast * 100) + '%';
+    raf = visible && !RM ? requestAnimationFrame(loop) : 0;
+  }
+  const kick = () => { if (!S) return; if (RM) { physics(); draw(); return; } if (!raf && visible) { t0 = performance.now(); raf = requestAnimationFrame(loop); } };
+  function press(isDemo = false) { if (done) return; demo = isDemo; if (!isDemo) { touched = true; call.classList.add('gone'); } holding = true; btn.classList.add('down'); if (!isDemo && roast < WIN[0]) say('Roasting…', 'Let go when they turn golden.'); kick(); if (RM) roastRM(); }
+  function release(auto = false) { if (!holding) return; holding = false; btn.classList.remove('down'); judge(auto); demo = false; }
+  // reduced motion: each press roasts one notch so it still works without animation
+  function roastRM() { roast = Math.min(1, roast + .22); needle.style.left = roast * 100 + '%'; physics(); draw(); }
+  btn.addEventListener('pointerdown', e => { e.preventDefault(); press(); });
+  addEventListener('pointerup', () => release()); addEventListener('pointercancel', () => release());
+  btn.addEventListener('contextmenu', e => e.preventDefault());
+  btn.addEventListener('keydown', e => { if ((e.key === ' ' || e.key === 'Enter') && !e.repeat) { e.preventDefault(); press(); } });
+  btn.addEventListener('keyup', e => { if (e.key === ' ' || e.key === 'Enter') release(); });
+  $('#rAgain').addEventListener('click', () => { roast = 0; done = false; pay.classList.remove('on'); nuts.forEach(n => { n.x = (Math.random() - .5) * .3; n.y = .1 + Math.random() * .2; n.px = n.x; n.py = n.y; }); say('Fresh batch.', 'Hold the button. Let go when they\'re golden.'); kick(); });
+  const size = () => { const r = cv.getBoundingClientRect(); if (!r.width) return; D = Math.min(2, devicePixelRatio || 1); S = r.width; cv.width = cv.height = Math.round(S * D); kick(); };
+  if ('ResizeObserver' in window) new ResizeObserver(size).observe(cv); else addEventListener('resize', size);
+  new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible) kick(); }).observe(cv);
+  // idle nudge: if nobody touches it, the roaster fires up briefly on its own
+  if (!RM) setTimeout(function nudge() { if (touched || done) return; if (!visible) return setTimeout(nudge, 2000); press(true); setTimeout(() => { release(); }, 1300); }, 3200);
+  window.__roast = { press, release, get roast() { return roast; }, get done() { return done; } };
+})();
+
+/* scroll: page motion */
 (() => {
   let lenis = null;
   if (!RM && typeof Lenis !== 'undefined') { lenis = new Lenis({ lerp: .085 }); if (HAS_G) { lenis.on('scroll', ScrollTrigger.update); gsap.ticker.add(t => lenis.raf(t * 1000)); gsap.ticker.lagSmoothing(0); } else { const f = t => { lenis.raf(t); requestAnimationFrame(f); }; requestAnimationFrame(f); } }
   const go = y => lenis ? lenis.scrollTo(y, { duration: 1.6 }) : scrollTo({ top: y, behavior: RM ? 'auto' : 'smooth' }); window.__go = go;
   $$('a[href^="#"]').forEach(a => a.addEventListener('click', e => { const id = a.getAttribute('href'), t = id === '#top' ? null : $(id); e.preventDefault(); go(t ? t.getBoundingClientRect().top + scrollY - 60 : 0); }));
-  const build = $('#build'), steps = $$('.step'), rail = $$('#rail button'), AT = CONFIG.stepAt, N = AT.length;
-  const yOf = p => build.offsetTop + p * (build.offsetHeight - innerHeight);
-  rail.forEach((b, i) => b.addEventListener('click', () => go(yOf(AT[i] + .03))));
-  $('#skip').addEventListener('click', () => go(yOf(1) + 2)); $('#rebuild').addEventListener('click', () => go(0));
-  const show = (el, on) => { if (HAS_G && !RM) gsap.to(el, { autoAlpha: on ? 1 : 0, y: on ? 0 : 16, duration: on ? .8 : .3, ease: 'expo.out', overwrite: true }); else { el.style.opacity = on ? 1 : 0; el.style.visibility = on ? 'visible' : 'hidden'; } };
-  let cur = -2;
-  function ui(p) {
-    let i = -1; for (let k = 0; k < N; k++) if (p >= AT[k] - .035) i = k; if (p > .95) i = N; if (p < .035) i = -1;
-    if (i !== cur) { cur = i; steps.forEach((s, k) => show(s, k === i)); rail.forEach((b, k) => { b.classList.toggle('on', k === i); b.classList.toggle('done', k < i); }); show($('#finale'), i === N); }
-    const h = Math.max(0, 1 - p / .03); $('#heroCopy').style.opacity = h; $('#heroCopy').style.visibility = h < .01 ? 'hidden' : 'visible';
-    $('#cue').style.opacity = p < .015 ? 1 : 0; const hs = p > .95 || (MOBILE && p < .015); $('#skip').style.opacity = hs ? 0 : 1; $('#skip').style.pointerEvents = hs ? 'none' : '';
-    $('#nav').classList.toggle('solid', build.getBoundingClientRect().bottom < 60 || scrollY > innerHeight * .5);
-  }
-  if (RM) ui(1);
-  else { const onScroll = () => { const r = build.getBoundingClientRect(), p = Math.min(1, Math.max(0, -r.top / (build.offsetHeight - innerHeight))); window.__build3d && window.__build3d.setProgress(p); ui(p); };
-    lenis && lenis.on('scroll', onScroll); addEventListener('scroll', onScroll, { passive: true }); addEventListener('resize', onScroll); onScroll(); window.__kitSync = onScroll; }
+  const nav = $('#nav'), onS = () => nav.classList.toggle('solid', scrollY > 40); addEventListener('scroll', onS, { passive: true }); onS();
   if (HAS_G && !RM) {
     gsap.registerPlugin(ScrollTrigger);
     $$('.reveal').forEach(el => gsap.to(el, { autoAlpha: 1, y: 0, duration: 1, ease: 'expo.out', scrollTrigger: { trigger: el, start: 'top 90%' } }));
@@ -615,6 +682,5 @@ $('#nvTrack').innerHTML = CONFIG.newv.map(n => n.img
   }
 })();
 </script>
-<script type="module" src="assets/scene.js"></script>
 </body>
 </html>

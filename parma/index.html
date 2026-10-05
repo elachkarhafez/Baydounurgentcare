@@ -10,8 +10,7 @@
 <meta property="og:title" content="Parma | Modern Italian, fully halal, in Dearborn">
 <meta property="og:description" content="Pasta, baguette sandwiches and plates from the painted truck at The Canteen at Midtown.">
 <meta property="og:image" content="https://eatparma.vercel.app/img/post4.jpg">
-<link rel="modulepreload" href="assets/scene.js">
-<link rel="preload" href="assets/studio-512.hdr" as="fetch" crossorigin>
+<link rel="preload" href="img/plate.webp" as="image">
 <link rel="preload" href="assets/fonts/dmserif.woff2" as="font" type="font/woff2" crossorigin>
 <style>
 @font-face{font-family:"DM Serif Display";src:url(assets/fonts/dmserif.woff2) format("woff2");font-weight:400;font-style:normal;font-display:swap}
@@ -51,40 +50,39 @@ img,svg,canvas{display:block;max-width:100%}a{color:inherit}button{font:inherit;
 .nav .btn{padding:12px 16px;font-size:13.5px}
 @media (max-width:980px){.nav-links a:not(.btn),.nav .status{display:none}}
 @media (max-width:480px){.nav .btn span{display:none}.nav .btn{padding:12px}}
-/* build */
-.build{position:relative;height:800vh}
-.stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;background:radial-gradient(110% 90% at 62% 55%,#f7f0e3,var(--paper) 70%)}
-#gl{position:absolute;inset:0;width:100%;height:100%;touch-action:pan-y;opacity:0;transition:opacity 1.4s var(--ease)}.gl-ready #gl{opacity:1}
-.fallback{display:none;position:absolute;inset:0}.no-gl .fallback{display:block}.fallback img{width:100%;height:100%;object-fit:cover;opacity:.35}
-.shade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(244,236,221,.95),rgba(244,236,221,.6) 30%,transparent 56%)}
-@media (max-width:820px){.shade{background:linear-gradient(0deg,rgba(244,236,221,.97),rgba(244,236,221,.65) 34%,transparent 56%)}}
-.hero{position:absolute;left:var(--pad);top:50%;transform:translateY(-46%);max-width:min(600px,48vw);z-index:3}
-.hero h1{font:400 clamp(60px,8.4vw,140px)/.86 var(--serif);margin:18px 0 22px;letter-spacing:-.02em}
-.hero h1 em{color:var(--teal);display:block}
-.hero p{color:#4d463c;max-width:460px;margin:0 0 28px}
+/* hero: say when */
+.hero{position:relative;min-height:100vh;min-height:100svh;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(24px,4vw,70px);align-items:center;padding:110px var(--pad) 60px;max-width:1440px;margin:0 auto}
+.hero h1{font:400 clamp(72px,11vw,190px)/.84 var(--serif);margin:16px 0 20px;letter-spacing:-.025em}
+.hero h1 em{color:var(--teal)}
+.hero p{color:#4d463c;max-width:470px;margin:0 0 28px}
 .cta{display:flex;gap:12px;flex-wrap:wrap}
-@media (max-width:820px){.hero{top:auto;bottom:92px;transform:none;max-width:none;right:var(--pad)}.hero h1{font-size:clamp(54px,16vw,88px);margin:12px 0 12px}.hero p{font-size:15px;margin-bottom:18px}}
-.steps{position:absolute;left:var(--pad);top:50%;transform:translateY(-50%);width:min(460px,40vw);height:280px;margin:0;padding:0;list-style:none;z-index:3;pointer-events:none}
-.step{position:absolute;inset:0;opacity:0;visibility:hidden}
-.step .num{font:italic 400 clamp(78px,9vw,140px)/.8 var(--serif);color:var(--tomato);display:block;margin-bottom:6px}
-.step h2{font:400 clamp(40px,4.4vw,72px)/.95 var(--serif);margin:0 0 12px}.step h2 em{color:var(--teal)}
-.step p{margin:0;color:#4d463c;max-width:380px}
-@media (max-width:820px){.steps{top:auto;bottom:max(84px,11vh);transform:none;width:auto;right:var(--pad);height:auto;min-height:170px}.step{inset:auto 0 0 0}.step .num{font-size:60px}.step h2{font-size:42px}.step p{font-size:15px}}
-.rail{position:absolute;right:var(--pad);top:50%;transform:translateY(-50%);z-index:4;display:flex;flex-direction:column;gap:5px}
-.rail button{all:unset;cursor:pointer;display:flex;align-items:center;justify-content:flex-end;gap:12px;padding:5px 0;color:rgba(29,26,22,.4);font:800 11px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;transition:color .3s}
-.rail button i{width:20px;height:3px;border-radius:3px;background:currentColor;transition:width .4s var(--ease),background .3s}
-.rail button.on{color:var(--ink)}.rail button.on i{width:42px;background:var(--teal)}.rail button.done i{background:var(--tomato)}
-.rail button:focus-visible{outline:2px solid var(--teal);outline-offset:4px}
-@media (min-width:821px) and (max-width:1180px){.rail button span{display:none}}
-@media (max-width:820px){.rail{top:76px;left:var(--pad);transform:none;flex-direction:row;gap:4px}.rail button{flex:1;justify-content:center;padding:8px 0}.rail button span{display:none}.rail button i,.rail button.on i{width:100%}}
-.skip{position:absolute;right:var(--pad);bottom:24px;z-index:4;background:none;border:1px solid var(--line);border-radius:99px;padding:9px 15px;cursor:pointer;color:var(--muted);font:800 11px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;transition:opacity .3s}
-.cue{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);z-index:3;pointer-events:none;white-space:nowrap;display:flex;align-items:center;gap:10px;padding:12px 18px;border-radius:99px;background:rgba(255,250,240,.8);border:1px solid var(--line);font-weight:800;font-size:14px;transition:opacity .3s}
-.cue svg{width:18px;height:18px;animation:nudge 1.6s var(--ease) infinite}@keyframes nudge{0%,100%{transform:translateY(-2px)}50%{transform:translateY(4px)}}
-.finale{position:absolute;left:var(--pad);top:50%;transform:translateY(-50%);z-index:3;opacity:0;visibility:hidden;max-width:min(560px,46vw)}
-.finale h2{font:400 clamp(64px,8.6vw,146px)/.86 var(--serif);margin:0 0 16px}.finale h2 em{color:var(--teal)}
-.finale p{color:#4d463c;margin:0 0 24px;max-width:400px}
-@media (max-width:820px){.finale{top:auto;bottom:76px;transform:none;max-width:none;right:var(--pad)}.finale h2{font-size:64px}.finale p{font-size:15px;margin-bottom:16px}}
-.rm .build{height:auto}.rm .stage{position:relative}.rm .steps,.rm .rail,.rm .skip,.rm .cue{display:none}
+@media (max-width:900px){.hero{grid-template-columns:1fr;padding-top:84px;gap:18px}.hero h1{font-size:clamp(66px,20vw,110px);margin:10px 0 12px}.hero p{font-size:15px;margin-bottom:18px}.table{order:-1}}
+.table{position:relative;width:100%;max-width:600px;justify-self:center;aspect-ratio:1/1.02;touch-action:pan-y;-webkit-user-select:none;user-select:none;cursor:grab}
+.table:active{cursor:grabbing}
+@media (max-width:900px){.table{max-width:min(380px,100%)}}
+.table .plate{position:absolute;left:0;bottom:0;width:100%;height:auto;pointer-events:none;filter:drop-shadow(0 30px 30px rgba(80,50,20,.18))}
+.table canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.grater{position:absolute;left:31%;top:1%;width:38%;pointer-events:none;filter:drop-shadow(0 18px 18px rgba(40,30,20,.25))}
+.wedge{position:absolute;left:0;top:13%;width:22%;transform-origin:50% 100%;pointer-events:none;will-change:transform;filter:drop-shadow(0 10px 10px rgba(60,40,10,.3))}
+.bubble{position:absolute;left:0;top:4%;max-width:34%;padding:14px 16px;border-radius:20px 20px 20px 4px;background:#fff;font:400 clamp(20px,2vw,28px)/1.05 var(--serif);box-shadow:0 18px 30px -16px rgba(40,30,20,.4);transform-origin:0 100%;transition:transform .4s var(--boing)}
+.bubble small{display:block;font:800 10.5px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--tomato);margin-bottom:6px}
+.bubble.pop{transform:scale(1.08)}
+.when{position:absolute;right:0;top:6%;z-index:3}
+.when .btn{padding:14px 22px;font-size:16px}
+.when .btn:disabled{opacity:.35;cursor:not-allowed;transform:none}
+.gcall{position:absolute;left:24%;top:46%;z-index:3;display:flex;align-items:center;gap:12px;padding:12px 16px 12px 12px;border-radius:99px;background:var(--ink);color:var(--paper);font:800 14px/1.15 var(--sans);box-shadow:0 18px 30px -12px rgba(0,0,0,.4);pointer-events:none;transition:opacity .5s,transform .5s var(--ease);animation:bob 2.6s ease-in-out infinite}
+.gcall i{width:34px;height:34px;border-radius:50%;background:var(--teal);color:#fff;display:grid;place-items:center;flex:none}.gcall svg{width:20px;height:20px}
+.gcall small{display:block;font-weight:600;font-size:12px;opacity:.7}.gcall.gone{opacity:0;transform:translateY(-10px);animation:none}
+@media (max-width:900px){.gcall{left:8%;top:auto;bottom:6%}}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.parm-meter{position:absolute;left:0;right:0;bottom:-34px;display:flex;align-items:center;gap:12px;font:800 11px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.parm-meter b{flex:1;height:6px;border-radius:6px;background:rgba(29,26,22,.08);overflow:hidden}.parm-meter b i{display:block;height:100%;background:linear-gradient(90deg,#f1e2b8,#e5c87a);transform-origin:left;transform:scaleX(0)}
+.payoff{position:absolute;inset:0;z-index:4;display:grid;place-items:center;align-content:center;gap:12px;text-align:center;opacity:0;pointer-events:none;transition:opacity .5s}
+.payoff.on{opacity:1}
+.payoff strong{font:italic 400 clamp(60px,8vw,118px)/.85 var(--serif);color:var(--tomato);transform:rotate(-6deg) scale(.4);transition:transform .7s var(--boing);text-shadow:0 4px 30px rgba(255,255,255,.95)}
+.payoff.on strong{transform:rotate(-6deg) scale(1)}
+.payoff span{font-weight:700;background:rgba(255,250,240,.92);padding:6px 12px;border-radius:99px}
+.payoff .row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
 /* marquee */
 .marquee{overflow:hidden;background:var(--teal);color:#fff;padding:16px 0}
 .mq{display:flex;width:max-content;animation:mq 40s linear infinite}
@@ -189,22 +187,28 @@ img,svg,canvas{display:block;max-width:100%}a{color:inherit}button{font:inherit;
 </header>
 
 <main id="top">
-  <section class="build" id="build" aria-label="A plate of Rosso Riggo builds itself as you scroll">
-    <div class="stage" id="stage">
-      <canvas id="gl" role="img" aria-label="A plate of rigatoni building itself: pasta tumbles onto the plate, house marinara pours over, then sun-dried tomato, parmesan and basil"></canvas>
-      <div class="fallback"><img src="img/post2.jpg" alt="The Parma food truck, wrapped in an Italian collage"></div>
-      <div class="shade"></div>
-      <div class="hero" id="heroCopy">
-        <span class="halal">Fully halal · Modern Italian</span>
-        <h1>Pasta from a truck. <em>Nonna approves.</em></h1>
-        <p>Handmade sauces, flame-toasted baguettes and plates, from the painted truck at The Canteen at Midtown. Scroll and we'll plate their #1.</p>
-        <div class="cta"><a class="btn btn-teal" href="#menu">See the menu</a><a class="btn btn-line" href="https://www.doordash.com/store/parma-dearborn-34987807/" target="_blank" rel="noopener">Order delivery</a></div>
-      </div>
-      <ol class="steps" id="steps" aria-live="polite"></ol>
-      <div class="finale" id="finale"><h2>Rosso <em>Riggo.</em></h2><p>Their most-liked plate: rigatoni, house-made marinara with mushrooms, fire-roasted peppers and onions, sun-dried tomato, parmesan and basil.</p><div class="cta"><a class="btn btn-teal" href="#menu">See the menu</a><button class="btn btn-line" type="button" id="rebuild">Plate it again</button></div></div>
-      <nav class="rail" id="rail" aria-label="Plate layers"></nav>
-      <button class="skip" id="skip" type="button">Skip</button>
-      <div class="cue" id="cue" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 4v15M6 13l6 6 6-6"/></svg>Scroll to plate it</div>
+  <section class="hero" id="heroWrap" aria-label="Parma">
+    <div id="heroCopy">
+      <span class="halal">Fully halal · Modern Italian</span>
+      <h1>Say <em>when.</em></h1>
+      <p>Every Rosso Riggo leaves the truck under a snowfall of parmesan. Grab the cheese, grate it over the pasta, and tell us when to stop.</p>
+      <div class="cta"><a class="btn btn-teal" href="#menu">See the menu</a><a class="btn btn-line" href="https://www.doordash.com/store/parma-dearborn-34987807/" target="_blank" rel="noopener">Order delivery</a></div>
+    </div>
+    <div class="table" id="table" role="group" aria-label="Grate parmesan over a plate of Rosso Riggo: drag the cheese across the grater, then press When">
+      <img class="plate" src="img/plate.webp" alt="A plate of Rosso Riggo: rigatoni in house marinara with basil" width="867" height="502">
+      <svg class="grater" viewBox="0 0 200 250" aria-hidden="true"><defs><linearGradient id="st" x1="0" x2="1"><stop offset="0" stop-color="#8e979c"/><stop offset=".35" stop-color="#eef2f3"/><stop offset=".6" stop-color="#c3cacd"/><stop offset="1" stop-color="#7d868b"/></linearGradient><pattern id="holes" width="16" height="13" patternUnits="userSpaceOnUse"><path d="M3 9 Q8 2 13 9" fill="none" stroke="#5c6468" stroke-width="2.4" stroke-linecap="round"/><path d="M4 9.5 Q8 5 12 9.5" fill="none" stroke="#fff" stroke-width=".8" opacity=".7"/></pattern></defs>
+        <path d="M70 34 Q100 -6 130 34" fill="none" stroke="#2c3134" stroke-width="12" stroke-linecap="round"/>
+        <path d="M58 36 H142 L176 244 H24 Z" fill="url(#st)" stroke="#6e777b" stroke-width="2"/>
+        <path d="M66 52 H134 L160 230 H40 Z" fill="url(#holes)" opacity=".9"/>
+        <path d="M24 244 H176" stroke="#5c6468" stroke-width="4"/></svg>
+      <svg class="wedge" id="wedge" viewBox="0 0 120 90" aria-hidden="true"><defs><pattern id="grain" width="9" height="9" patternUnits="userSpaceOnUse"><circle cx="2" cy="3" r="1.1" fill="#d9b860" opacity=".6"/><circle cx="6.5" cy="7" r=".8" fill="#fff6d8" opacity=".9"/></pattern></defs>
+        <path d="M6 30 L114 8 L114 82 L6 82 Z" fill="#f3dc95"/><path d="M6 30 L114 8 L114 82 L6 82 Z" fill="url(#grain)"/><path d="M6 30 L114 8 L114 20 L6 42 Z" fill="#c99a3c"/><path d="M104 10 L114 8 L114 82 L104 82 Z" fill="#b8862c"/><text x="70" y="66" font-family="Georgia,serif" font-size="11" fill="#b8862c" font-weight="700" text-anchor="middle" opacity=".8">PARMIGIANO</text></svg>
+      <canvas id="snow" aria-hidden="true"></canvas>
+      <div class="bubble" id="bubble" aria-live="polite"><small>Nonna</small><span id="bubTxt">Say when.</span></div>
+      <div class="when"><button class="btn btn-red" id="whenBtn" type="button" disabled>When!</button></div>
+      <div class="gcall" id="gCall" aria-hidden="true"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16M8 8l-4 4 4 4M16 8l4 4-4 4"/></svg></i><span id="gTxt">Grate the parm<small>Drag the cheese across the grater</small></span></div>
+      <div class="parm-meter" aria-hidden="true"><span>Parmesan</span><b><i id="parmBar"></i></b></div>
+      <div class="payoff" id="gPay"><strong id="payTxt">Perfetto.</strong><span id="paySub">That's a proper plate.</span><div class="row"><a class="btn btn-teal" href="https://www.doordash.com/store/parma-dearborn-34987807/" target="_blank" rel="noopener">Order the Rosso Riggo</a><button class="btn btn-line" type="button" id="gAgain">Grate again</button></div></div>
     </div>
   </section>
 
@@ -288,20 +292,10 @@ img,svg,canvas{display:block;max-width:100%}a{color:inherit}button{font:inherit;
 <script src="assets/lib/ScrollTrigger.min.js"></script>
 <script src="assets/lib/lenis.min.js"></script>
 <script src="assets/lib/drag.js"></script>
-<script src="assets/lib/gate.js"></script>
 <script>
 const CONFIG = {
   tz: 'America/Detroit',
   hours: { 0: [12, 22], 1: [11, 23], 2: [11, 23], 3: [11, 23], 4: [11, 23], 5: [11, 24], 6: [12, 24] },
-  steps: [
-    ['Plate', 'The <em>plate.</em>', 'White, warm, ready.'],
-    ['Rigatoni', '<em>Rigatoni.</em>', 'Ridged tubes, cooked right, so the sauce has somewhere to go.'],
-    ['Marinara', 'House <em>marinara.</em>', 'Made in-house, with mushrooms, fire-roasted peppers and onions.'],
-    ['Tomato', 'Sun-dried <em>tomato.</em>', 'Sweet, chewy, a little sharp.'],
-    ['Parmesan', 'Parmesan <em>snow.</em>', 'Grated over the top, generously.'],
-    ['Basil', 'Fresh <em>basil.</em>', 'The last thing on. Always.']
-  ],
-  stepAt: [.08, .24, .44, .62, .74, .86],
   twirl: [['Fettuccini Del Nonna', 'Creamy alfredo, parmesan, cracked black pepper.'], ['Tartufo', 'Linguine, truffle crema sauce, cremini mushrooms, parmesan.'], ['Pesto Alla Crème', 'House-made lemon pesto sauce, sun-dried tomatoes, fresh basil.']],
   menu: [
     { id: 'pasta', t: 'Pasta', items: [
@@ -331,10 +325,7 @@ const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [..
 const RM = matchMedia('(prefers-reduced-motion: reduce)').matches, FINE = matchMedia('(hover: hover) and (pointer: fine)').matches, MOBILE = matchMedia('(max-width: 820px)').matches, HAS_G = typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined';
 if (RM) document.documentElement.classList.add('rm'); if (!HAS_G) document.documentElement.classList.add('no-anim');
 $('#yr').textContent = new Date().getFullYear();
-window.__ffReady = () => { document.documentElement.classList.add('gl-ready'); window.__kitSync && window.__kitSync(); };
 
-$('#steps').innerHTML = CONFIG.steps.map((s, i) => `<li class="step"><span class="num">0${i + 1}</span><h2>${s[1]}</h2><p>${esc(s[2])}</p></li>`).join('');
-$('#rail').innerHTML = CONFIG.steps.map((s, i) => `<button type="button" aria-label="Layer ${i + 1}: ${esc(s[0])}"><span>${esc(s[0])}</span><i></i></button>`).join('');
 const mqh = CONFIG.marquee.map(m => `<span>${esc(m)}</span>`).join(''); $('#mq').innerHTML = mqh + mqh;
 $('#twList').innerHTML = CONFIG.twirl.map(t => `<li><b>${esc(t[0])}</b><span>${esc(t[1])}</span></li>`).join('');
 (() => { const q = $('#nnQ'); const walk = n => { [...n.childNodes].forEach(c => { if (c.nodeType === 3) { const f = document.createDocumentFragment(); c.textContent.split(/(\s+)/).forEach(w => { if (!w.trim()) return f.append(w); const s = document.createElement('span'); s.className = 'w'; s.textContent = w; f.append(s); }); c.replaceWith(f); } else walk(c); }); }; walk(q); })();
@@ -415,29 +406,67 @@ $('#twList').innerHTML = CONFIG.twirl.map(t => `<li><b>${esc(t[0])}</b><span>${e
   window.__twirl = { add: v => { twist += v; if (!paid && twist >= NEED) payoff(); kick(); draw(); }, get paid() { return paid; } };
 })();
 
-/* scroll: the build + page motion */
+/* say when: drag the parmesan across the grater, it snows onto the pasta, press When */
+(() => {
+  const box = $('#table'), cv = $('#snow'), ctx = cv.getContext('2d'), wedge = $('#wedge'), bub = $('#bubTxt'), when = $('#whenBtn'), pay = $('#gPay'), bar = $('#parmBar');
+  if (!ctx) return;
+  const land = document.createElement('canvas'), lctx = land.getContext('2d');
+  let W = 0, H = 0, D = 1, used = 0, pos = .5, raf = 0, flakes = [], paid = false, lastLine = -1, visible = true;
+  const BINS = 48, heap = new Float32Array(BINS);
+  // where things are, as fractions of the table box (tuned to the plate render + grater art)
+  const G = { l: .37, r: .63, bottom: .25 };           // grater's grating face (x range) and its bottom edge (y)
+  const plateTop = () => H - W * 502 / 867;            // the plate image sits on the bottom edge
+  const surf = x => { const cx = .515 * W, rx = .27 * W, ih = W * 502 / 867, cy = plateTop() + .43 * ih, ry = .37 * ih, u = (x - cx) / rx; return Math.abs(u) >= 1 ? null : cy - ry * Math.sqrt(1 - u * u); };
+  const LINES = [[0, 'Say when.'], [.06, 'More?'], [.2, 'A little more?'], [.4, 'Generous. I like you.'], [.62, 'Okay, Nonna-level.'], [.85, 'The whole block?!']];
+  const size = () => { const r = box.getBoundingClientRect(); if (!r.width) return; D = Math.min(2, devicePixelRatio || 1); W = r.width; H = r.height;
+    const keep = land.width ? (() => { const c = document.createElement('canvas'); c.width = land.width; c.height = land.height; c.getContext('2d').drawImage(land, 0, 0); return c; })() : null;
+    cv.width = land.width = Math.round(W * D); cv.height = land.height = Math.round(H * D); if (keep) lctx.drawImage(keep, 0, 0, land.width, land.height); placeWedge(); draw(); };
+  function placeWedge() { const ww = .22 * W, x = (G.l + (G.r - G.l) * pos) * W - ww / 2, s = 1 - used * .55; wedge.style.transform = `translate(${x}px,0) scale(${s})`; }
+  const shred = (c, f) => { c.save(); c.translate(f.x * D, f.y * D); c.rotate(f.a); c.fillStyle = f.c; c.beginPath(); c.roundRect(-f.w * D / 2, -f.h * D / 2, f.w * D, f.h * D, f.h * D / 2); c.fill(); c.restore(); };
+  function spawn(n) { for (let i = 0; i < n; i++) { const x = (G.l + .03 + Math.random() * (G.r - G.l - .06)) * W; flakes.push({ x, y: G.bottom * H + Math.random() * 6, vx: (Math.random() - .5) * .6, vy: .5 + Math.random(), a: Math.random() * 6.28, va: (Math.random() - .5) * .3, w: (3 + Math.random() * 5) * Math.max(1, W / 420), h: (1.2 + Math.random() * 1.2) * Math.max(1, W / 420), c: Math.random() < .3 ? '#efdba0' : Math.random() < .5 ? '#fff8e2' : '#f7ecc6', ph: Math.random() * 6 }); } kick(); }
+  function step() {
+    for (const f of flakes) { f.vy = Math.min(f.vy + .18, 5.5); f.x += f.vx + Math.sin(f.y * .05 + f.ph) * .6; f.y += f.vy; f.a += f.va;
+      const s = surf(f.x); if (s !== null) { const b = Math.min(BINS - 1, Math.max(0, ((f.x / W - .245) / .54 * BINS) | 0)), top = s - heap[b]; if (f.y >= top) { f.y = top + Math.random() * 3; shred(lctx, f); heap[b] = Math.min(H * .07, heap[b] + .35); if (b > 0) heap[b - 1] += .12; if (b < BINS - 1) heap[b + 1] += .12; f.dead = true; } }
+      else if (f.y > H) f.dead = true; }
+    flakes = flakes.filter(f => !f.dead);
+  }
+  function draw() { ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, cv.width, cv.height); ctx.drawImage(land, 0, 0); for (const f of flakes) shred(ctx, f); }
+  function loop() { step(); draw(); raf = flakes.length && visible ? requestAnimationFrame(loop) : 0; }
+  const kick = () => { if (!raf) raf = requestAnimationFrame(loop); };
+  function line() { let k = 0; LINES.forEach((l, i) => { if (used >= l[0]) k = i; }); if (k !== lastLine) { lastLine = k; bub.textContent = LINES[k][1]; const b = $('#bubble'); b.classList.add('pop'); setTimeout(() => b.classList.remove('pop'), 300); } }
+  function grate(dx) {
+    if (paid) return; const d = Math.abs(dx) / W; if (!d) return;
+    pos = Math.min(1, Math.max(0, pos + dx / W / (G.r - G.l) * .9)); used = Math.min(1, used + d * .12);
+    spawn(Math.min(14, Math.ceil(d * 60))); placeWedge(); bar.style.transform = `scaleX(${used})`; when.disabled = used < .02; line();
+    if (used >= 1) finish(true);
+  }
+  function finish(all) {
+    if (paid) return; paid = true;
+    const [t, sub] = all ? ['Basta!', 'You grated the whole block. Nonna approves.'] : used < .12 ? ['That\'s it?', 'Nonna is offended. A little more next time.'] : used < .7 ? ['Perfetto.', 'That\'s a proper plate of Rosso Riggo.'] : ['Bellissimo.', 'A Nonna-level amount of parmesan.'];
+    $('#payTxt').textContent = t; $('#paySub').textContent = sub; pay.classList.add('on'); pay.style.pointerEvents = 'none'; setTimeout(() => { if (paid) pay.style.pointerEvents = ''; }, 900); when.disabled = true;
+  }
+  $$('#table button, #table a').forEach(el => el.addEventListener('pointerdown', e => e.stopPropagation()));   // buttons stay clickable inside the drag area
+  when.addEventListener('click', () => finish(false));
+  $('#gAgain').addEventListener('click', () => { paid = false; used = 0; pos = .5; heap.fill(0); lctx.clearRect(0, 0, land.width, land.height); flakes = []; lastLine = -1; line(); bar.style.transform = 'scaleX(0)'; when.disabled = true; pay.classList.remove('on'); placeWedge(); draw(); ctl.reset(); });
+  let lastX = null;
+  const ctl = ElaDrag(box, { callout: $('#gCall'), perUnit: 1e9, idleAfter: 2600,
+    onStart: () => { lastX = null; },
+    onMove: (x, y, dx) => grate(dx),
+    demo: t => t > 1.8 ? null : { x: W * (.5 + .12 * Math.sin(t * 9)), y: H * .3 } });
+  if (!FINE) $('#gTxt').innerHTML = 'Swipe to grate<small>Left and right across the grater</small>';
+  if ('ResizeObserver' in window) new ResizeObserver(size).observe(box); else addEventListener('resize', size);
+  new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible && flakes.length) kick(); }).observe(box);
+  if (RM) { used = .4; for (let i = 0; i < 400; i++) { spawn(1); } }
+  window.__say = { grate, finish, get used() { return used; }, get paid() { return paid; } };
+})();
+
+/* scroll: page motion */
 (() => {
   let lenis = null;
   if (!RM && typeof Lenis !== 'undefined') { lenis = new Lenis({ lerp: .085 }); if (HAS_G) { lenis.on('scroll', ScrollTrigger.update); gsap.ticker.add(t => lenis.raf(t * 1000)); gsap.ticker.lagSmoothing(0); } else { const f = t => { lenis.raf(t); requestAnimationFrame(f); }; requestAnimationFrame(f); } }
   const go = y => lenis ? lenis.scrollTo(y, { duration: 1.6 }) : scrollTo({ top: y, behavior: RM ? 'auto' : 'smooth' });
-  const build = $('#build'), steps = $$('.step'), rail = $$('#rail button'), AT = CONFIG.stepAt, N = AT.length;
-  const gate = typeof ElaGate !== 'undefined' ? ElaGate({ section: build, lenis, rate: .3 }) : { check: () => false, open() {}, arm() {} };
-  $$('a[href^="#"]').forEach(a => a.addEventListener('click', e => { const id = a.getAttribute('href'), t = id === '#top' ? null : $(id); e.preventDefault(); const y = t ? t.getBoundingClientRect().top + scrollY - 60 : 0; if (y > build.offsetTop + build.offsetHeight - innerHeight) gate.open(); go(y); }));
-  const yOf = p => build.offsetTop + p * (build.offsetHeight - innerHeight);
-  rail.forEach((b, i) => b.addEventListener('click', () => go(yOf(AT[i] + .03))));
-  $('#skip').addEventListener('click', () => { gate.open(); go(yOf(1) + 2); }); $('#rebuild').addEventListener('click', () => { gate.arm(); go(0); });
-  const show = (el, on) => { if (HAS_G && !RM) gsap.to(el, { autoAlpha: on ? 1 : 0, y: on ? 0 : 16, duration: on ? .8 : .3, ease: 'expo.out', overwrite: true }); else { el.style.opacity = on ? 1 : 0; el.style.visibility = on ? 'visible' : 'hidden'; } };
-  let cur = -2;
-  function ui(p) {
-    let i = -1; for (let k = 0; k < N; k++) if (p >= AT[k] - .035) i = k; if (p > .95) i = N; if (p < .035) i = -1;
-    if (i !== cur) { cur = i; steps.forEach((s, k) => show(s, k === i)); rail.forEach((b, k) => { b.classList.toggle('on', k === i); b.classList.toggle('done', k < i); }); show($('#finale'), i === N); }
-    const h = Math.max(0, 1 - p / .03); $('#heroCopy').style.opacity = h; $('#heroCopy').style.visibility = h < .01 ? 'hidden' : 'visible';
-    $('#cue').style.opacity = p < .015 ? 1 : 0; const hs = p > .95 || (MOBILE && p < .015); $('#skip').style.opacity = hs ? 0 : 1; $('#skip').style.pointerEvents = hs ? 'none' : '';
-    $('#nav').classList.toggle('solid', build.getBoundingClientRect().bottom < 60 || scrollY > innerHeight * .5);
-  }
-  if (RM) ui(1);
-  else { const onScroll = () => { if (gate.check()) return; const r = build.getBoundingClientRect(), p = Math.min(1, Math.max(0, -r.top / (build.offsetHeight - innerHeight))); window.__build3d && window.__build3d.setProgress(p); ui(p); };
-    lenis && lenis.on('scroll', onScroll); addEventListener('scroll', onScroll, { passive: true }); addEventListener('resize', onScroll); onScroll(); window.__kitSync = onScroll; window.__gate = gate; }
+  $$('a[href^="#"]').forEach(a => a.addEventListener('click', e => { const id = a.getAttribute('href'), t = id === '#top' ? null : $(id); e.preventDefault(); go(t ? t.getBoundingClientRect().top + scrollY - 60 : 0); }));
+  const nav = $('#nav'), onS = () => nav.classList.toggle('solid', scrollY > 40); addEventListener('scroll', onS, { passive: true }); onS();
   if (HAS_G && !RM) {
     gsap.registerPlugin(ScrollTrigger);
     $$('.reveal').forEach(el => gsap.to(el, { autoAlpha: 1, y: 0, duration: 1, ease: 'expo.out', scrollTrigger: { trigger: el, start: 'top 90%' } }));
@@ -448,6 +477,5 @@ $('#twList').innerHTML = CONFIG.twirl.map(t => `<li><b>${esc(t[0])}</b><span>${e
   }
 })();
 </script>
-<script type="module" src="assets/scene.js"></script>
 </body>
 </html>
