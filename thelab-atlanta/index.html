@@ -1,0 +1,713 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noai, noimageai">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Lab Atlanta | Paint protection film &amp; paint correction</title>
+<meta name="description" content="The Lab Atlanta: full-body paint protection film and stage 1–3 paint correction in Atlanta, GA. Book through Instagram @thelab.atlanta.">
+<meta name="theme-color" content="#0b0c0e">
+<meta property="og:title" content="The Lab Atlanta | Paint protection, tested">
+<meta property="og:description" content="Full-body PPF and stage 1–3 paint correction in Atlanta. Scratch the panel and see what film does.">
+<meta property="og:image" content="https://thelab-atlanta.vercel.app/img/post4.jpg">
+<link rel="preload" href="assets/fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:"Archivo";src:url(assets/fonts/archivo.woff2) format("woff2");font-weight:100 900;font-stretch:62% 125%;font-display:swap}
+@font-face{font-family:"JetBrains Mono";src:url(assets/fonts/jbmono-500.woff2) format("woff2");font-weight:500;font-display:swap}
+/* Palette: shop black, lab yellow (their flask liquid), clean white, steel grey.
+   Type: Archivo at its widest for display (car-badge energy), Archivo text, JetBrains Mono for lab labels.
+   Motion: precise and snappy, like a machine finishing a pass. */
+:root{
+  --bg:#0b0c0e; --bg-2:#131519; --bg-3:#1a1d22; --ink:#f2f2ee; --muted:#8e939c; --line:rgba(255,255,255,.09);
+  --y:#ffd21f; --y-2:#ffe466; --steel:#c9ced6;
+  --sans:"Archivo", system-ui, sans-serif; --mono:"JetBrains Mono", ui-monospace, monospace;
+  --pad:clamp(16px,4vw,56px); --ease:cubic-bezier(.2,.7,.1,1);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;overflow-x:clip}
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+.lenis.lenis-stopped{overflow:hidden}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.6 var(--sans);overflow-x:clip;-webkit-font-smoothing:antialiased}
+img,svg,canvas{display:block;max-width:100%}
+a{color:inherit}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--y);outline-offset:3px}
+.wrap{max-width:1320px;margin:0 auto;padding:0 var(--pad)}
+.mono{font:500 12px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase}
+.kicker{display:inline-flex;align-items:center;gap:10px;color:var(--y)}
+.kicker::before{content:"";width:9px;height:9px;background:var(--y);clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%)}
+.h2{font:900 clamp(40px,6vw,96px)/.9 var(--sans);font-stretch:125%;text-transform:uppercase;letter-spacing:-.01em;margin:16px 0 0}
+.h2 span{color:var(--y)}
+.lead{font-size:clamp(17px,1.3vw,19px);color:var(--muted);max-width:560px}
+.btn{display:inline-flex;align-items:center;gap:10px;border:0;border-radius:4px;padding:16px 22px;font:800 14px/1 var(--sans);font-stretch:112%;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;cursor:pointer;transition:transform .3s var(--ease),background .3s,color .3s;white-space:nowrap}
+.btn svg{width:18px;height:18px}
+.btn-y{background:var(--y);color:#111}
+.btn-y:hover{background:var(--y-2);transform:translateY(-2px)}
+.btn-line{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.22)}
+.btn-line:hover{box-shadow:inset 0 0 0 1.5px var(--ink)}
+.reveal{opacity:0;transform:translateY(26px)}
+.rm .reveal,.no-anim .reveal{opacity:1;transform:none}
+
+/* ---------- loader: the flask fills ---------- */
+.loader{position:fixed;inset:0;z-index:100;background:var(--bg);display:grid;place-items:center;pointer-events:none}
+.loader.done{display:none}
+.loader svg{width:min(300px,70vw)}
+.loader .liq{transform:translateY(46px);animation:fill 1s var(--ease) .15s forwards}
+.loader .bub{opacity:0;animation:bub 1.1s ease-out infinite}
+.loader .bub:nth-of-type(2){animation-delay:.35s}.loader .bub:nth-of-type(3){animation-delay:.7s}
+.loader .word{opacity:0;animation:fade .5s ease .55s forwards}
+.loader.out{animation:ldout .55s var(--ease) forwards}
+@keyframes fill{to{transform:none}}
+@keyframes bub{0%{opacity:0;transform:translateY(8px)}30%{opacity:1}100%{opacity:0;transform:translateY(-16px)}}
+@keyframes fade{to{opacity:1}}
+@keyframes ldout{to{transform:translateY(-100%)}}
+
+/* ---------- nav ---------- */
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;transition:background .3s}
+.nav.solid{background:rgba(11,12,14,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 1px 0 var(--line)}
+.nav-in{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:14px var(--pad);max-width:1440px;margin:0 auto}
+.logo{display:block;width:96px;text-decoration:none}
+.nav-links{display:flex;align-items:center;gap:28px}
+.nav-links a:not(.btn){text-decoration:none;font:600 14px/1 var(--sans);font-stretch:112%;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);transition:color .2s}
+.nav-links a:not(.btn):hover{color:var(--ink)}
+.nav .btn{padding:12px 16px;font-size:13px}
+@media (max-width:900px){.nav-links a:not(.btn){display:none}}
+
+/* ---------- hero ---------- */
+.hero{position:relative;padding:clamp(104px,13vh,140px) 0 clamp(40px,6vw,80px);overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;background:radial-gradient(60% 50% at 75% 30%,rgba(255,210,31,.08),transparent 70%);pointer-events:none}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(24px,4vw,56px);align-items:center;position:relative}
+.hero h1{font:900 clamp(40px,4.3vw,80px)/.9 var(--sans);font-stretch:112%;text-transform:uppercase;letter-spacing:-.015em;margin:18px 0 22px}
+.hero h1 span{color:var(--y);display:block}
+.hero .lead{margin:0 0 30px}
+.hero-cta{display:flex;flex-wrap:wrap;gap:12px}
+@media (max-width:960px){.hero-grid{grid-template-columns:minmax(0,1fr)}.hero h1{font-size:clamp(40px,9vw,80px)}}
+@media (max-width:600px){.hero h1{font-size:10.6vw;font-stretch:100%}.h2{font-size:9.6vw;font-stretch:100%}.close h2{font-size:11vw;font-stretch:100%}.fm h3{font-stretch:100%}.cs-step h3{font-stretch:100%}.callout{font-size:12.5px;padding:10px 12px}}
+
+/* ---------- scratch test (signature) ---------- */
+.test{position:relative;border-radius:10px;overflow:hidden;background:#050506;box-shadow:0 0 0 1px var(--line),0 40px 90px -30px rgba(0,0,0,.8)}
+.test canvas{width:100%;height:clamp(340px,44vw,560px);touch-action:pan-y;cursor:crosshair}
+.lbl{position:absolute;top:14px;padding:8px 11px;border-radius:3px;font:500 11px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;pointer-events:none}
+.lbl.l{left:14px;background:rgba(255,255,255,.08);color:var(--steel)}
+.lbl.r{right:14px;background:var(--y);color:#111}
+.divider{position:absolute;top:0;bottom:56px;left:50%;width:2px;margin-left:-1px;background:linear-gradient(transparent,rgba(255,210,31,.85) 12%,rgba(255,210,31,.85) 88%,transparent);pointer-events:none}
+.divider::after{content:"";position:absolute;left:50%;top:50%;width:22px;height:22px;margin:-11px 0 0 -11px;background:var(--y);clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%)}
+.callout{position:absolute;left:50%;top:38%;transform:translate(-50%,-50%);display:flex;align-items:center;gap:10px;background:var(--y);color:#111;padding:12px 16px;border-radius:6px;font:800 14px/1 var(--sans);font-stretch:112%;letter-spacing:.04em;text-transform:uppercase;pointer-events:none;box-shadow:0 14px 30px -10px rgba(0,0,0,.7);transition:opacity .4s,transform .4s var(--ease);white-space:nowrap}
+.callout svg{width:20px;height:20px;animation:sweep 1.4s ease-in-out infinite}
+.callout.gone{opacity:0;transform:translate(-50%,-70%)}
+@keyframes sweep{0%,100%{transform:translateX(-4px)}50%{transform:translateX(6px)}}
+.stamp{position:absolute;right:8%;top:30%;padding:10px 14px;border:2.5px solid var(--y);color:var(--y);font:900 20px/1 var(--sans);font-stretch:125%;letter-spacing:.04em;text-transform:uppercase;transform:rotate(-8deg) scale(.6);opacity:0;pointer-events:none;transition:opacity .3s,transform .5s cubic-bezier(.2,1.6,.4,1)}
+.stamp.on{opacity:1;transform:rotate(-8deg) scale(1)}
+.test-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:12px 14px;background:var(--bg-2);border-top:1px solid var(--line);min-height:56px}
+.test-bar #testStatus{font:500 12.5px/1.4 var(--mono);color:var(--steel)}
+.test-bar .b{display:flex;gap:8px}
+.tbtn{border:0;border-radius:4px;padding:10px 13px;background:rgba(255,255,255,.07);font:700 12.5px/1 var(--sans);font-stretch:112%;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:background .2s,color .2s}
+.tbtn:hover{background:rgba(255,255,255,.14)}
+.tbtn.y{background:var(--y);color:#111}
+
+/* ---------- hazard marquee ---------- */
+.hazard{background:var(--y);color:#111;overflow:hidden;position:relative;padding:14px 0}
+.hazard::before,.hazard::after{content:"";position:absolute;left:0;right:0;height:6px;background:repeating-linear-gradient(-45deg,#111 0 12px,var(--y) 12px 24px)}
+.hazard::before{top:0}.hazard::after{bottom:0}
+.hz{display:flex;width:max-content;animation:mq 34s linear infinite;padding:6px 0}
+.hz span{display:flex;align-items:center;gap:28px;padding:0 14px;font:900 clamp(20px,2.2vw,30px)/1 var(--sans);font-stretch:125%;text-transform:uppercase;white-space:nowrap}
+.hz span::after{content:"";width:14px;height:14px;background:#111;clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%)}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+/* ---------- formulas (services) ---------- */
+.formulas{padding:clamp(90px,11vw,150px) 0}
+.fm-list{margin-top:56px;border-top:1px solid var(--line)}
+.fm{position:relative;display:grid;grid-template-columns:110px 1.1fr 1fr auto;gap:24px;align-items:center;padding:30px 0;border-bottom:1px solid var(--line)}
+.fm .code{color:var(--y)}
+.fm h3{font:900 clamp(28px,3.2vw,48px)/.95 var(--sans);font-stretch:125%;text-transform:uppercase;margin:0}
+.fm p{margin:0;color:var(--muted)}
+.fm .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.fm .tags span{font:500 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;padding:7px 9px;border:1px solid var(--line);border-radius:3px;color:var(--steel)}
+.fm .thumb{width:120px;aspect-ratio:3/4;border-radius:6px;overflow:hidden;background:var(--bg-3)}
+.fm .thumb img{width:100%;height:100%;object-fit:cover;filter:grayscale(.2);transition:transform .8s var(--ease),filter .4s}
+.fm:hover .thumb img{transform:scale(1.06);filter:none}
+@media (max-width:900px){.fm{grid-template-columns:1fr auto;gap:12px 18px}.fm .code{grid-column:1/-1}.fm>div:nth-child(3){grid-column:1/2}.fm .thumb{grid-row:2/4;grid-column:2;width:96px}}
+
+/* ---------- correction story ---------- */
+.correct{position:relative;height:460vh;background:#070809}
+.cs-stage{position:sticky;top:0;height:100vh;height:100svh;display:grid;grid-template-columns:.8fr 1.2fr;gap:clamp(20px,4vw,56px);align-items:center;padding:84px var(--pad) 36px;max-width:1440px;margin:0 auto}
+.cs-steps{position:relative;height:260px;margin-top:28px}
+.cs-step{position:absolute;inset:0;opacity:0;transform:translateY(14px);transition:opacity .45s var(--ease),transform .45s var(--ease)}
+.cs-step.on{opacity:1;transform:none}
+.cs-step .n{color:var(--y)}
+.cs-step h3{font:900 clamp(40px,4.4vw,72px)/.9 var(--sans);font-stretch:125%;text-transform:uppercase;margin:12px 0 14px}
+.cs-step p{margin:0;color:var(--muted);max-width:430px}
+.cs-meter{display:flex;align-items:center;gap:12px;margin-top:8px}
+.cs-meter .bar{flex:1;max-width:260px;height:6px;background:rgba(255,255,255,.08);border-radius:6px;overflow:hidden}
+.cs-meter .bar i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#ff6a3d,var(--y));transform-origin:left;transition:transform .3s}
+.cs-meter span{color:var(--steel)}
+.cs-panel{position:relative;border-radius:10px;overflow:hidden;box-shadow:0 0 0 1px var(--line)}
+.cs-panel canvas{width:100%;height:min(66vh,620px)}
+.cs-panel .lbl.l{background:rgba(0,0,0,.5)}
+@media (max-width:900px){
+  .correct{height:420vh}
+  .cs-stage{grid-template-columns:1fr;grid-template-rows:auto auto;align-content:center;gap:14px;padding-top:78px}
+  .cs-copy{order:2}.cs-panel{order:1}
+  .cs-copy>.kicker,.cs-copy>.h2{display:none}
+  .cs-panel canvas{height:46vh}
+  .cs-steps{height:180px;margin-top:0}
+  .cs-step h3{font-size:40px;margin:8px 0}
+  .cs-step p{font-size:15px}
+}
+
+/* ---------- the shop ---------- */
+.shop{padding:clamp(90px,11vw,150px) 0}
+.sh-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:50px}
+.sh-card{position:relative;border-radius:10px;overflow:hidden;background:var(--bg-2);box-shadow:0 0 0 1px var(--line);display:flex;flex-direction:column}
+.sh-card img{width:100%;height:clamp(300px,34vw,460px);object-fit:cover;object-position:50% 30%}
+.sh-card .cap{padding:22px 24px 26px}
+.sh-card .cap b{display:block;font:900 clamp(26px,2.6vw,38px)/.95 var(--sans);font-stretch:125%;text-transform:uppercase;margin:10px 0 8px}
+.sh-card .cap p{margin:0;color:var(--steel);font-size:15.5px}
+@media (max-width:900px){.sh-grid{grid-template-columns:1fr}}
+
+/* ---------- quote builder ---------- */
+.quote{padding:clamp(90px,11vw,150px) 0;background:var(--bg-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.q-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(24px,4vw,60px);margin-top:50px;align-items:start}
+.field{margin-bottom:24px}
+.field>.lbl2,.field>label{display:block;font:500 11.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:0;border-radius:4px;padding:12px 15px;background:rgba(255,255,255,.06);box-shadow:inset 0 0 0 1px var(--line);font:700 14px/1 var(--sans);font-stretch:108%;cursor:pointer;transition:background .2s,color .2s,box-shadow .2s}
+.chip:hover{box-shadow:inset 0 0 0 1px rgba(255,255,255,.35)}
+.chip[aria-pressed="true"]{background:var(--y);color:#111;box-shadow:none}
+.inp{width:100%;background:rgba(255,255,255,.04);border:0;box-shadow:inset 0 0 0 1px var(--line);border-radius:4px;padding:15px 16px;font:500 16px/1.2 var(--sans);color:var(--ink)}
+.inp:focus{outline:none;box-shadow:inset 0 0 0 1.5px var(--y)}
+.inp::placeholder{color:rgba(255,255,255,.35)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.hint{font-size:14px;color:var(--steel);margin-top:12px;display:flex;gap:10px;align-items:flex-start}
+.hint b{color:var(--y)}
+.ticket{position:sticky;top:96px;background:var(--bg);border-radius:10px;box-shadow:0 0 0 1px var(--line);overflow:hidden}
+.tk-head{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;background:var(--y);color:#111}
+.tk-head svg{width:74px}
+.tk-body{padding:22px 20px}
+.tk-msg{white-space:pre-wrap;font:500 14px/1.7 var(--mono);color:var(--ink);min-height:170px;margin:0 0 18px}
+.tk-actions{display:grid;gap:8px}
+.tk-actions .btn{justify-content:center}
+.tk-note{font-size:13px;color:var(--muted);margin:14px 0 0}
+@media (max-width:900px){.q-grid{grid-template-columns:1fr}.ticket{position:relative;top:0}.two{grid-template-columns:1fr}}
+
+/* ---------- lab notes (instagram) ---------- */
+.notes{padding:clamp(90px,11vw,150px) 0}
+.nt-head{display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap}
+.nt-row{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-top:44px}
+.nt{display:block;text-decoration:none;color:inherit}
+.nt .im{border-radius:8px;overflow:hidden;aspect-ratio:9/16;background:var(--bg-3)}
+.nt img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--ease)}
+.nt:hover img{transform:scale(1.05)}
+.nt p{margin:10px 0 0;font-size:13.5px;color:var(--muted);line-height:1.45}
+@media (max-width:1000px){.nt-row{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:46%;overflow-x:auto;scroll-snap-type:x mandatory;margin:44px calc(var(--pad)*-1) 0;padding:0 var(--pad);scrollbar-width:none}.nt-row::-webkit-scrollbar{display:none}.nt{scroll-snap-align:start}}
+@media (max-width:560px){.nt-row{grid-auto-columns:64%}}
+
+/* ---------- close + footer ---------- */
+.close{position:relative;padding:clamp(100px,13vw,180px) var(--pad);text-align:center;overflow:hidden}
+.close::before{content:"";position:absolute;inset:0;background:radial-gradient(50% 60% at 50% 100%,rgba(255,210,31,.14),transparent 70%)}
+.close h2{position:relative;font:900 clamp(48px,9vw,150px)/.86 var(--sans);font-stretch:125%;text-transform:uppercase;margin:0 auto 30px;max-width:14ch}
+.close h2 span{color:var(--y)}
+.close .hero-cta{justify-content:center;position:relative}
+.foot{border-top:1px solid var(--line);padding:40px 0 30px;color:var(--muted);font-size:14px}
+.ft{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+.ft svg{width:120px}
+.ft nav{display:flex;gap:22px;flex-wrap:wrap}
+.ft a{text-decoration:none}.ft a:hover{color:var(--ink)}
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,30px);opacity:0;z-index:90;background:var(--y);color:#111;padding:13px 20px;border-radius:4px;font:800 13px/1 var(--sans);letter-spacing:.04em;text-transform:uppercase;transition:opacity .35s,transform .35s var(--ease);pointer-events:none}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}.correct{height:auto}.cs-stage{position:relative;height:auto}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <symbol id="logo" viewBox="0 0 300 172">
+    <path d="M14 34h30v72h44v26H14z" fill="currentColor"/>
+    <clipPath id="flaskIn"><path d="M140 34h20v34l32 54c3 6 0 9-6 9h-72c-6 0-9-3-6-9l32-54z"/></clipPath>
+    <g clip-path="url(#flaskIn)"><rect x="100" y="92" width="100" height="44" fill="#ffd21f"/><path d="M120 120c3-6 9-9 16-10l8-6c4-3 8-4 13-4h9c6 0 10 2 14 6l5 5c6 1 9 3 11 7v5h-76z" fill="#111"/><circle cx="134" cy="125" r="4.5" fill="#ffd21f"/><circle cx="170" cy="125" r="4.5" fill="#ffd21f"/></g>
+    <path d="M136 30h28v36l34 56c5 9-1 14-10 14h-76c-9 0-15-5-10-14l34-56z" fill="none" stroke="currentColor" stroke-width="8" stroke-linejoin="round"/>
+    <rect x="130" y="24" width="40" height="10" rx="3" fill="currentColor"/>
+    <circle cx="146" cy="14" r="4.5" fill="#ffd21f"/><circle cx="158" cy="6" r="3.2" fill="#ffd21f"/><circle cx="141" cy="3" r="2.4" fill="#ffd21f"/>
+    <path fill="currentColor" fill-rule="evenodd" d="M212 34h44c22 0 34 10 34 26 0 10-5 17-13 21 11 4 17 12 17 24 0 18-13 27-36 27h-46zM240 56v18h14c7 0 11-3 11-9s-4-9-11-9zM240 94v18h16c8 0 12-3 12-9s-4-9-12-9z"/>
+    <text x="152" y="168" text-anchor="middle" font-family="Archivo, sans-serif" font-weight="900" font-stretch="125%" font-size="30" letter-spacing="7" fill="currentColor">ATLANTA</text>
+  </symbol>
+</defs></svg>
+
+<div class="loader" id="loader" aria-hidden="true">
+  <svg viewBox="0 0 300 172" style="color:#f2f2ee">
+    <path d="M14 34h30v72h44v26H14z" fill="currentColor"/>
+    <g clip-path="url(#flaskIn)"><g class="liq"><rect x="100" y="92" width="100" height="44" fill="#ffd21f"/><path d="M120 120c3-6 9-9 16-10l8-6c4-3 8-4 13-4h9c6 0 10 2 14 6l5 5c6 1 9 3 11 7v5h-76z" fill="#111"/></g></g>
+    <path d="M136 30h28v36l34 56c5 9-1 14-10 14h-76c-9 0-15-5-10-14l34-56z" fill="none" stroke="currentColor" stroke-width="8" stroke-linejoin="round"/>
+    <rect x="130" y="24" width="40" height="10" rx="3" fill="currentColor"/>
+    <circle class="bub" cx="146" cy="14" r="4.5" fill="#ffd21f"/><circle class="bub" cx="158" cy="8" r="3.2" fill="#ffd21f"/><circle class="bub" cx="141" cy="5" r="2.4" fill="#ffd21f"/>
+    <path fill="currentColor" fill-rule="evenodd" d="M212 34h44c22 0 34 10 34 26 0 10-5 17-13 21 11 4 17 12 17 24 0 18-13 27-36 27h-46zM240 56v18h14c7 0 11-3 11-9s-4-9-11-9zM240 94v18h16c8 0 12-3 12-9s-4-9-12-9z"/>
+    <text class="word" x="152" y="168" text-anchor="middle" font-family="Archivo, sans-serif" font-weight="900" font-stretch="125%" font-size="30" letter-spacing="7" fill="currentColor">ATLANTA</text>
+  </svg>
+</div>
+<script>
+(() => { const L = document.getElementById('loader'); let seen = false; try { seen = sessionStorage.getItem('labIntro') === '1'; sessionStorage.setItem('labIntro', '1'); } catch (e) {}
+  if (seen || new URLSearchParams(location.search).has('qa') || matchMedia('(prefers-reduced-motion: reduce)').matches) { L.classList.add('done'); return; }
+  setTimeout(() => L.classList.add('out'), 1250); setTimeout(() => L.classList.add('done'), 1850); })();
+</script>
+
+<header class="nav" id="nav">
+  <div class="nav-in">
+    <a class="logo" href="#top" aria-label="The Lab Atlanta home"><svg viewBox="0 0 300 172" style="color:#f2f2ee"><use href="#logo"/></svg></a>
+    <nav class="nav-links" aria-label="Main">
+      <a href="#formulas">Services</a>
+      <a href="#process">The process</a>
+      <a href="#quote">Quote</a>
+      <a href="#shop">The shop</a>
+      <a class="btn btn-y" data-dm href="https://ig.me/m/thelab.atlanta" target="_blank" rel="noopener">Book now</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <div class="kicker mono">Atlanta · PPF · Paint correction</div>
+        <h1>Paint protection, <span>tested.</span></h1>
+        <p class="lead">Full-body paint protection film and stage 1–3 paint correction from The Lab Atlanta. Go ahead, scratch the panel. Only one side has film.</p>
+        <div class="hero-cta">
+          <a class="btn btn-y" data-dm href="https://ig.me/m/thelab.atlanta" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6" fill="currentColor"/></svg>Book on Instagram</a>
+          <a class="btn btn-line" href="#quote">Build your quote</a>
+        </div>
+      </div>
+      <div class="test reveal" id="test" aria-label="Interactive scratch test: unprotected paint versus paint protection film">
+        <canvas id="testCanvas" role="img" aria-label="Glossy black paint under hex shop lights, split down the middle: left side bare paint, right side with paint protection film"></canvas>
+        <span class="lbl l">No film</span><span class="lbl r">Lab PPF</span>
+        <div class="divider"></div>
+        <div class="callout" id="callout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11V5.5a1.5 1.5 0 0 1 3 0V11m0-1.5a1.5 1.5 0 0 1 3 0V11m0-.5a1.5 1.5 0 0 1 3 0v4.5a6 6 0 0 1-6 6h-1a6 6 0 0 1-5-2.7L4.4 15a1.5 1.5 0 0 1 2.4-1.8L9 15"/></svg><span id="calloutText">Drag across to scratch it</span></div>
+        <div class="stamp" id="stamp">Self-healed</div>
+        <div class="test-bar">
+          <span id="testStatus">Scratch across both sides. Watch the right.</span>
+          <div class="b"><button class="tbtn y" type="button" id="gravel">Throw gravel</button><button class="tbtn" type="button" id="testReset">Reset</button></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="hazard" aria-hidden="true"><div class="hz" id="hz"></div></div>
+
+  <section class="formulas" id="formulas">
+    <div class="wrap">
+      <div class="kicker mono reveal">The formulas</div>
+      <h2 class="h2 reveal">What we <span>run</span> in the lab.</h2>
+      <div class="fm-list" id="fmList"></div>
+    </div>
+  </section>
+
+  <section class="correct" id="process" aria-label="Paint correction, stage by stage">
+    <div class="cs-stage">
+      <div class="cs-copy">
+        <div class="kicker mono">The process</div>
+        <h2 class="h2">Stage 1 to <span>stage 3.</span></h2>
+        <div class="cs-steps" id="csSteps"></div>
+        <div class="cs-meter"><span class="mono">Visible defects</span><div class="bar"><i id="csBar"></i></div></div>
+      </div>
+      <div class="cs-panel">
+        <canvas id="csCanvas" role="img" aria-label="Black paint under an inspection light. A polisher passes over it and the swirl marks clear stage by stage."></canvas>
+        <span class="lbl l" id="csLbl">Inspection light</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="shop" id="shop">
+    <div class="wrap">
+      <div class="kicker mono reveal">The shop</div>
+      <h2 class="h2 reveal">From non-existent to <span>fully operational</span> in a week.</h2>
+      <div class="sh-grid">
+        <div class="sh-card reveal"><img src="img/post5.jpg" alt="Inside The Lab Atlanta's shop: cars lined up under bright lights with Mustang, Shelby and Nismo banners" width="720" height="1280" loading="lazy"><div class="cap"><span class="kicker mono">Ready for Atlanta</span><b>Fully operational.</b><p>We built the shop out ourselves in one week, and it's ready to take on the Atlanta area.</p></div></div>
+        <div class="sh-card reveal"><img src="img/post3.jpg" alt="A Lab Atlanta installer training a teammate hands-on" width="720" height="1280" loading="lazy"><div class="cap"><span class="kicker mono">How we train</span><b>Hands-on, every time.</b><p>"A good teacher is a hands-on one." Skills are hard to learn when you try to do it alone, so nobody here does.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="quote" id="quote">
+    <div class="wrap">
+      <div class="kicker mono reveal">Build your quote</div>
+      <h2 class="h2 reveal">Mix your <span>formula.</span></h2>
+      <p class="lead reveal">Tell us the car and what it needs. We'll write it up so you can send it straight to our DMs.</p>
+      <div class="q-grid">
+        <form id="qForm" onsubmit="return false" aria-label="Quote details">
+          <div class="field"><span class="lbl2">Vehicle</span><div class="chips" id="qType" role="group" aria-label="Vehicle type"></div></div>
+          <div class="field"><label for="qCar">Year, make &amp; model</label><input class="inp" id="qCar" placeholder="e.g. 2027 Corvette Grand Sport" autocomplete="off"></div>
+          <div class="field"><span class="lbl2">Services</span><div class="chips" id="qSvc" role="group" aria-label="Services"></div></div>
+          <div class="field" id="qStageWrap"><span class="lbl2">Paint condition right now</span><div class="chips" id="qCond" role="group" aria-label="Paint condition"></div><div class="hint" id="qHint"></div></div>
+          <div class="two">
+            <div class="field"><label for="qName">Your name</label><input class="inp" id="qName" placeholder="First name" autocomplete="given-name"></div>
+            <div class="field"><label for="qWhen">When works?</label><input class="inp" id="qWhen" placeholder="This week, next month…" autocomplete="off"></div>
+          </div>
+        </form>
+        <aside class="ticket" aria-label="Your quote request">
+          <div class="tk-head"><svg viewBox="0 0 300 172" style="color:#111"><use href="#logo"/></svg><span class="mono">Formula sheet</span></div>
+          <div class="tk-body">
+            <p class="tk-msg" id="tkMsg"></p>
+            <div class="tk-actions">
+              <a class="btn btn-y" id="tkSend" href="https://ig.me/m/thelab.atlanta" target="_blank" rel="noopener">Send on Instagram</a>
+              <button class="btn btn-line" type="button" id="tkCopy">Copy text</button>
+            </div>
+            <p class="tk-note">"Send" copies your sheet and opens a DM to @thelab.atlanta. Paste it in and we'll get back to you with pricing.</p>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="notes">
+    <div class="wrap">
+      <div class="nt-head">
+        <div><div class="kicker mono reveal">Lab notes</div><h2 class="h2 reveal">Straight from <span>the shop.</span></h2></div>
+        <a class="btn btn-line reveal" href="https://www.instagram.com/thelab.atlanta/" target="_blank" rel="noopener">@thelab.atlanta</a>
+      </div>
+      <div class="nt-row" id="ntRow"></div>
+    </div>
+  </section>
+
+  <section class="close">
+    <h2 class="reveal">This is your sign to <span>book with us.</span></h2>
+    <div class="hero-cta reveal"><a class="btn btn-y" data-dm href="https://ig.me/m/thelab.atlanta" target="_blank" rel="noopener">DM @thelab.atlanta</a><a class="btn btn-line" href="#quote">Build your quote</a></div>
+  </section>
+</main>
+<footer class="foot">
+  <div class="wrap ft">
+    <svg viewBox="0 0 300 172" style="color:#f2f2ee" aria-label="The Lab Atlanta"><use href="#logo"/></svg>
+    <nav aria-label="Footer"><a href="#formulas">Services</a><a href="#process">Process</a><a href="#quote">Quote</a><a href="https://www.instagram.com/thelab.atlanta/" target="_blank" rel="noopener">Instagram</a></nav>
+    <span>© <span id="yr"></span> The Lab Atlanta · Atlanta, GA · Shop address by DM</span>
+  </div>
+</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="assets/lib/gsap.min.js"></script>
+<script src="assets/lib/ScrollTrigger.min.js"></script>
+<script src="assets/lib/lenis.min.js"></script>
+<script>
+/* ===================== CONFIG ===================== */
+const CONFIG = {
+  name: 'The Lab Atlanta', instagram: 'thelab.atlanta', dm: 'https://ig.me/m/thelab.atlanta', city: 'Atlanta, GA',
+  formulas: [
+    { code: 'F-01', title: 'Paint protection film', text: 'Clear film over every painted panel, so rock chips, scratches and road junk hit the film, not your paint. Like the 2027 Corvette Grand Sport we just wrapped full-body.', tags: ['Full body', 'Clear film', 'Self-healing'], img: 'img/post4.jpg', alt: 'A black Corvette after a full-body PPF install' },
+    { code: 'F-02', title: 'Paint correction', text: 'Machine polishing that takes swirls, holograms and wash marring out of the paint itself. Our stage 3 on a 2015 Mustang had people guessing the year wrong.', tags: ['Stage 1', 'Stage 2', 'Stage 3'], img: 'img/post1.jpg', alt: 'Delivering a stage 3 paint-corrected Mustang' },
+    { code: 'F-03', title: 'Customer delivery', text: 'When it’s finished, we bring it back to you and walk you through it. That part matters to us as much as the install.', tags: ['We deliver', 'Atlanta area'], img: 'img/post2.jpg', alt: 'A Lab Atlanta delivery, filmed from the driver’s seat' }
+  ],
+  stages: [
+    { t: 'As it came in', p: 'Swirls, holograms and wash marring. Under a light it’s all there, even on a car that looks fine in the driveway.', d: 1 },
+    { t: 'Stage 1', p: 'A one-step polish. Clears the light marring and brings the gloss back.', d: .5 },
+    { t: 'Stage 2', p: 'Compound, then polish. Takes out most of the swirls and the haze around the lights.', d: .17 },
+    { t: 'Stage 3', p: 'Multi-step correction for paint that needs to be as close to perfect as it gets. Then it’s ready for film.', d: .03 }
+  ],
+  types: ['Coupe', 'Sedan', 'SUV', 'Truck', 'Exotic'],
+  services: ['Full-body PPF', 'Partial PPF', 'Paint correction', 'Not sure yet'],
+  conds: [['Brand new', 'New paint still has dealer marring. Most people do a light polish, then film.'], ['Light swirls', 'Usually a stage 1 or 2 gets this back. We’ll confirm when we see it in person.'], ['Heavy swirls', 'This is stage 3 territory. We’ll check it under the lights first.']],
+  notes: [
+    ['img/post1.jpg', 'DeF1PRdsZR4', 'Delivering a stage 3 paint-corrected Mustang.'],
+    ['img/post4.jpg', 'Dd9jG2MBrLa', '2027 Corvette Grand Sport, full-body PPF.'],
+    ['img/post5.jpg', 'Dd4jwsSuWq8', 'Taking the shop from nothing to fully operational in one week.'],
+    ['img/post2.jpg', 'DeAOv-kuou_', 'How we handle customer deliveries.'],
+    ['img/post3.jpg', 'Dd9rGLeTsHc', 'Skills are hard to learn alone. Training time.'],
+    ['img/post6.jpg', 'DdxV0rPNlPH', 'You ever had a coworker like this?']
+  ],
+  hazard: ['Paint protection film', 'Stage 3 paint correction', 'Full body PPF', 'Customer delivery', 'Atlanta']
+};
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const FINE = matchMedia('(hover: hover) and (pointer: fine)').matches;
+const HAS_G = typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined';
+if (RM) document.documentElement.classList.add('rm');
+if (!HAS_G) document.documentElement.classList.add('no-anim');
+$('#yr').textContent = new Date().getFullYear();
+const clamp = (v, a = 0, b = 1) => v < a ? a : v > b ? b : v;
+
+/* ---------- content ---------- */
+$('#fmList').innerHTML = CONFIG.formulas.map(f => `<article class="fm reveal"><span class="code mono">${esc(f.code)}</span><h3>${esc(f.title)}</h3><div><p>${esc(f.text)}</p><div class="tags">${f.tags.map(t => `<span>${esc(t)}</span>`).join('')}</div></div><div class="thumb"><img src="${esc(f.img)}" alt="${esc(f.alt)}" width="720" height="1280" loading="lazy"></div></article>`).join('');
+$('#csSteps').innerHTML = CONFIG.stages.map((s, i) => `<div class="cs-step${i === 0 ? ' on' : ''}"><span class="n mono">${i === 0 ? 'Before' : 'Pass ' + i + ' of 3'}</span><h3>${esc(s.t)}</h3><p>${esc(s.p)}</p></div>`).join('');
+$('#ntRow').innerHTML = CONFIG.notes.map(n => `<a class="nt reveal" href="https://www.instagram.com/p/${esc(n[1])}/" target="_blank" rel="noopener"><div class="im"><img src="${esc(n[0])}" alt="${esc(n[2])}" width="720" height="1280" loading="lazy"></div><p>${esc(n[2])}</p></a>`).join('');
+const hz = CONFIG.hazard.map(h => `<span>${esc(h)}</span>`).join(''); $('#hz').innerHTML = hz + hz;
+
+/* ---------- quote builder ---------- */
+(() => {
+  const st = { type: 'Coupe', svc: new Set(['Full-body PPF']), cond: 1 };
+  $('#qType').innerHTML = CONFIG.types.map(t => `<button type="button" class="chip" aria-pressed="${t === st.type}">${esc(t)}</button>`).join('');
+  $('#qSvc').innerHTML = CONFIG.services.map(t => `<button type="button" class="chip" aria-pressed="${st.svc.has(t)}">${esc(t)}</button>`).join('');
+  $('#qCond').innerHTML = CONFIG.conds.map((c, i) => `<button type="button" class="chip" aria-pressed="${i === st.cond}" data-i="${i}">${esc(c[0])}</button>`).join('');
+  const build = () => {
+    $('#qHint').innerHTML = `<b>›</b><span>${esc(CONFIG.conds[st.cond][1])}</span>`;
+    const car = $('#qCar').value.trim(), name = $('#qName').value.trim(), when = $('#qWhen').value.trim();
+    const L = [`Yo Lab! ${name ? `It's ${name}. ` : ''}Looking for a quote.`, '', `CAR      ${car || st.type}${car ? ' (' + st.type + ')' : ''}`, `SERVICE  ${[...st.svc].join(' + ') || 'Not sure yet'}`, `PAINT    ${CONFIG.conds[st.cond][0].toLowerCase()}`];
+    if (when) L.push(`WHEN     ${when}`);
+    L.push('', 'What would that run me?');
+    $('#tkMsg').textContent = L.join('\n');
+  };
+  $('#qType').addEventListener('click', e => { const b = e.target.closest('.chip'); if (!b) return; st.type = b.textContent; $$('.chip', $('#qType')).forEach(c => c.setAttribute('aria-pressed', c === b)); build(); });
+  $('#qSvc').addEventListener('click', e => { const b = e.target.closest('.chip'); if (!b) return; const t = b.textContent;
+    if (t === 'Not sure yet') st.svc = new Set([t]); else { st.svc.delete('Not sure yet'); st.svc.has(t) ? st.svc.delete(t) : st.svc.add(t); if (t === 'Full-body PPF') st.svc.delete('Partial PPF'); if (t === 'Partial PPF') st.svc.delete('Full-body PPF'); }
+    $$('.chip', $('#qSvc')).forEach(c => c.setAttribute('aria-pressed', st.svc.has(c.textContent))); build(); });
+  $('#qCond').addEventListener('click', e => { const b = e.target.closest('.chip'); if (!b) return; st.cond = +b.dataset.i; $$('.chip', $('#qCond')).forEach(c => c.setAttribute('aria-pressed', c === b)); build(); });
+  $$('#qForm input').forEach(i => i.addEventListener('input', build));
+  const toast = m => { const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('on'), 2400); };
+  const copy = async () => { const txt = $('#tkMsg').textContent; try { await navigator.clipboard.writeText(txt); return true; } catch { const ta = document.createElement('textarea'); ta.value = txt; document.body.appendChild(ta); ta.select(); let ok = false; try { ok = document.execCommand('copy'); } catch {} ta.remove(); return ok; } };
+  $('#tkCopy').addEventListener('click', async () => toast(await copy() ? 'Copied' : 'Select the text to copy it'));
+  $('#tkSend').addEventListener('click', () => copy().then(ok => ok && toast('Copied. Paste it in the DM')));
+  build();
+})();
+
+/* ===================== PAINT: glossy black panel under hex shop lights ===================== */
+function Paint(canvas, mode) {
+  const ctx = canvas.getContext('2d');
+  const base = document.createElement('canvas'), swirlBand = document.createElement('canvas'), swirlRaw = document.createElement('canvas'), tmp = document.createElement('canvas'), marks = document.createElement('canvas');
+  let W = 0, H = 0, D = 1, seed = 9;
+  const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const api = { W: 0, H: 0, D: 1, ctx, marks, mctx: marks.getContext('2d') };
+  // the hex light grid, bent around the curve of the panel
+  function hexWarp(x, y, bandY) { const k = .34, bow = -H * .1 / ((W / 2) ** 2); return [x, bandY + y * k + bow * (x - W / 2) ** 2]; }
+  function drawHex(g, bandY, R, lw, alphaFn) {
+    const s3 = Math.sqrt(3), cols = Math.ceil(W / (R * 1.5)) + 3;
+    for (let i = -2; i < cols; i++) for (let j = -4; j <= 4; j++) {
+      const cx = i * R * 1.5, cy = j * R * s3 + (i & 1 ? R * s3 / 2 : 0);
+      const a = alphaFn(cy); if (a <= .01) continue;
+      g.beginPath();
+      for (let k = 0; k <= 6; k++) { const ang = Math.PI / 3 * k; const [X, Y] = hexWarp(cx + Math.cos(ang) * R, cy + Math.sin(ang) * R, bandY); k ? g.lineTo(X, Y) : g.moveTo(X, Y); }
+      g.strokeStyle = `rgba(255,255,255,${a})`; g.lineWidth = lw; g.stroke();
+    }
+  }
+  function build() {
+    const b = base.getContext('2d'); b.setTransform(D, 0, 0, D, 0, 0);
+    const g = b.createLinearGradient(0, 0, 0, H);
+    g.addColorStop(0, '#1d2025'); g.addColorStop(.3, '#0a0b0d'); g.addColorStop(.58, '#0e1013'); g.addColorStop(.63, '#22252b'); g.addColorStop(.645, '#060708'); g.addColorStop(.85, '#0b0c0f'); g.addColorStop(1, '#020203');
+    b.fillStyle = g; b.fillRect(0, 0, W, H);
+    // metallic flake
+    for (let i = 0; i < W * H / 55; i++) { b.fillStyle = `rgba(255,255,255,${.02 + rnd() * .06})`; b.fillRect(rnd() * W, rnd() * H, 1, 1); }
+    const bandY = H * .27, R = Math.max(20, W / 22);
+    const fall = cy => Math.max(0, 1 - Math.abs(cy) / (R * 6.5));
+    b.save(); b.filter = 'blur(7px)'; drawHex(b, bandY, R, R * .2, cy => fall(cy) * .5); b.restore();
+    drawHex(b, bandY, R, Math.max(1.5, R * .085), cy => fall(cy) * .95);
+    // soft box low on the panel, and the body line catching light
+    const sb = b.createLinearGradient(0, H * .78, 0, H * .9); sb.addColorStop(0, 'rgba(255,255,255,0)'); sb.addColorStop(.5, 'rgba(255,255,255,.07)'); sb.addColorStop(1, 'rgba(255,255,255,0)');
+    b.fillStyle = sb; b.fillRect(0, H * .78, W, H * .12);
+    b.beginPath(); b.moveTo(0, H * .632); b.quadraticCurveTo(W / 2, H * .61, W, H * .632); b.strokeStyle = 'rgba(255,255,255,.5)'; b.lineWidth = 1.4; b.stroke();
+    const vg = b.createRadialGradient(W / 2, H * .45, Math.min(W, H) * .2, W / 2, H * .5, Math.max(W, H) * .75); vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,.55)');
+    b.fillStyle = vg; b.fillRect(0, 0, W, H);
+    // swirl marks: concentric scratches that only show where light hits them
+    const sr = swirlRaw.getContext('2d'); sr.setTransform(D, 0, 0, D, 0, 0); sr.clearRect(0, 0, W, H);
+    const centers = [];
+    for (let i = 0; i < 26; i++) centers.push([rnd() * W, rnd() * H]);
+    for (let i = 0; i < W / (R * 1.5); i++) centers.push([i * R * 1.5 + rnd() * 10, bandY + (rnd() - .5) * R]);
+    for (const [cx, cy] of centers) for (let k = 0; k < 22; k++) {
+      const r = 6 + rnd() * R * 2.6, a0 = rnd() * Math.PI * 2;
+      sr.beginPath(); sr.arc(cx, cy, r, a0, a0 + .35 + rnd() * 1.1);
+      sr.strokeStyle = `rgba(255,255,255,${.2 + rnd() * .4})`; sr.lineWidth = .7 + rnd() * .6; sr.stroke();
+    }
+    for (let i = 0; i < 120; i++) { const x = rnd() * W, y = rnd() * H, a = rnd() * Math.PI, l = 10 + rnd() * 60; sr.beginPath(); sr.moveTo(x, y); sr.lineTo(x + Math.cos(a) * l, y + Math.sin(a) * l * .3); sr.strokeStyle = `rgba(255,255,255,${.06 + rnd() * .12})`; sr.lineWidth = .6; sr.stroke(); }
+    const sb2 = swirlBand.getContext('2d'); sb2.setTransform(1, 0, 0, 1, 0, 0); sb2.clearRect(0, 0, swirlBand.width, swirlBand.height);
+    sb2.drawImage(swirlRaw, 0, 0); sb2.globalCompositeOperation = 'destination-in';
+    sb2.setTransform(D, 0, 0, D, 0, 0);
+    const mk = sb2.createLinearGradient(0, bandY - R * 3, 0, bandY + R * 3); mk.addColorStop(0, 'rgba(0,0,0,.2)'); mk.addColorStop(.5, 'rgba(0,0,0,1)'); mk.addColorStop(1, 'rgba(0,0,0,.2)');
+    sb2.fillStyle = mk; sb2.fillRect(0, 0, W, H); sb2.globalCompositeOperation = 'source-over';
+  }
+  api.resize = () => {
+    const r = canvas.getBoundingClientRect(); D = Math.min(2, devicePixelRatio || 1); W = r.width; H = r.height;
+    for (const c of [canvas, base, swirlBand, swirlRaw, tmp, marks]) { c.width = Math.max(1, Math.round(W * D)); c.height = Math.max(1, Math.round(H * D)); }
+    api.W = W; api.H = H; api.D = D; seed = 9; build(); api.mctx.setTransform(D, 0, 0, D, 0, 0);
+  };
+  // draw swirls (band-lit) with amount a inside an x-range
+  api.swirl = (a, x0 = 0, x1 = W) => { if (a <= .001) return; ctx.save(); ctx.beginPath(); ctx.rect(x0 * D, 0, (x1 - x0) * D, H * D); ctx.clip(); ctx.globalAlpha = a; ctx.drawImage(swirlBand, 0, 0); ctx.restore(); };
+  // swirls lit by a moving inspection light
+  api.lit = (a, lx, ly, rad, x0 = 0, x1 = W) => {
+    if (a <= .001) return;
+    const t = tmp.getContext('2d'); t.setTransform(1, 0, 0, 1, 0, 0); t.clearRect(0, 0, tmp.width, tmp.height);
+    t.drawImage(swirlRaw, 0, 0); t.globalCompositeOperation = 'destination-in'; t.setTransform(D, 0, 0, D, 0, 0);
+    const gr = t.createRadialGradient(lx, ly, 0, lx, ly, rad); gr.addColorStop(0, 'rgba(0,0,0,1)'); gr.addColorStop(.55, 'rgba(0,0,0,.6)'); gr.addColorStop(1, 'rgba(0,0,0,0)');
+    t.fillStyle = gr; t.fillRect(0, 0, W, H); t.globalCompositeOperation = 'source-over';
+    ctx.save(); ctx.beginPath(); ctx.rect(x0 * D, 0, (x1 - x0) * D, H * D); ctx.clip(); ctx.globalAlpha = Math.min(1, a * 2); ctx.drawImage(tmp, 0, 0); if (a > .4) ctx.drawImage(tmp, 0, 0); ctx.restore();
+  };
+  api.base = () => { ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.drawImage(base, 0, 0); ctx.setTransform(D, 0, 0, D, 0, 0); };
+  return api;
+}
+
+/* ===================== SIGNATURE: the scratch test ===================== */
+(() => {
+  const cv = $('#testCanvas'), P = Paint(cv, 'test'), ctx = P.ctx;
+  const S = { live: [], drag: null, gravel: [], chipsL: 0, healed: 0, touched: false, lastX: 0, lastY: 0 };
+  const status = $('#testStatus'), stamp = $('#stamp'), callout = $('#callout');
+  if (!FINE) $('#calloutText').textContent = 'Swipe to scratch it';
+  const half = () => P.W / 2;
+  function scratchSeg(c, x1, y1, x2, y2, a) {
+    c.save(); c.lineCap = 'round';
+    c.strokeStyle = `rgba(0,0,0,${.5 * a})`; c.lineWidth = 2.2; c.beginPath(); c.moveTo(x1, y1 + 1); c.lineTo(x2, y2 + 1); c.stroke();
+    c.strokeStyle = `rgba(235,240,245,${.85 * a})`; c.lineWidth = 1.1; c.beginPath(); c.moveTo(x1, y1); c.lineTo(x2, y2); c.stroke();
+    if (Math.random() < .25) { c.fillStyle = `rgba(255,255,255,${a})`; c.fillRect(x2, y2 - .5, 1.5, 1.5); }
+    c.restore();
+  }
+  function addPoint(x, y) {
+    const d = S.drag; if (!d) return;
+    const px = d.px, py = d.py; d.px = x; d.py = y; if (px === undefined) return;
+    // split the segment at the film edge
+    const mid = half();
+    const segs = (px - mid) * (x - mid) < 0 ? [[px, py, mid, py + (y - py) * (mid - px) / (x - px)], [mid, py + (y - py) * (mid - px) / (x - px), x, y]] : [[px, py, x, y]];
+    for (const s of segs) {
+      if ((s[0] + s[2]) / 2 < mid) { scratchSeg(P.mctx, ...s, 1); d.hitL = true; }
+      else { d.segs.push(s); d.hitR = true; }
+    }
+  }
+  function endDrag() { const d = S.drag; if (!d) return; S.drag = null; if (d.segs.length) { d.t0 = performance.now(); S.live.push(d); } if (d.hitL || d.hitR) say(d.hitR ? 'Left: scratched for good. Right: give it a second…' : 'That one stays. Now try the right side.'); kick(); }
+  function say(t) { status.textContent = t; }
+  const pos = e => { const r = cv.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+  cv.addEventListener('pointerdown', e => { S.touched = true; callout.classList.add('gone'); S.drag = { segs: [], hitL: false, hitR: false }; const [x, y] = pos(e); addPoint(x, y); S.lastX = e.clientX; if (e.pointerType !== 'touch') cv.setPointerCapture(e.pointerId); kick(); });
+  cv.addEventListener('pointermove', e => { if (!S.drag) return; const [x, y] = pos(e); addPoint(x, y); kick(); });
+  cv.addEventListener('pointerup', endDrag); cv.addEventListener('pointercancel', endDrag); cv.addEventListener('pointerleave', e => { if (e.pointerType !== 'touch') endDrag(); });
+  // gravel: stones fly at the panel; bare paint chips, film shrugs it off
+  $('#gravel').addEventListener('click', () => {
+    S.touched = true; callout.classList.add('gone');
+    const now = performance.now();
+    for (let i = 0; i < 34; i++) S.gravel.push({ x: P.W * (.06 + Math.random() * .88), y: P.H * (.12 + Math.random() * .76), sx: P.W * (.35 + Math.random() * .3), t0: now + i * 28 + Math.random() * 60, s: 3.4 + Math.random() * 3, hit: false });
+    kick();
+  });
+  $('#testReset').addEventListener('click', () => { P.mctx.clearRect(0, 0, P.W, P.H); S.live = []; S.gravel = []; S.chipsL = 0; stamp.classList.remove('on'); say('Scratch across both sides. Watch the right.'); kick(); });
+  function chip(x, y, s) {
+    const c = P.mctx; c.save(); c.translate(x, y); c.rotate(Math.random() * 6);
+    c.beginPath(); for (let k = 0; k < 7; k++) { const a = k / 7 * Math.PI * 2, r = s * (.6 + Math.random() * .5); k ? c.lineTo(Math.cos(a) * r, Math.sin(a) * r) : c.moveTo(Math.cos(a) * r, Math.sin(a) * r); } c.closePath();
+    c.fillStyle = '#b9bec5'; c.fill(); c.fillStyle = '#5c6168'; c.beginPath(); c.arc(0, 0, s * .35, 0, 7); c.fill();
+    c.strokeStyle = 'rgba(255,255,255,.6)'; c.lineWidth = .7; c.stroke(); c.restore();
+  }
+  let running = false, visible = true, idle = 0, demo = null, lastT = 0;
+  function kick() { if (!running && visible) { running = true; lastT = performance.now(); requestAnimationFrame(frame); } }
+  function frame(now) {
+    const dt = clamp((now - lastT) / 1000, 0, .05); lastT = now;
+    const W = P.W, H = P.H, mid = W / 2;
+    P.base();
+    P.swirl(1, 0, mid);
+    P.swirl(.06, mid, W);
+    // film side: a touch more gloss and a clean film edge
+    ctx.save(); const fg = ctx.createLinearGradient(mid, 0, W, 0); fg.addColorStop(0, 'rgba(255,255,255,.05)'); fg.addColorStop(1, 'rgba(255,255,255,.015)'); ctx.fillStyle = fg; ctx.fillRect(mid, 0, W - mid, H); ctx.restore();
+    ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.drawImage(P.marks, 0, 0); ctx.setTransform(P.D, 0, 0, P.D, 0, 0);
+    // live scratches on the film heal with a little heat
+    let healing = false;
+    const all = S.drag ? [...S.live, S.drag] : S.live;
+    for (const d of all) {
+      const age = d.t0 ? (now - d.t0) / 1000 : 0;
+      const a = d.t0 ? 1 - clamp((age - .45) / 1.3) : 1;
+      if (a <= 0) continue; healing = true;
+      for (const s of d.segs) {
+        if (d.t0 && age > .3) { ctx.save(); ctx.strokeStyle = `rgba(255,170,60,${.22 * Math.sin(Math.PI * clamp((age - .3) / 1.5))})`; ctx.lineWidth = 9; ctx.lineCap = 'round'; ctx.filter = 'blur(4px)'; ctx.beginPath(); ctx.moveTo(s[0], s[1]); ctx.lineTo(s[2], s[3]); ctx.stroke(); ctx.restore(); }
+        scratchSeg(ctx, ...s, a);
+      }
+    }
+    const before = S.live.length;
+    S.live = S.live.filter(d => (now - d.t0) / 1000 < 1.8);
+    if (S.live.length < before) { stamp.classList.add('on'); clearTimeout(stamp.t); stamp.t = setTimeout(() => stamp.classList.remove('on'), 2200); say('Right side healed itself. That’s PPF. The left one’s there for good.'); }
+    // gravel
+    for (const g of S.gravel) {
+      const t = (now - g.t0) / 1000; if (t < 0) continue;
+      const fly = .32;
+      if (t < fly) { const k = t / fly, x = g.sx + (g.x - g.sx) * k, y = H * 1.15 + (g.y - H * 1.15) * k, s = g.s * (5 - 4 * k); ctx.fillStyle = '#8b8f95'; ctx.beginPath(); ctx.arc(x, y, s, 0, 7); ctx.fill(); ctx.fillStyle = 'rgba(255,255,255,.35)'; ctx.beginPath(); ctx.arc(x - s * .3, y - s * .3, s * .35, 0, 7); ctx.fill(); }
+      else if (!g.hit) { g.hit = true; if (g.x < mid) { chip(g.x, g.y, g.s); S.chipsL++; } else g.bounce = now; }
+      else if (g.bounce && t < fly + .35) { const k = (t - fly) / .35, s = g.s * (1 + k * 2.2); ctx.globalAlpha = 1 - k; ctx.fillStyle = '#8b8f95'; ctx.beginPath(); ctx.arc(g.x + (g.x - mid) * .12 * k, g.y + 40 * k, s, 0, 7); ctx.fill(); ctx.strokeStyle = 'rgba(255,210,31,.8)'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(g.x, g.y, 4 + k * 16, 0, 7); ctx.stroke(); ctx.globalAlpha = 1; }
+    }
+    const pend = S.gravel.some(g => (now - g.t0) / 1000 < .7);
+    if (S.gravel.length && !pend) { say(`Gravel test: bare paint took ${S.chipsL} chip${S.chipsL === 1 ? '' : 's'}. The film took none.`); S.gravel = []; }
+    // idle demo: a scratch drags itself across once if nobody has touched it
+    if (!S.touched && !RM) {
+      idle += dt;
+      if (idle > 2.8 && !demo) { demo = { t: 0 }; S.drag = { segs: [], hitL: false, hitR: false }; }
+      if (demo) { demo.t += dt; const k = clamp(demo.t / 1.1); addPoint(W * (.16 + .68 * k), H * (.55 + .06 * Math.sin(k * 6))); if (k >= 1) { endDrag(); demo = null; idle = -6; } }
+    }
+    const busy = S.drag || healing || S.live.length || S.gravel.length || (!S.touched && !RM);
+    if (busy && visible) requestAnimationFrame(frame); else running = false;
+  }
+  new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible) kick(); }).observe(cv);
+  const size = () => { P.resize(); kick(); };
+  addEventListener('resize', () => { clearTimeout(size.t); size.t = setTimeout(size, 150); });
+  size();
+})();
+
+/* ===================== STORY: stage 1 → 3 under an inspection light ===================== */
+(() => {
+  const cv = $('#csCanvas'), P = Paint(cv, 'correct'), ctx = P.ctx, steps = $$('.cs-step'), bar = $('#csBar');
+  const A = CONFIG.stages.map(s => s.d);
+  // [hold 0][pass 1][hold 1][pass 2][hold 2][pass 3][hold 3]
+  const K = [0, .16, .32, .42, .58, .68, .84, 1];
+  let p = RM ? 1 : 0, cur = -1, visible = false, raf = 0, t0 = performance.now();
+  function state(p) {
+    for (let i = 0; i < 7; i++) if (p <= K[i + 1]) { const k = (p - K[i]) / (K[i + 1] - K[i]); return i % 2 === 0 ? { stage: i / 2, pass: null } : { stage: (i - 1) / 2, pass: k }; }
+    return { stage: 3, pass: null };
+  }
+  function draw(now) {
+    const W = P.W, H = P.H, s = state(p), tt = (now - t0) / 1000;
+    P.base();
+    // inspection light wanders over the panel
+    const lx = W * (.5 + .32 * Math.sin(tt * .7)), ly = H * (.46 + .2 * Math.sin(tt * 1.1 + 1)), rad = Math.max(W, H) * .32;
+    let padX = null;
+    if (s.pass === null) { P.swirl(A[s.stage] * .8); P.lit(A[s.stage], lx, ly, rad); }
+    else {
+      const e = s.pass < .5 ? 2 * s.pass * s.pass : 1 - Math.pow(-2 * s.pass + 2, 2) / 2;
+      padX = -W * .12 + W * 1.24 * e;
+      const a0 = A[s.stage], a1 = A[s.stage + 1];
+      P.swirl(a1 * .8, 0, Math.max(0, padX)); P.lit(a1, lx, ly, rad, 0, Math.max(0, padX));
+      P.swirl(a0 * .8, Math.max(0, padX), W); P.lit(a0, lx, ly, rad, Math.max(0, padX), W);
+    }
+    // the LED's own reflection
+    ctx.save(); ctx.globalCompositeOperation = 'lighter';
+    const g1 = ctx.createRadialGradient(lx, ly, 0, lx, ly, rad * .5); g1.addColorStop(0, 'rgba(255,255,250,.35)'); g1.addColorStop(.12, 'rgba(255,255,250,.12)'); g1.addColorStop(1, 'rgba(255,255,250,0)');
+    ctx.fillStyle = g1; ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = 'rgba(255,255,255,.95)'; ctx.beginPath(); ctx.ellipse(lx, ly, rad * .045, rad * .03, 0, 0, 7); ctx.fill();
+    ctx.restore();
+    // the polisher making its pass
+    if (padX !== null && padX > -W * .1 && padX < W * 1.1) {
+      const py = H * .56, pr = Math.min(W, H) * .16;
+      ctx.save();
+      const haze = ctx.createLinearGradient(padX - pr * 3, 0, padX, 0); haze.addColorStop(0, 'rgba(255,255,255,0)'); haze.addColorStop(1, 'rgba(255,255,255,.06)');
+      ctx.fillStyle = haze; ctx.fillRect(padX - pr * 3, py - pr, pr * 3, pr * 2);
+      ctx.translate(padX, py);
+      ctx.fillStyle = 'rgba(0,0,0,.45)'; ctx.beginPath(); ctx.ellipse(6, 10, pr * 1.02, pr * .98, 0, 0, 7); ctx.fill();
+      ctx.fillStyle = '#ffd21f'; ctx.beginPath(); ctx.arc(0, 0, pr, 0, 7); ctx.fill();
+      ctx.fillStyle = '#e6b800'; ctx.beginPath(); ctx.arc(0, 0, pr * .78, 0, 7); ctx.fill();
+      ctx.rotate(tt * 22);
+      ctx.strokeStyle = 'rgba(0,0,0,.18)'; ctx.lineWidth = 2;
+      for (let k = 0; k < 10; k++) { ctx.beginPath(); ctx.arc(0, 0, pr * (.2 + k * .06), k, k + 1.2); ctx.stroke(); }
+      ctx.fillStyle = '#16181c'; ctx.beginPath(); ctx.arc(0, 0, pr * .3, 0, 7); ctx.fill();
+      ctx.fillStyle = '#ffd21f'; ctx.font = `700 ${pr * .16}px Archivo, sans-serif`; ctx.textAlign = 'center'; ctx.fillText('LAB', 0, pr * .06);
+      ctx.restore();
+    }
+    // UI
+    const shown = s.pass === null ? s.stage : (s.pass > .5 ? s.stage + 1 : s.stage);
+    if (shown !== cur) { cur = shown; steps.forEach((el, i) => el.classList.toggle('on', i === shown)); }
+    const a = s.pass === null ? A[s.stage] : A[s.stage] + (A[s.stage + 1] - A[s.stage]) * s.pass;
+    bar.style.transform = `scaleX(${Math.max(.03, a)})`;
+  }
+  function loop(now) { draw(now); if (visible && !RM) raf = requestAnimationFrame(loop); }
+  new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible) { cancelAnimationFrame(raf); raf = requestAnimationFrame(loop); } }).observe(cv);
+  const size = () => { P.resize(); draw(performance.now()); };
+  addEventListener('resize', () => { clearTimeout(size.t); size.t = setTimeout(size, 150); });
+  size();
+  if (RM) { steps.forEach(s => s.classList.add('on')); return; }
+  const sec = $('#process');
+  const onScroll = () => { const r = sec.getBoundingClientRect(), span = sec.offsetHeight - innerHeight; p = clamp(-r.top / span); };
+  addEventListener('scroll', onScroll, { passive: true }); onScroll();
+  window.__csScroll = onScroll;
+})();
+
+/* ===================== PAGE MOTION ===================== */
+(() => {
+  let lenis = null;
+  if (!RM && typeof Lenis !== 'undefined') {
+    lenis = new Lenis({ lerp: .1 });
+    if (HAS_G) { lenis.on('scroll', ScrollTrigger.update); gsap.ticker.add(t => lenis.raf(t * 1000)); gsap.ticker.lagSmoothing(0); }
+    else { const raf = t => { lenis.raf(t); requestAnimationFrame(raf); }; requestAnimationFrame(raf); }
+    lenis.on('scroll', () => window.__csScroll && window.__csScroll());
+  }
+  $$('a[href^="#"]').forEach(a => a.addEventListener('click', e => { const id = a.getAttribute('href'); const t = id === '#top' ? document.body : $(id); if (!t) return; e.preventDefault(); const y = id === '#top' ? 0 : t.getBoundingClientRect().top + scrollY - 70; lenis ? lenis.scrollTo(y, { duration: 1.4 }) : scrollTo({ top: y, behavior: RM ? 'auto' : 'smooth' }); }));
+  const nav = $('#nav'); const ns = () => nav.classList.toggle('solid', scrollY > 30); addEventListener('scroll', ns, { passive: true }); ns();
+  if (HAS_G && !RM) {
+    gsap.registerPlugin(ScrollTrigger);
+    $$('.reveal').forEach(el => gsap.to(el, { autoAlpha: 1, y: 0, duration: 1, ease: 'expo.out', scrollTrigger: { trigger: el, start: 'top 90%' } }));
+    const intro = () => gsap.from('.hero .kicker, .hero h1, .hero .lead, .hero .hero-cta', { y: 30, autoAlpha: 0, duration: 1.1, ease: 'expo.out', stagger: .08 });
+    $('#loader').classList.contains('done') ? intro() : setTimeout(intro, 1250);
+    if (FINE) $$('.btn-y').forEach(b => { b.addEventListener('mousemove', e => { const r = b.getBoundingClientRect(); gsap.to(b, { x: (e.clientX - r.left - r.width / 2) * .15, y: (e.clientY - r.top - r.height / 2) * .25, duration: .4 }); }); b.addEventListener('mouseleave', () => gsap.to(b, { x: 0, y: 0, duration: .5, ease: 'elastic.out(1,.5)' })); });
+  }
+})();
+</script>
+</body>
+</html>
