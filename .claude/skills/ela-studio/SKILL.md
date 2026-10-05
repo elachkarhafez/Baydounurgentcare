@@ -7,12 +7,19 @@ description: Build a standout, animated, single-file marketing website for a loc
 
 This is the playbook behind the Baydoun Urgent Care, Stack Shack, Vella Bakehouse, Mr. 2 Weeks, Bagel & Co, Halcyon Cuts, Vantage Detail, Halvark Strength, Lumen Skin, Marrowick Estates and Inkwell & Oak sites. Follow every phase in order. The thing that makes these sites work is not "more animation". It's **one idea that only fits this business**, built properly, wrapped in a site that's genuinely useful.
 
+## Fast path: use the kit first (target: 10 minutes, Fudge Fix quality)
+
+`kit/` holds the tested, production pieces from The Fudge Fix, CareMed and The Lab Atlanta: one-command research, the build3d scroll-assembly engine (plate, slab, disc, sheet, dome, sauce, scatter, topper + material presets), compositor-only openers, drag/scratch/grind interaction helpers, the paint renderer, QA scripts and libs. **Read `kit/README.md` before Phase 2 and build from the kit.** Only write new engine code when the signature needs a genuinely new primitive, and add that primitive to the kit afterwards so the next build is fast.
+
+Time budget: research 1 min (`kit/research/ig.mjs` in the background) → concept 1 min → build 4 min (copy closest site/example, edit CONFIG + layers) → check 2 min (`kit/qa/states.mjs`, `shoot.mjs`, scripted payoff) → ship 1 min (`kit/qa/verify-live.sh`). Run independent steps in parallel (research while choosing the concept; QA desktop and phone together; a subagent for a second site).
+
 Reference files (read them when you reach the phase that needs them):
 - `references/declined.md`: what to do when a business says no (generic concept + retire the old link).
 - `references/signatures.md`: catalogue of signature interactions by niche, with how each was built.
 - `references/boilerplate.md`: the HTML skeleton, CDN tags, CONFIG pattern, smooth-scroll setup, ElaSystems badge.
 - `references/design.md`: type pairings, palettes, copy rules, motion rules, anti-patterns.
 - `scripts/shoot.mjs`: headless QA harness (desktop + phone screenshots, console errors, horizontal overflow).
+- `kit/README.md`: the fast path, the build3d engine, openers, interaction helpers and the rules they encode.
 
 ---
 
