@@ -10,8 +10,6 @@
 <meta property="og:title" content="So Cheesy | Halal smash burgers in Dearborn">
 <meta property="og:description" content="Scratch-kitchen street food from the truck at The Canteen at Midtown. 100% halal.">
 <meta property="og:image" content="https://socheesy.vercel.app/img/post6.jpg">
-<link rel="modulepreload" href="assets/scene.js">
-<link rel="preload" href="assets/studio-512.hdr" as="fetch" crossorigin>
 <link rel="preload" href="assets/fonts/titan.woff2" as="font" type="font/woff2" crossorigin>
 <style>
 @font-face{font-family:"Titan One";src:url(assets/fonts/titan.woff2) format("woff2");font-weight:400;font-display:swap}
@@ -50,40 +48,39 @@ img,svg,canvas{display:block;max-width:100%}a{color:inherit}button{font:inherit;
 .nav .btn{padding:12px 16px;font-size:13.5px}
 @media (max-width:980px){.nav-links a:not(.btn),.nav .status{display:none}}
 @media (max-width:480px){.nav .btn span{display:none}.nav .btn{padding:12px}}
-/* build */
-.build{position:relative;height:900vh}
-.stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;background:radial-gradient(110% 90% at 62% 55%,#221c10,var(--bg) 70%)}
-#gl{position:absolute;inset:0;width:100%;height:100%;touch-action:pan-y;opacity:0;transition:opacity 1.4s var(--ease)}.gl-ready #gl{opacity:1}
-.fallback{display:none;position:absolute;inset:0}.no-gl .fallback{display:block}.fallback img{width:100%;height:100%;object-fit:cover;opacity:.55}
-.shade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(12,11,9,.92),rgba(12,11,9,.5) 30%,transparent 56%)}
-@media (max-width:820px){.shade{background:linear-gradient(0deg,rgba(12,11,9,.95),rgba(12,11,9,.55) 34%,transparent 56%)}}
-.hero{position:absolute;left:var(--pad);top:50%;transform:translateY(-46%);max-width:min(600px,48vw);z-index:3}
+/* hero: smash it */
+.hero{position:relative;min-height:100vh;min-height:100svh;display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);gap:clamp(24px,4vw,70px);align-items:center;padding:110px var(--pad) 70px;max-width:1440px;margin:0 auto}
+.hero::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(55% 55% at 70% 58%,rgba(255,90,31,.14),transparent 70%)}
 .hero h1{font:400 clamp(58px,8vw,132px)/.86 var(--disp);text-transform:uppercase;margin:18px 0 22px;letter-spacing:-.015em}
 .hero h1 span{color:var(--ched);display:block}
-.hero p{color:#d8d0bf;max-width:460px;margin:0 0 28px}
+.hero p{color:#d8d0bf;max-width:470px;margin:0 0 28px}
 .cta{display:flex;gap:12px;flex-wrap:wrap}
-@media (max-width:820px){.hero{top:auto;bottom:92px;transform:none;max-width:none;right:var(--pad)}.hero h1{font-size:clamp(50px,15vw,84px);margin:12px 0 12px}.hero p{font-size:15px;margin-bottom:18px}}
-.steps{position:absolute;left:var(--pad);top:50%;transform:translateY(-50%);width:min(460px,40vw);height:280px;margin:0;padding:0;list-style:none;z-index:3;pointer-events:none}
-.step{position:absolute;inset:0;opacity:0;visibility:hidden}
-.step .num{font:400 clamp(78px,9vw,140px)/.8 var(--disp);color:transparent;-webkit-text-stroke:2px var(--ched);display:block;margin-bottom:10px}
-.step h2{font:400 clamp(38px,4.2vw,68px)/.92 var(--disp);text-transform:uppercase;margin:0 0 12px}.step h2 em{font-style:normal;color:var(--ched)}
-.step p{margin:0;color:#d8d0bf;max-width:380px}
-@media (max-width:820px){.steps{top:auto;bottom:max(84px,11vh);transform:none;width:auto;right:var(--pad);height:auto;min-height:170px}.step{inset:auto 0 0 0}.step .num{font-size:60px}.step h2{font-size:40px}.step p{font-size:15px}}
-.rail{position:absolute;right:var(--pad);top:50%;transform:translateY(-50%);z-index:4;display:flex;flex-direction:column;gap:5px}
-.rail button{all:unset;cursor:pointer;display:flex;align-items:center;justify-content:flex-end;gap:12px;padding:5px 0;color:rgba(255,247,230,.42);font:800 11px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;transition:color .3s}
-.rail button i{width:20px;height:3px;border-radius:3px;background:currentColor;transition:width .4s var(--ease),background .3s}
-.rail button.on{color:var(--ink)}.rail button.on i{width:42px;background:var(--ched)}.rail button.done i{background:var(--flame)}
-.rail button:focus-visible{outline:2px solid var(--ched);outline-offset:4px}
-@media (min-width:821px) and (max-width:1180px){.rail button span{display:none}}
-@media (max-width:820px){.rail{top:76px;left:var(--pad);transform:none;flex-direction:row;gap:4px}.rail button{flex:1;justify-content:center;padding:8px 0}.rail button span{display:none}.rail button i,.rail button.on i{width:100%}}
-.skip{position:absolute;right:var(--pad);bottom:24px;z-index:4;background:none;border:1px solid var(--line);border-radius:99px;padding:9px 15px;cursor:pointer;color:var(--muted);font:800 11px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;transition:opacity .3s}
-.cue{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);z-index:3;pointer-events:none;white-space:nowrap;display:flex;align-items:center;gap:10px;padding:12px 18px;border-radius:99px;background:rgba(255,247,230,.08);border:1px solid var(--line);font-weight:800;font-size:14px;transition:opacity .3s}
-.cue svg{width:18px;height:18px;animation:nudge 1.6s var(--ease) infinite}@keyframes nudge{0%,100%{transform:translateY(-2px)}50%{transform:translateY(4px)}}
-.finale{position:absolute;left:var(--pad);top:50%;transform:translateY(-50%);z-index:3;opacity:0;visibility:hidden;max-width:min(560px,46vw)}
-.finale h2{font:400 clamp(64px,8.6vw,146px)/.84 var(--disp);text-transform:uppercase;margin:0 0 16px}.finale h2 span{color:var(--ched)}
-.finale p{color:#d8d0bf;margin:0 0 24px;max-width:400px}
-@media (max-width:820px){.finale{top:auto;bottom:76px;transform:none;max-width:none;right:var(--pad)}.finale h2{font-size:62px}.finale p{font-size:15px;margin-bottom:16px}}
-.rm .build{height:auto}.rm .stage{position:relative}.rm .steps,.rm .rail,.rm .skip,.rm .cue{display:none}
+@media (max-width:900px){.hero{grid-template-columns:minmax(0,1fr);padding-top:84px;gap:20px}.hero h1{font-size:clamp(44px,13.5vw,84px);margin:12px 0}.seq{flex-wrap:wrap}.seq ol{flex:1 1 100%;min-width:0}.go{padding:16px 20px;font-size:19px;width:100%;text-align:center;box-sizing:border-box}.gcall{right:0;top:0}.hero p{font-size:15px;margin-bottom:18px}.grill{order:-1}}
+.grill{position:relative;width:100%;max-width:640px;justify-self:center}
+.flat{position:relative;aspect-ratio:4/3.1;width:100%}
+.flat canvas{position:absolute;inset:0;width:100%;height:100%}
+.flat.shake{animation:shake .35s cubic-bezier(.36,.07,.19,.97)}
+@keyframes shake{10%,90%{transform:translate(-2px,1px)}20%,80%{transform:translate(5px,-2px)}30%,50%,70%{transform:translate(-8px,3px)}40%,60%{transform:translate(8px,-1px)}}
+.seq{display:flex;align-items:center;gap:14px;margin-top:10px}
+.seq ol{display:flex;gap:6px;list-style:none;margin:0;padding:0;flex:1}
+.seq li{flex:1;display:flex;align-items:center;gap:8px;font:800 12px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.seq li i{width:24px;height:24px;border-radius:50%;border:2px solid rgba(255,247,230,.25);display:grid;place-items:center;font-style:normal;font-size:11px;transition:background .3s,border-color .3s,color .3s}
+.seq li.on{color:var(--ink)}.seq li.on i{border-color:var(--ched);color:var(--ched)}.seq li.done i{background:var(--ched);border-color:var(--ched);color:#160f02}
+.go{all:unset;cursor:pointer;-webkit-user-select:none;user-select:none;touch-action:manipulation;padding:18px 26px;border-radius:99px;background:var(--flame);color:#fff;font:400 22px/1 var(--disp);text-transform:uppercase;letter-spacing:.02em;box-shadow:0 8px 0 #9b2c06,0 20px 34px -12px rgba(255,90,31,.6);transition:transform .12s,box-shadow .12s,opacity .3s;white-space:nowrap}
+.go:active{transform:translateY(6px);box-shadow:0 2px 0 #9b2c06}.go:disabled{opacity:.45;cursor:wait}
+.go:focus-visible{outline:2px solid var(--ched);outline-offset:5px}
+.sear{height:6px;border-radius:6px;background:rgba(255,247,230,.08);overflow:hidden;margin-top:12px}.sear i{display:block;height:100%;width:100%;background:linear-gradient(90deg,var(--ched),var(--flame));transform-origin:left;transform:scaleX(0)}
+.gcall{position:absolute;right:2%;top:4%;z-index:3;display:flex;align-items:center;gap:12px;padding:12px 16px 12px 12px;border-radius:99px;background:var(--ched);color:#160f02;font:800 14px/1.15 var(--sans);box-shadow:0 18px 30px -12px rgba(0,0,0,.6);pointer-events:none;transition:opacity .5s,transform .5s var(--ease);animation:bob 2.6s ease-in-out infinite}
+.gcall i{width:34px;height:34px;border-radius:50%;background:#160f02;color:var(--ched);display:grid;place-items:center;flex:none}.gcall svg{width:20px;height:20px}
+.gcall small{display:block;font-weight:600;font-size:12px;opacity:.75}.gcall.gone{opacity:0;transform:translateY(-10px);animation:none}
+.hpay{position:absolute;inset:0;z-index:4;display:grid;place-items:center;align-content:center;gap:14px;text-align:center;opacity:0;pointer-events:none;transition:opacity .5s}
+.hpay.on{opacity:1}
+.hpay strong{font:400 clamp(64px,8.6vw,130px)/.85 var(--disp);color:var(--ched);text-transform:uppercase;transform:rotate(-6deg) scale(.4);transition:transform .7s var(--boing);text-shadow:4px 4px 0 #3a2600,0 0 40px rgba(247,178,30,.35)}
+.hpay.on strong{transform:rotate(-6deg) scale(1)}
+.hpay .row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.slam{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;background:#0c0b09;pointer-events:none}
+.slam b{font:400 clamp(70px,16vw,220px)/.8 var(--disp);color:var(--ched);text-transform:uppercase;text-align:center;text-shadow:6px 6px 0 #3a2600}
+.slam b small{display:block;font-size:.5em}
 /* marquee */
 .marquee{overflow:hidden;background:var(--ched);color:#160f02;padding:16px 0;transform:rotate(-1.2deg);margin:-8px -10px 0;position:relative;z-index:5;box-shadow:0 10px 0 var(--flame)}
 .mq{display:flex;width:max-content;animation:mq 34s linear infinite}
@@ -183,8 +180,17 @@ img,svg,canvas{display:block;max-width:100%}a{color:inherit}button{font:inherit;
 </style>
 </head>
 <body>
-<script src="assets/lib/intros.js"></script>
-<script>ElaIntro.drip({ words: [{ text: 'SO', font: 'Titan One', weight: 400, color: '#f7b21e', scale: .8 }, { text: 'CHEESY', font: 'Titan One', weight: 400, color: '#f7b21e' }], dripWord: 1, liquid: '#f7b21e', bg: '#0c0b09', cherry: false, onReveal: () => window.__intro && window.__intro() });</script>
+<script>
+/* opener: the logo slams down like a smash patty (once per tab, skipped on ?qa / reduced motion) */
+(() => { const q = new URLSearchParams(location.search); let seen = false; try { seen = sessionStorage.getItem('scSlam') === '1'; sessionStorage.setItem('scSlam', '1'); } catch (e) {}
+  if (seen || q.has('qa') || matchMedia('(prefers-reduced-motion: reduce)').matches || !document.body.animate) { window.__introDone = true; return; }
+  const L = document.createElement('div'); L.className = 'slam'; L.setAttribute('aria-hidden', 'true'); L.innerHTML = '<b><small>So</small>Cheesy</b>'; document.body.appendChild(L); const b = L.querySelector('b');
+  b.animate([{ transform: 'translateY(-120vh) scale(1,1.2)' }, { transform: 'translateY(0) scale(1.25,.55)', offset: .55 }, { transform: 'translateY(0) scale(.92,1.1)', offset: .75 }, { transform: 'none' }], { duration: 900, easing: 'cubic-bezier(.5,0,.75,0)', fill: 'forwards' });
+  L.animate([{ transform: 'none' }, { transform: 'translate(-10px,6px)', offset: .55 }, { transform: 'translate(8px,-4px)', offset: .62 }, { transform: 'none', offset: .7 }, { transform: 'none' }], { duration: 900, fill: 'forwards' });
+  const out = L.animate([{ clipPath: 'inset(0 0 0 0)' }, { clipPath: 'inset(0 0 100% 0)' }], { duration: 700, delay: 1350, easing: 'cubic-bezier(.7,0,.2,1)', fill: 'forwards' });
+  setTimeout(() => { window.__introDone = true; window.__intro && window.__intro(); }, 1450); out.onfinish = () => L.remove();
+})();
+</script>
 
 <header class="nav" id="nav">
   <div class="nav-in">
@@ -198,22 +204,20 @@ img,svg,canvas{display:block;max-width:100%}a{color:inherit}button{font:inherit;
 </header>
 
 <main id="top">
-  <section class="build" id="build" aria-label="A So Cheesy smash burger builds itself as you scroll">
-    <div class="stage" id="stage">
-      <canvas id="gl" role="img" aria-label="A double smash burger stacking itself: brioche, lettuce, two smashed patties with melting American cheese, caramelized onions and mushrooms, sauce and a sesame top bun"></canvas>
-      <div class="fallback"><img src="img/post6.jpg" alt="A So Cheesy double smash burger"></div>
-      <div class="shade"></div>
-      <div class="hero" id="heroCopy">
-        <span class="halal">100% Halal · Scratch kitchen</span>
-        <h1>Smashed. Stacked. <span>So cheesy.</span></h1>
-        <p>Elevated street food from a food truck at The Canteen at Midtown, Dearborn. Scroll and we'll build you a double smash.</p>
-        <div class="cta"><a class="btn btn-ched" href="#menu">See the menu</a><a class="btn btn-line" href="https://www.doordash.com/store/so-cheesy-dearborn-25287797/" target="_blank" rel="noopener">Order delivery</a></div>
+  <section class="hero" id="heroWrap" aria-label="So Cheesy">
+    <div id="heroCopy">
+      <span class="halal">100% Halal · Scratch kitchen</span>
+      <h1>Smash it. Flip it. <span>Cheese it.</span></h1>
+      <p>Elevated street food from a food truck at The Canteen at Midtown, Dearborn. Every smash burger gets the same three moves. Try them on the flat-top.</p>
+      <div class="cta"><a class="btn btn-ched" href="#menu">See the menu</a><a class="btn btn-line" href="https://www.doordash.com/store/so-cheesy-dearborn-25287797/" target="_blank" rel="noopener">Order delivery</a></div>
+    </div>
+    <div class="grill" id="grill">
+      <div class="flat" id="flat"><canvas id="grillCv" role="img" aria-label="A flat-top griddle with a ball of halal beef. Smash it, flip it, then add cheese"></canvas>
+        <div class="hpay" id="hPay"><strong>So<br>cheesy.</strong><div class="row"><a class="btn btn-ched" href="#menu">See the burgers</a><button class="btn btn-line" type="button" id="again">Smash another</button></div></div>
       </div>
-      <ol class="steps" id="steps" aria-live="polite"></ol>
-      <div class="finale" id="finale"><h2>Two smashed. <span>Too cheesy.</span></h2><p>Brioche, smashed patties, American cheese, caramelized onions and mushrooms, sauce. Built from scratch at the truck, every order.</p><div class="cta"><a class="btn btn-ched" href="#menu">See the menu</a><button class="btn btn-line" type="button" id="rebuild">Build it again</button></div></div>
-      <nav class="rail" id="rail" aria-label="Burger layers"></nav>
-      <button class="skip" id="skip" type="button">Skip</button>
-      <div class="cue" id="cue" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 4v15M6 13l6 6 6-6"/></svg>Scroll to stack it</div>
+      <div class="gcall" id="gCall" aria-hidden="true"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v10M7 8l5 5 5-5M4 20h16"/></svg></i><span>Smash it<small>Hit the button</small></span></div>
+      <div class="seq"><ol id="seqList"><li class="on"><i>1</i>Smash</li><li><i>2</i>Flip</li><li><i>3</i>Cheese</li></ol><button class="go" id="goBtn" type="button">Smash it</button></div>
+      <div class="sear" aria-hidden="true"><i id="searBar"></i></div>
     </div>
   </section>
 
@@ -305,23 +309,10 @@ img,svg,canvas{display:block;max-width:100%}a{color:inherit}button{font:inherit;
 <script src="assets/lib/ScrollTrigger.min.js"></script>
 <script src="assets/lib/lenis.min.js"></script>
 <script src="assets/lib/drag.js"></script>
-<script src="assets/lib/gate.js"></script>
 <script>
 const CONFIG = {
   tel: '+13136991272', tz: 'America/Detroit',
   hours: { 0: [12, 22], 1: [11, 23], 2: [11, 23], 3: [11, 23], 4: [11, 23], 5: [12, 24], 6: [12, 24] },
-  steps: [
-    ['Brioche', 'The <em>brioche.</em>', 'Toasted, soft and ready to get messy.'],
-    ['Lettuce', '<em>Crunch</em> first.', 'Fresh lettuce on the bottom, so the bun stays crisp.'],
-    ['Smash', 'Smash <em>one.</em>', 'Halal beef, smashed hard on the flat top for that crust.'],
-    ['Melt', 'American <em>melt.</em>', 'A full slice, draped while the patty is still sizzling.'],
-    ['Smash 2', 'Smash <em>two.</em>', 'Because one is never enough.'],
-    ['Melt 2', 'Melt <em>again.</em>', 'Cheese on cheese. The name is not a joke.'],
-    ['Onions', 'Onions & <em>mushrooms.</em>', 'Caramelized low and slow until they go sweet.'],
-    ['Sauce', 'The <em>sauce.</em>', 'One of twelve house sauces, made in-house.'],
-    ['Top bun', 'Sesame <em>lid.</em>', 'Pressed down, wrapped up, handed out the window.']
-  ],
-  stepAt: [.16, .25, .34, .43, .52, .61, .68, .77, .9],
   bricks: [['O.G. Motz Bricks', 'The original fried mozzarella bricks.'], ['Burrata Hot Honey', 'Tossed in Calabrian chili hot honey, topped with a creamy burrata ball.'], ['Elote Bricks', 'Elote crema, fire-roasted corn, tajín, jalapeños, cilantro and cotija, chipotle crema on the side.']],
   menu: [
     { id: 'burgers', t: 'Burgers', photo: ['img/post6.jpg', 'Double smash, double cheese'], items: [
@@ -365,11 +356,8 @@ const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [..
 const RM = matchMedia('(prefers-reduced-motion: reduce)').matches, FINE = matchMedia('(hover: hover) and (pointer: fine)').matches, MOBILE = matchMedia('(max-width: 820px)').matches, HAS_G = typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined';
 if (RM) document.documentElement.classList.add('rm'); if (!HAS_G) document.documentElement.classList.add('no-anim');
 $('#yr').textContent = new Date().getFullYear();
-window.__ffReady = () => { document.documentElement.classList.add('gl-ready'); window.__kitSync && window.__kitSync(); };
 const toast = m => { const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('on'), 2400); };
 
-$('#steps').innerHTML = CONFIG.steps.map((s, i) => `<li class="step"><span class="num">0${i + 1}</span><h2>${s[1]}</h2><p>${esc(s[2])}</p></li>`).join('');
-$('#rail').innerHTML = CONFIG.steps.map((s, i) => `<button type="button" aria-label="Layer ${i + 1}: ${esc(s[0])}"><span>${esc(s[0])}</span><i></i></button>`).join('');
 const mqh = CONFIG.marquee.map(m => `<span>${esc(m)}</span>`).join(''); $('#mq').innerHTML = mqh + mqh;
 $('#bricks').innerHTML = CONFIG.bricks.map(b => `<li><b>${esc(b[0])}</b><span>${esc(b[1])}</span></li>`).join('');
 $('#fdRow').innerHTML = CONFIG.feed.map(f => `<a class="reveal" href="https://www.instagram.com/p/${esc(f[1])}/" target="_blank" rel="noopener"><img src="${esc(f[0])}" alt="${esc(f[2])}" width="720" height="900" loading="lazy"></a>`).join('');
@@ -480,39 +468,137 @@ $('#fdRow').innerHTML = CONFIG.feed.map(f => `<a class="reveal" href="https://ww
   window.__pull = { set: v => { dragging = true; off = v * MAXP(); kick(); }, release: () => { dragging = false; target = paid ? MAXP() : 0; kick(); }, get paid() { return paid; } };
 })();
 
-/* scroll: the build + page motion */
+/* smash it: three moves on the flat-top. smash → flip → cheese */
+(() => {
+  const cv = $('#grillCv'), ctx = cv.getContext('2d'), flat = $('#flat'), btn = $('#goBtn'), bar = $('#searBar'), pay = $('#hPay'), lis = $$('#seqList li');
+  if (!ctx) return;
+  let W = 0, H = 0, D = 1, raf = 0, visible = true, t0 = performance.now();
+  // stage: 0 raw ball, 1 smashing, 2 searing, 3 ready to flip, 4 flipping, 5 flipped, 6 cheese dropping/melting, 7 done
+  let stage = 0, smashT = 0, sear = 0, flipT = 0, cheeseT = 0, melt = 0, spat = 0, parts = [];
+  let seed = 3; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const fat = [...Array(320)].map(() => [rnd() * 6.283, Math.sqrt(rnd()), rnd()]);   // ground-beef grind: dark, light and a little fat
+  const crust = [...Array(140)].map(() => [rnd() * 6.283, Math.sqrt(rnd()), rnd()]);
+  const edge = a => 1 + .06 * Math.sin(a * 7) + .045 * Math.sin(a * 13 + 1) + .03 * Math.sin(a * 23 + 2);
+  const G = () => ({ cx: W * .5, cy: H * .58, rx: W * .32, ry: W * .11, th: W * .036, br: W * .145 });
+  const lerp = (a, b, t) => a + (b - a) * t, ease = t => t < 0 ? 0 : t > 1 ? 1 : 1 - Math.pow(1 - t, 3);
+  const steps = ['Smash it', 'Searing…', 'Flip it', 'Flipping…', 'Cheese it', 'Melting…', 'So cheesy'];
+  function ui() {
+    const lab = stage <= 0 ? steps[0] : stage <= 2 ? steps[1] : stage === 3 ? steps[2] : stage === 4 ? steps[3] : stage === 5 ? steps[4] : stage === 6 ? steps[5] : steps[6];
+    btn.textContent = lab; btn.disabled = ![0, 3, 5].includes(stage);
+    const k = stage <= 2 ? 0 : stage <= 4 ? 1 : 2; lis.forEach((l, i) => { l.classList.toggle('on', i === k && stage < 7); l.classList.toggle('done', i < k || stage >= 7); });
+  }
+  function puff(n, x, y, kind) { for (let i = 0; i < n; i++) parts.push(kind === 'grease' ? { k: 'g', x, y, vx: (Math.random() - .5) * 9, vy: -Math.random() * 7 - 1, r: 1.5 + Math.random() * 2.5, a: 1 } : { k: 's', x: x + (Math.random() - .5) * W * .3, y, vx: (Math.random() - .5) * .4, vy: -.6 - Math.random() * .8, r: 8 + Math.random() * 14, a: .5 + Math.random() * .3 }); }
+  function patty(g, crustUp, flipS) {
+    const { cx, cy, rx, ry, th } = g, N = 90;
+    const path = (dy, sx = 1, sy = 1) => { ctx.beginPath(); for (let i = 0; i <= N; i++) { const a = i / N * 6.283, e = edge(a), x = cx + Math.cos(a) * rx * e * sx, y = cy + dy + Math.sin(a) * ry * e * sy; i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); } ctx.closePath(); };
+    // side band (the bottom browns as it sears)
+    for (let k = 6; k >= 1; k--) { const f = k / 6; path(th * f * flipS); ctx.fillStyle = crustUp ? (f > .5 ? '#7a3f1c' : '#9c5a3a') : `rgb(${lerp(170, 92, sear * f) | 0},${lerp(70, 44, sear * f) | 0},${lerp(80, 26, sear * f) | 0})`; ctx.fill(); }
+    // top surface
+    path(0, 1, flipS); ctx.save(); ctx.clip();
+    if (!crustUp) { const tg = ctx.createRadialGradient(cx - rx * .2, cy - ry * .3, 2, cx, cy, rx); tg.addColorStop(0, `rgb(${lerp(206, 170, sear) | 0},${lerp(96, 90, sear) | 0},${lerp(108, 92, sear) | 0})`); tg.addColorStop(1, `rgb(${lerp(168, 128, sear) | 0},${lerp(60, 62, sear) | 0},${lerp(72, 60, sear) | 0})`); ctx.fillStyle = tg; ctx.fillRect(cx - rx * 1.2, cy - ry * 1.5, rx * 2.4, ry * 3);
+      for (const [a, r, t] of fat) { ctx.fillStyle = t < .45 ? `rgba(110,30,40,${.35 + t})` : t < .9 ? `rgba(240,150,150,${.25 + (t - .45)})` : 'rgba(255,236,226,.7)'; ctx.beginPath(); ctx.ellipse(cx + Math.cos(a) * r * rx * .95, cy + Math.sin(a) * r * ry * .95 * flipS, 1.2 + t * 2.4, .8 + t, a, 0, 7); ctx.fill(); } }
+    else { const tg = ctx.createRadialGradient(cx - rx * .2, cy - ry * .3, 2, cx, cy, rx * 1.05); tg.addColorStop(0, '#6e3416'); tg.addColorStop(.75, '#4a220e'); tg.addColorStop(1, '#a8642c'); ctx.fillStyle = tg; ctx.fillRect(cx - rx * 1.2, cy - ry * 1.5, rx * 2.4, ry * 3);
+      for (const [a, r, t] of crust) { ctx.fillStyle = t > .5 ? 'rgba(30,12,4,.55)' : 'rgba(196,120,60,.45)'; ctx.beginPath(); ctx.ellipse(cx + Math.cos(a) * r * rx, cy + Math.sin(a) * r * ry * flipS, 3 + t * 6, 1.4 + t * 2, a, 0, 7); ctx.fill(); }
+      ctx.fillStyle = 'rgba(255,220,170,.18)'; ctx.beginPath(); ctx.ellipse(cx - rx * .25, cy - ry * .35 * flipS, rx * .35, ry * .25, 0, 0, 7); ctx.fill(); }
+    ctx.restore();
+  }
+  function cheese(g) {
+    const { cx, cy, rx, ry, th } = g, drop = (1 - ease(cheeseT)) * -H * .5, bounce = cheeseT > 1 ? 0 : Math.sin(Math.min(1, cheeseT) * Math.PI) * 0, rot = .38, hs = .86, P = [];
+    const sq = [[-1, -1], [1, -1], [1, 1], [-1, 1]];
+    for (let s = 0; s < 4; s++) { const [x0, y0] = sq[s], [x1, y1] = sq[(s + 1) % 4]; for (let i = 0; i < 22; i++) { const t = i / 22; P.push([lerp(x0, x1, t) * hs, lerp(y0, y1, t) * hs]); } }
+    ctx.beginPath();
+    P.forEach(([u0, v0], i) => { const u = u0 * Math.cos(rot) - v0 * Math.sin(rot), v = u0 * Math.sin(rot) + v0 * Math.cos(rot), r = Math.hypot(u, v), a = Math.atan2(v, u), e = edge(a) * .97, over = Math.max(0, r - e);
+      const pull = over * melt * .45, uu = u - (u / r) * pull, vv = v - (v / r) * pull, x = cx + uu * rx, y = cy + vv * ry + drop - 3 + melt * (over > 0 ? th * 1.1 + over * W * .09 : 1.5); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); });
+    ctx.closePath();
+    const cg = ctx.createLinearGradient(cx, cy - ry, cx, cy + ry + th * 2); cg.addColorStop(0, '#ffc23a'); cg.addColorStop(1, '#f08a12');
+    ctx.fillStyle = cg; ctx.fill(); ctx.strokeStyle = 'rgba(255,240,180,.7)'; ctx.lineWidth = 1.5; ctx.stroke();
+    ctx.fillStyle = 'rgba(255,255,255,.28)'; ctx.beginPath(); ctx.ellipse(cx - rx * .2, cy - ry * .35 + drop, rx * .32, ry * .18, -.1, 0, 7); ctx.fill();
+    // drips off the hanging corners
+    if (melt > .3) for (const [ang, len] of [[.38 + .785, 1], [.38 + 2.36, .7], [.38 - .785, .55]]) { const x = cx + Math.cos(ang) * rx * 1.02, y0 = cy + Math.sin(ang) * ry * 1.02 + th * 1.2, L = (melt - .3) / .7 * W * .05 * len; if (Math.sin(ang) < 0) continue; ctx.fillStyle = '#f39a1c'; ctx.beginPath(); ctx.moveTo(x - 5, y0); ctx.quadraticCurveTo(x - 4, y0 + L, x, y0 + L + 5); ctx.quadraticCurveTo(x + 4, y0 + L, x + 5, y0); ctx.fill(); }
+  }
+  function spatula(g) {
+    if (spat <= 0) return; const { cx, cy } = g, y = lerp(-H * .35, cy - g.br * 2.1, ease(spat)) + (stage >= 2 ? -H * .5 * Math.min(1, (performance.now() - smashEnd) / 400) : 0) + (stage === 1 ? g.br * 1.6 * ease(smashT) : 0);
+    ctx.save(); ctx.translate(cx, y);
+    ctx.strokeStyle = '#2b2a27'; ctx.lineWidth = W * .028; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(W * .1, -W * .02); ctx.lineTo(W * .32, -W * .22); ctx.stroke();
+    const sg = ctx.createLinearGradient(-W * .19, 0, W * .19, 0); sg.addColorStop(0, '#8e979c'); sg.addColorStop(.4, '#f1f4f5'); sg.addColorStop(1, '#7d868b'); ctx.fillStyle = sg;
+    ctx.beginPath(); ctx.roundRect(-W * .19, -W * .03, W * .38, W * .03, 4); ctx.fill(); ctx.fillStyle = '#5c6468'; ctx.fillRect(-W * .19, -W * .004, W * .38, W * .004);
+    ctx.restore();
+  }
+  let smashEnd = 0;
+  function griddle() {
+    const top = H * .4, fr = H * .86, heat = stage >= 2 ? 1 : .5;
+    const glow = ctx.createRadialGradient(W * .5, fr, 10, W * .5, fr, W * .6); glow.addColorStop(0, `rgba(255,110,30,${.25 * heat})`); glow.addColorStop(1, 'rgba(255,110,30,0)'); ctx.fillStyle = glow; ctx.fillRect(0, top, W, H - top);
+    ctx.beginPath(); ctx.moveTo(W * .1, top); ctx.lineTo(W * .9, top); ctx.lineTo(W, fr); ctx.lineTo(0, fr); ctx.closePath(); const sg = ctx.createLinearGradient(0, top, 0, fr); sg.addColorStop(0, '#191a18'); sg.addColorStop(1, '#2c2d2a'); ctx.fillStyle = sg; ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,.05)'; ctx.beginPath(); ctx.ellipse(W * .3, top + (fr - top) * .4, W * .2, (fr - top) * .12, 0, 0, 7); ctx.fill();
+    const fg = ctx.createLinearGradient(0, fr, 0, fr + H * .06); fg.addColorStop(0, '#6b6e68'); fg.addColorStop(1, '#2a2b28'); ctx.fillStyle = fg; ctx.fillRect(0, fr, W, H * .06);
+    ctx.fillStyle = '#f7b21e'; ctx.font = `400 ${W * .03}px "Titan One", sans-serif`; ctx.textAlign = 'center'; ctx.fillText('SO CHEESY · FLAT-TOP', W * .5, fr + H * .042);
+  }
+  function draw() {
+    ctx.setTransform(D, 0, 0, D, 0, 0); ctx.clearRect(0, 0, W, H); griddle(); const g = G();
+    // grease sheen under the patty
+    if (stage >= 2) { ctx.fillStyle = 'rgba(255,190,90,.12)'; ctx.beginPath(); ctx.ellipse(g.cx, g.cy + g.th, g.rx * 1.25, g.ry * 1.4, 0, 0, 7); ctx.fill(); }
+    if (stage <= 1) { // the ball, squashing as the spatula comes down
+      const s = ease(smashT), w = lerp(g.br, g.rx, s), h = lerp(g.br, g.th + g.ry * .6, s), y = g.cy + g.th - h;
+      const bg = ctx.createRadialGradient(g.cx - w * .3, y + h * .4, 2, g.cx, y + h, w * 1.1); bg.addColorStop(0, '#d3606c'); bg.addColorStop(1, '#8e2c3a'); ctx.fillStyle = bg; ctx.beginPath(); ctx.ellipse(g.cx, y + h, w, h, 0, 0, 7); ctx.fill();
+      ctx.save(); ctx.beginPath(); ctx.ellipse(g.cx, y + h, w, h, 0, 0, 7); ctx.clip(); for (const [a, r, t] of fat) { ctx.fillStyle = t < .45 ? `rgba(110,30,40,${.35 + t})` : t < .9 ? `rgba(240,150,150,${.25 + (t - .45)})` : 'rgba(255,236,226,.7)'; ctx.beginPath(); ctx.arc(g.cx + Math.cos(a) * r * w, y + h + Math.sin(a) * r * h, 1 + t * 2.2, 0, 7); ctx.fill(); } ctx.restore();
+    } else {
+      const fl = stage === 4 ? flipT : 0, flipS = stage === 4 ? Math.abs(Math.cos(fl * Math.PI)) : 1, lift = stage === 4 ? Math.sin(fl * Math.PI) * H * .14 : 0;
+      ctx.save(); ctx.translate(0, -lift); patty(g, stage >= 5 || (stage === 4 && fl > .5), Math.max(.06, flipS)); ctx.restore();
+      if (stage >= 6) cheese(g);
+    }
+    spatula(g);
+    for (const p of parts) { if (p.k === 'g') { ctx.fillStyle = `rgba(255,220,150,${p.a})`; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 7); ctx.fill(); } else { ctx.fillStyle = `rgba(230,225,215,${p.a * .18})`; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 7); ctx.fill(); } }
+  }
+  function loop(now) {
+    const dt = Math.max(0, Math.min(.05, (now - t0) / 1000)); t0 = now; const g = G();
+    if (stage === 0 && spat > 0 && spat < 1) spat = Math.min(1, spat + dt * 5);
+    if (stage === 1) { smashT = Math.min(1, smashT + dt * 5.5); if (smashT >= 1) { stage = 2; smashEnd = performance.now(); flat.classList.remove('shake'); void flat.offsetWidth; flat.classList.add('shake'); puff(26, g.cx - g.rx, g.cy, 'grease'); puff(26, g.cx + g.rx, g.cy, 'grease'); puff(10, g.cx, g.cy - g.ry, 'smoke'); ui(); } }
+    if (stage === 2) { sear = Math.min(1, sear + dt * .65); bar.style.transform = `scaleX(${sear})`; if (Math.random() < .3) puff(1, g.cx, g.cy - g.ry, 'smoke'); if (Math.random() < .25) puff(1, g.cx + (Math.random() - .5) * g.rx * 2, g.cy + g.ry * .4, 'grease'); if (sear >= 1) { stage = 3; ui(); } }
+    if (stage === 3 || stage === 5) { if (Math.random() < .2) puff(1, g.cx, g.cy - g.ry, 'smoke'); }
+    if (stage === 4) { flipT = Math.min(1, flipT + dt * 2.2); if (flipT >= 1) { stage = 5; flat.classList.remove('shake'); void flat.offsetWidth; flat.classList.add('shake'); puff(18, g.cx, g.cy, 'grease'); puff(8, g.cx, g.cy - g.ry, 'smoke'); ui(); } }
+    if (stage === 6) { cheeseT = Math.min(1, cheeseT + dt * 2.6); if (cheeseT >= 1) melt = Math.min(1, melt + dt * .8); if (Math.random() < .2) puff(1, g.cx, g.cy - g.ry, 'smoke'); if (melt >= 1) { stage = 7; ui(); setTimeout(() => { pay.classList.add('on'); pay.style.pointerEvents = 'none'; setTimeout(() => pay.style.pointerEvents = '', 900); }, 450); } }
+    for (const p of parts) { p.x += p.vx; p.y += p.vy; if (p.k === 'g') { p.vy += .45; p.a -= dt * 1.6; } else { p.r += dt * 18; p.a -= dt * .5; } }
+    parts = parts.filter(p => p.a > 0 && p.y < H);
+    draw();
+    const busy = stage !== 0 || spat > 0 && spat < 1 || parts.length;
+    raf = visible && !RM && (busy || stage >= 2) && stage !== 7 || parts.length ? requestAnimationFrame(loop) : 0;
+  }
+  const kick = () => { if (!raf && W) { t0 = performance.now(); raf = requestAnimationFrame(loop); } };
+  function go() {
+    $('#gCall').classList.add('gone');
+    if (stage === 0) { stage = 1; smashT = 0; spat = 1; }
+    else if (stage === 3) { stage = 4; flipT = 0; }
+    else if (stage === 5) { stage = 6; cheeseT = 0; melt = 0; }
+    else return;
+    ui(); if (RM) { if (stage === 1) { smashT = 1; stage = 3; sear = 1; } else if (stage === 4) stage = 5; else if (stage === 6) { cheeseT = 1; melt = 1; stage = 7; pay.classList.add('on'); } ui(); draw(); return; }
+    kick();
+  }
+  btn.addEventListener('click', go);
+  $('#again').addEventListener('click', () => { stage = 0; smashT = sear = flipT = cheeseT = melt = 0; spat = 0; parts = []; bar.style.transform = 'scaleX(0)'; pay.classList.remove('on'); ui(); draw(); });
+  const size = () => { const r = cv.getBoundingClientRect(); if (!r.width) return; D = Math.min(2, devicePixelRatio || 1); W = r.width; H = r.height; cv.width = Math.round(W * D); cv.height = Math.round(H * D); draw(); };
+  if ('ResizeObserver' in window) new ResizeObserver(size).observe(cv); else addEventListener('resize', size);
+  new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible && stage > 0 && stage < 7) kick(); }).observe(cv);
+  // idle nudge: lower the spatula a little so people see what's about to happen
+  if (!RM) setTimeout(() => { if (stage === 0) { spat = .01; kick(); } }, 2200);
+  ui();
+  window.__smash = { go, get stage() { return stage; } };
+})();
+
+/* scroll: page motion */
 (() => {
   let lenis = null;
   if (!RM && typeof Lenis !== 'undefined') { lenis = new Lenis({ lerp: .085 }); if (HAS_G) { lenis.on('scroll', ScrollTrigger.update); gsap.ticker.add(t => lenis.raf(t * 1000)); gsap.ticker.lagSmoothing(0); } else { const f = t => { lenis.raf(t); requestAnimationFrame(f); }; requestAnimationFrame(f); } }
   const go = y => lenis ? lenis.scrollTo(y, { duration: 1.6 }) : scrollTo({ top: y, behavior: RM ? 'auto' : 'smooth' });
-  const build = $('#build'), steps = $$('.step'), rail = $$('#rail button'), AT = CONFIG.stepAt, N = AT.length;
-  // speed limit inside the build: a hard flick plays the burger forward instead of skipping past it
-  const gate = typeof ElaGate !== 'undefined' ? ElaGate({ section: build, lenis, rate: .3 }) : { check: () => false, open() {}, arm() {} };
-  $$('a[href^="#"]').forEach(a => a.addEventListener('click', e => { const id = a.getAttribute('href'), t = id === '#top' ? null : $(id); e.preventDefault(); const y = t ? t.getBoundingClientRect().top + scrollY - 60 : 0; if (y > build.offsetTop + build.offsetHeight - innerHeight) gate.open(); go(y); }));
-  const yOf = p => build.offsetTop + p * (build.offsetHeight - innerHeight);
-  rail.forEach((b, i) => b.addEventListener('click', () => go(yOf(AT[i] + .03))));
-  $('#skip').addEventListener('click', () => { gate.open(); go(yOf(1) + 2); }); $('#rebuild').addEventListener('click', () => { gate.arm(); go(0); });
-  const show = (el, on) => { if (HAS_G && !RM) gsap.to(el, { autoAlpha: on ? 1 : 0, y: on ? 0 : 16, duration: on ? .8 : .3, ease: 'expo.out', overwrite: true }); else { el.style.opacity = on ? 1 : 0; el.style.visibility = on ? 'visible' : 'hidden'; } };
-  let cur = -2;
-  function ui(p) {
-    let i = -1; for (let k = 0; k < N; k++) if (p >= AT[k] - .035) i = k; if (p > .95) i = N; if (p < .035) i = -1;
-    if (i !== cur) { cur = i; steps.forEach((s, k) => show(s, k === i)); rail.forEach((b, k) => { b.classList.toggle('on', k === i); b.classList.toggle('done', k < i); }); show($('#finale'), i === N); }
-    const h = Math.max(0, 1 - p / .03); $('#heroCopy').style.opacity = h; $('#heroCopy').style.visibility = h < .01 ? 'hidden' : 'visible';
-    $('#cue').style.opacity = p < .015 ? 1 : 0; const hs = p > .95 || (MOBILE && p < .015); $('#skip').style.opacity = hs ? 0 : 1; $('#skip').style.pointerEvents = hs ? 'none' : '';
-    $('#nav').classList.toggle('solid', build.getBoundingClientRect().bottom < 60 || scrollY > innerHeight * .5);
-  }
-  if (RM) ui(1);
-  else { const onScroll = () => { if (gate.check()) return; const r = build.getBoundingClientRect(), p = Math.min(1, Math.max(0, -r.top / (build.offsetHeight - innerHeight))); window.__build3d && window.__build3d.setProgress(p); ui(p); };
-    lenis && lenis.on('scroll', onScroll); addEventListener('scroll', onScroll, { passive: true }); addEventListener('resize', onScroll); onScroll(); window.__kitSync = onScroll; window.__gate = gate; }
+  $$('a[href^="#"]').forEach(a => a.addEventListener('click', e => { const id = a.getAttribute('href'), t = id === '#top' ? null : $(id); e.preventDefault(); go(t ? t.getBoundingClientRect().top + scrollY - 60 : 0); }));
+  const nav = $('#nav'), onS = () => nav.classList.toggle('solid', scrollY > 40); addEventListener('scroll', onS, { passive: true }); onS();
   if (HAS_G && !RM) {
     gsap.registerPlugin(ScrollTrigger);
     $$('.reveal').forEach(el => gsap.to(el, { autoAlpha: 1, y: 0, duration: 1, ease: 'expo.out', scrollTrigger: { trigger: el, start: 'top 90%' } }));
     gsap.from('#scGrid .sc', { y: 30, autoAlpha: 0, rotate: -6, duration: .8, ease: 'back.out(2)', stagger: .04, scrollTrigger: { trigger: '#scGrid', start: 'top 85%' } });
     const intro = () => gsap.from('#heroCopy > *', { y: 30, autoAlpha: 0, duration: 1.1, ease: 'expo.out', stagger: .08 });
-    if (window.__elaIntroDone) intro(); else window.__intro = intro;
+    if (window.__introDone) intro(); else window.__intro = intro;
   }
 })();
 </script>
-<script type="module" src="assets/scene.js"></script>
 </body>
 </html>
