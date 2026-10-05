@@ -2,6 +2,9 @@
 
 Each of these was built and shipped. Use them as proof of the pattern, not as templates to copy for a competitor in the same town.
 
+
+> **Standing rule:** the Fudge Fix scroll-build (build3d) is not a template. So Cheesy, Parma and Nuts Now got it by mistake. Use it only when the user asks for it. Every new client gets a different concept.
+
 | Niche | Site | Signature | How it was built |
 |---|---|---|---|
 | Barbershop | Halcyon Cuts | 3D barber pole that spins and tilts toward the cursor, plus a scroll-driven "skin fade": the headline fades guard by guard (#0 to #4) | Three.js open cylinder with a shader stripe that scrolls over time, a glass shader shell, lathe-turned chrome caps and brass torus rings; pointer sets a target tilt that gets lerped. The fade is a sticky section whose scrubbed ScrollTrigger progress steps through guard numbers and blends the headline |

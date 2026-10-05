@@ -31,12 +31,12 @@ kit/
 | min | step | command / action |
 |---|---|---|
 | 0–1 | Research (run in background while you think) | `node kit/research/ig.mjs <handle> $S/<slug>` then **look at sheet.jpg** and read brief.md |
-| 1–2 | Pick the signature | Food/product that's *assembled* → build3d. Paint/surface → Paint(). Tool/craft gesture (grind, pour, scratch, stamp) → ElaDrag + SVG/canvas. Write the 5-line brief. |
+| 1–2 | Pick the signature | Invent a concept for *this* business (see SKILL.md Phase 3). **build3d is opt-in only: use it when the user asks for the Fudge Fix style by name, never as a default.** Don't repeat a recent signature (check the last rows of references/signatures.md). ElaDrag + SVG/canvas covers most gestures. Write the 5-line brief. |
 | 2–6 | Build | Copy the closest existing site or `build3d/template.html`, swap CONFIG + copy, palette, fonts. For 3D: copy an example to `<site>/src/scene.js`, edit the layer list, `kit/build3d/build.sh <site>/src/scene.js <site>/assets/scene.js`, copy `build3d/assets/*` and `lib/*` → `<site>/assets/`. Opener: `ElaIntro.<kind>({...})`. |
 | 6–8 | Check | Serve the repo (`python3 -m http.server 8765` in background), `node kit/qa/states.mjs http://127.0.0.1:8765/<site>/index.html $S/qa` (+ `--phone`), plus `shoot.mjs` for overflow. Script the signature payoff in Playwright. Look at every sheet. |
 | 8–10 | Ship | commit + push → `create_deployment` → `kit/qa/verify-live.sh <slug> <site> assets/scene.js` → hand off |
 
-## build3d: a new product is a layer list
+## build3d: a new product is a layer list (OPT-IN ONLY: only when the user asks for the Fudge Fix style)
 
 ```js
 import { createStage } from '../../.claude/skills/ela-studio/kit/build3d/src/engine.js';
