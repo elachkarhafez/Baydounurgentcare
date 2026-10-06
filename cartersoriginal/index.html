@@ -1,0 +1,880 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noai, noimageai">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Carter's Original | Sliders, shakes &amp; floats | Dearborn, MI</title>
+<meta name="description" content="Carter's Original: a modern twist on a vintage diner in Dearborn, MI. Sliders, burgers, hot dogs, chili, fries, onion rings, shakes and floats. Now hiring the founding team, up to $20/hr + tips.">
+<meta name="theme-color" content="#d7262b">
+<meta property="og:title" content="Carter's Original | A modern twist on a vintage diner">
+<meta property="og:description" content="Sliders, fries, onion rings, hot dogs, chili, shakes and floats in Dearborn, MI.">
+<meta property="og:image" content="https://cartersoriginal.vercel.app/img/og.jpg">
+<link rel="icon" href="img/logo.png">
+<link rel="preload" href="assets/fonts/anton.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/yellowtail.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:"Anton";src:url(assets/fonts/anton.woff2) format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Yellowtail";src:url(assets/fonts/yellowtail.woff2) format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Figtree";src:url(assets/fonts/figtree.woff2) format("woff2");font-weight:300 900;font-display:swap}
+/* Palette: their sign and flyer. Diner red, pin-up teal, cream paper, ink black, chrome, checkerboard.
+   Type: Yellowtail (the script wordmark), Anton (the condensed flyer headlines), Figtree (text).
+   Motion: bouncy and mechanical, like a jukebox dropping a record. Hard offset shadows like a printed sticker. */
+:root{--red:#d7262b;--red-d:#a8181d;--teal:#3cb6b8;--teal-d:#17797b;--teal-l:#cdeeeb;--cream:#fbf4e6;--paper:#fffdf7;--ink:#161212;--ink-2:#3a3232;--muted:#675d58;
+--chrome:#dfe3e7;--yellow:#ffc928;--line:rgba(22,18,18,.14);--pad:clamp(16px,4vw,56px);--sh:6px 6px 0 var(--ink);--r:22px}
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%;overflow-x:clip}html.lenis,html.lenis body{height:auto}.lenis.lenis-smooth{scroll-behavior:auto!important}
+body{background:var(--cream);color:var(--ink);font:400 17px/1.55 "Figtree",system-ui,sans-serif;overflow-x:clip}
+img{display:block;max-width:100%;height:auto}
+a{color:inherit}
+button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+:focus-visible{outline:3px solid var(--teal-d);outline-offset:3px;border-radius:6px}
+.wrap{width:min(1240px,100% - 2*var(--pad));margin-inline:auto}
+.script{font-family:"Yellowtail",cursive;font-weight:400}
+.disp{font-family:"Anton",Impact,sans-serif;font-weight:400;text-transform:uppercase;letter-spacing:.01em;line-height:.92}
+.eyebrow{font:800 12px/1.2 "Figtree";letter-spacing:.22em;text-transform:uppercase;color:var(--teal-d)}
+.checker{height:22px;background:repeating-conic-gradient(var(--ink) 0 25%,#fff 0 50%) 0 0/22px 22px}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:15px 22px;border-radius:14px;background:var(--red);color:#fff;font:800 15px/1 "Figtree";letter-spacing:.04em;text-transform:uppercase;text-decoration:none;border:3px solid var(--ink);box-shadow:4px 4px 0 var(--ink);transition:transform .15s,box-shadow .15s}
+.btn svg{width:18px;height:18px;flex:none}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink)}
+.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+.btn.alt{background:var(--paper);color:var(--ink)}
+.btn.teal{background:var(--teal);color:var(--ink)}
+.btn.sm{padding:11px 16px;font-size:13px;border-radius:12px}
+
+/* nav */
+.nav{position:fixed;inset:0 0 auto;z-index:50;transition:background .3s,box-shadow .3s}
+.nav.scrolled{background:rgba(251,244,230,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 1px 0 var(--line)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:78px;gap:16px}
+.logo{display:inline-flex;flex-direction:column;align-items:center;text-decoration:none;line-height:1;color:var(--red)}
+.logo b{font:400 38px/1 "Yellowtail";transform:rotate(-5deg);position:relative}
+.logo b::after{content:"";position:absolute;left:-6%;right:-2%;bottom:-3px;height:5px;border-radius:5px;background:var(--red);transform:rotate(2deg)}
+.logo small{font:800 8.5px/1 "Figtree";letter-spacing:.42em;color:var(--ink);margin-top:9px;padding-left:.42em}
+.nav-links{display:flex;gap:26px;list-style:none}
+.nav-links a{font:800 13px/1 "Figtree";letter-spacing:.14em;text-transform:uppercase;text-decoration:none;padding:8px 0;border-bottom:2px solid transparent}
+.nav-links a:hover{border-color:var(--red)}
+.nav-cta{display:flex;gap:10px;align-items:center}
+.hire-pill{display:inline-flex;align-items:center;gap:8px;font:800 12px/1 "Figtree";letter-spacing:.1em;text-transform:uppercase;text-decoration:none;background:var(--teal);border:2px solid var(--ink);padding:9px 13px;border-radius:99px}
+.hire-pill i{width:8px;height:8px;border-radius:50%;background:var(--red);box-shadow:0 0 0 0 rgba(215,38,43,.6);animation:ping 1.8s infinite}
+@keyframes ping{70%{box-shadow:0 0 0 8px rgba(215,38,43,0)}100%{box-shadow:0 0 0 0 rgba(215,38,43,0)}}
+@media (max-width:980px){.nav-links{display:none}}
+@media (max-width:560px){.nav .wrap{height:66px}.logo b{font-size:31px}.hire-pill{display:none}.nav .btn.sm{padding:10px 12px;font-size:12px}}
+
+/* hero */
+.hero{position:relative;padding:112px 0 56px;overflow-x:clip}
+.hero::before{content:"";position:absolute;inset:0 0 auto;height:62%;background:radial-gradient(circle at 12% 30%,rgba(60,182,184,.18),transparent 45%),radial-gradient(circle at 88% 10%,rgba(215,38,43,.12),transparent 40%);pointer-events:none}
+.hero-grid{position:relative;display:grid;grid-template-columns:minmax(0,.86fr) minmax(0,1.14fr);gap:clamp(24px,4vw,56px);align-items:center}
+.status{display:inline-flex;align-items:center;gap:9px;font:800 13px/1 "Figtree";letter-spacing:.06em;background:var(--paper);border:2px solid var(--ink);border-radius:99px;padding:8px 13px 8px 10px;margin-bottom:22px}
+.status i{width:10px;height:10px;border-radius:50%;background:#8a8a8a}
+.status.open i{background:#1fa95b;box-shadow:0 0 0 3px rgba(31,169,91,.22)}
+.hero h1{font-size:clamp(64px,9.4vw,142px);color:var(--ink);margin:14px 0 6px}
+.hero h1 .l2{color:var(--red);display:block}
+.hero h1 .swap{display:inline-block}.hero h1 .l2.swap{display:block}
+.hero .sub{font-size:clamp(30px,3.4vw,46px);color:var(--teal-d);transform:rotate(-3deg);transform-origin:left;margin:2px 0 18px}
+.hero p.lede{max-width:44ch;color:var(--ink-2);font-size:clamp(16px,1.25vw,18.5px)}
+.hero .ctas{display:flex;flex-wrap:wrap;gap:14px;margin-top:26px}
+
+/* the jukebox stage */
+.stage{position:relative;border:4px solid var(--ink);border-radius:30px;box-shadow:10px 10px 0 var(--ink);overflow:hidden;background:
+ radial-gradient(circle at 1px 1px,rgba(255,255,255,.22) 1.2px,transparent 1.6px) 0 0/26px 26px,linear-gradient(180deg,#43bdbf,#2ea6a8 74%);
+ display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:auto auto;gap:14px 10px;padding:26px 22px 0;min-height:560px}
+.stage::after{content:"";position:absolute;left:0;right:0;bottom:0;height:96px;background:repeating-conic-gradient(var(--ink) 0 25%,#fff 0 50%) 0 0/32px 32px;opacity:.95;z-index:0;border-top:4px solid var(--ink)}
+.star{position:absolute;width:30px;height:30px;color:rgba(255,255,255,.55);z-index:0}
+.jb{position:relative;z-index:2;grid-row:1/3;align-self:end;width:100%;max-width:350px;justify-self:center;margin-bottom:18px}
+.jb-top{position:relative;height:96px;border:4px solid var(--ink);border-bottom:0;border-radius:165px 165px 0 0;background:linear-gradient(180deg,#f7f8f9,#b8bec4 60%,#eef0f2);overflow:hidden}
+.jb-top .tube{position:absolute;inset:12px 14px -40px;border-radius:150px 150px 0 0;border:12px solid transparent;background:linear-gradient(90deg,var(--red),var(--yellow),var(--teal),var(--red),var(--yellow)) border-box;-webkit-mask:linear-gradient(#000 0 0) padding-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;background-size:300% 100%;animation:tube 6s linear infinite;filter:saturate(1.1)}
+.playing .jb-top .tube{animation-duration:1.6s}
+@keyframes tube{to{background-position:300% 0}}
+.jb-top .badge{position:absolute;left:50%;bottom:6px;transform:translateX(-50%);font:400 26px/1 "Yellowtail";color:var(--red);text-shadow:0 1px 0 #fff}
+.jb-body{position:relative;border:4px solid var(--ink);border-radius:0 0 18px 18px;background:linear-gradient(90deg,#c9ced3,#f6f7f8 30%,#d1d6da 70%,#eef0f2);padding:12px 12px 10px}
+.jb-win{display:grid;grid-template-columns:1fr 1fr;grid-auto-flow:column;grid-template-rows:repeat(4,auto);gap:6px;background:#1d1717;border:3px solid var(--ink);border-radius:10px;padding:7px;box-shadow:inset 0 0 0 2px rgba(255,255,255,.08)}
+.strip{position:relative;display:flex;align-items:center;gap:6px;text-align:left;background:var(--paper);border-radius:4px;padding:6px 6px;min-height:46px;border-top:3px solid var(--red);border-bottom:3px solid var(--red);transition:transform .12s,background .2s}
+.strip b{flex:none;font:400 15px/1 "Anton";color:#fff;background:var(--red);border-radius:4px;padding:5px 5px 4px;min-width:30px;text-align:center}
+.strip span{display:flex;flex-direction:column;min-width:0}
+.strip strong{font:400 15.5px/1 "Anton";text-transform:uppercase;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.strip small{padding-right:2px;font:600 10px/1.2 "Figtree";color:var(--muted);font-style:italic;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.strip:hover{background:#fff6dc}
+.strip:active{transform:translateY(2px)}
+.strip.on{background:#fff2c4;box-shadow:0 0 0 3px var(--yellow),0 0 18px rgba(255,201,40,.75)}
+.strip.on b{background:var(--teal-d)}
+.strip.on strong::after{content:" ♪";color:var(--red)}
+.jb-grille{margin-top:10px;height:42px;border:3px solid var(--ink);border-radius:8px;background:repeating-linear-gradient(90deg,#2a2424 0 6px,#8d9399 6px 9px);position:relative}
+.jb-grille .np{position:absolute;inset:6px 10px;display:flex;align-items:center;justify-content:center;background:#141010;border-radius:4px;font:700 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.12em;color:#7fe7e4;text-transform:uppercase;white-space:nowrap;overflow:hidden}
+.jb-feet{display:flex;justify-content:space-between;padding:0 24px}
+.jb-feet i{width:34px;height:12px;background:var(--ink);border-radius:0 0 8px 8px}
+.notes{position:absolute;left:0;right:0;top:0;height:0;pointer-events:none;z-index:4}
+.notes span{position:absolute;top:0;font:700 26px/1 system-ui;color:#fff;text-shadow:2px 2px 0 var(--ink)}
+
+.deck{position:relative;z-index:2;display:grid;place-items:center;padding-top:6px}
+.rec{position:relative;width:min(100%,250px);aspect-ratio:1}
+.rec .disc{position:absolute;inset:0;border-radius:50%;box-shadow:6px 8px 0 rgba(0,0,0,.28)}
+.rec .disc svg{width:100%;height:100%;display:block;animation:spin 1.333s linear infinite;animation-play-state:paused}
+.playing .rec .disc svg{animation-play-state:running}
+@keyframes spin{to{transform:rotate(360deg)}}
+.rec .sheen{position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 30deg,transparent 0 10%,rgba(255,255,255,.16) 14%,transparent 20% 60%,rgba(255,255,255,.12) 64%,transparent 70%);pointer-events:none;-webkit-mask:radial-gradient(circle,transparent 34%,#000 35%);mask:radial-gradient(circle,transparent 34%,#000 35%)}
+.arm{position:absolute;right:-14%;top:-6%;width:46%;transform-origin:78% 14%;transform:rotate(24deg);transition:transform .35s cubic-bezier(.3,1.4,.5,1);z-index:3;pointer-events:none}
+.arm.up{transform:rotate(-4deg)}
+.dish{position:relative;z-index:3;width:min(100%,240px);margin-top:-46px;margin-left:-38%;aspect-ratio:200/170}
+.dish svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.callout{position:absolute;z-index:6;left:50%;top:-58px;transform:translateX(-50%);display:flex;align-items:center;gap:9px;white-space:nowrap;background:#fff;border:3px solid var(--ink);box-shadow:4px 4px 0 var(--ink);padding:8px 14px 8px 8px;border-radius:14px;font:800 15px/1 "Figtree";transition:opacity .4s,transform .4s}
+.callout i{display:grid;place-items:center;width:30px;height:30px;border-radius:9px;background:var(--red);color:#fff}
+.callout i svg{width:17px;height:17px}
+.callout::after{content:"";position:absolute;left:50%;bottom:-12px;width:18px;height:18px;background:#fff;border:3px solid var(--ink);border-top:0;border-left:0;transform:translateX(-50%) rotate(45deg)}
+.callout.gone{opacity:0;transform:translate(-50%,-10px);pointer-events:none}
+.tray-wrap{position:relative;z-index:3;align-self:end;padding-bottom:22px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.tray{position:relative;width:min(100%,300px);height:96px;background:var(--red);border:4px solid var(--ink);border-radius:16px 16px 26px 26px;padding:9px;box-shadow:4px 5px 0 var(--ink)}
+.tray-paper{height:100%;border-radius:8px;display:grid;grid-template-columns:repeat(3,1fr);gap:4px;background:repeating-conic-gradient(#e64a4e 0 25%,#fff 0 50%) 0 0/14px 14px;border:2px solid var(--ink);padding:2px}
+.slot{position:relative;display:grid;place-items:center;border-radius:6px}
+.slot svg{width:100%;height:100%;overflow:visible}
+.slot:empty::before{content:"";width:42%;aspect-ratio:1;border-radius:50%;border:2px dashed rgba(22,18,18,.35)}
+.meter{display:flex;align-items:center;gap:10px;font:800 13px/1 "Figtree";letter-spacing:.06em;text-transform:uppercase;color:#fff;background:var(--ink);padding:7px 11px;border-radius:99px}
+.meter .dots{display:flex;gap:5px}.meter .dots i{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.28)}.meter .dots i.on{background:var(--yellow)}
+.meter button{font:800 12px/1 "Figtree";letter-spacing:.06em;text-transform:uppercase;color:var(--ink);background:var(--yellow);padding:5px 9px;border-radius:99px;display:none}
+.done .meter button{display:inline-block}
+.stamp{position:absolute;left:50%;top:44%;z-index:7;transform:translate(-50%,-50%) rotate(-12deg) scale(.4);opacity:0;pointer-events:none;font:400 clamp(44px,5vw,64px)/1 "Anton";color:var(--red);background:#fff;border:5px solid var(--red);outline:4px solid var(--ink);border-radius:10px;padding:8px 18px 6px;white-space:nowrap;letter-spacing:.02em;box-shadow:8px 8px 0 var(--ink)}
+.bell{position:absolute;right:16px;top:14px;z-index:5;width:46px;height:46px;color:var(--ink)}
+@media (max-width:1060px){.hero-grid{grid-template-columns:1fr}.stage{max-width:760px;width:100%;justify-self:center}}
+@media (max-width:620px){
+ .hero{padding-top:86px}
+ .status{margin-bottom:14px}
+ .hero h1{font-size:clamp(54px,15vw,70px);margin:10px 0 2px}
+ .hero .sub{font-size:28px;margin-bottom:6px}
+ .hero p.lede{display:none}
+ .hero .ctas{margin-top:12px;gap:10px}.hero .ctas .btn{padding:12px 14px;font-size:13px}
+ .stage{grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:auto auto;padding:14px 12px 0;min-height:0;border-radius:24px;box-shadow:6px 6px 0 var(--ink)}
+ .stage::after{height:72px}
+ .jb{grid-row:2;grid-column:1/3;max-width:360px;margin-bottom:6px}
+ .jb-top{height:74px}.jb-top .badge{font-size:22px}
+ .callout{top:12px;font-size:14px}
+ .deck{grid-row:1;grid-column:1;padding:0;align-self:start}
+ .rec{width:min(100%,128px);margin-left:-14%}
+ .dish{width:76%;margin:-58px 0 0 34%}
+ .tray-wrap{grid-row:1;grid-column:2;padding-bottom:0;align-self:center}
+ .bell{display:none}
+ .stamp{top:18%}
+ .tray{height:74px;padding:6px;border-radius:12px 12px 20px 20px}
+ .meter{font-size:11px;padding:6px 9px;gap:7px}
+ .bell{width:38px;height:38px;right:10px;top:10px}
+}
+
+/* marquee */
+.marquee{background:var(--red);color:#fff;border-block:4px solid var(--ink);overflow:hidden;padding:16px 0}
+.marquee .row{display:flex;width:max-content;animation:mq 34s linear infinite}
+.marquee span{font:400 clamp(26px,3vw,40px)/1 "Anton";text-transform:uppercase;letter-spacing:.03em;padding:0 22px;display:flex;align-items:center;gap:44px}
+.marquee span::after{content:"★";color:var(--yellow);font-size:.6em}
+.marquee span.s{font:400 clamp(30px,3.4vw,46px)/1 "Yellowtail";text-transform:none;color:var(--teal-l)}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+section{position:relative}
+.sec{padding:clamp(80px,10vw,140px) 0}
+.sec-head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;margin-bottom:clamp(30px,4vw,52px)}
+.sec-head h2{font-size:clamp(48px,6.6vw,96px)}
+.sec-head h2 em{font-style:normal;color:var(--red)}
+.sec-head p{max-width:44ch;color:var(--ink-2)}
+
+/* menu */
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:26px}
+.tabs button{font:800 13px/1 "Figtree";letter-spacing:.12em;text-transform:uppercase;padding:11px 16px;border-radius:99px;border:2px solid var(--ink);background:var(--paper)}
+.tabs button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.menu-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+.card{position:relative;background:var(--paper);border:3px solid var(--ink);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden;display:flex;flex-direction:column;transition:transform .2s,box-shadow .2s}
+.card:hover{transform:translate(-3px,-3px);box-shadow:9px 9px 0 var(--ink)}
+.card .art{position:relative;aspect-ratio:200/150;display:grid;place-items:center;border-bottom:3px solid var(--ink);overflow:hidden}
+.card .art svg{width:86%;height:auto;overflow:visible;transition:transform .35s cubic-bezier(.3,1.5,.5,1)}
+.card:hover .art svg{transform:scale(1.06) rotate(-3deg)}
+.card .art .code{position:absolute;left:12px;top:12px;font:400 15px/1 "Anton";background:var(--ink);color:#fff;border-radius:6px;padding:5px 7px 4px}
+.card.c0 .art{background:var(--teal)}.card.c1 .art{background:#f6d9a5}.card.c2 .art{background:#f2a7a3}.card.c3 .art{background:var(--teal-l)}
+.card .body{padding:16px 18px 18px;display:flex;flex-direction:column;gap:6px;flex:1}
+.card h3{font:400 30px/1 "Anton";text-transform:uppercase}
+.card p{color:var(--ink-2);font-size:15.5px}
+.card .row{margin-top:auto;padding-top:10px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.card .tag{font:800 11px/1 "Figtree";letter-spacing:.14em;text-transform:uppercase;color:var(--teal-d)}
+.card .play{font:800 12px/1 "Figtree";letter-spacing:.06em;text-transform:uppercase;border:2px solid var(--ink);border-radius:99px;padding:8px 11px;background:var(--yellow)}
+.card[hidden]{display:none}
+.menu-note{margin-top:28px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;color:var(--ink-2);font-weight:600}
+@media (max-width:1060px){.menu-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:520px){.menu-grid{gap:12px}.card h3{font-size:23px}.card p{font-size:14px}.card .body{padding:12px 12px 14px}.card .row{flex-direction:column;align-items:flex-start}}
+
+/* scroll story */
+.story{background:var(--ink);color:#fff;overflow:hidden}
+.story .pin{min-height:100vh;min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding:110px 0 50px}
+.story .eyebrow{color:var(--teal)}
+.story-top{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap}
+.story h2{font-size:clamp(46px,6vw,88px)}
+.story h2 em{font-style:normal;color:var(--red)}
+.rail{position:relative;height:120px;margin:26px 0 22px}
+.rail::before{content:"";position:absolute;left:0;right:0;top:12px;height:10px;border-radius:10px;background:linear-gradient(180deg,#f2f4f6,#8e959b);box-shadow:0 2px 0 #000}
+.rail .stop{position:absolute;top:2px;width:30px;height:30px;margin-left:-15px;border-radius:50%;border:3px solid var(--ink);background:#555;display:grid;place-items:center;font:400 14px/1 "Anton";color:#fff;transition:background .3s}
+.rail .stop.on{background:var(--red)}
+.ticket{position:absolute;top:18px;width:150px;margin-left:-75px;background:#fffef6;color:var(--ink);border-radius:2px 2px 8px 8px;padding:12px 12px 10px;transform:rotate(-2deg);box-shadow:4px 6px 0 rgba(0,0,0,.4);font:600 11.5px/1.35 ui-monospace,Menlo,monospace;will-change:left}
+.ticket::before{content:"";position:absolute;left:50%;top:-14px;width:16px;height:22px;margin-left:-8px;border-radius:4px;background:linear-gradient(90deg,#9aa1a7,#f1f3f5,#9aa1a7);border:2px solid var(--ink)}
+.ticket h4{font:400 15px/1 "Anton";letter-spacing:.06em;color:var(--red);border-bottom:1px dashed #b9b2a6;padding-bottom:5px;margin-bottom:5px}
+.ticket li{list-style:none;display:flex;justify-content:space-between;gap:6px;color:#9b948a}
+.ticket li.on{color:var(--ink)}
+.ticket li.on::after{content:"✓";color:var(--red);font-weight:900}
+.track{display:flex;gap:22px;width:max-content;padding-right:var(--pad)}
+.panel{width:min(560px,82vw);flex:none;background:#221c1c;border:3px solid #3a3131;border-radius:26px;padding:clamp(22px,2.6vw,34px);display:grid;grid-template-columns:auto 1fr;gap:18px 22px;align-items:start}
+.panel .ic{width:clamp(76px,8vw,104px);aspect-ratio:1;border-radius:50%;background:var(--teal);border:3px solid #fff;display:grid;place-items:center;color:var(--ink)}
+.panel .ic svg{width:64%;height:64%;overflow:visible}
+.panel .n{font:800 12px/1 "Figtree";letter-spacing:.2em;color:var(--teal);text-transform:uppercase}
+.panel h3{font:400 clamp(34px,3.6vw,50px)/.95 "Anton";text-transform:uppercase;margin:6px 0 4px}
+.panel .tl{font:400 clamp(24px,2.4vw,30px)/1 "Yellowtail";color:var(--red);filter:brightness(1.25)}
+.panel p{grid-column:1/-1;color:#d8d0ca}
+.panel ul{grid-column:1/-1;list-style:none;display:grid;gap:8px}
+.panel li{display:flex;gap:10px;align-items:flex-start;color:#f1ebe6;font-weight:600}
+.panel li::before{content:"";flex:none;width:16px;height:16px;margin-top:4px;border-radius:4px;background:var(--red);box-shadow:inset 0 0 0 3px #221c1c,0 0 0 2px var(--red)}
+.panel a.more{grid-column:1/-1;justify-self:start;font:800 13px/1 "Figtree";letter-spacing:.08em;text-transform:uppercase;color:var(--teal);text-decoration:none;border-bottom:2px solid var(--teal);padding-bottom:4px}
+.panel.end{background:var(--red);border-color:var(--ink)}
+.panel.end .ic{background:var(--yellow)}
+.panel.end p,.panel.end li{color:#fff}
+.panel.end .tl{color:#fff;filter:none}
+.panel.end a.more{color:#fff;border-color:#fff}
+.story.static .pin{min-height:0}.story.static .track{flex-direction:column;width:auto;padding:0}.story.static .panel{width:auto}.story.static .rail{display:none}
+@media (max-width:620px){.panel{grid-template-columns:1fr}.panel .ic{width:70px}.rail{height:104px}.ticket{width:128px;margin-left:-64px;font-size:10.5px}}
+
+/* storefront */
+.front{padding:clamp(80px,10vw,130px) 0 0}
+.front-photo{position:relative;border:4px solid var(--ink);border-radius:30px;overflow:hidden;box-shadow:10px 10px 0 var(--ink);clip-path:inset(0 0 0 0 round 30px)}
+.front-photo img{width:100%;aspect-ratio:3/2;object-fit:cover;height:auto}
+.front-photo figcaption{position:absolute;left:clamp(14px,3vw,34px);bottom:clamp(14px,3vw,34px);right:clamp(14px,3vw,34px);display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+.front-photo .lbl{background:var(--paper);border:3px solid var(--ink);border-radius:16px;padding:12px 16px;box-shadow:4px 4px 0 var(--ink);max-width:420px}
+.front-photo .lbl b{display:block;font:400 clamp(22px,2.6vw,32px)/1 "Anton";text-transform:uppercase}
+.front-photo .lbl span{font-size:14.5px;color:var(--ink-2);font-weight:600}
+@media (max-width:620px){.front-photo{border-radius:20px;box-shadow:6px 6px 0 var(--ink)}.front-photo figcaption{position:static;padding:14px}.front-photo .lbl{box-shadow:none;border-width:2px}}
+
+/* hiring */
+.hire{background:var(--ink);color:#fff;margin-top:clamp(80px,10vw,130px)}
+.hire .checker{background:repeating-conic-gradient(#fff 0 25%,var(--ink) 0 50%) 0 0/22px 22px}
+.hire .sec{padding-top:clamp(70px,9vw,120px)}
+.hire-grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(28px,5vw,70px);align-items:start}
+.hire h2{font-size:clamp(52px,7vw,104px);margin:12px 0 8px}
+.hire h2 em{font-style:normal;color:var(--red)}
+.hire .eyebrow{color:var(--teal)}
+.pay{display:inline-flex;flex-direction:column;align-items:flex-start;background:var(--paper);color:var(--ink);border:4px solid var(--red);outline:3px solid #fff;border-radius:16px;padding:14px 20px 12px;transform:rotate(-3deg);margin:16px 0 26px;box-shadow:8px 8px 0 var(--red)}
+.pay small{font:800 12px/1 "Figtree";letter-spacing:.2em;text-transform:uppercase}
+.pay b{font:400 clamp(54px,6vw,82px)/.95 "Anton";color:var(--red)}
+.pay span{font:400 24px/1 "Yellowtail";color:var(--teal-d)}
+.perks{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.perk{display:flex;gap:12px;align-items:flex-start}
+.perk i{flex:none;width:42px;height:42px;border-radius:50%;background:var(--teal);color:var(--ink);display:grid;place-items:center;border:2px solid #fff}
+.perk i svg{width:21px;height:21px}
+.perk b{display:block;font:400 19px/1.05 "Anton";text-transform:uppercase;letter-spacing:.02em}
+.perk span{font-size:13.5px;color:#cfc7c1}
+.apply{background:var(--paper);color:var(--ink);border:4px solid #fff;border-radius:26px;padding:clamp(20px,2.6vw,32px);box-shadow:10px 10px 0 var(--teal)}
+.apply h3{font:400 32px/1 "Anton";text-transform:uppercase}
+.apply .stepl{font:800 12px/1 "Figtree";letter-spacing:.18em;text-transform:uppercase;color:var(--teal-d);margin:20px 0 10px;display:block}
+.roles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.role{text-align:left;border:3px solid var(--ink);border-radius:16px;padding:12px;background:#fff;display:flex;flex-direction:column;gap:6px;transition:transform .15s,background .2s}
+.role svg{width:30px;height:30px;color:var(--teal-d)}
+.role b{font:400 19px/1 "Anton";text-transform:uppercase}
+.role span{font:400 19px/1 "Yellowtail";color:var(--red)}
+.role[aria-checked="true"]{background:var(--teal-l);box-shadow:4px 4px 0 var(--ink);transform:translate(-2px,-2px)}
+.role-detail{margin-top:12px;background:#fff;border:2px dashed rgba(22,18,18,.25);border-radius:14px;padding:12px 14px;font-size:14.5px;display:grid;grid-template-columns:1fr 1fr;gap:4px 18px}
+.role-detail h5{font:800 11px/1.3 "Figtree";letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.role-detail li{list-style:none;padding-left:18px;position:relative}
+.role-detail li::before{content:"✓";position:absolute;left:0;color:var(--red);font-weight:900}
+.seg{display:flex;flex-wrap:wrap;gap:8px}
+.seg button{font:800 13px/1 "Figtree";letter-spacing:.06em;padding:11px 14px;border-radius:99px;border:2px solid var(--ink);background:#fff}
+.seg button[aria-checked="true"]{background:var(--ink);color:#fff}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fields label{display:flex;flex-direction:column;gap:6px;font:700 13px/1.2 "Figtree"}
+.fields input,.fields textarea{font:500 16px/1.4 "Figtree";border:2px solid var(--ink);border-radius:12px;padding:11px 12px;background:#fff;color:var(--ink);width:100%}
+.fields textarea{resize:vertical;min-height:74px}
+.fields .full{grid-column:1/-1}
+.msg{margin-top:18px;background:#fffbe9;border:2px solid var(--ink);border-radius:4px 4px 14px 14px;padding:14px 16px;font:500 14.5px/1.5 ui-monospace,Menlo,monospace;white-space:pre-wrap;position:relative}
+.msg::before{content:"YOUR MESSAGE";position:absolute;top:-10px;left:12px;background:var(--red);color:#fff;font:800 10px/1 "Figtree";letter-spacing:.16em;padding:4px 7px;border-radius:5px}
+.apply .acts{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px;align-items:center}
+.apply .hint{font-size:13px;color:var(--muted);font-weight:600}
+@media (max-width:980px){.hire-grid{grid-template-columns:1fr}}
+@media (max-width:560px){.roles{grid-template-columns:1fr}.role{flex-direction:row;align-items:center;gap:10px;padding:10px 12px}.role span{margin-left:auto}.role-detail{grid-template-columns:1fr}.fields{grid-template-columns:1fr}.perks{grid-template-columns:1fr}}
+
+/* visit */
+.visit-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:22px}
+.box{background:var(--paper);border:3px solid var(--ink);border-radius:var(--r);box-shadow:var(--sh);padding:clamp(20px,2.6vw,32px)}
+.box h3{font:400 30px/1 "Anton";text-transform:uppercase;margin-bottom:14px}
+.hours{width:100%;border-collapse:collapse;font-size:17px}
+.hours td{padding:11px 10px;border-bottom:1px dashed var(--line)}
+.hours td:last-child{text-align:right;font-weight:700}
+.hours tr.today td{background:var(--yellow);font-weight:800}
+.hours tr.today td:first-child{border-radius:10px 0 0 10px}.hours tr.today td:last-child{border-radius:0 10px 10px 0}
+.hours tr.today td:first-child::after{content:" · today";font-weight:700;font-size:13px;color:var(--ink-2)}
+.loc .big{font:400 clamp(40px,4.6vw,62px)/.95 "Anton";text-transform:uppercase}
+.loc .big span{display:block;color:var(--red)}
+.loc p{margin:12px 0 18px;color:var(--ink-2)}
+.loc .acts{display:flex;flex-wrap:wrap;gap:10px}
+@media (max-width:900px){.visit-grid{grid-template-columns:1fr}}
+
+/* closing */
+.close{background:var(--red);color:#fff;border-top:4px solid var(--ink);text-align:center;padding:clamp(80px,10vw,140px) 0;overflow:hidden}
+.close .script{font-size:clamp(64px,10vw,150px);line-height:.95;transform:rotate(-4deg);text-shadow:5px 5px 0 var(--ink);display:block}
+.close .disp{line-height:1.12;font-size:clamp(22px,2.4vw,32px);margin-top:clamp(30px,4vw,44px);letter-spacing:.06em}
+.close .acts{display:flex;justify-content:center;flex-wrap:wrap;gap:14px;margin-top:34px}
+.close .btn{background:#fff;color:var(--ink)}
+.close .btn.teal{background:var(--teal)}
+footer{background:var(--ink);color:#d9d1cb;padding:40px 0 34px;font-size:14.5px}
+footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:center}
+footer .logo b{color:var(--red)}footer .logo small{color:#fff}
+footer a{color:#fff;font-weight:700}
+.rv{opacity:0;transform:translateY(26px)}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<script src="assets/lib/intros.js"></script>
+
+<header class="nav" id="top">
+  <div class="wrap">
+    <a class="logo" href="#top" aria-label="Carter's Original, back to top"><b>Carter's</b><small>ORIGINAL</small></a>
+    <ul class="nav-links">
+      <li><a href="#jukebox">Jukebox</a></li>
+      <li><a href="#menu">Menu</a></li>
+      <li><a href="#line">The line</a></li>
+      <li><a href="#visit">Hours</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a class="hire-pill" href="#hiring"><i></i>Now hiring</a>
+      <a class="btn sm" href="#visit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Find us</a>
+    </div>
+  </div>
+</header>
+
+<main>
+<section class="hero" id="jukebox">
+  <div class="wrap hero-grid">
+    <div class="copy">
+      <div class="status" data-status><i></i><span>Checking hours…</span></div>
+      <div class="eyebrow">A modern twist on a vintage diner · Dearborn, MI</div>
+      <h1 class="disp"><span class="swap" data-h1a>Play the</span><span class="l2 swap" data-h1b>menu.</span></h1>
+      <div class="sub script">Sliders, shakes &amp; floats</div>
+      <p class="lede">Sliders, burgers, hot dogs, chili, fries, onion rings, shakes and floats. Pick a song on the jukebox and build your tray.</p>
+      <div class="ctas">
+        <a class="btn" href="#visit">Hours &amp; directions <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="btn alt" href="#hiring">Now hiring · up to $20/hr</a>
+      </div>
+    </div>
+
+    <div class="stage" data-stage aria-label="Tabletop jukebox. Pick a song to play a menu item and add it to your tray.">
+      <svg class="star" style="left:6%;top:9%" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 0l2.2 9.8L24 12l-9.8 2.2L12 24l-2.2-9.8L0 12l9.8-2.2z"/></svg>
+      <svg class="star" style="right:9%;top:46%;width:22px" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 0l2.2 9.8L24 12l-9.8 2.2L12 24l-2.2-9.8L0 12l9.8-2.2z"/></svg>
+      <svg class="star" style="left:47%;top:5%;width:18px" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 0l2.2 9.8L24 12l-9.8 2.2L12 24l-2.2-9.8L0 12l9.8-2.2z"/></svg>
+      <svg class="bell" data-bell viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" aria-hidden="true"><path d="M8 38h32" stroke-width="4" stroke-linecap="round"/><path d="M11 36a13 13 0 0 1 26 0z" fill="#e9ecef"/><path d="M24 23v-3" stroke-linecap="round"/><circle cx="24" cy="18" r="2.5" fill="#e9ecef"/><path d="M16 31a8 8 0 0 1 5-6" stroke="#fff" stroke-linecap="round"/></svg>
+
+      <div class="jb">
+        <div class="callout" data-callout><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11V5.5a1.5 1.5 0 0 1 3 0V10m0-.5V4a1.5 1.5 0 0 1 3 0v6m0-1.5a1.5 1.5 0 0 1 3 0V14a7 7 0 0 1-7 7h-.6a6 6 0 0 1-4.5-2L4 16.3a1.6 1.6 0 0 1 2.3-2.2L9 16.5V11"/></svg></i><span data-callout-text>Pick a song to play the menu</span></div>
+        <div class="notes" data-notes></div>
+        <div class="jb-top"><div class="tube"></div><div class="badge">Carter's</div></div>
+        <div class="jb-body">
+          <div class="jb-win" data-strips role="group" aria-label="Song selections"></div>
+          <div class="jb-grille"><div class="np" data-np aria-live="polite">Select a song</div></div>
+        </div>
+        <div class="jb-feet"><i></i><i></i></div>
+      </div>
+
+      <div class="deck">
+        <div class="rec">
+          <div class="disc" data-disc>
+            <svg viewBox="0 0 200 200" aria-hidden="true">
+              <circle cx="100" cy="100" r="99" fill="#141111"/>
+              <g fill="none" stroke="#2c2626" stroke-width="1.4"><circle cx="100" cy="100" r="92"/><circle cx="100" cy="100" r="85"/><circle cx="100" cy="100" r="78"/><circle cx="100" cy="100" r="71"/><circle cx="100" cy="100" r="64"/><circle cx="100" cy="100" r="57"/><circle cx="100" cy="100" r="50"/><circle cx="100" cy="100" r="44"/></g>
+              <circle cx="100" cy="100" r="38" fill="#d7262b"/>
+              <circle cx="100" cy="100" r="38" fill="none" stroke="#fff" stroke-width="1.5" stroke-dasharray="2 3" opacity=".6"/>
+              <text x="100" y="91" text-anchor="middle" font-family="Yellowtail" font-size="17" fill="#fff" transform="rotate(-6 100 91)">Carter's</text>
+              <text data-lname x="100" y="122" text-anchor="middle" font-family="Anton" font-size="12" fill="#fff" letter-spacing=".5">SLIDERS</text>
+              <text data-lcode x="100" y="132" text-anchor="middle" font-family="Figtree" font-weight="800" font-size="5.5" fill="#ffd9d9" letter-spacing="1">A1 · 45 RPM</text>
+              <circle cx="100" cy="100" r="4" fill="#f4f1ea"/>
+            </svg>
+          </div>
+          <div class="sheen"></div>
+          <svg class="arm" data-arm viewBox="0 0 120 140" aria-hidden="true"><circle cx="94" cy="20" r="16" fill="#cfd4d8" stroke="#161212" stroke-width="4"/><circle cx="94" cy="20" r="6" fill="#161212"/><path d="M94 20 L70 92 L44 116" fill="none" stroke="#161212" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/><path d="M94 20 L70 92 L44 116" fill="none" stroke="#eef0f2" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><rect x="26" y="108" width="26" height="16" rx="4" transform="rotate(-42 39 116)" fill="#d7262b" stroke="#161212" stroke-width="4"/></svg>
+        </div>
+        <div class="dish" data-dish></div>
+      </div>
+
+      <div class="tray-wrap">
+        <div class="tray"><div class="tray-paper" data-tray><div class="slot"></div><div class="slot"></div><div class="slot"></div></div></div>
+        <div class="meter"><span data-meter-text>Your tray</span><span class="dots" data-dots><i></i><i></i><i></i></span><button type="button" data-reset>New tray</button></div>
+      </div>
+      <div class="stamp" data-stamp aria-hidden="true">ORDER UP!</div>
+    </div>
+  </div>
+</section>
+
+<div class="marquee" aria-hidden="true"><div class="row" data-marquee></div></div>
+
+<section class="sec" id="menu">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div><div class="eyebrow">The menu</div><h2 class="disp">Eight reasons<br>to <em>pull up.</em></h2></div>
+      <p>Everything on the sign, and everything on the jukebox. Tap “Play it” on any card to spin it up top.</p>
+    </div>
+    <div class="tabs rv" role="group" aria-label="Filter the menu" data-tabs>
+      <button type="button" data-f="all" aria-pressed="true">All</button>
+      <button type="button" data-f="grill" aria-pressed="false">Off the grill</button>
+      <button type="button" data-f="sides" aria-pressed="false">Sides</button>
+      <button type="button" data-f="fountain" aria-pressed="false">Fountain</button>
+    </div>
+    <div class="menu-grid" data-menu></div>
+    <div class="menu-note rv"><span>Prices, specials and the full lineup: ask at the counter or DM</span><a class="btn sm alt" data-ig href="#" target="_blank" rel="noopener">@cartersoriginal_</a></div>
+  </div>
+</section>
+
+<section class="story" id="line">
+  <div class="pin">
+    <div class="wrap">
+      <div class="story-top">
+        <div><div class="eyebrow">How a tray gets made</div><h2 class="disp">Ticket to <em>tray.</em></h2></div>
+        <p style="max-width:40ch;color:#cfc7c1">Three stations, one ticket. Scroll and follow your order down the line.</p>
+      </div>
+      <div class="rail" data-rail>
+        <span class="stop" style="left:0%">1</span><span class="stop" style="left:33.33%">2</span><span class="stop" style="left:66.66%">3</span><span class="stop" style="left:100%">★</span>
+        <div class="ticket" data-ticket><h4>GUEST CHECK</h4><ul><li>Order taken</li><li>Prepped</li><li>On the grill</li><li>Order up</li></ul></div>
+      </div>
+    </div>
+    <div class="wrap" style="overflow:visible"><div class="track" data-track></div></div>
+  </div>
+</section>
+
+<section class="front" id="building">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div><div class="eyebrow">The building</div><h2 class="disp">Look for the<br><em>red &amp; white.</em></h2></div>
+      <p>Burgers, shakes and floats on the sign out front. The modern twist on a vintage diner, right here in Dearborn.</p>
+    </div>
+    <figure class="front-photo" data-front>
+      <img src="img/storefront.webp" width="1080" height="720" alt="The Carter's Original building: a red corner entrance with the Carter's Original sign, and a long white wall reading Burgers, Shakes, Floats beside the teal pin-up mural" loading="lazy" decoding="async">
+      <figcaption><div class="lbl"><b>Burgers · Shakes · Floats</b><span>Carter's Original · Dearborn, Michigan</span></div><a class="btn" data-map href="#" target="_blank" rel="noopener">Get directions</a></figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="hire" id="hiring">
+  <div class="checker"></div>
+  <div class="sec">
+    <div class="wrap hire-grid">
+      <div class="rv">
+        <div class="eyebrow">Now hiring</div>
+        <h2 class="disp">Join the<br><em>founding team.</em></h2>
+        <div class="pay"><small>Up to</small><b>$20/hr</b><span>+ tips, everywhere</span></div>
+        <div class="perks" data-perks></div>
+      </div>
+      <div class="apply rv" data-apply>
+        <h3>Build your application</h3>
+        <span class="stepl">1 · Pick a role</span>
+        <div class="roles" role="radiogroup" aria-label="Role" data-roles></div>
+        <div class="role-detail" data-role-detail></div>
+        <span class="stepl">2 · Schedule</span>
+        <div class="seg" role="radiogroup" aria-label="Schedule" data-sched></div>
+        <span class="stepl">3 · About you</span>
+        <div class="fields">
+          <label>Your name<input data-in="name" autocomplete="name" placeholder="First and last"></label>
+          <label>Phone (optional)<input data-in="phone" type="tel" autocomplete="tel" placeholder="(313) 555-0123"></label>
+          <label class="full">Anything we should know?<textarea data-in="note" placeholder="Experience, when you can start, the shifts you like…"></textarea></label>
+        </div>
+        <div class="msg" data-msg aria-live="polite"></div>
+        <div class="acts">
+          <a class="btn" data-send href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg>Copy &amp; DM on Instagram</a>
+          <a class="btn alt" href="#visit">Or apply in person</a>
+          <span class="hint" data-hint></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="visit">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div><div class="eyebrow">Visit</div><h2 class="disp">Open late.<br><em>Seven days.</em></h2></div>
+      <p data-status-text></p>
+    </div>
+    <div class="visit-grid">
+      <div class="box rv"><h3>Hours</h3><table class="hours" data-hours></table></div>
+      <div class="box loc rv">
+        <h3>Find us</h3>
+        <div class="big" data-addr>Dearborn,<span>Michigan</span></div>
+        <p>Look for the red corner and the long white wall that says Burgers, Shakes, Floats. Questions? Send us a DM.</p>
+        <div class="acts">
+          <a class="btn" data-map href="#" target="_blank" rel="noopener">Directions</a>
+          <a class="btn alt" data-ig href="#" target="_blank" rel="noopener">Instagram</a>
+          <a class="btn alt" data-tel hidden href="#">Call</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="close">
+  <div class="wrap">
+    <span class="script">See you at the counter.</span>
+    <div class="disp">Great food. Great people. Great vibes.</div>
+    <div class="acts">
+      <a class="btn" data-map href="#" target="_blank" rel="noopener">Get directions</a>
+      <a class="btn teal" href="#hiring">Join the team</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <a class="logo" href="#top" aria-label="Back to top"><b>Carter's</b><small>ORIGINAL</small></a>
+    <span>A modern twist on a vintage diner · Dearborn, MI</span>
+    <span><a data-ig href="#" target="_blank" rel="noopener">@cartersoriginal_</a> · © <span data-year></span> Carter's Original</span>
+  </div>
+</footer>
+
+<script src="assets/lib/gsap.min.js"></script>
+<script src="assets/lib/ScrollTrigger.min.js"></script>
+<script src="assets/lib/lenis.min.js"></script>
+<script>
+/* ================= CONFIG: everything the page shows ================= */
+const CONFIG = {
+  name: "Carter's Original",
+  city: 'Dearborn, MI',
+  address: '',                      // street address once confirmed; the map search below is used until then
+  mapsQuery: "Carter's Original, Dearborn, MI",
+  phone: '',
+  instagram: { handle: '@cartersoriginal_', url: 'https://www.instagram.com/cartersoriginal_/', dm: 'https://ig.me/m/cartersoriginal_' },
+  // [open, close] in 24h, Sunday first. From their hiring flyer.
+  hours: [[11, 22], [11, 22], [11, 22], [11, 22], [11, 22], [11, 24], [11, 24]],
+  menu: [
+    { id: 'sliders', code: 'A1', name: 'Sliders',     b: 'The signature',    cat: 'grill',    note: 'The house signature. Little burgers that disappear fast, so order a handful.' },
+    { id: 'burger',  code: 'A2', name: 'Burgers',     b: 'Off the grill',    cat: 'grill',    note: 'Bigger appetite? The full-size burger, stacked and hot off the grill.' },
+    { id: 'hotdog',  code: 'A3', name: 'Hot Dogs',    b: 'A diner classic',  cat: 'grill',    note: 'A diner classic in a soft bun, with a zigzag of mustard.' },
+    { id: 'chili',   code: 'A4', name: 'Chili',       b: 'By the bowl',      cat: 'grill',    note: 'A diner staple: warm, hearty and made for a cold Michigan night.' },
+    { id: 'fries',   code: 'B1', name: 'Fries',       b: 'Golden & salty',   cat: 'sides',    note: 'Golden, salty and made for dipping. Nobody shares these.' },
+    { id: 'rings',   code: 'B2', name: 'Onion Rings', b: 'Big & crunchy',    cat: 'sides',    note: 'Big, crunchy rings. Get a basket for the table.' },
+    { id: 'shake',   code: 'B3', name: 'Shakes',      b: 'Thick & cold',     cat: 'fountain', note: 'Thick, cold and topped with whipped cream and a cherry.' },
+    { id: 'float',   code: 'B4', name: 'Floats',      b: 'Fizz & cream',     cat: 'fountain', note: 'Soda, a scoop of ice cream and a whole lot of fizz.' }
+  ],
+  marquee: ['Sliders', 'Fries', 'Onion rings', 'Floats', 'Hot dogs', 'Chili', 'Burgers', 'Shakes'],
+  hiring: {
+    perks: [
+      ['Up to $20/hr + tips', 'Extremely competitive pay', 'dollar'],
+      ['Growth', 'Be part of something new', 'chart'],
+      ['Flexible schedules', 'Full-time & part-time', 'clock'],
+      ['Great team', 'Fun, fast-paced, supportive', 'team']
+    ],
+    roles: [
+      { id: 'boh', name: 'Burger Maker', tag: 'The heart of the kitchen', icon: 'burger',
+        does: ['Cook our signature sliders to perfection', 'Follow recipes and maintain quality', 'Keep grill and station clean', 'Work as a team to keep things moving'],
+        love: ['Take pride in your food', 'Love a fast-paced environment', 'Enjoy making people happy'] },
+      { id: 'foh', name: 'Front of House', tag: "The face of Carter's", icon: 'smile',
+        does: ['Greet and welcome guests', 'Take orders and process payments', 'Keep the dining area clean and stocked', 'Ensure every guest has a great experience'],
+        love: ['Have great communication skills', 'Enjoy helping people', 'Like being part of a team'] },
+      { id: 'prep', name: 'Prep & Grill', tag: 'Fuel the kitchen', icon: 'spatula',
+        does: ['Prep ingredients and keep stations stocked', 'Assist on the grill during busy times', 'Maintain food safety and cleanliness', 'Help with line setup and breakdown'],
+        love: ['Are dependable and hard-working', 'Work well with others', 'Enjoy variety in your day'] }
+    ],
+    schedules: ['Full-time', 'Part-time', 'Either works']
+  }
+};
+
+/* ================= helpers ================= */
+const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const FINE = matchMedia('(hover: hover) and (pointer: fine)').matches;
+const HAS_G = typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined';
+const anim = (el, kf, o) => (el && el.animate && !RM) ? el.animate(kf, o) : null;
+
+/* ================= drawn food (flat retro, ink outlines) ================= */
+const INK = '#161212';
+const G = inner => `<svg viewBox="0 0 200 170" aria-hidden="true"><g stroke="${INK}" stroke-width="4" stroke-linejoin="round" stroke-linecap="round">${inner}</g></svg>`;
+const shadow = (x, y, rx) => `<ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${rx * .13}" fill="rgba(0,0,0,.18)" stroke="none"/>`;
+function burger(x, y, w, o = {}) {
+  let s = '', c = y; const h = w * .17;
+  s += `<rect x="${x - w / 2}" y="${c - h}" width="${w}" height="${h}" rx="${h * .48}" fill="#e39a45"/>`; c -= h - 2;
+  if (o.lettuce) {
+    const x0 = x - w / 2 - 7, x1 = x + w / 2 + 7, n = 6, seg = (x1 - x0) / n; let d = `M${x0} ${c - w * .05} L${x1} ${c - w * .05} L${x1} ${c}`;
+    for (let i = n; i > 0; i--) { const a = x0 + seg * i, b = a - seg; d += ` Q${a - seg / 2} ${c + 10} ${b} ${c}`; }
+    s += `<path d="${d}Z" fill="#6cbf4a"/>`; c -= w * .05;
+  }
+  if (o.tomato) { s += `<rect x="${x - w / 2 + 3}" y="${c - w * .07}" width="${w - 6}" height="${w * .08}" rx="3" fill="#e2412f"/>`; c -= w * .07; }
+  const pt = c - w * .17;
+  s += `<rect x="${x - w / 2 - 5}" y="${pt}" width="${w + 10}" height="${w * .18}" rx="${w * .08}" fill="#5b2d1a"/>`;
+  s += `<path d="M${x - w / 2 - 4} ${pt + 2} H${x + w / 2 + 4} L${x + w * .34} ${pt + w * .17} L${x + w * .22} ${pt + 7} L${x + w * .04} ${pt + w * .21} L${x - w * .1} ${pt + 7} L${x - w * .3} ${pt + w * .15} L${x - w * .38} ${pt + 6} Z" fill="#ffc928"/>`;
+  const tb = pt + 4;
+  s += `<path d="M${x - w / 2 - 4} ${tb} C${x - w / 2 - 4} ${tb - w * .56} ${x + w / 2 + 4} ${tb - w * .56} ${x + w / 2 + 4} ${tb} Z" fill="#f0b257"/>`;
+  s += `<path d="M${x - w * .3} ${tb - w * .2} C${x - w * .2} ${tb - w * .33} ${x - w * .02} ${tb - w * .37} ${x + w * .12} ${tb - w * .36}" fill="none" stroke="#ffe6b8" stroke-width="${w * .05}"/>`;
+  [[-.2, -.26], [.05, -.33], [.24, -.24], [-.04, -.2], [.18, -.12], [-.28, -.1]].forEach(([a, b]) => s += `<ellipse cx="${x + a * w}" cy="${tb + b * w}" rx="${w * .03}" ry="${w * .018}" fill="#fff4d8" stroke="none" transform="rotate(${a * 60} ${x + a * w} ${tb + b * w})"/>`);
+  return s;
+}
+const FOOD = {
+  sliders: () => G(shadow(100, 152, 86) + burger(66, 148, 88) + burger(136, 152, 88) + `<path d="M150 70 L156 40" stroke-width="3"/><path d="M156 40 l12 4 -3 9 -12 -4z" fill="#d7262b" stroke-width="3"/>`),
+  burger: () => G(shadow(100, 154, 80) + burger(100, 150, 138, { lettuce: true, tomato: true })),
+  hotdog: () => G(shadow(100, 150, 84) +
+    `<rect x="22" y="80" width="156" height="44" rx="22" fill="#d98e3a"/>` +
+    `<rect x="12" y="88" width="176" height="28" rx="14" fill="#b8402a"/><path d="M30 95 H160" stroke="#e8735c" stroke-width="4"/>` +
+    `<path d="M30 102 L44 94 L58 106 L72 94 L86 106 L100 94 L114 106 L128 94 L142 106 L156 94 L170 102" fill="none" stroke="#f2c21b" stroke-width="6"/>` +
+    `<path d="M22 108 Q22 146 62 146 H138 Q178 146 178 108 Z" fill="#f0b257"/><path d="M40 122 Q60 136 92 136" fill="none" stroke="#ffe6b8" stroke-width="5"/>`),
+  chili: () => G(shadow(100, 154, 80) +
+    `<g class="steam" fill="none" stroke="rgba(22,18,18,.4)" stroke-width="3"><path d="M74 54 q-8 -10 0 -20 q8 -10 0 -20"/><path d="M100 50 q-8 -10 0 -20 q8 -10 0 -20"/><path d="M126 54 q-8 -10 0 -20 q8 -10 0 -20"/></g>` +
+    `<path d="M150 92 L178 46" stroke-width="12"/><path d="M150 92 L178 46" stroke="#dfe3e7" stroke-width="5"/>` +
+    `<path d="M28 90 Q32 152 100 152 Q168 152 172 90 Z" fill="#fffdf7"/><path d="M40 116 Q100 134 160 116" fill="none" stroke="#3cb6b8" stroke-width="8"/>` +
+    `<ellipse cx="100" cy="90" rx="72" ry="16" fill="#fffdf7"/><ellipse cx="100" cy="91" rx="62" ry="11" fill="#8e2b17" stroke-width="3"/>` +
+    `<path d="M50 92 Q100 62 150 92 Z" fill="#a23519" stroke-width="3"/>` +
+    `<g stroke="none"><ellipse cx="80" cy="84" rx="5" ry="3.5" fill="#5c1a10"/><ellipse cx="112" cy="80" rx="5" ry="3.5" fill="#5c1a10"/><ellipse cx="128" cy="88" rx="5" ry="3.5" fill="#5c1a10"/><rect x="92" y="76" width="5" height="5" fill="#fff" transform="rotate(20 94 78)"/><rect x="70" y="90" width="5" height="5" fill="#fff"/></g>` +
+    `<g stroke="#ffc928" stroke-width="3.5"><path d="M86 74 l10 4"/><path d="M104 72 l8 -5"/><path d="M118 80 l10 3"/><path d="M96 86 l9 -2"/></g>`),
+  fries: () => G(shadow(100, 154, 64) +
+    [[70, 34, -12], [84, 22, -5], [98, 28, 2], [112, 18, 6], [126, 30, 12], [92, 40, -2], [118, 42, 9], [78, 46, -10]].map(([x, y, r]) => `<rect x="${x}" y="${y}" width="14" height="74" rx="3" fill="#f6c34a" transform="rotate(${r} ${x + 7} ${y + 70})"/>`).join('') +
+    `<path d="M48 76 Q100 100 152 76 L138 150 L62 150 Z" fill="#d7262b"/><path d="M58 108 Q100 124 142 108" fill="none" stroke="#fff" stroke-width="7"/>` +
+    `<text x="100" y="142" text-anchor="middle" font-family="Yellowtail" font-size="24" fill="#fff" stroke="none" transform="rotate(-6 100 136)">Carter's</text>`),
+  rings: () => G(shadow(100, 154, 78) + [[100, 134, 0], [92, 110, -6], [108, 74, -24]].map(([x, y, r]) =>
+    `<g transform="rotate(${r} ${x} ${y})"><ellipse cx="${x}" cy="${y}" rx="52" ry="20" fill="none" stroke-width="26"/><ellipse cx="${x}" cy="${y}" rx="52" ry="20" fill="none" stroke="#d9973a" stroke-width="18"/><ellipse cx="${x}" cy="${y - 3}" rx="50" ry="17" fill="none" stroke="#f0bb5e" stroke-width="5" stroke-dasharray="20 14"/></g>`).join('')),
+  shake: () => G(shadow(100, 158, 46) +
+    `<path d="M112 64 L144 6" stroke-width="12"/><path d="M112 64 L144 6" stroke="#fff" stroke-width="7"/><path d="M112 64 L144 6" stroke="#d7262b" stroke-width="7" stroke-dasharray="6 6"/>` +
+    `<path d="M70 58 L130 58 L120 140 L80 140 Z" fill="#f6a9c1" stroke="none"/><path d="M80 70 L86 130" stroke="#fff" stroke-width="5" opacity=".7"/>` +
+    `<path d="M66 54 L134 54 L122 142 L78 142 Z" fill="rgba(255,255,255,.18)"/><path d="M88 142 L112 142 L108 150 L120 156 L80 156 L92 150 Z" fill="#dfe3e7"/>` +
+    `<g fill="#fffaf2"><circle cx="80" cy="50" r="14"/><circle cx="120" cy="50" r="14"/><circle cx="100" cy="44" r="18"/><circle cx="100" cy="28" r="12"/></g>` +
+    `<path d="M102 14 Q106 2 116 -2" fill="none" stroke-width="3"/><circle cx="101" cy="16" r="9" fill="#d7262b"/><circle cx="98" cy="13" r="2.5" fill="#fff" stroke="none"/>`),
+  float: () => G(shadow(100, 156, 58) +
+    `<path d="M140 74 C172 74 172 128 138 128" fill="none" stroke-width="16"/><path d="M140 74 C172 74 172 128 138 128" fill="none" stroke="#e9eef0" stroke-width="7"/>` +
+    `<path d="M62 70 L138 70 L134 148 L66 148 Z" fill="#5b2a14" stroke="none"/>` +
+    `<g class="bub" fill="none" stroke="#f1dfc4" stroke-width="2"><circle cx="82" cy="128" r="3"/><circle cx="104" cy="112" r="2.5"/><circle cx="120" cy="134" r="3.5"/><circle cx="92" cy="100" r="2"/></g>` +
+    `<path d="M58 50 L142 50 L136 152 L64 152 Z" fill="rgba(255,255,255,.16)"/>` +
+    `<path d="M118 56 L148 6" stroke-width="12"/><path d="M118 56 L148 6" stroke="#3cb6b8" stroke-width="6"/>` +
+    `<path d="M56 54 Q58 40 100 42 Q142 40 144 54 L141 74 Q134 84 128 74 Q118 88 110 74 Q98 82 88 74 Q76 86 70 74 L59 74 Z" fill="#f1dfc4"/>` +
+    `<circle cx="94" cy="38" r="24" fill="#fff8ea"/><path d="M80 30 Q88 20 100 22" fill="none" stroke="#fff" stroke-width="5"/><path d="M74 50 Q80 58 86 50 Q92 58 98 50" fill="#fff8ea"/>`)
+};
+
+/* ================= render CONFIG ================= */
+const ig = CONFIG.instagram;
+const mapUrl = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(CONFIG.address || CONFIG.mapsQuery);
+$$('[data-ig]').forEach(a => a.href = ig.url);
+$$('[data-map]').forEach(a => a.href = mapUrl);
+if (CONFIG.phone) $$('[data-tel]').forEach(a => { a.hidden = false; a.href = 'tel:+1' + CONFIG.phone.replace(/\D/g, '').slice(-10); });
+if (CONFIG.address) $('[data-addr]').innerHTML = esc(CONFIG.address) + `<span>${esc(CONFIG.city)}</span>`;
+$('[data-year]').textContent = new Date().getFullYear();
+const mq = CONFIG.marquee.map(w => `<span>${esc(w)}</span>`).join('') + '<span class="s">Great food. Great people. Great vibes.</span>';
+$('[data-marquee]').innerHTML = mq + mq;
+
+/* hours + live status (Detroit time) */
+const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const fmt = h => { h = h % 24; const ap = h >= 12 ? 'PM' : 'AM', hh = h % 12 || 12; return h === 0 ? 'Midnight' : `${hh} ${ap}`; };
+const fmtS = h => { h = h % 24; return h === 0 ? 'midnight' : `${h % 12 || 12} ${h >= 12 ? 'PM' : 'AM'}`; };
+function now() {
+  try { const p = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Detroit', weekday: 'short', hour: 'numeric', minute: 'numeric', hour12: false }).formatToParts(new Date()); const g = t => p.find(x => x.type === t).value; return { d: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(g('weekday')), h: (+g('hour') % 24) + (+g('minute')) / 60 }; }
+  catch (e) { const n = new Date(); return { d: n.getDay(), h: n.getHours() + n.getMinutes() / 60 }; }
+}
+function status() {
+  const H = CONFIG.hours, t = now(), h = H[t.d];
+  if (t.h >= h[0] && t.h < h[1]) return [true, `Open now · until ${fmtS(h[1])}`];
+  const nh = t.h < h[0] ? h : H[(t.d + 1) % 7], when = t.h < h[0] ? 'today' : 'tomorrow';
+  return [false, `Closed · opens ${when} at ${fmtS(nh[0])}`];
+}
+function paintStatus() {
+  const [open, txt] = status(), el = $('[data-status]');
+  el.classList.toggle('open', open); el.querySelector('span').textContent = txt;
+  $('[data-status-text]').textContent = `${txt}. Open every day from 11 AM, until 10 PM Sunday to Thursday and midnight on Friday and Saturday.`;
+  const td = now().d;
+  $('[data-hours]').innerHTML = [1, 2, 3, 4, 5, 6, 0].map(d => `<tr class="${d === td ? 'today' : ''}"><td>${DAYS[d]}</td><td>${fmt(CONFIG.hours[d][0])} – ${fmt(CONFIG.hours[d][1])}</td></tr>`).join('');
+}
+paintStatus(); setInterval(paintStatus, 60000);
+
+/* ================= the jukebox ================= */
+const stage = $('[data-stage]'), stripsEl = $('[data-strips]');
+stripsEl.innerHTML = CONFIG.menu.map((m, i) => `<button type="button" class="strip" data-i="${i}" aria-pressed="false" aria-label="${esc(m.code)}: play ${esc(m.name)}"><b>${esc(m.code)}</b><span><strong>${esc(m.name)}</strong><small>${esc(m.b)}</small></span></button>`).join('');
+const strips = $$('.strip', stripsEl), disc = $('[data-disc]'), arm = $('[data-arm]'), dish = $('[data-dish]');
+const lname = $('[data-lname]'), lcode = $('[data-lcode]'), np = $('[data-np]');
+const slots = $$('.slot'), dots = $$('[data-dots] i'), meterText = $('[data-meter-text]'), stamp = $('[data-stamp]'), resetBtn = $('[data-reset]');
+const callout = $('[data-callout]'), h1a = $('[data-h1a]'), h1b = $('[data-h1b]');
+let touched = false, tray = [], done = false, current = -1, guardUntil = 0;
+if (!FINE) $('[data-callout-text]').textContent = 'Tap a song to play the menu';
+dish.innerHTML = FOOD.sliders();
+
+function notes() {
+  if (RM) return; const box = $('[data-notes]');
+  for (let k = 0; k < 3; k++) {
+    const n = document.createElement('span'); n.textContent = k % 2 ? '♫' : '♪';
+    n.style.left = (18 + Math.random() * 64) + '%'; box.appendChild(n);
+    const dx = (Math.random() - .5) * 70;
+    const a = n.animate([{ transform: 'translate(0,10px) scale(.6)', opacity: 0 }, { opacity: 1, offset: .2 }, { transform: `translate(${dx}px,-110px) rotate(${dx / 3}deg) scale(1.1)`, opacity: 0 }], { duration: 1300 + k * 200, delay: k * 140, easing: 'cubic-bezier(.2,.7,.3,1)', fill: 'both' });
+    a.onfinish = () => n.remove();
+  }
+}
+function swapDish(m) {
+  const old = dish.firstElementChild, html = FOOD[m.id]();
+  const put = () => { dish.innerHTML = html; anim(dish.firstElementChild, [{ transform: 'translateY(40px) scale(.4) rotate(-14deg)', opacity: 0 }, { transform: 'translateY(-8px) scale(1.08) rotate(3deg)', opacity: 1, offset: .65 }, { transform: 'none', opacity: 1 }], { duration: 560, easing: 'cubic-bezier(.3,1.3,.5,1)' }); };
+  const a = anim(old, [{ transform: 'none', opacity: 1 }, { transform: 'translateY(30px) scale(.8)', opacity: 0 }], { duration: 180, fill: 'forwards' });
+  if (a) a.onfinish = put; else put();
+}
+function renderTray() {
+  slots.forEach((s, k) => s.innerHTML = tray[k] != null ? FOOD[CONFIG.menu[tray[k]].id]() : '');
+  dots.forEach((d, k) => d.classList.toggle('on', k < tray.length));
+  meterText.textContent = done ? 'Order up!' : tray.length ? `Tray ${tray.length} of 3` : 'Your tray';
+}
+function addToTray(i) {
+  if (done) return;
+  const at = tray.indexOf(i);
+  if (at > -1) { anim(slots[at], [{ transform: 'scale(1)' }, { transform: 'scale(1.18)' }, { transform: 'scale(1)' }], { duration: 360 }); return; }
+  tray.push(i); renderTray();
+  anim(slots[tray.length - 1].firstElementChild, [{ transform: 'translateY(-60px) scale(.5)', opacity: 0 }, { transform: 'translateY(4px) scale(1.1)', opacity: 1, offset: .7 }, { transform: 'none' }], { duration: 520, delay: 200, easing: 'cubic-bezier(.3,1.3,.5,1)', fill: 'backwards' });
+  if (tray.length === 3) setTimeout(payoff, 650);
+}
+function payoff() {
+  done = true; guardUntil = performance.now() + 900; stage.classList.add('done'); renderTray();
+  const names = tray.map(k => CONFIG.menu[k].name).join(', ');
+  np.textContent = 'Order up! ' + names;
+  if (RM) stamp.style.cssText = 'opacity:1;transform:translate(-50%,-50%) rotate(-12deg)';
+  else {
+    stamp.animate([{ opacity: 0, transform: 'translate(-50%,-50%) rotate(-12deg) scale(2.4)' }, { opacity: 1, transform: 'translate(-50%,-50%) rotate(-12deg) scale(.92)', offset: .7 }, { opacity: 1, transform: 'translate(-50%,-50%) rotate(-12deg) scale(1)' }], { duration: 420, easing: 'cubic-bezier(.5,0,.4,1)', fill: 'forwards' });
+    stamp.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 500, delay: 2300, fill: 'forwards' });
+    anim($('[data-bell]'), [{ transform: 'rotate(0)' }, { transform: 'rotate(-18deg)' }, { transform: 'rotate(14deg)' }, { transform: 'rotate(-8deg)' }, { transform: 'rotate(0)' }], { duration: 600 });
+    anim(stage, [{ transform: 'translateY(0)' }, { transform: 'translateY(5px)' }, { transform: 'translateY(0)' }], { duration: 220, delay: 280 });
+  }
+  setH1('Order', 'up!');
+}
+function setH1(a, b) {
+  const go = () => { h1a.textContent = a; h1b.textContent = b; };
+  const out = anim(h1a.parentNode, [{ transform: 'none', opacity: 1 }, { transform: 'translateY(-14px)', opacity: 0 }], { duration: 200, fill: 'forwards' });
+  if (!out) return go();
+  out.onfinish = () => { go(); h1a.parentNode.animate([{ transform: 'translateY(16px)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 380, easing: 'cubic-bezier(.3,1.4,.5,1)', fill: 'forwards' }); };
+}
+function resetTray() {
+  if (performance.now() < guardUntil) return;
+  tray = []; done = false; stage.classList.remove('done'); stamp.getAnimations().forEach(a => a.cancel()); stamp.style.cssText = '';
+  renderTray(); setH1('Play the', 'menu.'); np.textContent = 'Pick three for a full tray';
+}
+function firstTouch() {
+  if (touched) return; touched = true; callout.classList.add('gone');
+}
+function play(i) {
+  const m = CONFIG.menu[i]; firstTouch(); current = i;
+  strips.forEach((s, k) => { s.classList.toggle('on', k === i); s.setAttribute('aria-pressed', k === i); });
+  arm.classList.add('up');
+  anim(disc, [{ transform: 'scale(1)', opacity: 1 }, { transform: 'scale(.9) translateY(-6px)', opacity: .5, offset: .45 }, { transform: 'scale(1)', opacity: 1 }], { duration: 440, easing: 'ease-in-out' });
+  setTimeout(() => { lname.textContent = m.name.toUpperCase(); lcode.textContent = `${m.code} · 45 RPM`; }, 200);
+  setTimeout(() => { arm.classList.remove('up'); stage.classList.add('playing'); }, 400);
+  np.textContent = `♪ Now playing ${m.code} · ${m.name}`;
+  swapDish(m); notes(); addToTray(i);
+}
+strips.forEach((s, i) => s.addEventListener('click', () => play(i)));
+resetBtn.addEventListener('click', resetTray);
+// idle nudge: if nobody has touched the jukebox, wiggle the first strip
+setInterval(() => {
+  if (touched || RM || document.hidden) return;
+  const r = stage.getBoundingClientRect(); if (r.bottom < 0 || r.top > innerHeight) return;
+  strips[0].animate([{ transform: 'none' }, { transform: 'rotate(-3deg) scale(1.05)' }, { transform: 'rotate(3deg) scale(1.05)' }, { transform: 'rotate(-2deg)' }, { transform: 'none' }], { duration: 650 });
+  callout.animate([{ transform: 'translateX(-50%)' }, { transform: 'translate(-50%,-6px)' }, { transform: 'translateX(-50%)' }], { duration: 650 });
+}, 3200);
+window.__jukebox = { play, state: () => ({ tray: [...tray], done, current, h1: h1a.textContent + ' ' + h1b.textContent }) };
+
+/* ================= menu cards ================= */
+$('[data-menu]').innerHTML = CONFIG.menu.map((m, i) => `<article class="card c${i % 4} rv" data-cat="${esc(m.cat)}">
+  <div class="art"><span class="code">${esc(m.code)}</span>${FOOD[m.id]()}</div>
+  <div class="body"><h3>${esc(m.name)}</h3><p>${esc(m.note)}</p>${m.price ? `<b>${esc(m.price)}</b>` : ''}
+  <div class="row"><span class="tag">${{ grill: 'Off the grill', sides: 'Sides', fountain: 'Fountain' }[m.cat]}</span><button type="button" class="play" data-play="${i}">♪ Play it</button></div></div></article>`).join('');
+$$('[data-play]').forEach(b => b.addEventListener('click', () => {
+  const i = +b.dataset.play; go('#jukebox'); setTimeout(() => play(i), RM ? 0 : 750);
+}));
+$$('[data-tabs] button').forEach(b => b.addEventListener('click', () => {
+  $$('[data-tabs] button').forEach(x => x.setAttribute('aria-pressed', x === b));
+  const f = b.dataset.f; $$('.card').forEach(c => c.hidden = f !== 'all' && c.dataset.cat !== f);
+  if (HAS_G) ScrollTrigger.refresh();
+}));
+
+/* ================= ticket to tray ================= */
+const ICON = {
+  smile: '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"><circle cx="24" cy="24" r="19" fill="#fff"/><circle cx="17" cy="20" r="2" fill="currentColor"/><circle cx="31" cy="20" r="2" fill="currentColor"/><path d="M15 28q9 9 18 0"/></svg>',
+  spatula: '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="5" width="20" height="17" rx="3" transform="rotate(-35 18 13)" fill="#fff"/><path d="M14 9l8 11M19 7l7 10" stroke-width="2.5"/><path d="M24 24l15 17" stroke-width="6"/></svg>',
+  burger: '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"><path d="M7 22a17 13 0 0 1 34 0z" fill="#f0b257"/><rect x="5" y="25" width="38" height="6" rx="3" fill="#5b2d1a"/><path d="M6 25h36l-6 5-6-3-6 4-6-4-6 3z" fill="#ffc928"/><rect x="7" y="33" width="34" height="7" rx="3.5" fill="#e39a45"/></svg>',
+  tray: '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"><path d="M5 30h38l-4 10H9z" fill="#d7262b"/><path d="M12 30a7 6 0 0 1 14 0z" fill="#f0b257"/><path d="M29 30l2-14h8l2 14" fill="#5b2a14"/><circle cx="35" cy="14" r="4" fill="#fff"/></svg>',
+  dollar: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 3v18M16.5 7.5c-1-1.4-2.6-2-4.5-2-2.5 0-4 1.3-4 3.2 0 4.6 9 2.4 9 7 0 2-1.8 3.3-4.6 3.3-2 0-3.7-.8-4.6-2.3"/></svg>',
+  chart: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V14M10 20V10M16 20V6M3 9l6-5 4 3 7-5"/></svg>',
+  clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+  team: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="8" r="3"/><circle cx="5" cy="10" r="2.2"/><circle cx="19" cy="10" r="2.2"/><path d="M6.5 19a5.5 5.5 0 0 1 11 0M1.5 18a4 4 0 0 1 5-3.6M22.5 18a4 4 0 0 0-5-3.6"/></svg>'
+};
+const R = Object.fromEntries(CONFIG.hiring.roles.map(r => [r.id, r]));
+const PANELS = [
+  { n: 'Station 1', role: 'foh', ic: 'smile', p: "You walk in, somebody says hi, takes your order and makes sure you're good. Every tray starts right here." },
+  { n: 'Station 2', role: 'prep', ic: 'spatula', p: 'Before the rush hits, the stations get stocked and the grill gets going, so nothing slows your order down.' },
+  { n: 'Station 3', role: 'boh', ic: 'burger', p: 'The signature sliders come off the grill here, made the same way every time.' }
+];
+$('[data-track]').innerHTML = PANELS.map(P => { const r = R[P.role]; return `<article class="panel">
+  <div class="ic">${ICON[P.ic]}</div><div><div class="n">${P.n}</div><h3>${esc(r.name)}</h3><div class="tl">${esc(r.tag)}</div></div>
+  <p>${esc(P.p)}</p><ul>${r.does.slice(0, 3).map(d => `<li>${esc(d)}</li>`).join('')}</ul>
+  <a class="more" href="#hiring" data-pick="${r.id}">Work this station →</a></article>`; }).join('') +
+  `<article class="panel end"><div class="ic">${ICON.tray}</div><div><div class="n" style="color:#fff">The counter</div><h3>Order up.</h3><div class="tl">Great food. Great people. Great vibes.</div></div>
+  <p>Your tray hits the counter. Grab a booth, grab a straw, dig in.</p><a class="more" href="#visit">Hours &amp; directions →</a></article>`;
+
+/* ================= hiring builder ================= */
+const H = CONFIG.hiring;
+$('[data-perks]').innerHTML = H.perks.map(([b, s, ic]) => `<div class="perk"><i>${ICON[ic]}</i><div><b>${esc(b)}</b><span>${esc(s)}</span></div></div>`).join('');
+const sel = { role: 'boh', sched: 'Full-time' };
+$('[data-roles]').innerHTML = H.roles.map(r => `<button type="button" class="role" role="radio" data-role="${r.id}" aria-checked="false">${ICON[r.icon === 'smile' ? 'smile' : r.icon === 'spatula' ? 'spatula' : 'burger']}<b>${esc(r.name)}</b><span>${esc(r.tag)}</span></button>`).join('');
+$('[data-sched]').innerHTML = H.schedules.map(s => `<button type="button" role="radio" data-s="${esc(s)}" aria-checked="false">${esc(s)}</button>`).join('');
+const inputs = Object.fromEntries($$('[data-in]').map(el => [el.dataset.in, el]));
+function message() {
+  const r = R[sel.role], name = inputs.name.value.trim(), ph = inputs.phone.value.trim(), note = inputs.note.value.trim();
+  const sched = sel.sched === 'Either works' ? 'full-time or part-time, either works' : sel.sched.toLowerCase();
+  let m = `Hi Carter's! ${name ? `I'm ${name} and I'd` : `I'd`} love to join the founding team as ${/^[AEIOU]/.test(r.name) ? 'an' : 'a'} ${r.name} (${sched}).`;
+  if (note) m += `\n\n${note}`;
+  m += ph ? `\n\nYou can reach me at ${ph}. Thanks!` : `\n\nThanks!`;
+  return m;
+}
+function paintApply() {
+  $$('[data-role]').forEach(b => b.setAttribute('aria-checked', b.dataset.role === sel.role));
+  $$('[data-s]').forEach(b => b.setAttribute('aria-checked', b.dataset.s === sel.sched));
+  const r = R[sel.role];
+  $('[data-role-detail]').innerHTML = `<div><h5>The job</h5><ul>${r.does.map(d => `<li>${esc(d)}</li>`).join('')}</ul></div><div><h5>You'll love it if you</h5><ul>${r.love.map(d => `<li>${esc(d)}</li>`).join('')}</ul></div>`;
+  $('[data-msg]').textContent = message();
+}
+$$('[data-role]').forEach(b => b.addEventListener('click', () => { sel.role = b.dataset.role; paintApply(); }));
+$$('[data-s]').forEach(b => b.addEventListener('click', () => { sel.sched = b.dataset.s; paintApply(); }));
+Object.values(inputs).forEach(el => el.addEventListener('input', paintApply));
+$$('[data-pick]').forEach(a => a.addEventListener('click', () => { sel.role = a.dataset.pick; paintApply(); }));
+const send = $('[data-send]'); send.href = ig.dm;
+send.addEventListener('click', () => {
+  const txt = message(), hint = $('[data-hint]');
+  const ok = () => hint.textContent = 'Copied! Paste it in the DM.';
+  try { navigator.clipboard.writeText(txt).then(ok, () => hint.textContent = 'Copy the message above, then paste it in the DM.'); } catch (e) { hint.textContent = 'Copy the message above, then paste it in the DM.'; }
+});
+paintApply();
+
+/* ================= scroll: Lenis + GSAP ================= */
+let lenis = null;
+const nav = $('.nav');
+const navSync = () => nav.classList.toggle('scrolled', scrollY > 30);
+navSync(); addEventListener('scroll', navSync, { passive: true });
+function go(hash) { const t = $(hash); if (!t) return; if (lenis) lenis.scrollTo(t, { offset: hash === '#jukebox' ? 0 : -70 }); else t.scrollIntoView({ behavior: RM ? 'auto' : 'smooth' }); }
+$$('a[href^="#"]').forEach(a => a.addEventListener('click', e => { const h = a.getAttribute('href'); if (h.length > 1 && $(h)) { e.preventDefault(); go(h); } }));
+
+if (!RM && typeof Lenis !== 'undefined') { lenis = new Lenis({ lerp: .1 }); if (HAS_G) { lenis.on('scroll', ScrollTrigger.update); gsap.ticker.add(t => lenis.raf(t * 1000)); gsap.ticker.lagSmoothing(0); } else { const f = t => { lenis.raf(t); requestAnimationFrame(f); }; requestAnimationFrame(f); } }
+
+const ticket = $('[data-ticket]'), tItems = $$('li', ticket), stops = $$('.rail .stop');
+let lastP = 0;
+addEventListener('resize', () => ticketAt(lastP));
+function ticketAt(p) {
+  lastP = p;
+  const rw = ticket.parentNode.clientWidth, tw = ticket.offsetWidth;
+  ticket.style.left = (tw / 2 + p * Math.max(0, rw - tw)) + 'px';
+  tItems.forEach((li, k) => li.classList.toggle('on', p >= k / 3 - .02));
+  stops.forEach((s, k) => s.classList.toggle('on', p >= k / 3 - .02));
+}
+if (HAS_G && !RM) {
+  gsap.registerPlugin(ScrollTrigger);
+  const track = $('[data-track]'), dist = () => Math.max(0, track.scrollWidth - track.parentNode.clientWidth);
+  gsap.to(track, { x: () => -dist(), ease: 'none', scrollTrigger: { trigger: '.story', start: 'top top', end: () => '+=' + (dist() + innerHeight * .35), pin: '.story .pin', scrub: .6, invalidateOnRefresh: true, onUpdate: s => ticketAt(s.progress) } });
+  ticketAt(0);
+  $$('.rv').forEach(el => gsap.to(el, { opacity: 1, y: 0, duration: .8, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 88%', once: true } }));
+  gsap.fromTo('[data-front]', { clipPath: 'inset(12% 10% 12% 10% round 30px)' }, { clipPath: 'inset(0% 0% 0% 0% round 30px)', ease: 'none', scrollTrigger: { trigger: '[data-front]', start: 'top 92%', end: 'top 30%', scrub: .5 } });
+  gsap.fromTo('[data-front] img', { scale: 1.18 }, { scale: 1, ease: 'none', scrollTrigger: { trigger: '[data-front]', start: 'top bottom', end: 'bottom top', scrub: .5 } });
+} else {
+  $('.story').classList.add('static'); ticketAt(1);
+  $$('.rv').forEach(el => { el.style.opacity = 1; el.style.transform = 'none'; });
+}
+
+/* ================= opener ================= */
+const heroIn = () => {
+  if (RM) return;
+  anim($('.hero .copy'), [{ opacity: 0, transform: 'translateY(24px)' }, { opacity: 1, transform: 'none' }], { duration: 800, easing: 'cubic-bezier(.2,.8,.2,1)', fill: 'backwards' });
+  anim(stage, [{ opacity: 0, transform: 'translateY(40px) rotate(1.5deg)' }, { opacity: 1, transform: 'none' }], { duration: 900, delay: 120, easing: 'cubic-bezier(.3,1.25,.5,1)', fill: 'backwards' });
+  strips.forEach((s, k) => anim(s, [{ opacity: 0, transform: 'translateX(-14px)' }, { opacity: 1, transform: 'none' }], { duration: 420, delay: 420 + k * 55, easing: 'ease-out', fill: 'backwards' }));
+};
+if (window.ElaIntro) ElaIntro.curtain({ words: [{ text: "Carter's", font: 'Yellowtail', color: '#fff' }], panel: '#d7262b', accent: '#3cb6b8', onReveal: heroIn });
+else heroIn();
+</script>
+</body>
+</html>
