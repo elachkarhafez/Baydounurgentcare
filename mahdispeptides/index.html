@@ -13,6 +13,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230b0f14'/%3E%3Ccircle cx='22' cy='32' r='7' fill='%232fe0b0'/%3E%3Ccircle cx='42' cy='32' r='7' fill='%23fff'/%3E%3Cpath d='M29 32h6' stroke='%23fff' stroke-width='3'/%3E%3C/svg%3E">
 <link rel="preload" href="assets/fonts/geist.woff2" as="font" type="font/woff2" crossorigin>
 <style>
+@font-face{font-family:"Press Start 2P";src:url(assets/fonts/pressstart.woff2) format("woff2");font-weight:400;font-display:block}
 @font-face{font-family:"Geist";src:url(assets/fonts/geist.woff2) format("woff2");font-weight:100 900;font-display:swap}
 @font-face{font-family:"Geist Mono";src:url(assets/fonts/geist-mono.woff2) format("woff2");font-weight:100 900;font-display:swap}
 @font-face{font-family:"Instrument Serif";src:url(assets/fonts/instrument.woff2) format("woff2");font-style:normal;font-weight:400;font-display:swap}
@@ -286,11 +287,56 @@ footer a{color:#fff;text-decoration:none}
 footer nav{display:flex;flex-wrap:wrap;gap:18px}
 footer .legal{max-width:900px}
 
+/* ---------- the "press start" intro (game style) ---------- */
+html.booting,html.booting body{overflow:hidden}
+.boot{position:fixed;inset:0;z-index:300;background:radial-gradient(60% 60% at 50% 45%,#122028,var(--ink) 70%);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(18px,3.2vh,30px);text-align:center;padding:24px;transition:opacity .55s .35s,visibility 0s .9s}
+.boot::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.07) 1px,transparent 1.4px);background-size:20px 20px;pointer-events:none}
+.boot::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(0,0,0,.18) 0 1px,transparent 1px 3px);pointer-events:none;mix-blend-mode:multiply}
+.boot.out{opacity:0;visibility:hidden}
+.boot .px{font-family:"Press Start 2P",monospace;font-weight:400;text-transform:uppercase}
+.boot .tagk{font-size:clamp(8px,1vw,10px);color:var(--mint);letter-spacing:.06em}
+.mpdots{position:relative;display:flex;gap:clamp(14px,2.4vw,28px)}
+.mpdots .ltr{display:grid;grid-template-columns:repeat(5,var(--d));grid-auto-rows:var(--d);gap:calc(var(--d)*.28);--d:clamp(12px,2.6vw,26px)}
+.mpdots i{border-radius:50%;transform:scale(0);animation:popd .4s cubic-bezier(.3,1.7,.5,1) forwards;transition:transform .8s cubic-bezier(.3,0,.2,1),opacity .8s}
+.mpdots i.off{visibility:hidden;animation:none}
+.mpdots .m i{background:radial-gradient(circle at 35% 30%,#b9ffe9,var(--mint) 55%,#13a983)}
+.mpdots .p i{background:radial-gradient(circle at 35% 30%,#fff,#dfe7ea 60%,#9aa7b0)}
+@keyframes popd{to{transform:scale(1)}}
+.boot.go .mpdots i{animation:none;opacity:0}
+.boot .name{font-size:clamp(15px,2.4vw,28px);letter-spacing:.04em;text-shadow:0 4px 0 #000}
+.boot .name em{font-style:normal;color:var(--mint)}
+.startbtn{position:relative;display:inline-flex;align-items:center;gap:12px;border:0;cursor:pointer;font:400 clamp(12px,1.3vw,15px)/1 "Press Start 2P",monospace;text-transform:uppercase;color:var(--ink);background:var(--mint);padding:18px 24px;box-shadow:0 -4px 0 #05080b,0 4px 0 #05080b,-4px 0 0 #05080b,4px 0 0 #05080b,inset -4px -4px 0 #13a983,inset 4px 4px 0 #b9ffe9;transition:transform .08s}
+.startbtn:hover{transform:translateY(-2px)}
+.startbtn:active{transform:translateY(2px)}
+.startbtn .tri{width:0;height:0;border-left:11px solid currentColor;border-top:7px solid transparent;border-bottom:7px solid transparent}
+.startbtn span{animation:blinkt 1.05s steps(2) infinite}
+@keyframes blinkt{50%{opacity:.25}}
+.boot .meta{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 22px;font-size:8px;color:rgba(255,255,255,.5);line-height:1.8}
+.boot .meta button{background:none;border:0;color:inherit;font:inherit;cursor:pointer;text-decoration:underline;text-underline-offset:4px}
+.boot .meta button:hover{color:#fff}
+.boot .corner{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);font-size:7px;color:rgba(255,255,255,.35);white-space:nowrap}
+/* pixel accents carried into the clean site */
+.hud .chip,.lvl,.slot .p1,.panel .blink,.scard .top .mono,.ticket .h .mono{font-family:"Press Start 2P",monospace!important;font-weight:400!important;letter-spacing:0!important}
+.hud .chip{font-size:8.5px!important}
+.lvl{font-size:9px!important}
+.slot .p1{font-size:8px!important;padding:6px 7px}
+.panel .blink{font-size:9px!important}
+.scard .top .mono{font-size:8px!important}
+.mockup{display:inline-flex;align-items:center;gap:8px;margin-bottom:14px;font:400 8px/1.6 "Press Start 2P",monospace;color:var(--mint);text-transform:uppercase}
+
 .rv{opacity:0;transform:translateY(24px)}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
 </style>
 </head>
 <body>
+<div class="boot" data-boot role="dialog" aria-label="Intro: press start to enter the site">
+  <div class="tagk px">GLP-1 &amp; peptide programs</div>
+  <div class="mpdots" data-dots aria-hidden="true"><div class="ltr m"><i></i><i class="off"></i><i class="off"></i><i class="off"></i><i></i><i></i><i></i><i class="off"></i><i></i><i></i><i></i><i class="off"></i><i></i><i class="off"></i><i></i><i></i><i class="off"></i><i class="off"></i><i class="off"></i><i></i><i></i><i class="off"></i><i class="off"></i><i class="off"></i><i></i><i></i><i class="off"></i><i class="off"></i><i class="off"></i><i></i><i></i><i class="off"></i><i class="off"></i><i class="off"></i><i></i></div><div class="ltr p"><i></i><i></i><i></i><i></i><i class="off"></i><i></i><i class="off"></i><i class="off"></i><i class="off"></i><i></i><i></i><i class="off"></i><i class="off"></i><i class="off"></i><i></i><i></i><i></i><i></i><i></i><i class="off"></i><i></i><i class="off"></i><i class="off"></i><i class="off"></i><i class="off"></i><i></i><i class="off"></i><i class="off"></i><i class="off"></i><i class="off"></i><i></i><i class="off"></i><i class="off"></i><i class="off"></i><i class="off"></i></div></div>
+  <div class="name px">MAHDI'S <em>PEPTIDES</em></div>
+  <button class="startbtn" type="button" data-bootstart><i class="tri" aria-hidden="true"></i><span>PRESS START</span></button>
+  <div class="meta px"><span>1 PLAYER · YOUR PLAN</span><button type="button" data-bootskip>SKIP INTRO</button></div>
+  <div class="corner px">CONCEPT MOCKUP · v0.1</div>
+</div>
 
 <header class="nav">
   <div class="wrap">
@@ -468,6 +514,8 @@ footer .legal{max-width:900px}
       <a class="logo" href="#top"><span class="mk" aria-hidden="true"><i></i><i></i></span><span>Mahdi's <span class="serif">Peptides</span></span></a>
       <nav><a href="#programs">Programs</a><a href="#how">How it works</a><a href="#faq">FAQ</a><a href="#consult">Request a consult</a><a data-mail href="#consult" hidden></a></nav>
     </div>
+    <p class="mockup">&#9670; Concept mockup</p>
+    <p class="legal" style="margin-bottom:10px">This is a concept mockup prepared for Mahdi's Peptides. It is not an operating business yet: the programs, partners, policies and form shown here are placeholders for the pitch.</p>
     <p class="legal">Prescription products are available only after a consultation with a licensed medical provider, who decides whether a medication is appropriate for you. Not everyone qualifies. Compounded medications are not FDA-approved and have not been reviewed by the FDA for safety, effectiveness or quality. This site does not provide medical advice. If you have a medical emergency, call 911. © <span data-year></span> Mahdi's Peptides.</p>
   </div>
 </footer>
@@ -817,7 +865,7 @@ form.addEventListener('submit', async e => {
   const bad = $$('[required]', form).find(el => !el.checkValidity());
   if (bad) { bad.reportValidity(); bad.focus(); return; }
   const d = collect(), btn = $('[data-send]');
-  if (!CONFIG.email) { fallback(d, 'Online requests are being switched on. Please check back shortly.'); return; }
+  if (!CONFIG.email) { form.reset(); paintTicket(); showStatus('ok', `<strong>Mockup preview: request captured, ${esc(d.name.split(' ')[0])}.</strong> On the live site this goes straight to Mahdi's inbox and the team reaches out by ${esc((d.contact || 'text').toLowerCase())} to book the consult.`); return; }
   btn.disabled = true; btn.style.opacity = .6; btn.firstChild.textContent = 'Sending… ';
   const payload = { _subject: `New consult request: ${d.name} (${d.state})`, _template: 'table', _replyto: d.email, _captcha: 'false' };
   for (const [k, l] of Object.entries(LABELS)) if (d[k]) payload[l] = d[k];
@@ -831,13 +879,47 @@ form.addEventListener('submit', async e => {
   finally { btn.disabled = false; btn.style.opacity = ''; btn.firstChild.textContent = 'Request my consult '; }
 });
 
+/* ================= press-start intro ================= */
+const boot = $('[data-boot]');
+let booted = false;
+function bootSound() {
+  try {
+    const A = window.AudioContext || window.webkitAudioContext; if (!A) return; const ac = new A(), t0 = ac.currentTime;
+    [523, 659, 784, 1047, 1319].forEach((f, i) => { const o = ac.createOscillator(), g = ac.createGain(); o.type = 'square'; o.frequency.value = f; g.gain.setValueAtTime(0, t0 + i * .06); g.gain.linearRampToValueAtTime(.06, t0 + i * .06 + .01); g.gain.exponentialRampToValueAtTime(.0008, t0 + i * .06 + .14); o.connect(g); g.connect(ac.destination); o.start(t0 + i * .06); o.stop(t0 + i * .06 + .16); });
+  } catch (_) {}
+}
+function enterSite(withFx) {
+  if (booted) return; booted = true;
+  if (withFx) {
+    bootSound();
+    $$('[data-dots] i:not(.off)').forEach(d => { const a = Math.random() * Math.PI * 2, r = 300 + Math.random() * 500; d.style.transform = `translate(${Math.cos(a) * r}px,${Math.sin(a) * r}px) scale(${.3 + Math.random()})`; });
+    boot.classList.add('go');
+  }
+  boot.classList.add('out');
+  setTimeout(() => { document.documentElement.classList.remove('booting'); if (lenis) lenis.start(); boot.remove(); }, withFx ? 900 : 450);
+  if (withFx) {
+    const r = lab.getBoundingClientRect();
+    if (r.top < innerHeight * .6) setTimeout(() => assemble(), 1000);
+    else { const io = new IntersectionObserver(es => { if (es[0].intersectionRatio > .55) { io.disconnect(); setTimeout(() => assemble(), 250); } }, { threshold: [.55, .7] }); io.observe(lab); }
+  }
+}
+if (RM) { boot.remove(); booted = true; }
+else {
+  document.documentElement.classList.add('booting');
+  $$('[data-dots] i:not(.off)').forEach((d, i) => d.style.animationDelay = (150 + i * 35) + 'ms');
+  $('[data-bootstart]').addEventListener('click', () => enterSite(true));
+  $('[data-bootskip]').addEventListener('click', () => enterSite(false));
+  addEventListener('keydown', e => { if (!booted && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); enterSite(true); } });
+  setTimeout(() => $('[data-bootstart]').focus({ preventScroll: true }), 300);
+}
+
 /* ================= scroll ================= */
 let lenis = null;
 const nav = $('.nav'); const navSync = () => nav.classList.toggle('scrolled', scrollY > 30);
 navSync(); addEventListener('scroll', navSync, { passive: true });
 function go(h) { const el = $(h); if (!el) return; if (lenis) lenis.scrollTo(el, { offset: -80 }); else el.scrollIntoView({ behavior: RM ? 'auto' : 'smooth' }); }
 $$('a[href^="#"]').forEach(a => a.addEventListener('click', e => { const h = a.getAttribute('href'); if (h.length > 1 && $(h)) { e.preventDefault(); go(h); } }));
-if (!RM && typeof Lenis !== 'undefined') { lenis = new Lenis({ lerp: .09 }); if (HAS_G) { lenis.on('scroll', ScrollTrigger.update); gsap.ticker.add(t => lenis.raf(t * 1000)); gsap.ticker.lagSmoothing(0); } }
+if (!RM && typeof Lenis !== 'undefined') { lenis = new Lenis({ lerp: .09 }); if (!booted) lenis.stop(); if (HAS_G) { lenis.on('scroll', ScrollTrigger.update); gsap.ticker.add(t => lenis.raf(t * 1000)); gsap.ticker.lagSmoothing(0); } }
 if (HAS_G && !RM) {
   gsap.registerPlugin(ScrollTrigger);
   const track = $('[data-strack]');
