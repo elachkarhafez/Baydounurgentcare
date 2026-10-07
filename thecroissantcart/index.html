@@ -1,0 +1,690 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noai, noimageai">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Croissant Cart | Loaded croissants for events in Dearborn &amp; Detroit</title>
+<meta name="description" content="The Croissant Cart: loaded croissants made to order. Strawberry Cream, Oreo Mudslide, Biscoff Cinnamon Crunch and Dubai Chocolate. Book the cart or a grab-and-go table for your event.">
+<meta name="theme-color" content="#3b2416">
+<meta property="og:title" content="The Croissant Cart | Loaded croissants">
+<meta property="og:description" content="Loaded croissants for pop-ups, weddings, showers and events of 250+. Book the cart.">
+<meta property="og:image" content="https://thecroissantcart.vercel.app/img/og.jpg">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='32' fill='%23f8f1e6'/%3E%3Cpath d='M12 40c4-14 14-22 20-22s16 8 20 22c-6-4-12-6-20-6s-14 2-20 6z' fill='%23d9a441' stroke='%233b2416' stroke-width='2.5'/%3E%3C/svg%3E">
+<link rel="preload" href="assets/fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:"Fraunces";src:url(assets/fonts/fraunces.woff2) format("woff2");font-weight:300 800;font-style:normal;font-display:swap}
+@font-face{font-family:"Fraunces";src:url(assets/fonts/fraunces-i.woff2) format("woff2");font-weight:300 800;font-style:italic;font-display:swap}
+@font-face{font-family:"Yellowtail";src:url(assets/fonts/yellowtail.woff2) format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Figtree";src:url(assets/fonts/figtree.woff2) format("woff2");font-weight:300 900;font-display:swap}
+/* The Croissant Cart
+   Palette from their cart and logo: cream cart body, warm croissant gold, deep cocoa ink, kraft parchment liners,
+   with flavor accents (strawberry pink, pistachio green).
+   Type: Fraunces (soft bakery serif, their logo caps), Yellowtail (the script on their menu board), Figtree (reading).
+   Motion: buttery. Things drizzle, drop and settle. */
+:root{--cream:#f8f1e6;--paper:#fffaf2;--cocoa:#3b2416;--cocoa-2:#5a3a24;--gold:#d9a441;--gold-d:#b57f23;--kraft:#c49a6c;--pink:#e86a86;--pist:#9db45a;--grey:#7b6a5d;--line:rgba(59,36,22,.12);--pad:clamp(16px,4vw,56px);--r:22px}
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%;overflow-x:clip}html.lenis,html.lenis body{height:auto}.lenis.lenis-smooth{scroll-behavior:auto!important}
+body{background:var(--cream);color:var(--cocoa);font:400 17px/1.6 "Figtree",system-ui,sans-serif;overflow-x:clip}
+img,video{display:block;max-width:100%}
+a{color:inherit}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px;border-radius:8px}
+.wrap{width:min(1240px,100% - var(--pad)*2);margin-inline:auto}
+h1,h2,h3{font-family:"Fraunces",serif;font-weight:600;letter-spacing:-.025em;line-height:1;font-variation-settings:"SOFT" 100,"WONK" 0}
+.script{font-family:"Yellowtail",cursive;font-weight:400;letter-spacing:0;color:var(--gold-d)}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font:700 12px/1 "Figtree",sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-d)}
+.eyebrow::before{content:"";width:22px;height:2px;background:currentColor}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 24px;border-radius:999px;border:0;cursor:pointer;text-decoration:none;font-weight:700;font-size:15.5px;transition:transform .25s,background .25s,box-shadow .25s,color .25s}
+.btn svg{width:18px;height:18px;flex:none}
+.btn.cocoa{background:var(--cocoa);color:#fff}
+.btn.cocoa:hover{transform:translateY(-2px);box-shadow:0 14px 30px -14px rgba(59,36,22,.7)}
+.btn.gold{background:var(--gold);color:var(--cocoa)}
+.btn.gold:hover{transform:translateY(-2px);box-shadow:0 14px 30px -12px rgba(217,164,65,.8)}
+.btn.line{background:transparent;color:var(--cocoa);box-shadow:inset 0 0 0 1.5px rgba(59,36,22,.25)}
+.btn.line:hover{box-shadow:inset 0 0 0 1.5px var(--cocoa)}
+.btn.line.light{color:#fff;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.35)}
+
+/* nav */
+.nav{position:fixed;inset:0 0 auto;z-index:50;transition:background .3s,box-shadow .3s}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:74px;gap:16px}
+.nav.scrolled{background:rgba(248,241,230,.9);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 1px 0 var(--line)}
+.logo{display:inline-flex;align-items:center;gap:10px;text-decoration:none;white-space:nowrap}
+.logo img{width:44px;height:44px;border-radius:50%;box-shadow:0 0 0 1px var(--line)}
+.logo b{font:400 25px/1 "Yellowtail",cursive;color:var(--cocoa)}
+.nav ul{display:flex;gap:28px;list-style:none}
+.nav ul a{text-decoration:none;font-weight:600;font-size:15px;color:var(--cocoa-2)}
+.nav ul a:hover{color:var(--gold-d)}
+.nav .btn{min-height:44px;padding:0 18px;font-size:14.5px}
+@media (max-width:900px){.nav ul{display:none}}
+@media (max-width:420px){.logo b{font-size:21px}.logo img{width:38px;height:38px}}
+
+/* hero */
+.hero{position:relative;padding:112px 0 64px;overflow:hidden;background:radial-gradient(55% 60% at 78% 45%,rgba(217,164,65,.22),transparent 70%),var(--cream)}
+.hero-grid{display:grid;grid-template-columns:.95fr 1.05fr;gap:clamp(24px,4vw,64px);align-items:center}
+.hero h1{font-size:clamp(48px,6.3vw,98px);margin:20px 0 22px}
+.hero h1 .script{display:block;font-size:.82em;margin-top:.08em;color:var(--gold-d)}
+.hero .lead{font-size:clamp(17px,1.35vw,19.5px);color:var(--cocoa-2);max-width:520px}
+.hero .ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+.reels{display:flex;gap:14px;margin-top:34px}
+.pol{position:relative;width:clamp(96px,9vw,136px);aspect-ratio:9/16;border-radius:14px;overflow:hidden;background:var(--cocoa);box-shadow:0 0 0 5px #fff,0 18px 34px -14px rgba(59,36,22,.55);transform:rotate(var(--r));transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.pol:hover{transform:rotate(0) translateY(-6px) scale(1.04)}
+.pol video{width:100%;height:100%;object-fit:cover}
+.pol span{position:absolute;left:6px;bottom:6px;background:rgba(255,250,242,.92);color:var(--cocoa);font:700 10px/1 "Figtree",sans-serif;letter-spacing:.08em;text-transform:uppercase;padding:5px 7px;border-radius:999px}
+/* the load-it studio */
+.studio{position:relative;background:var(--paper);border-radius:32px;padding:18px 18px 16px;box-shadow:0 0 0 1px var(--line),0 40px 80px -50px rgba(59,36,22,.6)}
+.flav{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.flav button{border:0;cursor:pointer;padding:10px 14px;border-radius:999px;background:var(--cream);font-weight:700;font-size:14px;color:var(--cocoa-2);display:inline-flex;align-items:center;gap:8px;transition:background .2s,color .2s,transform .2s}
+.flav button i{width:12px;height:12px;border-radius:50%;box-shadow:0 0 0 2px #fff,0 0 0 3px var(--line)}
+.flav button:hover{transform:translateY(-1px)}
+.flav button[aria-pressed=true]{background:var(--cocoa);color:#fff}
+.stage{position:relative;margin-top:10px;aspect-ratio:600/430;border-radius:24px;background:radial-gradient(60% 55% at 50% 62%,#fff,#f4eadb 70%,#efe2cf);overflow:hidden;touch-action:none;cursor:crosshair}
+.stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.callout{position:absolute;left:50%;top:9%;transform:translateX(-50%);display:flex;align-items:center;gap:8px;background:var(--cocoa);color:#fff;padding:10px 15px;border-radius:999px;font-weight:700;font-size:14px;white-space:nowrap;pointer-events:none;box-shadow:0 14px 30px -12px rgba(59,36,22,.6);transition:opacity .35s}
+.callout::after{content:"";position:absolute;left:50%;bottom:-5px;width:10px;height:10px;background:var(--cocoa);transform:translateX(-50%) rotate(45deg)}
+.callout svg{width:17px;height:17px;color:var(--gold)}
+.callout.nudge{animation:nudge 1s ease-in-out 2}
+@keyframes nudge{25%{transform:translateX(-50%) translateY(-6px)}50%{transform:translateX(-50%)}75%{transform:translateX(-50%) translateY(-3px)}}
+.callout.gone{opacity:0}
+.stamp{position:absolute;left:10px;right:10px;top:10px;display:flex;justify-content:center;pointer-events:none}
+.stamp .tag{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px 14px;background:#fff;border-radius:18px;padding:10px 12px 10px 16px;text-align:left;box-shadow:0 20px 40px -22px rgba(59,36,22,.6),0 0 0 1px var(--line);transform:translateY(-20px) scale(.8);opacity:0;transition:transform .45s cubic-bezier(.3,1.6,.5,1),opacity .25s;pointer-events:auto}
+.stamp.on .tag{transform:none;opacity:1}
+.stamp small{display:block;font:700 11px/1 "Figtree",sans-serif;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-d)}
+.stamp b{display:block;font:600 clamp(17px,1.6vw,20px)/1.1 "Fraunces",serif;margin-top:3px}
+.stamp .pr{font:400 24px/1 "Yellowtail",cursive;color:var(--pink)}
+.stamp .acts{display:flex;gap:8px;justify-content:center}
+.stamp .btn{min-height:40px;padding:0 14px;font-size:13.5px}
+.meter{display:flex;align-items:center;gap:12px;margin-top:12px}
+.meter .bar{flex:1;height:10px;border-radius:5px;background:var(--cream);overflow:hidden;box-shadow:inset 0 0 0 1px var(--line)}
+.meter .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--pink));border-radius:5px;transition:width .2s}
+.meter b{font:700 13px/1 "Figtree",sans-serif;letter-spacing:.08em;text-transform:uppercase;min-width:132px;text-align:right}
+.meter button{border:0;background:none;cursor:pointer;font-weight:700;font-size:13.5px;color:var(--gold-d);text-decoration:underline;text-underline-offset:3px}
+@media (max-width:980px){.hero-grid{grid-template-columns:1fr}.hero{padding-top:98px}}
+@media (max-width:520px){.reels{gap:10px}.pol{width:28vw}.meter b{min-width:0;font-size:12px}.flav button{padding:9px 11px;font-size:13px}}
+
+/* marquee */
+.marquee{background:var(--cocoa);color:#fff;overflow:hidden;padding:16px 0;white-space:nowrap}
+.marquee .track{display:inline-flex;gap:38px;animation:mq 38s linear infinite;font:500 clamp(18px,1.8vw,24px)/1 "Fraunces",serif}
+.marquee .track span{display:inline-flex;align-items:center;gap:38px}
+.marquee .track span::after{content:"🥐";font-size:.8em}
+.marquee .track .script{color:var(--gold);font-size:1.15em}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+/* sections */
+section{position:relative}
+.sec{padding:clamp(84px,10vw,136px) 0}
+.sec-head{display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:end;margin-bottom:clamp(36px,5vw,60px)}
+.sec-head h2{font-size:clamp(40px,5.2vw,76px);margin-top:16px}
+.sec-head h2 .script{font-size:.9em}
+.sec-head p{color:var(--cocoa-2);max-width:500px;justify-self:end}
+@media (max-width:860px){.sec-head{grid-template-columns:1fr}.sec-head p{justify-self:start}}
+
+/* menu */
+.menu{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.mcard{position:relative;background:var(--paper);border-radius:var(--r);padding:18px 18px 22px;box-shadow:0 0 0 1px var(--line);transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s;display:flex;flex-direction:column}
+.mcard:hover{transform:translateY(-6px) rotate(-.6deg);box-shadow:0 0 0 1px var(--line),0 30px 50px -30px rgba(59,36,22,.5)}
+.mcard .art{border-radius:16px;background:radial-gradient(60% 60% at 50% 60%,#fff,#f4eadb);aspect-ratio:600/430;display:grid;place-items:center;overflow:hidden;margin-bottom:16px}
+.mcard .art img{width:100%;height:auto}
+.mcard h3{font-size:25px}
+.mcard .d{color:var(--grey);margin:4px 0 12px}
+.mcard .row{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-top:auto}
+.mcard .price{font:600 30px/1 "Fraunces",serif;color:var(--cocoa)}
+.mcard .extra{font-size:13px;color:var(--pink);font-weight:700}
+.mcard .try{border:0;background:none;cursor:pointer;font-weight:700;font-size:14px;color:var(--gold-d);text-decoration:underline;text-underline-offset:3px}
+.fall{margin-top:16px;display:grid;grid-template-columns:auto 1fr auto;gap:22px;align-items:center;background:linear-gradient(100deg,#7a3d1c,#b5622a);color:#fff;border-radius:var(--r);padding:20px 26px;overflow:hidden}
+.fall img{width:76px;height:76px;object-fit:cover;border-radius:50%;box-shadow:0 0 0 4px rgba(255,255,255,.25)}
+.fall b{display:block;font:600 24px/1.1 "Fraunces",serif}
+.fall span{color:rgba(255,255,255,.8)}
+.fall .chips{display:flex;flex-wrap:wrap;gap:8px}
+.fall .chips i{font-style:normal;background:rgba(255,255,255,.14);padding:8px 12px;border-radius:999px;font-weight:700;font-size:14px}
+@media (max-width:1060px){.menu{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:620px){.menu{grid-template-columns:1fr}.fall{grid-template-columns:auto 1fr}.fall .chips{grid-column:1/-1}}
+
+/* reel wall */
+.wall{background:var(--cocoa);color:#fff;overflow:hidden}
+.wall .sec-head p{color:rgba(255,255,255,.7)}
+.wall .eyebrow{color:var(--gold)}
+.wall .sec-head h2 .script{color:var(--gold)}
+.tiles{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;align-items:center}
+.tile{position:relative;border-radius:18px;overflow:hidden;aspect-ratio:9/16;background:#2a190e;text-decoration:none;color:#fff;box-shadow:0 30px 50px -30px rgba(0,0,0,.7)}
+.tile:nth-child(odd){transform:translateY(22px)}
+.tile video,.tile img{width:100%;height:100%;object-fit:cover;transition:transform .7s cubic-bezier(.2,.8,.2,1)}
+.tile:hover video,.tile:hover img{transform:scale(1.05)}
+.tile::after{content:"";position:absolute;inset:50% 0 0;background:linear-gradient(transparent,rgba(30,18,10,.85))}
+.tile span{position:absolute;left:14px;right:14px;bottom:14px;z-index:1;font:600 17px/1.15 "Fraunces",serif}
+.tile span small{display:block;font:700 10.5px/1 "Figtree",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+@media (max-width:1000px){.tiles{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:min(46vw,240px);overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:30px;margin-right:calc(var(--pad)*-1);padding-right:var(--pad);scrollbar-width:none}.tiles::-webkit-scrollbar{display:none}.tile{scroll-snap-align:start}}
+
+/* events (pinned story) */
+.events .story{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,4vw,64px);align-items:start}
+.events .vis{position:sticky;top:96px;border-radius:28px;overflow:hidden;aspect-ratio:4/5;background:var(--cocoa);box-shadow:0 40px 80px -50px rgba(59,36,22,.8)}
+.events .vis video,.events .vis img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .6s,transform 1.2s cubic-bezier(.2,.8,.2,1);transform:scale(1.06)}
+.events .vis .on{opacity:1;transform:none}
+.events .vis .cap{position:absolute;left:16px;bottom:16px;z-index:2;background:rgba(255,250,242,.94);border-radius:999px;padding:8px 14px;font-weight:700;font-size:13.5px}
+.opts3{display:grid;gap:14px}
+.opt{background:var(--paper);border-radius:var(--r);padding:clamp(22px,2.6vw,30px);box-shadow:0 0 0 1px var(--line);min-height:52vh;display:flex;flex-direction:column;justify-content:center;transition:box-shadow .3s,transform .3s}
+.opt.act{box-shadow:0 0 0 2px var(--gold),0 30px 50px -30px rgba(59,36,22,.4)}
+.opt .n{font:400 30px/1 "Yellowtail",cursive;color:var(--gold-d)}
+.opt h3{font-size:clamp(28px,2.8vw,40px);margin:10px 0 10px}
+.opt p{color:var(--cocoa-2);max-width:460px}
+.opt ul{list-style:none;margin-top:16px;display:grid;gap:8px}
+.opt li{display:flex;gap:10px;align-items:flex-start;color:var(--cocoa-2)}
+.opt li::before{content:"";flex:none;width:8px;height:8px;margin-top:8px;border-radius:50%;background:var(--gold)}
+@media (max-width:900px){.events .story{grid-template-columns:1fr}.events .vis{position:relative;top:0;aspect-ratio:4/3}.opt{min-height:0}}
+
+/* booking form */
+.book{background:#efe3d0}
+.iq{display:grid;grid-template-columns:1.35fr .65fr;gap:clamp(24px,3vw,44px);align-items:start}
+form.brief{background:var(--paper);border-radius:28px;padding:clamp(22px,3.4vw,44px);box-shadow:0 30px 60px -40px rgba(59,36,22,.45)}
+fieldset{border:0;padding:0 0 28px;margin:0 0 28px;border-bottom:1px dashed var(--line)}
+fieldset:last-of-type{border-bottom:0;margin-bottom:8px;padding-bottom:8px}
+legend{display:flex;align-items:center;gap:12px;font:600 23px/1.1 "Fraunces",serif;margin-bottom:20px}
+legend i{font:400 22px/1 "Yellowtail",cursive;color:var(--gold-d);font-style:normal}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.fgrid .full{grid-column:1/-1}
+.f label,.f .lbl{display:block;font-weight:700;font-size:14px;margin-bottom:7px}
+.f label em,.f .lbl em{color:var(--pink);font-style:normal}
+.f label span,.f .lbl span{color:var(--grey);font-weight:500}
+.f input:not([type=checkbox]):not([type=radio]):not([type=range]),.f select,.f textarea{width:100%;border:1.5px solid #e4d6c2;border-radius:12px;padding:13px 14px;background:#fff;font-size:16px;transition:border-color .2s}
+.f textarea{min-height:110px;resize:vertical;line-height:1.5}
+.f input:focus,.f select:focus,.f textarea:focus{outline:0;border-color:var(--cocoa)}
+.f input:user-invalid,.f select:user-invalid{border-color:#c9433b}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opts label{margin:0;cursor:pointer}
+.opts input{position:absolute;opacity:0;width:1px;height:1px}
+.opts span{display:inline-block;padding:9px 14px;border-radius:999px;border:1.5px solid #e4d6c2;background:#fff;font-weight:600;font-size:14.5px;color:var(--cocoa);transition:background .15s,border-color .15s,color .15s}
+.opts input:checked+span{background:var(--cocoa);border-color:var(--cocoa);color:#fff}
+.opts input:focus-visible+span{outline:3px solid var(--gold);outline-offset:2px}
+.range{display:flex;align-items:center;gap:16px}
+.range input{flex:1;accent-color:var(--cocoa)}
+.range output{font:600 22px/1 "Fraunces",serif;min-width:96px;text-align:right}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.submit{display:flex;flex-wrap:wrap;align-items:center;gap:16px;margin-top:8px}
+.submit .btn{min-width:220px}
+.submit small{color:var(--grey);font-size:13.5px}
+.status{margin-top:18px;padding:16px 18px;border-radius:14px;font-weight:600;line-height:1.5}
+.status.ok{background:#eaf5e4;color:#2f6a24}
+.status.err{background:#fbe9e4;color:#9a2b24}
+.status .alt{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.status .alt .btn{min-height:42px;font-size:13.5px}
+.ticket{position:sticky;top:96px;background:#fff;border-radius:22px;padding:24px 22px 22px;box-shadow:0 30px 60px -40px rgba(59,36,22,.5);overflow:hidden;font-family:"Figtree",sans-serif}
+.ticket::before,.ticket::after{content:"";position:absolute;left:0;right:0;height:10px;background:radial-gradient(circle at 6px 0,transparent 6px,#fff 6.5px) 0 0/12px 10px repeat-x}
+.ticket::before{top:-1px;transform:rotate(180deg)}
+.ticket::after{bottom:-1px}
+.ticket .h{text-align:center;border-bottom:1.5px dashed var(--line);padding-bottom:14px;margin-bottom:14px}
+.ticket .h b{display:block;font:400 30px/1 "Yellowtail",cursive}
+.ticket .h small{font-weight:700;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--grey)}
+.ticket dl{display:grid;gap:10px}
+.ticket dl div{display:flex;justify-content:space-between;gap:14px;font-size:14.5px}
+.ticket dt{color:var(--grey)}
+.ticket dd{font-weight:700;text-align:right}
+.ticket dd.empty{color:#cdbfae;font-weight:500}
+.ticket .count{margin-top:16px;padding-top:14px;border-top:1.5px dashed var(--line);display:flex;justify-content:space-between;align-items:baseline}
+.ticket .count b{font:600 34px/1 "Fraunces",serif}
+@media (max-width:980px){.iq{grid-template-columns:1fr}.ticket{position:relative;top:0;order:-1}}
+@media (max-width:560px){.fgrid{grid-template-columns:1fr}}
+
+/* closing + footer */
+.closing{background:var(--cocoa);color:#fff;text-align:center;padding:clamp(90px,11vw,150px) 0;overflow:hidden}
+.closing h2{font-size:clamp(44px,7vw,110px);max-width:1100px;margin:0 auto}
+.closing h2 .script{color:var(--gold);display:block;font-size:.85em}
+.closing p{color:rgba(255,255,255,.7);margin:22px auto 34px;max-width:520px}
+.closing .ctas{display:flex;flex-wrap:wrap;justify-content:center;gap:12px}
+footer{background:#2a190e;color:rgba(255,255,255,.6);padding:34px 0;font-size:14px}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:16px}
+footer .logo b{color:#fff}
+footer a{color:#fff;text-decoration:none}
+footer a:hover{color:var(--gold)}
+footer nav{display:flex;flex-wrap:wrap;gap:18px}
+
+.rv{opacity:0;transform:translateY(24px)}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="logo" href="#top" aria-label="The Croissant Cart home"><img src="img/logo.png" alt="" width="300" height="300"><b>The Croissant Cart</b></a>
+    <ul>
+      <li><a href="#menu">Menu</a></li>
+      <li><a href="#cart">From the cart</a></li>
+      <li><a href="#events">Events</a></li>
+      <li><a href="#book">Book</a></li>
+    </ul>
+    <a class="btn cocoa" href="#book">Book the cart</a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero" aria-labelledby="h1">
+    <div class="wrap hero-grid">
+      <div class="copy">
+        <div class="eyebrow">Dessert cart · Dearborn &amp; Detroit</div>
+        <h1 id="h1" data-h1>Loaded croissants<span class="script">made right in front of you.</span></h1>
+        <p class="lead">A dessert cart for pop-ups, weddings, showers and big events. Strawberry Cream, Oreo Mudslide, Biscoff Cinnamon Crunch and Dubai Chocolate, loaded fresh on site.</p>
+        <div class="ctas">
+          <a class="btn cocoa" href="#book">Book the cart <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a class="btn line" href="#menu">See the menu</a>
+        </div>
+        <div class="reels" data-hreels></div>
+      </div>
+
+      <div class="studio" data-studio>
+        <div class="flav" role="group" aria-label="Pick a flavor" data-flav></div>
+        <div class="stage" data-stage aria-label="Drag across the croissant to drizzle it">
+          <canvas data-cv></canvas>
+          <div class="callout" data-callout><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11V5a2 2 0 0 1 4 0v5M13 10V4a2 2 0 0 1 4 0v8M9 11a2 2 0 0 0-4 0v3a7 7 0 0 0 7 7h1a6 6 0 0 0 6-6v-3a2 2 0 0 0-4 0"/></svg><span data-callout-t>Drag across it to drizzle</span></div>
+          <div class="stamp" data-stamp aria-live="polite"><div class="tag"><span><small>Fully loaded</small><b data-st-name></b></span><span class="pr" data-st-price></span><div class="acts"><a class="btn cocoa" href="#book">Book the cart</a><button class="btn line" type="button" data-again>Load another</button></div></div></div>
+        </div>
+        <div class="meter"><span class="bar"><i data-bar></i></span><b data-mtxt>0% loaded</b><button type="button" data-auto>Load it for me</button></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="marquee" aria-hidden="true"><div class="track" data-mq></div></div>
+
+  <section class="sec" id="menu" aria-labelledby="menu-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <div><div class="eyebrow">The menu</div><h2 id="menu-h">Four flavors, <span class="script">fully loaded.</span></h2></div>
+        <p class="rv">Every croissant is split, filled and loaded to order. Tap "Load this one" to try it up top.</p>
+      </div>
+      <div class="menu" data-menu></div>
+      <div class="fall rv"><img src="img/fall.webp" alt="A loaded croissant held up at a fall festival" width="720" height="1280"><div><b>Fall menu, coming soon</b><span>New season. New flavors. Same loaded croissants.</span></div><div class="chips" data-fall></div></div>
+    </div>
+  </section>
+
+  <section class="sec wall" id="cart" aria-labelledby="cart-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <div><div class="eyebrow">From the cart</div><h2 id="cart-h">Straight off <span class="script">the cart.</span></h2></div>
+        <p class="rv">Real trays, real events. Follow along on <a data-ig href="https://www.instagram.com/tcroissantcart/" target="_blank" rel="noopener" style="color:#fff">@tcroissantcart</a>.</p>
+      </div>
+      <div class="tiles" data-tiles></div>
+    </div>
+  </section>
+
+  <section class="sec events" id="events" aria-labelledby="ev-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <div><div class="eyebrow">Events</div><h2 id="ev-h">Big events, <span class="script">bigger portions.</span></h2></div>
+        <p class="rv">From a backyard shower to 250+ guests. Pick the setup that fits your event.</p>
+      </div>
+      <div class="story">
+        <div class="vis" data-vis aria-hidden="true"></div>
+        <div class="opts3" data-opts3></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec book" id="book" aria-labelledby="bk-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <div><div class="eyebrow">Book the cart</div><h2 id="bk-h">Let's load up <span class="script">your event.</span></h2></div>
+        <p class="rv">Tell us about your event and we'll get back to you with availability and a quote.</p>
+      </div>
+      <div class="iq">
+        <form class="brief" data-form novalidate>
+          <fieldset>
+            <legend><i>1.</i>You</legend>
+            <div class="fgrid">
+              <div class="f"><label for="f-name">Your name <em>*</em></label><input id="f-name" name="name" autocomplete="name" required></div>
+              <div class="f"><label for="f-phone">Phone <em>*</em></label><input id="f-phone" name="phone" type="tel" autocomplete="tel" required></div>
+              <div class="f full"><label for="f-email">Email <em>*</em></label><input id="f-email" name="email" type="email" autocomplete="email" required></div>
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend><i>2.</i>The event</legend>
+            <div class="fgrid">
+              <div class="f"><label for="f-type">Type of event <em>*</em></label><select id="f-type" name="event_type" required data-select="types"><option value="">Choose one</option></select></div>
+              <div class="f"><label for="f-date">Date <em>*</em></label><input id="f-date" name="date" type="date" required></div>
+              <div class="f"><label for="f-time">Start time <span>(optional)</span></label><input id="f-time" name="time" type="time"></div>
+              <div class="f"><label for="f-where">City or venue <em>*</em></label><input id="f-where" name="location" required placeholder="e.g. Dearborn, MI"></div>
+              <div class="f full"><label for="f-guests">How many guests?</label><div class="range"><input id="f-guests" name="guests" type="range" min="25" max="400" step="25" value="100"><output data-gout>100</output></div></div>
+              <div class="f full"><span class="lbl" id="l-setup">Setup</span><div class="opts" role="radiogroup" aria-labelledby="l-setup" data-opts="setups" data-type="radio"></div></div>
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend><i>3.</i>The croissants</legend>
+            <div class="fgrid">
+              <div class="f full"><span class="lbl" id="l-flav">Flavors you want <span>(pick any)</span></span><div class="opts" role="group" aria-labelledby="l-flav" data-opts="flavors" data-type="checkbox"></div></div>
+              <div class="f full"><label for="f-notes">Anything else? <span>(optional)</span></label><textarea id="f-notes" name="notes" placeholder="Theme or colors, allergies, indoor or outdoor, how you heard about us…"></textarea></div>
+            </div>
+          </fieldset>
+          <div class="hp" aria-hidden="true"><label>Leave this empty<input name="_honey" tabindex="-1" autocomplete="off"></label></div>
+          <div class="submit">
+            <button class="btn cocoa" type="submit" data-send>Send my request <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+            <small>Fields marked <em style="color:var(--pink);font-style:normal">*</em> are required.</small>
+          </div>
+          <div class="status" data-status role="status" hidden></div>
+        </form>
+        <aside class="ticket" aria-label="Your order summary">
+          <div class="h"><b>The Croissant Cart</b><small>Event request</small></div>
+          <dl data-ticket></dl>
+          <div class="count"><span>Croissants (about)</span><b data-count>100</b></div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="closing" aria-labelledby="cl-h">
+    <div class="wrap">
+      <h2 id="cl-h" class="rv">Your event deserves <span class="script">a loaded croissant.</span></h2>
+      <p class="rv">Book the cart or a grab-and-go table. We'll bring the croissants.</p>
+      <div class="ctas rv"><a class="btn gold" href="#book">Book the cart</a><a class="btn line light" data-ig href="https://www.instagram.com/tcroissantcart/" target="_blank" rel="noopener">DM @tcroissantcart</a></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <a class="logo" href="#top"><img src="img/logo.png" alt="" width="300" height="300"><b>The Croissant Cart</b></a>
+    <span>Loaded croissants · Dearborn &amp; Detroit · © <span data-year></span></span>
+    <nav><a data-ig href="https://www.instagram.com/tcroissantcart/" target="_blank" rel="noopener">Instagram @tcroissantcart</a><a data-mail href="#book" hidden></a><a href="#book">Book the cart</a></nav>
+  </div>
+</footer>
+
+<script src="assets/lib/gsap.min.js"></script>
+<script src="assets/lib/ScrollTrigger.min.js"></script>
+<script src="assets/lib/lenis.min.js"></script>
+<script>
+/* ================= CONFIG ================= */
+const CONFIG = {
+  name: 'The Croissant Cart',
+  // Booking requests are emailed here via FormSubmit (first one sends the inbox a one-time activation email).
+  email: '',
+  instagram: { handle: '@tcroissantcart', url: 'https://www.instagram.com/tcroissantcart/', dm: 'https://ig.me/m/tcroissantcart' },
+  // From their menu board
+  menu: [
+    { id: 'strawberry', name: 'Strawberry Cream', price: 10, d: 'Strawberry white chocolate', cream: '#fbe0e4', speck: null, drizzle: ['#fff3e6', '#ffffff'], top: 'strawberry', dot: '#e86a86' },
+    { id: 'oreo', name: 'Oreo Mudslide', price: 10, d: 'Cookies & cream', cream: '#f6f1ea', speck: '#2b1d17', drizzle: ['#3b2216', '#7d4f33'], top: 'oreo', dot: '#2b1d17' },
+    { id: 'biscoff', name: 'Biscoff Cinnamon Crunch', price: 12, d: 'Cookie butter cream', cream: '#e8bf88', speck: null, drizzle: ['#b4652a', '#e6a35c'], top: 'biscoff', dot: '#c27a35' },
+    { id: 'dubai', name: 'Dubai Chocolate', price: 12, d: 'Pistachio & kataifi', extra: 'Add strawberries +$1', cream: '#b8cd76', speck: null, drizzle: ['#3b2216', '#7d4f33'], top: 'kataifi', dot: '#8fae4a' }
+  ],
+  fall: ['Apple Crumble', 'Maple Pecan', '+ a few more'],
+  clips: [
+    { k: 'assemble', tag: 'At an event', t: 'Watch us load two favorites' },
+    { k: 'trays', tag: 'Event trays', t: 'Fully loaded, row after row' },
+    { k: 'cart', tag: 'Fall pop-up', t: 'The cart, all set up' },
+    { k: 'load', tag: 'Made to order', t: 'Biscoff Cinnamon Crunch, loading' }
+  ],
+  photos: [{ img: 'event', tag: 'Detroit · 250+ guests', t: 'Grab-and-go table setup' }],
+  setups: [
+    { n: 'The Cart', h: 'The Croissant Cart', d: 'Our cart rolls in and every croissant gets loaded to order, right in front of your guests.', li: ['Made to order on site', 'Great for pop-ups, showers and parties', 'Pick your flavors'], vis: 'cart' },
+    { n: 'Grab & go', h: 'Grab-and-go table', d: 'Pre-loaded croissants on a table so guests can grab one and go. Smaller and larger tables available.', li: ['Serves more guests at once', 'Small and large table options', 'Great for busy events'], vis: 'trays' },
+    { n: '250+', h: 'Big events, bigger portions', d: 'For 250+ guests we bring the big setup, so everyone gets a fully loaded croissant without a long line.', li: ['Built for weddings and large events', 'Mix and match flavors', 'DM or send a request to plan it'], vis: 'event' }
+  ],
+  types: ['Wedding', 'Engagement', 'Bridal shower', 'Baby shower', 'Birthday', 'Corporate', 'School / community', 'Pop-up / market', 'Other'],
+  setupsForm: ['The Cart', 'Small grab-and-go table', 'Large grab-and-go table', 'Not sure yet']
+};
+
+/* ================= helpers ================= */
+const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const HAS_G = typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined';
+const TOUCH = matchMedia('(hover: none)').matches;
+const VEXT = document.createElement('video').canPlayType('video/mp4; codecs="avc1.42E01E"') ? 'mp4' : 'webm';
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v)), rand = (a, b) => a + Math.random() * (b - a);
+$$('[data-ig]').forEach(a => a.href = CONFIG.instagram.url);
+$('[data-year]').textContent = new Date().getFullYear();
+if (CONFIG.email) { const m = $('[data-mail]'); m.hidden = false; m.href = 'mailto:' + CONFIG.email; m.textContent = CONFIG.email; }
+const vid = (k, extra = '') => `<video data-clip="${k}" poster="img/clips/${k}.webp" muted playsinline loop preload="none"${extra}></video>`;
+
+/* ================= croissant renderer (canvas 2D) =================
+   Logical space 600x430. One croissant split on top, filled with cream, on a kraft liner. */
+const W = 600, H = 430;
+const CX = 300, BASEY = 244, FRONT = 318;
+const lobes = [];
+for (let i = 0; i < 11; i++) { const t = (i - 5) / 5; lobes.push({ t, x: CX + t * 222, y: BASEY + t * t * 62, rx: 26 + (1 - t * t) * 34, ry: 30 + (1 - t * t) * 58, a: t * .62 }); }
+const topY = x => { const t = clamp((x - CX) / 222, -1.1, 1.1); return BASEY + t * t * 62 - (30 + (1 - t * t) * 58) * .6; };
+function maskPath(c) { c.beginPath(); c.rect(0, 0, W, FRONT - 2); c.clip(); c.beginPath(); for (const l of lobes) { c.moveTo(l.x + l.rx * Math.cos(l.a), l.y + l.rx * Math.sin(l.a)); c.ellipse(l.x, l.y, l.rx, l.ry, l.a, 0, Math.PI * 2); } c.moveTo(118, topY(118)); for (let x = 118; x <= 482; x += 6) c.lineTo(x, topY(x) - 20); for (let x = 482; x >= 118; x -= 6) c.lineTo(x, topY(x) + 14); c.closePath(); }
+function drawLiner(c) {
+  c.save(); c.fillStyle = 'rgba(59,36,22,.14)'; c.beginPath(); c.ellipse(CX, 384, 250, 22, 0, 0, Math.PI * 2); c.fill();
+  const g = c.createLinearGradient(0, 250, 0, 330); g.addColorStop(0, '#b98a5a'); g.addColorStop(1, '#94673d');
+  c.fillStyle = g; c.beginPath(); c.moveTo(60, 262); c.quadraticCurveTo(CX, 236, 540, 262); c.lineTo(520, 330); c.lineTo(80, 330); c.closePath(); c.fill();
+  c.restore();
+}
+function drawLinerFront(c) {
+  c.save();
+  const g = c.createLinearGradient(0, FRONT, 0, 384); g.addColorStop(0, '#d6ad7b'); g.addColorStop(1, '#ad7e4e');
+  c.fillStyle = g; c.beginPath(); c.moveTo(48, FRONT - 6); c.quadraticCurveTo(CX, FRONT + 14, 552, FRONT - 6); c.lineTo(510, 380); c.quadraticCurveTo(CX, 390, 90, 380); c.closePath(); c.fill();
+  c.strokeStyle = 'rgba(80,50,25,.22)'; c.lineWidth = 2; for (let x = 92; x < 520; x += 30) { c.beginPath(); c.moveTo(x, FRONT + 2); c.lineTo(x + (x - CX) * .08, 380); c.stroke(); }
+  c.strokeStyle = 'rgba(255,240,215,.6)'; c.lineWidth = 2.5; c.beginPath(); c.moveTo(52, FRONT - 5); c.quadraticCurveTo(CX, FRONT + 15, 548, FRONT - 5); c.stroke();
+  c.restore();
+}
+function drawCroissant(c) {
+  const order = [...lobes].sort((a, b) => Math.abs(b.t) - Math.abs(a.t));
+  for (const l of order) {
+    c.save(); c.translate(l.x, l.y); c.rotate(l.a);
+    const g = c.createRadialGradient(-l.rx * .35, -l.ry * .5, 3, 0, 0, Math.max(l.rx, l.ry) * 1.1);
+    g.addColorStop(0, '#f8d38b'); g.addColorStop(.42, '#dc913c'); g.addColorStop(.82, '#a55a1c'); g.addColorStop(1, '#783c12');
+    c.fillStyle = g; c.beginPath(); c.ellipse(0, 0, l.rx, l.ry, 0, 0, Math.PI * 2); c.fill();
+    // laminated ridges
+    c.strokeStyle = 'rgba(115,56,16,.35)'; c.lineWidth = 2;
+    for (let k = -2; k <= 2; k++) { c.beginPath(); c.ellipse(k * l.rx * .28, l.ry * .1, l.rx * .22, l.ry * .82, 0, Math.PI * 1.15, Math.PI * 1.85); c.stroke(); }
+    c.strokeStyle = 'rgba(110,52,15,.5)'; c.lineWidth = 2.4; c.beginPath(); c.ellipse(0, 0, l.rx, l.ry, 0, Math.PI * .02, Math.PI * .98); c.stroke();
+    c.strokeStyle = 'rgba(255,238,195,.6)'; c.lineWidth = 3; c.beginPath(); c.ellipse(-l.rx * .12, -l.ry * .12, l.rx * .6, l.ry * .62, 0, Math.PI * 1.15, Math.PI * 1.55); c.stroke();
+    c.restore();
+  }
+}
+function drawCream(c, f) {
+  c.save();
+  const dark = shade(f.cream, -.16);
+  for (let x = 118; x <= 482; x += 13) {
+    const y = topY(x) - 8 - Math.sin((x - 120) / 360 * Math.PI) * 8, r = 16 + Math.sin((x - 120) / 360 * Math.PI) * 7;
+    const g = c.createRadialGradient(x - r * .35, y - r * .45, 1, x, y, r * 1.1); g.addColorStop(0, '#ffffff'); g.addColorStop(.35, f.cream); g.addColorStop(1, dark);
+    c.fillStyle = g; c.beginPath(); c.arc(x, y, r, 0, Math.PI * 2); c.fill();
+    c.strokeStyle = 'rgba(255,255,255,.7)'; c.lineWidth = 2; c.beginPath(); c.arc(x - 2, y - 2, r * .55, Math.PI * 1.1, Math.PI * 1.6); c.stroke();
+    if (f.speck) { c.fillStyle = f.speck; for (let k = 0; k < 4; k++) { c.beginPath(); c.arc(x + rand(-r * .7, r * .7), y + rand(-r * .6, r * .6), rand(1, 2.4), 0, Math.PI * 2); c.fill(); } }
+  }
+  c.restore();
+}
+function shade(hex, p) { const n = parseInt(hex.slice(1), 16); let r = n >> 16, g = (n >> 8) & 255, b = n & 255; const f = v => Math.round(clamp(p < 0 ? v * (1 + p) : v + (255 - v) * p, 0, 255)); return `rgb(${f(r)},${f(g)},${f(b)})`; }
+// toppings (particles that drop and settle)
+function makeTopping(kind) {
+  const x = rand(126, 474), restY = Math.min(FRONT - 8, topY(x) - rand(6, 24));
+  const base = { x, y: rand(-60, 20), vy: rand(0, 2), rest: restY, rot: rand(0, Math.PI * 2), vr: rand(-.1, .1), kind, s: 1 };
+  if (kind === 'strawberry') base.s = rand(.8, 1.2);
+  if (kind === 'oreo') base.s = rand(.5, 1.3);
+  if (kind === 'biscoff') base.s = rand(.5, 1.2);
+  if (kind === 'kataifi') { base.s = rand(.7, 1.3); base.c = Math.random() > .5 ? '#d8b25c' : '#9fbf55'; }
+  return base;
+}
+function drawTopping(c, p) {
+  c.save(); c.translate(p.x, p.y); c.rotate(p.rot); c.scale(p.s * 1.45, p.s * 1.45);
+  if (p.kind === 'strawberry') { c.fillStyle = '#d92f48'; c.beginPath(); c.moveTo(-9, 0); c.quadraticCurveTo(0, -16, 9, 0); c.closePath(); c.fill(); c.fillStyle = '#ff8fa0'; c.beginPath(); c.moveTo(-6, -1); c.quadraticCurveTo(0, -11, 6, -1); c.closePath(); c.fill(); c.fillStyle = '#fff3c4'; [[-3, -4], [2, -6], [0, -2]].forEach(([a, b]) => c.fillRect(a, b, 1.4, 1.4)); }
+  else if (p.kind === 'oreo') { c.fillStyle = '#2b1d17'; c.beginPath(); c.moveTo(-6, -3); c.lineTo(5, -5); c.lineTo(7, 3); c.lineTo(-4, 5); c.closePath(); c.fill(); c.fillStyle = 'rgba(255,255,255,.12)'; c.fillRect(-3, -2, 4, 2); }
+  else if (p.kind === 'biscoff') { c.fillStyle = '#b8732f'; c.beginPath(); c.moveTo(-5, -4); c.lineTo(6, -3); c.lineTo(5, 4); c.lineTo(-6, 3); c.closePath(); c.fill(); c.fillStyle = '#e1a05a'; c.fillRect(-3, -2, 5, 2); c.fillStyle = '#7a3f13'; c.fillRect(1, 1, 1.5, 1.5); }
+  else if (p.kind === 'kataifi') { c.strokeStyle = p.c; c.lineWidth = 1.6; c.beginPath(); c.moveTo(-8, 0); c.bezierCurveTo(-4, -5, 2, 5, 8, -1); c.stroke(); c.fillStyle = '#7fa344'; c.fillRect(-2, -2, 3, 3); }
+  c.restore();
+}
+
+/* the live studio */
+const stage = $('[data-stage]'), cv = $('[data-cv]'), ctx = cv.getContext('2d');
+const paint = document.createElement('canvas'), pctx = paint.getContext('2d');
+const base = document.createElement('canvas'), bctx = base.getContext('2d');
+let DPR = 1, S = 1, flavor = CONFIG.menu[2], toppings = [], drips = [], sparks = [], cover = 0, done = false, drawing = false, last = null, touched = false, spawned = 0, raf = 0;
+const samples = []; for (let x = 128; x <= 472; x += 12) for (let dy = -22; dy <= 6; dy += 7) samples.push([x, topY(x) + dy]);
+const GOAL = .45;
+function sizeStage() {
+  DPR = Math.min(devicePixelRatio || 1, 2); const w = stage.clientWidth, h = stage.clientHeight;
+  [cv, paint, base].forEach(k => { k.width = Math.round(w * DPR); k.height = Math.round(h * DPR); });
+  S = (w * DPR) / W;
+  pctx.setTransform(S, 0, 0, S, 0, 0); pctx.save(); maskPath(pctx); pctx.clip(); // paint stays on the croissant
+  renderBase(); redrawPaint();
+}
+let strokes = []; // remembered so a resize can repaint
+function renderBase() { bctx.setTransform(1, 0, 0, 1, 0, 0); bctx.clearRect(0, 0, base.width, base.height); bctx.setTransform(S, 0, 0, S, 0, 0); drawLiner(bctx); drawCroissant(bctx); drawCream(bctx, flavor); drawLinerFront(bctx); }
+function strokeSeg(c, a, b, f) {
+  c.lineCap = 'round'; c.lineJoin = 'round';
+  c.strokeStyle = f.drizzle[0]; c.lineWidth = 10; c.beginPath(); c.moveTo(a[0], a[1]); c.lineTo(b[0], b[1]); c.stroke();
+  c.strokeStyle = f.drizzle[1]; c.globalAlpha = .5; c.lineWidth = 3.2; c.beginPath(); c.moveTo(a[0] - 1.5, a[1] - 2); c.lineTo(b[0] - 1.5, b[1] - 2); c.stroke(); c.globalAlpha = 1;
+}
+function redrawPaint() { pctx.save(); pctx.setTransform(1, 0, 0, 1, 0, 0); pctx.clearRect(0, 0, paint.width, paint.height); pctx.restore(); for (const [a, b] of strokes) strokeSeg(pctx, a, b, flavor); }
+function local(e) { const r = cv.getBoundingClientRect(); return [(e.clientX - r.left) / r.width * W, (e.clientY - r.top) / r.height * H]; }
+function measure() {
+  const img = pctx.getImageData(0, 0, paint.width, paint.height).data; let hit = 0;
+  for (const [x, y] of samples) { const px = Math.round(x * S), py = Math.round(y * S); if (px < 0 || py < 0 || px >= paint.width || py >= paint.height) continue; if (img[(py * paint.width + px) * 4 + 3] > 20) hit++; }
+  cover = clamp(hit / samples.length / GOAL, 0, 1);
+  $('[data-bar]').style.width = (cover * 100) + '%';
+  $('[data-mtxt]').textContent = done ? 'Fully loaded' : `${Math.round(cover * 100)}% loaded`;
+  const want = Math.floor(cover * 4); while (spawned < want && spawned < 3) { spawned++; for (let i = 0; i < 14; i++) toppings.push(makeTopping(flavor.top)); }
+  if (cover >= 1 && !done) finish();
+}
+let mTimer = 0;
+function addSeg(a, b) {
+  strokes.push([a, b]); strokeSeg(pctx, a, b, flavor);
+  if (Math.hypot(b[0] - a[0], b[1] - a[1]) > 4 && Math.random() < .18) drips.push({ x: b[0], y: b[1], len: 0, max: rand(8, 20), w: rand(4, 7) });
+  if (!mTimer) mTimer = setTimeout(() => { mTimer = 0; measure(); }, 60);
+}
+function finish() {
+  done = true; $('[data-mtxt]').textContent = 'Fully loaded';
+  for (let i = 0; i < 18; i++) toppings.push(makeTopping(flavor.top));
+  for (let i = 0; i < 40; i++) sparks.push({ x: rand(150, 450), y: rand(120, 200), vx: rand(-2.5, 2.5), vy: rand(-5, -1.5), life: rand(40, 70), c: ['#d9a441', '#e86a86', '#fff', flavor.dot][i % 4] });
+  $('[data-st-name]').textContent = flavor.name; $('[data-st-price]').textContent = `$${flavor.price}${flavor.extra ? ' · ' + flavor.extra.replace('Add ', '+ ') : ''}`;
+  setTimeout(() => $('[data-stamp]').classList.add('on'), 450);
+  $('[data-h1]').innerHTML = `That's ${flavor.name === 'Dubai Chocolate' ? 'a' : 'one'} loaded <span class="script">${esc(flavor.name)}.</span>`;
+}
+function resetStudio(keepFlavor) {
+  strokes = []; toppings = []; drips = []; sparks = []; cover = 0; done = false; spawned = 0;
+  redrawPaint(); $('[data-bar]').style.width = '0%'; $('[data-mtxt]').textContent = '0% loaded'; $('[data-stamp]').classList.remove('on');
+  $('[data-h1]').innerHTML = H1_START; autoRunning = false;
+}
+function frame() {
+  raf = requestAnimationFrame(frame);
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, cv.width, cv.height);
+  ctx.drawImage(base, 0, 0);
+  // drips grow into the paint layer
+  for (const d of drips) if (d.len < d.max) { d.len += .6; pctx.fillStyle = flavor.drizzle[0]; pctx.beginPath(); pctx.ellipse(d.x, d.y + d.len, d.w / 2, d.w / 1.6, 0, 0, Math.PI * 2); pctx.fill(); pctx.fillRect(d.x - d.w / 2, d.y, d.w, d.len); }
+  ctx.drawImage(paint, 0, 0);
+  ctx.setTransform(S, 0, 0, S, 0, 0);
+  for (const p of toppings) { if (p.y < p.rest) { p.vy += .45; p.y = Math.min(p.rest, p.y + p.vy); p.rot += p.vr; } drawTopping(ctx, p); }
+  for (const s of sparks) { s.x += s.vx; s.y += s.vy; s.vy += .18; s.life--; ctx.globalAlpha = clamp(s.life / 30, 0, 1); ctx.fillStyle = s.c; ctx.fillRect(s.x, s.y, 3.5, 3.5); } ctx.globalAlpha = 1; sparks = sparks.filter(s => s.life > 0);
+}
+const H1_START = $('[data-h1]').innerHTML;
+$('[data-flav]').innerHTML = CONFIG.menu.map(f => `<button type="button" data-f="${f.id}" aria-pressed="${f === flavor}"><i style="background:${f.dot}"></i>${esc(f.name.replace(' Cinnamon Crunch', ''))}</button>`).join('');
+function setFlavor(id) { flavor = CONFIG.menu.find(f => f.id === id) || flavor; $$('[data-flav] button').forEach(b => b.setAttribute('aria-pressed', b.dataset.f === flavor.id)); resetStudio(); renderBase(); }
+$$('[data-flav] button').forEach(b => b.addEventListener('click', () => setFlavor(b.dataset.f)));
+if (TOUCH) $('[data-callout-t]').textContent = 'Swipe across it to drizzle';
+stage.addEventListener('pointerdown', e => { if (e.target.closest('.tag')) return; if (done) return; drawing = true; last = local(e); try { stage.setPointerCapture(e.pointerId); } catch (_) {} if (!touched) { touched = true; $('[data-callout]').classList.add('gone'); } });
+stage.addEventListener('pointermove', e => { if (!drawing) return; const p = local(e); addSeg(last, p); last = p; });
+['pointerup', 'pointercancel', 'lostpointercapture'].forEach(ev => stage.addEventListener(ev, () => { drawing = false; last = null; }));
+// "Load it for me": zig-zag drizzle like the real thing
+let autoRunning = false;
+async function autoLoad() {
+  if (done) resetStudio(); if (autoRunning) return; autoRunning = true; touched = true; $('[data-callout]').classList.add('gone');
+  const pts = []; for (let i = 0; i <= 28; i++) { const x = 124 + i * 12.6; pts.push([x, topY(x) + (i % 2 ? -22 : 4)]); }
+  for (let pass = 0; pass < 2 && autoRunning; pass++) for (let i = 1; i < pts.length && autoRunning; i++) {
+    const a = pts[i - 1], b = pts[i]; const off = pass ? 6 : 0;
+    for (let k = 0; k < 4; k++) { const t0 = k / 4, t1 = (k + 1) / 4; addSeg([a[0] + (b[0] - a[0]) * t0 + off, a[1] + (b[1] - a[1]) * t0 - off], [a[0] + (b[0] - a[0]) * t1 + off, a[1] + (b[1] - a[1]) * t1 - off]); }
+    await new Promise(r => setTimeout(r, RM ? 0 : 28));
+  }
+  measure(); if (!done) { cover = 1; finish(); } autoRunning = false;
+}
+$('[data-auto]').addEventListener('click', autoLoad);
+$('[data-again]').addEventListener('click', () => resetStudio());
+sizeStage(); addEventListener('resize', () => { sizeStage(); });
+new IntersectionObserver(es => { cancelAnimationFrame(raf); if (es[0].isIntersecting) raf = requestAnimationFrame(frame); }).observe(stage);
+setTimeout(() => { if (!touched && !RM) $('[data-callout]').classList.add('nudge'); }, 3200);
+if (RM) { cancelAnimationFrame(raf); }
+window.__studio = { state: () => ({ flavor: flavor.id, cover: +cover.toFixed(2), done, strokes: strokes.length }), auto: autoLoad, draw: (pts) => { for (let i = 1; i < pts.length; i++) addSeg(pts[i - 1], pts[i]); measure(); } };
+
+/* menu cards: render each flavor fully loaded with the same engine */
+function snapshot(f) {
+  const c = document.createElement('canvas'); c.width = W; c.height = H; const x = c.getContext('2d');
+  drawLiner(x); drawCroissant(x); drawCream(x, f); drawLinerFront(x);
+  const p = document.createElement('canvas'); p.width = W; p.height = H; const px = p.getContext('2d'); maskPath(px); px.clip();
+  for (let pass = 0; pass < 2; pass++) for (let i = 1; i <= 28; i++) { const x0 = 124 + (i - 1) * 12.6 + pass * 6, x1 = 124 + i * 12.6 + pass * 6; strokeSeg(px, [x0, topY(x0) + ((i - 1) % 2 ? -22 : 4) - pass * 6], [x1, topY(x1) + (i % 2 ? -22 : 4) - pass * 6], f); }
+  x.drawImage(p, 0, 0); drawLinerFront(x);
+  for (let i = 0; i < 46; i++) { const t = makeTopping(f.top); t.y = t.rest; drawTopping(x, t); }
+  return c.toDataURL('image/webp', .85);
+}
+$('[data-menu]').innerHTML = CONFIG.menu.map(f => `<article class="mcard rv"><div class="art"><img src="${snapshot(f)}" alt="${esc(f.name)} loaded croissant illustration" width="600" height="430"></div><h3>${esc(f.name)}</h3><div class="d">${esc(f.d)}</div><div class="row"><span class="price">$${f.price}</span>${f.extra ? `<span class="extra">${esc(f.extra)}</span>` : ''}<button class="try" type="button" data-try="${f.id}">Load this one</button></div></article>`).join('');
+$$('[data-try]').forEach(b => b.addEventListener('click', () => { setFlavor(b.dataset.try); go('#top'); }));
+$('[data-fall]').innerHTML = CONFIG.fall.map(t => `<i>${esc(t)}</i>`).join('');
+$('[data-mq]').innerHTML = [0, 1, 2].map(() => [...CONFIG.menu.map(m => m.name), '<span class="script">Fall menu soon</span>', 'Apple Crumble', 'Maple Pecan'].map(t => `<span>${t}</span>`).join('')).join('');
+
+/* real clips: hero polaroids, wall, events */
+$('[data-hreels]').innerHTML = CONFIG.clips.slice(0, 3).map((c, i) => `<a class="pol" style="--r:${[-5, 3, -2][i]}deg" href="#cart" aria-label="${esc(c.t)}">${vid(c.k, ' autoplay')}<span>${esc(c.tag)}</span></a>`).join('');
+$('[data-tiles]').innerHTML = [...CONFIG.clips.map(c => `<a class="tile rv" href="${CONFIG.instagram.url}" target="_blank" rel="noopener">${vid(c.k)}<span><small>${esc(c.tag)}</small>${esc(c.t)}</span></a>`), ...CONFIG.photos.map(p => `<a class="tile rv" href="${CONFIG.instagram.url}" target="_blank" rel="noopener"><img src="img/${p.img}.webp" alt="${esc(p.t)}" loading="lazy" width="720" height="1280"><span><small>${esc(p.tag)}</small>${esc(p.t)}</span></a>`)].join('');
+$('[data-vis]').innerHTML = CONFIG.setups.map((s, i) => (s.vis === 'event' ? `<img class="${i ? '' : 'on'}" data-v="${i}" src="img/event.webp" alt="" loading="lazy">` : vid(s.vis).replace('<video', `<video class="${i ? '' : 'on'}" data-v="${i}"`))).join('') + '<span class="cap" data-vcap></span>';
+$('[data-opts3]').innerHTML = CONFIG.setups.map((s, i) => `<article class="opt${i ? '' : ' act'}" data-o="${i}"><span class="n">${esc(s.n)}</span><h3>${esc(s.h)}</h3><p>${esc(s.d)}</p><ul>${s.li.map(l => `<li>${esc(l)}</li>`).join('')}</ul></article>`).join('');
+$$('video[data-clip]').forEach(v => v.src = `img/clips/${v.dataset.clip}.${VEXT}`);
+const vio = new IntersectionObserver(es => es.forEach(e => { const v = e.target; if (e.isIntersecting && (v.classList.contains('on') || !v.closest('[data-vis]'))) { v.preload = 'auto'; v.play().catch(() => {}); } else if (!e.isIntersecting) v.pause(); }), { threshold: .2 });
+$$('video[data-clip]').forEach(v => vio.observe(v));
+function showSetup(i) {
+  $$('[data-o]').forEach(o => o.classList.toggle('act', +o.dataset.o === i));
+  $$('[data-v]').forEach(v => { const on = +v.dataset.v === i; v.classList.toggle('on', on); if (v.tagName === 'VIDEO') on ? v.play().catch(() => {}) : v.pause(); });
+  $('[data-vcap]').textContent = CONFIG.setups[i].h;
+}
+showSetup(0);
+const soi = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) showSetup(+e.target.dataset.o); }), { rootMargin: '-45% 0px -45% 0px' });
+$$('[data-o]').forEach(o => soi.observe(o));
+
+/* ================= booking form ================= */
+const form = $('[data-form]'), status = $('[data-status]');
+CONFIG.flavors = [...CONFIG.menu.map(m => m.name), 'Fall flavors (when available)'];
+CONFIG.setupsList = CONFIG.setupsForm;
+$$('[data-opts]').forEach(box => {
+  const key = box.dataset.opts, type = box.dataset.type, list = key === 'setups' ? CONFIG.setupsForm : CONFIG[key];
+  box.innerHTML = list.map((o, i) => `<label><input type="${type}" name="${key}" value="${esc(o)}"${type === 'radio' && i === list.length - 1 ? ' checked' : ''}><span>${esc(o)}</span></label>`).join('');
+});
+$$('[data-select]').forEach(sel => sel.insertAdjacentHTML('beforeend', CONFIG[sel.dataset.select].map(o => `<option>${esc(o)}</option>`).join('')));
+const LABELS = { name: 'Name', phone: 'Phone', email: 'Email', event_type: 'Event', date: 'Date', time: 'Start time', location: 'Where', guests: 'Guests', setups: 'Setup', flavors: 'Flavors', notes: 'Notes' };
+const TICKET = ['event_type', 'date', 'location', 'guests', 'setups', 'flavors'];
+function collect() { const fd = new FormData(form), d = {}; for (const k of Object.keys(LABELS)) d[k] = fd.getAll(k).map(s => String(s).trim()).filter(Boolean).join(', '); return d; }
+function prettyDate(s) { if (!s) return ''; const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }); }
+function paintTicket() {
+  const d = collect(); $('[data-gout]').textContent = d.guests;
+  $('[data-ticket]').innerHTML = TICKET.map(k => { let v = d[k]; if (k === 'date') v = prettyDate(v); return `<div><dt>${esc(LABELS[k])}</dt><dd class="${v ? '' : 'empty'}">${esc(v || '—')}</dd></div>`; }).join('');
+  $('[data-count]').textContent = d.guests;
+}
+form.addEventListener('input', paintTicket); form.addEventListener('change', paintTicket); paintTicket();
+$('#f-date').min = new Date().toISOString().slice(0, 10);
+function plain(d) { return Object.entries(LABELS).filter(([k]) => d[k]).map(([k, l]) => `${l}: ${k === 'date' ? prettyDate(d[k]) : d[k]}`).join('\n'); }
+function showStatus(kind, html) { status.hidden = false; status.className = 'status ' + kind; status.innerHTML = html; }
+function fallback(d, msg) {
+  const body = `Croissant Cart event request\n\n${plain(d)}`;
+  const mail = CONFIG.email ? `<a class="btn cocoa" href="mailto:${esc(CONFIG.email)}?subject=${encodeURIComponent('Event request: ' + d.event_type + ' ' + prettyDate(d.date))}&body=${encodeURIComponent(body)}">Email it instead</a>` : '';
+  showStatus('err', `${esc(msg)}<div class="alt">${mail}<button type="button" class="btn cocoa" data-dm>Copy &amp; DM on Instagram</button></div>`);
+  $('[data-dm]', status).addEventListener('click', async () => { try { await navigator.clipboard.writeText(body); } catch (_) {} window.open(CONFIG.instagram.dm, '_blank', 'noopener'); });
+}
+form.addEventListener('submit', async e => {
+  e.preventDefault();
+  if (form._honey.value) return;
+  const bad = $$('[required]', form).find(el => !el.checkValidity());
+  if (bad) { bad.reportValidity(); bad.focus(); return; }
+  const d = collect(), btn = $('[data-send]');
+  if (!CONFIG.email) { fallback(d, 'Send your request to us on Instagram. We copy it for you, just paste it in the DM:'); return; }
+  btn.disabled = true; btn.style.opacity = .6; btn.firstChild.textContent = 'Sending… ';
+  const payload = { _subject: `Event request: ${d.event_type}, ${prettyDate(d.date)} (${d.guests} guests)`, _template: 'table', _replyto: d.email, _captcha: 'false' };
+  for (const [k, l] of Object.entries(LABELS)) if (d[k]) payload[l] = k === 'date' ? prettyDate(d[k]) : d[k];
+  try {
+    const r = await fetch('https://formsubmit.co/ajax/' + encodeURIComponent(CONFIG.email), { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(payload) });
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok || String(j.success) === 'false') throw new Error(j.message || 'send failed');
+    form.reset(); paintTicket();
+    showStatus('ok', `<strong>Got it, ${esc(d.name.split(' ')[0])}!</strong> Your request for ${esc(prettyDate(d.date))} is in. We'll get back to you with availability and a quote.`);
+  } catch (err) { fallback(d, "That didn't send. Your answers are still here, so try one of these:"); }
+  finally { btn.disabled = false; btn.style.opacity = ''; btn.firstChild.textContent = 'Send my request '; }
+});
+
+/* ================= scroll ================= */
+let lenis = null;
+const nav = $('.nav'); const navSync = () => nav.classList.toggle('scrolled', scrollY > 30);
+navSync(); addEventListener('scroll', navSync, { passive: true });
+function go(h) { const el = $(h); if (!el) return; if (lenis) lenis.scrollTo(el, { offset: -80 }); else el.scrollIntoView({ behavior: RM ? 'auto' : 'smooth' }); }
+$$('a[href^="#"]').forEach(a => a.addEventListener('click', e => { const h = a.getAttribute('href'); if (h.length > 1 && $(h)) { e.preventDefault(); go(h); } }));
+if (!RM && typeof Lenis !== 'undefined') { lenis = new Lenis({ lerp: .09 }); if (HAS_G) { lenis.on('scroll', ScrollTrigger.update); gsap.ticker.add(t => lenis.raf(t * 1000)); gsap.ticker.lagSmoothing(0); } }
+if (HAS_G && !RM) {
+  gsap.registerPlugin(ScrollTrigger);
+  $$('.rv').forEach(el => gsap.to(el, { opacity: 1, y: 0, duration: .9, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 90%', once: true } }));
+  $$('.hero .copy > *').forEach((el, i) => el.animate([{ opacity: 0, transform: 'translateY(24px)' }, { opacity: 1, transform: 'none' }], { duration: 900, delay: 80 + i * 90, easing: 'cubic-bezier(.2,.8,.2,1)', fill: 'backwards' }));
+  $('[data-studio]').animate([{ opacity: 0, transform: 'translateY(30px) rotate(1.5deg)' }, { opacity: 1, transform: 'none' }], { duration: 1100, delay: 200, easing: 'cubic-bezier(.2,.8,.2,1)', fill: 'backwards' });
+} else { $$('.rv').forEach(el => { el.style.opacity = 1; el.style.transform = 'none'; }); }
+</script>
+</body>
+</html>
