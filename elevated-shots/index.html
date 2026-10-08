@@ -75,10 +75,10 @@
     /* ---------- loader: a bottle fills, the cap twists off, juice floods the screen ---------- */
     .loader { position: fixed; inset: 0; z-index: 500; display: grid; place-items: center; background: var(--ink); color: var(--cream); cursor: pointer; }
     .l-in { display: grid; justify-items: center; gap: 18px; }
-    .l-bottle { width: 210px; height: 292px; overflow: visible; }
+    .l-bottle { width: 230px; height: 284px; overflow: visible; }
     .l-pct { font: 400 34px/1 var(--display); letter-spacing: .04em; }
     .l-word { font: 400 30px/1 var(--display); letter-spacing: .06em; text-transform: uppercase; color: var(--juice); }
-.l-flood { position: fixed; inset: 0; background: var(--juice); clip-path: circle(0% at 50% 60%); pointer-events: none; }
+.l-flood { position: fixed; left: 0; top: 0; width: 300vmax; height: 300vmax; margin: -150vmax 0 0 -150vmax; border-radius: 50%; background: var(--c); transform: scale(0); pointer-events: none; will-change: transform; }
     html.rm .loader, html:not(.js) .loader { display: none; }
 
     /* ---------- header ---------- */
@@ -160,7 +160,8 @@
 
     /* ---------- lineup ---------- */
     .lineup { position: relative; padding: clamp(80px, 9vw, 130px) 0 clamp(70px, 8vw, 110px); background: var(--fbg, #fff0a8); transition: background .7s var(--ease); overflow: hidden; overflow: clip; }
-    .lineup .reveal { position: absolute; inset: 0; z-index: 0; pointer-events: none; clip-path: circle(0 at 50% 50%); }
+    .lineup .reveal { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .lineup .reveal i { position: absolute; left: 0; top: 0; width: 200px; height: 200px; margin: -100px 0 0 -100px; border-radius: 50%; transform: scale(0); will-change: transform; }
     .lineup .wrap { position: relative; z-index: 1; }
     .lu-head { display: flex; align-items: end; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
     .lu-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(24px, 4vw, 70px); align-items: center; margin-top: clamp(30px, 4vw, 60px); }
@@ -451,20 +452,18 @@
     .collab .fields select option { color: var(--ink); }
     .collab .btn { margin-top: 14px; }
     @media (max-width: 900px) { .or-grid { grid-template-columns: 1fr; } .crate-wrap { position: relative; top: 0; order: -1; } }
-    @media (max-width: 520px) { .orow small { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; } .fields { grid-template-columns: 1fr; } .or-acts { grid-template-columns: 1fr; } }
+    @media (max-width: 520px) { .sizes { display: grid; grid-template-columns: repeat(4, 1fr); width: 100%; } .sizes button { padding: 10px 4px; font-size: 12px; } .tiers b { font-size: 21px; } .pill span { font: 600 14px/1.4 var(--sans); letter-spacing: 0; text-transform: none; } .pill b { font-size: 44px; } .price span { font-size: 11px; } .orow small { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; } .fields { grid-template-columns: 1fr; } .or-acts { grid-template-columns: 1fr; } }
 
     /* ---------- footer ---------- */
     footer { position: relative; background: var(--ink); color: var(--cream); padding: clamp(30px, 4vw, 60px) 0 34px; overflow: hidden; overflow: clip; }
-    .f-stage { position: relative; width: clamp(150px, 18vw, 240px); aspect-ratio: 292 / 400; margin: clamp(60px, 7vw, 100px) auto 0; }
+    .f-stage { position: relative; width: clamp(130px, 13vw, 190px); aspect-ratio: 292 / 400; margin: clamp(150px, 15vw, 210px) auto 0; }
     .f-mark { position: absolute; inset: 0; }
     .f-mark i { position: absolute; inset: 0; background: url(img/mark.png) center / contain no-repeat; filter: invert(1); }
     .f-fill { position: absolute; inset: 0; -webkit-mask: url(img/mark.png) center / contain no-repeat; mask: url(img/mark.png) center / contain no-repeat; pointer-events: none; }
     .f-fill b { position: absolute; left: -10%; right: -10%; bottom: 0; height: 0%; background: linear-gradient(#ffe45c, #ffab2e); }
     .f-fill b::before { content: ""; position: absolute; left: 0; right: 0; top: -10px; height: 12px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 12'%3E%3Cpath d='M0 6 Q15 0 30 6 T60 6 V12 H0Z' fill='%23ffe45c'/%3E%3C/svg%3E") 0 0 / 60px 12px repeat-x; animation: fwave 1.2s linear infinite; }
     @keyframes fwave { to { background-position-x: 60px; } }
-    .f-stream { position: absolute; left: 55%; top: -4%; width: 10px; height: 0; margin-left: -5px; border-radius: 6px; background: linear-gradient(#ffe45c, #ffc61a); transform-origin: 50% 0; }
-    .f-pour { position: absolute; left: 55.8%; top: -40%; width: 46%; opacity: 0; z-index: 2; }
-    .f-pour svg { width: 100%; height: auto; overflow: visible; }
+    .f-pour { position: absolute; left: -100%; top: -110%; width: 300%; max-width: none; height: 220%; overflow: visible; pointer-events: none; z-index: 2; }
     footer h2 { margin-top: 28px; text-align: center; font-size: clamp(54px, 8.4vw, 140px); color: var(--cream); }
     footer h2 .y { color: var(--juice); }
     .f-acts { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
@@ -507,9 +506,10 @@
     .fd-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(14px, 2vw, 26px); margin-top: clamp(36px, 5vw, 60px); perspective: 1000px; }
     .stk { position: relative; display: grid; grid-template-rows: auto 1fr auto; border-radius: 28px; border: 3px solid var(--ink); background: #fff; overflow: hidden; transform-style: preserve-3d; box-shadow: 0 20px 40px rgba(18,17,16,.1); }
     .stk-logo { display: grid; place-items: center; height: clamp(150px, 15vw, 200px); padding: 22px; background: #fff; border-bottom: 3px solid var(--ink); }
-    .stk-logo img { max-width: 86%; max-height: 100%; width: auto; height: auto; object-fit: contain; }
-    .stk-logo.full { padding: 8px; background: #c4202a; }
-    .stk-logo.full img { max-height: 100%; }
+    .stk-logo { position: relative; }
+    .stk-logo img { position: absolute; inset: 22px; width: calc(100% - 44px); height: calc(100% - 44px); max-width: none; object-fit: contain; }
+    .stk-logo.full { background: #c3282e; }
+    .stk-logo.full img { inset: 6px; width: calc(100% - 12px); height: calc(100% - 12px); }
     .stk-fridge { position: relative; padding: 18px 16px 0; background: linear-gradient(#e7f6fc, #cfeaf5); }
     .stk-fridge::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 12px; background: linear-gradient(#bcd9e4, #a8cbd8); border-top: 2px solid rgba(18,17,16,.15); }
     .stk-bots { display: flex; justify-content: center; align-items: flex-end; gap: 10px; height: 96px; position: relative; z-index: 1; }
@@ -519,7 +519,7 @@
     .stk-info b { display: block; font: 400 30px/1 var(--display); text-transform: uppercase; }
     .stk-info small { display: block; margin-top: 6px; font: 700 11.5px/1.4 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
     .stk-info .btn { margin-top: 14px; height: 46px; padding: 0 18px; font-size: 12.5px; }
-    @media (max-width: 900px) { .fd-grid { grid-template-columns: 1fr; max-width: 460px; margin-left: auto; margin-right: auto; } .stk-logo { height: 130px; padding: 16px; } .stk-bots { height: 80px; } .stk-bots span { width: 34px; } }
+    @media (max-width: 900px) { .fd-grid { grid-template-columns: 1fr; max-width: 460px; margin-left: auto; margin-right: auto; } .stk-logo { height: 140px; } .stk-bots { height: 80px; } .stk-bots span { width: 34px; } }
 
     /* ---------- instagram posts ---------- */
     .feed { position: relative; padding: clamp(80px, 9vw, 130px) 0; background: var(--paper); overflow: hidden; overflow: clip; }
@@ -539,11 +539,12 @@
     .g-bot { order: -1; width: 64px; pointer-events: auto; cursor: pointer; transform-origin: 50% 100%; }
     .g-bot svg { width: 100%; height: auto; overflow: visible; }
     .g-bub { position: relative; max-width: 220px; margin-bottom: 52px; padding: 10px 13px; border-radius: 16px 16px 16px 4px; background: var(--ink); color: var(--cream); font: 700 12.5px/1.35 var(--sans); box-shadow: 0 10px 24px rgba(18,17,16,.25); opacity: 0; }
-    @media (max-width: 760px) { .ff { width: calc(var(--s, 54px) * .72); } .guide { left: 10px; bottom: 74px; } .g-bot { width: 52px; } .g-bub { max-width: 190px; font-size: 12px; margin-bottom: 40px; } }
+    @media (max-width: 760px) { .ff { --s: 38px !important; } .guide { left: 10px; bottom: 74px; } .g-bot { width: 52px; } .g-bub { max-width: 190px; font-size: 12px; margin-bottom: 40px; } }
 
     /* ---------- fruit everywhere: floating, tappable, they pop ---------- */
-    .ff { position: absolute; z-index: 1; translate: -50% -50%; width: var(--s, 54px); aspect-ratio: 1; cursor: pointer; -webkit-tap-highlight-color: transparent; filter: drop-shadow(0 8px 10px rgba(18,17,16,.16)); }
+    .ff { position: absolute; z-index: 1; margin: calc(var(--s, 54px) / -2) 0 0 calc(var(--s, 54px) / -2); will-change: transform; width: var(--s, 54px); aspect-ratio: 1; cursor: pointer; -webkit-tap-highlight-color: transparent; filter: drop-shadow(0 8px 10px rgba(18,17,16,.16)); }
     .ff svg, .orb svg { pointer-events: none; }
+    @keyframes ffbob { from { translate: 0 -12px; rotate: -10deg; } to { translate: 0 12px; rotate: 10deg; } }
     .popfx { position: fixed; inset: 0; z-index: 110; pointer-events: none; overflow: hidden; }
     .popfx i { position: absolute; left: 0; top: 0; border-radius: 50%; }
     .popfx b { position: absolute; left: 0; top: 0; font: 400 30px/1 var(--display); color: var(--juice); -webkit-text-stroke: 2px var(--ink); white-space: nowrap; }
@@ -569,34 +570,13 @@
   <!-- LOADER -->
   <div class="loader" data-loader aria-hidden="true">
     <div class="l-in">
-      <svg class="l-bottle" viewBox="-30 -70 360 500" data-lsvg>
-        <defs>
-          <clipPath id="lClip"><path data-body/></clipPath>
-          <linearGradient id="lShade" x1="0" x2="1"><stop offset="0" stop-color="#000" stop-opacity=".35"/><stop offset=".2" stop-color="#000" stop-opacity="0"/><stop offset=".32" stop-color="#fff" stop-opacity=".22"/><stop offset=".55" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".4"/></linearGradient>
-          <clipPath id="lgClip"><path d="M206 330 L214 412 Q215 420 223 420 L273 420 Q281 420 282 412 L290 330 Z"/></clipPath>
-        </defs>
-        <g data-lglass opacity="0">
-          <g clip-path="url(#lgClip)"><rect x="200" y="420" width="100" height="100" fill="#ffe45c" data-lgliq/></g>
-          <path d="M206 330 L214 412 Q215 420 223 420 L273 420 Q281 420 282 412 L290 330" fill="rgba(255,255,255,.08)" stroke="#fff8e7" stroke-width="4" stroke-linejoin="round"/>
-          <path d="M212 412 L284 412" stroke="#fff8e7" stroke-width="3" opacity=".4"/>
-          <path d="M218 342 L224 400" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".5"/>
-        </g>
-        <path data-lstream d="M0 0" fill="none" stroke="#ffe45c" stroke-width="9" stroke-linecap="round"/>
-        <g data-lbody>
-          <path data-body fill="rgba(255,255,255,.06)"/>
-          <g clip-path="url(#lClip)"><path data-lwave fill="#ffe45c"/><rect x="30" y="0" width="140" height="360" fill="url(#lShade)"/></g>
-          <path data-body fill="none" stroke="#fff8e7" stroke-width="4.5"/>
-          <path d="M44 172 C42 220 42 280 46 318" stroke="#fff" stroke-opacity=".7" stroke-width="7" stroke-linecap="round" fill="none"/>
-          <rect x="74" y="72" width="52" height="10" rx="3" fill="none" stroke="#fff8e7" stroke-width="3.5"/>
-          <g data-lcap><rect x="66" y="6" width="68" height="70" rx="8" fill="#fff8e7"/><g data-lribs><path d="M58 14 V68 M66 14 V68 M74 14 V68 M82 14 V68 M90 14 V68 M98 14 V68 M106 14 V68 M114 14 V68 M122 14 V68 M130 14 V68 M138 14 V68" stroke="#121110" stroke-width="3.2"/></g><rect x="66" y="6" width="68" height="70" rx="8" fill="none" stroke="#fff8e7" stroke-width="3"/></g>
-        </g>
-      </svg>
+      <svg class="l-bottle" viewBox="-30 -40 380 470" data-lsvg><g data-lrig></g><g data-lglass opacity="0"><g transform="translate(286 330)"><clipPath id="lgIn"><path d="M-27 3 L27 3 L21 60 L-21 60 Z"/></clipPath><path d="M-31 0 L31 0 L24 72 Q24 75 21 75 L-21 75 Q-24 75 -24 72 Z" fill="rgba(255,255,255,.08)"/><g clip-path="url(#lgIn)"><rect x="-30" y="61" width="60" height="60" fill="#ffd426" data-lgliq/></g><path d="M-31 0 L31 0 L24 72 Q24 75 21 75 L-21 75 Q-24 75 -24 72 Z" fill="none" stroke="#fff8e7" stroke-width="3"/><path d="M-24 8 L-19 54" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".5"/></g></g></svg>
       <div class="l-pct"><span data-lpct>0</span>%</div>
       <div class="l-word">Take a shot</div>
     </div>
-    <div class="l-flood" data-lflood style="background:#ffe45c"></div>
-    <div class="l-flood" data-lflood style="background:#ffab2e"></div>
-    <div class="l-flood" data-lflood style="background:#f2b705"></div>
+    <div class="l-flood" data-lflood style="--c:#ffe866"></div>
+    <div class="l-flood" data-lflood style="--c:#ffb23d"></div>
+    <div class="l-flood" data-lflood style="--c:#f5be12"></div>
   </div>
 
   <header data-header>
@@ -604,7 +584,7 @@
       <a class="brand" href="#top" data-logo aria-label="Elevated Shots, back to top"><img src="img/mark.png" alt="" width="400" height="400"><span>Elevated<br>Shots</span></a>
       <nav aria-label="Sections"><a href="#shots">Shots</a><a href="#press">Pressed</a><a href="#cooler">Cooler</a><a href="#sips">Sips</a><a href="#find">Find us</a><a href="#order">Order</a></nav>
       <div class="nav-r">
-        <button class="prog" type="button" aria-label="Back to top" data-prog><svg viewBox="0 -4 200 370" aria-hidden="true"><defs><clipPath id="pClip"><path data-body/></clipPath></defs><path data-body fill="rgba(255,255,255,.7)"/><g clip-path="url(#pClip)"><path data-pwave fill="#ffe45c"/></g><path data-body fill="none" stroke="#121110" stroke-width="12"/><g data-pface><g data-peyes><ellipse cx="72" cy="214" rx="15" ry="20" fill="#121110"/><ellipse cx="128" cy="214" rx="15" ry="20" fill="#121110"/><circle cx="77" cy="206" r="5.5" fill="#fff"/><circle cx="133" cy="206" r="5.5" fill="#fff"/></g><ellipse cx="54" cy="248" rx="11" ry="7" fill="#ff7a8a" opacity=".8"/><ellipse cx="146" cy="248" rx="11" ry="7" fill="#ff7a8a" opacity=".8"/><path d="M84 250 Q100 268 116 250" fill="none" stroke="#121110" stroke-width="9" stroke-linecap="round"/></g><g data-pcap><rect x="62" y="0" width="76" height="74" rx="10" fill="#121110"/><path d="M76 8 V66 M90 8 V66 M104 8 V66 M118 8 V66" stroke="#3a3a3a" stroke-width="6"/></g></svg></button>
+        <button class="prog" type="button" aria-label="Back to top" data-prog><svg viewBox="0 -4 200 370" aria-hidden="true"><defs><clipPath id="pClip"><path data-body/></clipPath></defs><path data-body fill="rgba(255,255,255,.7)"/><g clip-path="url(#pClip)"><path data-pwave fill="#ffe45c"/></g><path data-body fill="none" stroke="#121110" stroke-width="12"/><g data-pface><g data-peyes><ellipse cx="72" cy="214" rx="15" ry="20" fill="#121110"/><ellipse cx="128" cy="214" rx="15" ry="20" fill="#121110"/><circle cx="77" cy="206" r="5.5" fill="#fff"/><circle cx="133" cy="206" r="5.5" fill="#fff"/></g><ellipse cx="54" cy="248" rx="11" ry="7" fill="#ff7a8a" opacity=".8"/><ellipse cx="146" cy="248" rx="11" ry="7" fill="#ff7a8a" opacity=".8"/><path d="M84 250 Q100 268 116 250" fill="none" stroke="#121110" stroke-width="9" stroke-linecap="round"/></g><g data-pcap><rect x="58" y="2" width="84" height="50" rx="8" fill="#121110"/><path d="M72 9 V46 M86 9 V46 M100 9 V46 M114 9 V46 M128 9 V46" stroke="#3a3a3a" stroke-width="5"/></g></svg></button>
         <a class="btn ink" href="#order">Order</a>
       </div>
     </div>
@@ -625,38 +605,7 @@
           <svg class="ring" viewBox="0 0 400 400" aria-hidden="true" data-ring><defs><path id="ringP" d="M200 200 m-170 0 a170 170 0 1 1 340 0 a170 170 0 1 1 -340 0"/></defs><text><textPath href="#ringP">TAKE A SHOT ✦ ELEVATE YOUR WELLNESS ✦ COLD-PRESSED ✦ METRO DETROIT ✦ </textPath></text></svg>
           <div class="hb-shadow" data-hbshadow></div>
           <button class="hb" type="button" data-hb aria-label="Press and hold to take a shot">
-            <svg viewBox="-60 -50 320 440" aria-hidden="true" data-hbsvg>
-              <defs>
-                <clipPath id="hbClip"><path data-body/></clipPath>
-                <linearGradient id="hbLiq" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#ffe45c" data-hbc1/><stop offset="1" stop-color="#ffcf1f" data-hbc2/></linearGradient>
-                <linearGradient id="hbShade" x1="0" x2="1"><stop offset="0" stop-color="#5a3a00" stop-opacity=".42"/><stop offset=".16" stop-color="#5a3a00" stop-opacity=".05"/><stop offset=".3" stop-color="#fff" stop-opacity=".28"/><stop offset=".42" stop-color="#fff" stop-opacity=".02"/><stop offset=".78" stop-color="#5a3a00" stop-opacity=".08"/><stop offset="1" stop-color="#5a3a00" stop-opacity=".5"/></linearGradient>
-                <linearGradient id="hbGlass" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity=".5"/><stop offset=".2" stop-color="#fff" stop-opacity=".08"/><stop offset=".8" stop-color="#fff" stop-opacity=".02"/><stop offset="1" stop-color="#fff" stop-opacity=".3"/></linearGradient>
-                <linearGradient id="hbCap" x1="0" x2="1"><stop offset="0" stop-color="#000"/><stop offset=".3" stop-color="#3b3b3b"/><stop offset=".5" stop-color="#1c1c1c"/><stop offset="1" stop-color="#000"/></linearGradient>
-                <radialGradient id="hbBase" cx=".5" cy="1" r=".6"><stop offset="0" stop-color="#fff" stop-opacity=".45"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
-              </defs>
-              <g data-hbrot>
-                <path data-body fill="url(#hbGlass)"/>
-                <g clip-path="url(#hbClip)">
-                  <g data-hbworld><path data-hbliq fill="url(#hbLiq)"/><path data-hbsurf fill="none" stroke="#fff8d0" stroke-width="5" stroke-linecap="round" opacity=".85"/><g data-hbpulp fill="#3a2608"></g></g>
-                  <rect x="30" y="60" width="140" height="300" fill="url(#hbShade)"/>
-                  <ellipse cx="100" cy="350" rx="70" ry="22" fill="url(#hbBase)"/>
-                  <g data-hblabel>
-                    <rect x="48" y="166" width="104" height="146" fill="none" stroke="#141414" stroke-width="1.8" data-hbbox/>
-                    <text class="lb2" x="100" y="196" data-hbname>GLOW SHOT</text>
-                    <g data-hbings></g>
-                    <image href="img/mark.png" x="94" y="292" width="12" height="16" data-hbmark/>
-                  </g>
-                  <g data-hbdrops fill="#fff" opacity=".6"></g>
-                </g>
-                <path data-body fill="none" stroke="#141414" stroke-width="3.5"/>
-                <path d="M44 172 C41 220 41 280 46 320" stroke="#fff" stroke-opacity=".85" stroke-width="7" stroke-linecap="round" fill="none"/>
-                <path d="M157 180 C159 220 159 260 157 296" stroke="#fff" stroke-opacity=".45" stroke-width="4" stroke-linecap="round" fill="none"/>
-                <path d="M58 132 Q70 122 84 120" stroke="#fff" stroke-opacity=".7" stroke-width="5" stroke-linecap="round" fill="none"/>
-                <path d="M36 338 Q100 352 164 338" stroke="#fff" stroke-opacity=".55" stroke-width="3" fill="none"/>
-                <rect x="74" y="72" width="52" height="10" rx="3" fill="rgba(255,255,255,.45)" stroke="#141414" stroke-width="3"/>
-                <g data-hbcap><rect x="66" y="4" width="68" height="72" rx="8" fill="url(#hbCap)"/><path d="M70 10 V70 M75 10 V70 M80 10 V70 M85 10 V70 M90 10 V70 M95 10 V70 M100 10 V70 M105 10 V70 M110 10 V70 M115 10 V70 M120 10 V70 M125 10 V70 M130 10 V70" stroke="#fff" stroke-opacity=".13" stroke-width="2"/><rect x="66" y="4" width="68" height="9" rx="4" fill="#4a4a4a" opacity=".6"/></g>
-              </g>
-            </svg>
+            <svg viewBox="-60 -50 320 440" aria-hidden="true" data-hbsvg><g data-hbglass></g><g data-hbrig></g></svg>
           </button>
           <div class="h-callout" data-hcall><svg viewBox="0 0 30 30"><circle cx="15" cy="15" r="12" fill="none" stroke="rgba(255,248,231,.25)" stroke-width="3"/><circle cx="15" cy="15" r="12" fill="none" stroke="#ffc61a" stroke-width="3" stroke-dasharray="75.4" stroke-dashoffset="75.4" transform="rotate(-90 15 15)" data-hring/><path d="M11 18 V11 a1.6 1.6 0 0 1 3.2 0 V15 l4 .6 a2 2 0 0 1 1.6 2.2 L19 22 H13 Z" fill="#fff8e7"/></svg><span data-hcalltxt>Press &amp; hold to take a shot</span></div>
           <div class="h-fx" data-hfx></div>
@@ -672,7 +621,7 @@
     <!-- LINEUP -->
     <div class="wv" data-wv="#fff0a8" style="background-color:var(--cream)"></div>
     <section class="lineup" id="shots" data-lineup>
-      <div class="reveal" data-lreveal></div>
+      <div class="reveal" data-lreveal><i></i></div>
       <div class="wrap">
         <div class="lu-head"><div><span class="tag"><i></i>The lineup</span><h2 style="margin-top:16px" data-split>Pick your shot.</h2></div><p class="lede" style="margin:0;color:var(--ink)">Three flavors, all cold-pressed. Tap a bottle.</p></div>
         <div class="lu-grid">
@@ -720,11 +669,10 @@
             <g data-pdrops fill="#ffc61a"><circle cx="320" cy="510" r="5"/><circle cx="320" cy="535" r="4"/><circle cx="320" cy="556" r="5"/></g>
             <g data-pbottle transform="translate(258 520) scale(.62)">
               <path data-body fill="rgba(255,248,231,.12)"/>
-              <g clip-path="url(#pbClip)"><rect x="0" y="354" width="200" height="300" fill="#f2b705" data-pliq/><g data-plabel opacity="0"><image href="img/mark.png" x="78" y="170" width="44" height="60"/><text class="lb1" x="100" y="256">ELEVATED SHOTS</text></g></g>
+              <g clip-path="url(#pbClip)"><rect x="0" y="354" width="200" height="300" fill="#f2b705" data-pliq/><g data-plabel opacity="0"><image href="img/mark.png" x="79" y="184" width="42" height="58"/><text x="100" y="290" text-anchor="middle" textLength="88" lengthAdjust="spacingAndGlyphs" style="font:400 15px Anton, Impact, sans-serif" fill="#141414">ELEVATED SHOTS</text></g></g>
               <path data-body fill="none" stroke="#fff8e7" stroke-width="6"/>
-              <rect x="74" y="72" width="52" height="10" rx="3" fill="none" stroke="#fff8e7" stroke-width="4"/>
-              <path d="M41 150 V236" stroke="#fff" stroke-opacity=".6" stroke-width="7" stroke-linecap="round"/>
-              <g data-pcap><rect x="66" y="4" width="68" height="72" rx="8" fill="#fff8e7"/><g data-pribs><path d="M72 12 V70 M82 12 V70 M92 12 V70 M102 12 V70 M112 12 V70 M122 12 V70 M132 12 V70" stroke="#121110" stroke-width="3.5"/></g></g>
+              <path d="M42 140 C40 200 40 280 43 328" stroke="#fff" stroke-opacity=".6" stroke-width="6" stroke-linecap="round" fill="none"/>
+              <g data-pcap><rect x="62" y="6" width="76" height="44" rx="5" fill="#fff8e7"/><g data-pribs><path d="M70 10 V46 M78 10 V46 M86 10 V46 M94 10 V46 M102 10 V46 M110 10 V46 M118 10 V46 M126 10 V46 M134 10 V46" stroke="#121110" stroke-width="3"/></g></g>
             </g>
           </svg>
           <div class="p-copy">
@@ -928,8 +876,7 @@
       <div class="f-stage" data-fstage aria-hidden="true">
         <div class="f-mark" data-fmark></div>
         <div class="f-fill"><b data-ffill></b></div>
-        <div class="f-stream" data-fstream></div>
-        <div class="f-pour" data-fpour></div>
+        <svg class="f-pour" data-fpour aria-hidden="true"><g data-fprig></g></svg>
       </div>
       <h2 data-split>Elevate your <span class="y">wellness.</span></h2>
       <div class="f-acts"><a class="btn juice" data-ig href="#" target="_blank" rel="noopener">Instagram @_elevatedshots</a><a class="btn ink" data-tel href="#">Call or text</a><a class="btn ink" href="#order">Order a pack</a></div>
@@ -963,9 +910,9 @@
     tiers: [{ min: 1, p: 6, l: '1–9' }, { min: 10, p: 5, l: '10–19' }, { min: 20, p: 4.5, l: '20+' }],
     // ingredients straight off the real labels
     flavors: [
-      { k: 'glow', n: 'Glow Shot', short: 'Glow', label: 'GLOW SHOT', ben: 'Wellness', c: '#ffe866', c2: '#ffd426', bg: '#fff6c4', kick: 'Sweet heat', ing: ['pineapple', 'ginger', 'turmeric', 'pepper', 'honey'], d: 'Pineapple and honey up front, ginger and turmeric right behind. The easy first shot.', photo: 'img/ice-four.webp', pcap: 'Glow on ice', reels: ['pineapple', 'honey', 'turmeric'] },
-      { k: 'golden', n: 'Golden', short: 'Golden', label: 'GOLDEN', ben: 'Energy', c: '#ffb23d', c2: '#f47b06', bg: '#ffd9ab', kick: 'Brings the kick', ing: ['orange', 'lemon', 'ginger', 'turmeric', 'pepper', 'cayenne', 'honey'], d: 'Orange and lemon with a cayenne kick and a little honey. Wakes you right up.', photo: 'img/menu.webp', pcap: 'Golden, Glow & The OG', reels: ['orange', 'cayenne', 'ginger'] },
-      { k: 'og', n: 'The OG', short: 'The OG', label: 'THE OG', ben: 'Immunity', c: '#f5be12', c2: '#cf8d00', bg: '#f6e19a', kick: 'Sharp & clean', ing: ['lemon', 'ginger', 'turmeric', 'pepper'], d: 'Where it started. Lemon, ginger, turmeric and black pepper. Nothing extra.', photo: 'img/og-close.webp', pcap: 'The OG, up close', reels: ['lemon', 'ginger', 'turmeric'] }
+      { k: 'glow', n: 'Glow Shot', short: 'Glow', label: 'GLOW SHOT', ben: 'Wellness', c: '#ffe14a', c2: '#f7bf00', bg: '#fff6c4', kick: 'Sweet heat', ing: ['pineapple', 'ginger', 'turmeric', 'pepper', 'honey'], d: 'Pineapple and honey up front, ginger and turmeric right behind. The easy first shot.', photo: 'img/ice-four.webp', pcap: 'Glow on ice', reels: ['pineapple', 'honey', 'turmeric'] },
+      { k: 'golden', n: 'Golden', short: 'Golden', label: 'GOLDEN', ben: 'Energy', c: '#ffb330', c2: '#ee7a00', bg: '#ffd9ab', kick: 'Brings the kick', ing: ['orange', 'lemon', 'ginger', 'turmeric', 'pepper', 'cayenne', 'honey'], d: 'Orange and lemon with a cayenne kick and a little honey. Wakes you right up.', photo: 'img/menu.webp', pcap: 'Golden, Glow & The OG', reels: ['orange', 'cayenne', 'ginger'] },
+      { k: 'og', n: 'The OG', short: 'The OG', label: 'THE OG', ben: 'Immunity', c: '#ffc61a', c2: '#d99200', bg: '#f6e19a', kick: 'Sharp & clean', ing: ['lemon', 'ginger', 'turmeric', 'pepper'], d: 'Where it started. Lemon, ginger, turmeric and black pepper. Nothing extra.', photo: 'img/og-close.webp', pcap: 'The OG, up close', reels: ['lemon', 'ginger', 'turmeric'] }
     ],
     pillars: [
       { b: 'Energy', s: 'golden', d: 'Caffeine-free. Citrus, ginger and a cayenne kick.' },
@@ -1046,8 +993,8 @@
   const store = { get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} } };
   if (HAS_G) gsap.registerPlugin(ScrollTrigger);
   const FL = CONFIG.flavors, FK = Object.fromEntries(FL.map(f => [f.k, f]));
-  // a 2 oz Boston round, like the real bottles: round shoulders, short neck, ribbed black cap
-  const BODY = 'M78 70 L78 100 C78 116 30 120 30 156 L30 334 Q30 354 50 354 L150 354 Q170 354 170 334 L170 156 C170 120 122 116 122 100 L122 70 Z';
+  // a 2 oz Boston round, measured off their photos (see THE BOTTLE below)
+  const BODY = 'M68 40 L68 72 C68 86 30 90 30 120 L30 338 Q30 352 44 352 L156 352 Q170 352 170 338 L170 120 C170 90 132 86 132 72 L132 40 Z';
   $$('[data-body]').forEach(p => p.setAttribute('d', BODY));
   const tierPrice = n => { let p = CONFIG.tiers[0].p; CONFIG.tiers.forEach(t => { if (n >= t.min) p = t.p; }); return p; };
   const money = v => '$' + (Math.round(v * 100) % 100 ? v.toFixed(2) : String(Math.round(v)));
@@ -1077,31 +1024,109 @@
     shot: '<rect x="23" y="2" width="18" height="13" rx="2.5" fill="#2a2a2a" stroke="#fff8e7" stroke-width="2"/><path d="M25 15 V20 C25 24 14 25 14 32 V56 Q14 61 19 61 H45 Q50 61 50 56 V32 C50 25 39 24 39 20 V15Z" fill="#ffe45c" stroke="#fff8e7" stroke-width="2.4"/><path d="M19 34 V54" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".75"/><path d="M27 38 h10 M26 43 h12 M28 48 h8" stroke="#141414" stroke-width="2.2"/>',
     cayenne: '<path d="M12 52 C30 50 46 37 50 17 C51 12 57 14 56 19 C53 42 34 58 12 58 C8 58 8 52 12 52Z" fill="#e8322a" stroke="#141414" stroke-width="2.5" stroke-linejoin="round"/><path d="M53 15 C54 9 58 6 62 6" fill="none" stroke="#3c8a2e" stroke-width="4" stroke-linecap="round"/><path d="M22 51 C34 46 42 38 46 28" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".45"/>'
   };
-  const SHARED = '<linearGradient id="gShade" x1="0" x2="1"><stop offset="0" stop-color="#4a2c00" stop-opacity=".42"/><stop offset=".16" stop-color="#4a2c00" stop-opacity=".04"/><stop offset=".3" stop-color="#fff" stop-opacity=".3"/><stop offset=".42" stop-color="#fff" stop-opacity="0"/><stop offset=".78" stop-color="#4a2c00" stop-opacity=".08"/><stop offset="1" stop-color="#4a2c00" stop-opacity=".5"/></linearGradient><linearGradient id="gCapSh" x1="0" x2="1"><stop offset="0" stop-color="#000" stop-opacity=".6"/><stop offset=".3" stop-color="#fff" stop-opacity=".16"/><stop offset=".55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".65"/></linearGradient><radialGradient id="gBase" cx=".5" cy="1" r=".6"><stop offset="0" stop-color="#fff" stop-opacity=".5"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>';
+  const SHARED = '<linearGradient id="gShade" gradientUnits="userSpaceOnUse" x1="30" x2="170" y1="0" y2="0"><stop offset="0" stop-color="#7a4100" stop-opacity=".55"/><stop offset=".08" stop-color="#7a4100" stop-opacity=".22"/><stop offset=".22" stop-color="#fff" stop-opacity=".16"/><stop offset=".34" stop-color="#fff" stop-opacity="0"/><stop offset=".7" stop-color="#7a4100" stop-opacity=".04"/><stop offset=".88" stop-color="#7a4100" stop-opacity=".2"/><stop offset="1" stop-color="#7a4100" stop-opacity=".6"/></linearGradient><linearGradient id="gCapSh" x1="0" x2="1"><stop offset="0" stop-color="#000" stop-opacity=".7"/><stop offset=".22" stop-color="#fff" stop-opacity=".2"/><stop offset=".34" stop-color="#fff" stop-opacity=".04"/><stop offset=".8" stop-color="#000" stop-opacity=".25"/><stop offset="1" stop-color="#000" stop-opacity=".75"/></linearGradient><radialGradient id="gBase" cx=".5" cy="1" r=".6"><stop offset="0" stop-color="#fff" stop-opacity=".5"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>';
   $('[data-symbols]').innerHTML = SHARED + Object.entries(ICONS).map(([k, v]) => `<symbol id="i-${k}" viewBox="0 0 64 64">${v}</symbol>`).join('');
   const FRUITS = ['pineapple', 'lemon', 'orange', 'ginger', 'turmeric', 'honeycomb', 'honey', 'cayenne', 'pepper'];
   const JUICE = { pineapple: '#ffc22e', lemon: '#ffe14d', orange: '#ff9a1f', ginger: '#f3d39a', turmeric: '#ff8d12', honeycomb: '#ffb81c', honey: '#ffad14', cayenne: '#e8322a', pepper: '#5a4a3a', shot: '#ffe45c' };
   const ico = (k, cls = '') => `<svg class="ico ${cls}" viewBox="0 0 64 64" aria-hidden="true"><use href="#i-${k}"/></svg>`;
   const SPRITES = Object.fromEntries(Object.entries(ICONS).map(([k, v]) => { const im = new Image(); im.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">${v}</svg>`); return [k, im]; }));
 
-  /* a realistic 3D-ish bottle in any flavor: cylinder shading, glass highlights, thick base,
-     ribbed cap and the label printed straight on the glass, like the real ones */
+  /* =============================================================
+     THE BOTTLE, measured off their photos: a 2 oz Boston round.
+     Body 140 wide; cap 54% of that and short; a short neck nearly
+     as wide as the cap; round shoulders; the label printed straight
+     on the glass in the lower two thirds (logo + ELEVATED SHOTS, or
+     the flavor box with the ingredient list).
+     ============================================================= */
   let uid = 0;
-  const CAP = (fill = '#141414') => `<g data-cap><rect x="66" y="4" width="68" height="72" rx="8" fill="${fill}"/><path d="M71 10 V70 M77 10 V70 M83 10 V70 M89 10 V70 M95 10 V70 M101 10 V70 M107 10 V70 M113 10 V70 M119 10 V70 M125 10 V70 M130 10 V70" stroke="#fff" stroke-opacity=".15" stroke-width="2.4"/><rect x="66" y="4" width="68" height="72" rx="8" fill="url(#gCapSh)"/><rect x="68" y="5" width="64" height="7" rx="3.5" fill="#fff" opacity=".14"/></g>`;
+  const BODY_IN = 'M71 42 L71 73 C71 88 33 93 33 121 L33 336 Q33 346 46 346 L154 346 Q167 346 167 336 L167 121 C167 93 129 88 129 73 L129 42 Z';
+  const MOUTH = [100, 40];
+  const ribPath = (x0, x1, st) => { let d = ''; for (let x = x0; x <= x1; x += st) d += `M${x.toFixed(1)} 9 V48 `; return d; };
+  const RIBS = ribPath(44, 156, 3.2), RIBS2 = ribPath(45.6, 156, 3.2);
+  const capSVG = id => `<g data-cap><clipPath id="${id}c"><rect x="62" y="6" width="76" height="44" rx="5"/></clipPath><rect x="62" y="6" width="76" height="44" rx="5" fill="#171717"/><g clip-path="url(#${id}c)"><g data-ribs><path d="${RIBS}" stroke="#000" stroke-opacity=".6" stroke-width="1.7"/><path d="${RIBS2}" stroke="#fff" stroke-opacity=".1" stroke-width="1.1"/></g></g><rect x="62" y="6" width="76" height="44" rx="5" fill="url(#gCapSh)"/><rect x="63.5" y="6.5" width="73" height="4" rx="2" fill="#fff" opacity=".16"/><rect x="62" y="46" width="76" height="4" fill="#000" opacity=".3"/></g>`;
   const labelLines = f => f.ing.map(k => CONFIG.ingredients[k].toUpperCase());
-  const flavorLabel = f => { const ls = labelLines(f), y0 = 216, h = 13.4; return `<rect x="48" y="166" width="104" height="${Math.max(118, 62 + ls.length * h)}" fill="none" stroke="#141414" stroke-width="1.8"/><text class="lb2" x="100" y="196">${esc(f.label)}</text>${ls.map((l, k) => `<text class="lb3" x="100" y="${(y0 + k * h).toFixed(1)}">${esc(l)}</text>`).join('')}<image href="img/mark.png" x="94" y="${(y0 + ls.length * h - 4).toFixed(1)}" width="12" height="16"/>`; };
-  const markLabel = () => '<image href="img/mark.png" x="72" y="166" width="56" height="77"/><text class="lb1" x="100" y="268">ELEVATED SHOTS</text>';
-  const FACE = '<g data-face><g data-eyes><ellipse cx="72" cy="212" rx="14" ry="18" fill="#141414"/><ellipse cx="128" cy="212" rx="14" ry="18" fill="#141414"/><g data-pupils fill="#fff"><circle cx="77" cy="205" r="5.5"/><circle cx="133" cy="205" r="5.5"/><circle cx="68" cy="220" r="2.4"/><circle cx="124" cy="220" r="2.4"/></g></g><ellipse cx="50" cy="244" rx="11" ry="7" fill="#ff7a8a" opacity=".8"/><ellipse cx="150" cy="244" rx="11" ry="7" fill="#ff7a8a" opacity=".8"/><path data-mouth d="M84 244 Q100 262 116 244" fill="#141414" stroke="#141414" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></g>';
+  const LBF = 'font-family:Anton,Impact,sans-serif;font-weight:400';
+  const flavorLabel = f => { const ls = labelLines(f), y0 = 194, h = 15.4, bot = Math.max(300, y0 + (ls.length - 1) * h + 34), gap = f.label.length * 5.3 + 6;
+    return `<g fill="#141414" style="${LBF}" text-anchor="middle"><path d="M${(100 - gap).toFixed(1)} 168 H40 V${bot} H89 M111 ${bot} H160 V168 H${(100 + gap).toFixed(1)}" fill="none" stroke="#141414" stroke-width="1.6"/><text x="100" y="176" style="font-size:22px;letter-spacing:.3px">${esc(f.label)}</text>${ls.map((l, k) => `<text x="100" y="${(y0 + k * h).toFixed(1)}" style="font-size:13.5px;letter-spacing:.4px">${esc(l)}</text>`).join('')}<image href="img/mark.png" x="93" y="${bot - 9}" width="14" height="19"/></g>`; };
+  const markLabel = () => `<image href="img/mark.png" x="79" y="184" width="42" height="58"/><text x="100" y="290" text-anchor="middle" textLength="88" lengthAdjust="spacingAndGlyphs" fill="#141414" style="${LBF};font-size:15px">ELEVATED SHOTS</text>`;
+  // glass in front of the juice: thin edge, inner wall, thick base, highlights, the threads under the cap
+  const GLASS_FRONT = (sw = 2.2, dark = false) => `<path d="M69 43 H131 M69 47.5 H131" stroke="#fff" stroke-opacity=".55" stroke-width="2"/><path d="${BODY}" fill="none" stroke="${dark ? 'rgba(255,248,231,.6)' : 'rgba(70,46,0,.42)'}" stroke-width="${sw * .7}"/><path d="${BODY_IN}" fill="none" stroke="#fff" stroke-opacity=".28" stroke-width="1.3"/><path d="M34 340 Q100 352 166 340" stroke="#fff" stroke-opacity=".55" stroke-width="2.4" fill="none"/><path d="M41 138 C38 200 38 280 42 330" stroke="#fff" stroke-opacity=".22" stroke-width="12" stroke-linecap="round" fill="none"/><path d="M42 140 C40 200 40 280 43 328" stroke="#fff" stroke-opacity=".85" stroke-width="3.2" stroke-linecap="round" fill="none"/><path d="M158 150 C160 200 160 270 158 318" stroke="#fff" stroke-opacity=".38" stroke-width="3" stroke-linecap="round" fill="none"/><path d="M46 108 Q54 96 70 91" stroke="#fff" stroke-opacity=".75" stroke-width="3.4" stroke-linecap="round" fill="none"/><path d="M74 52 V72" stroke="#fff" stroke-opacity=".5" stroke-width="3" stroke-linecap="round"/>`;
+  const SPECKS = (() => { let r = 7, d = ''; const rnd = () => (r = (r * 9301 + 49297) % 233280) / 233280; for (let k = 0; k < 26; k++) d += `<circle cx="${(40 + rnd() * 120).toFixed(0)}" cy="${(250 + rnd() * 92).toFixed(0)}" r="${(.7 + rnd() * 1.3).toFixed(1)}"/>`; return `<g fill="#3a2608" opacity=".55">${d}</g>`; })();
+  const FACE = '<g data-face><g data-eyes><ellipse cx="72" cy="214" rx="14" ry="18" fill="#141414"/><ellipse cx="128" cy="214" rx="14" ry="18" fill="#141414"/><g data-pupils fill="#fff"><circle cx="77" cy="207" r="5.5"/><circle cx="133" cy="207" r="5.5"/><circle cx="68" cy="222" r="2.4"/><circle cx="124" cy="222" r="2.4"/></g></g><ellipse cx="50" cy="246" rx="11" ry="7" fill="#ff7a8a" opacity=".8"/><ellipse cx="150" cy="246" rx="11" ry="7" fill="#ff7a8a" opacity=".8"/><path data-mouth d="M84 246 Q100 264 116 246" fill="#141414" stroke="#141414" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></g>';
   const ARMS = '<path data-arml d="M32 236 Q10 246 6 226" fill="none" stroke="#141414" stroke-width="8" stroke-linecap="round"/><path data-armr d="M168 236 Q192 226 194 200" fill="none" stroke="#141414" stroke-width="8" stroke-linecap="round"/>';
-  const bottle = (f, opt = {}) => { const id = 'b' + (++uid), lv = opt.level == null ? 104 : opt.level, lab = opt.label === undefined ? 'mark' : opt.label;
-    let drops = ''; if (opt.drops) { let r = (uid * 7919) % 233280; const rnd = () => (r = (r * 9301 + 49297) % 233280) / 233280; for (let k = 0; k < 16; k++) drops += `<circle cx="${(42 + rnd() * 116).toFixed(0)}" cy="${(150 + rnd() * 190).toFixed(0)}" r="${(1.3 + rnd() * 2.6).toFixed(1)}"/>`; }
+  const bottle = (f, opt = {}) => { const id = 'b' + (++uid), lv = opt.level == null ? 58 : opt.level, lab = opt.label === undefined ? 'mark' : opt.label;
+    let drops = ''; if (opt.drops) { let r = (uid * 7919) % 233280; const rnd = () => (r = (r * 9301 + 49297) % 233280) / 233280; for (let k = 0; k < 18; k++) drops += `<circle cx="${(40 + rnd() * 120).toFixed(0)}" cy="${(130 + rnd() * 210).toFixed(0)}" r="${(1.2 + rnd() * 2.4).toFixed(1)}"/>`; }
     const inner = lab === 'flavor' ? flavorLabel(f) : lab === 'mark' ? markLabel() : '';
-    return `<svg ${opt.standalone ? 'xmlns="http://www.w3.org/2000/svg" ' : ''}viewBox="${opt.arms ? '-12 0 224 360' : '0 0 200 360'}" aria-hidden="true">${opt.standalone ? '<defs>' + SHARED + '</defs>' : ''}<defs><clipPath id="${id}"><path d="${BODY}"/></clipPath><linearGradient id="${id}g" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="${f.c}"/><stop offset="1" stop-color="${f.c2}"/></linearGradient></defs>${opt.arms ? ARMS : ''}
-      <path d="${BODY}" fill="rgba(255,255,255,.5)"/>
-      <g clip-path="url(#${id})"><path d="M0 ${lv} Q50 ${lv - 4} 100 ${lv} T200 ${lv} V360 H0Z" fill="url(#${id}g)" data-bliq/><rect x="30" y="60" width="140" height="300" fill="url(#gShade)"/><ellipse cx="100" cy="352" rx="70" ry="20" fill="url(#gBase)"/>${inner}${opt.face ? FACE : ''}<g fill="#fff" opacity=".6">${drops}</g></g>
-      <path d="${BODY}" fill="none" stroke="#141414" stroke-width="${opt.sw || 4}"/>
-      <path d="M44 172 C41 220 41 280 46 320" stroke="#fff" stroke-opacity=".85" stroke-width="8" stroke-linecap="round" fill="none"/><path d="M157 182 C159 220 159 260 157 294" stroke="#fff" stroke-opacity=".45" stroke-width="5" stroke-linecap="round" fill="none"/><path d="M58 132 Q70 122 84 120" stroke="#fff" stroke-opacity=".7" stroke-width="5" stroke-linecap="round" fill="none"/><path d="M36 338 Q100 352 164 338" stroke="#fff" stroke-opacity=".5" stroke-width="3" fill="none"/>
-      <rect x="74" y="72" width="52" height="10" rx="3" fill="rgba(255,255,255,.5)" stroke="#141414" stroke-width="3"/>${CAP()}</svg>`; };
+    return `<svg ${opt.standalone ? 'xmlns="http://www.w3.org/2000/svg" ' : ''}viewBox="${opt.arms ? '-12 0 224 360' : '0 0 200 360'}" aria-hidden="true">${opt.standalone ? '<defs>' + SHARED + '</defs>' : ''}<defs><clipPath id="${id}"><path d="${BODY_IN}"/></clipPath><linearGradient id="${id}g" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="${f.c}"/><stop offset="1" stop-color="${f.c2}"/></linearGradient></defs>${opt.arms ? ARMS : ''}
+      <path d="${BODY}" fill="rgba(255,255,255,.4)"/>
+      <g clip-path="url(#${id})"><path d="M0 ${lv} Q50 ${lv - 3} 100 ${lv} T200 ${lv} V360 H0Z" fill="url(#${id}g)" data-bliq/><path d="M0 ${lv} Q50 ${lv - 3} 100 ${lv} T200 ${lv}" fill="none" stroke="#fff6c8" stroke-opacity=".7" stroke-width="2.5"/>${SPECKS}<rect x="30" y="30" width="140" height="330" fill="url(#gShade)"/><g fill="#fff" opacity=".42">${drops}</g></g>
+      ${inner}${opt.face ? FACE : ''}${GLASS_FRONT(opt.sw || 2.2)}${capSVG(id)}</svg>`; };
+
+  /* =============================================================
+     POUR ENGINE. Every bottle that pours on the page uses this.
+     The juice is drawn in world space, so its surface stays level
+     however the bottle tips (a row of springs makes it slosh). The
+     level comes from volume: the body outline is a polygon, and the
+     surface sits where the area under it equals what's left. Juice
+     only leaves once the mouth dips below that surface, at a rate
+     set by how deep it is, and the stream is a chain of droplets
+     thrown from the mouth that fall under gravity until they land
+     on whatever is catching them.
+     ============================================================= */
+  const SVGNS = 'http://www.w3.org/2000/svg';
+  let POLY = null, PAREA = 1;
+  const polyArea = pts => { let s = 0; for (let i = 0, n = pts.length; i < n; i++) { const a = pts[i], b = pts[(i + 1) % n]; s += a[0] * b[1] - b[0] * a[1]; } return Math.abs(s / 2); };
+  const initPoly = () => { if (POLY) return; const sv = document.createElementNS(SVGNS, 'svg'), pe = document.createElementNS(SVGNS, 'path'); sv.style.cssText = 'position:absolute;width:0;height:0'; pe.setAttribute('d', BODY_IN); sv.appendChild(pe); document.body.appendChild(sv); const L = pe.getTotalLength(); POLY = Array.from({ length: 96 }, (_, i) => { const q = pe.getPointAtLength(L * i / 96); return [q.x, q.y]; }); sv.remove(); PAREA = polyArea(POLY); };
+  const rotPt = (x, y, a, cx, cy) => { const r = a * Math.PI / 180, c = Math.cos(r), s = Math.sin(r), dx = x - cx, dy = y - cy; return [cx + dx * c - dy * s, cy + dx * s + dy * c]; };
+  const areaBelow = (pts, y0) => { const out = []; for (let i = 0, n = pts.length; i < n; i++) { const a = pts[i], b = pts[(i + 1) % n], ain = a[1] >= y0, bin = b[1] >= y0; if (ain) out.push(a); if (ain !== bin) { const t = (y0 - a[1]) / (b[1] - a[1]); out.push([a[0] + (b[0] - a[0]) * t, y0]); } } return out.length > 2 ? polyArea(out) : 0; };
+  const surfaceY = (fill, a, cx, cy) => { initPoly(); const pts = POLY.map(p => rotPt(p[0], p[1], a, cx, cy)); let lo = 1e9, hi = -1e9; pts.forEach(p => { lo = Math.min(lo, p[1]); hi = Math.max(hi, p[1]); }); if (fill <= 0) return hi + 2; if (fill >= 1) return lo; const want = fill * PAREA; for (let k = 0; k < 22; k++) { const m = (lo + hi) / 2; if (areaBelow(pts, m) > want) lo = m; else hi = m; } return (lo + hi) / 2; };
+  /* a pourable bottle inside any <g>. o.pivot: rotation point; o.dark: on a dark background */
+  const makeRig = (g, f, o = {}) => {
+    const id = 'r' + (++uid), P = o.pivot || [100, 200], NS = 26, SX0 = -260, SX1 = 460, SDX = (SX1 - SX0) / (NS - 1);
+    g.insertAdjacentHTML('beforeend', `<defs><clipPath id="${id}i"><path d="${BODY_IN}"/></clipPath><linearGradient id="${id}g" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="${f.c}" data-c1/><stop offset="1" stop-color="${f.c2}" data-c2/></linearGradient></defs>
+      <g data-rot><path d="${BODY}" fill="rgba(255,255,255,${o.dark ? .08 : .4})"/><g clip-path="url(#${id}i)"><g data-world><path data-liq fill="url(#${id}g)"/><path data-surf fill="none" stroke="#fff6c8" stroke-opacity=".8" stroke-width="3" stroke-linecap="round"/><g data-pulp fill="#3a2608" opacity=".6"></g></g><rect x="20" y="20" width="160" height="340" fill="url(#gShade)"/><g data-cdrops fill="#fff" opacity=".6"></g></g><g data-label></g>${GLASS_FRONT(o.sw || 2.4, o.dark)}${capSVG(id)}</g>
+      <path data-stream fill="none" stroke="${f.c2}" stroke-linecap="round" stroke-linejoin="round" stroke-width="7"/>`);
+    const q = s => g.querySelector(s), rot = q('[data-rot]'), world = q('[data-world]'), liq = q('[data-liq]'), surfEl = q('[data-surf]'), streamEl = q('[data-stream]'), cap = q('[data-cap]'), ribs = q('[data-ribs]'), label = q('[data-label]');
+    const S = { a: 0, tx: 0, ty: 0, fill: o.fill == null ? .95 : o.fill, open: false, flow: 0, pa: 0, rate: o.rate || .07, f };
+    const hs = new Float32Array(NS), vs = new Float32Array(NS), parts = []; let seg = 0, flowing = false, surf = 0;
+    const pulp = Array.from({ length: 14 }, () => ({ x: 40 + Math.random() * 120, y: 200 + Math.random() * 140, r: .8 + Math.random() * 1.6, v: 8 + Math.random() * 20 }));
+    q('[data-pulp]').innerHTML = pulp.map(() => '<circle/>').join(''); const pulpEls = [...q('[data-pulp]').children];
+    const setFlavor = nf => { S.f = nf; q('[data-c1]').setAttribute('stop-color', nf.c); q('[data-c2]').setAttribute('stop-color', nf.c2); streamEl.setAttribute('stroke', nf.c2); label.innerHTML = o.label === 'flavor' ? flavorLabel(nf) : o.label === false ? '' : markLabel(); };
+    setFlavor(f);
+    const mouth = () => { const m = rotPt(MOUTH[0], MOUTH[1], S.a, P[0], P[1]); return [m[0] + S.tx, m[1] + S.ty]; };
+    const splash = (amt = 14) => { for (let i = 0; i < NS; i++) vs[i] += (Math.random() - .5) * amt; };
+    const step = (dt, catchY, onCatch) => {
+      dt = Math.min(dt, .04); const av = (S.a - S.pa) / Math.max(dt, .001); S.pa = S.a;
+      const push = clamp(av, -300, 300) * .0016;
+      for (let i = 0; i < NS; i++) { const x = SX0 + i * SDX - P[0]; vs[i] += (-hs[i] * 38 + x * push * 9) * dt - vs[i] * 2.6 * dt; }
+      for (let i = 0; i < NS; i++) { const l = i ? hs[i - 1] : hs[i], r = i < NS - 1 ? hs[i + 1] : hs[i]; vs[i] += (l + r - 2 * hs[i]) * 14 * dt; }
+      for (let i = 0; i < NS; i++) { hs[i] = clamp(hs[i] + vs[i] * dt * 6, -26, 26); }
+      surf = surfaceY(S.fill, S.a, P[0], P[1]);
+      const m = mouth(), depth = m[1] - (surf + S.ty); S.flow = 0;
+      if (S.open && S.fill > .002 && depth > 0) { S.flow = Math.min(S.rate * Math.sqrt(depth), S.fill / dt); S.fill = Math.max(0, S.fill - S.flow * dt);
+        const r = S.a * Math.PI / 180, dir = [Math.sin(r), -Math.cos(r)], sp = 40 + 10 * Math.sqrt(depth);
+        if (!flowing) { seg++; flowing = true; } parts.push({ x: m[0], y: m[1], vx: dir[0] * sp, vy: dir[1] * sp, seg, vol: S.flow * dt }); }
+      else flowing = false;
+      for (let i = parts.length - 1; i >= 0; i--) { const pt = parts[i]; pt.vy += 1500 * dt; pt.x += pt.vx * dt; pt.y += pt.vy * dt; if (catchY && pt.y >= catchY(pt.x)) { onCatch && onCatch(pt); parts.splice(i, 1); } else if (pt.y > 2000) parts.splice(i, 1); }
+      pulp.forEach(p => { p.y -= p.v * dt; if (p.y < surf + 8) { p.y = 340; p.x = 40 + Math.random() * 120; } });
+    };
+    const draw = () => {
+      rot.setAttribute('transform', `translate(${S.tx.toFixed(1)} ${S.ty.toFixed(1)}) rotate(${S.a.toFixed(2)} ${P[0]} ${P[1]})`);
+      world.setAttribute('transform', `rotate(${(-S.a).toFixed(2)} ${P[0]} ${P[1]})`);
+      if (S.fill > .002) { let d = `M${SX0} 900 L${SX0} ${(surf + hs[0]).toFixed(1)}`, sl = `M${SX0} ${(surf + hs[0]).toFixed(1)}`;
+        for (let i = 1; i < NS; i++) { const x0 = SX0 + (i - 1) * SDX, x1 = SX0 + i * SDX, y0 = surf + hs[i - 1], y1 = surf + hs[i], seg2 = ` Q${x0.toFixed(1)} ${y0.toFixed(1)} ${((x0 + x1) / 2).toFixed(1)} ${((y0 + y1) / 2).toFixed(1)}`; d += seg2; sl += seg2; }
+        liq.setAttribute('d', d + ` L${SX1} 900 Z`); surfEl.setAttribute('d', sl); } else { liq.setAttribute('d', 'M0 0'); surfEl.setAttribute('d', 'M0 0'); }
+      pulp.forEach((p, k) => { const e = pulpEls[k]; e.setAttribute('cx', p.x.toFixed(1)); e.setAttribute('cy', p.y.toFixed(1)); e.setAttribute('r', p.r); });
+      let d = '', prev = null; for (const pt of parts) { d += (prev && prev.seg === pt.seg ? ' L' : ' M') + pt.x.toFixed(1) + ' ' + pt.y.toFixed(1); if (!prev || prev.seg !== pt.seg) d += ' l0 .1'; prev = pt; }
+      streamEl.setAttribute('d', d || 'M0 0'); streamEl.setAttribute('stroke-width', (3 + Math.min(1, S.flow / .5) * 6).toFixed(1));
+    };
+    // cap: twist (the ribs slide like it's turning, it rises a little each turn), then lift off
+    const twistOff = (tl, at, fly = [70, -150, 160]) => { tl.to(ribs, { x: -9.6, duration: .2, ease: 'power1.inOut', repeat: 2 }, at).to(cap, { y: -9, duration: .6, ease: 'steps(3)' }, at).to(cap, { x: fly[0], y: fly[1], rotation: fly[2], opacity: 0, svgOrigin: '100 28', duration: .5, ease: 'power2.out', onStart: () => { S.open = true; } }, at + .62); return at + .62; };
+    const twistOn = (tl, at) => { tl.set(ribs, { x: 0 }, at).fromTo(cap, { x: 0, y: -60, rotation: 0, opacity: 0 }, { y: -9, opacity: 1, duration: .32, ease: 'power2.out', onStart: () => { S.open = false; } }, at).to(ribs, { x: 9.6, duration: .2, ease: 'power1.inOut', repeat: 2 }, at + .34).to(cap, { y: 0, duration: .6, ease: 'steps(3)' }, at + .34); return at + .96; };
+    // where the falling stream crosses a given height (used to keep a glass under it)
+    const landX = y => { let best = null, bd = 1e9; for (const pt of parts) { const d = Math.abs(pt.y - y); if (d < bd) { bd = d; best = pt; } } return best && bd < 40 ? best.x : null; };
+    return { S, step, draw, mouth, splash, setFlavor, twistOff, twistOn, landX, cap, get parts() { return parts.length; } };
+  };
   const MASCOT = { c: '#ffe866', c2: '#ffcb1f' };
 
   /* ---------- split headings into letters ---------- */
@@ -1130,86 +1155,77 @@
      ingredients burst out, "Elevated." stamps down, then it refills
      with the next flavor.
      ============================================================= */
-  const hb = $('[data-hb]'), hbRot = $('[data-hbrot]'), hbWorld = $('[data-hbworld]'), hbLiq = $('[data-hbliq]'), hbSurf = $('[data-hbsurf]'), hbPulp = $('[data-hbpulp]');
+  const hb = $('[data-hb]'), hbSvg = $('[data-hbsvg]');
   const hStage = $('[data-hstage]'), hFx = $('[data-hfx]'), hRing = $('[data-hring]'), hCall = $('[data-hcall]'), hCount = $('[data-hcount]'), hShadow = $('[data-hbshadow]');
-  const CX = 100, CY = 210, N = 30, X0 = -170, X1 = 370, DX = (X1 - X0) / (N - 1);
-  const H = { a: 0, va: 0, aim: 0, level: .92, lift: 0, hold: 0, holding: false, drinking: false, manual: false, flav: 0, t: 0, px: null, touched: false };
-  const hs = new Float32Array(N), vs = new Float32Array(N);
+  const CX = 100, CY = 210;
+  const H = { a: 0, va: 0, aim: 0, lift: 0, hold: 0, holding: false, drinking: false, manual: false, flav: 0, t: 0, px: null, touched: false };
   let shots = store.get('es-shots', 0); hCount.textContent = shots;
-  const pulp = Array.from({ length: 16 }, () => ({ x: 40 + Math.random() * 120, y: 160 + Math.random() * 180, r: 1 + Math.random() * 1.8, v: .05 + Math.random() * .18 }));
-  hbPulp.innerHTML = pulp.map(() => '<circle/>').join('');
-  const pulpEls = $$('circle', hbPulp);
-  const setHeroFlavor = i => { const f = FL[i], ls = labelLines(f), y0 = 216, h = 13.4; $('[data-hbc1]').setAttribute('stop-color', f.c); $('[data-hbc2]').setAttribute('stop-color', f.c2); $('[data-hbname]').textContent = f.label;
-    $('[data-hbings]').innerHTML = ls.map((l, k) => `<text class="lb3" x="100" y="${(y0 + k * h).toFixed(1)}">${esc(l)}</text>`).join('');
-    $('[data-hbbox]').setAttribute('height', Math.max(118, 62 + ls.length * h)); $('[data-hbmark]').setAttribute('y', (y0 + ls.length * h - 4).toFixed(1)); };
-  // condensation: little drops that slide down the cold glass
-  const cdrops = Array.from({ length: 22 }, () => ({ x: 38 + Math.random() * 124, y: 150 + Math.random() * 190, r: 1.2 + Math.random() * 2.6, v: 0 }));
-  $('[data-hbdrops]').innerHTML = cdrops.map(() => '<circle/>').join(''); const cdropEls = $$('[data-hbdrops] circle');
-  setHeroFlavor(0);
-  const drawHero = () => {
-    const surf = 350 - H.level * 262; let d = `M${X0} 620 L${X0} ${(surf + hs[0]).toFixed(1)}`, s = `M${X0} ${(surf + hs[0]).toFixed(1)}`;
-    for (let i = 1; i < N; i++) { const x0 = X0 + (i - 1) * DX, x1 = X0 + i * DX, y0 = surf + hs[i - 1], y1 = surf + hs[i], mx = (x0 + x1) / 2, my = (y0 + y1) / 2; d += ` Q${x0.toFixed(1)} ${y0.toFixed(1)} ${mx.toFixed(1)} ${my.toFixed(1)}`; s += ` Q${x0.toFixed(1)} ${y0.toFixed(1)} ${mx.toFixed(1)} ${my.toFixed(1)}`; }
-    d += ` L${X1} ${(surf + hs[N - 1]).toFixed(1)} L${X1} 620 Z`;
-    hbLiq.setAttribute('d', H.level > .005 ? d : 'M0 0');
-    hbSurf.setAttribute('d', H.level > .02 ? s : 'M0 0');
-    hbRot.setAttribute('transform', `translate(0 ${(-H.lift * 40).toFixed(1)}) rotate(${H.a.toFixed(2)} ${CX} ${CY})`);
-    hbWorld.setAttribute('transform', `rotate(${(-H.a).toFixed(2)} ${CX} ${CY})`);
-    cdrops.forEach((p, k) => { const e = cdropEls[k]; e.setAttribute('cx', p.x.toFixed(1)); e.setAttribute('cy', p.y.toFixed(1)); e.setAttribute('r', p.r); });
-    pulp.forEach((p, k) => { const e = pulpEls[k]; e.setAttribute('cx', p.x.toFixed(1)); e.setAttribute('cy', p.y.toFixed(1)); e.setAttribute('r', p.r); e.setAttribute('opacity', p.y > surf + 12 ? .7 : 0); });
-    hShadow.style.transform = `scale(${(1 - H.lift * .35).toFixed(3)})`; hShadow.style.opacity = (1 - H.lift * .5).toFixed(2);
-  };
-  const stepHero = dt => {
+  const R = makeRig($('[data-hbrig]'), FL[0], { pivot: [CX, CY], label: 'flavor', fill: .95, rate: .13 });
+  const splash = a => R.splash(a);
+  // condensation on the glass: drops bead up, get heavy and run down
+  const cdrops = Array.from({ length: 18 }, () => ({ x: 38 + Math.random() * 124, y: 130 + Math.random() * 200, r: 1.2 + Math.random() * 2.4, v: 0 }));
+  const cdG = $('[data-hbrig] [data-cdrops]'); cdG.innerHTML = cdrops.map(() => '<circle/>').join(''); const cdropEls = [...cdG.children];
+  // the shot glass that catches the pour
+  const GL = { cx: -76, top: 316, fill: 0, on: false };
+  $('[data-hbglass]').innerHTML = `<g data-glass opacity="0"><g transform="translate(${GL.cx} ${GL.top})" data-glpos><clipPath id="glIn"><path d="M-27 3 L27 3 L21 60 L-21 60 Z"/></clipPath><path d="M-31 0 L31 0 L24 72 Q24 75 21 75 L-21 75 Q-24 75 -24 72 Z" fill="rgba(255,255,255,.45)"/><g clip-path="url(#glIn)"><rect x="-30" y="61" width="60" height="60" fill="${FL[0].c2}" data-glq/></g><path d="M-31 0 L31 0 L24 72 Q24 75 21 75 L-21 75 Q-24 75 -24 72 Z" fill="none" stroke="rgba(28,22,10,.6)" stroke-width="2"/><path d="M-21 60 L21 60" stroke="rgba(28,22,10,.25)" stroke-width="1.5"/><path d="M-24 8 L-19 54" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".8"/><ellipse cx="0" cy="0" rx="31" ry="3" fill="none" stroke="rgba(28,22,10,.45)" stroke-width="1.5"/></g></g>`;
+  const glassEl = $('[data-glass]'), glq = $('[data-glq]'), glPos = $('[data-glpos]');
+  const catchHero = x => GL.on && Math.abs(x - GL.cx) < 26 ? GL.top + 60 - GL.fill * 55 : 520;
+  const stepHero = (dt, real = dt) => {
     H.t += dt;
     if (!H.drinking) {
-      if (H.holding) H.hold = Math.min(1, H.hold + dt / .85); else H.hold = Math.max(0, H.hold - dt * 2.5);
+      if (H.holding) H.hold = Math.min(1, H.hold + real / .85); else H.hold = Math.max(0, H.hold - real * 2.5);
       hRing.setAttribute('stroke-dashoffset', (75.4 * (1 - H.hold)).toFixed(1));
       const sway = ANIM ? Math.sin(H.t * 1.3) * 3.5 : 0;
-      H.aim = (H.px == null ? sway : H.px * 16) - H.hold * 38;
-      H.lift = lerp(H.lift, H.hold * .9, .2);
+      H.aim = (H.px == null ? sway : H.px * 16) - H.hold * 30;
+      H.lift = lerp(H.lift, H.hold * .6, .2);
       if (H.hold >= 1) takeShot();
     }
     if (!H.manual) { const acc = (H.aim - H.a) * 60 - H.va * 9; H.va += acc * dt; H.a += H.va * dt; }
-    // slosh: angular velocity pushes the surface, springs spread it out
-    const push = clamp(H.va, -200, 200) * .0016;
-    for (let i = 0; i < N; i++) { const x = X0 + i * DX - CX; vs[i] += (-hs[i] * 38 + x * push * 9) * dt - vs[i] * 2.6 * dt; }
-    for (let pass = 0; pass < 2; pass++) for (let i = 0; i < N; i++) { const l = i ? hs[i - 1] : hs[i], r = i < N - 1 ? hs[i + 1] : hs[i]; vs[i] += (l + r - 2 * hs[i]) * 9 * dt; }
-    for (let i = 0; i < N; i++) { hs[i] += vs[i] * dt * 6; hs[i] = clamp(hs[i], -40, 40); }
-    cdrops.forEach(p => { if (p.r > 3 && Math.random() < .02) p.v = .8 + Math.random(); p.y += p.v; p.v *= .97; if (p.v < .05 && Math.random() < .003) p.r = Math.min(3.8, p.r + .3); if (p.y > 345) { p.y = 150 + Math.random() * 40; p.x = 38 + Math.random() * 124; p.r = 1.2 + Math.random() * 1.6; p.v = 0; } });
-    const surf = 350 - H.level * 262; pulp.forEach(p => { p.y -= p.v; p.x += Math.sin(H.t * 2 + p.r) * .15; if (p.y < surf + 6) { p.y = 345; p.x = 40 + Math.random() * 120; } });
-    drawHero();
+    R.S.a = H.a; R.S.ty = -H.lift * 40;
+    R.step(dt, catchHero, pt => { GL.fill = Math.min(1, GL.fill + pt.vol * 1.1); });
+    if (ANIM) cdrops.forEach((p, k) => { if (p.r > 3 && Math.random() < .015) p.v = 40 + Math.random() * 40; p.y += p.v * dt; p.v *= .97; if (p.v < 2 && Math.random() < .004) p.r = Math.min(3.6, p.r + .3); if (p.y > 340) { p.y = 130 + Math.random() * 40; p.x = 38 + Math.random() * 124; p.r = 1.2 + Math.random() * 1.4; p.v = 0; } const e = cdropEls[k]; e.setAttribute('cx', p.x.toFixed(1)); e.setAttribute('cy', p.y.toFixed(1)); e.setAttribute('r', p.r); });
+    // like a hand under the bottle: the glass slides to stay under where the stream is landing
+    if (GL.on && R.S.flow > 0) { const lx = R.landX(GL.top + 10); if (lx != null) GL.cx = lerp(GL.cx, clamp(lx, -120, -30), .12); }
+    glPos.setAttribute('transform', `translate(${GL.cx.toFixed(1)} ${GL.top})`);
+    R.draw(); glq.setAttribute('y', (61 - GL.fill * 55).toFixed(1));
+    hShadow.style.transform = `scale(${(1 - H.lift * .35).toFixed(3)})`; hShadow.style.opacity = (1 - H.lift * .5).toFixed(2);
   };
-  const splash = (amt = 14) => { for (let i = 0; i < N; i++) vs[i] += (Math.random() - .5) * amt; };
   const firstHero = () => { if (H.touched) return; H.touched = true; if (ANIM) gsap.to(hCall, { opacity: 0, y: 8, duration: .3, onComplete: () => hCall.remove() }); else hCall.remove(); };
   const msgs = ['Ginger hits different.', 'That’s the turmeric talking.', 'Okay, one more.', 'You have a shot problem.', 'Elevated. Officially.', 'Your body says thanks.'];
+  // take a shot: twist the cap off, pour into the glass, cheers, then a fresh bottle and the cap twists back on
   function takeShot() {
     if (H.drinking) return; H.drinking = true; H.holding = false; H.manual = true; firstHero();
     const f = FL[H.flav];
-    if (!ANIM) { shots++; store.set('es-shots', shots); hCount.textContent = shots; H.flav = (H.flav + 1) % FL.length; setHeroFlavor(H.flav); H.drinking = false; H.manual = false; H.hold = 0; toast(msgs[shots % msgs.length]); return; }
+    if (!ANIM) { shots++; store.set('es-shots', shots); hCount.textContent = shots; H.flav = (H.flav + 1) % FL.length; R.setFlavor(FL[H.flav]); H.drinking = false; H.manual = false; H.hold = 0; toast(msgs[shots % msgs.length]); return; }
+    GL.fill = 0; glq.setAttribute('fill', f.c2);
     const tl = gsap.timeline({ onComplete: () => { H.drinking = false; H.manual = false; H.hold = 0; H.va = 0; } });
-    tl.to(H, { a: -112, lift: 1.25, duration: .55, ease: 'power2.inOut', onUpdate: () => splash(2) })
-      .to(H, { level: 0, duration: .55, ease: 'power1.in' }, .3)
-      .add(() => { burst(f); shots++; store.set('es-shots', shots); hCount.textContent = shots; gsap.fromTo(hCount, { scale: 1.8 }, { scale: 1, duration: .5, ease: 'back.out(3)' }); }, .72)
-      .to(H, { a: 0, lift: 0, duration: .8, ease: 'elastic.out(1, .45)' }, 1.05)
-      .add(() => { H.flav = (H.flav + 1) % FL.length; setHeroFlavor(H.flav); }, 1.4)
-      .to(H, { level: .92, duration: 1.1, ease: 'power2.out', onUpdate: () => splash(3) }, 1.5);
+    tl.to(H, { a: 0, lift: .25, duration: .35, ease: 'power2.out' }, 0);
+    const t1 = R.twistOff(tl, .15, [80, -150, 150]);
+    tl.add(() => { GL.on = true; }, t1 - .3)
+      .fromTo(glassEl, { opacity: 0, x: -50, y: 20, rotation: -14, svgOrigin: `${GL.cx} ${GL.top + 70}` }, { opacity: 1, x: 0, y: 0, rotation: 0, duration: .5, ease: 'back.out(1.7)' }, t1 - .3)
+      .to(H, { a: -122, lift: .5, duration: .7, ease: 'power2.inOut' }, t1 + .05)
+      .to(H, { a: -132, duration: 1, ease: 'sine.inOut' }, t1 + .75)
+      .to(H, { a: 0, lift: 0, duration: .9, ease: 'elastic.out(1, .5)' }, t1 + 1.85)
+      .add(() => { burst(f); shots++; store.set('es-shots', shots); hCount.textContent = shots; gsap.fromTo(hCount, { scale: 1.8 }, { scale: 1, duration: .5, ease: 'back.out(3)' }); }, t1 + 2.05)
+      .to(glassEl, { y: -120, x: 40, rotation: -30, scale: 1.3, opacity: 0, svgOrigin: `${GL.cx} ${GL.top + 70}`, duration: .6, ease: 'power2.in' }, t1 + 2.0)
+      .add(() => { GL.on = false; GL.cx = -76; H.flav = (H.flav + 1) % FL.length; R.setFlavor(FL[H.flav]); }, t1 + 2.65)
+      .to(R.S, { fill: 0, duration: .15 }, t1 + 2.5)
+      .to(R.S, { fill: .95, duration: 1, ease: 'power2.out', onUpdate: () => R.splash(3) }, t1 + 2.7);
+    R.twistOn(tl, t1 + 3.3);
   }
   const burst = f => {
-    const sr = hStage.getBoundingClientRect(), svg = $('[data-hbsvg]'), pt = svg.createSVGPoint(); pt.x = 100; pt.y = 10;
-    const m = hbRot.getScreenCTM(), sp = m ? pt.matrixTransform(m) : { x: sr.left + sr.width / 2, y: sr.top + sr.height * .2 };
+    const sr = hStage.getBoundingClientRect(), pt = hbSvg.createSVGPoint(), gm = [GL.cx, GL.top - 10]; pt.x = gm[0]; pt.y = gm[1];
+    const m = hbSvg.getScreenCTM(), sp = m ? pt.matrixTransform(m) : { x: sr.left + sr.width * .3, y: sr.top + sr.height * .6 };
     const ox = sp.x - sr.left, oy = sp.y - sr.top;
-    document.documentElement.style.setProperty('--fx', (sp.x / innerWidth * 100).toFixed(1) + '%'); const fl = $('[data-flash]'); fl.style.setProperty('--fx', (sp.x / innerWidth * 100).toFixed(1) + '%'); fl.style.setProperty('--fy', (sp.y / innerHeight * 100).toFixed(1) + '%');
-    gsap.fromTo(fl, { opacity: .95 }, { opacity: 0, duration: .9, ease: 'power2.out' });
-    gsap.fromTo(hStage, { x: -6 }, { x: 0, duration: .6, ease: 'elastic.out(1.2, .2)' });
-    const parts = [];
-    f.ing.concat(f.ing).forEach((k, i) => { const e = document.createElement('div'); e.className = 'p'; e.innerHTML = ico(k); hFx.appendChild(e); parts.push(e);
-      const ang = -Math.PI / 2 + (Math.random() - .5) * 2.6, sp2 = 180 + Math.random() * 220;
+    const fl = $('[data-flash]'); fl.style.setProperty('--fx', (sp.x / innerWidth * 100).toFixed(1) + '%'); fl.style.setProperty('--fy', (sp.y / innerHeight * 100).toFixed(1) + '%');
+    gsap.fromTo(fl, { opacity: .9 }, { opacity: 0, duration: .9, ease: 'power2.out' });
+    f.ing.concat(f.ing).forEach(k => { const e = document.createElement('div'); e.className = 'p'; e.innerHTML = ico(k); hFx.appendChild(e);
+      const ang = -Math.PI / 2 + (Math.random() - .5) * 2.6, sp2 = 160 + Math.random() * 200;
       gsap.set(e, { x: ox - 23, y: oy - 23, scale: .3, rotation: Math.random() * 360 });
       gsap.to(e, { x: ox - 23 + Math.cos(ang) * sp2, duration: 1.4, ease: 'power1.out' });
       gsap.to(e, { y: oy - 23 + Math.sin(ang) * sp2 * .9, duration: .55, ease: 'power2.out', onComplete: () => gsap.to(e, { y: '+=' + (260 + Math.random() * 120), duration: .9, ease: 'power2.in' }) });
       gsap.to(e, { scale: .9 + Math.random() * .5, rotation: '+=' + (Math.random() * 540 - 270), duration: 1.4 });
       gsap.to(e, { opacity: 0, duration: .3, delay: 1.15, onComplete: () => e.remove() }); });
-    for (let i = 0; i < 16; i++) { const e = document.createElement('i'); e.className = 'd'; hFx.appendChild(e); const ang = Math.random() * Math.PI * 2, r = 60 + Math.random() * 140;
-      gsap.fromTo(e, { x: ox - 7, y: oy - 7, scale: 1 }, { x: ox - 7 + Math.cos(ang) * r, y: oy - 7 + Math.sin(ang) * r, scale: 0, duration: .8 + Math.random() * .4, ease: 'power3.out', onComplete: () => e.remove() }); }
     const st = $('[data-hstamp]'), mg = $('[data-hmsg]'); mg.textContent = msgs[shots % msgs.length];
     gsap.timeline().fromTo(st, { scale: 2.6, rotation: -24, opacity: 0 }, { scale: 1, rotation: -8, opacity: 1, duration: .45, ease: 'back.out(2.2)' })
       .fromTo(mg, { y: 12, opacity: 0 }, { y: 0, opacity: 1, duration: .35 }, .2)
@@ -1225,9 +1241,10 @@
   // orbiting ingredients around the hero bottle
   const ORB = [['ginger', 8, 22], ['orange', 80, 14], ['turmeric', 84, 58], ['pineapple', 4, 64], ['honeycomb', 70, 84], ['lemon', 18, 86]];
   hStage.insertAdjacentHTML('beforeend', ORB.map(([k, x, y]) => `<div class="orb" style="left:${x}%;top:${y}%" data-orb data-fruit="${k}">${ico(k)}</div>`).join(''));
-  drawHero();
+  R.step(0); R.draw();
   let heroOn = true; new IntersectionObserver(es => es.forEach(e => heroOn = e.isIntersecting)).observe(hStage);
-  if (HAS_G) gsap.ticker.add((t, dms) => { if (heroOn) stepHero(Math.min(dms, 40) / 1000); });
+  // the hold ring runs on the real clock so it takes .85 s even on a slow phone
+  let hLast = performance.now(); if (HAS_G) gsap.ticker.add(() => { const n = performance.now(), real = Math.min(.25, (n - hLast) / 1000); hLast = n; if (heroOn) stepHero(Math.min(real, .04), real); });
   else { let last = performance.now(); const raf = n => { stepHero(Math.min(n - last, 40) / 1000); last = n; requestAnimationFrame(raf); }; requestAnimationFrame(raf); }
 
   /* =============================================================
@@ -1237,19 +1254,19 @@
      ============================================================= */
   const lu = $('[data-lineup]'), luB = $('[data-lbottle]'), orbit = $('[data-orbit]'), shelf = $('[data-shelf]'), lReveal = $('[data-lreveal]');
   shelf.insertAdjacentHTML('beforeend', FL.map(f => `<button class="pick" type="button" data-pick="${f.k}" aria-pressed="false" aria-label="${esc(f.n)}">${bottle(f, { label: 'flavor' })}<em>${esc(f.short)}</em></button>`).join(''));
-  let luCur = null, luTouched = false, luDemo = null;
+  let luCur = null, luTouched = false, luDemo = null, orbitEls = [];
   const fillLineup = f => { $('[data-lname]').textContent = f.n; $('[data-lkick]').textContent = f.kick; $('[data-lben]').textContent = f.ben; $('[data-ldesc]').textContent = f.d;
     $('[data-lings]').innerHTML = f.ing.map(k => `<span data-poppable data-fruit="${k}">${ico(k)}${esc(CONFIG.ingredients[k])}</span>`).join('');
     orbit.innerHTML = f.ing.map((k, i) => `<div class="o" style="--i:${i}" data-fruit="${k}">${ico(k)}</div>`).join('');
-    const os = $$('.o', orbit), R = () => orbit.clientWidth / 2; os.forEach((o, i) => { const a = i / os.length * Math.PI * 2; o.style.transform = `translate(${(Math.cos(a) * R()).toFixed(1)}px, ${(Math.sin(a) * R()).toFixed(1)}px)`; });
+    const os = $$('.o', orbit), R = () => orbit.clientWidth / 2; orbitEls = os; os.forEach((o, i) => { const a = i / os.length * Math.PI * 2; o.style.transform = `translate(${(Math.cos(a) * R()).toFixed(1)}px, ${(Math.sin(a) * R()).toFixed(1)}px)`; });
     $('[data-lphotoimg]').src = f.photo; $('[data-lphotocap]').textContent = f.pcap; };
   const setLineup = (k, src) => {
     if (k === luCur) return; const f = FK[k], first = luCur == null; luCur = k;
     $$('[data-pick]').forEach(b => b.setAttribute('aria-pressed', b.dataset.pick === k));
     if (!ANIM || first) { lu.style.setProperty('--fbg', f.bg); luB.innerHTML = bottle(f, { label: 'flavor', drops: true }); fillLineup(f); return; }
     const lr = lu.getBoundingClientRect(), br = src ? src.getBoundingClientRect() : luB.getBoundingClientRect(), cx = br.left + br.width / 2 - lr.left, cy = br.top + br.height / 2 - lr.top;
-    lReveal.style.background = f.bg;
-    gsap.fromTo(lReveal, { clipPath: `circle(0px at ${cx}px ${cy}px)` }, { clipPath: `circle(${Math.hypot(lr.width, lr.height)}px at ${cx}px ${cy}px)`, duration: .9, ease: 'power3.inOut', onComplete: () => { lu.style.setProperty('--fbg', f.bg); gsap.set(lReveal, { clipPath: 'circle(0px at 50% 50%)' }); } });
+    const dot = lReveal.firstElementChild; dot.style.background = f.bg;
+    gsap.fromTo(dot, { x: cx, y: cy, scale: 0 }, { scale: Math.hypot(lr.width, lr.height) / 100 + .2, duration: .9, ease: 'power3.inOut', onComplete: () => { lu.style.setProperty('--fbg', f.bg); gsap.set(dot, { scale: 0 }); } });
     gsap.timeline().to(luB, { scaleX: 0, rotation: -8, duration: .25, ease: 'power2.in', onComplete: () => { luB.innerHTML = bottle(f, { label: 'flavor', drops: true }); fillLineup(f); animIn(); } }).to(luB, { scaleX: 1, rotation: 0, duration: .55, ease: 'back.out(2)' });
     if (src) gsap.fromTo(src.querySelector('svg'), { y: 0, scaleY: 1 }, { keyframes: [{ y: 6, scaleY: .88, duration: .12 }, { y: -38, scaleY: 1.06, duration: .28, ease: 'power2.out' }, { y: 0, scaleY: 1, duration: .45, ease: 'bounce.out' }], transformOrigin: '50% 100%' });
   };
@@ -1360,18 +1377,20 @@
      ============================================================= */
   const PU = CONFIG.popups;
   // every pin is a little bottle with its number printed on it; tap one and it lights up
-  const pinBottle = (label, next) => `<g transform="translate(-14 -54) scale(.14)"><path d="${BODY}" class="pliq" fill="${next ? '#ffb23d' : '#ffe45c'}" stroke="#121110" stroke-width="13"/><path d="M48 176 C46 220 46 280 50 316" stroke="#fff" stroke-opacity=".8" stroke-width="16" stroke-linecap="round" fill="none"/><rect x="66" y="4" width="68" height="72" rx="10" fill="#121110"/><text class="pnum" x="100" y="290" text-anchor="middle" style="font:400 150px Anton, Impact, sans-serif" fill="#121110">${label}</text></g>`;
+  const pinBottle = (label, next) => `<g transform="translate(-14 -54) scale(.14)"><path d="${BODY}" class="pliq" fill="${next ? '#ffb23d' : '#ffe45c'}" stroke="#121110" stroke-width="13"/><path d="M48 176 C46 220 46 280 50 316" stroke="#fff" stroke-opacity=".8" stroke-width="16" stroke-linecap="round" fill="none"/><rect x="62" y="6" width="76" height="44" rx="6" fill="#121110"/><text class="pnum" x="100" y="292" text-anchor="middle" style="font:400 150px Anton, Impact, sans-serif" fill="#121110">${label}</text></g>`;
   $('[data-map] svg').insertAdjacentHTML('afterbegin', '<defs><radialGradient id="pinGlow"><stop offset="0" stop-color="#ffe45c" stop-opacity=".95"/><stop offset=".55" stop-color="#ffd21f" stop-opacity=".45"/><stop offset="1" stop-color="#ffd21f" stop-opacity="0"/></radialGradient></defs>');
   const NOW = Date.now(), isUp = p => !!p.end && Date.parse(p.end) > NOW;
   const firstUp = PU.findIndex(isUp);
   $('[data-pins]').innerHTML = PU.map((p, i) => `<g class="pin" data-pin="${i}" transform="translate(${p.x} ${p.y})" role="button" aria-label="${esc(p.n)}, ${esc(p.city)}"><g data-pinin><circle class="hi" cy="-28" r="40" fill="url(#pinGlow)"/><g class="rays" data-rays>${Array.from({ length: 10 }, (_, k) => { const a = k / 10 * Math.PI * 2; return `<path d="M${(Math.cos(a) * 32).toFixed(1)} ${(-28 + Math.sin(a) * 32).toFixed(1)} L${(Math.cos(a) * 42).toFixed(1)} ${(-28 + Math.sin(a) * 42).toFixed(1)}" stroke="#f29a0c" stroke-width="3.5" stroke-linecap="round"/>`; }).join('')}</g><ellipse cx="0" cy="0" rx="13" ry="4" fill="rgba(18,17,16,.25)"/>${pinBottle(i + 1, isUp(p))}</g>${p.nolabel ? '' : `<text class="city" y="16">${esc(p.city)}</text>`}</g>`).join('');
   const routeD = PU.map((p, i) => (i ? 'L' : 'M') + p.x + ' ' + (p.y - 20)).join(' '); $('[data-route]').setAttribute('d', routeD); $('[data-routemask]').setAttribute('d', routeD);
-  const listBottle = (n, up) => `<svg viewBox="0 -4 200 368" aria-hidden="true"><path d="${BODY}" fill="${up ? '#ffb23d' : '#ffe45c'}" stroke="#121110" stroke-width="12"/><path d="M48 176 C46 220 46 280 50 316" stroke="#fff" stroke-opacity=".8" stroke-width="14" stroke-linecap="round" fill="none"/><rect x="66" y="2" width="68" height="74" rx="10" fill="#121110"/><text x="100" y="296" text-anchor="middle" style="font:400 150px Anton, Impact, sans-serif" fill="#121110">${n}</text></svg>`;
+  const listBottle = (n, up) => `<svg viewBox="0 -4 200 368" aria-hidden="true"><path d="${BODY}" fill="${up ? '#ffb23d' : '#ffe45c'}" stroke="#121110" stroke-width="12"/><path d="M48 176 C46 220 46 280 50 316" stroke="#fff" stroke-opacity=".8" stroke-width="14" stroke-linecap="round" fill="none"/><rect x="62" y="6" width="76" height="44" rx="6" fill="#121110"/><text x="100" y="294" text-anchor="middle" style="font:400 150px Anton, Impact, sans-serif" fill="#121110">${n}</text></svg>`;
   const poBtn = (p, i) => `<button type="button" class="po${isUp(p) ? ' up' : ''}" data-po="${i}"><span class="n">${listBottle(i + 1, isUp(p))}</span><span><b>${esc(p.n)}</b><small>${isUp(p) ? `<span class="when">${esc(p.date)}</span>` : ''}${esc(p.city)} · ${esc(p.t)}</small></span></button>`;
   const upIdx = PU.map((p, i) => i).filter(i => isUp(PU[i])), pastIdx = PU.map((p, i) => i).filter(i => !isUp(PU[i])).reverse();
   $('[data-polist]').innerHTML = (upIdx.length ? '<p class="po-group">Coming up</p>' + upIdx.map(i => poBtn(PU[i], i)).join('') : '') + '<p class="po-group">Past sips</p>' + pastIdx.map(i => poBtn(PU[i], i)).join('');
+  let rayTw = null;
   const hiPin = (i, big) => { $$('[data-pin]').forEach(p => p.classList.toggle('on', +p.dataset.pin === i)); $$('[data-po]').forEach(p => p.classList.toggle('on', +p.dataset.po === i));
     if (!ANIM || i == null) return; gsap.fromTo(`[data-pin="${i}"] [data-pinin]`, { y: 0, rotation: 0 }, { keyframes: [{ y: -18, rotation: -10, duration: .2, ease: 'power2.out' }, { y: 0, rotation: 0, duration: .55, ease: 'bounce.out' }] });
+    if (rayTw) rayTw.kill(); rayTw = gsap.fromTo(`[data-pin="${i}"] [data-rays]`, { rotation: 0 }, { rotation: 360, svgOrigin: '0 -28', duration: 12, ease: 'none', repeat: -1 });
     if (big) { gsap.fromTo(`[data-pin="${i}"] .hi`, { attr: { r: 20 } }, { attr: { r: 40 }, duration: .6, ease: 'elastic.out(1, .4)' }); gsap.fromTo(`[data-pin="${i}"] .rays path`, { opacity: 0 }, { opacity: 1, duration: .5, stagger: .03 }); } };
   $('[data-polist]').addEventListener('pointerover', e => { const b = e.target.closest('[data-po]'); if (b && FINE) hiPin(+b.dataset.po); });
   $('[data-polist]').addEventListener('click', e => { const b = e.target.closest('[data-po]'); if (b) { hiPin(+b.dataset.po, true); showEvent(+b.dataset.po); } });
@@ -1468,7 +1487,8 @@
      and it pops into juice, then grows back.
      ============================================================= */
   const FLOATS = { '.lineup': [['pineapple', 3, 12, 62], ['honeycomb', 97, 34, 56], ['lemon', 95, 84, 46]], '.bens': [['orange', 2, 28, 58], ['honeycomb', 4, 70, 54], ['ginger', 97, 56, 56]], '.slots': [['cayenne', 97, 10, 52], ['lemon', 2, 92, 48]], '.cooler-sec': [['lemon', 3, 16, 50], ['pineapple', 97, 12, 60]], '.problem': [['honeycomb', 96, 8, 58], ['lemon', 3, 92, 50]], '.cheers': [['honey', 97, 6, 50], ['orange', 2, 46, 46]], '.feed': [['honeycomb', 97, 10, 56], ['pineapple', 2, 76, 52]], '.pops': [['turmeric', 2, 6, 52], ['lemon', 97, 94, 46]], '.find': [['ginger', 97, 8, 52], ['honeycomb', 2, 88, 56]], '.order': [['orange', 97, 4, 52], ['honeycomb', 1, 36, 50], ['pineapple', 97, 66, 56]], 'footer': [['pineapple', 8, 22, 56], ['lemon', 90, 30, 48], ['honeycomb', 12, 72, 54], ['orange', 86, 74, 48]] };
-  Object.entries(FLOATS).forEach(([sel, list]) => { const sec = $(sel); if (!sec) return; sec.classList.add('ffhost'); list.forEach(([k, x, y, sz]) => sec.insertAdjacentHTML('beforeend', `<span class="ff" style="left:${x}%;top:${y}%;--s:${sz}px" data-fruit="${k}" data-ff aria-hidden="true">${ico(k)}</span>`)); });
+  const PHONE = innerWidth < 760;
+  Object.entries(FLOATS).forEach(([sel, list]) => { const sec = $(sel); if (!sec) return; sec.classList.add('ffhost'); list.forEach(([k, x, y, sz], n) => { if (PHONE && n > 1) return; if (PHONE) x = x < 50 ? 0 : 100; sec.insertAdjacentHTML('beforeend', `<span class="ff" style="left:${x}%;top:${y}%;--s:${sz}px" data-fruit="${k}" data-ff aria-hidden="true">${ico(k)}</span>`); }); });
   const popFx = $('[data-popfx]'), POPW = ['POP!', 'SPLASH!', 'JUICY!', 'POP!', 'FRESH!'];
   let pops = 0;
   const popFruit = (el, x, y) => {
@@ -1511,8 +1531,9 @@
   const addDrop = (k, x, y, vx, vy) => { if (drops.length > 70) drops.shift(); drops.push({ k, x, y, vx, vy, a: Math.random() * 6.28, va: (Math.random() - .5) * .2, s: 30 + Math.random() * 26 }); };
   function rainBurst(list, x, y) { if (!ANIM) return; for (let i = 0; i < 14; i++) { const k = list[i % list.length], a = -Math.PI / 2 + (Math.random() - .5) * 2.4, sp = 8 + Math.random() * 10; addDrop(k, x, y, Math.cos(a) * sp, Math.sin(a) * sp); } }
   let rainVel = 0;
-  const tickRain = () => { if (!drops.length && Math.abs(rainVel) < 2800) { rx.setTransform(1, 0, 0, 1, 0, 0); if (rc._dirty) { rx.clearRect(0, 0, rc.width, rc.height); rc._dirty = false; } return; }
-    if (Math.abs(rainVel) > 2800 && Math.random() < .3) addDrop(keys[Math.floor(Math.random() * keys.length)], Math.random() * RW, -40, (Math.random() - .5) * 2, 2 + Math.random() * 3);
+  const RAIN_V = FINE ? 2800 : 5200;
+  const tickRain = () => { if (!drops.length && Math.abs(rainVel) < RAIN_V) { rx.setTransform(1, 0, 0, 1, 0, 0); if (rc._dirty) { rx.clearRect(0, 0, rc.width, rc.height); rc._dirty = false; } return; }
+    if (Math.abs(rainVel) > RAIN_V && Math.random() < (FINE ? .3 : .15)) addDrop(keys[Math.floor(Math.random() * keys.length)], Math.random() * RW, -40, (Math.random() - .5) * 2, 2 + Math.random() * 3);
     rx.setTransform(rdpr, 0, 0, rdpr, 0, 0); rx.clearRect(0, 0, RW, RH); rc._dirty = true;
     for (let i = drops.length - 1; i >= 0; i--) { const d = drops[i]; d.vy += .45; d.vx *= .99; d.x += d.vx; d.y += d.vy; d.a += d.va; if (d.y > RH + 60) { drops.splice(i, 1); continue; } const im = SPRITES[d.k]; if (!im.complete) continue; rx.save(); rx.translate(d.x, d.y); rx.rotate(d.a); rx.drawImage(im, -d.s / 2, -d.s / 2, d.s, d.s); rx.restore(); } };
 
@@ -1523,7 +1544,7 @@
 
   /* ---------- progress bottle in the header ---------- */
   const pw = $('[data-pwave]'); let pT = 0;
-  const drawProg = p => { const y = 354 - p * 274; let d = `M0 400 L0 ${y}`; for (let x = 0; x <= 200; x += 20) d += ` L${x} ${(y + Math.sin(x / 24 + pT) * 8).toFixed(1)}`; pw.setAttribute('d', d + ' L200 400 Z'); };
+  const drawProg = p => { const y = 352 - p * 300; let d = `M0 400 L0 ${y}`; for (let x = 0; x <= 200; x += 20) d += ` L${x} ${(y + Math.sin(x / 24 + pT) * 8).toFixed(1)}`; pw.setAttribute('d', d + ' L200 400 Z'); };
   $('[data-prog]').addEventListener('click', () => scrollTo({ top: 0, behavior: RM ? 'auto' : 'smooth' }));
 
   const liqEl = $('[data-liq]'), LQ = { f: 1.1, x: 0 };
@@ -1559,20 +1580,28 @@
   // the header mascot blinks every few seconds
   (function blink() { gsap.fromTo('[data-peyes]', { scaleY: 1 }, { scaleY: .1, svgOrigin: '100 214', duration: .08, yoyo: true, repeat: 1, ease: 'power1.in' }); gsap.delayedCall(2.4 + Math.random() * 3, blink); })();
   $('[data-prog]').addEventListener('pointerenter', () => gsap.fromTo('[data-pcap]', { y: 0 }, { keyframes: [{ y: -18, duration: .15 }, { y: 0, duration: .4, ease: 'bounce.out' }] }));
-  gsap.ticker.add((t, dms) => { vel *= .9; rainVel = vel; tickRain();
-    const sp = 1.1 + Math.min(14, Math.abs(vel) / 260); ribX -= sp * (vel < -40 ? -1 : 1); if (ribW) { if (ribX <= -ribW) ribX += ribW; if (ribX > 0) ribX -= ribW; } ra.style.transform = `translate3d(${ribX.toFixed(1)}px,0,0)`; rb.style.transform = `translate3d(${(-ribW - ribX).toFixed(1)}px,0,0)`;
-    LQ.x = (LQ.x + 1.3) % 120; liqEl.style.setProperty('--wx', LQ.x.toFixed(1) + 'px'); liqEl.style.setProperty('--wyp', (LQ.f * liqEl.offsetHeight - 12).toFixed(1) + 'px');
-    pT += .08; const max = document.documentElement.scrollHeight - innerHeight; drawProg(max > 0 ? scrollY / max : 0);
-    progLean = lerp(progLean, clamp(-vel / 90, -24, 24), .12); progEl.style.transform = `rotate(${progLean.toFixed(2)}deg)`; pupils.forEach(pp => pp.style.transform = `translateY(${clamp(vel / 300, -4, 6).toFixed(1)}px)`);
-    const sk = clamp(vel / 140, -16, 16); signWords.forEach((w, i) => { w._s = lerp(w._s || 0, sk * (1 - i * .18), .12 + i * .03); w.style.transform = `skewX(${(-w._s).toFixed(2)}deg) scaleY(${(1 + Math.abs(w._s) / 60).toFixed(3)})`; }); });
+  // one ticker for the ambient stuff. Nothing in here reads layout, and each piece only runs while it's on screen.
+  const VIS = {}; const watch = (el, k) => el && new IntersectionObserver(es => es.forEach(e => { VIS[k] = e.isIntersecting; }), { rootMargin: '120px' }).observe(el);
+  watch($('.ribbons'), 'rib'); watch($('.hero'), 'hero'); watch($('[data-problem]'), 'sign'); watch(lu, 'lu');
+  let liqH = liqEl.offsetHeight, maxS = 1; const measure = () => { liqH = liqEl.offsetHeight; maxS = Math.max(1, document.documentElement.scrollHeight - innerHeight); }; measure(); addEventListener('resize', measure); ScrollTrigger.addEventListener('refresh', measure);
+  let frame = 0, leanSet = 0, pupSet = 0, progSet = -1;
+  gsap.ticker.add((t, dms) => { frame++; vel *= .9; rainVel = vel; tickRain();
+    if (VIS.rib) { const sp = 1.1 + Math.min(14, Math.abs(vel) / 260); ribX -= sp * (vel < -40 ? -1 : 1); if (ribW) { if (ribX <= -ribW) ribX += ribW; if (ribX > 0) ribX -= ribW; } ra.style.transform = `translate3d(${ribX.toFixed(1)}px,0,0)`; rb.style.transform = `translate3d(${(-ribW - ribX).toFixed(1)}px,0,0)`; }
+    if (VIS.hero) { LQ.x = (LQ.x + 1.3) % 120; liqEl.style.setProperty('--wx', LQ.x.toFixed(1) + 'px'); liqEl.style.setProperty('--wyp', (LQ.f * liqH - 12).toFixed(1) + 'px'); }
+    pT += .08; const pr = scrollY / maxS; if (frame % 2 === 0 || Math.abs(pr - progSet) > .002) { drawProg(clamp(pr, 0, 1)); progSet = pr; }
+    progLean = lerp(progLean, clamp(-vel / 90, -24, 24), .12); if (Math.abs(progLean - leanSet) > .05) { progEl.style.transform = `rotate(${progLean.toFixed(2)}deg)`; leanSet = progLean; }
+    const pup = clamp(vel / 300, -4, 6); if (Math.abs(pup - pupSet) > .1) { pupils.forEach(pp => pp.style.transform = `translateY(${pup.toFixed(1)}px)`); pupSet = pup; }
+    if (VIS.sign) { const sk = clamp(vel / 140, -16, 16); signWords.forEach((w, i) => { w._s = lerp(w._s || 0, sk * (1 - i * .18), .12 + i * .03); w.style.transform = `skewX(${(-w._s).toFixed(2)}deg) scaleY(${(1 + Math.abs(w._s) / 60).toFixed(3)})`; }); } });
 
   /* =============================================================
      LOADER: the bottle fills to 100, the cap twists off, juice
      floods the screen, then drains away to reveal the hero.
      ============================================================= */
-  const loader = $('[data-loader]'), lw = $('[data-lwave]'), lp = $('[data-lpct]'), LO = { p: 0, t: 0 };
-  const drawL = () => { if (LO.pour) { const y = 60 + LO.p / 100 * 294; let d = `M0 0 L0 ${y}`; for (let x = 0; x <= 200; x += 10) d += ` L${x} ${(y + Math.sin(x / 22 + LO.t) * 5).toFixed(1)}`; lw.setAttribute('d', d + ' L200 0 Z'); return; } const y = 354 - LO.p / 100 * 272; let d = `M0 380 L0 ${y}`; for (let x = 0; x <= 200; x += 10) d += ` L${x} ${(y + Math.sin(x / 22 + LO.t) * 5).toFixed(1)}`; lw.setAttribute('d', d + ' L200 380 Z'); };
-  const lTick = () => { LO.t += .25; drawL(); }; gsap.ticker.add(lTick);
+  const loader = $('[data-loader]'), lp = $('[data-lpct]');
+  const LR = makeRig($('[data-lrig]'), FL[0], { pivot: [100, 200], label: 'mark', fill: 0, dark: true, rate: .1 });
+  const LG = { cx: 286, top: 330, fill: 0 }, lgq = $('[data-lgliq]');
+  const lTick = (t, dms) => { LR.step(Math.min(dms, 40) / 1000, x => Math.abs(x - LG.cx) < 26 ? LG.top + 60 - LG.fill * 55 : 520, pt => { LG.fill = Math.min(1, LG.fill + pt.vol * 1.25); }); LR.draw(); lgq.setAttribute('y', (61 - LG.fill * 55).toFixed(1)); };
+  gsap.ticker.add(lTick);
   gsap.set('.hero h1 .row > span', { yPercent: 110 }); gsap.set('[data-in]', { opacity: 0, y: 26 }); gsap.set(hb, { scale: .4, rotation: -30, opacity: 0 }); gsap.set('[data-orb]', { scale: 0 }); gsap.set('[data-ring]', { scale: .6, opacity: 0 }); gsap.set(hCall, { opacity: 0, y: 10 });
   const intro = gsap.timeline({ paused: true })
     .to('.hero h1 .row > span', { yPercent: 0, duration: 1, ease: 'back.out(1.5)', stagger: .1 }, 0)
@@ -1582,28 +1611,22 @@
     .to(hb, { scale: 1, rotation: 0, opacity: 1, duration: 1.1, ease: 'elastic.out(1, .55)', onStart: () => splash(30) }, .25)
     .to('[data-orb]', { scale: 1, duration: .7, ease: 'back.out(2.6)', stagger: .07 }, .6)
     .to(hCall, { opacity: 1, y: 0, duration: .5, ease: 'back.out(2)' }, 1.3);
-  // the opening: the bottle fills, the cap twists off and flies, the bottle tips and pours a shot,
-  // and the three flavors flood the screen one after another
-  const floods = $$('[data-lflood]'); let fx0 = '50%', fy0 = '60%';
+  // the opening: the bottle fills, the cap twists off, the bottle tips and the juice pours out of
+  // the mouth into a shot glass, then the three flavors flood the screen from that glass
+  const floods = $$('[data-lflood]');
   const lt = gsap.timeline({ onComplete: () => { gsap.ticker.remove(lTick); loader.remove(); } })
-    .to(LO, { p: 100, duration: .85, ease: 'power2.inOut', onUpdate: () => lp.textContent = Math.round(LO.p) })
-    .to('[data-lribs]', { x: -24, duration: .42, ease: 'steps(6)' })
-    .to('[data-lcap]', { y: -14, rotation: -4, svgOrigin: '100 40', duration: .42, ease: 'steps(3)' }, '<')
-    .to('.l-pct', { opacity: 0, duration: .2 }, '<')
-    .to('[data-lcap]', { y: -190, x: -70, rotation: -320, opacity: 0, duration: .45, ease: 'power2.out' })
-    .to('[data-lglass]', { opacity: 1, duration: .2 }, '<')
-    .add(() => { LO.pour = true; }, '-=.2')
-    .to('[data-lbody]', { rotation: 112, svgOrigin: '100 210', duration: .42, ease: 'power2.inOut' }, '<')
-    .fromTo('[data-lstream]', { attr: { d: 'M236 258 Q240 262 242 262' } }, { attr: { d: 'M236 258 Q244 330 248 418' }, duration: .18, ease: 'power1.in' })
-    .to(LO, { p: 30, duration: .6, ease: 'none' }, '<')
-    .fromTo('[data-lgliq]', { attr: { y: 420 } }, { attr: { y: 346 }, duration: .6, ease: 'power1.out' }, '<')
-    .to('[data-lstream]', { attr: { d: 'M236 258 Q240 380 248 418' }, opacity: 0, duration: .15 })
-    .add(() => { const r = $('[data-lglass]').getBoundingClientRect(); fx0 = (r.left + r.width / 2) + 'px'; fy0 = (r.top + r.height * .4) + 'px'; })
-    .fromTo(floods, { clipPath: () => `circle(0% at ${fx0} ${fy0})` }, { clipPath: () => `circle(150% at ${fx0} ${fy0})`, duration: .6, ease: 'power3.in', stagger: .12 })
+    .to(LR.S, { fill: .95, duration: .8, ease: 'power2.inOut', onUpdate: () => { lp.textContent = Math.round(LR.S.fill / .95 * 100); LR.splash(2); } });
+  const ltCap = LR.twistOff(lt, .85, [-60, -150, -160]);
+  lt.to('.l-pct', { opacity: 0, duration: .2 }, .9)
+    .to('[data-lglass]', { opacity: 1, duration: .25 }, ltCap - .2)
+    .to(LR.S, { a: 110, duration: .5, ease: 'power2.inOut' }, ltCap + .05)
+    .to(LR.S, { a: 122, duration: .7, ease: 'sine.inOut' }, ltCap + .55)
+    .add(() => { const r = $('[data-lglass]').getBoundingClientRect(); gsap.set(floods, { x: r.left + r.width / 2, y: r.top + r.height * .3 }); }, ltCap + 1.15)
+    .to(floods, { scale: 1, duration: .7, ease: 'power3.in', stagger: .12 }, ltCap + 1.2)
     .set('.l-in', { opacity: 0 })
     .set(loader, { background: 'transparent' })
-    .to(floods.slice().reverse(), { clipPath: 'inset(0 0 100% 0)', duration: .6, ease: 'power3.inOut', stagger: .08 })
-    .add(() => intro.play(), '-=.5');
+    .to(floods.slice().reverse(), { y: '-=' + (innerHeight * 1.6 + innerWidth), duration: .75, ease: 'power3.inOut', stagger: .08 })
+    .add(() => intro.play(), '-=.55');
   loader.addEventListener('click', () => lt.progress(1));
 
   /* ambient hero motion */
@@ -1620,7 +1643,7 @@
 
   /* lineup idle demo + orbit spin */
   gsap.to(orbit, { rotation: 360, duration: 26, ease: 'none', repeat: -1 });
-  gsap.ticker.add(() => { const r = gsap.getProperty(orbit, 'rotation') || 0; $$('.o', orbit).forEach(o => { const svg = o.firstElementChild; if (svg) svg.style.transform = `rotate(${-r}deg)`; }); });
+  gsap.ticker.add(() => { if (!VIS.lu) return; const r = gsap.getProperty(orbit, 'rotation') || 0; orbitEls.forEach(o => { const svg = o.firstElementChild; if (svg) svg.style.transform = `rotate(${-r}deg)`; }); });
   ScrollTrigger.create({ trigger: lu, start: 'top 60%', once: true, onEnter: () => { let i = 0; const go = () => { if (luTouched) return; i = (i + 1) % FL.length; setLineup(FL[i].k, $(`[data-pick="${FL[i].k}"]`)); luDemo = gsap.delayedCall(3.6, go); }; luDemo = gsap.delayedCall(2.6, go); } });
   gsap.to('[data-lcall]', { y: -5, duration: .9, ease: 'sine.inOut', yoyo: true, repeat: -1 });
   gsap.from('.pick', { y: 80, opacity: 0, duration: .9, ease: 'back.out(1.8)', stagger: .1, scrollTrigger: { trigger: shelf, start: 'top 92%' } });
@@ -1646,7 +1669,7 @@
       .fromTo('[data-ppuddle]', { attr: { height: 0, y: 456 } }, { attr: { height: 20, y: 436 }, duration: .4 }, at[1] + .8)
       .fromTo('[data-pstream]', { scaleY: 0, transformOrigin: '50% 0%' }, { scaleY: 1, duration: .25 }, at[2])
       .fromTo('[data-pdrops]', { opacity: 0 }, { opacity: 1, duration: .1 }, at[2])
-      .fromTo('[data-pliq]', { attr: { y: 354 } }, { attr: { y: 100 }, duration: .9, ease: 'power1.inOut' }, at[2] + .1)
+      .fromTo('[data-pliq]', { attr: { y: 354 } }, { attr: { y: 58 }, duration: .9, ease: 'power1.inOut' }, at[2] + .1)
       .fromTo('[data-ppuddle]', { attr: { height: 20, y: 436 } }, { attr: { height: 4, y: 452 }, duration: .8, immediateRender: false }, at[2] + .2)
       .fromTo('[data-pstream]', { scaleY: 1, transformOrigin: '50% 100%' }, { scaleY: 0, duration: .2, immediateRender: false }, at[3] - .1)
       .fromTo('[data-pdrops]', { opacity: 1 }, { opacity: 0, duration: .1, immediateRender: false }, at[3] - .1)
@@ -1699,7 +1722,6 @@
   gsap.from('[data-pin] [data-pinin]', { y: -260, rotation: -540, opacity: 0, duration: 1, ease: 'bounce.out', stagger: .15, scrollTrigger: { trigger: '[data-map]', start: 'top 70%' } });
   // fromTo + clearProps: a from() here fought the CSS transform transition and could leave the list 60px off
   gsap.fromTo('[data-po]', { x: 60, opacity: 0 }, { x: 0, opacity: 1, duration: .7, ease: 'expo.out', stagger: .06, clearProps: 'transform', scrollTrigger: { trigger: '[data-polist]', start: 'top 85%' } });
-  gsap.to('[data-pin] [data-rays]', { rotation: 360, svgOrigin: '0 -28', duration: 12, ease: 'none', repeat: -1 });
 
   /* energy / immunity / wellness cards flip up, their bottles bob */
   gsap.from('[data-pill]', { y: 90, rotationX: -40, opacity: 0, duration: .9, ease: 'back.out(1.6)', stagger: .12, scrollTrigger: { trigger: '[data-pillars]', start: 'top 85%' } });
@@ -1718,7 +1740,7 @@
   $$('[data-post]').forEach(a => { const h = $('.heart', a); const pop = () => gsap.fromTo(h, { scale: .2, opacity: 1, rotation: -15 }, { scale: 1.3, opacity: 0, rotation: 8, duration: .8, ease: 'power2.out' }); a.addEventListener('pointerenter', () => FINE && pop()); a.addEventListener('click', pop); });
 
   /* fruit floats: bob, drift on scroll */
-  $$('[data-ff]').forEach((f, i) => { gsap.to(f, { y: i % 2 ? 16 : -16, rotation: i % 2 ? 14 : -14, duration: 2.2 + (i % 5) * .35, ease: 'sine.inOut', yoyo: true, repeat: -1 }); gsap.fromTo(f, { yPercent: 40 }, { yPercent: -60, ease: 'none', scrollTrigger: { trigger: f.parentElement, start: 'top bottom', end: 'bottom top', scrub: true } }); });
+  $$('[data-ff]').forEach((f, i) => { f.style.animation = `ffbob ${(2.4 + (i % 5) * .4).toFixed(1)}s ${(i * -.7).toFixed(1)}s ease-in-out infinite alternate`; if (FINE) gsap.fromTo(f, { yPercent: 40 }, { yPercent: -60, ease: 'none', scrollTrigger: { trigger: f.parentElement, start: 'top bottom', end: 'bottom top', scrub: true } }); });
   gsap.to('[data-lings] span svg', { rotation: 10, duration: 1.4, ease: 'sine.inOut', yoyo: true, repeat: -1, stagger: .15 });
 
   /* the booth under the lineup slides up; bottles on it stay lively */
@@ -1734,25 +1756,36 @@
 
   /* footer: the logo assembles from slices, then a shot flies in, its cap twists off and
      flies away, and it pours until the logo is full of juice. Tap the logo to pour again. */
-  const fm = $('[data-fmark]'), fst = $('[data-fstage]'), fpour = $('[data-fpour]'), fstream = $('[data-fstream]'), ffill = $('[data-ffill]');
+  const fm = $('[data-fmark]'), fst = $('[data-fstage]'), fsvg = $('[data-fpour]'), ffill = $('[data-ffill]');
   fm.innerHTML = Array.from({ length: 6 }, (_, i) => `<i style="clip-path: inset(${(i * 100 / 6).toFixed(2)}% 0 ${(100 - (i + 1) * 100 / 6).toFixed(2)}% 0)"></i>`).join('');
-  fpour.innerHTML = bottle(FL[0], { label: 'mark', level: 92 }); const fcap = $('[data-cap]', fpour);
-  const ftl = gsap.timeline({ paused: true })
-    .from($$('i', fm), { x: (i) => (i % 2 ? 1 : -1) * 260, rotation: (i) => (i % 2 ? 20 : -20), opacity: 0, duration: 1.1, ease: 'expo.out', stagger: .08 })
-    .fromTo(fpour, { x: 320, y: -80, rotation: 40, opacity: 0 }, { x: 110, y: 0, rotation: 0, opacity: 1, duration: .7, ease: 'back.out(1.6)' }, 1.1)
-    .to(fcap, { x: -6, duration: .36, ease: 'steps(4)', yoyo: true, repeat: 1 })
-    .to(fcap, { y: -170, x: 90, rotation: 300, opacity: 0, svgOrigin: '100 40', duration: .55, ease: 'power2.out' })
-    .to(fpour, { x: 0, rotation: -110, duration: .5, ease: 'power2.inOut' }, '-=.3')
-    .fromTo(fstream, { height: '0%', top: '-4%', opacity: 1 }, { height: '46%', duration: .25, ease: 'power1.in' })
-    .fromTo(ffill, { height: '0%' }, { height: '104%', duration: 1.9, ease: 'power1.inOut' }, '-=.05')
-    .to(fpour, { rotation: -118, duration: .45, ease: 'sine.inOut', yoyo: true, repeat: 3 }, '<')
-    .to(fstream, { height: '0%', top: '42%', duration: .25, ease: 'power1.in' })
-    .to(fpour, { x: 110, rotation: 0, y: -20, duration: .6, ease: 'back.out(1.6)' }, '<')
-    .to(fpour, { y: -120, x: 320, rotation: 30, opacity: 0, duration: .6, ease: 'power2.in' }, '+=.2')
-    .fromTo(fst, { scale: 1 }, { scale: 1.08, duration: .2, yoyo: true, repeat: 1, ease: 'power2.out' }, '<')
-    .add(() => { const r = fst.getBoundingClientRect(); rainBurst(['pineapple', 'lemon', 'honeycomb', 'orange'], r.left + r.width / 2, r.top + r.height * .3); });
-  ScrollTrigger.create({ trigger: 'footer', start: 'top 70%', once: true, onEnter: () => ftl.play() });
-  fst.style.pointerEvents = 'auto'; fst.style.cursor = 'pointer'; fst.addEventListener('click', () => { if (ftl.isActive()) return; gsap.set(fcap, { x: 0, y: 0, rotation: 0, opacity: 1 }); ftl.play(1.1); });
+  const FR = makeRig($('[data-fprig]'), FL[0], { pivot: [100, 200], label: 'mark', fill: .95, dark: true, rate: .1 });
+  const FP = { W: 1, Hh: 1, s: 1, bx: 0, by: 0, fill: 0, on: false };
+  const fLayout = () => { const W = fst.clientWidth, Hh = fst.clientHeight, sc = Hh * .52 / 350; Object.assign(FP, { W, Hh, s: sc, bx: 1.55 * W + 141 * sc, by: 1.1 * Hh - 36 - 75 * sc });
+    fsvg.setAttribute("viewBox", `0 0 ${3 * W} ${2.2 * Hh}`); $('[data-fprig]').setAttribute('transform', `translate(${(FP.bx - 100 * sc).toFixed(1)} ${(FP.by - 200 * sc).toFixed(1)}) scale(${sc.toFixed(4)})`); };
+  fLayout(); addEventListener('resize', fLayout);
+  // where the juice lands, in the bottle's own units: the surface of what's already in the logo
+  const fCatch = x => { const px = FP.bx - 100 * FP.s + x * FP.s; if (Math.abs(px - 1.5 * FP.W) > FP.W * .4) return 9e3; const sy = 1.1 * FP.Hh + FP.Hh * (1 - FP.fill); return (sy - (FP.by - 200 * FP.s)) / FP.s; };
+  const fTick = (t, dms) => { FR.step(Math.min(dms, 40) / 1000, fCatch, pt => { FP.fill = Math.min(1, FP.fill + pt.vol * 1.05); ffill.style.height = (FP.fill * 104).toFixed(1) + '%'; }); FR.draw(); };
+  let fRun = false; const fStart = () => { if (!fRun) { fRun = true; gsap.ticker.add(fTick); } }, fStop = () => { fRun = false; gsap.ticker.remove(fTick); };
+  gsap.set(fsvg, { opacity: 0 }); FR.S.tx = 340; FR.step(0); FR.draw();
+  const fPour = (build) => { fStart(); FP.fill = 0; ffill.style.height = '0%'; FR.S.fill = .95; FR.S.a = 0; FR.S.tx = 340; FR.S.ty = 0; FR.setFlavor(FL[0]); gsap.set(FR.cap, { x: 0, y: 0, rotation: 0, opacity: 1 });
+    const tl = gsap.timeline({ onComplete: fStop });
+    if (build) tl.from($$('i', fm), { x: (i) => (i % 2 ? 1 : -1) * 260, rotation: (i) => (i % 2 ? 20 : -20), opacity: 0, duration: 1.1, ease: 'expo.out', stagger: .08 }, 0);
+    const b = build ? 1.1 : 0;
+    tl.to(fsvg, { opacity: 1, duration: .2 }, b).to(FR.S, { tx: 0, duration: .7, ease: 'back.out(1.4)', onUpdate: () => FR.splash(1.5) }, b);
+    const t1 = FR.twistOff(tl, b + .75, [90, -170, 170]);
+    tl.to(FR.S, { a: -112, duration: .55, ease: 'power2.inOut' }, t1 + .05)
+      .to(FR.S, { a: -132, duration: 1.6, ease: 'sine.inOut' }, t1 + .6)
+      .to(FR.S, { a: 0, ty: -30, duration: .6, ease: 'back.out(1.5)' }, t1 + 2.3)
+      .to(FR.S, { tx: 360, ty: -120, duration: .6, ease: 'power2.in' }, t1 + 3)
+      .to(fsvg, { opacity: 0, duration: .2 }, t1 + 3.45)
+      .to(ffill, { height: '104%', duration: .5, ease: 'power1.out' }, t1 + 2.4)
+      .fromTo(fst, { scale: 1 }, { scale: 1.08, duration: .2, yoyo: true, repeat: 1, ease: 'power2.out' }, t1 + 2.9)
+      .add(() => { const r = fst.getBoundingClientRect(); rainBurst(['pineapple', 'lemon', 'honeycomb', 'orange'], r.left + r.width / 2, r.top + r.height * .3); }, t1 + 2.9);
+    return tl; };
+  let ftl = null;
+  ScrollTrigger.create({ trigger: 'footer', start: 'top 70%', once: true, onEnter: () => { ftl = fPour(true); } });
+  fst.style.pointerEvents = 'auto'; fst.style.cursor = 'pointer'; fst.addEventListener('click', () => { if (ftl && ftl.isActive()) return; ftl = fPour(false); });
   gsap.to(fst, { y: -10, duration: 2.4, ease: 'sine.inOut', yoyo: true, repeat: -1 });
 
   /* magnetic buttons */
