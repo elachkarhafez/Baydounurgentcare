@@ -1,0 +1,651 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noai, noimageai">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Amelia St. Pizza Co. · Big 18" pies · Hazel Park, MI</title>
+<meta name="description" content="Whole 18-inch New York-style pies on a 72-hour sourdough biga. Home of the Pecorino Half Moon. 951 E 9 Mile Rd, Hazel Park. Thursday to Monday, 3 to 9 or sellout. Walk-ins only.">
+<meta name="theme-color" content="#0f6f7d">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Ccircle cx=%2232%22 cy=%2232%22 r=%2230%22 fill=%22%23e9b37a%22/%3E%3Ccircle cx=%2232%22 cy=%2232%22 r=%2225%22 fill=%22%23d2402a%22/%3E%3Cpath d=%22M32 7a25 25 0 0 1 0 50z%22 fill=%22%23fff6e8%22/%3E%3C/svg%3E">
+<meta property="og:title" content="Amelia St. Pizza Co. · Hazel Park">
+<meta property="og:description" content="Big 18-inch pies. Home of the Pecorino Half Moon. Thu–Mon 3–9 (or sellout).">
+<meta property="og:image" content="img/og.jpg">
+<meta property="og:type" content="website">
+<link rel="preload" href="assets/fonts/bungee.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="img/pies/clean.webp" as="image">
+<link rel="preload" href="img/pies/cheese.webp" as="image">
+<style>
+@font-face{font-family:Bungee;src:url(assets/fonts/bungee.woff2) format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Big Shoulders Display";src:url(assets/fonts/big-shoulders-display-800.woff2) format("woff2");font-weight:600 800;font-display:swap}
+@font-face{font-family:"DM Sans";src:url(assets/fonts/dm-sans.woff2) format("woff2");font-weight:100 1000;font-display:swap}
+@font-face{font-family:"Press Start 2P";src:url(assets/fonts/pressstart.woff2) format("woff2");font-weight:400;font-display:swap}
+/* Amelia St. Pizza Co., Hazel Park
+   Palette: the shop. Teal wall, the hot-pink retro "AMELIA ST. PIZZA CO." sign with its pixel heart and gold stars,
+   the black felt letter board, kraft pizza boxes, and pecorino white.
+   Type: Bungee for the arcade sign, Big Shoulders for the letter board, DM Sans for text, Press Start 2P for tiny pixel labels.
+   Motion: arcade-snappy. The sign flickers on, letters pop into the board, the moon slides. */
+:root{
+  --teal:#0f6f7d; --teal-2:#0b5560; --teal-3:#139bab; --ink:#16181c; --cream:#fff6e8; --cream-2:#f6ead6;
+  --pink:#ff3d8b; --pink-2:#ff7ab3; --gold:#ffc83d; --kraft:#c99a68; --board:#141414; --muted:#5e5a55; --line:#e6d8c2;
+  --pad:clamp(18px,4vw,56px); --max:1240px; --ease:cubic-bezier(.2,.75,.2,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+body{background:var(--cream);color:var(--ink);font:400 17px/1.55 "DM Sans",system-ui,sans-serif;overflow-x:clip;-webkit-font-smoothing:antialiased}
+img,video{display:block;max-width:100%}
+a{color:inherit}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+:focus-visible{outline:3px solid var(--pink);outline-offset:3px;border-radius:6px}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 var(--pad)}
+.pixel{font:400 10px/1.4 "Press Start 2P",monospace;letter-spacing:.04em;text-transform:uppercase}
+.h2{font:400 clamp(36px,5vw,72px)/.98 Bungee,sans-serif;letter-spacing:-.01em}
+.sign{font-family:Bungee,sans-serif;color:var(--pink);text-shadow:0 0 1px #fff,2px 2px 0 #ffd0e4,4px 4px 0 var(--teal-2),5px 5px 0 #0a3f47,0 0 24px #ff3d8b88}
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .8s var(--ease),transform .9s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+
+/* ---------- intro: the sign switches on ---------- */
+#intro{position:fixed;inset:0;z-index:200;background:var(--teal-2);display:grid;place-items:center;transition:clip-path .8s cubic-bezier(.75,0,.2,1);clip-path:inset(0 0 0 0)}
+#intro.out{clip-path:inset(0 0 100% 0)}
+#intro .s{text-align:center;font-size:clamp(40px,10vw,110px);line-height:.9;animation:flick 1s steps(1) both}
+#intro .s small{display:block;font-size:.42em;margin-top:.25em;color:var(--pink-2)}
+#intro .heart{position:absolute;left:12%;top:18%;width:42px;image-rendering:pixelated;animation:flick 1s .15s steps(1) both}
+#intro .star{position:absolute;color:var(--gold);font-size:28px;animation:flick 1s .25s steps(1) both}
+#intro .skip{position:absolute;right:18px;bottom:18px;color:#ffffffb0;font-size:13px;padding:10px 14px;border:1px solid #ffffff40;border-radius:99px}
+@keyframes flick{0%{opacity:0}10%{opacity:1}15%{opacity:.2}22%{opacity:1}27%{opacity:.4}33%,100%{opacity:1}}
+
+/* ---------- nav ---------- */
+.nav{position:fixed;top:0;left:0;right:0;z-index:60;display:flex;align-items:center;gap:22px;padding:12px var(--pad);color:#fff;transition:background .3s,box-shadow .3s,transform .45s var(--ease)}
+.nav.solid{background:#0b5560f0;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 2px 0 #0a3f47}
+.nav.hide{transform:translateY(-110%)}
+.mark{text-decoration:none;font:400 19px/1 Bungee;color:var(--pink);text-shadow:2px 2px 0 #0a3f47;white-space:nowrap}
+.mark small{font-size:.62em;color:#fff;text-shadow:none;margin-left:4px}
+.nav .links{display:flex;gap:26px;margin-left:auto;font-weight:600;font-size:15px}
+.nav .links a{text-decoration:none;position:relative}
+.nav .links a::after{content:"";position:absolute;left:0;right:0;bottom:-4px;height:2px;background:var(--gold);transform:scaleX(0);transform-origin:right;transition:transform .3s var(--ease)}
+.nav .links a:hover::after{transform:scaleX(1);transform-origin:left}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;text-decoration:none;font:700 15.5px/1 "DM Sans";padding:15px 22px;border-radius:12px;transition:transform .15s,box-shadow .15s,background .2s;white-space:nowrap}
+.btn svg{width:18px;height:18px;flex:none}
+.btn.pink{background:var(--pink);color:#fff;box-shadow:4px 4px 0 var(--ink)}
+.btn.pink:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink)}
+.btn.pink:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
+.btn.ghost{background:#fff;color:var(--ink);box-shadow:4px 4px 0 var(--ink)}
+.btn.ghost:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink)}
+.nav .btn{padding:11px 16px;font-size:14px;box-shadow:3px 3px 0 #0a3f47}
+
+/* ---------- hero: the teal wall + the moon pie ---------- */
+.hero{position:relative;background:linear-gradient(180deg,var(--teal) 0%,var(--teal-2) 100%);color:#fff;overflow:hidden;padding:104px 0 70px}
+.hero::before{content:"";position:absolute;inset:0;background:
+  radial-gradient(50% 60% at 74% 48%,#21b3c455 0%,#21b3c400 70%),
+  repeating-linear-gradient(0deg,#ffffff07 0 2px,transparent 2px 6px);pointer-events:none}
+.hero .grid{position:relative;display:grid;grid-template-columns:1fr 1.02fr;gap:clamp(20px,4vw,60px);align-items:center;min-height:calc(100svh - 174px)}
+.hero .eyebrow{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;color:#d8f4f7}
+.hero h1{font-size:clamp(46px,7vw,112px);line-height:.88;margin:20px 0 22px}
+.hero h1 span{display:block}
+.hero h1 .co{font-size:.46em;color:var(--pink-2);margin-top:.18em}
+.hero .lede{font-size:clamp(17px,1.4vw,20px);color:#e2f5f7;max-width:31em}
+.hero .lede b{color:#fff}
+.hero .ctas{display:flex;flex-wrap:wrap;gap:14px;margin-top:30px}
+.status{display:inline-flex;align-items:center;gap:8px;font-weight:700}
+.status i{width:10px;height:10px;border-radius:2px;background:#9fb9bd;flex:none}
+.status.open i{background:#39e27a;box-shadow:0 0 0 3px #39e27a33;animation:blink 1.2s steps(2) infinite}
+@keyframes blink{50%{opacity:.35}}
+.rules{display:flex;flex-wrap:wrap;gap:8px;margin-top:26px}
+.rules span{font:400 9px/1 "Press Start 2P";padding:9px 10px;border-radius:6px;background:#0a3f47;color:#bff1f6;letter-spacing:.04em}
+.deco-heart{position:absolute;right:5%;top:96px;width:38px;image-rendering:pixelated;opacity:.9}
+.deco-star{position:absolute;color:var(--gold);font-size:26px;line-height:1}
+.h-in{opacity:0;transform:translateY(20px)}
+.ready .h-in{opacity:1;transform:none;transition:opacity .7s var(--ease),transform .8s var(--ease)}
+.ready .h-in:nth-child(2){transition-delay:.06s}.ready .h-in:nth-child(3){transition-delay:.12s}.ready .h-in:nth-child(4){transition-delay:.18s}.ready .h-in:nth-child(5){transition-delay:.24s}
+
+.moon{position:relative;display:flex;flex-direction:column;align-items:center}
+.piebox{position:relative;width:min(100%,560px);aspect-ratio:1;border-radius:14px;background:linear-gradient(135deg,#d7ab78,#c08d58);box-shadow:inset 0 0 0 10px #b98450,inset 0 0 0 12px #a9773f,0 30px 60px -20px #00000088;display:grid;place-items:center;touch-action:pan-y;cursor:ew-resize;user-select:none;-webkit-user-select:none}
+.piebox::before,.piebox::after{content:"";position:absolute;z-index:0;width:15%;aspect-ratio:1;border-radius:50%;background:#fbf8f2;box-shadow:inset 0 0 0 1px #e8e0d2}
+.piebox::before{left:2.2%;top:2.2%}.piebox::after{right:2.2%;bottom:2.2%}
+.piebox canvas{position:relative;z-index:1;width:94%;height:94%;border-radius:50%;filter:drop-shadow(0 10px 14px #5a3b1a66)}
+.phase-tag{position:absolute;z-index:3;left:50%;top:-18px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:11px 16px;border-radius:10px;font:400 11px/1 "Press Start 2P";white-space:nowrap;box-shadow:4px 4px 0 var(--pink)}
+.callout{position:absolute;z-index:4;left:-6px;top:20%;background:#fff;color:var(--ink);font:700 15px/1.25 "DM Sans";padding:12px 14px;border-radius:12px;display:flex;align-items:center;gap:10px;box-shadow:4px 4px 0 var(--ink);transition:opacity .35s,transform .35s var(--ease);max-width:220px}
+.callout svg{width:26px;height:26px;flex:none;color:var(--pink)}
+.callout.gone{opacity:0;transform:translateY(8px);pointer-events:none}
+.dial{display:flex;align-items:center;gap:6px;margin-top:22px;padding:8px;background:#0a3f47;border-radius:14px;box-shadow:4px 4px 0 #062a30}
+.dial button{width:52px;height:52px;border-radius:10px;display:grid;place-items:center;transition:background .2s,transform .15s}
+.dial button:hover{background:#ffffff14}
+.dial button[aria-pressed="true"]{background:#ffffff22;box-shadow:inset 0 0 0 2px var(--gold)}
+.dial svg{width:32px;height:32px}
+.payoff{min-height:48px;margin-top:16px;text-align:center;font-size:15.5px;color:#e2f5f7;max-width:420px}
+.payoff b{display:block;font:400 18px/1.15 Bungee;color:#fff;margin-bottom:4px}
+.nudge .piebox{animation:wig .9s var(--ease)}
+@keyframes wig{25%{transform:rotate(-2deg)}55%{transform:rotate(1.5deg)}80%{transform:rotate(-.5deg)}}
+
+/* ---------- marquee ---------- */
+.marquee{position:relative;z-index:2;background:var(--pink);color:#fff;overflow:hidden;padding:16px 0;border-top:3px solid var(--ink);border-bottom:3px solid var(--ink)}
+.marquee .track{display:flex;width:max-content;animation:mq 30s linear infinite}
+.marquee span{font:400 clamp(20px,2.4vw,30px)/1 Bungee;padding:0 20px;white-space:nowrap;display:flex;align-items:center;gap:40px}
+.marquee span::after{content:"★";color:var(--gold);font-size:.8em}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+/* ---------- menu: the letter board ---------- */
+.menu{padding:clamp(90px,11vw,140px) 0;background:var(--cream)}
+.menu .head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:18px;margin-bottom:clamp(30px,4vw,50px)}
+.menu .head p{color:var(--muted);max-width:28em}
+.menu .grid{display:grid;grid-template-columns:1.55fr 1fr;gap:clamp(20px,3vw,36px);align-items:start}
+.board{position:relative;padding:clamp(14px,1.8vw,22px);border-radius:10px;background:linear-gradient(135deg,#d9a564,#b37a3c 60%,#c88f4e);box-shadow:0 30px 60px -30px #5a3b1a99,inset 0 1px 0 #ffe2b0}
+.felt{background:repeating-linear-gradient(180deg,#191919 0 6px,#0d0d0d 6px 8px);border-radius:3px;padding:clamp(18px,3vw,38px) clamp(16px,3vw,40px);color:#f3ecdf;font:700 clamp(16px,1.75vw,25px)/1.2 "Big Shoulders Display",sans-serif;letter-spacing:.07em;text-transform:uppercase;box-shadow:inset 0 2px 10px #000}
+.felt .title{text-align:center;margin-bottom:.7em}
+.felt .cols{display:grid;grid-template-columns:1fr 1fr;gap:0 clamp(20px,4vw,60px)}
+.felt .row{display:flex;justify-content:space-between;gap:12px;padding:.12em 0;white-space:nowrap}
+.felt .row.sub{padding-left:1.1em}
+.felt .gap{height:.9em}
+.felt .hd{margin-bottom:.15em}
+.felt .ch{display:inline-block;text-shadow:0 2px 0 #00000088;opacity:0;transform:translateY(-14px) rotate(-8deg)}
+.board.in .ch{opacity:1;transform:none;transition:opacity .2s,transform .45s cubic-bezier(.3,1.6,.5,1)}
+.side{display:grid;gap:16px}
+.card{background:#fff;border-radius:14px;border:2px solid var(--ink);box-shadow:5px 5px 0 var(--ink);overflow:hidden}
+.card .body{padding:16px 18px}
+.card .pixel{color:var(--pink)}
+.card h3{font:400 22px/1.1 Bungee;margin:8px 0 6px}
+.card p{font-size:15px;color:var(--muted)}
+.card img{width:100%;aspect-ratio:16/10;object-fit:cover}
+.card.half{display:grid;grid-template-columns:96px 1fr;align-items:center}
+.card.half .mini{width:96px;height:100%;min-height:110px;background:var(--teal);display:grid;place-items:center}
+.card.half .mini svg{width:56px;height:56px}
+
+/* ---------- dough story: pinned ---------- */
+.dough{position:relative;height:300vh;background:var(--ink);color:#fff}
+.dough .pin{position:sticky;top:0;height:100svh;overflow:hidden;display:grid;grid-template-columns:auto 1fr;gap:clamp(24px,5vw,80px);align-items:center;max-width:var(--max);margin:0 auto;padding:0 var(--pad)}
+.dough .phone{position:relative;height:min(78svh,640px);aspect-ratio:9/16;border-radius:26px;overflow:hidden;border:3px solid #2b2e35;box-shadow:0 40px 80px -30px #000,8px 8px 0 var(--pink)}
+.dough .phone video{width:100%;height:100%;object-fit:cover}
+.dough .phone .credit{position:absolute;left:10px;bottom:10px;font:400 8px/1.3 "Press Start 2P";background:#000a;padding:7px 8px;border-radius:6px;color:#ddd}
+.dough .big{font:400 clamp(70px,13vw,190px)/.85 Bungee;color:var(--pink);text-shadow:4px 4px 0 var(--teal-2)}
+.dough .big small{display:block;font-size:.2em;color:#fff;text-shadow:none;margin-top:.5em;letter-spacing:.02em}
+.steps{list-style:none;margin-top:clamp(20px,3vh,36px);display:grid;gap:4px;counter-reset:s}
+.steps li{display:flex;gap:16px;align-items:baseline;padding:9px 0;border-bottom:1px solid #ffffff1a;color:#ffffff59;transition:color .3s}
+.steps li::before{counter-increment:s;content:counter(s,decimal-leading-zero);font:400 10px/1 "Press Start 2P";color:inherit;min-width:28px}
+.steps li b{font:700 clamp(17px,1.5vw,21px)/1.2 "DM Sans";color:inherit}
+.steps li span{font-size:14.5px;margin-left:auto;text-align:right}
+.steps li.on{color:#fff}
+.steps li.on::before{color:var(--gold)}
+.quote{margin-top:clamp(18px,3vh,30px);font-size:clamp(15px,1.25vw,18px);color:#d7d2ca;max-width:34em;border-left:3px solid var(--pink);padding-left:14px}
+.quote cite{display:block;font-style:normal;font-size:13px;color:#9b958c;margin-top:6px}
+
+/* ---------- Monday Surprise wall ---------- */
+.surprise{background:var(--teal);color:#fff;padding:clamp(90px,11vw,140px) 0;overflow:hidden;position:relative}
+.surprise .head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:18px;margin-bottom:clamp(30px,4vw,50px)}
+.surprise .head p{color:#d8f4f7;max-width:28em}
+.rail{display:flex;gap:clamp(14px,2vw,24px);overflow-x:auto;scroll-snap-type:x mandatory;padding:6px var(--pad) 24px;margin:0 calc(-1 * var(--pad));scrollbar-width:thin;scrollbar-color:var(--pink) transparent}
+.pie{flex:0 0 clamp(250px,26vw,330px);scroll-snap-align:start;background:var(--cream);color:var(--ink);border-radius:16px;border:3px solid var(--ink);box-shadow:6px 6px 0 #062a30;overflow:hidden;transition:transform .3s var(--ease)}
+.pie:hover{transform:translateY(-6px) rotate(-.6deg)}
+.pie img{width:100%;aspect-ratio:1;object-fit:cover}
+.pie .body{padding:14px 16px 18px}
+.pie .pixel{color:var(--pink)}
+.pie h3{font:400 20px/1.1 Bungee;margin:8px 0 6px}
+.pie p{font-size:14.5px;color:var(--muted)}
+.press{display:grid;grid-template-columns:auto 1fr;gap:clamp(20px,4vw,50px);align-items:center;margin-top:clamp(50px,7vw,90px);background:#0a3f47;border-radius:18px;padding:clamp(18px,3vw,30px);box-shadow:6px 6px 0 #062a30}
+.press img{width:clamp(120px,16vw,200px);border-radius:10px}
+.press blockquote{font:400 clamp(20px,2.3vw,30px)/1.25 "DM Sans";font-weight:600}
+.press cite{display:block;margin-top:12px;font-style:normal;color:var(--gold)}
+
+/* ---------- before you come ---------- */
+.know{background:var(--cream);padding:clamp(90px,11vw,140px) 0}
+.know .grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,5vw,70px);align-items:start}
+.clock{background:var(--ink);color:#fff;border-radius:18px;padding:clamp(22px,3vw,34px);box-shadow:8px 8px 0 var(--pink)}
+.clock .pixel{color:var(--gold)}
+.clock .t{font:400 clamp(34px,4.6vw,60px)/1 Bungee;margin:14px 0 10px;color:#fff}
+.clock .sub{color:#c8c3bb}
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:22px}
+.week div{border-radius:8px;padding:10px 4px;text-align:center;background:#ffffff10;font:400 9px/1.5 "Press Start 2P";color:#8d8880}
+.week div.on{background:var(--teal);color:#fff}
+.week div.today{box-shadow:inset 0 0 0 2px var(--gold)}
+.list{list-style:none;display:grid;gap:12px}
+.list li{display:grid;grid-template-columns:42px 1fr;gap:14px;align-items:start;background:#fff;border:2px solid var(--ink);border-radius:14px;padding:14px 16px;box-shadow:4px 4px 0 var(--ink)}
+.list li i{width:42px;height:42px;border-radius:10px;background:var(--teal);color:#fff;display:grid;place-items:center;font:400 12px/1 "Press Start 2P";font-style:normal}
+.list b{display:block;font-size:17px}
+.list span{font-size:15px;color:var(--muted)}
+
+/* ---------- visit ---------- */
+.visit{background:var(--cream-2);padding:clamp(90px,11vw,140px) 0;border-top:3px solid var(--ink)}
+.visit .grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(24px,5vw,70px);align-items:stretch}
+.addr{font:400 clamp(24px,2.6vw,34px)/1.15 Bungee;margin:14px 0 18px}
+.visit dl{display:grid;grid-template-columns:auto 1fr;gap:12px 24px;margin:20px 0 28px}
+.visit dt{color:var(--muted)}
+.visit dd{font-weight:700}
+.visit dd a{color:var(--pink);text-decoration:none}
+.visit .ctas{display:flex;flex-wrap:wrap;gap:14px}
+.map{position:relative;min-height:400px;border-radius:16px;overflow:hidden;border:3px solid var(--ink);box-shadow:6px 6px 0 var(--ink);background:var(--teal)}
+.map iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.map a{position:absolute;right:12px;bottom:12px;z-index:2;background:#fff;border:2px solid var(--ink);border-radius:10px;padding:8px 12px;font-size:13px;font-weight:700;text-decoration:none}
+
+/* ---------- close + footer ---------- */
+.close{background:var(--teal-2);color:#fff;text-align:center;padding:clamp(100px,13vw,170px) var(--pad);position:relative;overflow:hidden}
+.close .sign{font-size:clamp(44px,8vw,120px);line-height:.9}
+.close .sign small{display:block;font-size:.4em;color:var(--pink-2);margin-top:.2em}
+.close p{color:#d8f4f7;max-width:30em;margin:26px auto 0;font-size:18px}
+.close .ctas{display:flex;justify-content:center;flex-wrap:wrap;gap:14px;margin-top:30px}
+footer{background:var(--ink);color:#ffffffa8;padding:36px var(--pad) calc(36px + env(safe-area-inset-bottom));font-size:14px}
+footer .row{max-width:var(--max);margin:0 auto;display:flex;flex-wrap:wrap;gap:14px 34px;align-items:center;justify-content:space-between}
+footer a{color:#fff;text-decoration:none}
+footer a:hover{text-decoration:underline}
+
+/* ---------- phones ---------- */
+@media (max-width:900px){
+  .nav .links{display:none}
+  .nav .btn{margin-left:auto}
+  .mark{font-size:16px}
+  .hero{padding-top:92px}
+  .hero .grid{grid-template-columns:1fr;min-height:0;gap:34px}
+  .hero h1{font-size:clamp(42px,13vw,66px);margin:14px 0 14px}
+  .hero .ctas .btn{flex:1 1 auto}
+  .deco-heart{top:84px;right:6%;width:28px}
+  .callout{left:0;top:auto;bottom:16%;font-size:14px}
+  .dial button{width:46px;height:46px}.dial svg{width:28px;height:28px}
+  .menu .grid,.know .grid,.visit .grid{grid-template-columns:1fr}
+  .felt{letter-spacing:.05em}
+  .felt .cols{grid-template-columns:1fr}
+  .felt .cols>div+div{margin-top:.9em}
+  .dough{height:260vh}
+  .dough .pin{grid-template-columns:1fr;grid-template-rows:auto 1fr;align-content:center;gap:16px;padding-top:56px}
+  .dough .phone{height:34svh;justify-self:start}
+  .dough .big{font-size:clamp(54px,17vw,84px)}
+  .steps{margin-top:10px}
+  .steps li{padding:6px 0}
+  .steps li span{display:none}
+  .quote{display:none}
+  .press{grid-template-columns:1fr}
+  .press img{width:150px}
+  .map{min-height:300px}
+}
+@media (max-width:380px){.dial button{width:40px;height:40px}.dial svg{width:24px;height:24px}}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+  .marquee .track{animation:none}
+}
+</style>
+</head>
+<body>
+<div id="intro" aria-hidden="true">
+  <svg class="heart" viewBox="0 0 7 6" shape-rendering="crispEdges"><path fill="#ff3d8b" d="M1 0h2v1h1V0h2v1h1v2H6v1H5v1H4v1H3V5H2V4H1V3H0V1h1z"/></svg>
+  <span class="star" style="right:14%;top:22%">★</span><span class="star" style="right:20%;top:30%;font-size:18px">★</span>
+  <div class="s sign">AMELIA ST.<small>PIZZA CO.</small></div>
+  <button class="skip" type="button" tabindex="-1">Skip</button>
+</div>
+
+<header class="nav" id="nav">
+  <a class="mark" href="#top" aria-label="Amelia St. Pizza Co., home">AMELIA ST.<small>PIZZA CO.</small></a>
+  <nav class="links" aria-label="Main">
+    <a href="#menu">Menu</a>
+    <a href="#dough">The dough</a>
+    <a href="#surprise">Monday Surprise</a>
+    <a href="#visit">Visit</a>
+  </nav>
+  <a class="btn pink" data-href="maps" href="#visit">Directions</a>
+</header>
+
+<main id="top">
+  <!-- HERO -->
+  <section class="hero" aria-labelledby="h1">
+    <svg class="deco-heart" viewBox="0 0 7 6" shape-rendering="crispEdges" aria-hidden="true"><path fill="#ff3d8b" d="M1 0h2v1h1V0h2v1h1v2H6v1H5v1H4v1H3V5H2V4H1V3H0V1h1z"/></svg>
+    <span class="deco-star" style="right:12%;top:150px" aria-hidden="true">★</span>
+    <div class="wrap grid">
+      <div class="copy">
+        <p class="eyebrow h-in"><span class="pixel">Hazel Park, MI</span><span class="status" data-status><i></i><span>…</span></span></p>
+        <h1 id="h1" class="sign h-in"><span>AMELIA ST.</span><span class="co">PIZZA CO.</span></h1>
+        <p class="lede h-in">Big 18-inch New York-style pies with a thin, crunchy crust from a <b>72-hour sourdough biga</b>. Whole pies only, and every one gets the <b>Pecorino Half Moon</b>.</p>
+        <div class="ctas h-in">
+          <a class="btn pink" data-href="maps" href="#visit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Get directions</a>
+          <a class="btn ghost" href="#menu">See the board</a>
+        </div>
+        <div class="rules h-in" aria-label="House rules"><span>No slices</span><span>No phones</span><span>Walk-ins only</span><span>Thu–Mon 3–9</span></div>
+      </div>
+      <div class="moon h-in" id="moon">
+        <div class="piebox" id="piebox" role="img" aria-label="An 18-inch Amelia St. pie, seen from above, with grated pecorino covering part of it like a moon phase">
+          <span class="phase-tag" id="phaseTag">HALF MOON</span>
+          <div class="callout" id="callout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 12h11m0 0-3.5-3.5M19 12l-3.5 3.5M5 12H4"/></svg><span>Drag across the pie to change the moon</span></div>
+          <canvas id="pie" width="900" height="900"></canvas>
+        </div>
+        <div class="dial" id="dial" role="group" aria-label="Pecorino moon phase"></div>
+        <p class="payoff" id="payoff" aria-live="polite"><b>Home of the Pecorino Half Moon.</b>Grated pecorino over half the pie, crust included.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="marquee" aria-hidden="true"><div class="track" id="mq"></div></div>
+
+  <!-- MENU: their real letter board -->
+  <section class="menu" id="menu" aria-labelledby="menuH">
+    <div class="wrap">
+      <div class="head">
+        <div><p class="pixel" style="color:var(--pink)">The board</p><h2 class="h2" id="menuH" style="margin-top:12px">Short menu.<br>Big pies.</h2></div>
+        <p>Two pies, two sauces, one quarter-pound cookie and cold drinks. Everything comes off this board, the same one that hangs in the shop.</p>
+      </div>
+      <div class="grid">
+        <div class="board reveal" id="board"><div class="felt" id="felt" aria-label="Menu board"></div></div>
+        <div class="side">
+          <article class="card reveal">
+            <img src="img/cookie.webp" alt="A quarter-pound Halloween cookie with M&amp;M's, Reese's Pieces and marshmallows on parchment" width="640" height="647" loading="lazy">
+            <div class="body"><p class="pixel">Cookie of the month</p><h3>The Spooky One</h3><p>Halloween M&amp;M's, Reese's Pieces, toasted oats, marshmallows and chopped Barry Callebaut chocolate. Quarter pound, as always. October only.</p></div>
+          </article>
+          <article class="card half reveal">
+            <div class="mini" aria-hidden="true"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="18" fill="#d2402a"/><path d="M20 2a18 18 0 0 1 0 36z" fill="#fff6e8"/></svg></div>
+            <div class="body"><p class="pixel">On every pie</p><h3>Pecorino Half Moon</h3><p>Vegan parm for the half moon if you ask.</p></div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DOUGH: pinned story with their reel -->
+  <section class="dough" id="dough" aria-labelledby="doughH">
+    <div class="pin">
+      <div class="phone"><video id="doughVid" muted loop playsinline preload="none" poster="img/clips/dough.webp" aria-label="Matt mixing the sourdough biga and stretching the dough"></video><span class="credit">Filmed by Angela</span></div>
+      <div>
+        <h2 class="big" id="doughH">72 HRS<small>Every batch, start to box.</small></h2>
+        <ol class="steps" id="steps">
+          <li class="on"><b>Sourdough starter</b><span>fed and ready</span></li>
+          <li><b>Biga</b><span>the pre-ferment</span></li>
+          <li><b>Water, salt, mix</b><span>in the big mixer</span></li>
+          <li><b>Time.</b><span>48 to 72 hours cold</span></li>
+          <li><b>Stretch to 18 inches</b><span>thin and wide</span></li>
+          <li><b>About 7 minutes</b><span>in the deck oven</span></li>
+          <li><b>Pecorino Half Moon</b><span>then into the box</span></li>
+        </ol>
+        <p class="quote">"This whole thing started because I fell in love with dough. The process. Techniques. Flours. How it affects the final product."<cite>Matt Arb, owner</cite></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- MONDAY SURPRISE -->
+  <section class="surprise" id="surprise" aria-labelledby="surH">
+    <div class="wrap">
+      <div class="head">
+        <div><p class="pixel" style="color:var(--gold)">Mondays</p><h2 class="h2 sign" id="surH" style="margin-top:12px">Monday Surprise</h2></div>
+        <p>Full menu, plus one special pie that's gone when the day is. Here's what's come out of the oven so far.</p>
+      </div>
+      <div class="rail" id="rail"></div>
+      <div class="press reveal">
+        <img src="img/hour-detroit.webp" alt="Hour Detroit's Best New Casual Eateries 2026 graphic with an Amelia St. pepperoni pie" width="640" height="800" loading="lazy">
+        <div><blockquote>"Ultra-crispy, New York-style thin crusts with 72-hour cold sourdough ferment."</blockquote><cite>Hour Detroit · Best New Casual Eateries 2026</cite></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BEFORE YOU COME -->
+  <section class="know" id="know" aria-labelledby="knowH">
+    <div class="wrap grid">
+      <div class="reveal">
+        <p class="pixel" style="color:var(--pink)">Before you come</p>
+        <h2 class="h2" id="knowH" style="margin:12px 0 24px">Doors at 3.<br>Pies till they're gone.</h2>
+        <div class="clock" id="clock" role="status" aria-live="polite">
+          <p class="pixel" id="clockLabel">Right now</p>
+          <p class="t" id="clockT">…</p>
+          <p class="sub" id="clockS"></p>
+          <div class="week" id="week"></div>
+        </div>
+      </div>
+      <ul class="list reveal">
+        <li><i>18</i><div><b>Whole 18-inch pies only</b><span>No slices. Cheese or pep, plus the Monday Surprise.</span></div></li>
+        <li><i>☎</i><div><b>No phones, walk-ins only</b><span>Come in and order at the counter.</span></div></li>
+        <li><i>!</i><div><b>Open till 9, or sellout</b><span>When the dough's gone, we're done for the day. Check Instagram before you head over.</span></div></li>
+        <li><i>★</i><div><b>Mondays get a surprise</b><span>Full menu plus one special pie, that day only.</span></div></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- VISIT -->
+  <section class="visit" id="visit" aria-labelledby="visitH">
+    <div class="wrap grid">
+      <div class="reveal">
+        <p class="pixel" style="color:var(--pink)">Find us</p>
+        <h2 class="h2" id="visitH" style="margin-top:12px">9 Mile, Hazel Park.</h2>
+        <p class="addr" id="addr">951 E 9 Mile Rd<br>Hazel Park, MI 48030</p>
+        <dl>
+          <dt>Hours</dt><dd>Thu–Mon, 3–9 PM (or sellout)</dd>
+          <dt>Today</dt><dd><span class="status" data-status><i></i><span>…</span></span></dd>
+          <dt>Ordering</dt><dd>Walk-ins only, no phones</dd>
+          <dt>Instagram</dt><dd><a data-href="ig" href="#visit">@ameliastpizzaco</a></dd>
+        </dl>
+        <div class="ctas">
+          <a class="btn pink" data-href="maps" href="#visit">Get directions</a>
+          <a class="btn ghost" data-href="ig" href="#visit">Sellout updates</a>
+        </div>
+      </div>
+      <div class="map reveal" id="map"><a data-href="maps" href="#visit">Open in Maps</a></div>
+    </div>
+  </section>
+
+  <section class="close" aria-labelledby="closeH">
+    <h2 class="sign" id="closeH">AMELIA ST.<small>PIZZA CO.</small></h2>
+    <p>Big pies, half moons, quarter-pound cookies. Thursday to Monday on 9 Mile, from 3 until the dough runs out.</p>
+    <div class="ctas"><a class="btn pink" data-href="maps" href="#visit">Get directions</a><a class="btn ghost" data-href="ig" href="#visit">Follow @ameliastpizzaco</a></div>
+  </section>
+</main>
+
+<footer>
+  <div class="row">
+    <span class="mark">AMELIA ST.<small>PIZZA CO.</small></span>
+    <span>951 E 9 Mile Rd, Hazel Park, MI</span>
+    <span>Shirts $35 · Hats $25 at the counter</span>
+    <span>Beloved foster child of <a href="https://www.instagram.com/mabelgraykitchen/" target="_blank" rel="noopener">@mabelgraykitchen</a></span>
+    <span>© <span id="yr"></span> Amelia St. Pizza Co.</span>
+  </div>
+</footer>
+
+<script src="assets/lib/gsap.min.js"></script>
+<script src="assets/lib/lenis.min.js"></script>
+<script>
+/* ===================== CONFIG: everything about the business lives here ===================== */
+const CONFIG = {
+  name: 'Amelia St. Pizza Co.',
+  address: '951 E 9 Mile Rd', city: 'Hazel Park, MI 48030',
+  tz: 'America/Detroit',
+  hours: [[15, 21], [15, 21], null, null, [15, 21], [15, 21], [15, 21]], // Sunday first; closed Tue & Wed
+  ig: 'https://www.instagram.com/ameliastpizzaco/',
+  maps: 'https://www.google.com/maps/search/?api=1&query=Amelia+Street+Pizza+Co+951+E+9+Mile+Rd+Hazel+Park+MI',
+  mapEmbed: 'https://maps.google.com/maps?q=951%20E%209%20Mile%20Rd%2C%20Hazel%20Park%2C%20MI%2048030&z=15&output=embed',
+  // their letter board, word for word
+  board: {
+    title: 'AMELIA ST.',
+    left: [['BIG A$$ PIZZAS ONLY 18"', ''], ['CHEESE', '24'], ['PEP', '28'], ['>XTRA PEP', '6'], ['', ''], ['SAUCES 4 OZ', ''], ['MADAM SAUCE', '4'], ['RIGATO RANCH', '3']],
+    right: [['1/4 LB COOKIE', ''], ['CHOC CHIP', '6'], ['', ''], ['MEXICAN COKE', '4'], ['LIMONATA', '4'], ['FRIDGE CIG', '3'], ['SAN PELLEGRINO', '6'], ['', ''], ['SHIRT', '35'], ['HAT', '25']]
+  },
+  surprise: [
+    { img: 'nduja', date: 'Mon 8/24 · the first one', name: "'Nduja & Sweet Corn", d: "'Nduja, Michigan sweet corn, caramelized onions, urfa biber, side of Rigato Ranch." },
+    { img: 'tomato', date: 'Mon 8/31', name: 'Tomato Pie', d: 'Heirloom Michigan cherry tomatoes, garlic confit, lemon oil, fresh basil, Aleppo.' },
+    { img: 'capicola', date: 'Mon 9/14', name: 'Capicola & Hot Honey', d: 'Capicola, red onion, Taleggio, banana peppers, house-made hot honey. Hot honey on this pie only.' },
+    { img: 'fullmoon', date: 'Mon 9/21 & 9/28', name: 'The Full Moon', d: 'Mozzarella, fontina, gorgonzola, parsley, chili flake, lemon. Pecorino all the way around.' },
+    { img: 'y2k', date: 'Mon 10/5', name: 'Rigato Y2K White Pie', d: 'Cajun roasted chicken, Rigato Ranch, marinated heirloom tomatoes. Chef James Rigato\'s first pie on a menu.' }
+  ],
+  marquee: ['Big pies only', 'Home of the Pecorino Half Moon', 'No slices', 'No phones', 'Walk-ins only', 'Thu–Mon 3–9 (or sellout)', 'Monday Surprise']
+};
+
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const qs = new URLSearchParams(location.search), QA = qs.has('qa');
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+const DAYS = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+const DAYN = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+/* ---------- links + data ---------- */
+const LINK = { ig: CONFIG.ig, maps: CONFIG.maps };
+$$('[data-href]').forEach(a => { const u = LINK[a.dataset.href]; if (!u) return; a.href = u; a.target = '_blank'; a.rel = 'noopener'; });
+$('#yr').textContent = new Date().getFullYear();
+$('#addr').innerHTML = esc(CONFIG.address) + '<br>' + esc(CONFIG.city);
+{ const items = CONFIG.marquee.map(w => `<span>${esc(w)}</span>`).join(''); $('#mq').innerHTML = items + items + items; }
+$('#rail').innerHTML = CONFIG.surprise.map(p => `<article class="pie"><img src="img/surprise/${esc(p.img)}.webp" alt="${esc(p.name)}, an 18-inch pie with the pecorino half moon, seen from above in its box" width="640" height="640" loading="lazy"><div class="body"><p class="pixel">${esc(p.date)}</p><h3>${esc(p.name)}</h3><p>${esc(p.d)}</p></div></article>`).join('');
+
+/* ---------- the letter board: letters pop in ---------- */
+(function board() {
+  const B = CONFIG.board;
+  const letters = s => [...s].map(ch => ch === ' ' ? ' ' : `<span class="ch">${esc(ch)}</span>`).join('');
+  const col = rows => rows.map(([a, b], i) => !a ? '<div class="gap"></div>' :
+    `<div class="row${a[0] === '>' ? ' sub' : ''}${!b ? ' hd' : ''}"><span>${letters(a.replace(/^>/, ''))}</span><span>${letters(b)}</span></div>`).join('');
+  const felt = $('#felt');
+  felt.innerHTML = `<div class="title">${letters(B.title)}</div><div class="cols"><div>${col(B.left)}</div><div>${col(B.right)}</div></div>`;
+  felt.setAttribute('aria-label', 'Menu: 18-inch pizzas only. Cheese $24, pepperoni $28, extra pepperoni $6. Sauces, 4 ounces: Madam Sauce $4, Rigato Ranch $3. Quarter-pound chocolate chip cookie $6. Mexican Coke $4, Limonata $4, Fridge Cig $3, San Pellegrino $6. Shirt $35, hat $25.');
+  $$('.ch', felt).forEach((c, i) => c.style.transitionDelay = (RM ? 0 : (i * 9 + Math.random() * 60)) + 'ms');
+})();
+
+/* ---------- open / closed, in Hazel Park time ---------- */
+function nowMI() {
+  try {
+    const p = new Intl.DateTimeFormat('en-US', { timeZone: CONFIG.tz, weekday: 'short', hour: 'numeric', minute: 'numeric', hourCycle: 'h23' }).formatToParts(new Date());
+    const g = t => p.find(x => x.type === t).value;
+    return { d: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(g('weekday')), h: +g('hour') + +g('minute') / 60 };
+  } catch (e) { const n = new Date(); return { d: n.getDay(), h: n.getHours() + n.getMinutes() / 60 }; }
+}
+const dur = hrs => { const m = Math.max(1, Math.round(hrs * 60)); const h = Math.floor(m / 60), mm = m % 60; return h ? `${h}h ${String(mm).padStart(2, '0')}m` : `${mm} min`; };
+function nextOpen(d, h) { for (let k = 0; k < 8; k++) { const dd = (d + k) % 7, hrs = CONFIG.hours[dd]; if (hrs && (k > 0 || h < hrs[0])) return { k, dd, at: hrs[0] }; } }
+function setStatus() {
+  const { d, h } = nowMI(), today = CONFIG.hours[d];
+  const open = today && h >= today[0] && h < today[1];
+  const nx = nextOpen(d, h);
+  let short, big, sub;
+  if (open) { short = 'Open now · till 9 or sellout'; big = 'Open now'; sub = `Till 9 PM, ${dur(today[1] - h)} left, unless the dough runs out first.`; }
+  else if (nx && nx.k === 0) { short = 'Doors at 3 PM today'; big = 'Doors in ' + dur(nx.at - h); sub = 'Lines can start before 3. Come early.'; }
+  else { const when = nx.k === 1 ? 'tomorrow' : DAYN[nx.dd]; short = `Closed · back ${when} at 3`; big = `Back ${when}`; sub = `Doors at 3 PM ${nx.k === 1 ? 'tomorrow' : 'on ' + DAYN[nx.dd]}. ${today ? 'Today is done.' : 'We\'re closed Tuesdays and Wednesdays.'}`; }
+  $$('[data-status]').forEach(el => { el.classList.toggle('open', !!open); el.lastElementChild.textContent = short; });
+  $('#clockT').textContent = big; $('#clockS').textContent = sub;
+  $('#week').innerHTML = [4, 5, 6, 0, 1, 2, 3].map(i => `<div class="${CONFIG.hours[i] ? 'on' : ''} ${i === d ? 'today' : ''}">${DAYS[i]}<br>${CONFIG.hours[i] ? '3–9' : '—'}</div>`).join('');
+}
+setStatus(); setInterval(setStatus, 30000);
+
+/* ---------- intro ---------- */
+let seen = false; try { seen = sessionStorage.getItem('asp-intro') === '1'; } catch (e) {}
+const intro = $('#intro'); let started = false;
+function endIntro() {
+  if (intro.dataset.done) return; intro.dataset.done = 1;
+  intro.classList.add('out'); document.documentElement.classList.add('ready');
+  try { sessionStorage.setItem('asp-intro', '1'); } catch (e) {}
+  setTimeout(() => intro.remove(), 850);
+  setTimeout(() => window.__moonIntro && window.__moonIntro(), RM ? 0 : 450);
+}
+if (QA || seen || RM) { intro.style.transition = 'none'; setTimeout(endIntro, 0); }
+else { intro.addEventListener('click', endIntro); setTimeout(endIntro, 1300); }
+
+/* ---------- smooth scroll ---------- */
+let lenis = null;
+if (!RM && !qs.has('nolenis') && window.Lenis) {
+  lenis = new Lenis({ lerp: .12, smoothWheel: true });
+  if (window.gsap) { gsap.ticker.add(t => lenis.raf(t * 1000)); gsap.ticker.lagSmoothing(0); }
+  else { const raf = t => { lenis.raf(t); requestAnimationFrame(raf); }; requestAnimationFrame(raf); }
+}
+$$('a[href^="#"]').forEach(a => a.addEventListener('click', e => {
+  const id = a.getAttribute('href'), t = id === '#top' ? null : $(id);
+  if (id !== '#top' && !t) return; e.preventDefault();
+  if (lenis) lenis.scrollTo(t || 0, { offset: -10, duration: 1.3 }); else (t ? t.scrollIntoView() : scrollTo(0, 0));
+}));
+const nav = $('#nav'); let lastY = 0;
+addEventListener('scroll', () => { const y = scrollY; nav.classList.toggle('solid', y > 30);
+  if (y > lastY + 4 && y > 500) nav.classList.add('hide'); else if (y < lastY - 4 || y < 500) nav.classList.remove('hide'); lastY = y; }, { passive: true });
+
+/* ---------- reveals ---------- */
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .2 });
+$$('.reveal').forEach(el => io.observe(el));
+
+/* ---------- map only when close ---------- */
+const mapIO = new IntersectionObserver(es => { if (es[0].isIntersecting) { const f = document.createElement('iframe'); f.src = CONFIG.mapEmbed; f.title = 'Map to Amelia St. Pizza Co.'; f.loading = 'lazy'; $('#map').prepend(f); mapIO.disconnect(); } }, { rootMargin: '600px' });
+mapIO.observe($('#map'));
+
+/* ---------- dough story: video plays while pinned, steps follow the scroll ---------- */
+(function dough() {
+  const sec = $('#dough'), v = $('#doughVid'), steps = $$('#steps li');
+  const ext = document.createElement('video').canPlayType('video/mp4; codecs="avc1.42E01E"') ? 'mp4' : 'webm';
+  new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { if (!v.getAttribute('src')) v.src = 'img/clips/dough.' + ext; if (!RM) v.play().catch(() => {}); } else v.pause(); }), { threshold: .25 }).observe(v);
+  function upd() { const r = sec.getBoundingClientRect(); const p = clamp(-r.top / Math.max(1, r.height - innerHeight));
+    const k = Math.min(steps.length - 1, Math.floor(p * steps.length * .999 + (RM ? steps.length : 0)));
+    steps.forEach((s, i) => s.classList.toggle('on', i <= k)); }
+  addEventListener('scroll', upd, { passive: true }); upd();
+})();
+
+/* ===================== the Pecorino Moon ===================== */
+(function moon() {
+  const cv = $('#pie'), ctx = cv.getContext('2d'), box = $('#piebox'), tag = $('#phaseTag'), payoff = $('#payoff'), callout = $('#callout'), dialEl = $('#dial');
+  const S = 900, C = S / 2, R = 433;
+  const clean = new Image(), cheese = new Image(); let loaded = 0;
+  // mask at low resolution: scaling it up gives the soft, ragged edge of real grated cheese
+  const MS = 90, mask = document.createElement('canvas'); mask.width = mask.height = MS; const mx = mask.getContext('2d');
+  const layer = document.createElement('canvas'); layer.width = layer.height = S; const lx = layer.getContext('2d');
+  let f = 0, target = .5, touched = false, flakes = [];
+  const PH = [
+    { at: 0, name: 'NEW MOON', b: 'New moon.', s: 'No pecorino? Not on our watch.' },
+    { at: .25, name: 'CRESCENT', b: 'Crescent.', s: 'Getting there. Keep going.' },
+    { at: .5, name: 'HALF MOON', b: 'Home of the Pecorino Half Moon.', s: 'Grated pecorino over half the pie, crust included. Every pie gets it.' },
+    { at: .75, name: 'GIBBOUS', b: 'Gibbous.', s: "That's a lot of pecorino. We respect it." },
+    { at: 1, name: 'FULL MOON', b: 'Full Moon.', s: 'Pecorino all the way around. It showed up on a Monday Surprise (9/21 & 9/28).' }
+  ];
+  const nearest = x => PH.reduce((a, p) => Math.abs(p.at - x) < Math.abs(a.at - x) ? p : a, PH[0]);
+  function moonPath(g, cx, cy, r, ph) {
+    g.beginPath();
+    if (ph >= .999) { g.arc(cx, cy, r, 0, Math.PI * 2); return; }
+    if (ph <= .001) return;
+    const rx = r * Math.abs(1 - 2 * ph);
+    g.ellipse(cx, cy, r, r, 0, -Math.PI / 2, Math.PI / 2, false);
+    if (ph < .5) g.ellipse(cx, cy, Math.max(.01, rx), r, 0, Math.PI / 2, -Math.PI / 2, true);
+    else g.ellipse(cx, cy, Math.max(.01, rx), r, 0, Math.PI / 2, Math.PI * 1.5, false);
+    g.closePath();
+  }
+  // the dial: five little moons drawn with the same path
+  dialEl.innerHTML = PH.map((p, i) => `<button type="button" data-i="${i}" aria-label="${p.name.toLowerCase()}" aria-pressed="false"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="13" fill="#d2402a" stroke="#fff6e8" stroke-opacity=".35"/><path d="" fill="#fff6e8"/></svg></button>`).join('');
+  $$('button', dialEl).forEach((b, i) => {
+    const ph = PH[i].at, r = 13, rx = r * Math.abs(1 - 2 * ph); let d = '';
+    if (ph >= 1) d = 'M16 3a13 13 0 1 1 0 26a13 13 0 1 1 0-26z';
+    else if (ph > 0) d = `M16 3A13 13 0 0 1 16 29A${rx.toFixed(2)} 13 0 0 ${ph < .5 ? 0 : 1} 16 3z`;
+    b.querySelector('path').setAttribute('d', d);
+    b.addEventListener('click', () => { touch(); target = ph; kick(); });
+  });
+  function draw() {
+    ctx.clearRect(0, 0, S, S);
+    if (loaded < 2) return;
+    ctx.drawImage(clean, 0, 0, S, S);
+    mx.clearRect(0, 0, MS, MS); mx.fillStyle = '#fff'; moonPath(mx, MS / 2, MS / 2, (R + 14) * MS / S, f); mx.fill();
+    lx.globalCompositeOperation = 'source-over'; lx.clearRect(0, 0, S, S); lx.drawImage(cheese, 0, 0, S, S);
+    lx.globalCompositeOperation = 'destination-in'; lx.imageSmoothingEnabled = true; lx.drawImage(mask, 0, 0, S, S);
+    ctx.drawImage(layer, 0, 0);
+    // falling flecks along the edge while it grows
+    ctx.fillStyle = '#fffaf0';
+    flakes.forEach(k => { ctx.globalAlpha = k.a; ctx.save(); ctx.translate(k.x, k.y); ctx.rotate(k.r); ctx.fillRect(-k.w / 2, -1, k.w, 2.2); ctx.restore(); });
+    ctx.globalAlpha = 1;
+  }
+  let shown = null;
+  function label() {
+    const p = nearest(f); tag.textContent = p.name;
+    $$('button', dialEl).forEach((b, i) => b.setAttribute('aria-pressed', PH[i] === p && Math.abs(f - p.at) < .06));
+    if (Math.abs(f - p.at) < .06 && shown !== p) { shown = p; payoff.innerHTML = `<b>${esc(p.b)}</b>${esc(p.s)}`; }
+  }
+  let raf = 0, last = 0;
+  function tick(now) {
+    const dt = Math.min(.05, Math.max(0, (now - last) / 1000)); last = now;
+    const prev = f; f += (target - f) * Math.min(1, dt * (RM ? 99 : 7)); if (Math.abs(target - f) < .0008) f = target;
+    // spawn flecks on the terminator when the moon grows
+    if (f > prev + .0005 && !RM) { const rx = R * Math.abs(1 - 2 * f);
+      for (let i = 0; i < 6; i++) { const yy = (Math.random() * 2 - 1) * R * .95, xr = Math.sqrt(Math.max(0, 1 - (yy / R) ** 2)), x = C + (f < .5 ? 1 : -1) * rx * xr;
+        flakes.push({ x: x + (Math.random() - .5) * 20, y: C + yy - 30 - Math.random() * 40, vy: 60 + Math.random() * 90, r: Math.random() * 3, w: 4 + Math.random() * 7, a: .95, life: .5 + Math.random() * .4 }); } }
+    flakes.forEach(k => { k.y += k.vy * dt; k.life -= dt; k.a = Math.max(0, Math.min(.95, k.life * 2)); });
+    flakes = flakes.filter(k => k.life > 0).slice(-260);
+    draw(); label();
+    if (f !== target || flakes.length) raf = requestAnimationFrame(tick); else raf = 0;
+  }
+  function kick() { if (!raf) { last = performance.now(); raf = requestAnimationFrame(tick); } }
+  const onload = () => { if (++loaded === 2) { draw(); label(); } };
+  clean.onload = cheese.onload = onload; clean.src = 'img/pies/clean.webp'; cheese.src = 'img/pies/cheese.webp';
+  // drag across the pie: right = more pecorino
+  let drag = null;
+  function touch() { if (touched) return; touched = true; callout.classList.add('gone'); }
+  box.addEventListener('pointerdown', e => { drag = { x: e.clientX, y: e.clientY, f0: target, lock: e.pointerType !== 'touch' }; });
+  addEventListener('pointermove', e => { if (!drag) return; const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+    if (!drag.lock) { if (Math.abs(dx) > 8 && Math.abs(dx) > Math.abs(dy)) drag.lock = true; else if (Math.abs(dy) > 8) { drag = null; return; } else return; }
+    touch(); target = clamp(drag.f0 + dx / box.clientWidth * 1.25); kick(); }, { passive: true });
+  addEventListener('pointerup', () => { if (drag && drag.lock && touched) { const p = nearest(target); if (Math.abs(p.at - target) < .07) { target = p.at; kick(); } } drag = null; });
+  addEventListener('pointercancel', () => drag = null);
+  box.tabIndex = 0;
+  box.addEventListener('keydown', e => { if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); touch(); target = clamp(target + (e.key === 'ArrowRight' ? .25 : -.25)); kick(); } });
+  // opener: the moon rises to a half, then a nudge if nobody touches it
+  window.__moonIntro = () => { if (RM) { f = target = .5; draw(); label(); return; } f = 0; target = .5; kick();
+    setTimeout(function nudge() { if (touched) return; const m = $('#moon'); m.classList.add('nudge'); setTimeout(() => m.classList.remove('nudge'), 950); setTimeout(nudge, 4500); }, 3600); };
+  window.__moon = { set: v => { touched = true; target = clamp(v); kick(); }, get f() { return f; }, get tag() { return tag.textContent; } };
+})();
+</script>
+</body>
+</html>
