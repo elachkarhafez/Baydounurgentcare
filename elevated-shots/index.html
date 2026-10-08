@@ -376,6 +376,22 @@
     .po small { display: block; font: 700 11px/1.3 var(--mono); letter-spacing: .04em; text-transform: uppercase; color: var(--muted); margin-top: 3px; }
     .po.on, .po:focus-visible { border-color: var(--ink); background: #fff; transform: translateX(6px); }
     .next { margin-top: 16px; padding: 22px; border-radius: 22px; background: var(--ink); color: var(--cream); }
+    .next [hidden] { display: none !important; }
+    .nx-top { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 14px; align-items: start; }
+    .nx-flyer { position: relative; width: 92px; border-radius: 10px; overflow: hidden; border: 2px solid var(--juice); transform: rotate(4deg); transition: transform .35s var(--ease-out); }
+    .nx-flyer img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; object-position: 50% 30%; height: auto; }
+    .nx-flyer span { position: absolute; left: 0; right: 0; bottom: 0; padding: 4px 0; background: var(--juice); color: var(--ink); font: 700 10px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; }
+    @media (hover: hover) { .nx-flyer:hover { transform: rotate(-2deg) scale(1.06); } }
+    .cd-msg { margin: 14px 0 0 !important; padding: 14px; border-radius: 14px; background: rgba(255,248,231,.08); color: var(--cream) !important; font: 400 26px/1.1 var(--display) !important; text-transform: uppercase; }
+    .nx-dir { margin-top: 14px; height: 46px; padding: 0 20px; font-size: 12.5px; }
+    .po-group { margin: 16px 0 8px; font: 700 11.5px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ink); display: flex; align-items: center; gap: 8px; }
+    .po-group:first-child { margin-top: 0; }
+    .po-group::after { content: ""; flex: 1; height: 2px; background: var(--line); }
+    .po.up { border-color: var(--juice-d); background: #fff8e0; }
+    .po .when { display: inline-block; margin-right: 6px; padding: 3px 7px; border-radius: 6px; background: var(--ink); color: var(--juice); }
+    .flyer-lb { position: fixed; inset: 0; z-index: 400; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 24px; background: rgba(18,17,16,.86); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+    .flyer-lb[hidden] { display: none; }
+    .flyer-lb img { max-width: min(92vw, 560px); max-height: 78vh; width: auto; height: auto; object-fit: contain; min-width: 0; border-radius: 14px; border: 3px solid var(--cream); box-shadow: 0 30px 60px rgba(0,0,0,.5); }
     .next .tag { background: var(--juice); color: var(--ink); }
     .next h3 { margin-top: 14px; font-size: clamp(30px, 3vw, 44px); color: var(--juice); }
     .next p { margin: 6px 0 0; font: 700 12.5px/1.5 var(--mono); letter-spacing: .04em; text-transform: uppercase; color: rgba(255,248,231,.75); }
@@ -854,10 +870,12 @@
           <div>
             <p class="po-hint" data-pohint>Tap a bottle to light it up</p><div class="po-list" data-polist></div>
             <div class="next" data-next>
-              <span class="tag"><i></i>Next sip</span>
-              <h3 data-nextname>Global Holiday Bazaar</h3>
-              <p data-nextmeta>Fri, Nov 13 · 4–10 PM · Larsa Banquet Hall, Warren</p>
+              <div class="nx-top"><div><span class="tag"><i></i><span data-nexttag>Next sip</span></span>
+              <h3 data-nextname>Vendor Fest</h3>
+              <p data-nextmeta></p></div><button type="button" class="nx-flyer" data-nxflyer aria-label="See the flyer"><img alt="" width="640" height="851" data-nxflyerimg><span>Flyer</span></button></div>
               <div class="cd" data-cd><div><b data-cdd>00</b><span>Days</span></div><div><b data-cdh>00</b><span>Hrs</span></div><div><b data-cdm>00</b><span>Min</span></div><div><b data-cds>00</b><span>Sec</span></div></div>
+              <p class="cd-msg" data-cdmsg hidden></p>
+              <a class="btn juice nx-dir" data-nxdir href="#" target="_blank" rel="noopener">Directions</a>
             </div>
           </div>
         </div>
@@ -921,6 +939,7 @@
 
   <nav class="mbar" aria-label="Quick actions" data-mbar><a class="btn juice" data-sms href="#">Text to order</a><a class="btn ink" data-ig href="#" target="_blank" rel="noopener">DM us</a></nav>
   <div class="guide" data-guide aria-hidden="true"><div class="g-bub" data-gbub></div><div class="g-bot" data-gbot></div></div>
+  <div class="flyer-lb" data-flb hidden role="dialog" aria-modal="true" aria-label="Event flyer"><img alt="" data-flbimg><button type="button" class="btn" data-flbx>Close</button></div>
   <div class="popfx" data-popfx aria-hidden="true"></div>
   <canvas class="rain" data-rain aria-hidden="true"></canvas>
   <div class="flash" data-flash aria-hidden="true"></div>
@@ -984,14 +1003,18 @@
       { m: 'Want that glow', s: 'glow', why: 'The wellness one. Pineapple, honey, ginger and turmeric. It is literally in the name.' },
       { m: 'Surprise me', s: '?', why: '' }
     ],
-    // pop-ups, oldest first (from their Instagram)
+    // sips, oldest first (from their Instagram). Anything with an end time in the future shows as coming up,
+    // and the countdown always points at the soonest one. Times are UTC (Detroit is UTC-4 until Nov 1, then UTC-5).
     popups: [
       { n: 'Powerhouse Gym', t: '35th anniversary celebration', city: 'Troy', x: 398, y: 108 },
       { n: 'Rambler', t: 'Elevated Shots x Rambler', city: 'Ann Arbor', x: 84, y: 300 },
       { n: 'Harvest & Handmade Market', t: 'With Overtime Athletics & The Canteen', city: 'Detroit', x: 470, y: 288 },
       { n: 'The Canteen', t: '2-year anniversary market', city: 'Dearborn', x: 366, y: 306 },
-      { n: 'Qimmah Coffee House', t: 'Fall market', city: 'Dearborn', x: 312, y: 262, nolabel: true },
-      { n: 'Global Holiday Bazaar', t: 'Larsa Banquet Hall · 100+ vendors', city: 'Warren', x: 470, y: 158, next: true, at: '2026-11-13T21:00:00Z', meta: 'Fri, Nov 13 · 4–10 PM · Larsa Banquet Hall, Warren' }
+      { n: 'Warm Brews & Fall Finds', t: 'Qimmah Coffee House fall market', city: 'Dearborn', x: 312, y: 262, nolabel: true, at: '2026-10-01T14:00:00Z', end: '2026-10-01T22:00:00Z', date: 'Thu, Oct 1', meta: 'Thu, Oct 1 · 10 AM–6 PM · 939 Howard St, Dearborn', addr: '939 Howard St, Dearborn, MI 48126', flyer: 'img/sips/warm-brews.webp' },
+      { n: 'Vendor Fest', t: 'Shop, sip & support local', city: 'Macomb', x: 498, y: 58, at: '2026-10-09T22:00:00Z', end: '2026-10-10T01:00:00Z', date: 'Fri, Oct 9', meta: 'Fri, Oct 9 · 6–9 PM · Insta Snap Studios, 51410 Milano Dr, Unit 110, Macomb', addr: '51410 Milano Dr Unit 110, Macomb, MI', flyer: 'img/sips/vendor-fest.webp' },
+      { n: 'Yoga for Peace, Hope for Lebanon', t: 'Music · market · meaning', city: 'Dearborn', x: 330, y: 322, nolabel: true, at: '2026-10-11T19:00:00Z', end: '2026-10-11T23:00:00Z', date: 'Sun, Oct 11', meta: 'Sun, Oct 11 · 3–7 PM · West Dearborn Peace Park', addr: 'Peace Park, West Dearborn, MI', flyer: 'img/sips/yoga-peace.webp' },
+      { n: 'Fall Market & Family Fest', t: 'New date · free admission', city: 'Dearborn Hts', x: 262, y: 268, at: '2026-10-18T16:00:00Z', end: '2026-10-18T21:00:00Z', date: 'Sun, Oct 18', meta: 'Sun, Oct 18 · 12–5 PM · Canfield Community Center, 1801 N Beech Daly, Dearborn Heights', addr: '1801 N Beech Daly Rd, Dearborn Heights, MI', flyer: 'img/sips/fall-fest.webp' },
+      { n: 'Global Holiday Bazaar', t: 'Larsa Banquet Hall · 100+ vendors', city: 'Warren', x: 470, y: 158, at: '2026-11-13T21:00:00Z', end: '2026-11-14T03:00:00Z', date: 'Fri, Nov 13', meta: 'Fri, Nov 13 · 4–10 PM · Larsa Banquet Hall, Warren', addr: 'Larsa Banquet Hall, Warren, MI' }
     ],
     clips: [
       { v: 'vid/canteen1', t: 'The Canteen · 2-year anniversary' },
@@ -1337,16 +1360,20 @@
   // every pin is a little bottle with its number printed on it; tap one and it lights up
   const pinBottle = (label, next) => `<g transform="translate(-14 -54) scale(.14)"><path d="${BODY}" class="pliq" fill="${next ? '#ffb23d' : '#ffe45c'}" stroke="#121110" stroke-width="13"/><path d="M48 176 C46 220 46 280 50 316" stroke="#fff" stroke-opacity=".8" stroke-width="16" stroke-linecap="round" fill="none"/><rect x="66" y="4" width="68" height="72" rx="10" fill="#121110"/><text class="pnum" x="100" y="290" text-anchor="middle" style="font:400 150px Anton, Impact, sans-serif" fill="#121110">${label}</text></g>`;
   $('[data-map] svg').insertAdjacentHTML('afterbegin', '<defs><radialGradient id="pinGlow"><stop offset="0" stop-color="#ffe45c" stop-opacity=".95"/><stop offset=".55" stop-color="#ffd21f" stop-opacity=".45"/><stop offset="1" stop-color="#ffd21f" stop-opacity="0"/></radialGradient></defs>');
-  $('[data-pins]').innerHTML = PU.map((p, i) => `<g class="pin" data-pin="${i}" transform="translate(${p.x} ${p.y})" role="button" aria-label="${esc(p.n)}, ${esc(p.city)}"><g data-pinin><circle class="hi" cy="-28" r="40" fill="url(#pinGlow)"/><g class="rays" data-rays>${Array.from({ length: 10 }, (_, k) => { const a = k / 10 * Math.PI * 2; return `<path d="M${(Math.cos(a) * 32).toFixed(1)} ${(-28 + Math.sin(a) * 32).toFixed(1)} L${(Math.cos(a) * 42).toFixed(1)} ${(-28 + Math.sin(a) * 42).toFixed(1)}" stroke="#f29a0c" stroke-width="3.5" stroke-linecap="round"/>`; }).join('')}</g><ellipse cx="0" cy="0" rx="13" ry="4" fill="rgba(18,17,16,.25)"/>${pinBottle(p.next ? '!' : i + 1, p.next)}</g>${p.nolabel ? '' : `<text class="city" y="16">${esc(p.city)}</text>`}</g>`).join('');
+  const NOW = Date.now(), isUp = p => !!p.end && Date.parse(p.end) > NOW;
+  const firstUp = PU.findIndex(isUp);
+  $('[data-pins]').innerHTML = PU.map((p, i) => `<g class="pin" data-pin="${i}" transform="translate(${p.x} ${p.y})" role="button" aria-label="${esc(p.n)}, ${esc(p.city)}"><g data-pinin><circle class="hi" cy="-28" r="40" fill="url(#pinGlow)"/><g class="rays" data-rays>${Array.from({ length: 10 }, (_, k) => { const a = k / 10 * Math.PI * 2; return `<path d="M${(Math.cos(a) * 32).toFixed(1)} ${(-28 + Math.sin(a) * 32).toFixed(1)} L${(Math.cos(a) * 42).toFixed(1)} ${(-28 + Math.sin(a) * 42).toFixed(1)}" stroke="#f29a0c" stroke-width="3.5" stroke-linecap="round"/>`; }).join('')}</g><ellipse cx="0" cy="0" rx="13" ry="4" fill="rgba(18,17,16,.25)"/>${pinBottle(i + 1, isUp(p))}</g>${p.nolabel ? '' : `<text class="city" y="16">${esc(p.city)}</text>`}</g>`).join('');
   const routeD = PU.map((p, i) => (i ? 'L' : 'M') + p.x + ' ' + (p.y - 20)).join(' '); $('[data-route]').setAttribute('d', routeD); $('[data-routemask]').setAttribute('d', routeD);
-  const listBottle = n => `<svg viewBox="0 -4 200 368" aria-hidden="true"><path d="${BODY}" fill="#ffe45c" stroke="#121110" stroke-width="12"/><path d="M48 176 C46 220 46 280 50 316" stroke="#fff" stroke-opacity=".8" stroke-width="14" stroke-linecap="round" fill="none"/><rect x="66" y="2" width="68" height="74" rx="10" fill="#121110"/><text x="100" y="296" text-anchor="middle" style="font:400 150px Anton, Impact, sans-serif" fill="#121110">${n}</text></svg>`;
-  $('[data-polist]').innerHTML = PU.filter(p => !p.next).map((p, i) => `<button type="button" class="po" data-po="${PU.indexOf(p)}"><span class="n">${listBottle(i + 1)}</span><span><b>${esc(p.n)}</b><small>${esc(p.city)} · ${esc(p.t)}</small></span></button>`).join('');
+  const listBottle = (n, up) => `<svg viewBox="0 -4 200 368" aria-hidden="true"><path d="${BODY}" fill="${up ? '#ffb23d' : '#ffe45c'}" stroke="#121110" stroke-width="12"/><path d="M48 176 C46 220 46 280 50 316" stroke="#fff" stroke-opacity=".8" stroke-width="14" stroke-linecap="round" fill="none"/><rect x="66" y="2" width="68" height="74" rx="10" fill="#121110"/><text x="100" y="296" text-anchor="middle" style="font:400 150px Anton, Impact, sans-serif" fill="#121110">${n}</text></svg>`;
+  const poBtn = (p, i) => `<button type="button" class="po${isUp(p) ? ' up' : ''}" data-po="${i}"><span class="n">${listBottle(i + 1, isUp(p))}</span><span><b>${esc(p.n)}</b><small>${isUp(p) ? `<span class="when">${esc(p.date)}</span>` : ''}${esc(p.city)} · ${esc(p.t)}</small></span></button>`;
+  const upIdx = PU.map((p, i) => i).filter(i => isUp(PU[i])), pastIdx = PU.map((p, i) => i).filter(i => !isUp(PU[i])).reverse();
+  $('[data-polist]').innerHTML = (upIdx.length ? '<p class="po-group">Coming up</p>' + upIdx.map(i => poBtn(PU[i], i)).join('') : '') + '<p class="po-group">Past sips</p>' + pastIdx.map(i => poBtn(PU[i], i)).join('');
   const hiPin = (i, big) => { $$('[data-pin]').forEach(p => p.classList.toggle('on', +p.dataset.pin === i)); $$('[data-po]').forEach(p => p.classList.toggle('on', +p.dataset.po === i));
     if (!ANIM || i == null) return; gsap.fromTo(`[data-pin="${i}"] [data-pinin]`, { y: 0, rotation: 0 }, { keyframes: [{ y: -18, rotation: -10, duration: .2, ease: 'power2.out' }, { y: 0, rotation: 0, duration: .55, ease: 'bounce.out' }] });
     if (big) { gsap.fromTo(`[data-pin="${i}"] .hi`, { attr: { r: 20 } }, { attr: { r: 40 }, duration: .6, ease: 'elastic.out(1, .4)' }); gsap.fromTo(`[data-pin="${i}"] .rays path`, { opacity: 0 }, { opacity: 1, duration: .5, stagger: .03 }); } };
   $('[data-polist]').addEventListener('pointerover', e => { const b = e.target.closest('[data-po]'); if (b && FINE) hiPin(+b.dataset.po); });
-  $('[data-polist]').addEventListener('click', e => { const b = e.target.closest('[data-po]'); if (b) hiPin(+b.dataset.po, true); });
-  $('[data-pins]').addEventListener('click', e => { const p = e.target.closest('[data-pin]'); if (!p) return; hiPin(+p.dataset.pin, true); const ph = $('[data-pohint]'); if (ph) ph.textContent = PU[+p.dataset.pin].n + ' · ' + PU[+p.dataset.pin].city; });
+  $('[data-polist]').addEventListener('click', e => { const b = e.target.closest('[data-po]'); if (b) { hiPin(+b.dataset.po, true); showEvent(+b.dataset.po); } });
+  $('[data-pins]').addEventListener('click', e => { const p = e.target.closest('[data-pin]'); if (!p) return; hiPin(+p.dataset.pin, true); showEvent(+p.dataset.pin); const ph = $('[data-pohint]'); if (ph) ph.textContent = PU[+p.dataset.pin].n + ' · ' + PU[+p.dataset.pin].city; });
 
   /* where we're located: their logos, a little fridge of shots, directions */
   $('[data-stk]').innerHTML = CONFIG.stockists.map(st => `<article class="stk" data-stkc><div class="stk-logo${st.full ? ' full' : ''}"><img src="${st.logo}" alt="${esc(st.n)} logo" loading="lazy"></div><div class="stk-fridge"><div class="stk-bots">${FL.map(f => `<span data-stkb>${bottle(f, { label: 'flavor', sw: 6 })}</span>`).join('')}</div></div><div class="stk-info"><b>${esc(st.n)}</b><small>${esc(st.where)} · Elevated Shots in the fridge</small><a class="btn ink" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(st.q)}" target="_blank" rel="noopener">Get directions</a></div></article>`).join('');
@@ -1354,13 +1381,29 @@
   /* latest Instagram posts */
   const IGI = '<svg viewBox="0 0 24 24" fill="none" stroke="#121110" stroke-width="2.2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1" fill="#121110"/></svg>';
   $('[data-posts]').innerHTML = CONFIG.posts.map(po => `<a class="post" href="${po.url}" target="_blank" rel="noopener" data-post><img src="${po.img}" alt="" loading="lazy" width="540" height="960"><span class="ig">${IGI}</span><svg class="heart" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-10-9.3C.3 8.4 2.2 4 6.3 4c2.3 0 3.9 1.3 5.7 3.4C13.8 5.3 15.4 4 17.7 4 21.8 4 23.7 8.4 22 11.7 19.5 16.4 12 21 12 21z" fill="#ff4d6d" stroke="#121110" stroke-width="1.4"/></svg><figcaption>${esc(po.t)}</figcaption></a>`).join('');
-  const nx = PU.find(p => p.next), nxAt = nx ? Date.parse(nx.at) : 0;
-  if (nx) { $('[data-nextname]').textContent = nx.n; $('[data-nextmeta]').textContent = nx.meta; }
+  /* the event card: the soonest sip by default, or whichever one you tap. Upcoming = live countdown,
+     happening now = says so, past = thanks. Flyer opens big. */
+  let evSel = firstUp >= 0 ? firstUp : PU.length - 1;
   const cdEls = ['[data-cdd]', '[data-cdh]', '[data-cdm]', '[data-cds]'].map(s => $(s)); let cdLast = [];
-  const tickCd = () => { let ms = Math.max(0, nxAt - Date.now()); if (!nx || ms <= 0) { $('[data-cd]').innerHTML = '<div style="grid-column:1/-1"><b style="font-size:26px">Happening now or just happened</b><span>Follow @_elevatedshots for the next sip</span></div>'; return false; }
-    const v = [Math.floor(ms / 864e5), Math.floor(ms / 36e5) % 24, Math.floor(ms / 6e4) % 60, Math.floor(ms / 1e3) % 60].map(n => String(n).padStart(2, '0'));
-    v.forEach((s, i) => { if (s !== cdLast[i]) { cdEls[i].textContent = s; if (ANIM && cdLast.length) gsap.fromTo(cdEls[i], { yPercent: -60, opacity: 0 }, { yPercent: 0, opacity: 1, duration: .35, ease: 'back.out(2)' }); } }); cdLast = v; return true; };
-  if (tickCd()) setInterval(tickCd, 1000);
+  const flb = $('[data-flb]');
+  const showEvent = i => { const p = PU[i]; if (!p) return; evSel = i; cdLast = [];
+    $('[data-nextname]').textContent = p.n; $('[data-nextmeta]').textContent = p.meta || `${p.city} · ${p.t}`;
+    $('[data-nexttag]').textContent = isUp(p) ? (i === firstUp ? 'Next sip' : 'Coming up') : 'Past sip';
+    const fb = $('[data-nxflyer]'); fb.hidden = !p.flyer; if (p.flyer) $('[data-nxflyerimg]').src = p.flyer;
+    const dir = $('[data-nxdir]'); dir.hidden = !p.addr || !isUp(p); if (p.addr) dir.href = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(p.addr);
+    tickCd(); if (ANIM) gsap.fromTo('[data-next]', { scale: .97, rotation: -1 }, { scale: 1, rotation: 0, duration: .5, ease: 'back.out(2.4)' }); };
+  const tickCd = () => { const p = PU[evSel], at = p.at ? Date.parse(p.at) : 0, end = p.end ? Date.parse(p.end) : 0, now = Date.now(), cd = $('[data-cd]'), msg = $('[data-cdmsg]');
+    const say = t => { cd.hidden = true; msg.hidden = false; msg.textContent = t; };
+    if (!at || now >= end) { say(isUp(p) ? 'That one just wrapped. Thanks for coming!' : 'Thanks to everyone who came out.'); return; }
+    if (now >= at) { say('Happening now. Come grab a shot!'); return; }
+    cd.hidden = false; msg.hidden = true;
+    const ms = at - now, v = [Math.floor(ms / 864e5), Math.floor(ms / 36e5) % 24, Math.floor(ms / 6e4) % 60, Math.floor(ms / 1e3) % 60].map(n => String(n).padStart(2, '0'));
+    v.forEach((s, i) => { if (s !== cdLast[i]) { cdEls[i].textContent = s; if (ANIM && cdLast.length) gsap.fromTo(cdEls[i], { yPercent: -60, opacity: 0 }, { yPercent: 0, opacity: 1, duration: .35, ease: 'back.out(2)' }); } }); cdLast = v; };
+  $('[data-nxflyer]').addEventListener('click', () => { const p = PU[evSel]; if (!p.flyer) return; $('[data-flbimg]').src = p.flyer; $('[data-flbimg]').alt = p.n + ' flyer'; flb.hidden = false; $('[data-flbx]').focus(); if (ANIM) gsap.fromTo('[data-flbimg]', { scale: .7, rotation: -6, opacity: 0 }, { scale: 1, rotation: 0, opacity: 1, duration: .5, ease: 'back.out(1.8)' }); });
+  const closeFlb = () => { flb.hidden = true; $('[data-nxflyer]').focus(); };
+  flb.addEventListener('click', e => { if (e.target === flb || e.target.closest('[data-flbx]')) closeFlb(); });
+  addEventListener('keydown', e => { if (e.key === 'Escape' && !flb.hidden) closeFlb(); });
+  showEvent(evSel); setInterval(tickCd, 1000);
 
   /* =============================================================
      THE COOLER: Matter.js physics. Ice and bottles in a white
@@ -1682,8 +1725,7 @@
   /* mascot tips as each section comes in */
   // phones get fewer tips so the mascot doesn't sit on the content
   (innerWidth < 760 ? TIPS.filter((_, i) => i === 0 || i === 3 || i === 5 || i === 7) : TIPS).forEach(([sel, txt]) => ScrollTrigger.create({ trigger: sel, start: 'top 55%', once: true, onEnter: () => guideSay(txt, innerWidth < 760 ? 3000 : 4200) }));
-  gsap.to(`[data-pin="${PU.length - 1}"] .hi`, { attr: { r: 54 }, opacity: 0, duration: 1.4, ease: 'power2.out', repeat: -1 });
-  gsap.set(`[data-pin="${PU.length - 1}"] .hi`, { opacity: .5 });
+  if (firstUp >= 0) { gsap.to(`[data-pin="${firstUp}"] .hi`, { attr: { r: 54 }, opacity: 0, duration: 1.4, ease: 'power2.out', repeat: -1 }); gsap.set(`[data-pin="${firstUp}"] .hi`, { opacity: .5 }); }
 
   /* crate idle nudge */
   gsap.from('.crate', { y: 80, rotation: -3, opacity: 0, duration: 1, ease: 'back.out(1.5)', scrollTrigger: { trigger: '.crate', start: 'top 90%' } });
