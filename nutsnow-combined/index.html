@@ -7,7 +7,7 @@
 <title>Nuts Now | Fresh roasted, by the pound | Allen Park &amp; Dearborn Heights</title>
 <meta name="description" content="Nuts Now: nuts and seeds from the family roastery, dried fruit, baklava, Turkish delight, Dubai chocolate, candy, a fresh counter and peanut butter ground to order. All by the pound, in Allen Park and Dearborn Heights.">
 <meta name="theme-color" content="#0e0c0a">
-<meta property="og:title" content="Nuts Now | Nail the roast, make it a pound">
+<meta property="og:title" content="Nuts Now | Nail the roast, weigh your mix">
 <meta property="og:description" content="Fresh roasted, by the pound. Allen Park & Dearborn Heights.">
 <meta property="og:image" content="https://nutsnow-combined.vercel.app/img/a-nuts.webp">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%277%27 fill=%27%230e0c0a%27/%3E%3Ctext x=%2716%27 y=%2723%27 text-anchor=%27middle%27 font-family=%27Georgia%27 font-style=%27italic%27 font-size=%2720%27 fill=%27%23e8c27a%27%3EN%3C/text%3E%3C/svg%3E">
@@ -108,30 +108,47 @@ button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
 @keyframes glow{0%,100%{box-shadow:0 0 0 0 rgba(232,194,122,.5)}50%{box-shadow:0 0 0 8px rgba(232,194,122,0)}}
 .linkish{font-size:13.5px;color:var(--muted);text-decoration:underline;text-underline-offset:3px;margin-top:18px;display:inline-block}
 .linkish:hover{color:var(--ink)}
-/* step 2 controls */
+/* step 2 controls: any bulk item, any amount */
 .c-pound .eyebrow{color:var(--gold)}
+.pk-top{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.sizes{display:flex;align-items:center;gap:4px;padding:4px;border-radius:999px;border:1px solid var(--line);background:var(--bg-2)}
+.sizes span{font-family:"Geist Mono";font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:0 8px 0 10px}
+.sizes button{font-family:"Geist Mono";font-size:13px;padding:7px 12px;border-radius:999px;color:var(--ink-2);transition:background .2s,color .2s}
+.sizes button[aria-checked="true"]{background:var(--gold);color:#1a140a}
+.cats{display:flex;gap:6px;margin-top:18px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}.cats::-webkit-scrollbar{display:none}
+.cats button{flex:none;font-size:13.5px;padding:8px 14px;border-radius:999px;border:1px solid var(--line);color:var(--ink-2);transition:background .2s,color .2s,border-color .2s}
+.cats button:hover{color:var(--ink);border-color:rgba(243,236,224,.35)}
+.cats button[aria-selected="true"]{background:var(--ink);color:#14110d;border-color:var(--ink)}
 .swatches{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px 12px;margin-top:18px}
 .sw{display:flex;flex-direction:column;align-items:center;gap:8px;font-size:12.5px;color:var(--ink-2);text-align:center;line-height:1.25;transition:color .2s,opacity .3s}
-.sw i{width:62px;height:62px;border-radius:50%;background-size:cover;background-position:center;box-shadow:0 0 0 1px var(--line),0 10px 24px -10px rgba(0,0,0,.8);transition:transform .35s cubic-bezier(.3,1.6,.5,1),box-shadow .25s;position:relative}
+.sw i{width:62px;height:62px;border-radius:50%;background-size:cover;background-position:center;background-repeat:no-repeat;box-shadow:0 0 0 1px var(--line),0 10px 24px -10px rgba(0,0,0,.8);transition:transform .35s cubic-bezier(.3,1.6,.5,1),box-shadow .25s;position:relative;font-style:normal}
+.sw i.tile{background-color:var(--bg-3);background-size:112%}
 .sw:hover i{transform:translateY(-4px) scale(1.06);box-shadow:0 0 0 2px var(--gold),0 14px 28px -10px rgba(0,0,0,.9)}
 .sw:hover{color:var(--ink)}
-.sw:disabled{opacity:.35;cursor:default}.sw:disabled i{transform:none;box-shadow:0 0 0 1px var(--line)}
+.sw.pop i{animation:pop .45s cubic-bezier(.3,1.6,.5,1)}
+@keyframes pop{40%{transform:scale(.88)}}
+.sw b{position:absolute;right:-8px;top:-4px;font:500 10.5px/1 "Geist Mono";padding:4px 6px;border-radius:999px;background:var(--gold);color:#1a140a;box-shadow:0 0 0 2px var(--bg)}
 .sw.hint i::after{content:"";position:absolute;inset:-6px;border-radius:50%;border:1.5px solid var(--gold);animation:ping 1.6s ease-out infinite}
 @keyframes ping{from{opacity:.9;transform:scale(.92)}to{opacity:0;transform:scale(1.25)}}
-.slots{display:flex;align-items:center;gap:10px;margin-top:24px;flex-wrap:wrap}
-.slots .lbl{font-family:"Geist Mono";font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-right:4px}
-.slot{width:38px;height:38px;border-radius:50%;border:1px dashed rgba(243,236,224,.25);background-size:cover;background-position:center;position:relative;transition:.3s}
-.slot.f{border:0;box-shadow:0 0 0 2px var(--bg),0 0 0 3px var(--gold-2)}
-.slots .reset{font-size:13px;color:var(--muted);text-decoration:underline;text-underline-offset:3px;margin-left:6px}
-.slots .reset:hover{color:var(--ink)}
-.hpay{display:none;margin-top:24px;padding:22px 24px;border-radius:var(--r);background:var(--bg-3);border:1px solid var(--line)}
-.hpay.on{display:block;animation:payIn .7s cubic-bezier(.2,.8,.2,1) both}
+.bag{margin-top:26px;padding:20px 22px;border-radius:var(--r);background:var(--bg-2);border:1px solid var(--line)}
+.bag-h{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.bag-h .serif{font-size:30px}
+.bag-h b{font-family:"Geist Mono";font-weight:500;font-size:18px;color:var(--gold);white-space:nowrap}
+.bag ul{list-style:none;margin-top:12px;max-height:340px;overflow-y:auto;scrollbar-width:thin}
+.bag li{display:grid;grid-template-columns:34px minmax(0,1fr) auto auto;gap:12px;align-items:center;padding:8px 0;border-top:1px solid var(--line);animation:payIn .4s both}
+.bag li>i{width:34px;height:34px;border-radius:50%;background-size:cover;background-position:center;background-color:var(--bg-3)}
+.bag li>i.tile{background-size:115%}
+.bag li span{font-size:14.5px;line-height:1.3}
+.qty{display:flex;align-items:center;gap:2px;border:1px solid var(--line);border-radius:999px;padding:2px}
+.qty button{width:28px;height:28px;border-radius:50%;font-size:17px;line-height:1;color:var(--ink-2)}.qty button:hover{background:rgba(243,236,224,.08);color:var(--ink)}
+.qty b{font-family:"Geist Mono";font-weight:500;font-size:13px;min-width:52px;text-align:center}
+.bag .x{width:28px;height:28px;border-radius:50%;color:var(--muted);font-size:18px}.bag .x:hover{color:var(--ink);background:rgba(243,236,224,.08)}
+.bag-empty{color:var(--muted);font-size:14.5px;margin-top:10px}
+.bag .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.bag .row .btn{padding:11px 18px;font-size:14px}
+.bag-links{display:flex;gap:16px;margin-top:14px}
+.reset{font-size:13px;color:var(--muted);text-decoration:underline;text-underline-offset:3px}.reset:hover{color:var(--ink)}
 @keyframes payIn{from{opacity:0;transform:translateY(14px)}}
-.hpay .serif{font-size:36px}
-.hpay p{color:var(--ink-2);font-size:15px;margin:6px 0 16px}
-.hpay p b{color:var(--ink);font-weight:600}
-.hpay .row{display:flex;gap:10px;flex-wrap:wrap}
-.hpay .btn{padding:11px 18px;font-size:14px}
 @media (max-width:900px){
   .hero{padding:84px 0 40px;min-height:0}
   .hero .wrap{display:flex;flex-direction:column}
@@ -149,7 +166,9 @@ button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
   .verdict{min-height:56px;margin-top:16px}
   .swatches{margin:14px auto 0;gap:12px 6px}
   .sw i{width:56px;height:56px}
-  .slots{justify-content:center}
+  .pk-top{justify-content:center}.pk-top .eyebrow{width:100%;text-align:center}
+  .bag{padding:18px 16px}.bag li{gap:8px}.qty b{min-width:44px}
+  .bag ul{max-height:none;overflow:visible}.bag-h .serif{font-size:25px}.bag-h b{font-size:16px}
 }
 
 /* marquee */
@@ -317,8 +336,8 @@ footer small{grid-column:1/-1;border-top:1px solid var(--line);padding-top:22px;
   <div class="wrap">
     <div class="hcopy">
       <p class="eyebrow">Nuts Now · Allen Park &amp; Dearborn Heights</p>
-      <h1 class="serif"><span>Nail the roast.</span> <span><em>Make it a pound.</em></span></h1>
-      <p class="lede">Our family has roasted nuts and seeds in Allen Park for 15+ years, and the trick is knowing when to stop. Roast a batch, pour it into the jar on the scale, then scoop the rest of your pound. That's how the regulars do it.</p>
+      <h1 class="serif"><span>Nail the roast.</span> <span><em>Weigh your mix.</em></span></h1>
+      <p class="lede">Our family has roasted nuts and seeds in Allen Park for 15+ years, and the trick is knowing when to stop. Roast a batch, pour it into the jar on the scale, then scoop anything else from the shop, as much as you like. Everything's sold by the pound, so mix it however you want.</p>
       <ol class="steps" id="steps"><li class="on"><b>01</b>Roast</li><li><b>02</b>Weigh</li></ol>
     </div>
     <div class="stage" id="stage">
@@ -326,7 +345,7 @@ footer small{grid-column:1/-1;border-top:1px solid var(--line);padding-top:22px;
         <canvas id="drumCv" role="img" aria-label="A roasting drum full of raw cashews, pistachios and hazelnuts. Hold the roast button and let go when they turn golden."></canvas>
         <div class="callout" id="rCall" aria-hidden="true"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c2 3 5 5 5 9a5 5 0 0 1-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-5 1-8z"/></svg></i><span id="rCallT">Hold to roast<small>Let go when they're golden</small></span></div>
       </div>
-      <div class="pane pane-jar" role="img" aria-label="A glass jar on a digital scale. Your roast pours in first, then each scoop you pick pours in as a layer.">
+      <div class="pane pane-jar" role="img" aria-label="A glass jar on a digital scale. Your roast pours in first, then every scoop you pick pours in as a layer and the scale counts up.">
         <canvas id="jarCv"></canvas>
         <div class="tip" id="tip">Pick a scoop</div>
       </div>
@@ -342,13 +361,18 @@ footer small{grid-column:1/-1;border-top:1px solid var(--line);padding-top:22px;
         <button class="linkish" type="button" id="skipRoast">Skip the roast, go straight to the scale</button>
       </div>
       <div class="c-pound">
-        <p class="eyebrow" id="pickLbl">Now fill it up · a quarter pound a scoop</p>
-        <div class="swatches" id="swatches" role="group" aria-label="Scoops, a quarter pound each"></div>
-        <div class="slots" id="slots" aria-live="polite"><span class="lbl">Your pound</span><span class="slot"></span><span class="slot"></span><span class="slot"></span><span class="slot"></span><button class="reset" type="button" id="backRoast">Roast another batch</button><button class="reset" type="button" id="resetBtn" hidden>Start over</button></div>
-        <div class="hpay" id="hPay" role="status">
-          <div class="serif">That's a <em>pound.</em></div>
-          <p id="payTxt"></p>
-          <div class="row"><button class="btn btn-gold" type="button" id="copyBtn">Copy my mix</button><a class="btn btn-line" data-ig href="#" target="_blank" rel="noopener">Send it on Instagram</a><button class="btn btn-line" type="button" id="again">Roast another</button></div>
+        <div class="pk-top">
+          <p class="eyebrow" id="pickLbl">Scoop anything · as much as you like</p>
+          <div class="sizes" id="sizes" role="radiogroup" aria-label="Scoop size"><span>Scoop</span><button type="button" role="radio" aria-checked="true" data-lb=".25">¼ lb</button><button type="button" role="radio" aria-checked="false" data-lb=".5">½ lb</button><button type="button" role="radio" aria-checked="false" data-lb="1">1 lb</button></div>
+        </div>
+        <div class="cats" id="cats" role="tablist" aria-label="Aisles"></div>
+        <div class="swatches" id="swatches" role="group" aria-label="Tap to pour a scoop into the jar"></div>
+        <div class="bag" id="bag">
+          <div class="bag-h"><span class="serif" id="bagTitle">Your <em>mix</em></span><b id="bagTot">0.00 lb</b></div>
+          <ul id="bagList" aria-live="polite"></ul>
+          <p class="bag-empty" id="bagEmpty">Nothing in the jar yet. Tap anything above to pour it in, then use + and − to get the amounts right.</p>
+          <div class="row" id="bagActs" hidden><button class="btn btn-gold" type="button" id="sealBtn">Seal the jar</button><button class="btn btn-line" type="button" id="copyBtn">Copy my order</button><a class="btn btn-line" id="bagIg" href="https://ig.me/m/nutsnow.co" target="_blank" rel="noopener">Send it on Instagram</a></div>
+          <div class="bag-links"><button class="reset" type="button" id="backRoast">Roast another batch</button><button class="reset" type="button" id="resetBtn" hidden>Start over</button></div>
         </div>
       </div>
     </div>
@@ -463,10 +487,15 @@ const CONFIG = {
   // the roaster: what tumbles in the drum (rows in the catalog sprite atlas)
   roastNuts: ['cashews', 'pistachios', 'hazelnuts'],
   atlas: 'cashews bbq zaatar pistachios pecans hazelnuts walnuts mix pumpkin melon lemon strawberries mango kiwi pineapple baklava delight dates stuffed dubaidates bulkchoc wrapped discs dubaibar dubaicup browniecup dubaiberries gummies sours blue licorice swedish fish pretzels nougat cheesecake cake icecream peanutbutter nutbutters spices coffee'.split(' '),
-  // the scoops on the scale: each one is a quarter pound
-  scoops: [
-    ['cashews', 'Roasted cashews', 'Cashews'], ['bbq', 'BBQ cashews', 'BBQ cashews'], ['pistachios', 'Pistachios', 'Pistachios'], ['hazelnuts', 'Hazelnuts', 'Hazelnuts'],
-    ['seeds', 'Pumpkin seeds', 'Pumpkin'], ['dates', 'Dates', 'Dates'], ['gummies', 'Gummies', 'Gummies'], ['delight', 'Turkish delight', 'Delight']
+  // the scale: everything sold loose by weight, by aisle. A photo (img/t-*) where we have a macro shot,
+  // otherwise the catalog tile; the jar layer is the photo, or a tile of that item's sprites from the atlas
+  bulk: [
+    { tab: 'Nuts', items: [['cashews', 'Roasted cashews', 't-cashews'], ['bbq', 'BBQ cashews', 't-bbq'], ['zaatar', "Za'atar cashews"], ['pistachios', 'Pistachios', 't-pistachios'], ['pecans', 'Pecans'], ['hazelnuts', 'Hazelnuts', 't-hazelnuts'], ['walnuts', 'Walnuts'], ['mix', 'Snack mix']] },
+    { tab: 'Seeds', items: [['pumpkin', 'Pumpkin seeds', 't-seeds'], ['melon', 'Melon seeds'], ['lemon', 'Lemon seeds']] },
+    { tab: 'Dried fruit', items: [['strawberries', 'Dried strawberries'], ['mango', 'Mango slices'], ['kiwi', 'Kiwi'], ['pineapple', 'Pineapple']] },
+    { tab: 'Sweets', items: [['delight', 'Turkish delight', 't-delight'], ['dates', 'Dates', 't-dates'], ['stuffed', 'Stuffed dates']] },
+    { tab: 'Chocolate', items: [['bulkchoc', 'Bulk chocolate'], ['wrapped', 'Wrapped chocolates'], ['discs', 'Melting discs']] },
+    { tab: 'Candy', items: [['gummies', 'Gummies', 't-gummies'], ['sours', 'Gummy sours'], ['blue', 'Blue raspberry'], ['licorice', 'Licorice'], ['swedish', 'Swedish candy'], ['fish', 'Swedish Fish'], ['pretzels', 'Pretzels']] }
   ],
   aisles: [
     { img: 'a-nuts', h: 'Roasted <em>nuts</em>', line: 'From the family roastery in Allen Park, roasting for 15+ years.', items: [['Roasted cashews', 'No. 1'], ['BBQ cashews'], ["Za'atar cashews"], ['Pistachios'], ['Pecans'], ['Hazelnuts'], ['Walnuts'], ['Snack mixes']] },
@@ -670,12 +699,17 @@ paint(); setInterval(paint, 60000);
   /* ===== step 2: the jar on the scale ===== */
   const jar = (() => {
     const box = $('.pane-jar'), cv = $('#jarCv'), cx = cv.getContext('2d');
-    const IMG = {}, PAT = {}, CUSTOM = {}, SC = {};
-    CONFIG.scoops.forEach(([id, name, short]) => { const im = new Image(); im.src = `img/t-${id}.webp`; IMG[id] = im; SC[id] = { name, short, thumb: `img/t-${id}.webp` }; });
+    const ITEMS = {}, IMG = {}, PAT = {}, CUSTOM = {};
+    CONFIG.bulk.forEach(c => c.items.forEach(([id, name, photo]) => {
+      ITEMS[id] = { id, name, short: name, photo, row: CONFIG.atlas.indexOf(id), thumb: photo ? `img/${photo}.webp` : `img/shop/${id}.webp` };
+      if (photo) { const im = new Image(); im.src = `img/${photo}.webp`; IMG[id] = im; }
+    }));
     let W = 0, H = 0, DPR = 1, J;
-    const layers = [];        // {id, h (0..1 of one scoop), px, amp, seed, t0}
-    let weight = 0, shown = 0, done = false, doneT = 0, raf = 0, last = performance.now(), T = 0, nRoast = 0;
-    const N = 4, rnd = (a, b) => a + Math.random() * (b - a);
+    const layers = [];        // pours, bottom to top: {id, lb (target), sh (lb shown so far), px, ampK, seed}
+    const CAP = 2;            // the jar looks full at 2 lb; past that every layer squeezes to fit
+    let weight = 0, shown = 0, capS = CAP, sealed = false, sealT = 0, raf = 0, last = performance.now(), T = 0, scoop = .25, touched = false;
+    const rnd = (a, b) => a + Math.random() * (b - a);
+    const fmtLb = q => { const n = Math.round(q * 4), w = n / 4 | 0, f = ['', '¼', '½', '¾'][n % 4]; return (w ? w + f : f || '0') + ' lb'; };
 
     function size() {
       const r = box.getBoundingClientRect(); if (!r.width) return; DPR = Math.min(2, devicePixelRatio || 1); W = r.width; H = r.height;
@@ -694,64 +728,76 @@ paint(); setInterval(paint, 60000);
       const edge = (x0, y0, x1, y1) => { const g = mg.createLinearGradient(x0, y0, x1, y1); g.addColorStop(0, 'rgba(0,0,0,1)'); g.addColorStop(1, 'rgba(0,0,0,0)'); mg.fillStyle = g; mg.fillRect(0, 0, w, h); };
       edge(0, 0, 0, h * .22); edge(0, h, 0, h * .78); edge(0, 0, w * .22, 0); edge(w, 0, w * .78, 0);
       mg.globalCompositeOperation = 'source-in'; mg.drawImage(sh, 0, 0); o.drawImage(m, 0, 0); return out; };
-    // the roast you pulled, as a seamless tile of nuts at that exact colour (each sprite also drawn wrapped)
-    const roastTile = level => { const TS = 384, c = document.createElement('canvas'); c.width = c.height = TS; const x = c.getContext('2d');
+    // a seamless tile of sprites from the atlas (each sprite also drawn wrapped). level = roast tint, null = as-is
+    const spriteTile = (rows, level) => { const TS = 384, c = document.createElement('canvas'); c.width = c.height = TS; const x = c.getContext('2d');
       x.fillStyle = '#1c130b'; x.fillRect(0, 0, TS, TS); let seed = 11; const r = () => (seed = seed * 16807 % 2147483647) / 2147483647;
       for (const off of [0, .5]) { const n = 7; for (let gy = 0; gy < n; gy++) for (let gx = 0; gx < n; gx++) {
-        const px = (gx + off + (r() - .5) * .5) * TS / n, py = (gy + off + (r() - .5) * .5) * TS / n, row = ROWS[(r() * 3) | 0], col = (r() * 3) | 0, a = r() * 6.28, s = TS / n * (1.25 + r() * .2);
-        for (const ox of [-TS, 0, TS]) for (const oy of [-TS, 0, TS]) { x.save(); x.translate(px + ox, py + oy); x.rotate(a); nut(x, level, row, col, s); x.restore(); } } }
+        const px = (gx + off + (r() - .5) * .5) * TS / n, py = (gy + off + (r() - .5) * .5) * TS / n, row = rows[(r() * rows.length) | 0], col = (r() * 3) | 0, a = r() * 6.28, s = TS / n * (1.25 + r() * .2);
+        for (const ox of [-TS, 0, TS]) for (const oy of [-TS, 0, TS]) { x.save(); x.translate(px + ox, py + oy); x.rotate(a); if (level == null) x.drawImage(atlas, col * 112 + 8, row * 112 + 8, 96, 96, -s / 2, -s / 2, s, s); else nut(x, level, row, col, s); x.restore(); } } }
       return c; };
     const SCALE = () => J.w / 640 * .62;
-    const pat = id => { if (PAT[id]) return PAT[id]; let src = CUSTOM[id]; if (!src) { const im = IMG[id]; if (!im || !im.complete || !im.naturalWidth) return null; src = tile(im); } const p = cx.createPattern(src, 'repeat'); p.setTransform(new DOMMatrix().scale(SCALE())); PAT[id] = p; return p; };
+    const pat = id => { if (PAT[id]) return PAT[id]; let src = CUSTOM[id];
+      if (!src) { const it = ITEMS[id]; if (!it) return null;
+        if (it.photo) { const im = IMG[id]; if (!im.complete || !im.naturalWidth) return null; src = tile(im); }
+        else { if (!atlas.complete || !atlas.naturalWidth) return null; src = CUSTOM[id] = spriteTile([it.row], null); } }
+      const p = cx.createPattern(src, 'repeat'); p.setTransform(new DOMMatrix().scale(SCALE())); PAT[id] = p; return p; };
     const rr = (x, y, w, h, r) => { cx.beginPath(); cx.moveTo(x + r, y); cx.arcTo(x + w, y, x + w, y + h, r); cx.arcTo(x + w, y + h, x, y + h, r); cx.arcTo(x, y + h, x, y, r); cx.arcTo(x, y, x + w, y, r); cx.closePath(); };
 
-    // surface height (px above the jar floor) of layer i at x
-    function surf(i, x) {
-      if (i < 0) return 0;
-      let base = 0; for (let k = 0; k <= i; k++) base += layers[k].h * J.cap / N;
-      const L = layers[i], u = (x - J.x0) / J.w, g = Math.exp(-Math.pow((u - L.px) / .32, 2)), wob = Math.sin(u * 23 + L.seed) * 1.6 + Math.sin(u * 51 + L.seed * 2) * .9;
-      const v = base + L.amp * L.h * (g - .4) + wob * L.h;
-      return Math.max(i ? surf(i - 1, x) + 2 : 2, v);
+    // every layer's top surface, sampled across the jar once per frame (px above the floor)
+    const NS = 48;
+    function surfaces() {
+      const unit = J.cap / capS, out = []; let base = 0, prev = null;
+      for (const L of layers) {
+        const th = L.sh * unit; base += th; const row = new Float32Array(NS + 1), wk = Math.min(1, th / (J.cap / 8));
+        for (let k = 0; k <= NS; k++) { const u = k / NS, g = Math.exp(-Math.pow((u - L.px) / .32, 2)), wob = (Math.sin(u * 23 + L.seed) * 1.6 + Math.sin(u * 51 + L.seed * 2) * .9) * wk;
+          const v = base + th * L.ampK * (g - .4) + wob, lo = prev ? prev[k] + Math.min(2, th) : Math.min(2, th); row[k] = Math.max(lo, v); }
+        out.push(row); prev = row;
+      }
+      return out;
     }
 
-    function add(id) {
-      if (done || layers.length >= N || !J) return false;
-      layers.push({ id, h: 0, px: rnd(.32, .68), amp: J.cap / N * rnd(.35, .55), seed: rnd(0, 9), t0: T });
-      weight = layers.length * .25;
+    function unseal() { if (!sealed) return; sealed = false; steps[1].classList.remove('ok'); }
+    function add(id, lb = scoop) {
+      if (!J || !ITEMS[id]) return false;
+      unseal(); touched = true;
+      const top = layers[layers.length - 1];
+      if (top && top.id === id && top.lb > 0) top.lb += lb;
+      else layers.push({ id, lb, sh: 0, px: rnd(.3, .7), ampK: rnd(.35, .55), seed: rnd(0, 9) });
       $('#tip').style.opacity = 0; $$('.sw').forEach(b => b.classList.remove('hint'));
+      const b = $(`.sw[data-id="${id}"]`); if (b) { b.classList.remove('pop'); void b.offsetWidth; b.classList.add('pop'); }
       render(); kick(); return true;
     }
-    // pour a roast batch in: register its tile + a thumbnail, then add it as a layer
+    function less(id) { unseal(); for (let i = layers.length - 1; i >= 0; i--) if (layers[i].id === id && layers[i].lb > 0) { layers[i].lb = Math.max(0, layers[i].lb - .25); break; } render(); kick(); }
+    function remove(id) { unseal(); layers.forEach(L => { if (L.id === id) L.lb = 0; }); render(); kick(); }
+    // pour a roast batch in: one tile + thumbnail per roast level (golden / dark), then add it like any scoop
     function addRoast(level) {
-      if (!tints || done || layers.length >= N) return false;
-      const id = 'roast' + (++nRoast), t = roastTile(level), k = roastName(level);
-      CUSTOM[id] = t; const th = document.createElement('canvas'); th.width = th.height = 96; th.getContext('2d').drawImage(t, 0, 0, 160, 160, 0, 0, 96, 96);
-      SC[id] = { name: `${k[0].toUpperCase() + k.slice(1)}-roasted cashews, pistachios & hazelnuts`, short: `${k} roast`, thumb: th.toDataURL() };
+      if (!tints) return false;
+      const k = roastName(level), id = 'roast-' + k;
+      if (!ITEMS[id]) { const t = spriteTile(ROWS, level); CUSTOM[id] = t; const th = document.createElement('canvas'); th.width = th.height = 96; th.getContext('2d').drawImage(t, 0, 0, 160, 160, 0, 0, 96, 96);
+        ITEMS[id] = { id, name: `${k[0].toUpperCase() + k.slice(1)} roast: cashews, pistachios & hazelnuts`, short: `${k} roast`, thumb: th.toDataURL() }; }
       return add(id);
     }
+    // the order, merged by item in the order things first went in
+    const order = () => { const m = new Map(); layers.forEach(L => { if (L.lb > 0) m.set(L.id, (m.get(L.id) || 0) + L.lb); }); return [...m]; };
+    const thumbCss = it => `background-image:url(${it.thumb})`;
     function render() {
-      $$('#slots .slot').forEach((s, i) => { const L = layers[i]; s.classList.toggle('f', !!L); s.style.backgroundImage = L ? `url(${SC[L.id].thumb})` : ''; s.title = L ? SC[L.id].name : ''; });
-      const full = layers.length >= N;
-      $('#resetBtn').hidden = !layers.length; $('#backRoast').hidden = full;
-      $$('.sw').forEach(b => b.disabled = full);
-      const left = N - layers.length;
-      $('#pickLbl').textContent = full ? 'Weighed in at a pound' : layers.length ? `${left} more scoop${left > 1 ? 's' : ''} · a quarter pound each` : 'Fill it up · a quarter pound a scoop';
+      const o = order(); weight = o.reduce((s, [, q]) => s + q, 0);
+      $('#bagList').innerHTML = o.map(([id, q]) => { const it = ITEMS[id]; return `<li data-id="${id}"><i class="${it.photo || id.startsWith('roast') ? '' : 'tile'}" style="${thumbCss(it)}"></i><span>${esc(it.name)}</span><div class="qty"><button type="button" data-act="less" aria-label="Less ${esc(it.name)}">−</button><b>${fmtLb(q)}</b><button type="button" data-act="more" aria-label="More ${esc(it.name)}">+</button></div><button type="button" class="x" data-act="rm" aria-label="Remove ${esc(it.name)}">×</button></li>`; }).join('');
+      $('#bagEmpty').hidden = !!o.length; $('#bagActs').hidden = !o.length; $('#resetBtn').hidden = !o.length;
+      $('#bagTot').textContent = weight.toFixed(2) + ' lb';
+      $('#bagTitle').innerHTML = sealed ? 'Sealed. <em>That\'s your mix.</em>' : 'Your <em>mix</em>';
+      $('#sealBtn').textContent = sealed ? 'Sealed' : 'Seal the jar'; $('#sealBtn').disabled = sealed;
+      const inJar = Object.fromEntries(o);
+      $$('.sw').forEach(b => { const q = inJar[b.dataset.id], bd = b.querySelector('b'); if (q) { bd.textContent = fmtLb(q).replace(' lb', ''); bd.hidden = false; } else bd.hidden = true; });
+      const txt = ['Hi Nuts Now! Here\'s my mix' + (o.length ? ` (${fmtLb(weight)} total):` : ':'), ...o.map(([id, q]) => `• ${fmtLb(q)} ${ITEMS[id].name}`)].join('\n');
+      $('#copyBtn').dataset.txt = txt;
     }
-    function finish() {
-      done = true; doneT = T;
-      const names = layers.map(L => SC[L.id].name);
-      const mix = {}; names.forEach(n => mix[n] = (mix[n] || 0) + 1);
-      const list = Object.entries(mix).map(([n, q]) => `${q === 4 ? '1 lb' : q === 2 ? '½ lb' : q === 3 ? '¾ lb' : '¼ lb'} ${n}`);
-      $('#payTxt').innerHTML = `Your mix: <b>${esc(list.join(' · '))}</b>. Ask for it at the counter, or send it to us on Instagram.`;
-      $('#copyBtn').dataset.txt = `My Nuts Now pound: ${list.join(' · ')}`;
-      steps[1].classList.add('ok');
-      setTimeout(() => $('#hPay').classList.add('on'), RM ? 0 : 1300);
-    }
-    function reset() { layers.length = 0; weight = 0; done = false; $('#hPay').classList.remove('on'); $('#tip').style.opacity = 1; steps[1].classList.remove('ok'); render(); kick(); }
+    function seal() { if (!weight) return; sealed = true; sealT = T; steps[1].classList.add('ok'); render(); kick(); }
+    function reset() { layers.length = 0; sealed = false; steps[1].classList.remove('ok'); $('#tip').style.opacity = 1; render(); kick(); }
 
     function draw(dt) {
       cx.setTransform(DPR, 0, 0, DPR, 0, 0); cx.clearRect(0, 0, W, H);
-      const { x0, x1, t, b, w, r } = J, floor = b - w * .06, sc = SCALE();
+      const { x0, x1, t, b, w, r } = J, floor = b - w * .06, sc = SCALE(), X = k => x0 + w * k / NS;
       // scale: steel platform + body with the readout
       const sy = b + 4, sw = w * 1.36, sx = W / 2 - sw / 2;
       cx.save(); cx.shadowColor = 'rgba(0,0,0,.6)'; cx.shadowBlur = 40; cx.shadowOffsetY = 20;
@@ -760,40 +806,43 @@ paint(); setInterval(paint, 60000);
       g = cx.createLinearGradient(sx, 0, sx + sw, 0); g.addColorStop(0, '#5d5850'); g.addColorStop(.3, '#bdb6aa'); g.addColorStop(.55, '#8a847a'); g.addColorStop(.8, '#d4cdc0'); g.addColorStop(1, '#5d5850');
       rr(sx, sy, sw, 16, 6); cx.fillStyle = g; cx.fill();
       cx.fillStyle = 'rgba(0,0,0,.35)'; cx.fillRect(sx + 6, sy + 13, sw - 12, 3);
-      // readout
-      shown += (weight - shown) * Math.min(1, dt * (RM ? 99 : 5)); if (Math.abs(weight - shown) < .002) shown = weight;
-      const lw = w * .62, lh = H * .085, lx = W / 2 - lw / 2, ly = sy + 14 + H * .19 / 2 - lh / 2 + 4;
+      // readout follows what has actually landed in the jar
+      const landed = layers.reduce((s, L) => s + L.sh, 0);
+      shown += (landed - shown) * Math.min(1, dt * (RM ? 99 : 8)); if (Math.abs(landed - shown) < .002) shown = landed;
+      const lw = w * .62, lh = H * .085, lx = W / 2 - lw / 2, ly = sy + 14 + H * .19 / 2 - lh / 2 + 4, rd = shown.toFixed(2);
       rr(lx, ly, lw, lh, 10); cx.fillStyle = '#0b0a08'; cx.fill(); cx.strokeStyle = 'rgba(232,194,122,.18)'; cx.lineWidth = 1; cx.stroke();
-      cx.font = `500 ${lh * .62}px "Geist Mono", monospace`; cx.textAlign = 'right'; cx.textBaseline = 'middle';
-      cx.fillStyle = 'rgba(232,194,122,.08)'; cx.fillText('8.88', lx + lw * .74, ly + lh * .54);
-      cx.shadowColor = 'rgba(232,194,122,.6)'; cx.shadowBlur = 14; cx.fillStyle = done ? '#f4d798' : '#e8c27a'; cx.fillText(shown.toFixed(2), lx + lw * .74, ly + lh * .54); cx.shadowBlur = 0;
+      const fs = lh * (rd.length > 5 ? .5 : .62);
+      cx.font = `500 ${fs}px "Geist Mono", monospace`; cx.textAlign = 'right'; cx.textBaseline = 'middle';
+      cx.fillStyle = 'rgba(232,194,122,.08)'; cx.fillText(rd.length > 4 ? '88.88' : '8.88', lx + lw * .74, ly + lh * .54);
+      cx.shadowColor = 'rgba(232,194,122,.6)'; cx.shadowBlur = 14; cx.fillStyle = sealed ? '#f4d798' : '#e8c27a'; cx.fillText(rd, lx + lw * .74, ly + lh * .54); cx.shadowBlur = 0;
       cx.font = `500 ${lh * .26}px "Geist Mono", monospace`; cx.textAlign = 'left'; cx.fillStyle = '#8d8476'; cx.fillText('LB', lx + lw * .79, ly + lh * .6);
       cx.fillText('NET', lx + lw * .06, ly + lh * .3);
       cx.fillStyle = 'rgba(0,0,0,.45)'; cx.beginPath(); cx.ellipse(W / 2, sy + 2, w * .52, 6, 0, 0, 7); cx.fill();
       // contents, clipped to the jar
+      const SF = surfaces();
       cx.save(); rr(x0 + 3, t + 3, w - 6, b - t - 6, r * .8); cx.clip();
       cx.fillStyle = 'rgba(255,255,255,.03)'; cx.fillRect(x0, t, w, b - t);
       for (let i = 0; i < layers.length; i++) {
-        const L = layers[i], p = pat(L.id); if (!p) continue;
+        const p = pat(layers[i].id); if (!p || layers[i].sh <= 0) continue;
         cx.beginPath();
-        for (let k = 0; k <= 48; k++) { const x = x0 + w * k / 48; cx.lineTo(x, floor - surf(i, x)); }
-        for (let k = 48; k >= 0; k--) { const x = x0 + w * k / 48; cx.lineTo(x, floor - (i ? surf(i - 1, x) : -40)); }
+        for (let k = 0; k <= NS; k++) cx.lineTo(X(k), floor - SF[i][k]);
+        for (let k = NS; k >= 0; k--) cx.lineTo(X(k), floor - (i ? SF[i - 1][k] : -40));
         cx.closePath(); cx.fillStyle = p; cx.fill();
-        cx.beginPath(); for (let k = 0; k <= 48; k++) { const x = x0 + w * k / 48; cx.lineTo(x, floor - surf(i, x)); }
+        cx.beginPath(); for (let k = 0; k <= NS; k++) cx.lineTo(X(k), floor - SF[i][k]);
         cx.strokeStyle = 'rgba(0,0,0,.35)'; cx.lineWidth = 3; cx.stroke();
         cx.strokeStyle = 'rgba(255,240,210,.12)'; cx.lineWidth = 1; cx.stroke();
       }
       g = cx.createLinearGradient(x0, 0, x1, 0); g.addColorStop(0, 'rgba(0,0,0,.55)'); g.addColorStop(.18, 'rgba(0,0,0,0)'); g.addColorStop(.82, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,.6)');
       cx.fillStyle = g; cx.fillRect(x0, t, w, b - t);
-      // stream: product falling from the scoop into the jar
-      const cur = layers[layers.length - 1];
-      if (cur && cur.h < 1) {
-        const sxp = x0 + w * cur.px, top = t - H * .02, bot = floor - surf(layers.length - 1, sxp), p = pat(cur.id);
+      // stream: the top layer while it's still pouring
+      const ti = layers.length - 1, cur = layers[ti], pouring = cur && cur.sh < cur.lb - .004;
+      if (pouring) {
+        const k = Math.round(cur.px * NS), sxp = X(k), top = t - H * .02, bot = floor - SF[ti][k], p = pat(cur.id);
         if (p) { p.setTransform(new DOMMatrix().translate(0, T * 260).scale(sc)); cx.fillStyle = p; rr(sxp - w * .045, top, w * .09, Math.max(0, bot - top), w * .04); cx.fill(); p.setTransform(new DOMMatrix().scale(sc)); }
       }
       cx.restore();
-      if (cur && cur.h < 1) { // stream above the jar mouth, from the steel scoop
-        const sxp = x0 + w * cur.px, p = pat(cur.id), sTop = H * .085;
+      if (pouring) { // stream above the jar mouth, from the steel scoop
+        const sxp = X(Math.round(cur.px * NS)), p = pat(cur.id), sTop = H * .085;
         if (p) { p.setTransform(new DOMMatrix().translate(0, T * 260).scale(sc)); cx.fillStyle = p; rr(sxp - w * .04, sTop, w * .08, t - sTop + 6, w * .04); cx.fill(); p.setTransform(new DOMMatrix().scale(sc)); }
         cx.save(); cx.translate(sxp + w * .06, sTop); cx.rotate(-.55);
         g = cx.createLinearGradient(-w * .2, 0, w * .2, 0); g.addColorStop(0, '#6a655c'); g.addColorStop(.4, '#e3ddd0'); g.addColorStop(1, '#7a746a');
@@ -807,23 +856,24 @@ paint(); setInterval(paint, 60000);
       cx.fillStyle = g; rr(x0 + w * .06, t + 14, w * .12, b - t - 28, 8); cx.fill();
       cx.fillStyle = 'rgba(255,255,255,.08)'; rr(x1 - w * .12, t + 20, w * .04, b - t - 40, 6); cx.fill();
       cx.strokeStyle = 'rgba(243,236,224,.35)'; cx.lineWidth = 1.5; cx.beginPath(); cx.ellipse(W / 2, t + 2, w / 2 - 2, w * .045, 0, 0, 7); cx.stroke();
-      // lid + label once it's a pound
-      if (done) {
-        const k = RM ? 1 : Math.min(1, (T - doneT) / .5), e = 1 - Math.pow(1 - k, 3), ly2 = t - w * .1 - (1 - e) * H * .25;
+      // sealed: the brass lid drops and a label wraps the jar
+      if (sealed) {
+        const k = RM ? 1 : Math.min(1, (T - sealT) / .5), e = 1 - Math.pow(1 - k, 3), ly2 = t - w * .1 - (1 - e) * H * .25;
         g = cx.createLinearGradient(x0, 0, x1, 0); g.addColorStop(0, '#3a2c17'); g.addColorStop(.35, '#c79a52'); g.addColorStop(.6, '#8a6a37'); g.addColorStop(1, '#3a2c17');
         cx.globalAlpha = e; rr(x0 - 4, ly2, w + 8, w * .13, 8); cx.fillStyle = g; cx.fill(); cx.globalAlpha = 1;
-        const k2 = RM ? 1 : Math.min(1, Math.max(0, (T - doneT - .45) / .5)), e2 = 1 - Math.pow(1 - k2, 3);
+        const k2 = RM ? 1 : Math.min(1, Math.max(0, (T - sealT - .45) / .5)), e2 = 1 - Math.pow(1 - k2, 3);
         if (k2 > 0) {
           const lh2 = (b - t) * .3, ly3 = t + (b - t) * .36, lw2 = w * (.3 + .7 * e2), lx2 = W / 2 - lw2 / 2;
           cx.save(); rr(lx2, ly3, lw2, lh2, 6); cx.fillStyle = '#f3ece0'; cx.shadowColor = 'rgba(0,0,0,.4)'; cx.shadowBlur = 16; cx.fill(); cx.restore();
           if (k2 > .6) {
             cx.save(); rr(lx2, ly3, lw2, lh2, 6); cx.clip(); cx.globalAlpha = (k2 - .6) / .4;
             cx.fillStyle = '#0e0c0a'; cx.textAlign = 'center'; cx.textBaseline = 'alphabetic';
-            cx.font = `italic ${lh2 * .3}px "Instrument Serif", serif`; cx.fillText('Your pound', W / 2, ly3 + lh2 * .4);
+            cx.font = `italic ${lh2 * .3}px "Instrument Serif", serif`; cx.fillText('Your mix', W / 2, ly3 + lh2 * .4);
             cx.font = `500 ${lh2 * .1}px "Geist Mono", monospace`; cx.fillStyle = '#6b6357';
-            cx.fillText('NUTS NOW · NET 1.00 LB', W / 2, ly3 + lh2 * .6);
-            const line = layers.map(L => SC[L.id].short.toUpperCase()).join(' · ');
-            let fs = lh2 * .1; cx.font = `500 ${fs}px "Geist Mono", monospace`; const mw = lw2 * .9, tw = cx.measureText(line).width; if (tw > mw) { fs *= mw / tw; cx.font = `500 ${fs}px "Geist Mono", monospace`; }
+            cx.fillText(`NUTS NOW · NET ${weight.toFixed(2)} LB`, W / 2, ly3 + lh2 * .6);
+            const o = order(), names = o.slice(0, o.length > 4 ? 3 : 4).map(([id]) => ITEMS[id].short.toUpperCase()); if (o.length > 4) names.push(`+${o.length - 3} MORE`);
+            const line = names.join(' · ');
+            let fs2 = lh2 * .1; cx.font = `500 ${fs2}px "Geist Mono", monospace`; const mw = lw2 * .9, tw = cx.measureText(line).width; if (tw > mw) { fs2 *= mw / tw; cx.font = `500 ${fs2}px "Geist Mono", monospace`; }
             cx.fillText(line, W / 2, ly3 + lh2 * .8);
             cx.restore();
           }
@@ -833,21 +883,35 @@ paint(); setInterval(paint, 60000);
 
     function tick(now) {
       raf = 0; const dt = Math.max(0, Math.min(.05, (now - last) / 1000)); last = now; T += dt;
-      let busy = Math.abs(weight - shown) > .001 || (done && T - doneT < 1.4);
-      for (const L of layers) if (L.h < 1) { L.h = RM ? 1 : Math.min(1, L.h + dt / 1.15); busy = true; }
-      if (!done && layers.length === N && layers[N - 1].h >= 1) finish();
+      let busy = sealed && T - sealT < 1.4;
+      // the top layer pours (one scoop takes about a second); anything else just settles to its new amount
+      for (let i = 0; i < layers.length; i++) { const L = layers[i];
+        if (L.sh < L.lb) { L.sh = RM ? L.lb : Math.min(L.lb, L.sh + dt * Math.max(.24, (L.lb - L.sh) * 1.3)); busy = true; }
+        else if (L.sh > L.lb) { L.sh = RM ? L.lb : Math.max(L.lb, L.sh - dt * Math.max(.6, (L.sh - L.lb) * 3)); busy = true; } }
+      for (let i = layers.length - 1; i >= 0; i--) if (layers[i].lb <= 0 && layers[i].sh <= .001) layers.splice(i, 1);
+      const capT = Math.max(CAP, layers.reduce((s, L) => s + L.sh, 0));
+      if (Math.abs(capT - capS) > .001) { capS += (capT - capS) * (RM ? 1 : Math.min(1, dt * 6)); busy = true; } else capS = capT;
+      if (Math.abs(layers.reduce((s, L) => s + L.sh, 0) - shown) > .001) busy = true;
       draw(dt);
       if (busy) raf = requestAnimationFrame(tick);
     }
     function kick() { if (!J) return; if (!raf) { last = performance.now(); raf = requestAnimationFrame(tick); } }
 
-    $('#swatches').innerHTML = CONFIG.scoops.map(([id, n], i) => `<button class="sw${i === 0 ? ' hint' : ''}" type="button" data-id="${id}" aria-label="Add a quarter pound of ${esc(n)}"><i style="background-image:url(img/t-${id}.webp)"></i><span>${esc(n)}</span></button>`).join('');
-    $$('.sw').forEach(b => b.addEventListener('click', () => add(b.dataset.id)));
+    // aisles → swatches
+    let cat = 0;
+    const swatches = () => { $('#swatches').innerHTML = CONFIG.bulk[cat].items.map(([id, n], i) => { const it = ITEMS[id]; return `<button class="sw${!touched && cat === 0 && i === 0 ? ' hint' : ''}" type="button" data-id="${id}" aria-label="Pour ${esc(n)} into the jar"><i class="${it.photo ? '' : 'tile'}" style="${thumbCss(it)}"><b hidden></b></i><span>${esc(n)}</span></button>`; }).join(''); render(); };
+    $('#cats').innerHTML = CONFIG.bulk.map((c, i) => `<button type="button" role="tab" aria-selected="${i === 0}" data-i="${i}">${esc(c.tab)}</button>`).join('');
+    $('#cats').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; cat = +b.dataset.i; $$('#cats button').forEach(x => x.setAttribute('aria-selected', x === b)); swatches(); });
+    $('#swatches').addEventListener('click', e => { const b = e.target.closest('.sw'); if (b) add(b.dataset.id); });
+    $('#sizes').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; scoop = +b.dataset.lb; $$('#sizes button').forEach(x => x.setAttribute('aria-checked', x === b)); });
+    $('#bagList').addEventListener('click', e => { const b = e.target.closest('button'), li = e.target.closest('li'); if (!b || !li) return; const id = li.dataset.id, a = b.dataset.act; if (a === 'more') add(id, .25); else if (a === 'less') less(id); else if (a === 'rm') remove(id); });
+    $('#sealBtn').addEventListener('click', seal);
     Object.values(IMG).forEach(im => im.addEventListener('load', kick));
+    atlas.addEventListener('load', kick);
     document.fonts && document.fonts.ready.then(kick);
     if ('ResizeObserver' in window) new ResizeObserver(size).observe(box); else addEventListener('resize', size);
-    size(); render();
-    return { add, addRoast, reset, get full() { return layers.length >= N; }, get state() { return { layers: layers.map(L => L.id), names: layers.map(L => SC[L.id].name), weight, shown: +shown.toFixed(2), done }; } };
+    size(); swatches();
+    return { add, less, remove, addRoast, reset, seal, get scoop() { return scoop; }, get state() { return { layers: layers.map(L => L.id), order: order().map(([id, q]) => [ITEMS[id].name, q]), weight, shown: +shown.toFixed(2), sealed }; } };
   })();
 
   /* ===== the flow between the two ===== */
@@ -858,7 +922,7 @@ paint(); setInterval(paint, 60000);
     drum.active = n === 1;
   }
   function pourIn() {
-    if (!drum.ok || jar.full) return;
+    if (!drum.ok) return;
     const level = drum.roast; steps[0].classList.add('ok'); go(2);
     // on a phone the button sits under the stage: bring the jar back into view so you see the pour
     const top = stage.getBoundingClientRect().top; if (top < 70) { const y = top + scrollY - 76; lenis ? lenis.scrollTo(y, { duration: .9 }) : scrollTo({ top: y, behavior: RM ? 'auto' : 'smooth' }); }
@@ -867,9 +931,10 @@ paint(); setInterval(paint, 60000);
   $('#toJar').addEventListener('click', pourIn);
   $('#skipRoast').addEventListener('click', () => { drum.touch(); go(2); });
   $('#backRoast').addEventListener('click', () => { drum.again(); go(1); });
-  const startOver = () => { jar.reset(); drum.again(); steps[0].classList.remove('ok'); go(1); };
-  $('#resetBtn').addEventListener('click', startOver); $('#again').addEventListener('click', startOver);
-  $('#copyBtn').addEventListener('click', async e => { const b = e.currentTarget, t = b.dataset.txt; try { await navigator.clipboard.writeText(t); b.textContent = 'Copied'; } catch (err) { prompt('Copy your mix:', t); } setTimeout(() => b.textContent = 'Copy my mix', 1800); });
+  $('#resetBtn').addEventListener('click', () => { jar.reset(); drum.again(); steps[0].classList.remove('ok'); go(1); });
+  const copyMix = async () => { try { await navigator.clipboard.writeText($('#copyBtn').dataset.txt); return true; } catch (e) { return false; } };
+  $('#copyBtn').addEventListener('click', async () => { if (await copyMix()) toast('Copied'); else prompt('Copy your order:', $('#copyBtn').dataset.txt); });
+  $('#bagIg').addEventListener('click', () => copyMix().then(ok => ok && toast('Copied. Paste it in the DM')));
   window.__flow = { drum, jar, go, pourIn, get step() { return step; } };
 
   /* page motion */
