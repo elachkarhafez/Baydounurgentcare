@@ -1,0 +1,619 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noai, noimageai">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gardenside Brewing · A garden-side brewpub in Core City, Detroit</title>
+<meta name="description" content="Gardenside Brewing is a garden-side brewpub coming to 4403 Wabash St in Detroit's Core City: local beer, a real lineup of non-alcoholic drinks, farm-to-table food and a native-plant beer garden. Opening late 2026.">
+<meta name="theme-color" content="#2f4d2a">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Crect width=%2264%22 height=%2264%22 rx=%2214%22 fill=%22%232f4d2a%22/%3E%3Cg fill=%22%23b993d6%22 transform=%22translate(32 32)%22%3E%3Cpath id=%22p%22 d=%22M3 -4C8 -16 22 -18 24 -6C25 2 14 2 3 -4Z%22/%3E%3Cuse href=%22%23p%22 transform=%22rotate(90)%22/%3E%3Cuse href=%22%23p%22 transform=%22rotate(180)%22/%3E%3Cuse href=%22%23p%22 transform=%22rotate(270)%22/%3E%3C/g%3E%3C/svg%3E">
+<meta property="og:title" content="Gardenside Brewing · Core City, Detroit">
+<meta property="og:description" content="A garden-side brewpub with beer, non-alcoholic drinks and a native-plant garden. Opening late 2026.">
+<meta property="og:image" content="img/og.jpg">
+<meta property="og:type" content="website">
+<link rel="preload" href="assets/fonts/righteous.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:Righteous;src:url(assets/fonts/righteous.woff2) format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"DM Sans";src:url(assets/fonts/dm-sans.woff2) format("woff2");font-weight:100 1000;font-display:swap}
+/* Gardenside Brewing, Core City Detroit
+   Palette: straight from their branding. Deep garden green, a brighter leaf green for the blob shapes, cream type,
+   the lavender four-petal flower, mint for the wordmark, plus lime and sky from their flyers, and the poppy-purple bar tile.
+   Type: Righteous (rounded, cut terminals, close to their "SHRUB CLUB" lettering), DM Sans for text.
+   Motion: things grow. Soft, springy, never fast. */
+:root{
+  --green:#2f4d2a; --green-2:#3b7a35; --deep:#1f3520; --cream:#f1ecd2; --paper:#f8f5e8; --petal:#b993d6; --mint:#a9e3d8;
+  --lime:#cfdc52; --sky:#a8dbe8; --poppy:#c9a6e4; --ink:#1c2a1c; --muted:#5b6656; --line:#dcd6bc;
+  --pad:clamp(18px,4vw,56px); --max:1240px; --ease:cubic-bezier(.2,.75,.2,1); --spring:cubic-bezier(.3,1.5,.5,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+body{background:var(--paper);color:var(--ink);font:400 17px/1.55 "DM Sans",system-ui,sans-serif;overflow-x:clip;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+a{color:inherit}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+:focus-visible{outline:3px solid var(--petal);outline-offset:3px;border-radius:8px}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 var(--pad)}
+.eyebrow{font:400 13px/1 Righteous;letter-spacing:.14em;text-transform:uppercase;color:var(--green-2)}
+.h2{font:400 clamp(38px,5.2vw,78px)/.98 Righteous;letter-spacing:-.01em}
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .9s var(--ease),transform 1s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+.flower{display:inline-block;width:1em;height:1em;vertical-align:-.12em}
+
+/* ---------- nav ---------- */
+.nav{position:fixed;top:0;left:0;right:0;z-index:60;display:flex;align-items:center;gap:22px;padding:12px var(--pad);color:var(--deep);transition:background .35s,box-shadow .35s,transform .45s var(--ease)}
+.nav.solid,.dusk-nav .nav{color:var(--cream)}
+.nav.solid .logo,.dusk-nav .nav .logo{color:var(--mint)}
+.nav.solid{background:#2f4d2af0;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.nav.hide{transform:translateY(-110%)}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--green);font:400 20px/.85 Righteous;letter-spacing:.02em}
+.logo svg{width:38px;height:38px;flex:none}
+.logo span{display:block}
+.logo span i{display:block;font-style:normal;padding-left:.5em}
+.nav .links{display:flex;gap:26px;margin-left:auto;font-weight:500;font-size:15px}
+.nav .links a{text-decoration:none;position:relative}
+.nav .links a::after{content:"";position:absolute;left:0;right:0;bottom:-4px;height:2px;border-radius:2px;background:var(--petal);transform:scaleX(0);transform-origin:right;transition:transform .35s var(--ease)}
+.nav .links a:hover::after{transform:scaleX(1);transform-origin:left}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;text-decoration:none;font:600 15.5px/1 "DM Sans";padding:15px 22px;border-radius:99px;transition:transform .35s var(--spring),background .25s,color .25s;white-space:nowrap}
+.btn svg{width:18px;height:18px;flex:none}
+.btn:hover{transform:translateY(-2px) scale(1.02)}
+.btn.petal{background:var(--petal);color:var(--deep)}
+.btn.cream{background:var(--cream);color:var(--deep)}
+.btn.line{border:1.5px solid currentColor}
+.nav .btn{padding:11px 16px;font-size:14px}
+
+/* ---------- hero: the plot ---------- */
+.hero{position:relative;min-height:100svh;color:var(--cream);overflow:hidden;display:flex;flex-direction:column;
+  --dusk:0;background:linear-gradient(180deg,
+    color-mix(in srgb,#9fd5e6 calc(100% - var(--dusk)*100%),#2a2550) 0%,
+    color-mix(in srgb,#d7eee6 calc(100% - var(--dusk)*100%),#c9708e) 55%,
+    color-mix(in srgb,#eef3d6 calc(100% - var(--dusk)*100%),#f0a76f) 100%)}
+@supports not (background:color-mix(in srgb,red,blue)){.hero{background:linear-gradient(#9fd5e6,#eef3d6)}}
+.hero .top{position:relative;z-index:3;padding:118px var(--pad) 0;max-width:1400px;width:100%;margin:0 auto;display:grid;grid-template-columns:1.1fr 1fr;gap:20px;align-items:end;color:var(--deep);transition:color .8s}
+.hero.dusk .top{color:var(--cream)}
+.hero .eyebrow{color:inherit;opacity:.85}
+.hero h1{font:400 clamp(44px,6.4vw,104px)/.92 Righteous;letter-spacing:-.015em;margin-top:14px}
+.hero h1 em{font-style:normal;color:var(--green-2);transition:color .8s}
+.hero.dusk h1 em{color:var(--mint)}
+.hero .lede{font-size:clamp(16.5px,1.35vw,19.5px);max-width:30em;opacity:.9}
+.hero .ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}
+.hero .ctas .btn.line{color:inherit}
+.scene{position:relative;flex:1;min-height:440px;margin-top:-20px}
+#garden{position:absolute;inset:0;width:100%;height:100%;touch-action:pan-y;cursor:crosshair;display:block}
+.tools{position:absolute;z-index:4;left:50%;bottom:clamp(14px,3vh,28px);transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:10px;width:max-content;max-width:calc(100% - 24px)}
+.chips{display:flex;gap:6px;padding:6px;border-radius:99px;background:#1f3520e6;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);box-shadow:0 14px 30px -14px #000a;overflow-x:auto;max-width:100%;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{display:flex;align-items:center;gap:7px;padding:8px 12px 8px 8px;border-radius:99px;color:var(--cream);font-size:13.5px;font-weight:600;white-space:nowrap;transition:background .2s}
+.chip i{width:18px;height:18px;border-radius:50%;background:var(--c);box-shadow:inset 0 0 0 3px var(--c2)}
+.chip[aria-pressed="true"]{background:#ffffff26;box-shadow:inset 0 0 0 1.5px #ffffff55}
+.meter{display:flex;align-items:center;gap:10px;padding:8px 10px 8px 14px;border-radius:99px;background:#f1ecd2f0;color:var(--deep);font-size:13.5px;font-weight:600;box-shadow:0 10px 24px -14px #000a}
+.meter .bar{width:120px;height:8px;border-radius:9px;background:#d9d2b0;overflow:hidden}
+.meter .bar b{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--green-2),var(--petal));border-radius:9px;transition:width .3s}
+.meter button{padding:6px 10px;border-radius:99px;background:var(--green);color:var(--cream);font-size:12.5px}
+.callout{position:absolute;z-index:4;left:var(--pad);bottom:38%;background:var(--cream);color:var(--deep);font:600 15px/1.25 "DM Sans";padding:12px 16px 12px 14px;border-radius:16px;display:flex;align-items:center;gap:10px;box-shadow:0 16px 34px -16px #000a;transition:opacity .4s,transform .4s var(--ease);max-width:250px}
+.callout svg{width:28px;height:28px;flex:none;color:var(--green-2)}
+.callout.gone{opacity:0;transform:translateY(10px);pointer-events:none}
+.callout.nudge{animation:nudge 1s var(--ease)}
+@keyframes nudge{25%{transform:translateX(8px)}50%{transform:translateX(-4px)}75%{transform:translateX(3px)}}
+.payoff{position:absolute;z-index:5;left:50%;bottom:clamp(120px,17vh,160px);transform:translate(-50%,16px);opacity:0;pointer-events:none;color:var(--cream);text-align:center;background:#1f3520e6;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);padding:18px 26px;border-radius:22px;box-shadow:0 20px 40px -20px #000;transition:opacity .8s,transform 1s var(--ease);width:max-content;max-width:calc(100% - 32px)}
+.payoff.on{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+.payoff b{display:block;font:400 clamp(26px,3.2vw,44px)/1 Righteous;color:var(--mint)}
+.payoff span{display:block;margin-top:8px;font-size:16px;opacity:.95}
+
+/* ---------- marquee ---------- */
+.marquee{position:relative;z-index:3;background:var(--green);color:var(--cream);overflow:hidden;padding:18px 0}
+.marquee .track{display:flex;width:max-content;animation:mq 40s linear infinite}
+.marquee span{font:400 clamp(20px,2.4vw,32px)/1 Righteous;padding:0 20px;white-space:nowrap;display:flex;align-items:center;gap:40px}
+.marquee span::after{content:"";width:22px;height:22px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-30 -30 60 60'%3E%3Cg fill='%23b993d6'%3E%3Cpath id='p' d='M3 -4C8 -16 22 -18 24 -6C25 2 14 2 3 -4Z'/%3E%3Cuse href='%23p' transform='rotate(90)'/%3E%3Cuse href='%23p' transform='rotate(180)'/%3E%3Cuse href='%23p' transform='rotate(270)'/%3E%3C/g%3E%3C/svg%3E") center/contain no-repeat}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+/* ---------- pouring: the tap wall ---------- */
+.pour{padding:clamp(90px,11vw,150px) 0;background:var(--paper)}
+.pour .head{display:grid;grid-template-columns:1fr 1fr;gap:clamp(20px,4vw,60px);align-items:end;margin-bottom:clamp(34px,5vw,60px)}
+.pour .head p{color:var(--muted);font-size:18px}
+.wall{position:relative;border-radius:26px;overflow:hidden;padding:clamp(26px,4vw,48px) clamp(16px,3vw,40px) 0;
+  background:
+   linear-gradient(#0000 0 62%,#0000 62%),
+   repeating-linear-gradient(90deg,#0000 0 calc(12.5% - 2px),#ffffffaa calc(12.5% - 2px) 12.5%),
+   repeating-linear-gradient(0deg,#0000 0 46px,#ffffffaa 46px 48px),
+   var(--poppy)}
+.wall .pendants{display:flex;justify-content:space-around;height:70px;margin:-48px 0 10px}
+.wall .pendants i{position:relative;width:2px;height:44px;background:#d8a93a}
+.wall .pendants i::after{content:"";position:absolute;left:50%;bottom:-16px;width:34px;height:18px;transform:translateX(-50%);border-radius:18px 18px 4px 4px;background:#f2c14e;box-shadow:0 10px 30px 4px #ffd36b88}
+.taps{display:grid;grid-template-columns:repeat(6,1fr);gap:clamp(8px,1.4vw,18px);align-items:end}
+.tap{display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;cursor:pointer;background:none}
+.tap .handle{width:clamp(30px,3vw,40px);height:clamp(90px,10vw,130px);border-radius:12px 12px 6px 6px;background:var(--hc);box-shadow:inset -6px 0 0 #0002,inset 4px 0 0 #fff3;transform-origin:50% 100%;transition:transform .5s var(--spring);display:grid;place-items:center}
+.tap .handle svg{width:70%;height:auto;opacity:.9}
+.tap .spout{width:16px;height:22px;border-radius:0 0 8px 8px;background:linear-gradient(90deg,#b9b9b0,#eee,#a9a99f);margin-top:-6px}
+.tap:hover .handle,.tap[aria-expanded="true"] .handle{transform:rotate(-14deg)}
+.tap b{font:400 clamp(13px,1.2vw,16px)/1.15 Righteous;color:var(--deep)}
+.counter{margin:0 clamp(-16px,-3vw,-40px);margin-top:18px;background:repeating-linear-gradient(90deg,#3d7b3f 0 28px,#346c37 28px 30px);padding:22px clamp(16px,3vw,40px) 26px;border-top:10px solid #d9d6cc;color:var(--cream);min-height:120px}
+.counter .pixel{font:400 12px/1 Righteous;letter-spacing:.14em;text-transform:uppercase;color:var(--mint)}
+.counter h3{font:400 clamp(22px,2.4vw,32px)/1.1 Righteous;margin:8px 0 6px}
+.counter p{max-width:46em;color:#e8f0dc}
+.note{margin-top:16px;font-size:14px;color:var(--muted)}
+
+/* ---------- the space: renderings ---------- */
+.space{background:var(--green);color:var(--cream);padding:clamp(90px,11vw,150px) 0;position:relative;overflow:hidden}
+.space::before,.space::after{content:"";position:absolute;border-radius:50% 40% 60% 45%;background:var(--green-2);opacity:.55;pointer-events:none}
+.space::before{width:60vw;height:40vw;left:-20vw;top:-10vw;transform:rotate(-14deg)}
+.space::after{width:50vw;height:34vw;right:-16vw;bottom:-12vw;transform:rotate(20deg)}
+.space .wrap{position:relative;z-index:1}
+.space .head{max-width:760px;margin-bottom:clamp(34px,5vw,60px)}
+.space .head p{color:#dfe7cf;font-size:18px;margin-top:16px}
+.space .eyebrow{color:var(--mint)}
+.renders{display:grid;grid-template-columns:repeat(12,1fr);gap:clamp(12px,1.6vw,20px)}
+.rd{position:relative;border-radius:22px;overflow:hidden;background:var(--deep);clip-path:inset(10% 10% 10% 10% round 22px);transition:clip-path 1.2s var(--ease)}
+.rd.in{clip-path:inset(0 0 0 0 round 22px)}
+.rd img{width:100%;height:100%;object-fit:cover;transform:scale(1.12);transition:transform 1.6s var(--ease)}
+.rd.in img{transform:none}
+.rd figcaption{position:absolute;left:12px;right:12px;bottom:12px;padding:12px 14px;border-radius:14px;background:#1f3520d9;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);font-size:14px;line-height:1.4}
+.rd figcaption b{display:block;font:400 16px/1.2 Righteous;color:var(--mint);margin-bottom:3px}
+.rd.a{grid-column:span 12;aspect-ratio:1050/600}
+.rd.b{grid-column:span 5;aspect-ratio:4/5}
+.rd.c{grid-column:span 4;aspect-ratio:4/5}
+.rd.d{grid-column:span 3;aspect-ratio:4/5}
+.rd.b img{object-position:50% 40%}
+.credits{margin-top:26px;font-size:13.5px;color:#cbd6bb}
+.credits a{color:var(--mint);text-decoration:none}
+
+/* ---------- neighbors ---------- */
+.neighbors{background:var(--paper);padding:clamp(90px,11vw,150px) 0}
+.neighbors .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(24px,5vw,70px);align-items:center}
+.quote{font:400 clamp(26px,3.2vw,46px)/1.15 Righteous;color:var(--deep)}
+.quote::before{content:"“";display:block;font-size:2.2em;line-height:.6;color:var(--petal)}
+.quote cite{display:block;margin-top:18px;font:500 15px/1.4 "DM Sans";color:var(--muted);font-style:normal}
+.events{margin-top:34px;display:grid;gap:12px}
+.ev{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center;padding:14px 16px;border-radius:18px;background:#fff;border:1px solid var(--line)}
+.ev .date{width:62px;height:62px;border-radius:14px;background:var(--lime);display:grid;place-items:center;text-align:center;font:400 13px/1.1 Righteous;color:var(--deep)}
+.ev .date b{display:block;font-size:24px;font-weight:400}
+.ev p{font-size:15px;color:var(--muted)}
+.ev strong{display:block;color:var(--ink);font-size:16px}
+.flyer{border-radius:22px;overflow:hidden;box-shadow:0 30px 60px -30px #1f352088;transform:rotate(2deg)}
+
+/* ---------- visit ---------- */
+.visit{background:var(--cream);padding:clamp(90px,11vw,150px) 0;border-top:1px solid var(--line)}
+.visit .grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(24px,5vw,70px);align-items:stretch}
+.addr{font:400 clamp(26px,2.8vw,38px)/1.12 Righteous;margin:16px 0 18px;color:var(--deep)}
+.visit dl{display:grid;grid-template-columns:auto 1fr;gap:12px 24px;margin:20px 0 28px}
+.visit dt{color:var(--muted)}
+.visit dd{font-weight:600}
+.visit dd a{color:var(--green-2);text-decoration:none}
+.visit .ctas{display:flex;flex-wrap:wrap;gap:12px}
+.visit .btn.line{color:var(--deep)}
+.progress{margin-top:6px;display:flex;gap:6px}
+.progress span{flex:1;padding:10px 8px;border-radius:12px;background:#fff;border:1px solid var(--line);font-size:12.5px;font-weight:600;text-align:center;color:var(--muted)}
+.progress span.done{background:var(--green-2);border-color:var(--green-2);color:var(--cream)}
+.progress span.now{background:var(--lime);border-color:var(--lime);color:var(--deep)}
+.map{position:relative;min-height:400px;border-radius:24px;overflow:hidden;background:var(--green);border:1px solid var(--line)}
+.map iframe{position:absolute;inset:0;width:100%;height:100%;border:0;filter:saturate(.8)}
+.map a{position:absolute;right:12px;bottom:12px;z-index:2;background:#fff;border-radius:10px;padding:8px 12px;font-size:13px;font-weight:600;text-decoration:none;box-shadow:0 8px 20px -12px #0006}
+
+/* ---------- close + footer ---------- */
+.close{background:var(--green);color:var(--cream);text-align:center;padding:clamp(100px,13vw,170px) var(--pad);position:relative;overflow:hidden}
+.close .big{width:min(40vw,190px);margin:0 auto 26px;animation:spin 30s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.close h2{font:400 clamp(40px,6vw,90px)/.95 Righteous}
+.close p{color:#dfe7cf;max-width:30em;margin:22px auto 0;font-size:18px}
+.close .ctas{display:flex;justify-content:center;flex-wrap:wrap;gap:12px;margin-top:30px}
+footer{background:var(--deep);color:#ffffffa8;padding:36px var(--pad) calc(36px + env(safe-area-inset-bottom));font-size:14px}
+footer .row{max-width:var(--max);margin:0 auto;display:flex;flex-wrap:wrap;gap:14px 34px;align-items:center;justify-content:space-between}
+footer .logo,.close .logo{color:var(--mint)}
+footer a{color:#fff;text-decoration:none}
+footer a:hover{text-decoration:underline}
+
+/* ---------- phones ---------- */
+@media (max-width:900px){
+  .nav .links{display:none}
+  .nav .btn{margin-left:auto}
+  .logo{font-size:17px}.logo svg{width:32px;height:32px}
+  .hero .top{grid-template-columns:1fr;padding-top:94px;gap:12px}
+  .hero h1{font-size:clamp(40px,11.6vw,60px)}
+  .hero .ctas{margin-top:14px}
+  .scene{min-height:calc(min(56svh,500px) + 112px);margin-top:0;background:linear-gradient(#0000 calc(100% - 114px),#3f2f22 0)}
+  #garden{inset:0 0 112px 0;height:calc(100% - 112px)}
+  .tools{bottom:14px}
+  .payoff{bottom:126px}
+  .callout{bottom:auto;top:12%;left:12px;font-size:14px;max-width:220px}
+  .chip{font-size:12.5px;padding:7px 10px 7px 7px}
+  .meter .bar{width:80px}
+  .pour .head,.neighbors .grid,.visit .grid{grid-template-columns:1fr}
+  .taps{grid-template-columns:repeat(3,1fr);row-gap:22px}
+  .rd.a{aspect-ratio:4/3}
+  .rd.b,.rd.c,.rd.d{grid-column:span 12;aspect-ratio:4/5}
+  .flyer{max-width:420px;margin:0 auto}
+  .map{min-height:300px}
+  .progress{flex-wrap:wrap}.progress span{flex:1 1 40%}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <g id="fl"><path id="pt" d="M3 -4C8 -16 22 -18 24 -6C25 2 14 2 3 -4Z"/><use href="#pt" transform="rotate(90)"/><use href="#pt" transform="rotate(180)"/><use href="#pt" transform="rotate(270)"/></g>
+</defs></svg>
+
+<header class="nav" id="nav">
+  <a class="logo" href="#top" aria-label="Gardenside Brewing, home"><svg viewBox="-30 -30 60 60" aria-hidden="true"><use href="#fl" fill="#b993d6"/></svg><span>GARDEN<i>SIDE</i></span></a>
+  <nav class="links" aria-label="Main">
+    <a href="#pour">What's pouring</a>
+    <a href="#space">The space</a>
+    <a href="#neighbors">Neighbors</a>
+    <a href="#visit">Where</a>
+  </nav>
+  <a class="btn petal" data-href="ig" href="#visit">Follow along</a>
+</header>
+
+<main id="top">
+  <!-- HERO: plant the garden -->
+  <section class="hero" id="hero" aria-labelledby="h1">
+    <div class="top">
+      <div>
+        <p class="eyebrow">Core City, Detroit · Opening late 2026</p>
+        <h1 id="h1">Beer with a <em>garden</em> side.</h1>
+      </div>
+      <div>
+        <p class="lede">A brewpub on Wabash St with local beer, a real lineup of non-alcoholic drinks, food from Detroit growers and a beer garden full of native Michigan plants.</p>
+        <div class="ctas"><a class="btn petal" data-href="ig" href="#visit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".9" fill="currentColor"/></svg>Follow the build</a><a class="btn line" href="#space">See the space</a></div>
+      </div>
+    </div>
+    <div class="scene" id="scene">
+      <canvas id="garden" role="img" aria-label="A drawing of the Gardenside building with a bare garden plot in front. Drag across the soil to plant native Michigan flowers and grasses."></canvas>
+      <div class="callout" id="callout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21v-7m0 0c0-3 2-5 5-5 0 3-2 5-5 5Zm0 0c0-3-2-5-5-5 0 3 2 5 5 5Z"/><path d="M4 21h16"/></svg><span>Drag across the soil to plant the garden</span></div>
+      <div class="payoff" id="payoff" role="status" aria-live="polite"><b>This is Gardenside.</b><span>Opening late 2026 at 4403 Wabash St.</span></div>
+      <div class="tools">
+        <div class="chips" id="chips" role="group" aria-label="Pick a native plant"></div>
+        <div class="meter"><span id="meterTxt">Garden 0% planted</span><span class="bar"><b id="meterBar"></b></span><button type="button" id="fill">Fill it</button></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="marquee" aria-hidden="true"><div class="track" id="mq"></div></div>
+
+  <!-- WHAT'S POURING -->
+  <section class="pour" id="pour" aria-labelledby="pourH">
+    <div class="wrap">
+      <div class="head">
+        <div><p class="eyebrow">What's pouring</p><h2 class="h2" id="pourH" style="margin-top:14px">Something for everyone at the bar.</h2></div>
+        <p>A rotating list of local, artisan-brewed beer, plus non-alcoholic options that get the same attention: hop water, NA beer and NA seltzer. Tap a handle.</p>
+      </div>
+      <div class="wall reveal" id="wall">
+        <div class="pendants" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="taps" id="taps" role="group" aria-label="The tap list"></div>
+        <div class="counter" id="counter" aria-live="polite"><p class="pixel">Tap a handle</p><h3>Under the flowerpot lights</h3><p>The bar sits under flowerpot pendant lights, in front of poppy-purple tile with green tile below. Pick a handle to see what's planned for it.</p></div>
+      </div>
+      <p class="note">The menu is still being built. Exact beers and drinks will be announced closer to opening.</p>
+    </div>
+  </section>
+
+  <!-- THE SPACE -->
+  <section class="space" id="space" aria-labelledby="spaceH">
+    <div class="wrap">
+      <div class="head reveal">
+        <p class="eyebrow">The space</p>
+        <h2 class="h2" id="spaceH" style="margin-top:14px">A pre-fab building, hacked into a garden.</h2>
+        <p>A 5,778-square-foot metal building in Core City, opened up to light and greenery, with a street-facing plaza, garden-side seating and a pergola that carries the brewery out into the garden. These are the design renderings.</p>
+      </div>
+      <div class="renders">
+        <figure class="rd a"><img src="img/exterior.webp" alt="Rendering of the Gardenside exterior: a dark metal building with a pergola, bike racks and native plantings along the sidewalk" width="1050" height="735" loading="lazy"><figcaption><b>The garden side</b>Native plants by JIMA Studio, a plaza on the street and a pergola that pulls the bar outside.</figcaption></figure>
+        <figure class="rd b"><img src="img/bar.webp" alt="Rendering of the bar: purple tile wall, green tile bar front, flowerpot pendant lights and stools" width="720" height="900" loading="lazy"><figcaption><b>The bar</b>Flowerpot pendants, earthy green and poppy-purple tile.</figcaption></figure>
+        <figure class="rd c"><img src="img/planter.webp" alt="Collage of people sitting on a long green-tiled planter bench full of tropical plants and flowers" width="720" height="900" loading="lazy"><figcaption><b>Planter seating</b>Benches built into the greenery.</figcaption></figure>
+        <figure class="rd d"><img src="img/restrooms.webp" alt="Rendering of the restrooms with orange tile and framed botanical prints" width="720" height="899" loading="lazy"><figcaption><b>Even the restrooms</b>Warm tile and botanical prints.</figcaption></figure>
+      </div>
+      <p class="credits">Architecture: <a href="https://www.instagram.com/e.n.d.studio/" target="_blank" rel="noopener">END Studio</a> · Landscape: <a href="https://www.instagram.com/jimastudio/" target="_blank" rel="noopener">JIMA Studio</a> · Branding: <a href="https://www.instagram.com/mondubray/" target="_blank" rel="noopener">@mondubray</a> · Development: <a href="https://www.instagram.com/jumidevelops/" target="_blank" rel="noopener">Jumi Develops</a></p>
+    </div>
+  </section>
+
+  <!-- NEIGHBORS -->
+  <section class="neighbors" id="neighbors" aria-labelledby="nbH">
+    <div class="wrap grid">
+      <div class="reveal">
+        <p class="eyebrow" id="nbH">Neighbors first</p>
+        <p class="quote" style="margin-top:18px">The brewery for me is kind of a vehicle to try and think about how businesses can give back.<cite>Jack Jeffery, owner</cite></p>
+        <div class="events">
+          <div class="ev"><div class="date">MAY<b>2</b></div><div><strong>Core City clean-up</strong><p>With the Grand River Block Club at Common Ground Art Park, 4469 17th St. Gardenside poured its non-alcoholic drinks.</p></div></div>
+          <div class="ev"><div class="date" style="background:var(--petal)">NEW</div><div><strong>Introducing the Shrub Club</strong><p>It's coming. Follow along on Instagram for the details.</p></div></div>
+        </div>
+      </div>
+      <img class="flyer reveal" src="img/cleanup.webp" alt="Flyer: Join us for a Core City clean up, May 2nd, Common Ground Art Park, with Gardenside and the Grand River Block Club" width="720" height="900" loading="lazy">
+    </div>
+  </section>
+
+  <!-- VISIT -->
+  <section class="visit" id="visit" aria-labelledby="visitH">
+    <div class="wrap grid">
+      <div class="reveal">
+        <p class="eyebrow">Where</p>
+        <h2 class="h2" id="visitH" style="margin-top:14px">Core City, on Wabash.</h2>
+        <p class="addr" id="addr">4403 Wabash St<br>Detroit, MI 48208</p>
+        <dl>
+          <dt>Opening</dt><dd>Late 2026</dd>
+          <dt>Owner</dt><dd>Jack Jeffery</dd>
+          <dt>Updates</dt><dd><a data-href="ig" href="#visit">@gardensidebrewing</a></dd>
+        </dl>
+        <div class="progress" aria-label="Build progress"><span class="done">Design</span><span class="done">Funding &amp; grants</span><span class="now">Building</span><span>Opening</span></div>
+        <div class="ctas" style="margin-top:26px"><a class="btn petal" data-href="ig" href="#visit">Follow for the opening date</a><a class="btn line" data-href="maps" href="#visit">See it on the map</a></div>
+      </div>
+      <div class="map reveal" id="map"><a data-href="maps" href="#visit">Open in Maps</a></div>
+    </div>
+  </section>
+
+  <section class="close" aria-labelledby="closeH">
+    <svg class="big" viewBox="-30 -30 60 60" aria-hidden="true"><use href="#fl" fill="#b993d6"/></svg>
+    <h2 id="closeH">See you in the garden.</h2>
+    <p>Beer, non-alcoholic drinks, food from Detroit growers and a lot of native plants. Late 2026, in Core City.</p>
+    <div class="ctas"><a class="btn petal" data-href="ig" href="#visit">Follow @gardensidebrewing</a></div>
+  </section>
+</main>
+
+<footer>
+  <div class="row">
+    <a class="logo" href="#top" aria-label="Back to top"><svg viewBox="-30 -30 60 60" aria-hidden="true"><use href="#fl" fill="#b993d6"/></svg><span>GARDEN<i>SIDE</i></span></a>
+    <span>4403 Wabash St, Detroit, MI 48208</span>
+    <span>Opening late 2026</span>
+    <a data-href="ig" href="#visit">Instagram</a>
+    <span>© <span id="yr"></span> Gardenside Brewing</span>
+  </div>
+</footer>
+
+<script src="assets/lib/gsap.min.js"></script>
+<script src="assets/lib/lenis.min.js"></script>
+<script>
+/* ===================== CONFIG ===================== */
+const CONFIG = {
+  name: 'Gardenside Brewing',
+  address: '4403 Wabash St', city: 'Detroit, MI 48208',
+  ig: 'https://www.instagram.com/gardensidebrewing/',
+  maps: 'https://www.google.com/maps/search/?api=1&query=4403+Wabash+St+Detroit+MI+48208',
+  mapEmbed: 'https://maps.google.com/maps?q=4403%20Wabash%20St%2C%20Detroit%2C%20MI%2048208&z=15&output=embed',
+  // what's planned (from the owner's interviews): no specific beers named yet
+  taps: [
+    { name: 'Local beer', hc: '#3b7a35', t: 'Rotating local beer', d: 'A rotating selection of local, artisan-brewed beer. The list changes, so there is always something new on.' },
+    { name: 'Hop water', hc: '#a9e3d8', t: 'Hop water', d: 'All the hop smell, no alcohol. One of the non-alcoholic options that get a real spot on the wall.' },
+    { name: 'NA beer', hc: '#cfdc52', t: 'Non-alcoholic beer', d: 'For the designated driver, the early riser or anyone who just wants a beer without the beer part.' },
+    { name: 'NA seltzer', hc: '#a8dbe8', t: 'Non-alcoholic seltzer', d: 'Light and cold, for a long afternoon in the garden.' },
+    { name: 'Wine & seltzer', hc: '#c9a6e4', t: 'Wine & hard seltzer', d: 'Wine and hard seltzer for anyone who isn\'t in a beer mood.' },
+    { name: 'Shrub Club', hc: '#f1ecd2', t: 'The Shrub Club', d: 'Freshly announced and still under wraps. Follow @gardensidebrewing to hear what it is first.' }
+  ],
+  // native Michigan perennials for the plot (illustration: the real planting plan is by JIMA Studio)
+  plants: [
+    { id: 'cone', name: 'Coneflower', c: '#c76ab8', c2: '#c4641c' },
+    { id: 'susan', name: 'Black-eyed Susan', c: '#f4b31b', c2: '#3b2416' },
+    { id: 'berg', name: 'Bergamot', c: '#b993d6', c2: '#8c6bb0' },
+    { id: 'milk', name: 'Milkweed', c: '#f07b1d', c2: '#d45f0e' },
+    { id: 'blue', name: 'Bluestem', c: '#7fa496', c2: '#c07a3d' },
+    { id: 'aster', name: 'Aster', c: '#8c5bd6', c2: '#f2c94c' }
+  ],
+  marquee: ['Local beer', 'Non-alcoholic, done right', 'Native Michigan plants', 'Food from Detroit growers', 'Core City, Detroit', 'Opening late 2026']
+};
+
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const qs = new URLSearchParams(location.search);
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+const ease = t => 1 - Math.pow(1 - clamp(t), 3);
+
+/* ---------- links + data ---------- */
+const LINK = { ig: CONFIG.ig, maps: CONFIG.maps };
+$$('[data-href]').forEach(a => { const u = LINK[a.dataset.href]; if (!u) return; a.href = u; a.target = '_blank'; a.rel = 'noopener'; });
+$('#yr').textContent = new Date().getFullYear();
+$('#addr').innerHTML = esc(CONFIG.address) + '<br>' + esc(CONFIG.city);
+{ const items = CONFIG.marquee.map(w => `<span>${esc(w)}</span>`).join(''); $('#mq').innerHTML = items + items + items; }
+
+/* ---------- smooth scroll, nav, reveals ---------- */
+let lenis = null;
+if (!RM && !qs.has('nolenis') && window.Lenis) {
+  lenis = new Lenis({ lerp: .1, smoothWheel: true });
+  if (window.gsap) { gsap.ticker.add(t => lenis.raf(t * 1000)); gsap.ticker.lagSmoothing(0); }
+  else { const raf = t => { lenis.raf(t); requestAnimationFrame(raf); }; requestAnimationFrame(raf); }
+}
+$$('a[href^="#"]').forEach(a => a.addEventListener('click', e => {
+  const id = a.getAttribute('href'), t = id === '#top' ? null : $(id); if (id !== '#top' && !t) return; e.preventDefault();
+  if (lenis) lenis.scrollTo(t || 0, { offset: -10, duration: 1.4 }); else (t ? t.scrollIntoView() : scrollTo(0, 0));
+}));
+const nav = $('#nav'); let lastY = 0;
+addEventListener('scroll', () => { const y = scrollY; nav.classList.toggle('solid', y > 30);
+  if (y > lastY + 4 && y > 500) nav.classList.add('hide'); else if (y < lastY - 4 || y < 500) nav.classList.remove('hide'); lastY = y; }, { passive: true });
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .15 });
+$$('.reveal,.rd').forEach(el => io.observe(el));
+const mapIO = new IntersectionObserver(es => { if (es[0].isIntersecting) { const f = document.createElement('iframe'); f.src = CONFIG.mapEmbed; f.title = 'Map to 4403 Wabash St'; f.loading = 'lazy'; $('#map').prepend(f); mapIO.disconnect(); } }, { rootMargin: '600px' });
+mapIO.observe($('#map'));
+
+/* ---------- the tap wall ---------- */
+(function taps() {
+  const wrap = $('#taps'), counter = $('#counter');
+  wrap.innerHTML = CONFIG.taps.map((t, i) => `<button class="tap" type="button" data-i="${i}" aria-expanded="false"><span class="handle" style="--hc:${esc(t.hc)}"><svg viewBox="-30 -30 60 60"><use href="#fl" fill="#1f3520" opacity=".55"/></svg></span><span class="spout"></span><b>${esc(t.name)}</b></button>`).join('');
+  $$('.tap', wrap).forEach(b => b.addEventListener('click', () => {
+    $$('.tap', wrap).forEach(x => x.setAttribute('aria-expanded', x === b));
+    const t = CONFIG.taps[+b.dataset.i];
+    counter.innerHTML = `<p class="pixel">On the wall</p><h3>${esc(t.t)}</h3><p>${esc(t.d)}</p>`;
+  }));
+})();
+
+/* ===================== the garden plot ===================== */
+(function garden() {
+  const hero = $('#hero'), scene = $('#scene'), cv = $('#garden'), ctx = cv.getContext('2d');
+  const callout = $('#callout'), payoff = $('#payoff'), meterTxt = $('#meterTxt'), meterBar = $('#meterBar');
+  let W = 0, H = 0, DPR = 1, gy = 0, plants = [], cols = [], NC = 44, sel = -1, touched = false, dusk = 0, duskT = 0, done = false, flies = [], t0 = performance.now();
+  const P = CONFIG.plants;
+  // chips: "Mix" plus each native
+  $('#chips').innerHTML = `<button class="chip" type="button" data-i="-1" aria-pressed="true"><i style="--c:conic-gradient(#c76ab8 0 25%,#f4b31b 0 50%,#b993d6 0 75%,#f07b1d 0);--c2:#0000"></i>Mix</button>` +
+    P.map((p, i) => `<button class="chip" type="button" data-i="${i}" aria-pressed="false"><i style="--c:${esc(p.c)};--c2:${esc(p.c2)}"></i>${esc(p.name)}</button>`).join('');
+  $$('#chips .chip').forEach(b => b.addEventListener('click', () => { sel = +b.dataset.i; $$('#chips .chip').forEach(x => x.setAttribute('aria-pressed', x === b)); }));
+
+  function resize() {
+    const r = scene.getBoundingClientRect(); W = r.width; H = r.height; DPR = Math.min(devicePixelRatio || 1, 2);
+    cv.width = Math.round(W * DPR); cv.height = Math.round(H * DPR); ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    gy = H * (W < 700 ? .5 : .56); NC = Math.max(16, Math.min(44, Math.round(W / 24)));
+    kick();
+  }
+  // seeded random so the building texture stays put
+  let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+
+  /* ----- the building: dark pre-fab with big windows, a pergola, and the flower on the gable ----- */
+  function building() {
+    const mob = W < 700;
+    const bw = mob ? W * .72 : Math.min(W * .4, 620), bx = mob ? W * .14 : W * .5 - bw * .1, bh = Math.min(H * .34, bw * .42), by = gy - bh;
+    const roof = bh * .38;
+    // pergola (behind the plants, in front of the wall on the right)
+    const px0 = bx + bw * .62, px1 = Math.min(W - 10, bx + bw * 1.25), ph = bh * .78;
+    // wall
+    ctx.fillStyle = '#2e3230';
+    ctx.beginPath(); ctx.moveTo(bx, gy); ctx.lineTo(bx, by); ctx.lineTo(bx + bw / 2, by - roof); ctx.lineTo(bx + bw, by); ctx.lineTo(bx + bw, gy); ctx.closePath(); ctx.fill();
+    // standing-seam lines
+    ctx.strokeStyle = '#ffffff10'; ctx.lineWidth = 1;
+    for (let x = bx + 8; x < bx + bw; x += 9) { const top = x < bx + bw / 2 ? by - roof * ((x - bx) / (bw / 2)) : by - roof * ((bx + bw - x) / (bw / 2)); ctx.beginPath(); ctx.moveTo(x, gy); ctx.lineTo(x, top + 2); ctx.stroke(); }
+    // roof edge
+    ctx.strokeStyle = '#1b1e1d'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(bx - 6, by + 3); ctx.lineTo(bx + bw / 2, by - roof - 3); ctx.lineTo(bx + bw + 6, by + 3); ctx.stroke();
+    // windows: big bay, glow at dusk
+    const glow = dusk;
+    const win = (x, y, w, h) => {
+      const g = ctx.createLinearGradient(0, y, 0, y + h);
+      g.addColorStop(0, `rgba(${Math.round(150 + 105 * glow)},${Math.round(200 - 10 * glow)},${Math.round(215 - 95 * glow)},1)`);
+      g.addColorStop(1, `rgba(${Math.round(110 + 140 * glow)},${Math.round(150 + 40 * glow)},${Math.round(160 - 60 * glow)},1)`);
+      ctx.fillStyle = g; ctx.fillRect(x, y, w, h);
+      ctx.strokeStyle = '#3b7a35'; ctx.lineWidth = 3; ctx.strokeRect(x, y, w, h);
+      ctx.lineWidth = 2; for (let k = 1; k < 3; k++) { ctx.beginPath(); ctx.moveTo(x + w * k / 3, y); ctx.lineTo(x + w * k / 3, y + h); ctx.stroke(); }
+      // flowerpot pendants inside
+      if (glow > .05) { ctx.fillStyle = `rgba(255,205,90,${glow})`; for (let k = 0; k < 3; k++) { const cx = x + w * (k + .5) / 3; ctx.fillRect(cx - .5, y, 1, h * .22); ctx.beginPath(); ctx.ellipse(cx, y + h * .24, 7, 4.5, 0, Math.PI, 0); ctx.fill(); ctx.shadowColor = '#ffcf6b'; ctx.shadowBlur = 14 * glow; ctx.fill(); ctx.shadowBlur = 0; } }
+    };
+    win(bx + bw * .08, by + bh * .18, bw * .5, bh * .66);
+    win(bx + bw * .66, by + bh * .3, bw * .24, bh * .54);
+    // the flower on the gable
+    ctx.save(); ctx.translate(bx + bw / 2, by - roof * .38); const fs = Math.max(.35, bw / 1100);
+    ctx.scale(fs, fs); ctx.fillStyle = '#b993d6';
+    for (let k = 0; k < 4; k++) { ctx.save(); ctx.rotate(k * Math.PI / 2); ctx.beginPath(); ctx.moveTo(3, -4); ctx.bezierCurveTo(8, -16, 22, -18, 24, -6); ctx.bezierCurveTo(25, 2, 14, 2, 3, -4); ctx.fill(); ctx.restore(); }
+    ctx.restore();
+    // pergola
+    ctx.strokeStyle = '#3b7a35'; ctx.lineWidth = 5;
+    for (let x = px0 + 20; x <= px1; x += Math.max(60, (px1 - px0) / 3)) { ctx.beginPath(); ctx.moveTo(x, gy + 6); ctx.lineTo(x, gy - ph); ctx.stroke(); }
+    ctx.beginPath(); ctx.moveTo(px0, gy - ph); ctx.lineTo(px1, gy - ph); ctx.stroke();
+    ctx.lineWidth = 3; for (let x = px0; x < px1; x += 14) { ctx.beginPath(); ctx.moveTo(x, gy - ph - 6); ctx.lineTo(x + 8, gy - ph + 2); ctx.stroke(); }
+    // string lights at dusk
+    if (glow > .05) { for (let x = px0 + 6; x < px1; x += 16) { const sag = Math.sin((x - px0) / (px1 - px0) * Math.PI * 3) * 6; ctx.beginPath(); ctx.arc(x, gy - ph + 14 + Math.abs(sag), 2.6, 0, Math.PI * 2); ctx.fillStyle = `rgba(255,214,120,${glow})`; ctx.shadowColor = '#ffd36b'; ctx.shadowBlur = 10 * glow; ctx.fill(); ctx.shadowBlur = 0; } }
+  }
+  function ground() {
+    // sidewalk line, then the soil bed
+    ctx.fillStyle = '#c9c4ad'; ctx.fillRect(0, gy - 2, W, 8);
+    const g = ctx.createLinearGradient(0, gy, 0, H); g.addColorStop(0, '#5e4734'); g.addColorStop(1, '#3f2f22');
+    ctx.fillStyle = g; ctx.fillRect(0, gy + 6, W, H - gy);
+    seed = 11; ctx.fillStyle = '#ffffff12';
+    for (let i = 0; i < W * (H - gy) / 260; i++) { ctx.fillRect(rnd() * W, gy + 8 + rnd() * (H - gy), 2, 1.5); }
+  }
+
+  /* ----- the plants, drawn in code ----- */
+  function stem(h, lean, col = '#3e7d3a', w = 2.2) { ctx.strokeStyle = col; ctx.lineWidth = w; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(0, 0); ctx.quadraticCurveTo(lean * .5, -h * .55, lean, -h); ctx.stroke(); }
+  function leaf(x, y, ang, len, col = '#4e8f45') { ctx.save(); ctx.translate(x, y); ctx.rotate(ang); ctx.fillStyle = col; ctx.beginPath(); ctx.moveTo(0, 0); ctx.quadraticCurveTo(len * .5, -len * .28, len, 0); ctx.quadraticCurveTo(len * .5, len * .28, 0, 0); ctx.fill(); ctx.restore(); }
+  function drawPlant(p, now) {
+    const g = ease((now - p.t) / 750), b = ease((now - p.t - 380) / 650); if (g <= 0) return;
+    const h = p.h * g, sw = Math.sin(now / 900 + p.ph) * 2.2 * g, s = p.k;
+    ctx.save(); ctx.translate(p.x, p.y); ctx.scale(s, s);
+    const sp = P[p.s];
+    if (sp.id === 'blue') { // grass tuft, blue-green fading to copper tips
+      for (let i = 0; i < 9; i++) { const a = (i - 4) * .16, hh = h * (.7 + .3 * Math.cos(i)); const gr = ctx.createLinearGradient(0, 0, 0, -hh); gr.addColorStop(0, '#5f8a7b'); gr.addColorStop(.7, '#8fb0a0'); gr.addColorStop(1, '#c07a3d');
+        ctx.strokeStyle = gr; ctx.lineWidth = 1.8; ctx.beginPath(); ctx.moveTo(i - 4, 0); ctx.quadraticCurveTo(Math.sin(a) * hh * .4 + sw, -hh * .6, Math.sin(a) * hh * .8 + sw * 1.4, -hh); ctx.stroke(); }
+      ctx.restore(); return;
+    }
+    stem(h, sw);
+    if (g > .4) { leaf(sw * .2, -h * .3, -2.6, 13 * g); leaf(sw * .3, -h * .45, -.5, 12 * g); }
+    ctx.translate(sw, -h);
+    if (b <= 0) { ctx.fillStyle = '#5c9a4f'; ctx.beginPath(); ctx.arc(0, 0, 3, 0, Math.PI * 2); ctx.fill(); ctx.restore(); return; }
+    ctx.scale(b, b);
+    if (sp.id === 'cone') { ctx.fillStyle = sp.c; for (let i = 0; i < 11; i++) { const a = Math.PI * .15 + i / 10 * Math.PI * .7; ctx.save(); ctx.rotate(a); ctx.beginPath(); ctx.ellipse(10, 0, 9, 2.6, 0, 0, Math.PI * 2); ctx.fill(); ctx.restore(); }
+      ctx.fillStyle = sp.c2; ctx.beginPath(); ctx.ellipse(0, -2, 6, 5, 0, Math.PI, 0); ctx.fill(); ctx.fillRect(-6, -2, 12, 3); }
+    else if (sp.id === 'susan') { ctx.fillStyle = sp.c; for (let i = 0; i < 13; i++) { ctx.save(); ctx.rotate(i / 13 * Math.PI * 2); ctx.beginPath(); ctx.ellipse(8.5, 0, 7.5, 2.6, 0, 0, Math.PI * 2); ctx.fill(); ctx.restore(); }
+      ctx.fillStyle = sp.c2; ctx.beginPath(); ctx.arc(0, 0, 4.2, 0, Math.PI * 2); ctx.fill(); }
+    else if (sp.id === 'berg') { ctx.strokeStyle = sp.c; ctx.lineWidth = 1.6; for (let i = 0; i < 22; i++) { const a = -Math.PI + i / 21 * Math.PI; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(Math.cos(a) * 10, Math.sin(a) * 10 - 1); ctx.stroke(); }
+      ctx.fillStyle = sp.c2; ctx.beginPath(); ctx.arc(0, 0, 4.5, 0, Math.PI * 2); ctx.fill(); }
+    else if (sp.id === 'milk') { for (let i = 0; i < 16; i++) { const a = i * 2.4, r = Math.sqrt(i) * 2.6; ctx.fillStyle = i % 3 ? sp.c : sp.c2; ctx.beginPath(); ctx.arc(Math.cos(a) * r, Math.sin(a) * r * .5 - 1, 2.4, 0, Math.PI * 2); ctx.fill(); } }
+    else if (sp.id === 'aster') { [[0, 0], [-9, 6], [9, 5], [-3, 12]].forEach(([x, y], j) => { ctx.save(); ctx.translate(x, y); const r = j ? .72 : 1; ctx.fillStyle = sp.c;
+      for (let i = 0; i < 14; i++) { ctx.save(); ctx.rotate(i / 14 * Math.PI * 2); ctx.beginPath(); ctx.ellipse(5.5 * r, 0, 5 * r, 1.4 * r, 0, 0, Math.PI * 2); ctx.fill(); ctx.restore(); }
+      ctx.fillStyle = sp.c2; ctx.beginPath(); ctx.arc(0, 0, 2.2 * r, 0, Math.PI * 2); ctx.fill(); ctx.restore(); }); }
+    ctx.restore();
+  }
+  function monarch(f, now) { // a monarch drifting over the flowers
+    const t = (now - f.t) / 1000; const x = f.x + Math.sin(t * .7 + f.ph) * 60 + t * f.vx, y = f.y + Math.sin(t * 1.3 + f.ph) * 18;
+    const flap = Math.abs(Math.sin(t * 14 + f.ph));
+    ctx.save(); ctx.translate(((x % (W + 40)) + W + 40) % (W + 40) - 20, y); ctx.scale(f.s, f.s);
+    ctx.fillStyle = '#f07b1d'; ctx.strokeStyle = '#1c1c1c'; ctx.lineWidth = 1.2;
+    [-1, 1].forEach(sd => { ctx.save(); ctx.scale(sd * (.25 + .75 * flap), 1); ctx.beginPath(); ctx.moveTo(0, 0); ctx.bezierCurveTo(6, -12, 16, -10, 14, -2); ctx.bezierCurveTo(13, 4, 6, 4, 0, 1); ctx.bezierCurveTo(6, 6, 10, 12, 4, 12); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.restore(); });
+    ctx.fillStyle = '#1c1c1c'; ctx.fillRect(-1, -4, 2, 12); ctx.restore();
+  }
+
+  /* ----- planting ----- */
+  function plantAt(x, y, now) {
+    if (y < gy + 8) y = gy + 8 + Math.random() * 10;
+    if (y > H - 8) y = H - 8 - Math.random() * 8;
+    const depth = (y - gy) / (H - gy), k = .7 + depth * .9;
+    const s = sel < 0 ? Math.floor(Math.random() * P.length) : sel;
+    const p = { x, y, s, t: now, h: (P[s].id === 'blue' ? 26 : 34) + Math.random() * 26, k, ph: Math.random() * 6 };
+    // keep the list sorted by depth so near plants draw over far ones
+    let i = plants.length; while (i > 0 && plants[i - 1].y > y) i--; plants.splice(i, 0, p);
+    const c = Math.floor(x / W * NC); if (c >= 0 && c < NC) cols[c] = (cols[c] || 0) + 1;
+    if (plants.length > 900) plants.splice(0, 1);
+  }
+  function coverage() { let n = 0; for (let i = 0; i < NC; i++) if ((cols[i] || 0) >= 1) n++; return n / NC; }
+  function updateMeter() {
+    const c = coverage(), pct = Math.round(c * 100);
+    meterTxt.textContent = `Garden ${pct}% planted`; meterBar.style.width = pct + '%';
+    if (c > .5 && flies.length < 4 && !RM) flies.push({ x: Math.random() * W, y: gy - 20 - Math.random() * 60, t: performance.now(), ph: Math.random() * 6, vx: 10 + Math.random() * 20, s: .9 + Math.random() * .4 });
+    if (c >= .85 && !done) { done = true; duskT = performance.now(); hero.classList.add('dusk'); document.documentElement.classList.add('dusk-nav'); setTimeout(() => payoff.classList.add('on'), RM ? 0 : 700); $('#fill').textContent = 'Start over'; }
+  }
+  let last = null, drag = null;
+  function sow(x, y) {
+    const now = performance.now();
+    if (!last) { last = { x, y }; plantAt(x, y + (Math.random() - .5) * 20, now); return; }
+    const d = Math.hypot(x - last.x, y - last.y), step = 14;
+    for (let s = step; s <= d; s += step) { const t = s / d; plantAt(last.x + (x - last.x) * t + (Math.random() - .5) * 8, last.y + (y - last.y) * t + (Math.random() - .5) * 26, now + s * .6); }
+    if (d >= step) last = { x, y };
+    updateMeter(); kick();
+  }
+  function touch() { if (touched) return; touched = true; callout.classList.add('gone'); }
+  const pos = e => { const r = cv.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; };
+  cv.addEventListener('pointerdown', e => { const p = pos(e); drag = { ...p, lock: e.pointerType !== 'touch' }; last = null; if (drag.lock) { touch(); sow(p.x, p.y); } });
+  addEventListener('pointermove', e => { if (!drag) return; const p = pos(e);
+    if (!drag.lock) { const dx = p.x - drag.x, dy = p.y - drag.y; if (Math.abs(dx) > 8 && Math.abs(dx) > Math.abs(dy)) { drag.lock = true; touch(); sow(drag.x, drag.y); } else if (Math.abs(dy) > 8) { drag = null; return; } else return; }
+    sow(p.x, p.y); }, { passive: true });
+  addEventListener('pointerup', e => { if (drag && !drag.lock) { touch(); const p = pos(e); const now = performance.now(); for (let i = 0; i < 7; i++) plantAt(p.x + (Math.random() - .5) * 60, p.y + (Math.random() - .5) * 40, now + i * 40); updateMeter(); kick(); } drag = null; last = null; });
+  addEventListener('pointercancel', () => { drag = null; last = null; });
+  // "Fill it": a sweep that plants the whole bed (also the keyboard / no-drag path)
+  function fill() {
+    if (done) { plants = []; cols = []; flies = []; done = false; dusk = 0; hero.classList.remove('dusk'); document.documentElement.classList.remove('dusk-nav'); hero.style.setProperty('--dusk', 0); payoff.classList.remove('on'); $('#fill').textContent = 'Fill it'; updateMeter(); kick(); return; }
+    touch(); const now = performance.now(), rows = 4;
+    for (let r = 0; r < rows; r++) for (let x = 6; x < W; x += Math.min(16, W / NC * .7)) plantAt(x + (Math.random() - .5) * 10, gy + 12 + (r + Math.random()) / rows * (H - gy - 20), now + x * (RM ? 0 : 1.1) + r * 60);
+    updateMeter(); kick();
+  }
+  $('#fill').addEventListener('click', fill);
+
+  /* ----- loop: draws only while something is growing or moving ----- */
+  let raf = 0, visible = true;
+  function frame(now) {
+    raf = 0;
+    if (done && dusk < 1) { dusk = RM ? 1 : clamp((now - duskT) / 1800); hero.style.setProperty('--dusk', dusk.toFixed(3)); }
+    ctx.clearRect(0, 0, W, H);
+    ground(); building();
+    for (const p of plants) drawPlant(p, now);
+    for (const f of flies) monarch(f, now);
+    const growing = plants.some(p => now - p.t < 1200);
+    if (visible && (growing || flies.length || (done && dusk < 1) || plants.length)) raf = requestAnimationFrame(frame);
+  }
+  function kick() { if (!raf && visible) raf = requestAnimationFrame(frame); }
+  new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible) kick(); }).observe(scene);
+  document.addEventListener('visibilitychange', () => { visible = !document.hidden; if (visible) kick(); });
+  addEventListener('resize', () => { const oldW = W; resize(); if (oldW && W !== oldW) { const k = W / oldW; plants.forEach(p => p.x *= k); } });
+  resize();
+  // a few sprouts already in, so it reads as a garden-in-progress
+  { const now = performance.now() + 300; for (let i = 0; i < (W < 700 ? 4 : 8); i++) plantAt(W * (.06 + i * (W < 700 ? .24 : .12)) + Math.random() * 20, gy + 20 + Math.random() * (H - gy - 40), now + i * 90); updateMeter(); }
+  if (RM) fill();
+  // idle nudge
+  setTimeout(function nudge() { if (touched) return; callout.classList.add('nudge'); setTimeout(() => callout.classList.remove('nudge'), 1000); setTimeout(nudge, 4200); }, 3000);
+  window.__garden = { sow: (pts) => { touch(); pts.forEach(([x, y]) => sow(x * W, gy + y * (H - gy))); last = null; }, fill, get pct() { return Math.round(coverage() * 100); }, get done() { return done; } };
+})();
+</script>
+</body>
+</html>
