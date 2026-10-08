@@ -1,0 +1,894 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noai, noimageai">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nuts Now | Fresh roasted, by the pound | Allen Park &amp; Dearborn Heights</title>
+<meta name="description" content="Nuts Now: nuts and seeds from the family roastery, dried fruit, baklava, Turkish delight, Dubai chocolate, candy, a fresh counter and peanut butter ground to order. All by the pound, in Allen Park and Dearborn Heights.">
+<meta name="theme-color" content="#0e0c0a">
+<meta property="og:title" content="Nuts Now | Nail the roast, make it a pound">
+<meta property="og:description" content="Fresh roasted, by the pound. Allen Park & Dearborn Heights.">
+<meta property="og:image" content="https://nutsnow-combined.vercel.app/img/a-nuts.webp">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%277%27 fill=%27%230e0c0a%27/%3E%3Ctext x=%2716%27 y=%2723%27 text-anchor=%27middle%27 font-family=%27Georgia%27 font-style=%27italic%27 font-size=%2720%27 fill=%27%23e8c27a%27%3EN%3C/text%3E%3C/svg%3E">
+<link rel="preload" href="assets/fonts/serif.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:"Instrument Serif";src:url(assets/fonts/serif.woff2) format("woff2");font-style:normal;font-display:swap}
+@font-face{font-family:"Instrument Serif";src:url(assets/fonts/serif-italic.woff2) format("woff2");font-style:italic;font-display:swap}
+@font-face{font-family:"Geist";src:url(assets/fonts/geist.woff2) format("woff2");font-weight:100 900;font-display:swap}
+@font-face{font-family:"Geist Mono";src:url(assets/fonts/geist-mono.woff2) format("woff2");font-weight:100 900;font-display:swap}
+/* Combined concept: "Nail the roast. Make it a pound." The dark roastery-at-night editorial system from the
+   pound concept (warm black, cream type, brass gold for the scale and the roast, pistachio green for the viral
+   stuff; Instrument Serif + Geist, Geist Mono for weights), with one hero flow: roast in the drum, then pour
+   the batch into the jar on the scale and build the rest of the pound. */
+:root{--bg:#0e0c0a;--bg-2:#171410;--bg-3:#211c16;--ink:#f3ece0;--ink-2:#c9bfae;--muted:#8d8476;--line:rgba(243,236,224,.12);
+--gold:#e8c27a;--gold-2:#b98d45;--pist:#a9c45a;--red:#e2563c;--r:22px}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;overflow-x:clip}html.lenis,html.lenis body{height:auto}.lenis.lenis-smooth{scroll-behavior:auto!important}
+body{background:var(--bg);color:var(--ink);font:400 16.5px/1.6 "Geist",system-ui,sans-serif;overflow-x:clip;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%;height:auto}
+[hidden]{display:none!important}
+a{color:inherit}
+button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.wrap{width:min(1280px,100% - 40px);margin-inline:auto}
+.serif{font-family:"Instrument Serif",serif;font-weight:400;letter-spacing:-.015em;line-height:.95}
+.serif em{font-style:italic;color:var(--gold)}
+.mono{font-family:"Geist Mono",ui-monospace,monospace}
+.eyebrow{font-family:"Geist Mono";font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:14px 22px;border-radius:999px;font-weight:600;font-size:15px;text-decoration:none;transition:background .25s,color .25s,transform .25s,border-color .25s;white-space:nowrap}
+.btn-gold{background:var(--gold);color:#1a140a}.btn-gold:hover{background:#f4d798;transform:translateY(-1px)}
+.btn-line{border:1px solid rgba(243,236,224,.3)}.btn-line:hover{border-color:var(--ink);background:rgba(243,236,224,.06)}
+.reveal{opacity:0;transform:translateY(28px);transition:opacity 1s cubic-bezier(.2,.7,.2,1),transform 1s cubic-bezier(.2,.7,.2,1)}
+.reveal.in{opacity:1;transform:none}
+.grain{position:fixed;inset:0;pointer-events:none;z-index:90;opacity:.06;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* opener: the scale zeroes itself */
+#open{position:fixed;inset:0;z-index:100;background:var(--bg);display:grid;place-items:center;transition:opacity .6s,visibility .6s}
+#open .r{font-family:"Geist Mono";font-size:clamp(48px,10vw,120px);color:var(--gold);letter-spacing:-.02em;text-shadow:0 0 30px rgba(232,194,122,.35)}
+#open .r small{font-size:.3em;color:var(--muted);margin-left:.2em}
+#open p{position:absolute;bottom:12%;left:0;right:0;text-align:center;font-family:"Instrument Serif";font-style:italic;font-size:22px;color:var(--ink-2)}
+#open.go{opacity:0;visibility:hidden}
+
+/* nav */
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;transition:background .4s,backdrop-filter .4s}
+.nav.solid{background:rgba(14,12,10,.8);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.nav .wrap{display:flex;align-items:center;gap:28px;height:76px}
+.brand{font-family:"Instrument Serif";font-size:30px;text-decoration:none;letter-spacing:-.01em;line-height:1}
+.brand em{color:var(--gold)}
+.nav ul{display:flex;gap:26px;list-style:none;margin-left:auto;font-size:14px}
+.nav ul a{text-decoration:none;color:var(--ink-2);transition:color .2s}.nav ul a:hover{color:var(--ink)}
+.nav .btn{padding:10px 18px;font-size:14px}
+@media (max-width:1000px){.nav ul{display:none}.nav .btn{margin-left:auto}.nav .wrap{height:64px}.brand{font-size:26px}}
+
+/* hero: roast, then weigh */
+.hero{position:relative;min-height:100vh;padding:110px 0 60px;display:flex;align-items:center;overflow:hidden}
+.hero::before{content:"";position:absolute;right:-10vw;top:10%;width:70vw;height:80%;background:radial-gradient(closest-side,rgba(232,194,122,.13),transparent 70%);pointer-events:none}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1.02fr) minmax(0,.98fr);grid-template-areas:'copy stage' 'ctl stage';column-gap:56px;align-items:center;position:relative}
+.hcopy{grid-area:copy;align-self:end}.ctl{grid-area:ctl;align-self:start}.stage{grid-area:stage}
+.hero h1{font-size:clamp(56px,6.2vw,104px);margin:18px 0 22px}
+.hero h1 span{display:block}
+.hero .lede{color:var(--ink-2);font-size:clamp(16px,1.3vw,18px);max-width:32em}
+.steps{display:flex;gap:8px;list-style:none;margin-top:26px}
+.steps li{display:flex;align-items:center;gap:9px;padding:8px 14px 8px 8px;border-radius:999px;border:1px solid var(--line);font-size:14px;color:var(--muted);transition:color .3s,border-color .3s,background .3s}
+.steps b{font-family:"Geist Mono";font-weight:500;font-size:11px;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--bg-3);color:var(--muted);transition:inherit}
+.steps li.on{color:var(--ink);border-color:rgba(232,194,122,.45);background:rgba(232,194,122,.06)}.steps li.on b{background:var(--gold);color:#1a140a}
+.steps li.ok b{background:var(--pist);color:#14180b}
+/* the stage holds both pieces: the roaster, then the jar on the scale */
+.stage{position:relative;width:100%;max-width:560px;justify-self:center;aspect-ratio:5/6}
+.pane{position:absolute;inset:0;transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1),visibility .7s}
+.pane canvas{position:absolute;inset:0;width:100%;height:100%}
+.pane-jar{opacity:0;visibility:hidden;transform:translateY(6%)}
+.stage.s2 .pane-drum{opacity:0;visibility:hidden;transform:translateY(-8%) scale(.9)}
+.stage.s2 .pane-jar{opacity:1;visibility:visible;transform:none}
+.tip{position:absolute;left:50%;top:3%;transform:translateX(-50%);font-family:"Geist Mono";font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);white-space:nowrap;transition:opacity .4s}
+.callout{position:absolute;left:-4%;top:6%;z-index:3;display:flex;align-items:center;gap:12px;padding:11px 16px 11px 11px;border-radius:99px;background:var(--gold);color:#1a140a;font-weight:600;font-size:14px;line-height:1.15;box-shadow:0 18px 30px -12px rgba(0,0,0,.7);pointer-events:none;transition:opacity .5s,transform .5s;animation:bob 2.6s ease-in-out infinite}
+.callout i{width:32px;height:32px;border-radius:50%;background:#1a140a;color:var(--gold);display:grid;place-items:center;flex:none}.callout svg{width:18px;height:18px}
+.callout small{display:block;font-weight:500;font-size:12px;opacity:.7}.callout.gone{opacity:0;transform:translateY(-10px);animation:none}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+/* step 1 controls */
+.c-roast,.c-pound{margin-top:30px;max-width:520px}
+.c-pound{display:none}.ctl.s2 .c-roast{display:none}.ctl.s2 .c-pound{display:block;animation:payIn .7s cubic-bezier(.2,.8,.2,1) both}
+.r-ui{display:grid;grid-template-columns:auto minmax(0,1fr);gap:20px;align-items:center}
+.hold{all:unset;cursor:pointer;-webkit-user-select:none;user-select:none;touch-action:manipulation;-webkit-touch-callout:none;display:grid;place-items:center;align-content:center;width:96px;height:96px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#f08a52,var(--red) 58%,#8f2c16);color:#fff7ec;font:600 16px/1 "Geist",sans-serif;letter-spacing:.04em;text-align:center;box-shadow:0 0 0 1px rgba(232,194,122,.5),0 9px 0 #5e1d0d,0 24px 40px -10px rgba(226,86,60,.55);transition:transform .12s,box-shadow .12s}
+.hold:focus-visible{outline:2px solid var(--gold);outline-offset:5px}
+.hold.down{transform:translateY(7px);box-shadow:0 0 0 1px rgba(232,194,122,.5),0 2px 0 #5e1d0d,0 10px 30px -10px rgba(226,86,60,.8)}
+.hold small{display:block;font:500 10px/1 "Geist Mono";letter-spacing:.16em;text-transform:uppercase;opacity:.8;margin-top:5px}
+.gauge .lbl{display:flex;justify-content:space-between;font:500 11px/1 "Geist Mono";letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.gauge .bar{position:relative;height:14px;border-radius:99px;background:linear-gradient(90deg,#efe3c4,#e2c27a 35%,#c98a3a 55%,#8a4a1c 78%,#2b170c);box-shadow:inset 0 0 0 1px rgba(255,255,255,.1)}
+.gauge .win{position:absolute;top:-6px;bottom:-6px;left:55%;width:20%;border:1.5px solid var(--gold);border-radius:8px;box-shadow:0 0 0 4px rgba(232,194,122,.12)}
+.gauge .win::after{content:"Golden";position:absolute;left:50%;top:-22px;transform:translateX(-50%);font:500 10.5px/1 "Geist Mono";letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.gauge .needle{position:absolute;top:-9px;bottom:-9px;width:4px;margin-left:-2px;border-radius:4px;background:#fff;box-shadow:0 0 12px rgba(255,255,255,.7);left:0}
+.verdict{min-height:64px;margin-top:22px;font-family:"Instrument Serif";font-size:clamp(30px,2.6vw,40px);line-height:1;color:var(--ink)}
+.verdict.good{color:var(--gold);font-style:italic}.verdict small{display:block;font:400 14.5px/1.45 "Geist",sans-serif;color:var(--ink-2);margin-top:8px;font-style:normal}
+.r-pay{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.r-pay[hidden]{display:none}
+.r-pay .btn{padding:12px 20px;font-size:14.5px}
+.r-pay .btn-gold{animation:glow 1.8s ease-in-out infinite}
+@keyframes glow{0%,100%{box-shadow:0 0 0 0 rgba(232,194,122,.5)}50%{box-shadow:0 0 0 8px rgba(232,194,122,0)}}
+.linkish{font-size:13.5px;color:var(--muted);text-decoration:underline;text-underline-offset:3px;margin-top:18px;display:inline-block}
+.linkish:hover{color:var(--ink)}
+/* step 2 controls */
+.c-pound .eyebrow{color:var(--gold)}
+.swatches{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px 12px;margin-top:18px}
+.sw{display:flex;flex-direction:column;align-items:center;gap:8px;font-size:12.5px;color:var(--ink-2);text-align:center;line-height:1.25;transition:color .2s,opacity .3s}
+.sw i{width:62px;height:62px;border-radius:50%;background-size:cover;background-position:center;box-shadow:0 0 0 1px var(--line),0 10px 24px -10px rgba(0,0,0,.8);transition:transform .35s cubic-bezier(.3,1.6,.5,1),box-shadow .25s;position:relative}
+.sw:hover i{transform:translateY(-4px) scale(1.06);box-shadow:0 0 0 2px var(--gold),0 14px 28px -10px rgba(0,0,0,.9)}
+.sw:hover{color:var(--ink)}
+.sw:disabled{opacity:.35;cursor:default}.sw:disabled i{transform:none;box-shadow:0 0 0 1px var(--line)}
+.sw.hint i::after{content:"";position:absolute;inset:-6px;border-radius:50%;border:1.5px solid var(--gold);animation:ping 1.6s ease-out infinite}
+@keyframes ping{from{opacity:.9;transform:scale(.92)}to{opacity:0;transform:scale(1.25)}}
+.slots{display:flex;align-items:center;gap:10px;margin-top:24px;flex-wrap:wrap}
+.slots .lbl{font-family:"Geist Mono";font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-right:4px}
+.slot{width:38px;height:38px;border-radius:50%;border:1px dashed rgba(243,236,224,.25);background-size:cover;background-position:center;position:relative;transition:.3s}
+.slot.f{border:0;box-shadow:0 0 0 2px var(--bg),0 0 0 3px var(--gold-2)}
+.slots .reset{font-size:13px;color:var(--muted);text-decoration:underline;text-underline-offset:3px;margin-left:6px}
+.slots .reset:hover{color:var(--ink)}
+.hpay{display:none;margin-top:24px;padding:22px 24px;border-radius:var(--r);background:var(--bg-3);border:1px solid var(--line)}
+.hpay.on{display:block;animation:payIn .7s cubic-bezier(.2,.8,.2,1) both}
+@keyframes payIn{from{opacity:0;transform:translateY(14px)}}
+.hpay .serif{font-size:36px}
+.hpay p{color:var(--ink-2);font-size:15px;margin:6px 0 16px}
+.hpay p b{color:var(--ink);font-weight:600}
+.hpay .row{display:flex;gap:10px;flex-wrap:wrap}
+.hpay .btn{padding:11px 18px;font-size:14px}
+@media (max-width:900px){
+  .hero{padding:84px 0 40px;min-height:0}
+  .hero .wrap{display:flex;flex-direction:column}
+  .hcopy{display:contents}
+  .hcopy .eyebrow{order:1}.hero h1{order:2}.steps{order:3}.stage{order:4}.ctl{order:5}.hero .lede{order:6;margin-top:22px}
+  .stage{width:100%}
+  .hero h1{font-size:clamp(46px,13vw,80px);margin:10px 0 12px}
+  .hero .lede{font-size:15px}
+  .steps{margin-top:16px}.steps li{font-size:13px;padding:6px 12px 6px 6px}
+  .stage{max-width:330px;margin:6px auto 0}
+  .ctl{width:100%}
+  .callout{left:0;top:2%;font-size:13px}
+  .c-roast,.c-pound{margin:6px auto 0}
+  .hold{width:84px;height:84px}
+  .verdict{min-height:56px;margin-top:16px}
+  .swatches{margin:14px auto 0;gap:12px 6px}
+  .sw i{width:56px;height:56px}
+  .slots{justify-content:center}
+}
+
+/* marquee */
+.marq{border-block:1px solid var(--line);overflow:hidden;padding:18px 0}
+.marq .track{display:flex;gap:42px;width:max-content;animation:marq 46s linear infinite;font-family:"Instrument Serif";font-style:italic;font-size:clamp(24px,2.6vw,36px);color:var(--ink-2);white-space:nowrap}
+.marq .track span::after{content:"·";margin-left:42px;color:var(--gold)}
+@keyframes marq{to{transform:translateX(-50%)}}
+
+.sec{padding:130px 0}
+.head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.7fr);gap:40px;align-items:end;margin-bottom:56px}
+.head h2{font-size:clamp(52px,7vw,112px);margin-top:16px}
+.head p{color:var(--ink-2);font-size:17.5px}
+@media (max-width:860px){.sec{padding:90px 0}.head{grid-template-columns:minmax(0,1fr);gap:14px;margin-bottom:36px}}
+
+/* aisles: pinned horizontal walk */
+.aisles{position:relative;overflow:hidden}
+.aisles .intro{padding:120px 0 40px}
+.pinbox{height:100vh;display:flex;align-items:center;overflow:hidden}
+.track-x{display:flex;gap:28px;padding:0 max(20px,(100vw - 1280px)/2);width:max-content}
+.panel{width:min(78vw,1080px);height:min(74vh,700px);display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);border-radius:28px;overflow:hidden;background:var(--bg-2);border:1px solid var(--line);flex:none}
+.panel .ph{position:relative;overflow:hidden}
+.panel .ph img{position:absolute;inset:-4% -4%;width:108%;height:108%;object-fit:cover;will-change:transform}
+.panel .ph::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent 60%,rgba(23,20,16,.9))}
+.panel .tx{padding:44px 40px;display:flex;flex-direction:column;min-width:0}
+.panel .no{font-family:"Geist Mono";font-size:12px;letter-spacing:.14em;color:var(--muted)}
+.panel h3{font-family:"Instrument Serif";font-weight:400;font-size:clamp(44px,4.6vw,76px);line-height:.95;margin:16px 0 14px;letter-spacing:-.015em}
+.panel h3 em{color:var(--gold)}
+.panel .line{color:var(--ink-2);font-size:16px;max-width:30em}
+.panel ul{list-style:none;margin-top:auto;padding-top:26px;columns:2;column-gap:24px}
+.panel li{break-inside:avoid;padding:9px 0;border-top:1px solid var(--line);font-size:15px;display:flex;justify-content:space-between;gap:8px}
+.panel li i{font-style:normal;font-family:"Geist Mono";font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:#1a140a;background:var(--gold);padding:2px 7px;border-radius:999px;align-self:center;white-space:nowrap}
+.panel li i.viral,.panel li i.new{background:var(--pist)}
+@media (max-width:900px){
+  .aisles .intro{padding:90px 0 30px}
+  .pinbox{height:auto;display:block}
+  .track-x{flex-direction:column;width:auto;padding:0 20px 80px;gap:20px}
+  .panel{width:100%;height:auto;grid-template-columns:minmax(0,1fr)}
+  .panel .ph{aspect-ratio:4/3}
+  .panel .ph::after{background:linear-gradient(180deg,transparent 55%,rgba(23,20,16,.95))}
+  .panel .tx{padding:26px 22px 28px}
+  .panel ul{columns:1}
+}
+
+/* roastery */
+.roast{position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden}
+.roast .bgimg{position:absolute;inset:0}
+.roast .bgimg img{width:100%;height:100%;object-fit:cover;object-position:60% 50%}
+.roast .bgimg::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(14,12,10,.95) 25%,rgba(14,12,10,.2) 70%,rgba(14,12,10,.5))}
+.roast .wrap{position:relative;z-index:1}
+.roast h2{font-size:clamp(56px,8vw,128px);max-width:9em}
+.roast p{color:var(--ink-2);font-size:18px;max-width:30em;margin-top:22px}
+.roast blockquote{margin-top:36px;padding-left:22px;border-left:2px solid var(--gold);max-width:30em}
+.roast blockquote p{font-family:"Instrument Serif";font-style:italic;font-size:clamp(24px,2.4vw,32px);color:var(--ink);line-height:1.2;margin:0}
+.roast cite{display:block;margin-top:10px;font-style:normal;font-family:"Geist Mono";font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.stats{display:flex;gap:44px;margin-top:44px;flex-wrap:wrap}
+.stats b{display:block;font-family:"Instrument Serif";font-weight:400;font-size:clamp(44px,4vw,64px);line-height:1;color:var(--gold)}
+.stats span{font-size:14px;color:var(--ink-2)}
+.facts{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px}
+.facts span{font-family:"Geist Mono";font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;padding:8px 12px;border-radius:999px;border:1px solid var(--line);color:var(--ink-2);background:rgba(14,12,10,.5)}
+@media (max-width:860px){.roast{display:block;min-height:0;padding:0 0 80px}.roast .bgimg{position:relative;height:78vw}.roast .bgimg::after{background:linear-gradient(180deg,transparent 45%,var(--bg))}.roast .wrap{margin-top:-40px}}
+
+/* new & viral */
+.viral-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));grid-auto-rows:minmax(0,auto);gap:18px}
+.v{position:relative;border-radius:var(--r);overflow:hidden;background:var(--bg-2);isolation:isolate}
+.v img{width:100%;height:100%;object-fit:cover;transition:transform 1s cubic-bezier(.2,.7,.2,1)}
+.v:hover img{transform:scale(1.05)}
+.v .cap{position:absolute;inset:auto 0 0 0;padding:70px 24px 22px;background:linear-gradient(transparent,rgba(10,8,6,.92))}
+.v .cap i{font-style:normal;font-family:"Geist Mono";font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#1a140a;background:var(--pist);padding:3px 9px;border-radius:999px}
+.v .cap h3{font-family:"Instrument Serif";font-weight:400;font-size:clamp(28px,2.6vw,40px);line-height:1;margin:12px 0 6px}
+.v .cap p{color:var(--ink-2);font-size:14.5px;max-width:28em}
+.v .cap q{display:block;margin-top:8px;font-family:"Instrument Serif";font-style:italic;font-size:20px;color:var(--ink);quotes:none}
+.v .cap cite{font-style:normal;font-family:"Geist Mono";font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.v1{grid-column:span 7;aspect-ratio:7/6}.v2{grid-column:span 5}.v3{grid-column:span 4;aspect-ratio:4/5}.v4{grid-column:span 4;aspect-ratio:4/5}.v5{grid-column:span 4;aspect-ratio:4/5}
+@media (max-width:860px){.viral-grid{grid-template-columns:minmax(0,1fr)}.v1,.v2,.v3,.v4,.v5{grid-column:auto;aspect-ratio:4/4.4}}
+
+/* samples + trays */
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
+.card{position:relative;border-radius:28px;overflow:hidden;min-height:560px;display:flex;align-items:flex-end;background:var(--bg-2)}
+.card>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.card::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(14,12,10,.1) 30%,rgba(14,12,10,.92));z-index:1}
+.card .tx{position:relative;z-index:2;padding:40px}
+.card h2{font-size:clamp(46px,5vw,80px)}
+.card p{color:var(--ink-2);font-size:16.5px;margin:14px 0 22px;max-width:30em}
+.card .row{display:flex;gap:10px;flex-wrap:wrap}
+@media (max-width:860px){.split{grid-template-columns:minmax(0,1fr)}.card{min-height:480px}.card .tx{padding:28px 22px}}
+
+/* party tray planner */
+.pl-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(24px,4vw,60px);align-items:start}
+.field{margin-bottom:26px}.field>.lbl,.field>label{display:block;font-family:"Geist Mono";font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid rgba(243,236,224,.2);border-radius:99px;padding:10px 16px;font-size:14.5px;color:var(--ink-2);transition:background .2s,color .2s,border-color .2s}
+.chip:hover{border-color:var(--ink);color:var(--ink)}.chip[aria-pressed="true"]{background:var(--gold);color:#1a140a;border-color:var(--gold)}
+.inp{width:100%;min-width:0;background:var(--bg-2);border:1px solid rgba(243,236,224,.18);border-radius:14px;padding:14px 15px;font:500 16px/1.2 "Geist",sans-serif;color:var(--ink);color-scheme:dark}.inp:focus{outline:none;border-color:var(--gold)}
+.inp::placeholder{color:var(--muted)}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
+.ticket{position:sticky;top:96px;background:var(--bg-3);border:1px solid var(--line);border-radius:28px;padding:26px}
+.tk-tray{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-bottom:18px}
+.tk-tray i{aspect-ratio:1;overflow-wrap:anywhere;border-radius:12px;background:var(--bg-2);border:1px dashed rgba(243,236,224,.14);display:grid;place-items:center;font:500 10px/1.15 "Geist Mono";text-align:center;padding:4px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;font-style:normal}
+.tk-tray i.f{background:rgba(232,194,122,.14);border:1px solid rgba(232,194,122,.45);color:var(--gold)}
+.tk-msg{white-space:pre-wrap;font-size:15px;line-height:1.6;margin:0 0 18px;min-height:120px;color:var(--ink-2)}
+.tk-actions{display:grid;gap:8px}.tk-actions .btn{justify-content:center}
+.tk-note{font-size:13px;color:var(--muted);margin-top:12px}
+@media (max-width:900px){.pl-grid{grid-template-columns:minmax(0,1fr)}.ticket{position:relative;top:0;padding:22px}.two{grid-template-columns:minmax(0,1fr)}}
+
+/* visit */
+.shops{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
+.shop{border:1px solid var(--line);border-radius:28px;padding:38px;background:var(--bg-2);display:flex;flex-direction:column;gap:14px}
+.shop .tag{align-self:flex-start;font-family:"Geist Mono";font-size:11px;letter-spacing:.14em;text-transform:uppercase;border:1px solid var(--line);padding:6px 11px;border-radius:999px;color:var(--ink-2)}
+.shop h3{font-family:"Instrument Serif";font-weight:400;font-size:clamp(44px,4.4vw,68px);line-height:.95}
+.shop address{font-style:normal;color:var(--ink-2)}
+.shop .note{color:var(--muted);font-size:14.5px}
+.status{font-family:"Geist Mono";font-size:13px;display:flex;align-items:center;gap:9px}
+.status::before{content:"";width:8px;height:8px;border-radius:50%;background:#6d665b}
+.status.open::before{background:var(--pist);box-shadow:0 0 0 4px rgba(169,196,90,.16)}
+.shop table{width:100%;border-collapse:collapse;font-size:14px}
+.shop td{padding:7px 0;border-bottom:1px solid var(--line)}
+.shop td:last-child{text-align:right;font-family:"Geist Mono";font-size:13px}
+.shop tr.today td{color:var(--gold)}
+.shop .acts{display:flex;gap:10px;flex-wrap:wrap;margin-top:auto;padding-top:10px}
+.shop .acts .btn{padding:11px 18px;font-size:14px}
+@media (max-width:860px){.shops{grid-template-columns:minmax(0,1fr)}.shop{padding:28px 22px}}
+
+/* their own posts */
+.feed{padding:0 0 130px}
+.fd-head{display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap;margin-bottom:40px}
+.fd-head h2{font-size:clamp(52px,7vw,112px);margin-top:16px}
+.fd-row{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
+.fd-row a{display:block;border-radius:18px;overflow:hidden;aspect-ratio:9/14;background:var(--bg-2)}
+.fd-row img{width:100%;height:100%;object-fit:cover;transition:transform .8s cubic-bezier(.2,.7,.2,1)}.fd-row a:hover img{transform:scale(1.05)}
+@media (max-width:1000px){.fd-row{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:42%;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 -20px;padding:0 20px;scrollbar-width:none}.fd-row::-webkit-scrollbar{display:none}.fd-row a{scroll-snap-align:start}}
+@media (max-width:560px){.fd-row{grid-auto-columns:62%}.feed{padding-bottom:90px}}
+
+footer{border-top:1px solid var(--line);padding:90px 0 40px}
+footer .wrap{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:30px;align-items:end}
+footer .big{font-family:"Instrument Serif";font-size:clamp(64px,10vw,170px);line-height:.85;letter-spacing:-.02em}
+footer .big em{color:var(--gold)}
+footer .links{display:flex;flex-direction:column;gap:8px;text-align:right;font-size:15px;color:var(--ink-2)}
+footer .links a{text-decoration:none}footer .links a:hover{color:var(--ink)}
+footer small{grid-column:1/-1;border-top:1px solid var(--line);padding-top:22px;color:var(--muted);font-size:12.5px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+@media (max-width:700px){footer .wrap{grid-template-columns:minmax(0,1fr)}footer .links{text-align:left}}
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,30px);opacity:0;z-index:95;background:var(--gold);color:#1a140a;padding:12px 20px;border-radius:99px;font-weight:600;font-size:14px;transition:opacity .35s,transform .35s;pointer-events:none}.toast.on{opacity:1;transform:translate(-50%,0)}
+@media (prefers-reduced-motion:reduce){.marq .track{animation:none}.reveal{opacity:1;transform:none;transition:none}.sw.hint i::after,.callout,.r-pay .btn-gold{animation:none}.pane{transition:none}}
+</style>
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+<div id="open" aria-hidden="true"><div class="r"><span id="openR">8.88</span><small>lb</small></div><p>Fresh roasted traditions</p></div>
+
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a class="brand" href="#top">Nuts <em>Now</em></a>
+    <ul>
+      <li><a href="#aisles">The aisles</a></li>
+      <li><a href="#roastery">Roastery</a></li>
+      <li><a href="#viral">New &amp; viral</a></li>
+      <li><a href="#plan">Party trays</a></li>
+      <li><a href="#visit">Visit</a></li>
+    </ul>
+    <a class="btn btn-gold" href="#visit">Find a shop</a>
+  </div>
+</header>
+
+<main id="top">
+<section class="hero" id="pound">
+  <div class="wrap">
+    <div class="hcopy">
+      <p class="eyebrow">Nuts Now · Allen Park &amp; Dearborn Heights</p>
+      <h1 class="serif"><span>Nail the roast.</span> <span><em>Make it a pound.</em></span></h1>
+      <p class="lede">Our family has roasted nuts and seeds in Allen Park for 15+ years, and the trick is knowing when to stop. Roast a batch, pour it into the jar on the scale, then scoop the rest of your pound. That's how the regulars do it.</p>
+      <ol class="steps" id="steps"><li class="on"><b>01</b>Roast</li><li><b>02</b>Weigh</li></ol>
+    </div>
+    <div class="stage" id="stage">
+      <div class="pane pane-drum">
+        <canvas id="drumCv" role="img" aria-label="A roasting drum full of raw cashews, pistachios and hazelnuts. Hold the roast button and let go when they turn golden."></canvas>
+        <div class="callout" id="rCall" aria-hidden="true"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c2 3 5 5 5 9a5 5 0 0 1-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-5 1-8z"/></svg></i><span id="rCallT">Hold to roast<small>Let go when they're golden</small></span></div>
+      </div>
+      <div class="pane pane-jar" role="img" aria-label="A glass jar on a digital scale. Your roast pours in first, then each scoop you pick pours in as a layer.">
+        <canvas id="jarCv"></canvas>
+        <div class="tip" id="tip">Pick a scoop</div>
+      </div>
+    </div>
+    <div class="ctl" id="ctl">
+      <div class="c-roast">
+        <div class="r-ui">
+          <button class="hold" id="holdBtn" type="button" aria-describedby="verdict">Roast<small>hold</small></button>
+          <div class="gauge" aria-hidden="true"><div class="lbl"><span>Raw</span><span>Dark</span></div><div class="bar"><span class="win"></span><span class="needle" id="needle"></span></div></div>
+        </div>
+        <p class="verdict" id="verdict" aria-live="polite">Raw cashews, pistachios &amp; hazelnuts.<small>Hold the button to fire up the roaster.</small></p>
+        <div class="r-pay" id="rPay" hidden><button class="btn btn-gold" type="button" id="toJar">Pour it into the jar</button><button class="btn btn-line" type="button" id="rAgain">Roast another batch</button></div>
+        <button class="linkish" type="button" id="skipRoast">Skip the roast, go straight to the scale</button>
+      </div>
+      <div class="c-pound">
+        <p class="eyebrow" id="pickLbl">Now fill it up · a quarter pound a scoop</p>
+        <div class="swatches" id="swatches" role="group" aria-label="Scoops, a quarter pound each"></div>
+        <div class="slots" id="slots" aria-live="polite"><span class="lbl">Your pound</span><span class="slot"></span><span class="slot"></span><span class="slot"></span><span class="slot"></span><button class="reset" type="button" id="backRoast">Roast another batch</button><button class="reset" type="button" id="resetBtn" hidden>Start over</button></div>
+        <div class="hpay" id="hPay" role="status">
+          <div class="serif">That's a <em>pound.</em></div>
+          <p id="payTxt"></p>
+          <div class="row"><button class="btn btn-gold" type="button" id="copyBtn">Copy my mix</button><a class="btn btn-line" data-ig href="#" target="_blank" rel="noopener">Send it on Instagram</a><button class="btn btn-line" type="button" id="again">Roast another</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="marq" aria-hidden="true"><div class="track" id="marq"></div></div>
+
+<section class="aisles" id="aisles">
+  <div class="wrap intro">
+    <div class="head">
+      <div><p class="eyebrow">The aisles</p><h2 class="serif reveal">Walk the <em>shop.</em></h2></div>
+      <p class="reveal">Nine aisles, from the roastery's own cashews to Dubai chocolate and a candy wall. Scroll sideways through all of it.</p>
+    </div>
+  </div>
+  <div class="pinbox" id="pinbox"><div class="track-x" id="trackX"></div></div>
+</section>
+
+<section class="roast" id="roastery">
+  <div class="bgimg"><img src="img/s-pistachio.webp" alt="A single cracked pistachio lit against a black background" width="1500" height="1200" loading="lazy"></div>
+  <div class="wrap">
+    <p class="eyebrow reveal">The roastery next door</p>
+    <h2 class="serif reveal">Roasted <em>down the road.</em></h2>
+    <p class="reveal">Before the shop, there was the roastery. The family behind Nuts Now has roasted nuts and seeds in Allen Park for more than 15 years, supplying other stores. Now you buy straight from the source, in bulk by the pound or packed and ready.</p>
+    <blockquote class="reveal"><p>"So many people tell us they are happy that we opened. We get 5-star reviews."</p><cite>Gareeb Koussan, co-owner</cite></blockquote>
+    <div class="stats reveal"><div><b>15+</b><span>years roasting</span></div><div><b>2</b><span>shops, same bins</span></div><div><b>1 lb</b><span>or as little as you like</span></div></div>
+    <div class="facts reveal"><span>Sourced from all over the world</span><span>Bulk or pre-packed</span></div>
+  </div>
+</section>
+
+<section class="sec" id="viral">
+  <div class="wrap">
+    <div class="head">
+      <div><p class="eyebrow">New &amp; viral</p><h2 class="serif reveal">What everyone's <em>posting.</em></h2></div>
+      <p class="reveal">The stuff people drive in for after seeing it online. The fresh counter sells out, so come early.</p>
+    </div>
+    <div class="viral-grid" id="viralGrid"></div>
+  </div>
+</section>
+
+<section class="sec" style="padding-top:0">
+  <div class="wrap split">
+    <div class="card reveal"><img src="img/x-samples.webp" alt="A dark bowl of mixed nuts on a dark table" width="1400" height="933" loading="lazy"><div class="tx"><p class="eyebrow">Free samples</p><h2 class="serif">Taste it <em>first.</em></h2><p>Stuck between the BBQ and the za'atar cashews? Ask. Reviewers keep bringing up how generous the free samples are, so try before you scoop.</p></div></div>
+    <div class="card reveal"><img src="img/x-trays.webp" alt="Small bowls of nuts and dried fruit laid out on a cloth" width="1500" height="1500" loading="lazy"><div class="tx"><p class="eyebrow">Party trays</p><h2 class="serif">Hosting? <em>Tray it.</em></h2><p>Family over, a shower, an Eid gathering. Tell them what goes in each compartment and how many guests, and ask about sizes and pricing.</p><div class="row"><a class="btn btn-gold" href="#plan">Plan a tray</a><a class="btn btn-line" href="tel:+13137685370">Call Allen Park</a></div></div></div>
+  </div>
+</section>
+
+<section class="sec" id="plan" style="padding-top:20px">
+  <div class="wrap">
+    <div class="head">
+      <div><p class="eyebrow">Party trays</p><h2 class="serif reveal">Plan your <em>tray.</em></h2></div>
+      <p class="reveal">Pick what goes in each compartment and we'll put it in words. Call it in or send it on Instagram, and ask about sizes and pricing.</p>
+    </div>
+    <div class="pl-grid">
+      <form id="plForm" onsubmit="return false" aria-label="Tray details">
+        <div class="field"><span class="lbl">Fill it with (pick up to 7)</span><div class="chips" id="plItems" role="group" aria-label="Tray items"></div></div>
+        <div class="two">
+          <div class="field"><label for="plGuests">About how many guests?</label><input class="inp" id="plGuests" inputmode="numeric" placeholder="e.g. 40"></div>
+          <div class="field"><label for="plDate">For when?</label><input class="inp" id="plDate" type="date"></div>
+        </div>
+        <div class="field"><label for="plName">Your name</label><input class="inp" id="plName" autocomplete="name" placeholder="First name"></div>
+      </form>
+      <aside class="ticket" aria-label="Your tray">
+        <div class="tk-tray" id="tkTray"></div>
+        <p class="tk-msg" id="tkMsg"></p>
+        <div class="tk-actions">
+          <a class="btn btn-gold" href="tel:+13137685370">Call (313) 768-5370</a>
+          <a class="btn btn-line" id="tkIg" href="https://ig.me/m/nutsnow.co" target="_blank" rel="noopener">Send on Instagram</a>
+          <button class="btn btn-line" type="button" id="tkCopy">Copy text</button>
+        </div>
+        <p class="tk-note">Nothing here is sent until you call or send it yourself.</p>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="visit" style="padding-top:40px">
+  <div class="wrap">
+    <div class="head">
+      <div><p class="eyebrow">Visit</p><h2 class="serif reveal">Two shops. <em>Same bins.</em></h2></div>
+      <p class="reveal">Also in store: viral TikTok snacks, international treats, pastries, coffee and more. Stock changes, so call if you're after something specific.</p>
+    </div>
+    <div class="shops" id="shops"></div>
+  </div>
+</section>
+
+<section class="feed">
+  <div class="wrap">
+    <div class="fd-head"><div><p class="eyebrow">@nutsnow.co</p><h2 class="serif reveal">Fresh from <em>the bins.</em></h2></div><a class="btn btn-line" data-ig href="#" target="_blank" rel="noopener">Follow on Instagram</a></div>
+    <div class="fd-row" id="fdRow"></div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="big">Nuts <em>Now.</em></div>
+    <div class="links" id="flinks"></div>
+    <small><span>© <span id="yr"></span> Nuts Now · Fresh roasted traditions</span><span>Shop photos: @nutsnow.co · Product photography: stock images from Unsplash</span></small>
+  </div>
+</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const CONFIG = {
+  ig: 'https://www.instagram.com/nutsnow.co/', igHandle: '@nutsnow.co', igDm: 'https://ig.me/m/nutsnow.co',
+  tz: 'America/Detroit',
+  shops: [
+    { id: 'ap', tag: 'The original', name: 'Allen Park', addr: '5713 Allen Rd<br>Allen Park, MI 48101', tel: '+13137685370', telL: '(313) 768-5370', hours: { 0: [10, 20], 1: [10, 21], 2: [10, 21], 3: [10, 21], 4: [10, 21], 5: [10, 21], 6: [10, 21] }, map: 'Nuts Now 5713 Allen Rd Allen Park MI 48101' },
+    { id: 'dh', tag: 'Bigger store', name: 'Dearborn Heights', addr: '26454 Ford Rd<br>Dearborn Heights, MI', tel: '+13133952684', telL: '(313) 395-2684', hours: { 0: [9, 22], 1: [9, 22], 2: [9, 22], 3: [9, 22], 4: [9, 22], 5: [9, 22], 6: [9, 22] }, note: 'Home of the fresh nut butter corner. Holiday hours can change, so call ahead.', map: 'Nuts Now 26454 Ford Rd Dearborn Heights MI' }
+  ],
+  // the roaster: what tumbles in the drum (rows in the catalog sprite atlas)
+  roastNuts: ['cashews', 'pistachios', 'hazelnuts'],
+  atlas: 'cashews bbq zaatar pistachios pecans hazelnuts walnuts mix pumpkin melon lemon strawberries mango kiwi pineapple baklava delight dates stuffed dubaidates bulkchoc wrapped discs dubaibar dubaicup browniecup dubaiberries gummies sours blue licorice swedish fish pretzels nougat cheesecake cake icecream peanutbutter nutbutters spices coffee'.split(' '),
+  // the scoops on the scale: each one is a quarter pound
+  scoops: [
+    ['cashews', 'Roasted cashews', 'Cashews'], ['bbq', 'BBQ cashews', 'BBQ cashews'], ['pistachios', 'Pistachios', 'Pistachios'], ['hazelnuts', 'Hazelnuts', 'Hazelnuts'],
+    ['seeds', 'Pumpkin seeds', 'Pumpkin'], ['dates', 'Dates', 'Dates'], ['gummies', 'Gummies', 'Gummies'], ['delight', 'Turkish delight', 'Delight']
+  ],
+  aisles: [
+    { img: 'a-nuts', h: 'Roasted <em>nuts</em>', line: 'From the family roastery in Allen Park, roasting for 15+ years.', items: [['Roasted cashews', 'No. 1'], ['BBQ cashews'], ["Za'atar cashews"], ['Pistachios'], ['Pecans'], ['Hazelnuts'], ['Walnuts'], ['Snack mixes']] },
+    { img: 'a-seeds', h: 'Roasted <em>seeds</em>', line: 'By the pound, for cracking in front of the TV.', items: [['Pumpkin seeds'], ['Melon seeds'], ['Lemon seeds']] },
+    { img: 'a-fruit', h: 'Dried <em>fruit</em>', line: 'Sweet, chewy and bright.', items: [['Dried strawberries'], ['Mango slices'], ['Kiwi'], ['Pineapple']] },
+    { img: 'a-sweets', h: 'Middle Eastern <em>sweets</em>', line: 'Baklava by the piece, Turkish delight by the pound, dates every way.', items: [['Baklava'], ['Turkish delight'], ['Dates'], ['Stuffed dates']] },
+    { img: 'a-dubai', h: 'Dubai <em>chocolate</em>', line: 'The pistachio-kunafa chocolate everyone saw online, in cups, bars, berries and dates.', items: [['Dubai chocolate strawberry cup', 'Viral'], ['Brownie Dubai cup', 'Viral'], ['Dubai chocolate strawberries'], ['Dubai chocolate bars'], ['Dubai chocolate dates']] },
+    { img: 'a-choc', h: '<em>Chocolate</em>', line: 'Bulk, wrapped, melting discs and imports.', items: [['Bulk chocolate'], ['Wrapped chocolates'], ['Melting discs']] },
+    { img: 'a-candy', h: 'The candy <em>wall</em>', line: 'Gummies, sours, licorice and Swedish candy. Halal options too.', items: [['Gummies', 'Halal'], ['Gummy sours'], ['Blue raspberry'], ['Licorice'], ['Swedish candy'], ['Swedish Fish', 'Halal'], ['Pretzels']] },
+    { img: 'a-fresh', h: 'Fresh <em>counter</em>', line: 'Cheesecake, cakes, ice cream and nougat. Goes fast.', items: [['Chocolate ice cream', 'New'], ['Cheesecake slices'], ['Cakes'], ['Chocolate dip nougat']] },
+    { img: 'a-pantry', h: 'Nut butter &amp; <em>pantry</em>', line: 'Peanut butter ground to order, plus spices and coffee.', items: [['Fresh-ground peanut butter', 'Made to order'], ['Nut butters'], ['Spices'], ['Coffee']] }
+  ],
+  viral: [
+    ['a-dubai', 'Viral', 'Dubai chocolate', 'Milk and dark chocolate from Dubai, pistachio-kunafa bars, strawberry cups, berries and dates.', 'Packed to the brim.', 'TikTok review of the strawberry cups'],
+    ['n-icecream', 'New', 'Chocolate ice cream', 'The newest thing at the fresh counter.'],
+    ['n-cheesecake', 'Fresh counter', 'Cheesecake slices', 'Big, soft slices. One of the things reviewers mention most.'],
+    ['n-pb', 'Made to order', 'Fresh-ground peanut butter', 'Ground while you wait. Dearborn Heights has a whole nut butter corner.'],
+    ['n-delight', 'By the pound', 'Turkish delight', 'Soft, dusted, and sold by the pound next to the baklava.']
+  ],
+  trayItems: ['Flavored cashews', 'Pistachios', 'Hazelnuts', 'Pecans', 'Walnuts', 'Pumpkin seeds', 'Dried mango', 'Dried strawberries', 'Baklava', 'Turkish delight', 'Dates', 'Stuffed dates', 'Chocolates', 'Gummies'],
+  feed: [['img/post1.jpg', 'DeFQXTBixwD', 'Shopping the cases at Nuts Now'], ['img/post2.jpg', 'Dd68m0ZqWm4', 'Scooping blue raspberry candy'], ['img/post3.jpg', 'Dd4-solC0WK', 'Filling a gold party tray'], ['img/post4.jpg', 'DdsEI8_CApe', 'A Nuts Now tub in front of the nut bins'], ['img/post5.jpg', 'Ddgs47DKYfr', 'Chocolate and nougat at the counter'], ['img/post6.jpg', 'DdenYXWitwh', 'A tray of chocolate dip nougat']],
+  marquee: ['Fresh roasted', 'By the pound', 'BBQ cashews', "Za'atar cashews", 'Pistachios', 'Dubai chocolate', 'Baklava', 'Turkish delight', 'Stuffed dates', 'Cheesecake', 'Swedish candy', 'Fresh-ground peanut butter', 'Free samples']
+};
+
+const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches, MOBILE = matchMedia('(max-width: 900px)').matches;
+const ext = 'target="_blank" rel="noopener"', mapUrl = q => 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(q);
+const toast = m => { const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('on'), 2400); };
+
+$('#yr').textContent = new Date().getFullYear();
+$$('[data-ig]').forEach(a => a.href = CONFIG.ig);
+$('#marq').innerHTML = [...CONFIG.marquee, ...CONFIG.marquee].map(t => `<span>${esc(t)}</span>`).join('');
+$('#trackX').innerHTML = CONFIG.aisles.map((a, i) => `<article class="panel"><div class="ph"><img src="img/${a.img}.webp" alt="" loading="lazy" width="1000" height="1500"></div><div class="tx"><div class="no">${String(i + 1).padStart(2, '0')} / ${String(CONFIG.aisles.length).padStart(2, '0')}</div><h3>${a.h}</h3><p class="line">${esc(a.line)}</p><ul>${a.items.map(([n, t]) => `<li><span>${esc(n)}</span>${t ? `<i class="${t === 'Viral' ? 'viral' : t === 'New' ? 'new' : ''}">${esc(t)}</i>` : ''}</li>`).join('')}</ul></div></article>`).join('');
+$('#viralGrid').innerHTML = CONFIG.viral.map(([img, tag, h, p, q, cite], i) => `<article class="v v${i + 1} reveal"><img src="img/${img}.webp" alt="${esc(h)}" loading="lazy" width="1000" height="1200"><div class="cap"><i>${esc(tag)}</i><h3>${esc(h)}</h3><p>${esc(p)}</p>${q ? `<q>“${esc(q)}”</q><cite>${esc(cite)}</cite>` : ''}</div></article>`).join('');
+$('#fdRow').innerHTML = CONFIG.feed.map(f => `<a class="reveal" href="https://www.instagram.com/p/${esc(f[1])}/" ${ext} aria-label="${esc(f[2])} (Instagram post)"><img src="${esc(f[0])}" alt="${esc(f[2])}" width="720" height="1280" loading="lazy"></a>`).join('');
+$('#flinks').innerHTML = CONFIG.shops.map(s => `<a href="tel:${s.tel}">${esc(s.name)} · ${s.telL}</a>`).join('') + `<a href="${CONFIG.ig}" ${ext}>Instagram ${CONFIG.igHandle}</a>`;
+
+// shops + live status
+const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'], fmt = h => h === 24 ? 'midnight' : (((h + 11) % 12) + 1) + (h >= 12 ? 'pm' : 'am');
+const now = () => { const p = new Intl.DateTimeFormat('en-US', { timeZone: CONFIG.tz, weekday: 'short', hour: 'numeric', minute: 'numeric', hour12: false }).formatToParts(new Date()), g = t => p.find(x => x.type === t).value; return { d: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(g('weekday')), h: (+g('hour') % 24) + (+g('minute')) / 60 }; };
+$('#shops').innerHTML = CONFIG.shops.map(s => { const n = now(); return `<article class="shop reveal"><span class="tag">${esc(s.tag)}</span><h3>${esc(s.name)}</h3><address>${s.addr}</address><div class="status" data-st="${s.id}"></div><table aria-label="${esc(s.name)} opening hours">${[1, 2, 3, 4, 5, 6, 0].map(d => `<tr${d === n.d ? ' class="today"' : ''}><td>${days[d]}</td><td>${fmt(s.hours[d][0])} – ${fmt(s.hours[d][1])}</td></tr>`).join('')}</table>${s.note ? `<p class="note">${esc(s.note)}</p>` : ''}<div class="acts"><a class="btn btn-gold" href="tel:${s.tel}">Call ${s.telL}</a><a class="btn btn-line" href="${mapUrl(s.map)}" ${ext}>Directions</a></div></article>`; }).join('');
+const paint = () => CONFIG.shops.forEach(s => { const t = now(), h = s.hours[t.d], el = $(`[data-st="${s.id}"]`), open = t.h >= h[0] && t.h < h[1]; el.textContent = open ? `Open now · until ${fmt(h[1])}` : `Closed · opens ${t.h < h[0] ? 'today ' + fmt(h[0]) : 'tomorrow ' + fmt(s.hours[(t.d + 1) % 7][0])}`; el.classList.toggle('open', open); });
+paint(); setInterval(paint, 60000);
+
+/* party tray planner */
+(() => {
+  const sel = new Set(['Flavored cashews', 'Pistachios', 'Baklava', 'Turkish delight']);
+  $('#plItems').innerHTML = CONFIG.trayItems.map(t => `<button type="button" class="chip" aria-pressed="${sel.has(t)}">${esc(t)}</button>`).join('');
+  const build = () => {
+    const items = [...sel], slots = [...items, ...Array(Math.max(0, 7 - items.length)).fill('')];
+    $('#tkTray').innerHTML = slots.slice(0, 7).map(s => `<i class="${s ? 'f' : ''}">${esc(s || 'empty')}</i>`).join('') + '<i>centre</i>';
+    const g = $('#plGuests').value.trim(), d = $('#plDate').value, nm = $('#plName').value.trim();
+    const when = d ? new Date(d + 'T12:00').toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }) : '';
+    $('#tkMsg').textContent = [`Hi Nuts Now! ${nm ? `This is ${nm}. ` : ''}I'd like a party tray with:`, ...(items.length ? items.map(i => '• ' + i) : ['• (pick your items)']), g ? `For about ${g} guests.` : '', when ? `Needed ${when}.` : '', 'What sizes do you have, and how much would it be?'].filter(Boolean).join('\n');
+  };
+  $('#plItems').addEventListener('click', e => { const b = e.target.closest('.chip'); if (!b) return; const t = b.textContent; if (sel.has(t)) sel.delete(t); else { if (sel.size >= 7) return toast('7 compartments max'); sel.add(t); } b.setAttribute('aria-pressed', sel.has(t)); build(); });
+  $$('#plForm input').forEach(i => i.addEventListener('input', build));
+  const copy = async () => { try { await navigator.clipboard.writeText($('#tkMsg').textContent); return true; } catch (e) { return false; } };
+  $('#tkCopy').addEventListener('click', async () => toast(await copy() ? 'Copied' : 'Select the text to copy it'));
+  $('#tkIg').addEventListener('click', () => copy().then(ok => ok && toast('Copied. Paste it in the DM')));
+  build();
+})();
+
+/* opener: the scale reads 8.88, then zeroes */
+(() => {
+  const o = $('#open'); let seen = false; try { seen = sessionStorage.getItem('nnOpen'); } catch (e) {}
+  if (RM || seen || new URLSearchParams(location.search).has('noopen')) { o.remove(); return; }
+  try { sessionStorage.setItem('nnOpen', 1); } catch (e) {}
+  const r = $('#openR'); let v = 8.88; const t0 = performance.now();
+  const f = t => { const k = Math.min(1, (t - t0 - 350) / 700); if (k > 0) { v = 8.88 * (1 - (1 - Math.pow(1 - k, 3))); r.textContent = v.toFixed(2); } if (k < 1) requestAnimationFrame(f); else { r.textContent = '0.00'; setTimeout(() => o.classList.add('go'), 350); setTimeout(() => o.remove(), 1100); } };
+  requestAnimationFrame(f);
+})();
+</script>
+<script src="assets/lib/gsap.min.js"></script>
+<script src="assets/lib/ScrollTrigger.min.js"></script>
+<script src="assets/lib/lenis.min.js"></script>
+<script>
+/* ---------- HERO: roast it, then weigh it ----------
+   Step 1, the roaster: a drum (canvas) of raw cashews, pistachios and hazelnuts tumbling with verlet physics.
+   Hold Roast: the drum spins up and the nuts tint raw → golden → dark (pre-tinted copies of the sprite atlas,
+   crossfaded). Let go inside the golden window. Golden or a little dark can go in the jar; burnt can't.
+   Step 2, the scale: the batch pours into the glass jar as the first quarter pound, its layer drawn from the
+   same tinted sprites at the roast you pulled. Scoop three more (real macro photos as canvas patterns) and at
+   1.00 lb the brass lid drops, a 'Your pound' label wraps the jar and the payoff card copies or sends the mix. */
+(() => {
+  const HAS_G = typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined';
+  const stage = $('#stage'), ctl = $('#ctl'), steps = $$('#steps li');
+  const WIN = [.55, .75];
+  const ROWS = CONFIG.roastNuts.map(id => CONFIG.atlas.indexOf(id));
+  // shared: the sprite atlas in four roast tints (raw, toasty, golden, dark)
+  let tints = null; const onTints = [];
+  const atlas = new Image(); atlas.src = 'img/pieces.webp';
+  atlas.onload = () => {
+    const base = document.createElement('canvas'); base.width = atlas.naturalWidth; base.height = atlas.naturalHeight; const bx = base.getContext('2d', { willReadFrequently: true }); bx.drawImage(atlas, 0, 0);
+    const src = bx.getImageData(0, 0, base.width, base.height);
+    const mk = f => { const c = document.createElement('canvas'); c.width = base.width; c.height = base.height; const x = c.getContext('2d'), im = new ImageData(new Uint8ClampedArray(src.data), src.width, src.height), d = im.data; for (let i = 0; i < d.length; i += 4) if (d[i + 3]) { const o = f(d[i], d[i + 1], d[i + 2]); d[i] = o[0]; d[i + 1] = o[1]; d[i + 2] = o[2]; } x.putImageData(im, 0, 0); return c; };
+    const raw = (r, g, b) => { const l = (r * .3 + g * .59 + b * .11); return [l * .5 + 128, l * .48 + 118, l * .36 + 92]; };
+    tints = [mk(raw), mk((r, g, b) => { const q = raw(r, g, b); return [(r + q[0]) / 2, (g + q[1]) / 2, (b + q[2]) / 2]; }), mk((r, g, b) => [Math.min(255, r * 1.02 + 8), g * .86, b * .62]), mk((r, g, b) => [r * .42 + 8, g * .3 + 3, b * .22])];
+    onTints.forEach(f => f());
+  };
+  // draw one nut sprite at a roast level (crossfade between neighbouring tints)
+  const nut = (x, level, row, col, s) => { const f = Math.min(2.999, level * 3), i0 = f | 0, t = f - i0, sx = col * 112 + 8, sy = row * 112 + 8;
+    x.globalAlpha = 1; x.drawImage(tints[i0], sx, sy, 96, 96, -s / 2, -s / 2, s, s); if (t > .02) { x.globalAlpha = t; x.drawImage(tints[i0 + 1], sx, sy, 96, 96, -s / 2, -s / 2, s, s); } x.globalAlpha = 1; };
+  const roastName = r => r <= WIN[1] ? 'golden' : 'dark';
+
+  /* ===== step 1: the roaster ===== */
+  const drum = (() => {
+    const cv = $('#drumCv'), ctx = cv.getContext('2d'), btn = $('#holdBtn'), verdict = $('#verdict'), pay = $('#rPay'), needle = $('#needle'), call = $('#rCall');
+    let S = 0, HH = 0, D = 1, raf = 0, visible = true, active = true, holding = false, demo = false, touched = false, roast = 0, omega = .008, ang = 0, done = false, ok = false, t0 = performance.now(), steam = [];
+    const N = 64, nuts = [...Array(N)].map((_, i) => ({ x: 0, y: 0, px: 0, py: 0, row: ROWS[i % 3], col: (i / 3 | 0) % 3, a: Math.random() * 6.28, s: .92 + Math.random() * .16 }));
+    const fill = () => nuts.forEach(n => { n.x = (Math.random() - .5) * .3; n.y = .1 + Math.random() * .2; n.px = n.x; n.py = n.y; }); fill();
+    const RW = .355, RN = .036;   // window radius, nut radius (fractions of the drum size)
+    const CY = .47;               // drum centre, as a fraction of the stage width (the stand sits below it)
+    function physics() {
+      const g = .00042, lim = RW - RN;
+      for (const n of nuts) { const vx = (n.x - n.px) * .992, vy = (n.y - n.py) * .992; n.px = n.x; n.py = n.y; n.x += vx; n.y += vy + g; }
+      for (let it = 0; it < 3; it++) {
+        for (let i = 0; i < N; i++) { const a = nuts[i];
+          for (let j = i + 1; j < N; j++) { const b = nuts[j], dx = b.x - a.x, dy = b.y - a.y, m = RN * 2 * .9, d2 = dx * dx + dy * dy; if (d2 < m * m && d2 > 1e-9) { const d = Math.sqrt(d2), k = (m - d) / d * .5; a.x -= dx * k; a.y -= dy * k; b.x += dx * k; b.y += dy * k; } }
+          const d = Math.hypot(a.x, a.y); if (d > lim) { const nx = a.x / d, ny = a.y / d; a.x = nx * lim; a.y = ny * lim;
+            // the drum wall drags nuts along with it (that's what makes them tumble)
+            const tx = -ny, ty = nx, vt = (a.x - a.px) * tx + (a.y - a.py) * ty, wall = omega * lim, dv = (wall - vt) * .35; a.px -= tx * dv; a.py -= ty * dv; }
+        }
+      }
+      for (const n of nuts) n.a += ((n.x - n.px) * -n.y + (n.y - n.py) * n.x) * 40 + omega * .5;
+    }
+    const rr = (x, y, w, h, r) => { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); };
+    function draw() {
+      const c = S / 2, cy = S * CY; ctx.setTransform(D, 0, 0, D, 0, 0); ctx.clearRect(0, 0, S, HH);
+      const heat = holding ? Math.min(1, .35 + roast) : Math.max(0, roast * .4);
+      const R = S * .43;
+      // stand + burner under the drum
+      ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.6)'; ctx.shadowBlur = 40; ctx.shadowOffsetY = 20;
+      let g = ctx.createLinearGradient(0, cy + R * .7, 0, HH); g.addColorStop(0, '#2a251f'); g.addColorStop(1, '#151210');
+      ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(c - R * .55, cy + R * .6); ctx.lineTo(c + R * .55, cy + R * .6); ctx.lineTo(c + R * .78, HH - S * .05); ctx.lineTo(c - R * .78, HH - S * .05); ctx.closePath(); ctx.fill(); ctx.restore();
+      g = ctx.createLinearGradient(c - R, 0, c + R, 0); g.addColorStop(0, '#5d5850'); g.addColorStop(.3, '#bdb6aa'); g.addColorStop(.55, '#8a847a'); g.addColorStop(.8, '#d4cdc0'); g.addColorStop(1, '#5d5850');
+      rr(c - R * .95, HH - S * .065, R * 1.9, S * .03, 6); ctx.fillStyle = g; ctx.fill();
+      // burner glow
+      const fg = ctx.createRadialGradient(c, cy + R * 1.02, S * .02, c, cy + R * .9, S * .45); fg.addColorStop(0, `rgba(255,130,50,${.12 + heat * .55})`); fg.addColorStop(1, 'rgba(255,120,40,0)'); ctx.fillStyle = fg; ctx.fillRect(0, 0, S, HH);
+      for (let i = -3; i <= 3; i++) { const h = S * (.018 + heat * .03) * (1 + .3 * Math.sin(ang * 3 + i)); ctx.fillStyle = `rgba(${255},${150 + heat * 40 | 0},70,${.25 + heat * .6})`; ctx.beginPath(); ctx.ellipse(c + i * R * .12, cy + R * 1.05 - h / 2, S * .009, h, 0, 0, 7); ctx.fill(); }
+      // drum body
+      const body = ctx.createRadialGradient(c - R * .3, cy - R * .35, R * .1, c, cy, R); body.addColorStop(0, '#4e4a42'); body.addColorStop(.55, '#26231e'); body.addColorStop(1, '#13110e');
+      ctx.fillStyle = body; ctx.beginPath(); ctx.arc(c, cy, R, 0, 7); ctx.fill();
+      ctx.strokeStyle = 'rgba(232,194,122,.6)'; ctx.lineWidth = S * .01; ctx.beginPath(); ctx.arc(c, cy, R * .965, 0, 7); ctx.stroke();
+      for (let i = 0; i < 24; i++) { const a = i / 24 * 6.283 + ang * .2; ctx.fillStyle = 'rgba(232,210,170,.5)'; ctx.beginPath(); ctx.arc(c + Math.cos(a) * R * .89, cy + Math.sin(a) * R * .89, S * .0065, 0, 7); ctx.fill(); }
+      // window: warm interior
+      const rw = RW * S, inside = ctx.createRadialGradient(c, cy + rw * .3, rw * .1, c, cy, rw); inside.addColorStop(0, `rgb(${70 + heat * 120 | 0},${38 + heat * 40 | 0},${18})`); inside.addColorStop(1, '#120c06');
+      ctx.save(); ctx.beginPath(); ctx.arc(c, cy, rw, 0, 7); ctx.clip(); ctx.fillStyle = inside; ctx.fillRect(c - rw, cy - rw, rw * 2, rw * 2);
+      ctx.strokeStyle = 'rgba(255,255,255,.07)'; ctx.lineWidth = S * .02; for (let i = 0; i < 3; i++) { const a = ang + i * 2.094; ctx.beginPath(); ctx.moveTo(c + Math.cos(a) * rw * .2, cy + Math.sin(a) * rw * .2); ctx.lineTo(c + Math.cos(a) * rw, cy + Math.sin(a) * rw); ctx.stroke(); }
+      if (tints) { const sz = RN * S * 2.6; for (const n of nuts) { ctx.save(); ctx.translate(c + n.x * S, cy + n.y * S); ctx.rotate(n.a); nut(ctx, roast, n.row, n.col, sz * n.s); ctx.restore(); } }
+      if (roast > .78) { ctx.fillStyle = `rgba(40,30,25,${(roast - .78) * 1.6})`; ctx.fillRect(c - rw, cy - rw, rw * 2, rw * 2); }
+      ctx.restore();
+      // glass: brass rim + reflection
+      ctx.strokeStyle = '#8a7650'; ctx.lineWidth = S * .016; ctx.beginPath(); ctx.arc(c, cy, rw + S * .008, 0, 7); ctx.stroke();
+      ctx.strokeStyle = 'rgba(255,255,255,.2)'; ctx.lineWidth = S * .024; ctx.lineCap = 'round'; ctx.beginPath(); ctx.arc(c, cy, rw * .82, 3.6, 4.4); ctx.stroke(); ctx.lineWidth = S * .01; ctx.beginPath(); ctx.arc(c, cy, rw * .82, 4.55, 4.75); ctx.stroke();
+      for (const p of steam) { ctx.fillStyle = `rgba(243,236,224,${Math.max(0, p.a) * .16})`; ctx.beginPath(); ctx.arc(p.x * S, p.y * S, p.r * S, 0, 7); ctx.fill(); }
+      // brand plate
+      ctx.fillStyle = '#e8c27a'; ctx.font = `500 ${S * .026}px "Geist Mono", monospace`; ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic'; ctx.fillText('NUTS NOW · ROASTERY', c, cy + R * .93 - S * .008);
+    }
+    const say = (h, small, good) => { verdict.innerHTML = `${h}<small>${small}</small>`; verdict.classList.toggle('good', !!good); };
+    function judge(auto) {
+      if (demo) return;
+      if (roast < WIN[0]) return say('Still raw.', roast < .2 ? 'Hold the button down. Watch the colour.' : 'Getting there. Hold a little longer.');
+      done = true; pay.hidden = false;
+      if (roast <= WIN[1]) { ok = true; say('Golden. Perfect roast.', 'That\'s the colour we pull every batch at the roastery. Now pour it in.', true); $('#toJar').hidden = false; }
+      else if (!auto) { ok = true; say('A little dark.', 'Ours never are. Pour it in anyway, or roast another batch.'); $('#toJar').hidden = false; }
+      else { ok = false; say('Burnt!', 'That one\'s not going in the jar. Roast another batch.'); $('#toJar').hidden = true; }
+    }
+    function loop(now) {
+      const dt = Math.max(0, Math.min(.05, (now - t0) / 1000)); t0 = now;
+      omega += ((holding ? .055 : .008) - omega) * Math.min(1, dt * 3); ang += omega * 1.6;
+      if (holding && !done) { roast = Math.min(1, roast + dt * (demo ? .18 : .2)); if (roast >= 1) release(true); }
+      if (holding && roast > .25 && Math.random() < .5) steam.push({ x: .5 + (Math.random() - .5) * .3, y: CY - .3, r: .02 + Math.random() * .02, a: .8 });
+      for (const p of steam) { p.y -= dt * .08; p.r += dt * .03; p.a -= dt * .5; } steam = steam.filter(p => p.a > 0);
+      physics(); draw();
+      needle.style.left = (roast * 100) + '%';
+      raf = visible && active && !RM ? requestAnimationFrame(loop) : 0;
+    }
+    const kick = () => { if (!S) return; if (RM) { physics(); draw(); return; } if (!raf && visible && active) { t0 = performance.now(); raf = requestAnimationFrame(loop); } };
+    function press(isDemo = false) { if (done || !active) return; demo = isDemo; if (!isDemo) { touched = true; call.classList.add('gone'); } holding = true; btn.classList.add('down'); if (!isDemo && roast < WIN[0]) say('Roasting…', 'Let go when they turn golden.'); kick(); if (RM) roastRM(); }
+    function release(auto = false) { if (!holding) return; holding = false; btn.classList.remove('down'); judge(auto); demo = false; }
+    // reduced motion: each press roasts one notch so it still works without animation
+    function roastRM() { roast = Math.min(1, roast + .22); needle.style.left = roast * 100 + '%'; physics(); draw(); }
+    function again(msg = true) { roast = 0; done = false; ok = false; pay.hidden = true; fill(); needle.style.left = '0%'; if (msg) say('Fresh batch.', 'Hold the button. Let go when they\'re golden.'); kick(); }
+    btn.addEventListener('pointerdown', e => { e.preventDefault(); press(); });
+    addEventListener('pointerup', () => release()); addEventListener('pointercancel', () => release());
+    btn.addEventListener('contextmenu', e => e.preventDefault());
+    btn.addEventListener('keydown', e => { if ((e.key === ' ' || e.key === 'Enter') && !e.repeat) { e.preventDefault(); press(); } });
+    btn.addEventListener('keyup', e => { if (e.key === ' ' || e.key === 'Enter') release(); });
+    $('#rAgain').addEventListener('click', () => again());
+    const size = () => { const r = cv.getBoundingClientRect(); if (!r.width) return; D = Math.min(2, devicePixelRatio || 1); S = r.width; HH = r.height; cv.width = Math.round(S * D); cv.height = Math.round(HH * D); kick(); };
+    if ('ResizeObserver' in window) new ResizeObserver(size).observe(cv); else addEventListener('resize', size);
+    new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible) kick(); }).observe(cv);
+    onTints.push(kick);
+    // idle nudge: if nobody touches it, the roaster fires up briefly on its own
+    if (!RM) setTimeout(function nudge() { if (touched || done || !active) return; if (!visible) return setTimeout(nudge, 2000); press(true); setTimeout(() => { release(); }, 1300); }, 3200);
+    return { press, release, again, get roast() { return roast; }, get done() { return done; }, get ok() { return ok; }, set active(v) { active = v; if (v) kick(); }, touch() { touched = true; call.classList.add('gone'); } };
+  })();
+
+  /* ===== step 2: the jar on the scale ===== */
+  const jar = (() => {
+    const box = $('.pane-jar'), cv = $('#jarCv'), cx = cv.getContext('2d');
+    const IMG = {}, PAT = {}, CUSTOM = {}, SC = {};
+    CONFIG.scoops.forEach(([id, name, short]) => { const im = new Image(); im.src = `img/t-${id}.webp`; IMG[id] = im; SC[id] = { name, short, thumb: `img/t-${id}.webp` }; });
+    let W = 0, H = 0, DPR = 1, J;
+    const layers = [];        // {id, h (0..1 of one scoop), px, amp, seed, t0}
+    let weight = 0, shown = 0, done = false, doneT = 0, raf = 0, last = performance.now(), T = 0, nRoast = 0;
+    const N = 4, rnd = (a, b) => a + Math.random() * (b - a);
+
+    function size() {
+      const r = box.getBoundingClientRect(); if (!r.width) return; DPR = Math.min(2, devicePixelRatio || 1); W = r.width; H = r.height;
+      cv.width = Math.round(W * DPR); cv.height = Math.round(H * DPR);
+      const jw = W * .5, jx = (W - jw) / 2, jt = H * .2, jb = H * .74;
+      J = { x0: jx, x1: jx + jw, t: jt, b: jb, w: jw, r: jw * .1, cap: (jb - jt - jw * .06) * .92 };
+      for (const k in PAT) delete PAT[k];
+      kick();
+    }
+    // make each photo tile seamlessly: lay a half-offset copy over the original, faded in only near the
+    // edges, so the original's seams are covered and the copy's own seams (now in the middle) stay hidden
+    const tile = im => { const w = im.naturalWidth, h = im.naturalHeight, mk = () => { const c = document.createElement('canvas'); c.width = w; c.height = h; return c; };
+      const out = mk(), o = out.getContext('2d'); o.drawImage(im, 0, 0);
+      const sh = mk(), s2 = sh.getContext('2d'); for (const [dx, dy] of [[-.5, -.5], [.5, -.5], [-.5, .5], [.5, .5]]) s2.drawImage(im, dx * w, dy * h);
+      const m = mk(), mg = m.getContext('2d'); mg.globalCompositeOperation = 'lighter';
+      const edge = (x0, y0, x1, y1) => { const g = mg.createLinearGradient(x0, y0, x1, y1); g.addColorStop(0, 'rgba(0,0,0,1)'); g.addColorStop(1, 'rgba(0,0,0,0)'); mg.fillStyle = g; mg.fillRect(0, 0, w, h); };
+      edge(0, 0, 0, h * .22); edge(0, h, 0, h * .78); edge(0, 0, w * .22, 0); edge(w, 0, w * .78, 0);
+      mg.globalCompositeOperation = 'source-in'; mg.drawImage(sh, 0, 0); o.drawImage(m, 0, 0); return out; };
+    // the roast you pulled, as a seamless tile of nuts at that exact colour (each sprite also drawn wrapped)
+    const roastTile = level => { const TS = 384, c = document.createElement('canvas'); c.width = c.height = TS; const x = c.getContext('2d');
+      x.fillStyle = '#1c130b'; x.fillRect(0, 0, TS, TS); let seed = 11; const r = () => (seed = seed * 16807 % 2147483647) / 2147483647;
+      for (const off of [0, .5]) { const n = 7; for (let gy = 0; gy < n; gy++) for (let gx = 0; gx < n; gx++) {
+        const px = (gx + off + (r() - .5) * .5) * TS / n, py = (gy + off + (r() - .5) * .5) * TS / n, row = ROWS[(r() * 3) | 0], col = (r() * 3) | 0, a = r() * 6.28, s = TS / n * (1.25 + r() * .2);
+        for (const ox of [-TS, 0, TS]) for (const oy of [-TS, 0, TS]) { x.save(); x.translate(px + ox, py + oy); x.rotate(a); nut(x, level, row, col, s); x.restore(); } } }
+      return c; };
+    const SCALE = () => J.w / 640 * .62;
+    const pat = id => { if (PAT[id]) return PAT[id]; let src = CUSTOM[id]; if (!src) { const im = IMG[id]; if (!im || !im.complete || !im.naturalWidth) return null; src = tile(im); } const p = cx.createPattern(src, 'repeat'); p.setTransform(new DOMMatrix().scale(SCALE())); PAT[id] = p; return p; };
+    const rr = (x, y, w, h, r) => { cx.beginPath(); cx.moveTo(x + r, y); cx.arcTo(x + w, y, x + w, y + h, r); cx.arcTo(x + w, y + h, x, y + h, r); cx.arcTo(x, y + h, x, y, r); cx.arcTo(x, y, x + w, y, r); cx.closePath(); };
+
+    // surface height (px above the jar floor) of layer i at x
+    function surf(i, x) {
+      if (i < 0) return 0;
+      let base = 0; for (let k = 0; k <= i; k++) base += layers[k].h * J.cap / N;
+      const L = layers[i], u = (x - J.x0) / J.w, g = Math.exp(-Math.pow((u - L.px) / .32, 2)), wob = Math.sin(u * 23 + L.seed) * 1.6 + Math.sin(u * 51 + L.seed * 2) * .9;
+      const v = base + L.amp * L.h * (g - .4) + wob * L.h;
+      return Math.max(i ? surf(i - 1, x) + 2 : 2, v);
+    }
+
+    function add(id) {
+      if (done || layers.length >= N || !J) return false;
+      layers.push({ id, h: 0, px: rnd(.32, .68), amp: J.cap / N * rnd(.35, .55), seed: rnd(0, 9), t0: T });
+      weight = layers.length * .25;
+      $('#tip').style.opacity = 0; $$('.sw').forEach(b => b.classList.remove('hint'));
+      render(); kick(); return true;
+    }
+    // pour a roast batch in: register its tile + a thumbnail, then add it as a layer
+    function addRoast(level) {
+      if (!tints || done || layers.length >= N) return false;
+      const id = 'roast' + (++nRoast), t = roastTile(level), k = roastName(level);
+      CUSTOM[id] = t; const th = document.createElement('canvas'); th.width = th.height = 96; th.getContext('2d').drawImage(t, 0, 0, 160, 160, 0, 0, 96, 96);
+      SC[id] = { name: `${k[0].toUpperCase() + k.slice(1)}-roasted cashews, pistachios & hazelnuts`, short: `${k} roast`, thumb: th.toDataURL() };
+      return add(id);
+    }
+    function render() {
+      $$('#slots .slot').forEach((s, i) => { const L = layers[i]; s.classList.toggle('f', !!L); s.style.backgroundImage = L ? `url(${SC[L.id].thumb})` : ''; s.title = L ? SC[L.id].name : ''; });
+      const full = layers.length >= N;
+      $('#resetBtn').hidden = !layers.length; $('#backRoast').hidden = full;
+      $$('.sw').forEach(b => b.disabled = full);
+      const left = N - layers.length;
+      $('#pickLbl').textContent = full ? 'Weighed in at a pound' : layers.length ? `${left} more scoop${left > 1 ? 's' : ''} · a quarter pound each` : 'Fill it up · a quarter pound a scoop';
+    }
+    function finish() {
+      done = true; doneT = T;
+      const names = layers.map(L => SC[L.id].name);
+      const mix = {}; names.forEach(n => mix[n] = (mix[n] || 0) + 1);
+      const list = Object.entries(mix).map(([n, q]) => `${q === 4 ? '1 lb' : q === 2 ? '½ lb' : q === 3 ? '¾ lb' : '¼ lb'} ${n}`);
+      $('#payTxt').innerHTML = `Your mix: <b>${esc(list.join(' · '))}</b>. Ask for it at the counter, or send it to us on Instagram.`;
+      $('#copyBtn').dataset.txt = `My Nuts Now pound: ${list.join(' · ')}`;
+      steps[1].classList.add('ok');
+      setTimeout(() => $('#hPay').classList.add('on'), RM ? 0 : 1300);
+    }
+    function reset() { layers.length = 0; weight = 0; done = false; $('#hPay').classList.remove('on'); $('#tip').style.opacity = 1; steps[1].classList.remove('ok'); render(); kick(); }
+
+    function draw(dt) {
+      cx.setTransform(DPR, 0, 0, DPR, 0, 0); cx.clearRect(0, 0, W, H);
+      const { x0, x1, t, b, w, r } = J, floor = b - w * .06, sc = SCALE();
+      // scale: steel platform + body with the readout
+      const sy = b + 4, sw = w * 1.36, sx = W / 2 - sw / 2;
+      cx.save(); cx.shadowColor = 'rgba(0,0,0,.6)'; cx.shadowBlur = 40; cx.shadowOffsetY = 20;
+      let g = cx.createLinearGradient(0, sy, 0, sy + H * .2); g.addColorStop(0, '#2a251f'); g.addColorStop(1, '#151210');
+      rr(sx - w * .06, sy + 14, sw + w * .12, H * .19, 18); cx.fillStyle = g; cx.fill(); cx.restore();
+      g = cx.createLinearGradient(sx, 0, sx + sw, 0); g.addColorStop(0, '#5d5850'); g.addColorStop(.3, '#bdb6aa'); g.addColorStop(.55, '#8a847a'); g.addColorStop(.8, '#d4cdc0'); g.addColorStop(1, '#5d5850');
+      rr(sx, sy, sw, 16, 6); cx.fillStyle = g; cx.fill();
+      cx.fillStyle = 'rgba(0,0,0,.35)'; cx.fillRect(sx + 6, sy + 13, sw - 12, 3);
+      // readout
+      shown += (weight - shown) * Math.min(1, dt * (RM ? 99 : 5)); if (Math.abs(weight - shown) < .002) shown = weight;
+      const lw = w * .62, lh = H * .085, lx = W / 2 - lw / 2, ly = sy + 14 + H * .19 / 2 - lh / 2 + 4;
+      rr(lx, ly, lw, lh, 10); cx.fillStyle = '#0b0a08'; cx.fill(); cx.strokeStyle = 'rgba(232,194,122,.18)'; cx.lineWidth = 1; cx.stroke();
+      cx.font = `500 ${lh * .62}px "Geist Mono", monospace`; cx.textAlign = 'right'; cx.textBaseline = 'middle';
+      cx.fillStyle = 'rgba(232,194,122,.08)'; cx.fillText('8.88', lx + lw * .74, ly + lh * .54);
+      cx.shadowColor = 'rgba(232,194,122,.6)'; cx.shadowBlur = 14; cx.fillStyle = done ? '#f4d798' : '#e8c27a'; cx.fillText(shown.toFixed(2), lx + lw * .74, ly + lh * .54); cx.shadowBlur = 0;
+      cx.font = `500 ${lh * .26}px "Geist Mono", monospace`; cx.textAlign = 'left'; cx.fillStyle = '#8d8476'; cx.fillText('LB', lx + lw * .79, ly + lh * .6);
+      cx.fillText('NET', lx + lw * .06, ly + lh * .3);
+      cx.fillStyle = 'rgba(0,0,0,.45)'; cx.beginPath(); cx.ellipse(W / 2, sy + 2, w * .52, 6, 0, 0, 7); cx.fill();
+      // contents, clipped to the jar
+      cx.save(); rr(x0 + 3, t + 3, w - 6, b - t - 6, r * .8); cx.clip();
+      cx.fillStyle = 'rgba(255,255,255,.03)'; cx.fillRect(x0, t, w, b - t);
+      for (let i = 0; i < layers.length; i++) {
+        const L = layers[i], p = pat(L.id); if (!p) continue;
+        cx.beginPath();
+        for (let k = 0; k <= 48; k++) { const x = x0 + w * k / 48; cx.lineTo(x, floor - surf(i, x)); }
+        for (let k = 48; k >= 0; k--) { const x = x0 + w * k / 48; cx.lineTo(x, floor - (i ? surf(i - 1, x) : -40)); }
+        cx.closePath(); cx.fillStyle = p; cx.fill();
+        cx.beginPath(); for (let k = 0; k <= 48; k++) { const x = x0 + w * k / 48; cx.lineTo(x, floor - surf(i, x)); }
+        cx.strokeStyle = 'rgba(0,0,0,.35)'; cx.lineWidth = 3; cx.stroke();
+        cx.strokeStyle = 'rgba(255,240,210,.12)'; cx.lineWidth = 1; cx.stroke();
+      }
+      g = cx.createLinearGradient(x0, 0, x1, 0); g.addColorStop(0, 'rgba(0,0,0,.55)'); g.addColorStop(.18, 'rgba(0,0,0,0)'); g.addColorStop(.82, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,.6)');
+      cx.fillStyle = g; cx.fillRect(x0, t, w, b - t);
+      // stream: product falling from the scoop into the jar
+      const cur = layers[layers.length - 1];
+      if (cur && cur.h < 1) {
+        const sxp = x0 + w * cur.px, top = t - H * .02, bot = floor - surf(layers.length - 1, sxp), p = pat(cur.id);
+        if (p) { p.setTransform(new DOMMatrix().translate(0, T * 260).scale(sc)); cx.fillStyle = p; rr(sxp - w * .045, top, w * .09, Math.max(0, bot - top), w * .04); cx.fill(); p.setTransform(new DOMMatrix().scale(sc)); }
+      }
+      cx.restore();
+      if (cur && cur.h < 1) { // stream above the jar mouth, from the steel scoop
+        const sxp = x0 + w * cur.px, p = pat(cur.id), sTop = H * .085;
+        if (p) { p.setTransform(new DOMMatrix().translate(0, T * 260).scale(sc)); cx.fillStyle = p; rr(sxp - w * .04, sTop, w * .08, t - sTop + 6, w * .04); cx.fill(); p.setTransform(new DOMMatrix().scale(sc)); }
+        cx.save(); cx.translate(sxp + w * .06, sTop); cx.rotate(-.55);
+        g = cx.createLinearGradient(-w * .2, 0, w * .2, 0); g.addColorStop(0, '#6a655c'); g.addColorStop(.4, '#e3ddd0'); g.addColorStop(1, '#7a746a');
+        cx.fillStyle = g; cx.beginPath(); cx.moveTo(-w * .16, -w * .05); cx.lineTo(w * .1, -w * .07); cx.quadraticCurveTo(w * .16, 0, w * .1, w * .07); cx.lineTo(-w * .16, w * .05); cx.quadraticCurveTo(-w * .2, 0, -w * .16, -w * .05); cx.fill();
+        cx.fillStyle = '#2a251f'; cx.fillRect(w * .1, -w * .02, w * .16, w * .04);
+        cx.restore();
+      }
+      // glass: outline, mouth, highlights
+      rr(x0, t, w, b - t, r); cx.strokeStyle = 'rgba(243,236,224,.28)'; cx.lineWidth = 1.5; cx.stroke();
+      g = cx.createLinearGradient(x0, 0, x0 + w * .25, 0); g.addColorStop(0, 'rgba(255,255,255,0)'); g.addColorStop(.45, 'rgba(255,255,255,.16)'); g.addColorStop(1, 'rgba(255,255,255,0)');
+      cx.fillStyle = g; rr(x0 + w * .06, t + 14, w * .12, b - t - 28, 8); cx.fill();
+      cx.fillStyle = 'rgba(255,255,255,.08)'; rr(x1 - w * .12, t + 20, w * .04, b - t - 40, 6); cx.fill();
+      cx.strokeStyle = 'rgba(243,236,224,.35)'; cx.lineWidth = 1.5; cx.beginPath(); cx.ellipse(W / 2, t + 2, w / 2 - 2, w * .045, 0, 0, 7); cx.stroke();
+      // lid + label once it's a pound
+      if (done) {
+        const k = RM ? 1 : Math.min(1, (T - doneT) / .5), e = 1 - Math.pow(1 - k, 3), ly2 = t - w * .1 - (1 - e) * H * .25;
+        g = cx.createLinearGradient(x0, 0, x1, 0); g.addColorStop(0, '#3a2c17'); g.addColorStop(.35, '#c79a52'); g.addColorStop(.6, '#8a6a37'); g.addColorStop(1, '#3a2c17');
+        cx.globalAlpha = e; rr(x0 - 4, ly2, w + 8, w * .13, 8); cx.fillStyle = g; cx.fill(); cx.globalAlpha = 1;
+        const k2 = RM ? 1 : Math.min(1, Math.max(0, (T - doneT - .45) / .5)), e2 = 1 - Math.pow(1 - k2, 3);
+        if (k2 > 0) {
+          const lh2 = (b - t) * .3, ly3 = t + (b - t) * .36, lw2 = w * (.3 + .7 * e2), lx2 = W / 2 - lw2 / 2;
+          cx.save(); rr(lx2, ly3, lw2, lh2, 6); cx.fillStyle = '#f3ece0'; cx.shadowColor = 'rgba(0,0,0,.4)'; cx.shadowBlur = 16; cx.fill(); cx.restore();
+          if (k2 > .6) {
+            cx.save(); rr(lx2, ly3, lw2, lh2, 6); cx.clip(); cx.globalAlpha = (k2 - .6) / .4;
+            cx.fillStyle = '#0e0c0a'; cx.textAlign = 'center'; cx.textBaseline = 'alphabetic';
+            cx.font = `italic ${lh2 * .3}px "Instrument Serif", serif`; cx.fillText('Your pound', W / 2, ly3 + lh2 * .4);
+            cx.font = `500 ${lh2 * .1}px "Geist Mono", monospace`; cx.fillStyle = '#6b6357';
+            cx.fillText('NUTS NOW · NET 1.00 LB', W / 2, ly3 + lh2 * .6);
+            const line = layers.map(L => SC[L.id].short.toUpperCase()).join(' · ');
+            let fs = lh2 * .1; cx.font = `500 ${fs}px "Geist Mono", monospace`; const mw = lw2 * .9, tw = cx.measureText(line).width; if (tw > mw) { fs *= mw / tw; cx.font = `500 ${fs}px "Geist Mono", monospace`; }
+            cx.fillText(line, W / 2, ly3 + lh2 * .8);
+            cx.restore();
+          }
+        }
+      }
+    }
+
+    function tick(now) {
+      raf = 0; const dt = Math.max(0, Math.min(.05, (now - last) / 1000)); last = now; T += dt;
+      let busy = Math.abs(weight - shown) > .001 || (done && T - doneT < 1.4);
+      for (const L of layers) if (L.h < 1) { L.h = RM ? 1 : Math.min(1, L.h + dt / 1.15); busy = true; }
+      if (!done && layers.length === N && layers[N - 1].h >= 1) finish();
+      draw(dt);
+      if (busy) raf = requestAnimationFrame(tick);
+    }
+    function kick() { if (!J) return; if (!raf) { last = performance.now(); raf = requestAnimationFrame(tick); } }
+
+    $('#swatches').innerHTML = CONFIG.scoops.map(([id, n], i) => `<button class="sw${i === 0 ? ' hint' : ''}" type="button" data-id="${id}" aria-label="Add a quarter pound of ${esc(n)}"><i style="background-image:url(img/t-${id}.webp)"></i><span>${esc(n)}</span></button>`).join('');
+    $$('.sw').forEach(b => b.addEventListener('click', () => add(b.dataset.id)));
+    Object.values(IMG).forEach(im => im.addEventListener('load', kick));
+    document.fonts && document.fonts.ready.then(kick);
+    if ('ResizeObserver' in window) new ResizeObserver(size).observe(box); else addEventListener('resize', size);
+    size(); render();
+    return { add, addRoast, reset, get full() { return layers.length >= N; }, get state() { return { layers: layers.map(L => L.id), names: layers.map(L => SC[L.id].name), weight, shown: +shown.toFixed(2), done }; } };
+  })();
+
+  /* ===== the flow between the two ===== */
+  let step = 1;
+  function go(n) {
+    step = n; stage.classList.toggle('s2', n === 2); ctl.classList.toggle('s2', n === 2);
+    steps[0].classList.toggle('on', n === 1); steps[1].classList.toggle('on', n === 2);
+    drum.active = n === 1;
+  }
+  function pourIn() {
+    if (!drum.ok || jar.full) return;
+    const level = drum.roast; steps[0].classList.add('ok'); go(2);
+    // on a phone the button sits under the stage: bring the jar back into view so you see the pour
+    const top = stage.getBoundingClientRect().top; if (top < 70) { const y = top + scrollY - 76; lenis ? lenis.scrollTo(y, { duration: .9 }) : scrollTo({ top: y, behavior: RM ? 'auto' : 'smooth' }); }
+    setTimeout(() => { jar.addRoast(level); drum.again(false); $('#verdict').innerHTML = 'Fresh batch.<small>Hold the button. Let go when they\'re golden.</small>'; $('#verdict').classList.remove('good'); }, RM ? 0 : 520);
+  }
+  $('#toJar').addEventListener('click', pourIn);
+  $('#skipRoast').addEventListener('click', () => { drum.touch(); go(2); });
+  $('#backRoast').addEventListener('click', () => { drum.again(); go(1); });
+  const startOver = () => { jar.reset(); drum.again(); steps[0].classList.remove('ok'); go(1); };
+  $('#resetBtn').addEventListener('click', startOver); $('#again').addEventListener('click', startOver);
+  $('#copyBtn').addEventListener('click', async e => { const b = e.currentTarget, t = b.dataset.txt; try { await navigator.clipboard.writeText(t); b.textContent = 'Copied'; } catch (err) { prompt('Copy your mix:', t); } setTimeout(() => b.textContent = 'Copy my mix', 1800); });
+  window.__flow = { drum, jar, go, pourIn, get step() { return step; } };
+
+  /* page motion */
+  const nav = $('#nav'); const onS = () => nav.classList.toggle('solid', scrollY > 30); addEventListener('scroll', onS, { passive: true }); onS();
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -8% 0px' });
+  $$('.reveal').forEach(el => io.observe(el));
+  let lenis = null;
+  if (!RM && typeof Lenis !== 'undefined') { lenis = new Lenis({ lerp: .085 }); if (HAS_G) { lenis.on('scroll', ScrollTrigger.update); gsap.ticker.add(t => lenis.raf(t * 1000)); gsap.ticker.lagSmoothing(0); } else { const f = t => { lenis.raf(t); requestAnimationFrame(f); }; requestAnimationFrame(f); } }
+  $$('a[href^="#"]').forEach(a => a.addEventListener('click', e => { const id = a.getAttribute('href'); const tg = id.length > 1 && $(id); if (!tg) return; e.preventDefault(); const y = tg.getBoundingClientRect().top + scrollY - 70; lenis ? lenis.scrollTo(y, { duration: 1.5 }) : scrollTo({ top: y, behavior: RM ? 'auto' : 'smooth' }); }));
+  // the aisles: pinned, scrolled sideways on desktop, with a slow parallax inside each photo
+  if (HAS_G && !RM && !MOBILE) {
+    gsap.registerPlugin(ScrollTrigger);
+    const track = $('#trackX'), dist = () => track.scrollWidth - innerWidth;
+    const tw = gsap.to(track, { x: () => -dist(), ease: 'none', scrollTrigger: { trigger: '#pinbox', start: 'top top', end: () => '+=' + dist(), pin: true, scrub: .8, invalidateOnRefresh: true, anticipatePin: 1 } });
+    $$('.panel .ph img').forEach(img => gsap.fromTo(img, { xPercent: 4 }, { xPercent: -4, ease: 'none', scrollTrigger: { trigger: img.closest('.panel'), containerAnimation: tw, start: 'left right', end: 'right left', scrub: true } }));
+    gsap.fromTo('.roast .bgimg img', { scale: 1.12 }, { scale: 1, ease: 'none', scrollTrigger: { trigger: '.roast', start: 'top bottom', end: 'bottom top', scrub: true } });
+    addEventListener('load', () => ScrollTrigger.refresh());
+  }
+})();
+</script>
+</body>
+</html>
