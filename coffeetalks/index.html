@@ -214,6 +214,9 @@
     .o-grid { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(30px, 5vw, 90px); align-items: start; }
     .cupwrap { position: sticky; top: 100px; text-align: center; }
     .cup { width: min(340px, 72vw); margin: 0 auto; overflow: visible; }
+    .cup3d { display: block; width: min(480px, 100%); aspect-ratio: 1 / .92; margin: -20px auto 0; opacity: 0; transition: opacity .8s var(--ease); }
+    .cup3d.on { opacity: 1; }
+    .cupwrap.has3d .cup { display: none; }
     .cup .steam path { fill: none; stroke: rgba(111,95,82,.45); stroke-width: 3; stroke-linecap: round; }
     .ticket { margin: 18px auto 0; max-width: 380px; padding: 16px 18px; border-radius: 16px; background: var(--paper); box-shadow: 0 0 0 1px var(--line); text-align: left; }
     .ticket b { display: block; font: 600 23px/1.15 var(--serif); }
@@ -252,6 +255,11 @@
       .o-grid { grid-template-columns: 1fr; }
       .cupwrap { position: relative; top: 0; }
       .cup { width: min(230px, 56vw); }
+      .cupwrap.has3d { position: sticky; top: 64px; z-index: 6; background: var(--bg-2); margin: 0 calc(-1 * var(--pad)); padding: 0 var(--pad) 10px; box-shadow: 0 10px 18px -16px rgba(42,26,16,.5); }
+      .cupwrap.has3d .cup3d { width: 100%; height: 34svh; max-height: 300px; aspect-ratio: auto; margin: 0 auto; }
+      .cupwrap.has3d .ticket { margin-top: 0; padding: 10px 14px; }
+      .cupwrap.has3d .ticket b { font-size: 19px; }
+      .cupwrap.has3d .ticket span { font-size: 12.5px; margin-top: 2px; }
       .two { grid-template-columns: 1fr; }
       .send .acts { grid-template-columns: 1fr 1fr; }
       .send .acts .solid { grid-column: 1 / -1; }
@@ -436,10 +444,11 @@
       <div class="wrap">
         <div class="sec-head">
           <div><span class="label">Build Your Package</span><h2><span class="line"><span>What Are</span></span><span class="line"><span><em>We Brewing?</em></span></span></h2></div>
-          <p class="lede" style="margin:0">Tap what you need and watch your cup fill up. Your package comes to me as an email and we’ll set up a discovery call.</p>
+          <p class="lede" style="margin:0">Tap what you need and watch your cappuccino pour. Your package comes to me as an email and we’ll set up a discovery call.</p>
         </div>
         <div class="o-grid">
-          <div class="cupwrap">
+          <div class="cupwrap" data-cupwrap>
+            <canvas class="cup3d" data-cup3d hidden aria-label="Your package, poured as a cappuccino" role="img"></canvas>
             <svg class="cup" viewBox="0 0 300 330" data-cup aria-label="Your package, drawn as a coffee cup" role="img">
               <defs>
                 <clipPath id="cupClip"><path d="M50 92 H 250 L 232 290 Q 229 306 212 306 H 88 Q 71 306 68 290 Z"/></clipPath>
@@ -763,7 +772,16 @@
     $('[data-shots]').innerHTML = CONFIG.shots.map(s => chip('shot', 'checkbox', s.v, '', s.c)).join('');
     const g = n => $$(`input[name="${n}"]:checked`, f).map(i => i.value);
     const TOP = 92, BOT = 306, CUPH = BOT - TOP;
-    let touched = false, nudge = null;
+    let touched = false, nudge = null, cup3d = null, cupState = { base: false, size: 0, shots: 0 };
+    // the 3D cappuccino (falls back to the drawn cup if WebGL or the module fails)
+    (() => {
+      const cv = $('[data-cup3d]'), wrap = $('[data-cupwrap]');
+      const go = () => import('./assets/cup.js').then(m => { cv.hidden = false; wrap.classList.add('has3d'); return m.mountCup(cv, { assets: 'assets/', img: 'img/' }); })
+        .then(api => { cup3d = api; api.set(cupState); requestAnimationFrame(() => cv.classList.add('on')); window.__cup3d = api; })
+        .catch(() => { cv.hidden = true; wrap.classList.remove('has3d'); });
+      const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { io.disconnect(); go(); } }, { rootMargin: '900px 0px' });
+      io.observe($('#package'));
+    })();
     const touch = () => { if (touched) return; touched = true; f.classList.add('touched'); if (nudge) { nudge.kill(); gsap.set('[data-base] .chip > span', { clearProps: 'transform' }); } };
     const render = (animate) => {
       const base = CONFIG.base.find(b => b.v === g('base')[0]), size = CONFIG.size.find(s => s.v === g('size')[0]), shots = CONFIG.shots.filter(s => g('shot').includes(s.v));
@@ -779,10 +797,12 @@
       layers.innerHTML = svg;
       if (animate && ANIM) { const last = $$('rect', layers).pop(); if (last && layers.childElementCount >= prevCount) gsap.from(last, { attr: { y: TOP - 40 }, opacity: 0, duration: .6, ease: 'bounce.out' }); const foam = $('[data-l="foam"]', layers); if (foam) gsap.from(foam, { scaleY: 0, transformOrigin: 'center', duration: .5, ease: 'back.out(2)' }); }
       $('[data-steam]').style.opacity = parts.length ? 1 : .25;
+      const ns = { base: !!base, size: size ? size.h : 0, shots: shots.length };
+      if (JSON.stringify(ns) !== JSON.stringify(cupState)) { cupState = ns; if (cup3d) cup3d.set(cupState); }
       const name = f.name.value.trim();
       $('[data-cupname]').textContent = (name ? name.toUpperCase() + '’S PACKAGE' : 'YOUR PACKAGE').slice(0, 24);
       $('[data-tk-t]').textContent = base ? `${size ? size.v + ' ' : ''}${base.v}` : 'An Empty Cup';
-      $('[data-tk-d]').textContent = base ? (shots.length ? 'With ' + shots.map(s => s.v).join(', ') : 'Add a shot or two, or send it as is.') : 'Tap something on the right to start your package.';
+      $('[data-tk-d]').textContent = base ? (shots.length ? 'With ' + shots.map(s => s.v).join(', ') : 'Add a shot or two, or send it as is.') : (matchMedia('(max-width: 900px)').matches ? 'Tap something below to start your package.' : 'Tap something on the right to start your package.');
       const biz = f.biz.value.trim();
       const subj = `My Coffee Talks Package${biz ? ' · ' + biz : ''}`;
       const body = ['Hi Noor! Here’s my package:', '', `Service: ${base ? base.v : '(not sure yet)'}`, `How often: ${size ? size.v + ' (' + size.d.toLowerCase() + ')' : '(not sure yet)'}`, `Extras: ${shots.length ? shots.map(s => s.v).join(', ') : 'none'}`, `Business / brand: ${biz || '(your business)'}`, '', 'Let’s set up a discovery call!', `- ${name || '(your name)'}`].join('\n');
