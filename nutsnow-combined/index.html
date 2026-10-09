@@ -113,7 +113,7 @@ button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
 .pk-top{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
 .sizes{display:flex;align-items:center;gap:4px;padding:4px;border-radius:999px;border:1px solid var(--line);background:var(--bg-2)}
 .sizes span{font-family:"Geist Mono";font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:0 8px 0 10px}
-.sizes button{font-family:"Geist Mono";font-size:13px;padding:7px 12px;border-radius:999px;color:var(--ink-2);transition:background .2s,color .2s}
+.sizes button{font-family:"Geist Mono";font-size:13.5px;padding:0 13px;min-height:42px;border-radius:999px;color:var(--ink-2);transition:background .2s,color .2s}
 .sizes button[aria-checked="true"]{background:var(--gold);color:#1a140a}
 .cats{display:flex;gap:6px;margin-top:18px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}.cats::-webkit-scrollbar{display:none}
 .cats button{flex:none;font-size:13.5px;padding:8px 14px;border-radius:999px;border:1px solid var(--line);color:var(--ink-2);transition:background .2s,color .2s,border-color .2s}
@@ -158,7 +158,10 @@ button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
   .hero h1{font-size:clamp(46px,13vw,80px);margin:10px 0 12px}
   .hero .lede{font-size:15px}
   .steps{margin-top:16px}.steps li{font-size:13px;padding:6px 12px 6px 6px}
-  .stage{max-width:330px;margin:6px auto 0}
+  .stage{max-width:330px;margin:6px auto 0;transition:max-width .5s}
+  .stage:not(.s2){max-width:280px}
+  .r-pick{margin-bottom:16px}
+  .toast{top:74px;bottom:auto;transform:translate(-50%,-20px);max-width:calc(100% - 32px);text-align:center}.toast.on{transform:translate(-50%,0)}
   .ctl{width:100%}
   .callout{left:0;top:2%;font-size:13px}
   .c-roast,.c-pound{margin:6px auto 0}
@@ -311,6 +314,130 @@ footer small{grid-column:1/-1;border-top:1px solid var(--line);padding-top:22px;
 @media (max-width:700px){footer .wrap{grid-template-columns:minmax(0,1fr)}footer .links{text-align:left}}
 .toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,30px);opacity:0;z-index:95;background:var(--gold);color:#1a140a;padding:12px 20px;border-radius:99px;font-weight:600;font-size:14px;transition:opacity .35s,transform .35s;pointer-events:none}.toast.on{opacity:1;transform:translate(-50%,0)}
 @media (prefers-reduced-motion:reduce){.marq .track{animation:none}.reveal{opacity:1;transform:none;transition:none}.sw.hint i::after,.callout,.r-pay .btn-gold{animation:none}.pane{transition:none}}
+/* ordering: shop, basket, pickup. Same tokens, type and radii as the rest of the page */
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.nav .bk-btn{gap:8px}
+.bk-btn b{font-family:"Geist Mono";font-weight:500;font-size:12px;min-width:22px;height:22px;border-radius:999px;display:inline-grid;place-items:center;background:#1a140a;color:var(--gold);padding:0 6px}
+.bk-btn .t{font-family:"Geist Mono";font-weight:500;font-size:13px}.bk-btn .t:empty{display:none}
+.bk-btn.bump{animation:bump .6s cubic-bezier(.3,1.6,.5,1)}
+@keyframes bump{30%{transform:scale(1.08)}}
+.o-how{list-style:none;display:flex;gap:10px;flex-wrap:wrap;margin:-20px 0 34px}
+.o-how li{display:flex;align-items:center;gap:10px;padding:10px 16px 10px 10px;border-radius:999px;border:1px solid var(--line);font-size:15px;color:var(--ink-2)}
+.o-how b{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--gold);color:#1a140a;font:500 12px "Geist Mono"}
+.ocats{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:2px 2px 6px}.ocats::-webkit-scrollbar{display:none}
+.ocats button{flex:none;display:flex;align-items:center;gap:8px;min-height:48px;padding:0 18px;border-radius:999px;border:1px solid rgba(243,236,224,.22);font-size:16px;color:var(--ink);transition:background .2s,color .2s,border-color .2s}
+.ocats button small{font-family:"Geist Mono";font-size:11.5px;color:var(--muted)}
+.ocats button:hover{border-color:var(--ink)}
+.ocats button[aria-selected="true"]{background:var(--gold);color:#1a140a;border-color:var(--gold)}.ocats button[aria-selected="true"] small{color:#5a4520}
+.o-crumb{margin:18px 0 22px;font-size:15px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 8px;align-items:baseline}
+.o-crumb b{color:var(--ink);font-weight:600}.o-crumb i{font-style:normal}.o-crumb .n{font-family:"Geist Mono";font-size:12px}.o-crumb .d{flex-basis:100%;color:var(--ink-2)}
+.ogrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;outline:none}
+.pcard{display:flex;flex-direction:column;border-radius:var(--r);background:var(--bg-2);border:1px solid var(--line);overflow:hidden;transition:border-color .3s,box-shadow .3s}
+.pcard.added{animation:added 1s ease-out}
+@keyframes added{0%{box-shadow:0 0 0 0 rgba(232,194,122,.6);border-color:var(--gold)}100%{box-shadow:0 0 0 14px rgba(232,194,122,0)}}
+.pimg{position:relative;aspect-ratio:4/3;background:radial-gradient(closest-side,rgba(232,194,122,.12),transparent 80%),var(--bg-3);display:grid;place-items:center;overflow:hidden}
+.pimg img{width:78%;height:86%;object-fit:contain;filter:drop-shadow(0 16px 18px rgba(0,0,0,.5))}
+.pimg.photo img{width:100%;height:100%;object-fit:cover;filter:none}
+.noimg{display:grid;place-items:center;width:100%;height:100%;font-family:"Geist Mono";font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.pthumbs{position:absolute;bottom:8px;left:0;right:0;display:flex;justify-content:center;gap:6px}
+.pthumbs button{width:22px;height:22px;border-radius:50%;display:grid;place-items:center}.pthumbs button::after{content:"";width:8px;height:8px;border-radius:50%;background:rgba(243,236,224,.4)}.pthumbs button[aria-pressed="true"]::after{background:var(--gold)}
+.pbody{padding:18px 18px 20px;display:flex;flex-direction:column;gap:8px;flex:1}
+.pbody h3{font-family:"Instrument Serif";font-weight:400;font-size:28px;line-height:1.05}
+.pdesc{color:var(--ink-2);font-size:15.5px;line-height:1.45}
+.pprice{font-family:"Geist Mono";font-size:16px;color:var(--gold);margin-top:2px}
+.pprice.none{color:var(--ink-2);font-size:14px}.pprice small{display:block;font-family:"Geist";font-size:13px;color:var(--muted);margin-top:2px}
+.prow{display:flex;align-items:center;gap:10px;margin-top:auto;padding-top:10px;flex-wrap:wrap}
+.prow .lbl{font-size:14px;color:var(--muted);flex-basis:100%}
+.psub{font-family:"Geist Mono";font-weight:500;font-size:16px;margin-left:auto}
+.pacts{display:flex;flex-direction:column;gap:8px;margin-top:8px}.pacts .btn{justify-content:center;min-height:48px}
+.pna{margin-top:auto;padding-top:10px;color:var(--muted);font-size:15px}
+.pcard.off .pimg{opacity:.45}
+.qty.big{padding:3px}.qty.big button{width:44px;height:44px;font-size:22px}.qty.big output{font-family:"Geist Mono";font-size:15px;min-width:64px;text-align:center}
+.o-note{margin-top:26px;color:var(--muted);font-size:14px;max-width:46em}
+.o-empty,.o-err{color:var(--ink-2);font-size:16px;padding:20px 0}
+/* the jar's list: name + price on one line, amount and line total under it */
+.bag li{grid-template-columns:34px minmax(0,1fr) auto auto;grid-template-areas:"th nm pr x" "th q q q";row-gap:6px}
+.bag li>i{grid-area:th}.bag li .nm{grid-area:nm}.bag li .qty{grid-area:q;justify-self:start}.bag li .pr{grid-area:pr;font-family:"Geist Mono";font-weight:500;font-size:14px}.bag li .x{grid-area:x}
+.bag li .nm small{display:block;font-family:"Geist Mono";font-size:11.5px;color:var(--muted)}
+.bag-sum{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding-top:12px;margin-top:4px;border-top:1px solid var(--line)}
+.bag-sum span{color:var(--ink-2);font-size:14.5px}
+#bagSub{font-family:"Geist Mono";font-weight:500;font-size:18px;color:var(--gold);text-align:right}#bagSub small{display:block;font-family:"Geist";font-weight:400;font-size:12.5px;color:var(--muted);max-width:22em}
+.r-pick{display:flex;flex-direction:column;gap:10px;margin-bottom:22px;align-items:flex-start}
+/* basket dialog */
+html.bk-open{overflow:hidden}
+.basket{border:0;padding:0;margin:0 0 0 auto;width:min(560px,100vw);max-width:100vw;height:100dvh;max-height:100dvh;background:var(--bg-2);color:var(--ink);box-shadow:-30px 0 80px rgba(0,0,0,.6)}
+.basket::backdrop{background:rgba(8,7,5,.72);backdrop-filter:blur(3px)}
+.basket[open]{animation:bkIn .45s cubic-bezier(.2,.8,.2,1)}
+@keyframes bkIn{from{transform:translateX(40px);opacity:0}}
+.bk-in{height:100%;overflow-y:auto;overscroll-behavior:contain;padding:22px 24px 40px}
+.bk-top{display:flex;justify-content:space-between;align-items:center;gap:12px;position:sticky;top:-22px;margin:-22px -24px 10px;padding:18px 24px;background:var(--bg-2);border-bottom:1px solid var(--line);z-index:2}
+.bk-top h2{font-size:38px;outline:none}
+.bk-x{min-height:44px;padding:10px 16px}
+.bk-sec{padding:20px 0;border-bottom:1px solid var(--line)}
+.bk-sec h3{display:flex;align-items:center;gap:10px;font-size:18px;font-weight:600;margin-bottom:12px}
+.bk-sec h3 b{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--gold);color:#1a140a;font:500 13px "Geist Mono"}
+.bk-hint{color:var(--ink-2);font-size:15px;margin-bottom:12px}
+.bk-warn{margin:14px 0 4px;padding:16px 18px;border-radius:16px;border:1px solid rgba(226,86,60,.5);background:rgba(226,86,60,.08);font-size:15px}
+.bk-warn ul{margin:6px 0 0 18px}.bk-warn .btn{margin-top:10px;padding:10px 16px;font-size:14px}
+.bk-lines{list-style:none;display:flex;flex-direction:column;gap:10px}
+.bl{border:1px solid var(--line);border-radius:18px;padding:14px;background:var(--bg)}
+.bl.bad{border-color:rgba(226,86,60,.6)}
+.bl-item{display:grid;grid-template-columns:56px minmax(0,1fr) auto;gap:12px;align-items:center}
+.bl-img{width:56px;height:56px;object-fit:contain;border-radius:12px;background:var(--bg-3)}
+.bl-main b{display:block;font-size:16.5px;font-weight:600}.bl-main span{font-family:"Geist Mono";font-size:12.5px;color:var(--muted)}
+.bl-pr{font-family:"Geist Mono";font-weight:500;font-size:16px;white-space:nowrap}
+.bl-acts{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px;flex-wrap:wrap}
+.bl-acts .btn{padding:10px 16px;font-size:14.5px;min-height:44px}
+.bl-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}.bl-head b:first-child{font-family:"Instrument Serif";font-weight:400;font-size:26px;color:var(--gold)}.bl-head span{color:var(--ink-2);font-size:14.5px}.bl-head .bl-pr{margin-left:auto}
+.bl-comps{list-style:none;margin-top:8px}
+.bl-comps li{display:grid;grid-template-columns:minmax(0,1fr) auto auto;column-gap:12px;padding:7px 0;border-top:1px solid var(--line);font-size:15px}
+.bl-comps li span:nth-child(2){font-family:"Geist Mono";font-size:13.5px}.bl-comps .up{grid-column:1;font-family:"Geist Mono";font-size:11.5px;color:var(--muted)}.bl-comps li b{grid-row:1;grid-column:3;font-family:"Geist Mono";font-weight:500;font-size:14px}
+.bl-err{color:#f29a85;font-size:14.5px;margin-top:8px}
+.linkish{margin:0;min-height:44px}
+.bk-empty{padding:12px 0}.bk-empty p{color:var(--ink-2);margin-bottom:12px}
+.bk-sum{margin-top:14px}
+.bk-sum div{display:flex;justify-content:space-between;padding:6px 0;font-size:15.5px;color:var(--ink-2)}
+.bk-sum .tot{font-size:18px;color:var(--ink)}.bk-sum .tot b{font-family:"Geist Mono";font-weight:500;color:var(--gold)}
+.bk-sum p{color:var(--muted);font-size:14px;margin-top:4px}
+.pk-stores{border:0}
+#pkStores{display:grid;gap:10px}
+.pk-store{display:flex;gap:12px;align-items:flex-start;padding:14px;border-radius:16px;border:1px solid rgba(243,236,224,.22);cursor:pointer;transition:border-color .2s,background .2s}
+.pk-store:has(input:checked){border-color:var(--gold);background:rgba(232,194,122,.07)}
+.pk-store input{width:22px;height:22px;margin-top:2px;accent-color:var(--gold);flex:none}
+.pk-store>span{display:flex;flex-direction:column;gap:2px;font-size:14.5px;color:var(--ink-2)}.pk-store b{font-size:17px;color:var(--ink)}.pk-store .h{color:var(--gold);font-size:14px}
+.pk-days{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;margin-top:14px}
+.pk-day{text-align:left;padding:12px 14px;border-radius:14px;border:1px solid rgba(243,236,224,.22);min-height:56px}
+.pk-day b{display:block;font-size:15.5px}.pk-day small{font-size:13px;color:var(--ink-2)}
+.pk-day[aria-pressed="true"]{border-color:var(--gold);background:rgba(232,194,122,.1)}
+.pk-day:disabled{opacity:.5;cursor:default}
+.pk-time{display:flex;flex-direction:column;gap:6px;margin-top:14px;font-size:15px;color:var(--ink-2)}
+.pk-time select{min-height:50px;border-radius:14px;border:1px solid rgba(243,236,224,.3);background:var(--bg);color:var(--ink);font:500 17px "Geist",sans-serif;padding:0 14px;color-scheme:dark}
+.pk-msg{margin-top:12px;color:#f2b8a8;font-size:15px}
+.pk-chosen{margin-top:12px;font-size:15.5px;color:var(--ink-2)}.pk-chosen b{color:var(--ink)}
+.bk-wide{width:100%;justify-content:center;min-height:52px;font-size:16px}
+.bk-wide+.bk-wide,.ck-res+.bk-wide{margin-top:10px}
+#payBtn:disabled{opacity:.5;cursor:not-allowed}
+.ck-res{margin-top:12px;padding:14px 16px;border-radius:16px;border:1px solid var(--line);font-size:15px;color:var(--ink-2)}
+.ck-res.ok{border-color:rgba(169,196,90,.6);background:rgba(169,196,90,.08)}.ck-res.no{border-color:rgba(226,86,60,.5);background:rgba(226,86,60,.06)}
+.ck-res ul{margin:6px 0 0 18px}.ck-res b{color:var(--ink)}.ck-res .ck-pay{margin-top:8px;color:var(--muted);font-size:14px}
+.bk-alt{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}.bk-alt .btn{padding:11px 16px;font-size:14.5px;min-height:44px}
+@media (max-width:900px){
+  .o-how{margin:-8px 0 26px}.o-how li{font-size:14px}
+  .ogrid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
+  .bk-in{padding:18px 16px 40px}.bk-top{margin:-18px -16px 8px;padding:14px 16px;top:-18px}.bk-top h2{font-size:32px}
+}
+.sizes button{white-space:nowrap}
+.order .head h2{font-size:clamp(48px,5.4vw,88px)}
+@media (max-width:420px){.r-pick .sizes span{display:none}.r-pick .sizes{flex-wrap:wrap}.sizes button{padding:0 11px}}
+@media (max-width:560px){
+  .ogrid{grid-template-columns:minmax(0,1fr);gap:12px}
+  .pcard{display:grid;grid-template-columns:104px minmax(0,1fr)}
+  .pimg{aspect-ratio:auto;height:100%;min-height:120px;align-items:start;padding-top:14px}.pimg img{width:88px;height:88px}
+  .pbody{padding:14px 14px 16px 4px;gap:6px}.pbody h3{font-size:24px}.pdesc{font-size:15px}
+  .prow .lbl{display:none}.pacts{flex-direction:row;flex-wrap:wrap}.pacts .btn{flex:1 1 auto;padding:12px 14px;font-size:14.5px}
+  .nav .bk-btn{padding:10px 14px}
+}
+@media (prefers-reduced-motion:reduce){.basket[open],.pcard.added,.bk-btn.bump{animation:none}}
 </style>
 </head>
 <body>
@@ -321,13 +448,14 @@ footer small{grid-column:1/-1;border-top:1px solid var(--line);padding-top:22px;
   <div class="wrap">
     <a class="brand" href="#top">Nuts <em>Now</em></a>
     <ul>
+      <li><a href="#order">Order</a></li>
       <li><a href="#aisles">The aisles</a></li>
       <li><a href="#roastery">Roastery</a></li>
       <li><a href="#viral">New &amp; viral</a></li>
       <li><a href="#plan">Party trays</a></li>
       <li><a href="#visit">Visit</a></li>
     </ul>
-    <a class="btn btn-gold" href="#visit">Find a shop</a>
+    <button class="btn btn-gold bk-btn" type="button" id="bkOpen" aria-haspopup="dialog">Basket <b id="bkCount">0</b><span class="t" id="bkNavTot"></span></button>
   </div>
 </header>
 
@@ -342,7 +470,7 @@ footer small{grid-column:1/-1;border-top:1px solid var(--line);padding-top:22px;
     </div>
     <div class="stage" id="stage">
       <div class="pane pane-drum">
-        <canvas id="drumCv" role="img" aria-label="A roasting drum full of raw cashews, pistachios and hazelnuts. Hold the roast button and let go when they turn golden."></canvas>
+        <canvas id="drumCv" role="img" aria-label="A roasting drum full of raw nuts. Choose what to roast and how much, hold the roast button and let go when they turn golden."></canvas>
         <div class="callout" id="rCall" aria-hidden="true"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c2 3 5 5 5 9a5 5 0 0 1-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-5 1-8z"/></svg></i><span id="rCallT">Hold to roast<small>Let go when they're golden</small></span></div>
       </div>
       <div class="pane pane-jar" role="img" aria-label="A glass jar on a digital scale. Your roast pours in first, then every scoop you pick pours in as a layer and the scale counts up.">
@@ -352,27 +480,34 @@ footer small{grid-column:1/-1;border-top:1px solid var(--line);padding-top:22px;
     </div>
     <div class="ctl" id="ctl">
       <div class="c-roast">
+        <div class="r-pick">
+          <div class="sizes" id="roastNut" role="radiogroup" aria-label="What to roast"><span>Roast</span><button type="button" role="radio" aria-checked="true" data-id="cashews">Cashews</button><button type="button" role="radio" aria-checked="false" data-id="pistachios">Pistachios</button><button type="button" role="radio" aria-checked="false" data-id="hazelnuts">Hazelnuts</button></div>
+          <div class="sizes" id="roastAmt" role="radiogroup" aria-label="How much to roast"><span>Amount</span><button type="button" role="radio" aria-checked="false" data-u="1">¼ lb</button><button type="button" role="radio" aria-checked="true" data-u="2">½ lb</button><button type="button" role="radio" aria-checked="false" data-u="3">¾ lb</button><button type="button" role="radio" aria-checked="false" data-u="4">1 lb</button></div>
+        </div>
         <div class="r-ui">
           <button class="hold" id="holdBtn" type="button" aria-describedby="verdict">Roast<small>hold</small></button>
           <div class="gauge" aria-hidden="true"><div class="lbl"><span>Raw</span><span>Dark</span></div><div class="bar"><span class="win"></span><span class="needle" id="needle"></span></div></div>
         </div>
-        <p class="verdict" id="verdict" aria-live="polite">Raw cashews, pistachios &amp; hazelnuts.<small>Hold the button to fire up the roaster.</small></p>
-        <div class="r-pay" id="rPay" hidden><button class="btn btn-gold" type="button" id="toJar">Pour it into the jar</button><button class="btn btn-line" type="button" id="rAgain">Roast another batch</button></div>
+        <p class="verdict" id="verdict" aria-live="polite">Raw cashews.<small>Hold the button to fire up the roaster.</small></p>
+        <div class="r-pay" id="rPay" hidden><button class="btn btn-gold" type="button" id="toJar">Pour ½ lb into the jar</button><button class="btn btn-line" type="button" id="rAgain">Roast another batch</button></div>
         <button class="linkish" type="button" id="skipRoast">Skip the roast, go straight to the scale</button>
       </div>
       <div class="c-pound">
         <div class="pk-top">
-          <p class="eyebrow" id="pickLbl">Scoop anything · as much as you like</p>
-          <div class="sizes" id="sizes" role="radiogroup" aria-label="Scoop size"><span>Scoop</span><button type="button" role="radio" aria-checked="true" data-lb=".25">¼ lb</button><button type="button" role="radio" aria-checked="false" data-lb=".5">½ lb</button><button type="button" role="radio" aria-checked="false" data-lb="1">1 lb</button></div>
+          <p class="eyebrow" id="pickLbl">Build a mix · any amount</p>
+          <div class="sizes" id="sizes" role="radiogroup" aria-label="Scoop size"><span>Scoop</span><button type="button" role="radio" aria-checked="true" data-u="1">¼ lb</button><button type="button" role="radio" aria-checked="false" data-u="2">½ lb</button><button type="button" role="radio" aria-checked="false" data-u="4">1 lb</button></div>
         </div>
-        <div class="cats" id="cats" role="tablist" aria-label="Aisles"></div>
+        <div class="cats" id="cats" role="tablist" aria-label="Aisles" data-needs-catalog></div>
         <div class="swatches" id="swatches" role="group" aria-label="Tap to pour a scoop into the jar"></div>
         <div class="bag" id="bag">
-          <div class="bag-h"><span class="serif" id="bagTitle">Your <em>mix</em></span><b id="bagTot">0.00 lb</b></div>
+          <div class="bag-h"><span class="serif" id="bagTitle">Your <em>mix</em></span><b id="bagTot">0 lb</b></div>
           <ul id="bagList" aria-live="polite"></ul>
           <p class="bag-empty" id="bagEmpty">Nothing in the jar yet. Tap anything above to pour it in, then use + and − to get the amounts right.</p>
-          <div class="row" id="bagActs" hidden><button class="btn btn-gold" type="button" id="sealBtn">Seal the jar</button><button class="btn btn-line" type="button" id="copyBtn">Copy my order</button><a class="btn btn-line" id="bagIg" href="https://ig.me/m/nutsnow.co" target="_blank" rel="noopener">Send it on Instagram</a></div>
-          <div class="bag-links"><button class="reset" type="button" id="backRoast">Roast another batch</button><button class="reset" type="button" id="resetBtn" hidden>Start over</button></div>
+          <div id="bagFoot" hidden>
+            <div class="bag-sum"><span>Mix subtotal</span><b id="bagSub"></b></div>
+            <div class="row"><button class="btn btn-gold" type="button" id="mixAdd">Add mix to basket</button><button class="btn btn-gold" type="button" id="mixSave" hidden>Save changes</button><button class="btn btn-line" type="button" id="mixCancel" hidden>Cancel editing</button><button class="btn btn-line" type="button" data-open-basket>View basket</button></div>
+          </div>
+          <div class="bag-links"><button class="reset" type="button" id="backRoast">Roast another batch</button><button class="reset" type="button" id="resetBtn" hidden>Empty the jar</button></div>
         </div>
       </div>
     </div>
@@ -380,6 +515,20 @@ footer small{grid-column:1/-1;border-top:1px solid var(--line);padding-top:22px;
 </section>
 
 <div class="marq" aria-hidden="true"><div class="track" id="marq"></div></div>
+
+<section class="sec order" id="order" aria-labelledby="orderH">
+  <div class="wrap">
+    <div class="head">
+      <div><p class="eyebrow">Order for pickup</p><h2 class="serif reveal in" id="orderH">Pick it. Weigh it. <em>Pick it up.</em></h2></div>
+      <p class="reveal in">Everything here is sold loose by weight. Choose an aisle, set the amount with <b>+</b> and <b>−</b>, and add it to your basket. Or pour it into your own mix in the jar above.</p>
+    </div>
+    <ol class="o-how" aria-label="How ordering works"><li><b>1</b>Choose an aisle and an item</li><li><b>2</b>Set how much you want</li><li><b>3</b>Review your basket and pickup time</li></ol>
+    <div class="ocats" id="oCats" role="tablist" aria-label="Aisles" data-needs-catalog></div>
+    <p class="o-crumb" id="oCrumb" aria-live="polite"></p>
+    <div class="ogrid" id="oGrid" tabindex="-1"></div>
+    <p class="o-note">Product pictures are illustrations for now. The shop's own photos will replace them. Prices that aren't online yet are weighed and priced at the counter.</p>
+  </div>
+</section>
 
 <section class="aisles" id="aisles">
   <div class="wrap intro">
@@ -474,29 +623,47 @@ footer small{grid-column:1/-1;border-top:1px solid var(--line);padding-top:22px;
     <small><span>© <span id="yr"></span> Nuts Now · Fresh roasted traditions</span><span>Shop photos: @nutsnow.co · Product photography: stock images from Unsplash</span></small>
   </div>
 </footer>
+<dialog class="basket" id="basket" aria-labelledby="bkTitle">
+  <div class="bk-in" data-lenis-prevent>
+    <div class="bk-top"><h2 class="serif" id="bkTitle" tabindex="-1">Your <em>basket</em></h2><button class="btn btn-line bk-x" type="button" id="bkClose">Close <span aria-hidden="true">×</span></button></div>
+    <div class="bk-warn" id="bkWarn" role="alert" hidden></div>
+    <section class="bk-sec" aria-labelledby="bkS1">
+      <h3 id="bkS1"><b>1</b>Review your order</h3>
+      <ul class="bk-lines" id="bkLines"></ul>
+      <div class="bk-empty" id="bkEmpty"><p>Your basket is empty.</p><button class="btn btn-gold" type="button" id="bkShop">Keep shopping</button></div>
+      <div class="bk-sum bk-need" id="bkSum"></div>
+    </section>
+    <section class="bk-sec bk-need" aria-labelledby="bkS2">
+      <h3 id="bkS2"><b>2</b>Choose your pickup</h3>
+      <p class="bk-hint">Pick the shop, the day and the time you'll come in. Please arrive by your pickup time.</p>
+      <fieldset class="pk-stores"><legend class="sr">Pickup shop</legend><div id="pkStores"></div></fieldset>
+      <div id="pkWhen" hidden>
+        <div class="pk-days" id="pkDays" role="group" aria-label="Pickup day"></div>
+        <label class="pk-time"><span>Pickup time</span><select id="pkTime"></select></label>
+      </div>
+      <p class="pk-msg" id="pkMsg" role="status" hidden></p>
+      <p class="pk-chosen" id="pkChosen" aria-live="polite"></p>
+    </section>
+    <section class="bk-sec bk-need" aria-labelledby="bkS3">
+      <h3 id="bkS3"><b>3</b>Check and pay</h3>
+      <button class="btn btn-gold bk-wide" type="button" id="ckBtn">Check my order</button>
+      <div class="ck-res" id="ckResult" aria-live="polite" hidden></div>
+      <button class="btn btn-line bk-wide" type="button" id="payBtn" disabled aria-describedby="payNote">Pay with DoorDash</button>
+      <p class="bk-hint" id="payNote"></p>
+      <div class="bk-alt"><button class="btn btn-line" type="button" id="bkCopy">Copy my order</button><a class="btn btn-line" id="bkIg" href="https://ig.me/m/nutsnow.co" target="_blank" rel="noopener">Send it on Instagram</a><a class="btn btn-line" id="bkCall" href="tel:+13137685370">Call the shop</a></div>
+    </section>
+  </div>
+</dialog>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+<script src="js/order-core.js"></script>
 <script>
 const CONFIG = {
   ig: 'https://www.instagram.com/nutsnow.co/', igHandle: '@nutsnow.co', igDm: 'https://ig.me/m/nutsnow.co',
   tz: 'America/Detroit',
-  shops: [
-    { id: 'ap', tag: 'The original', name: 'Allen Park', addr: '5713 Allen Rd<br>Allen Park, MI 48101', tel: '+13137685370', telL: '(313) 768-5370', hours: { 0: [10, 20], 1: [10, 21], 2: [10, 21], 3: [10, 21], 4: [10, 21], 5: [10, 21], 6: [10, 21] }, map: 'Nuts Now 5713 Allen Rd Allen Park MI 48101' },
-    { id: 'dh', tag: 'Bigger store', name: 'Dearborn Heights', addr: '26454 Ford Rd<br>Dearborn Heights, MI', tel: '+13133952684', telL: '(313) 395-2684', hours: { 0: [9, 22], 1: [9, 22], 2: [9, 22], 3: [9, 22], 4: [9, 22], 5: [9, 22], 6: [9, 22] }, note: 'Home of the fresh nut butter corner. Holiday hours can change, so call ahead.', map: 'Nuts Now 26454 Ford Rd Dearborn Heights MI' }
-  ],
   // the roaster: what tumbles in the drum (rows in the catalog sprite atlas)
   roastNuts: ['cashews', 'pistachios', 'hazelnuts'],
   atlas: 'cashews bbq zaatar pistachios pecans hazelnuts walnuts mix pumpkin melon lemon strawberries mango kiwi pineapple baklava delight dates stuffed dubaidates bulkchoc wrapped discs dubaibar dubaicup browniecup dubaiberries gummies sours blue licorice swedish fish pretzels nougat cheesecake cake icecream peanutbutter nutbutters spices coffee'.split(' '),
-  // the scale: everything sold loose by weight, by aisle. A photo (img/t-*) where we have a macro shot,
-  // otherwise the catalog tile; the jar layer is the photo, or a tile of that item's sprites from the atlas
-  bulk: [
-    { tab: 'Nuts', items: [['cashews', 'Roasted cashews', 't-cashews'], ['bbq', 'BBQ cashews', 't-bbq'], ['zaatar', "Za'atar cashews"], ['pistachios', 'Pistachios', 't-pistachios'], ['pecans', 'Pecans'], ['hazelnuts', 'Hazelnuts', 't-hazelnuts'], ['walnuts', 'Walnuts'], ['mix', 'Snack mix']] },
-    { tab: 'Seeds', items: [['pumpkin', 'Pumpkin seeds', 't-seeds'], ['melon', 'Melon seeds'], ['lemon', 'Lemon seeds']] },
-    { tab: 'Dried fruit', items: [['strawberries', 'Dried strawberries'], ['mango', 'Mango slices'], ['kiwi', 'Kiwi'], ['pineapple', 'Pineapple']] },
-    { tab: 'Sweets', items: [['delight', 'Turkish delight', 't-delight'], ['dates', 'Dates', 't-dates'], ['stuffed', 'Stuffed dates']] },
-    { tab: 'Chocolate', items: [['bulkchoc', 'Bulk chocolate'], ['wrapped', 'Wrapped chocolates'], ['discs', 'Melting discs']] },
-    { tab: 'Candy', items: [['gummies', 'Gummies', 't-gummies'], ['sours', 'Gummy sours'], ['blue', 'Blue raspberry'], ['licorice', 'Licorice'], ['swedish', 'Swedish candy'], ['fish', 'Swedish Fish'], ['pretzels', 'Pretzels']] }
-  ],
   aisles: [
     { img: 'a-nuts', h: 'Roasted <em>nuts</em>', line: 'From the family roastery in Allen Park, roasting for 15+ years.', items: [['Roasted cashews', 'No. 1'], ['BBQ cashews'], ["Za'atar cashews"], ['Pistachios'], ['Pecans'], ['Hazelnuts'], ['Walnuts'], ['Snack mixes']] },
     { img: 'a-seeds', h: 'Roasted <em>seeds</em>', line: 'By the pound, for cracking in front of the TV.', items: [['Pumpkin seeds'], ['Melon seeds'], ['Lemon seeds']] },
@@ -524,7 +691,54 @@ const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [..
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const RM = matchMedia('(prefers-reduced-motion: reduce)').matches, MOBILE = matchMedia('(max-width: 900px)').matches;
 const ext = 'target="_blank" rel="noopener"', mapUrl = q => 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(q);
-const toast = m => { const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('on'), 2400); };
+const toast = m => { const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('on'), 3200); };
+
+/* ---------- ordering data: the catalog file + the basket (shared by the jar, the shop and the basket) ----------
+   data/catalog.json is the one source for products, prices, photos, store hours and pickup rules.
+   js/order-core.js (O) does every price and pickup calculation, here and on the server. */
+const O = window.NNOrder;
+const NN = { catalog: null, byId: {} };
+NN.ready = fetch('data/catalog.json', { cache: 'no-cache' }).then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+  .then(c => { NN.catalog = c; NN.byId = O.index(c); return c; });
+NN.ready.catch(() => { $$('[data-needs-catalog]').forEach(el => { el.innerHTML = '<p class="o-err" role="alert">We couldn\'t load the menu just now. Please refresh the page, or call the shop.</p>'; }); });
+const storeLS = { get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} } };
+const uid = () => Math.random().toString(36).slice(2, 10);
+const bumpBasket = () => { const b = $('#bkOpen'); if (!b || RM) return; b.classList.remove('bump'); void b.offsetWidth; b.classList.add('bump'); };
+
+// the basket: plain lines of product ids + whole units, saved in this browser. Prices are never stored as
+// the truth: `snap` only remembers the price seen when something was added, so a later change can be flagged.
+const basket = (() => {
+  const saved = storeLS.get('nn-basket-v1') || {};
+  let lines = Array.isArray(saved.lines) ? saved.lines.filter(l => l && (l.type === 'mix' ? Array.isArray(l.components) : typeof l.productId === 'string')) : [];
+  let seq = saved.seq || 0, snap = saved.snap || {}, pickup = saved.pickup || null;
+  const subs = [];
+  const emit = () => { storeLS.set('nn-basket-v1', { lines, seq, snap, pickup }); subs.forEach(f => f()); };
+  const remember = pid => { const p = NN.byId[pid]; if (p) snap[pid] = p.priceCents; };
+  const ids = () => { const s = new Set(); lines.forEach(l => (l.type === 'mix' ? l.components.map(c => c.productId) : [l.productId]).forEach(i => s.add(i))); return s; };
+  return {
+    on(f) { subs.push(f); },
+    get lines() { return lines; }, get pickup() { return pickup; },
+    find: id => lines.find(l => l.id === id) || null,
+    setPickup(p) { pickup = p; emit(); },
+    // regular items: the same product added twice is one line with more weight
+    addItem(pid, units) {
+      const p = NN.byId[pid], ex = lines.find(l => l.type === 'item' && l.productId === pid), err = O.checkQty(NN.catalog, p, (ex ? ex.units : 0) + units, false);
+      if (err) return err;
+      if (ex) ex.units += units; else lines.push({ type: 'item', id: uid(), productId: pid, units });
+      remember(pid); emit(); return null;
+    },
+    setUnits(id, units) { const l = lines.find(x => x.id === id); if (!l) return; if (units <= 0) lines = lines.filter(x => x !== l); else l.units = units; emit(); },
+    // each mix is its own line, even when two mixes hold the same things
+    addMix(components) { seq++; const m = { type: 'mix', id: uid(), name: `Mix #${seq}`, components }; lines.push(m); components.forEach(c => remember(c.productId)); emit(); return m; },
+    updateMix(id, components) { const m = lines.find(x => x.id === id); if (!m) return null; m.components = components; components.forEach(c => remember(c.productId)); emit(); return m; },
+    remove(id) { lines = lines.filter(x => x.id !== id); emit(); },
+    clear() { lines = []; emit(); },
+    price() { return O.priceBasket(NN.catalog, lines); },
+    changes() { const out = []; ids().forEach(pid => { const p = NN.byId[pid]; if (p && pid in snap && snap[pid] !== p.priceCents) out.push({ p, was: snap[pid], now: p.priceCents }); }); return out; },
+    acceptPrices() { ids().forEach(remember); emit(); },
+    refresh() { subs.forEach(f => f()); }
+  };
+})();
 
 $('#yr').textContent = new Date().getFullYear();
 $$('[data-ig]').forEach(a => a.href = CONFIG.ig);
@@ -532,14 +746,20 @@ $('#marq').innerHTML = [...CONFIG.marquee, ...CONFIG.marquee].map(t => `<span>${
 $('#trackX').innerHTML = CONFIG.aisles.map((a, i) => `<article class="panel"><div class="ph"><img src="img/${a.img}.webp" alt="" loading="lazy" width="1000" height="1500"></div><div class="tx"><div class="no">${String(i + 1).padStart(2, '0')} / ${String(CONFIG.aisles.length).padStart(2, '0')}</div><h3>${a.h}</h3><p class="line">${esc(a.line)}</p><ul>${a.items.map(([n, t]) => `<li><span>${esc(n)}</span>${t ? `<i class="${t === 'Viral' ? 'viral' : t === 'New' ? 'new' : ''}">${esc(t)}</i>` : ''}</li>`).join('')}</ul></div></article>`).join('');
 $('#viralGrid').innerHTML = CONFIG.viral.map(([img, tag, h, p, q, cite], i) => `<article class="v v${i + 1} reveal"><img src="img/${img}.webp" alt="${esc(h)}" loading="lazy" width="1000" height="1200"><div class="cap"><i>${esc(tag)}</i><h3>${esc(h)}</h3><p>${esc(p)}</p>${q ? `<q>“${esc(q)}”</q><cite>${esc(cite)}</cite>` : ''}</div></article>`).join('');
 $('#fdRow').innerHTML = CONFIG.feed.map(f => `<a class="reveal" href="https://www.instagram.com/p/${esc(f[1])}/" ${ext} aria-label="${esc(f[2])} (Instagram post)"><img src="${esc(f[0])}" alt="${esc(f[2])}" width="720" height="1280" loading="lazy"></a>`).join('');
-$('#flinks').innerHTML = CONFIG.shops.map(s => `<a href="tel:${s.tel}">${esc(s.name)} · ${s.telL}</a>`).join('') + `<a href="${CONFIG.ig}" ${ext}>Instagram ${CONFIG.igHandle}</a>`;
-
-// shops + live status
-const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'], fmt = h => h === 24 ? 'midnight' : (((h + 11) % 12) + 1) + (h >= 12 ? 'pm' : 'am');
-const now = () => { const p = new Intl.DateTimeFormat('en-US', { timeZone: CONFIG.tz, weekday: 'short', hour: 'numeric', minute: 'numeric', hour12: false }).formatToParts(new Date()), g = t => p.find(x => x.type === t).value; return { d: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(g('weekday')), h: (+g('hour') % 24) + (+g('minute')) / 60 }; };
-$('#shops').innerHTML = CONFIG.shops.map(s => { const n = now(); return `<article class="shop reveal"><span class="tag">${esc(s.tag)}</span><h3>${esc(s.name)}</h3><address>${s.addr}</address><div class="status" data-st="${s.id}"></div><table aria-label="${esc(s.name)} opening hours">${[1, 2, 3, 4, 5, 6, 0].map(d => `<tr${d === n.d ? ' class="today"' : ''}><td>${days[d]}</td><td>${fmt(s.hours[d][0])} – ${fmt(s.hours[d][1])}</td></tr>`).join('')}</table>${s.note ? `<p class="note">${esc(s.note)}</p>` : ''}<div class="acts"><a class="btn btn-gold" href="tel:${s.tel}">Call ${s.telL}</a><a class="btn btn-line" href="${mapUrl(s.map)}" ${ext}>Directions</a></div></article>`; }).join('');
-const paint = () => CONFIG.shops.forEach(s => { const t = now(), h = s.hours[t.d], el = $(`[data-st="${s.id}"]`), open = t.h >= h[0] && t.h < h[1]; el.textContent = open ? `Open now · until ${fmt(h[1])}` : `Closed · opens ${t.h < h[0] ? 'today ' + fmt(h[0]) : 'tomorrow ' + fmt(s.hours[(t.d + 1) % 7][0])}`; el.classList.toggle('open', open); });
-paint(); setInterval(paint, 60000);
+// shops: address, hours and live status, all from the catalog's stores
+NN.ready.then(cat => {
+  const tz = cat.settings.pickup.timeZone, order = [1, 2, 3, 4, 5, 6, 0], dayName = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const hrsOn = (s, d) => s.hours[String(d)] ? { open: O.fmtClock(toM(s.hours[d].open)), close: O.fmtClock(toM(s.hours[d].close)), last: O.fmtClock(Math.min(toM(s.hours[d].close), toM(s.hours[d].lastPickup || s.hours[d].close))) } : null;
+  const toM = t => { const [h, m] = t.split(':').map(Number); return h * 60 + m; };
+  const lastNote = s => { const c = {}; order.forEach(d => { const h = hrsOn(s, d); if (h) (c[h.last] = c[h.last] || []).push(d); }); const ks = Object.keys(c).sort((a, b) => c[b].length - c[a].length); return 'Last pickup for online orders: ' + ks[0] + ks.slice(1).map(k => ` (${c[k].map(d => dayName[d].slice(0, 3)).join(', ')}: ${k})`).join(''); };
+  const today = O.zoned(Date.now(), tz).dow;
+  $('#shops').innerHTML = cat.stores.map(s => `<article class="shop reveal in"><span class="tag">${esc(s.tag)}</span><h3>${esc(s.name)}</h3><address>${s.address.map(esc).join('<br>')}</address><div class="status" data-st="${s.id}"></div><table aria-label="${esc(s.name)} opening hours">${order.map(d => { const h = hrsOn(s, d); return `<tr${d === today ? ' class="today"' : ''}><td>${dayName[d]}</td><td>${h ? `${h.open} – ${h.close}` : 'Closed'}</td></tr>`; }).join('')}</table><p class="note">${esc(lastNote(s))}${s.note ? '. ' + esc(s.note) : ''}</p><div class="acts"><a class="btn btn-gold" href="tel:${s.phone}">Call ${esc(s.phoneLabel)}</a><a class="btn btn-line" href="${mapUrl(s.map)}" ${ext}>Directions</a></div></article>`).join('');
+  $('#flinks').innerHTML = cat.stores.map(s => `<a href="tel:${s.phone}">${esc(s.name)} · ${esc(s.phoneLabel)}</a>`).join('') + `<a href="${CONFIG.ig}" ${ext}>Instagram ${CONFIG.igHandle}</a>`;
+  const paint = () => cat.stores.forEach(s => { const z = O.zoned(Date.now(), tz), min = z.h * 60 + z.mi, h = O.dayHours(cat, s, z.date), el = $(`[data-st="${s.id}"]`), open = h && min >= h.open && min < h.close;
+    let next = ''; if (!open) { if (h && min < h.open) next = 'today ' + O.fmtClock(h.open); else for (let i = 1; i < 8; i++) { const hn = O.dayHours(cat, s, O.addDays(z.date, i)); if (hn) { next = (i === 1 ? 'tomorrow ' : dayName[(z.dow + i) % 7] + ' ') + O.fmtClock(hn.open); break; } } }
+    el.textContent = open ? `Open now · until ${O.fmtClock(h.close)}` : `Closed · opens ${next}`; el.classList.toggle('open', !!open); });
+  paint(); setInterval(paint, 60000);
+});
 
 /* party tray planner */
 (() => {
@@ -578,14 +798,14 @@ paint(); setInterval(paint, 60000);
    Step 1, the roaster: a drum (canvas) of raw cashews, pistachios and hazelnuts tumbling with verlet physics.
    Hold Roast: the drum spins up and the nuts tint raw → golden → dark (pre-tinted copies of the sprite atlas,
    crossfaded). Let go inside the golden window. Golden or a little dark can go in the jar; burnt can't.
-   Step 2, the scale: the batch pours into the glass jar as the first quarter pound, its layer drawn from the
-   same tinted sprites at the roast you pulled. Scoop three more (real macro photos as canvas patterns) and at
-   1.00 lb the brass lid drops, a 'Your pound' label wraps the jar and the payoff card copies or sends the mix. */
+   You pick the nut and the amount first; that product and weight is what goes in the basket.
+   Step 2, the scale: the batch pours into the glass jar, its layer drawn from the same tinted sprites at the
+   roast you pulled. Scoop anything else (catalog products, in ¼ lb units), then "Add mix to basket" seals the
+   jar (lid + label) and the mix becomes one basket line with its items listed. Mixes can be edited later. */
 (() => {
   const HAS_G = typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined';
   const stage = $('#stage'), ctl = $('#ctl'), steps = $$('#steps li');
   const WIN = [.55, .75];
-  const ROWS = CONFIG.roastNuts.map(id => CONFIG.atlas.indexOf(id));
   // shared: the sprite atlas in four roast tints (raw, toasty, golden, dark)
   let tints = null; const onTints = [];
   const atlas = new Image(); atlas.src = 'img/pieces.webp';
@@ -605,8 +825,8 @@ paint(); setInterval(paint, 60000);
   /* ===== step 1: the roaster ===== */
   const drum = (() => {
     const cv = $('#drumCv'), ctx = cv.getContext('2d'), btn = $('#holdBtn'), verdict = $('#verdict'), pay = $('#rPay'), needle = $('#needle'), call = $('#rCall');
-    let S = 0, HH = 0, D = 1, raf = 0, visible = true, active = true, holding = false, demo = false, touched = false, roast = 0, omega = .008, ang = 0, done = false, ok = false, t0 = performance.now(), steam = [];
-    const N = 64, nuts = [...Array(N)].map((_, i) => ({ x: 0, y: 0, px: 0, py: 0, row: ROWS[i % 3], col: (i / 3 | 0) % 3, a: Math.random() * 6.28, s: .92 + Math.random() * .16 }));
+    let nutId = 'cashews', S = 0, HH = 0, D = 1, raf = 0, visible = true, active = true, holding = false, demo = false, touched = false, roast = 0, omega = .008, ang = 0, done = false, ok = false, t0 = performance.now(), steam = [];
+    const N = 64, nuts = [...Array(N)].map((_, i) => ({ x: 0, y: 0, px: 0, py: 0, row: CONFIG.atlas.indexOf('cashews'), col: i % 3, a: Math.random() * 6.28, s: .92 + Math.random() * .16 }));
     const fill = () => nuts.forEach(n => { n.x = (Math.random() - .5) * .3; n.y = .1 + Math.random() * .2; n.px = n.x; n.py = n.y; }); fill();
     const RW = .355, RN = .036;   // window radius, nut radius (fractions of the drum size)
     const CY = .47;               // drum centre, as a fraction of the stage width (the stand sits below it)
@@ -692,24 +912,27 @@ paint(); setInterval(paint, 60000);
     new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible) kick(); }).observe(cv);
     onTints.push(kick);
     // idle nudge: if nobody touches it, the roaster fires up briefly on its own
-    if (!RM) setTimeout(function nudge() { if (touched || done || !active) return; if (!visible) return setTimeout(nudge, 2000); press(true); setTimeout(() => { release(); }, 1300); }, 3200);
-    return { press, release, again, get roast() { return roast; }, get done() { return done; }, get ok() { return ok; }, set active(v) { active = v; if (v) kick(); }, touch() { touched = true; call.classList.add('gone'); } };
+    if (!RM) setTimeout(function nudge() { if (touched || done || !active) return; if (!visible) return setTimeout(nudge, 2000); press(true); setTimeout(() => { if (demo) release(); }, 1300); }, 3200);
+    // what's in the drum: one product, so the batch goes into the basket as exactly that product
+    function setNut(pid, label) { if (demo && holding) { holding = false; demo = false; btn.classList.remove('down'); } nutId = pid; const row = CONFIG.atlas.indexOf(pid); nuts.forEach(n => { n.row = row; }); if (!done && !holding) { roast = 0; needle.style.left = '0%'; say(`Raw ${label.toLowerCase()}.`, 'Hold the button to fire up the roaster.'); } kick(); }
+    return { press, release, again, setNut, get nut() { return nutId; }, get busy() { return holding && !demo; }, get roast() { return roast; }, get done() { return done; }, get ok() { return ok; }, set active(v) { active = v; if (v) kick(); }, touch() { touched = true; call.classList.add('gone'); } };
   })();
 
-  /* ===== step 2: the jar on the scale ===== */
-  const jar = (() => {
+  /* ===== step 2: the jar on the scale (the mix builder) =====
+     Every layer is a pour of one catalog product, in whole ¼ lb units. The order list under it, the prices and
+     the checks all come from NNOrder + the catalog, so the jar can never price anything differently from the basket. */
+  let jar = null;
+  const makeJar = () => {
     const box = $('.pane-jar'), cv = $('#jarCv'), cx = cv.getContext('2d');
-    const ITEMS = {}, IMG = {}, PAT = {}, CUSTOM = {};
-    CONFIG.bulk.forEach(c => c.items.forEach(([id, name, photo]) => {
-      ITEMS[id] = { id, name, short: name, photo, row: CONFIG.atlas.indexOf(id), thumb: photo ? `img/${photo}.webp` : `img/shop/${id}.webp` };
-      if (photo) { const im = new Image(); im.src = `img/${photo}.webp`; IMG[id] = im; }
-    }));
+    const IMG = {}, PAT = {}, CUSTOM = {}, P = () => NN.byId;
+    const mixable = NN.catalog.products.filter(p => p.mixable && p.sellBy !== 'each').sort((a, b) => a.order - b.order);
+    mixable.forEach(p => { if (p.jarTexture) { const im = new Image(); im.src = p.jarTexture; IMG[p.id] = im; } });
     let W = 0, H = 0, DPR = 1, J;
-    const layers = [];        // pours, bottom to top: {id, lb (target), sh (lb shown so far), px, ampK, seed}
+    const layers = [];        // pours, bottom to top: {pid, tex, u (units), sh (lb shown so far), px, ampK, seed}
     const CAP = 2;            // the jar looks full at 2 lb; past that every layer squeezes to fit
-    let weight = 0, shown = 0, capS = CAP, sealed = false, sealT = 0, raf = 0, last = performance.now(), T = 0, scoop = .25, touched = false;
+    let shown = 0, capS = CAP, sealed = false, sealT = 0, raf = 0, last = performance.now(), T = 0, scoop = 1, touched = false, busyAdd = false;
+    let editing = null, stash = null;   // editing: basket mix id being edited; stash: the jar it replaced
     const rnd = (a, b) => a + Math.random() * (b - a);
-    const fmtLb = q => { const n = Math.round(q * 4), w = n / 4 | 0, f = ['', '¼', '½', '¾'][n % 4]; return (w ? w + f : f || '0') + ' lb'; };
 
     function size() {
       const r = box.getBoundingClientRect(); if (!r.width) return; DPR = Math.min(2, devicePixelRatio || 1); W = r.width; H = r.height;
@@ -736,11 +959,13 @@ paint(); setInterval(paint, 60000);
         for (const ox of [-TS, 0, TS]) for (const oy of [-TS, 0, TS]) { x.save(); x.translate(px + ox, py + oy); x.rotate(a); if (level == null) x.drawImage(atlas, col * 112 + 8, row * 112 + 8, 96, 96, -s / 2, -s / 2, s, s); else nut(x, level, row, col, s); x.restore(); } } }
       return c; };
     const SCALE = () => J.w / 640 * .62;
-    const pat = id => { if (PAT[id]) return PAT[id]; let src = CUSTOM[id];
-      if (!src) { const it = ITEMS[id]; if (!it) return null;
-        if (it.photo) { const im = IMG[id]; if (!im.complete || !im.naturalWidth) return null; src = tile(im); }
-        else { if (!atlas.complete || !atlas.naturalWidth) return null; src = CUSTOM[id] = spriteTile([it.row], null); } }
-      const p = cx.createPattern(src, 'repeat'); p.setTransform(new DOMMatrix().scale(SCALE())); PAT[id] = p; return p; };
+    // texture keys: a product id (its macro photo, or its atlas sprites), or 'roast:<id>:<level>' for a roasted batch
+    const pat = tex => { if (PAT[tex]) return PAT[tex]; let src = CUSTOM[tex];
+      if (!src) {
+        if (tex.startsWith('roast:')) { const [, pid, lv] = tex.split(':'); if (!tints) return null; src = CUSTOM[tex] = spriteTile([CONFIG.atlas.indexOf(pid)], +lv); }
+        else { const im = IMG[tex]; if (im) { if (!im.complete || !im.naturalWidth) return null; src = tile(im); } else { const row = CONFIG.atlas.indexOf(tex); if (row < 0 || !atlas.complete || !atlas.naturalWidth) return null; src = CUSTOM[tex] = spriteTile([row], null); } }
+      }
+      const p = cx.createPattern(src, 'repeat'); p.setTransform(new DOMMatrix().scale(SCALE())); PAT[tex] = p; return p; };
     const rr = (x, y, w, h, r) => { cx.beginPath(); cx.moveTo(x + r, y); cx.arcTo(x + w, y, x + w, y + h, r); cx.arcTo(x + w, y + h, x, y + h, r); cx.arcTo(x, y + h, x, y, r); cx.arcTo(x, y, x + w, y, r); cx.closePath(); };
 
     // every layer's top surface, sampled across the jar once per frame (px above the floor)
@@ -756,49 +981,72 @@ paint(); setInterval(paint, 60000);
       return out;
     }
 
-    function unseal() { if (!sealed) return; sealed = false; steps[1].classList.remove('ok'); }
-    function add(id, lb = scoop) {
-      if (!J || !ITEMS[id]) return false;
+    // what's in the jar, merged by product in the order things first went in
+    const totals = () => { const m = new Map(); layers.forEach(L => { if (L.u > 0) m.set(L.pid, (m.get(L.pid) || 0) + L.u); }); return m; };
+    const components = () => [...totals()].map(([productId, units]) => ({ productId, units }));
+    const save = () => storeLS.set('nn-jar-v1', { comps: components(), editing, stash });
+    function unseal() { if (!sealed) return; sealed = false; }
+    function add(pid, units = scoop, tex = pid) {
+      const p = P()[pid]; if (!J || !p || busyAdd) return false;
+      const now = totals().get(pid) || 0, err = O.checkQty(NN.catalog, p, now + units, true);
+      if (err) { toast(err); return false; }
       unseal(); touched = true;
       const top = layers[layers.length - 1];
-      if (top && top.id === id && top.lb > 0) top.lb += lb;
-      else layers.push({ id, lb, sh: 0, px: rnd(.3, .7), ampK: rnd(.35, .55), seed: rnd(0, 9) });
+      if (top && top.pid === pid && top.tex === tex && top.u > 0) top.u += units;
+      else layers.push({ pid, tex, u: units, sh: 0, px: rnd(.3, .7), ampK: rnd(.35, .55), seed: rnd(0, 9) });
       $('#tip').style.opacity = 0; $$('.sw').forEach(b => b.classList.remove('hint'));
-      const b = $(`.sw[data-id="${id}"]`); if (b) { b.classList.remove('pop'); void b.offsetWidth; b.classList.add('pop'); }
+      const b = $(`.sw[data-id="${pid}"]`); if (b) { b.classList.remove('pop'); void b.offsetWidth; b.classList.add('pop'); }
       render(); kick(); return true;
     }
-    function less(id) { unseal(); for (let i = layers.length - 1; i >= 0; i--) if (layers[i].id === id && layers[i].lb > 0) { layers[i].lb = Math.max(0, layers[i].lb - .25); break; } render(); kick(); }
-    function remove(id) { unseal(); layers.forEach(L => { if (L.id === id) L.lb = 0; }); render(); kick(); }
-    // pour a roast batch in: one tile + thumbnail per roast level (golden / dark), then add it like any scoop
-    function addRoast(level) {
-      if (!tints) return false;
-      const k = roastName(level), id = 'roast-' + k;
-      if (!ITEMS[id]) { const t = spriteTile(ROWS, level); CUSTOM[id] = t; const th = document.createElement('canvas'); th.width = th.height = 96; th.getContext('2d').drawImage(t, 0, 0, 160, 160, 0, 0, 96, 96);
-        ITEMS[id] = { id, name: `${k[0].toUpperCase() + k.slice(1)} roast: cashews, pistachios & hazelnuts`, short: `${k} roast`, thumb: th.toDataURL() }; }
-      return add(id);
+    function setTotal(pid, units) {   // + / − in the list: grow the top pour of it, or shrink from the top down
+      const cur = totals().get(pid) || 0; if (units === cur) return;
+      if (units > cur) return add(pid, units - cur, (layers.slice().reverse().find(L => L.pid === pid) || {}).tex || pid);
+      unseal(); let cut = cur - units;
+      for (let i = layers.length - 1; i >= 0 && cut > 0; i--) if (layers[i].pid === pid && layers[i].u > 0) { const d = Math.min(cut, layers[i].u); layers[i].u -= d; cut -= d; }
+      render(); kick();
     }
-    // the order, merged by item in the order things first went in
-    const order = () => { const m = new Map(); layers.forEach(L => { if (L.lb > 0) m.set(L.id, (m.get(L.id) || 0) + L.lb); }); return [...m]; };
-    const thumbCss = it => `background-image:url(${it.thumb})`;
+    const remove = pid => setTotal(pid, 0);
+    function load(comps) { layers.length = 0; (comps || []).forEach(c => { if (P()[c.productId] && Number.isInteger(c.units) && c.units > 0) layers.push({ pid: c.productId, tex: c.productId, u: c.units, sh: c.units / 4, px: rnd(.3, .7), ampK: rnd(.35, .55), seed: rnd(0, 9) }); }); capS = Math.max(CAP, layers.reduce((s, L) => s + L.sh, 0)); shown = layers.reduce((s, L) => s + L.sh, 0); sealed = false; $('#tip').style.opacity = layers.length ? 0 : 1; render(); kick(); }
+    function clear() { load([]); }
+
     function render() {
-      const o = order(); weight = o.reduce((s, [, q]) => s + q, 0);
-      $('#bagList').innerHTML = o.map(([id, q]) => { const it = ITEMS[id]; return `<li data-id="${id}"><i class="${it.photo || id.startsWith('roast') ? '' : 'tile'}" style="${thumbCss(it)}"></i><span>${esc(it.name)}</span><div class="qty"><button type="button" data-act="less" aria-label="Less ${esc(it.name)}">−</button><b>${fmtLb(q)}</b><button type="button" data-act="more" aria-label="More ${esc(it.name)}">+</button></div><button type="button" class="x" data-act="rm" aria-label="Remove ${esc(it.name)}">×</button></li>`; }).join('');
-      $('#bagEmpty').hidden = !!o.length; $('#bagActs').hidden = !o.length; $('#resetBtn').hidden = !o.length;
-      $('#bagTot').textContent = weight.toFixed(2) + ' lb';
-      $('#bagTitle').innerHTML = sealed ? 'Sealed. <em>That\'s your mix.</em>' : 'Your <em>mix</em>';
-      $('#sealBtn').textContent = sealed ? 'Sealed' : 'Seal the jar'; $('#sealBtn').disabled = sealed;
-      const inJar = Object.fromEntries(o);
-      $$('.sw').forEach(b => { const q = inJar[b.dataset.id], bd = b.querySelector('b'); if (q) { bd.textContent = fmtLb(q).replace(' lb', ''); bd.hidden = false; } else bd.hidden = true; });
-      const txt = ['Hi Nuts Now! Here\'s my mix' + (o.length ? ` (${fmtLb(weight)} total):` : ':'), ...o.map(([id, q]) => `• ${fmtLb(q)} ${ITEMS[id].name}`)].join('\n');
-      $('#copyBtn').dataset.txt = txt;
+      const comps = components(), q = O.priceBasket(NN.catalog, comps.length ? [{ type: 'mix', id: 'jar', name: 'Your mix', components: comps }] : []), L = q.lines[0];
+      const units = comps.reduce((s, c) => s + c.units, 0);
+      $('#bagList').innerHTML = comps.map((c, i) => { const p = P()[c.productId], li = L.components[i], img = p.images[0];
+        return `<li data-id="${p.id}"><i style="background-image:url(${esc(img ? img.src : '')})"></i><span class="nm">${esc(p.name)}<small>${esc(O.priceLabel(p) || 'Priced at the counter')}</small></span>
+          <div class="qty"><button type="button" data-act="less" aria-label="Less ${esc(p.name)}">−</button><b aria-live="polite">${O.fmtWeight(c.units)}</b><button type="button" data-act="more" aria-label="More ${esc(p.name)}">+</button></div>
+          <b class="pr">${li.cents != null ? O.fmtMoney(li.cents) : '—'}</b><button type="button" class="x" data-act="rm" aria-label="Remove ${esc(p.name)}">×</button></li>`; }).join('');
+      $('#bagEmpty').hidden = !!comps.length; $('#bagFoot').hidden = !comps.length; $('#resetBtn').hidden = !comps.length;
+      $('#bagTot').textContent = O.fmtWeight(units);
+      $('#bagSub').innerHTML = !comps.length ? '' : L.missingPrices ? `${L.pricedCents ? O.fmtMoney(L.pricedCents) + ' so far' : 'Price at the counter'}<small>${L.missingPrices === comps.length ? 'Prices aren\'t online yet, so the shop weighs and prices it at the counter.' : 'Some prices aren\'t online yet. Those are priced at the counter.'}</small>` : O.fmtMoney(L.cents);
+      const m = editing && basket.find(editing);
+      $('#bagTitle').innerHTML = sealed ? 'Sealed. <em>Into the basket.</em>' : m ? `Editing <em>${esc(m.name)}</em>` : 'Your <em>mix</em>';
+      $('#mixAdd').hidden = !!m; $('#mixSave').hidden = $('#mixCancel').hidden = !m;
+      if (m) $('#mixSave').textContent = `Save changes to ${m.name}`;
+      $('#mixAdd').disabled = $('#mixSave').disabled = busyAdd;
+      const inJar = Object.fromEntries(totals());
+      $$('.sw').forEach(b => { const u = inJar[b.dataset.id], bd = b.querySelector('b'); if (u) { bd.textContent = O.fmtWeight(u).replace(' lb', ''); bd.hidden = false; } else bd.hidden = true; });
+      save();
     }
-    function seal() { if (!weight) return; sealed = true; sealT = T; steps[1].classList.add('ok'); render(); kick(); }
-    function reset() { layers.length = 0; sealed = false; steps[1].classList.remove('ok'); $('#tip').style.opacity = 1; render(); kick(); }
+    // seal it (lid + label), then hand the components to the basket and start a fresh jar
+    function addToBasket() {
+      const comps = components(); if (!comps.length || busyAdd) return;
+      const errs = O.priceBasket(NN.catalog, [{ type: 'mix', id: 'jar', name: 'Your mix', components: comps }]).errors; if (errs.length) return toast(errs[0].msg);
+      busyAdd = true; sealed = true; sealT = T; render(); kick();
+      setTimeout(() => { const mx = basket.addMix(comps); busyAdd = false; clear(); toast(`${mx.name} is in your basket.`); bumpBasket(); }, RM ? 0 : 1300);
+    }
+    function edit(id) { const m = basket.find(id); if (!m) return; if (!editing) stash = components(); editing = id; load(m.components); }
+    function saveEdit() {
+      const comps = components(), m = basket.find(editing); if (!m) return cancelEdit();
+      if (!comps.length) { basket.remove(m.id); toast(`${m.name} was empty, so it's been taken out of your basket.`); }
+      else { const errs = O.priceBasket(NN.catalog, [{ type: 'mix', id: 'x', name: m.name, components: comps }]).errors; if (errs.length) return toast(errs[0].msg); basket.updateMix(m.id, comps); toast(`${m.name} is updated.`); bumpBasket(); }
+      editing = null; load(stash || []); stash = null;
+    }
+    function cancelEdit() { editing = null; load(stash || []); stash = null; toast('No changes made.'); }
 
     function draw(dt) {
       cx.setTransform(DPR, 0, 0, DPR, 0, 0); cx.clearRect(0, 0, W, H);
       const { x0, x1, t, b, w, r } = J, floor = b - w * .06, sc = SCALE(), X = k => x0 + w * k / NS;
-      // scale: steel platform + body with the readout
       const sy = b + 4, sw = w * 1.36, sx = W / 2 - sw / 2;
       cx.save(); cx.shadowColor = 'rgba(0,0,0,.6)'; cx.shadowBlur = 40; cx.shadowOffsetY = 20;
       let g = cx.createLinearGradient(0, sy, 0, sy + H * .2); g.addColorStop(0, '#2a251f'); g.addColorStop(1, '#151210');
@@ -818,12 +1066,11 @@ paint(); setInterval(paint, 60000);
       cx.font = `500 ${lh * .26}px "Geist Mono", monospace`; cx.textAlign = 'left'; cx.fillStyle = '#8d8476'; cx.fillText('LB', lx + lw * .79, ly + lh * .6);
       cx.fillText('NET', lx + lw * .06, ly + lh * .3);
       cx.fillStyle = 'rgba(0,0,0,.45)'; cx.beginPath(); cx.ellipse(W / 2, sy + 2, w * .52, 6, 0, 0, 7); cx.fill();
-      // contents, clipped to the jar
       const SF = surfaces();
       cx.save(); rr(x0 + 3, t + 3, w - 6, b - t - 6, r * .8); cx.clip();
       cx.fillStyle = 'rgba(255,255,255,.03)'; cx.fillRect(x0, t, w, b - t);
       for (let i = 0; i < layers.length; i++) {
-        const p = pat(layers[i].id); if (!p || layers[i].sh <= 0) continue;
+        const p = pat(layers[i].tex); if (!p || layers[i].sh <= 0) continue;
         cx.beginPath();
         for (let k = 0; k <= NS; k++) cx.lineTo(X(k), floor - SF[i][k]);
         for (let k = NS; k >= 0; k--) cx.lineTo(X(k), floor - (i ? SF[i - 1][k] : -40));
@@ -834,15 +1081,14 @@ paint(); setInterval(paint, 60000);
       }
       g = cx.createLinearGradient(x0, 0, x1, 0); g.addColorStop(0, 'rgba(0,0,0,.55)'); g.addColorStop(.18, 'rgba(0,0,0,0)'); g.addColorStop(.82, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,.6)');
       cx.fillStyle = g; cx.fillRect(x0, t, w, b - t);
-      // stream: the top layer while it's still pouring
-      const ti = layers.length - 1, cur = layers[ti], pouring = cur && cur.sh < cur.lb - .004;
+      const ti = layers.length - 1, cur = layers[ti], pouring = cur && cur.sh < cur.u / 4 - .004;
       if (pouring) {
-        const k = Math.round(cur.px * NS), sxp = X(k), top = t - H * .02, bot = floor - SF[ti][k], p = pat(cur.id);
+        const k = Math.round(cur.px * NS), sxp = X(k), top = t - H * .02, bot = floor - SF[ti][k], p = pat(cur.tex);
         if (p) { p.setTransform(new DOMMatrix().translate(0, T * 260).scale(sc)); cx.fillStyle = p; rr(sxp - w * .045, top, w * .09, Math.max(0, bot - top), w * .04); cx.fill(); p.setTransform(new DOMMatrix().scale(sc)); }
       }
       cx.restore();
-      if (pouring) { // stream above the jar mouth, from the steel scoop
-        const sxp = X(Math.round(cur.px * NS)), p = pat(cur.id), sTop = H * .085;
+      if (pouring) {
+        const sxp = X(Math.round(cur.px * NS)), p = pat(cur.tex), sTop = H * .085;
         if (p) { p.setTransform(new DOMMatrix().translate(0, T * 260).scale(sc)); cx.fillStyle = p; rr(sxp - w * .04, sTop, w * .08, t - sTop + 6, w * .04); cx.fill(); p.setTransform(new DOMMatrix().scale(sc)); }
         cx.save(); cx.translate(sxp + w * .06, sTop); cx.rotate(-.55);
         g = cx.createLinearGradient(-w * .2, 0, w * .2, 0); g.addColorStop(0, '#6a655c'); g.addColorStop(.4, '#e3ddd0'); g.addColorStop(1, '#7a746a');
@@ -850,13 +1096,12 @@ paint(); setInterval(paint, 60000);
         cx.fillStyle = '#2a251f'; cx.fillRect(w * .1, -w * .02, w * .16, w * .04);
         cx.restore();
       }
-      // glass: outline, mouth, highlights
       rr(x0, t, w, b - t, r); cx.strokeStyle = 'rgba(243,236,224,.28)'; cx.lineWidth = 1.5; cx.stroke();
       g = cx.createLinearGradient(x0, 0, x0 + w * .25, 0); g.addColorStop(0, 'rgba(255,255,255,0)'); g.addColorStop(.45, 'rgba(255,255,255,.16)'); g.addColorStop(1, 'rgba(255,255,255,0)');
       cx.fillStyle = g; rr(x0 + w * .06, t + 14, w * .12, b - t - 28, 8); cx.fill();
       cx.fillStyle = 'rgba(255,255,255,.08)'; rr(x1 - w * .12, t + 20, w * .04, b - t - 40, 6); cx.fill();
       cx.strokeStyle = 'rgba(243,236,224,.35)'; cx.lineWidth = 1.5; cx.beginPath(); cx.ellipse(W / 2, t + 2, w / 2 - 2, w * .045, 0, 0, 7); cx.stroke();
-      // sealed: the brass lid drops and a label wraps the jar
+      // sealed on its way to the basket: the brass lid drops and a label wraps the jar
       if (sealed) {
         const k = RM ? 1 : Math.min(1, (T - sealT) / .5), e = 1 - Math.pow(1 - k, 3), ly2 = t - w * .1 - (1 - e) * H * .25;
         g = cx.createLinearGradient(x0, 0, x1, 0); g.addColorStop(0, '#3a2c17'); g.addColorStop(.35, '#c79a52'); g.addColorStop(.6, '#8a6a37'); g.addColorStop(1, '#3a2c17');
@@ -869,9 +1114,10 @@ paint(); setInterval(paint, 60000);
             cx.save(); rr(lx2, ly3, lw2, lh2, 6); cx.clip(); cx.globalAlpha = (k2 - .6) / .4;
             cx.fillStyle = '#0e0c0a'; cx.textAlign = 'center'; cx.textBaseline = 'alphabetic';
             cx.font = `italic ${lh2 * .3}px "Instrument Serif", serif`; cx.fillText('Your mix', W / 2, ly3 + lh2 * .4);
+            const units = [...totals().values()].reduce((s, u) => s + u, 0);
             cx.font = `500 ${lh2 * .1}px "Geist Mono", monospace`; cx.fillStyle = '#6b6357';
-            cx.fillText(`NUTS NOW · NET ${weight.toFixed(2)} LB`, W / 2, ly3 + lh2 * .6);
-            const o = order(), names = o.slice(0, o.length > 4 ? 3 : 4).map(([id]) => ITEMS[id].short.toUpperCase()); if (o.length > 4) names.push(`+${o.length - 3} MORE`);
+            cx.fillText(`NUTS NOW · NET ${(units / 4).toFixed(2)} LB`, W / 2, ly3 + lh2 * .6);
+            const o = components(), names = o.slice(0, o.length > 4 ? 3 : 4).map(c => P()[c.productId].name.toUpperCase()); if (o.length > 4) names.push(`+${o.length - 3} MORE`);
             const line = names.join(' · ');
             let fs2 = lh2 * .1; cx.font = `500 ${fs2}px "Geist Mono", monospace`; const mw = lw2 * .9, tw = cx.measureText(line).width; if (tw > mw) { fs2 *= mw / tw; cx.font = `500 ${fs2}px "Geist Mono", monospace`; }
             cx.fillText(line, W / 2, ly3 + lh2 * .8);
@@ -884,65 +1130,71 @@ paint(); setInterval(paint, 60000);
     function tick(now) {
       raf = 0; const dt = Math.max(0, Math.min(.05, (now - last) / 1000)); last = now; T += dt;
       let busy = sealed && T - sealT < 1.4;
-      // the top layer pours (one scoop takes about a second); anything else just settles to its new amount
-      for (let i = 0; i < layers.length; i++) { const L = layers[i];
-        if (L.sh < L.lb) { L.sh = RM ? L.lb : Math.min(L.lb, L.sh + dt * Math.max(.24, (L.lb - L.sh) * 1.3)); busy = true; }
-        else if (L.sh > L.lb) { L.sh = RM ? L.lb : Math.max(L.lb, L.sh - dt * Math.max(.6, (L.sh - L.lb) * 3)); busy = true; } }
-      for (let i = layers.length - 1; i >= 0; i--) if (layers[i].lb <= 0 && layers[i].sh <= .001) layers.splice(i, 1);
-      const capT = Math.max(CAP, layers.reduce((s, L) => s + L.sh, 0));
+      for (const L of layers) { const tgt = L.u / 4;
+        if (L.sh < tgt) { L.sh = RM ? tgt : Math.min(tgt, L.sh + dt * Math.max(.24, (tgt - L.sh) * 1.3)); busy = true; }
+        else if (L.sh > tgt) { L.sh = RM ? tgt : Math.max(tgt, L.sh - dt * Math.max(.6, (L.sh - tgt) * 3)); busy = true; } }
+      for (let i = layers.length - 1; i >= 0; i--) if (layers[i].u <= 0 && layers[i].sh <= .001) layers.splice(i, 1);
+      const land = layers.reduce((s, L) => s + L.sh, 0), capT = Math.max(CAP, land);
       if (Math.abs(capT - capS) > .001) { capS += (capT - capS) * (RM ? 1 : Math.min(1, dt * 6)); busy = true; } else capS = capT;
-      if (Math.abs(layers.reduce((s, L) => s + L.sh, 0) - shown) > .001) busy = true;
+      if (Math.abs(land - shown) > .001) busy = true;
       draw(dt);
       if (busy) raf = requestAnimationFrame(tick);
     }
     function kick() { if (!J) return; if (!raf) { last = performance.now(); raf = requestAnimationFrame(tick); } }
 
-    // aisles → swatches
+    // aisles → swatches (the same catalog categories as the shop below)
+    const cats = NN.catalog.categories.slice().sort((a, b) => a.order - b.order).filter(c => mixable.some(p => p.category === c.id));
     let cat = 0;
-    const swatches = () => { $('#swatches').innerHTML = CONFIG.bulk[cat].items.map(([id, n], i) => { const it = ITEMS[id]; return `<button class="sw${!touched && cat === 0 && i === 0 ? ' hint' : ''}" type="button" data-id="${id}" aria-label="Pour ${esc(n)} into the jar"><i class="${it.photo ? '' : 'tile'}" style="${thumbCss(it)}"><b hidden></b></i><span>${esc(n)}</span></button>`; }).join(''); render(); };
-    $('#cats').innerHTML = CONFIG.bulk.map((c, i) => `<button type="button" role="tab" aria-selected="${i === 0}" data-i="${i}">${esc(c.tab)}</button>`).join('');
+    const swatches = () => { $('#swatches').innerHTML = mixable.filter(p => p.category === cats[cat].id).map((p, i) => { const thumb = p.jarTexture || (p.images[0] && p.images[0].src); return `<button class="sw${!touched && !layers.length && cat === 0 && i === 0 ? ' hint' : ''}" type="button" data-id="${p.id}" aria-label="Pour ${esc(p.name)} into the jar${p.priceCents != null ? ', ' + esc(O.priceLabel(p)) : ''}"><i class="${p.jarTexture ? '' : 'tile'}" style="background-image:url(${esc(thumb || '')})"><b hidden></b></i><span>${esc(p.name)}</span></button>`; }).join(''); render(); };
+    $('#cats').innerHTML = cats.map((c, i) => `<button type="button" role="tab" aria-selected="${i === 0}" data-i="${i}">${esc(c.name)}</button>`).join('');
     $('#cats').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; cat = +b.dataset.i; $$('#cats button').forEach(x => x.setAttribute('aria-selected', x === b)); swatches(); });
     $('#swatches').addEventListener('click', e => { const b = e.target.closest('.sw'); if (b) add(b.dataset.id); });
-    $('#sizes').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; scoop = +b.dataset.lb; $$('#sizes button').forEach(x => x.setAttribute('aria-checked', x === b)); });
-    $('#bagList').addEventListener('click', e => { const b = e.target.closest('button'), li = e.target.closest('li'); if (!b || !li) return; const id = li.dataset.id, a = b.dataset.act; if (a === 'more') add(id, .25); else if (a === 'less') less(id); else if (a === 'rm') remove(id); });
-    $('#sealBtn').addEventListener('click', seal);
+    $('#sizes').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; scoop = +b.dataset.u; $$('#sizes button').forEach(x => x.setAttribute('aria-checked', x === b)); });
+    $('#bagList').addEventListener('click', e => { const b = e.target.closest('button'), li = e.target.closest('li'); if (!b || !li) return; const pid = li.dataset.id, p = P()[pid], cur = totals().get(pid) || 0, a = b.dataset.act;
+      if (a === 'more') setTotal(pid, O.stepQty(NN.catalog, p, cur, 1)); else if (a === 'less') setTotal(pid, O.stepQty(NN.catalog, p, cur, -1)); else if (a === 'rm') remove(pid); });
+    $('#mixAdd').addEventListener('click', addToBasket); $('#mixSave').addEventListener('click', saveEdit); $('#mixCancel').addEventListener('click', cancelEdit);
     Object.values(IMG).forEach(im => im.addEventListener('load', kick));
-    atlas.addEventListener('load', kick);
+    atlas.addEventListener('load', kick); onTints.push(() => { for (const k in PAT) if (k.startsWith('roast:')) delete PAT[k]; kick(); });
     document.fonts && document.fonts.ready.then(kick);
     if ('ResizeObserver' in window) new ResizeObserver(size).observe(box); else addEventListener('resize', size);
-    size(); swatches();
-    return { add, less, remove, addRoast, reset, seal, get scoop() { return scoop; }, get state() { return { layers: layers.map(L => L.id), order: order().map(([id, q]) => [ITEMS[id].name, q]), weight, shown: +shown.toFixed(2), sealed }; } };
-  })();
+    // bring back an unfinished jar (and a mix being edited) after a reload
+    const was = storeLS.get('nn-jar-v1');
+    if (was) { stash = Array.isArray(was.stash) ? was.stash : null; editing = was.editing && basket.find(was.editing) ? was.editing : null; if (!editing) stash = null; }
+    size(); swatches(); if (was && Array.isArray(was.comps)) load(was.comps);
+    return { add, setTotal, remove, load, clear, edit, addToBasket, saveEdit, cancelEdit, get editing() { return editing; }, get empty() { return !layers.some(L => L.u > 0); }, get state() { return { comps: components(), editing, sealed, shown: +shown.toFixed(2) }; } };
+  };
 
   /* ===== the flow between the two ===== */
-  let step = 1;
+  let step = 1, roastUnits = 2;
   function go(n) {
     step = n; stage.classList.toggle('s2', n === 2); ctl.classList.toggle('s2', n === 2);
     steps[0].classList.toggle('on', n === 1); steps[1].classList.toggle('on', n === 2);
     drum.active = n === 1;
   }
+  // bring the stage into view (on a phone the controls sit under it, and the shop is further down)
+  const scrollToStage = () => { const top = stage.getBoundingClientRect().top; if (top > 60 && top < innerHeight * .5) return; const y = top + scrollY - 76; lenis ? lenis.scrollTo(y, { duration: .9 }) : scrollTo({ top: y, behavior: RM ? 'auto' : 'smooth' }); };
   function pourIn() {
-    if (!drum.ok) return;
-    const level = drum.roast; steps[0].classList.add('ok'); go(2);
-    // on a phone the button sits under the stage: bring the jar back into view so you see the pour
-    const top = stage.getBoundingClientRect().top; if (top < 70) { const y = top + scrollY - 76; lenis ? lenis.scrollTo(y, { duration: .9 }) : scrollTo({ top: y, behavior: RM ? 'auto' : 'smooth' }); }
-    setTimeout(() => { jar.addRoast(level); drum.again(false); $('#verdict').innerHTML = 'Fresh batch.<small>Hold the button. Let go when they\'re golden.</small>'; $('#verdict').classList.remove('good'); }, RM ? 0 : 520);
+    if (!drum.ok || !jar) return;
+    const level = drum.roast, pid = drum.nut; steps[0].classList.add('ok'); go(2);
+    if (stage.getBoundingClientRect().top < 70) scrollToStage();
+    setTimeout(() => { jar.add(pid, roastUnits, `roast:${pid}:${level.toFixed(2)}`); drum.again(false); $('#verdict').innerHTML = `Fresh batch.<small>Hold the button. Let go when they're golden.</small>`; $('#verdict').classList.remove('good'); }, RM ? 0 : 520);
   }
+  const radio = (box, b) => $$('button', box).forEach(x => x.setAttribute('aria-checked', x === b));
+  $('#roastNut').addEventListener('click', e => { const b = e.target.closest('button'); if (!b || drum.busy) return; radio($('#roastNut'), b); drum.setNut(b.dataset.id, b.textContent); });
+  $('#roastAmt').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; radio($('#roastAmt'), b); roastUnits = +b.dataset.u; $('#toJar').textContent = `Pour ${b.textContent} into the jar`; });
   $('#toJar').addEventListener('click', pourIn);
   $('#skipRoast').addEventListener('click', () => { drum.touch(); go(2); });
   $('#backRoast').addEventListener('click', () => { drum.again(); go(1); });
-  $('#resetBtn').addEventListener('click', () => { jar.reset(); drum.again(); steps[0].classList.remove('ok'); go(1); });
-  const copyMix = async () => { try { await navigator.clipboard.writeText($('#copyBtn').dataset.txt); return true; } catch (e) { return false; } };
-  $('#copyBtn').addEventListener('click', async () => { if (await copyMix()) toast('Copied'); else prompt('Copy your order:', $('#copyBtn').dataset.txt); });
-  $('#bagIg').addEventListener('click', () => copyMix().then(ok => ok && toast('Copied. Paste it in the DM')));
-  window.__flow = { drum, jar, go, pourIn, get step() { return step; } };
+  $('#resetBtn').addEventListener('click', () => { if (jar) { jar.clear(); toast('The jar is empty.'); } });
+  NN.ready.then(() => { jar = makeJar(); if (!jar.empty || jar.editing) { steps[0].classList.add('ok'); go(2); } });
+  window.__flow = { drum, get jar() { return jar; }, go, pourIn, scrollToStage, get step() { return step; } };
 
   /* page motion */
   const nav = $('#nav'); const onS = () => nav.classList.toggle('solid', scrollY > 30); addEventListener('scroll', onS, { passive: true }); onS();
   const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -8% 0px' });
   $$('.reveal').forEach(el => io.observe(el));
   let lenis = null;
-  if (!RM && typeof Lenis !== 'undefined') { lenis = new Lenis({ lerp: .085 }); if (HAS_G) { lenis.on('scroll', ScrollTrigger.update); gsap.ticker.add(t => lenis.raf(t * 1000)); gsap.ticker.lagSmoothing(0); } else { const f = t => { lenis.raf(t); requestAnimationFrame(f); }; requestAnimationFrame(f); } }
+  if (!RM && typeof Lenis !== 'undefined') { lenis = window.__lenis = new Lenis({ lerp: .085 }); if (HAS_G) { lenis.on('scroll', ScrollTrigger.update); gsap.ticker.add(t => lenis.raf(t * 1000)); gsap.ticker.lagSmoothing(0); } else { const f = t => { lenis.raf(t); requestAnimationFrame(f); }; requestAnimationFrame(f); } }
   $$('a[href^="#"]').forEach(a => a.addEventListener('click', e => { const id = a.getAttribute('href'); const tg = id.length > 1 && $(id); if (!tg) return; e.preventDefault(); const y = tg.getBoundingClientRect().top + scrollY - 70; lenis ? lenis.scrollTo(y, { duration: 1.5 }) : scrollTo({ top: y, behavior: RM ? 'auto' : 'smooth' }); }));
   // the aisles: pinned, scrolled sideways on desktop, with a slow parallax inside each photo
   if (HAS_G && !RM && !MOBILE) {
@@ -953,6 +1205,176 @@ paint(); setInterval(paint, 60000);
     gsap.fromTo('.roast .bgimg img', { scale: 1.12 }, { scale: 1, ease: 'none', scrollTrigger: { trigger: '.roast', start: 'top bottom', end: 'bottom top', scrub: true } });
     addEventListener('load', () => ScrollTrigger.refresh());
   }
+})();
+</script>
+<script>
+/* ---------- ORDER: the shop by category, the basket, pickup time and the server check ----------
+   Everything renders from data/catalog.json; every amount and price goes through NNOrder (js/order-core.js).
+   Payment is not connected yet (settings.checkout), so nothing here takes money or claims an order is paid. */
+(() => {
+  const dlg = $('#basket'), P = () => NN.byId;
+  const imgTag = (p, cls = '') => { const im = p.images && p.images[0]; return im ? `<img class="${cls}" src="${esc(im.src)}" alt="${esc(im.alt || p.name)}" width="${im.width || 400}" height="${im.height || 400}" loading="lazy" decoding="async"${im.srcset ? ` srcset="${esc(im.srcset)}" sizes="(max-width: 700px) 45vw, 280px"` : ''} onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'noimg',textContent:'Photo coming soon'}))">` : '<span class="noimg">Photo coming soon</span>'; };
+
+  NN.ready.then(cat => {
+    /* ===== the shop ===== */
+    const cats = cat.categories.slice().sort((a, b) => a.order - b.order);
+    const prods = cat.products.slice().sort((a, b) => a.order - b.order);
+    const pick = {};   // the amount chosen on each card, in units
+    let active = cats[0].id;
+    const amount = p => pick[p.id] || O.rules(cat, p).min;
+    const card = p => { const off = p.available === false, u = amount(p), sub = O.lineCents(p, u), pl = O.priceLabel(p);
+      return `<article class="pcard${off ? ' off' : ''}" data-id="${p.id}">
+        <div class="pimg${p.images[0] && p.images[0].kind === 'photo' ? ' photo' : ''}">${imgTag(p)}${p.images.length > 1 ? `<div class="pthumbs">${p.images.map((im, i) => `<button type="button" data-act="img" data-i="${i}" aria-label="Photo ${i + 1} of ${p.images.length}" aria-pressed="${i === 0}"></button>`).join('')}</div>` : ''}</div>
+        <div class="pbody">
+          <h3>${esc(p.name)}</h3>
+          ${p.description ? `<p class="pdesc">${esc(p.description)}</p>` : ''}
+          <p class="pprice${pl ? '' : ' none'}">${pl ? esc(pl) : 'Price coming soon<small>Weighed and priced at the counter</small>'}</p>
+          ${off ? '<p class="pna">Not available right now</p>' : `
+          <div class="prow"><span class="lbl" id="q-${p.id}">Amount</span>
+            <div class="qty big" role="group" aria-labelledby="q-${p.id}"><button type="button" data-act="less" aria-label="Less ${esc(p.name)}">−</button><output aria-live="polite">${O.fmtQty(p, u)}</output><button type="button" data-act="more" aria-label="More ${esc(p.name)}">+</button></div>
+            <b class="psub">${sub != null ? O.fmtMoney(sub) : ''}</b></div>
+          <div class="pacts"><button class="btn btn-gold" type="button" data-act="add">Add to basket</button>${p.mixable && p.sellBy !== 'each' ? '<button class="btn btn-line" type="button" data-act="mix">Add to my mix</button>' : ''}</div>`}
+        </div></article>`; };
+    function renderShop() {
+      const c = cats.find(x => x.id === active), list = prods.filter(p => p.category === active);
+      $('#oCats').innerHTML = cats.map(x => { const n = prods.filter(p => p.category === x.id).length; return `<button type="button" role="tab" aria-selected="${x.id === active}" aria-controls="oGrid" data-id="${x.id}">${esc(x.name)}<small>${n}</small></button>`; }).join('');
+      $('#oCrumb').innerHTML = `<span>Shop</span> <i aria-hidden="true">›</i> <b>${esc(c.name)}</b> <span class="n">${list.length} item${list.length === 1 ? '' : 's'}</span>${c.description ? `<span class="d">${esc(c.description)}</span>` : ''}`;
+      $('#oGrid').innerHTML = list.length ? list.map(card).join('') : '<p class="o-empty">Nothing in this aisle online yet. Pop in to see what\'s in the bins.</p>';
+    }
+    renderShop();
+    $('#oCats').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; active = b.dataset.id; renderShop(); $('#oGrid').focus({ preventScroll: true }); });
+    $('#oCats').addEventListener('keydown', e => { if (!/Arrow(Left|Right)/.test(e.key)) return; const bs = $$('#oCats button'), i = bs.findIndex(b => b.dataset.id === active), n = bs[(i + (e.key === 'ArrowRight' ? 1 : bs.length - 1)) % bs.length]; active = n.dataset.id; renderShop(); $(`#oCats [data-id="${active}"]`).focus(); });
+    $('#oGrid').addEventListener('click', e => {
+      const b = e.target.closest('button'), el = e.target.closest('.pcard'); if (!b || !el) return;
+      const p = P()[el.dataset.id], a = b.dataset.act, r = O.rules(cat, p);
+      if (a === 'img') { const im = p.images[+b.dataset.i], img = $('.pimg img', el); if (img && im) { img.src = im.src; img.alt = im.alt || p.name; } $$('.pthumbs button', el).forEach(x => x.setAttribute('aria-pressed', x === b)); return; }
+      if (a === 'more' || a === 'less') { const u = amount(p), n = a === 'more' ? O.stepQty(cat, p, u, 1) : Math.max(r.min, O.stepQty(cat, p, u, -1)); pick[p.id] = n; $('output', el).textContent = O.fmtQty(p, n); const s = O.lineCents(p, n); $('.psub', el).textContent = s != null ? O.fmtMoney(s) : ''; return; }
+      if (a === 'add') { const err = basket.addItem(p.id, amount(p)); if (err) return toast(err); toast(`Added ${O.fmtQty(p, amount(p))} of ${p.name} to your basket.`); bumpBasket(); el.classList.remove('added'); void el.offsetWidth; el.classList.add('added'); return; }
+      if (a === 'mix') { const F = window.__flow; if (!F || !F.jar) return; F.go(2); if (F.jar.add(p.id, amount(p))) { toast(`${O.fmtQty(p, amount(p))} of ${p.name} is pouring into your mix.`); F.scrollToStage(); } }
+    });
+
+    /* ===== the basket ===== */
+    const lineHtml = (L, q) => {
+      if (L.type === 'mix') {
+        return `<li class="bl mix${q.errors.length ? ' bad' : ''}" data-id="${L.id}">
+          <div class="bl-head"><b>${esc(q.name)}</b><span>${esc(q.weight)} · ${q.components.length} item${q.components.length === 1 ? '' : 's'}</span><b class="bl-pr">${q.cents != null ? O.fmtMoney(q.cents) : q.pricedCents ? O.fmtMoney(q.pricedCents) + ' + counter' : 'Priced at the counter'}</b></div>
+          <ul class="bl-comps">${q.components.map(c => { const p = P()[c.productId]; return `<li><span>${esc(c.name)}</span><span>${esc(c.qty || O.fmtWeight(c.units || 0))}</span><span class="up">${p && p.priceCents != null ? esc(O.priceLabel(p)) : 'price at counter'}</span><b>${c.cents != null ? O.fmtMoney(c.cents) : '—'}</b></li>`; }).join('')}</ul>
+          ${q.errors.map(m => `<p class="bl-err" role="alert">${esc(m)}</p>`).join('')}
+          <div class="bl-acts"><button class="btn btn-line" type="button" data-act="edit">Edit this mix</button><button class="linkish" type="button" data-act="rm">Remove ${esc(q.name)}</button></div></li>`;
+      }
+      const p = P()[L.productId];
+      return `<li class="bl${q.errors.length ? ' bad' : ''}" data-id="${L.id}">
+        <div class="bl-item">${p ? imgTag(p, 'bl-img') : '<span class="noimg bl-img"></span>'}
+          <div class="bl-main"><b>${esc(q.name)}</b><span>${p && p.priceCents != null ? esc(O.priceLabel(p)) : 'Priced at the counter'}</span></div>
+          <b class="bl-pr">${q.cents != null ? O.fmtMoney(q.cents) : '—'}</b></div>
+        ${q.errors.map(m => `<p class="bl-err" role="alert">${esc(m)}</p>`).join('')}
+        <div class="bl-acts">${p && p.available !== false ? `<div class="qty big" role="group" aria-label="Amount of ${esc(q.name)}"><button type="button" data-act="less" aria-label="Less ${esc(q.name)}">−</button><output aria-live="polite">${esc(O.fmtQty(p, L.units))}</output><button type="button" data-act="more" aria-label="More ${esc(q.name)}">+</button></div>` : ''}<button class="linkish" type="button" data-act="rm">Remove</button></div></li>`;
+    };
+    function renderBasket() {
+      const q = basket.price(), n = basket.lines.length, ch = basket.changes();
+      $('#bkCount').textContent = n; $('#bkOpen').setAttribute('aria-label', `Basket, ${n} line${n === 1 ? '' : 's'}`);
+      $('#bkNavTot').textContent = n && q.subtotalCents ? O.fmtMoney(q.subtotalCents) : '';
+      $('#bkLines').innerHTML = basket.lines.map((L, i) => lineHtml(L, q.lines[i])).join('');
+      $('#bkEmpty').hidden = !!n; $$('.bk-need').forEach(el => el.hidden = !n);
+      const warn = [];
+      if (ch.length) warn.push(`<p><b>Prices changed since you added these:</b> ${ch.map(c => `${esc(c.p.name)} ${c.was == null ? 'now has a price' : 'was ' + esc(O.fmtMoney(c.was))}${c.now == null ? ', now priced at the counter' : ', now ' + esc(O.fmtMoney(c.now))}`).join('; ')}. Your basket shows the new prices.</p><button class="btn btn-line" type="button" id="bkAccept">OK, got it</button>`);
+      if (q.errors.length) warn.push(`<p><b>Please fix ${q.errors.length === 1 ? 'this' : 'these'} before you check out:</b></p><ul>${q.errors.map(e => `<li>${esc(e.msg)}</li>`).join('')}</ul>`);
+      $('#bkWarn').innerHTML = warn.join(''); $('#bkWarn').hidden = !warn.length;
+      const units = q.weightUnits;
+      $('#bkSum').innerHTML = `<div><span>Total weight</span><b>${O.fmtWeight(units)}</b></div><div class="tot"><span>Subtotal</span><b>${q.unpricedCount ? (q.subtotalCents ? O.fmtMoney(q.subtotalCents) + ' so far' : 'Priced at the counter') : O.fmtMoney(q.subtotalCents)}</b></div>${q.unpricedCount ? `<p>${q.unpricedCount === 1 ? 'One item doesn\'t' : q.unpricedCount + ' items don\'t'} have an online price yet. The shop weighs and prices ${q.unpricedCount === 1 ? 'it' : 'them'} at the counter.</p>` : ''}`;
+      renderPickup(); resetCheck();
+    }
+    basket.on(renderBasket);
+    $('#bkLines').addEventListener('click', e => {
+      const b = e.target.closest('button'), li = e.target.closest('.bl'); if (!b || !li) return;
+      const L = basket.find(li.dataset.id); if (!L) return; const a = b.dataset.act;
+      if (a === 'rm') { basket.remove(L.id); toast(`${L.type === 'mix' ? L.name : (P()[L.productId] || {}).name || 'Item'} removed.`); $('#bkTitle').focus(); }
+      else if (a === 'more' || a === 'less') { const p = P()[L.productId], n = O.stepQty(cat, p, L.units, a === 'more' ? 1 : -1); if (n && O.checkQty(cat, p, n, false)) return toast(O.checkQty(cat, p, n, false)); basket.setUnits(L.id, n); if (!n) toast(`${p.name} removed.`); }
+      else if (a === 'edit') { const F = window.__flow; if (!F || !F.jar) return; closeBasket(); F.go(2); F.jar.edit(L.id); F.scrollToStage(); toast(`Editing ${L.name}. Change it in the jar, then press Save changes.`); }
+    });
+    $('#bkWarn').addEventListener('click', e => { if (e.target.id === 'bkAccept') basket.acceptPrices(); });
+
+    /* ===== pickup ===== */
+    let pk = Object.assign({ store: null, date: null, at: null }, basket.pickup || {}), pkNote = '';
+    const savePk = () => basket.setPickup({ ...pk });
+    function renderPickup() {
+      const now = Date.now();
+      // a saved time that has passed (or a closed day) is cleared, and the customer is told why
+      if (pk.at && !O.checkPickup(cat, pk, now).ok) { pkNote = 'The pickup time you picked earlier is no longer available. Please choose a new one.'; pk.at = null; queueMicrotask(savePk); }
+      $('#pkStores').innerHTML = cat.stores.map(s => { const d = O.pickupDays(cat, s.id, now)[0]; return `<label class="pk-store"><input type="radio" name="pkStore" value="${s.id}"${pk.store === s.id ? ' checked' : ''}><span><b>${esc(s.name)}</b><span>${s.address.map(esc).join(', ')}</span><span class="h">${d.hours ? `Today: open ${d.hours.open} – ${d.hours.close} · Last pickup ${d.hours.lastPickup}` : 'Closed today'}</span></span></label>`; }).join('');
+      const days = pk.store ? O.pickupDays(cat, pk.store, now) : [];
+      if (pk.store && (!pk.date || !days.some(d => d.date === pk.date))) pk.date = (days.find(d => d.slots.length) || days[0] || {}).date || null;
+      $('#pkDays').innerHTML = days.map(d => `<button type="button" class="pk-day" data-date="${d.date}" aria-pressed="${d.date === pk.date}"${d.slots.length ? '' : ' disabled'}><b>${esc(d.label)}</b><small>${d.hours ? (d.slots.length ? `Open ${d.hours.open} – ${d.hours.close} · Last pickup ${d.hours.lastPickup}` : 'No pickup times left') : 'Closed'}</small></button>`).join('');
+      const day = days.find(d => d.date === pk.date), slots = day ? day.slots : [];
+      $('#pkWhen').hidden = !pk.store;
+      $('#pkTime').innerHTML = `<option value="">${slots.length ? 'Choose a time' : 'No times available'}</option>` + slots.map(s => `<option value="${s.at}"${s.at === pk.at ? ' selected' : ''}>${s.label}</option>`).join('');
+      $('#pkTime').disabled = !slots.length;
+      const sname = pk.store && O.store(cat, pk.store).name;
+      let msg = pkNote; pkNote = '';
+      if (pk.store && !days.some(d => d.slots.length)) msg = `There are no pickup times left at ${sname} for now. Please choose the other shop, or call us.`;
+      else if (pk.store && day && !slots.length) msg = `No pickup times are left ${day.label.startsWith('Today') ? 'today' : 'that day'} at ${sname}. Please choose another day.`;
+      $('#pkMsg').textContent = msg; $('#pkMsg').hidden = !msg;
+      $('#pkChosen').innerHTML = pk.at ? `Pickup: <b>${esc(O.checkPickup(cat, pk, now).label || '')}</b> at ${esc(sname)}. Please arrive by your pickup time.` : '';
+    }
+    $('#pkStores').addEventListener('change', e => { if (e.target.name !== 'pkStore') return; pk = { store: e.target.value, date: null, at: null }; savePk(); });
+    $('#pkDays').addEventListener('click', e => { const b = e.target.closest('.pk-day'); if (!b || b.disabled) return; pk.date = b.dataset.date; pk.at = null; savePk(); });
+    $('#pkTime').addEventListener('change', e => { pk.at = e.target.value || null; savePk(); });
+    setInterval(() => { if (dlg.open) renderPickup(); }, 60000);
+
+    /* ===== check with the shop's server, then pay ===== */
+    let checking = false;
+    function resetCheck() { if (checking) return; $('#ckResult').hidden = true; $('#ckResult').innerHTML = ''; $('#ckBtn').disabled = !basket.lines.length; }
+    async function check() {
+      if (checking || !basket.lines.length) return;
+      const local = basket.price();
+      checking = true; $('#ckBtn').disabled = true; $('#ckBtn').textContent = 'Checking…';
+      const out = $('#ckResult'); out.hidden = false; out.className = 'ck-res'; out.textContent = 'Checking prices and your pickup time with the shop…';
+      try {
+        const r = await fetch('api/quote', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ lines: basket.lines, pickup: pk.store && pk.at ? { store: pk.store, at: pk.at } : null, clientTotalCents: local.subtotalCents }) });
+        const q = await r.json().catch(() => null);
+        if (!r.ok || !q || !Array.isArray(q.lines)) throw new Error((q && q.error) || 'bad response');
+        const why = [];
+        q.errors.forEach(e => why.push(e.msg));
+        if (q.priceChanged) why.push('Some prices changed on our end. Please refresh the page to see the current prices.');
+        if (q.unpricedCount) why.push('Some items don\'t have an online price yet, so this order can\'t be paid online. The shop will weigh and price them at the counter.');
+        if (!q.pickup.ok) why.push(q.pickup.reason);
+        out.className = 'ck-res ' + (q.ok ? 'ok' : 'no');
+        out.innerHTML = (q.ok ? `<p><b>Everything checks out.</b> ${esc(O.fmtWeight(q.weightUnits))}, subtotal <b>${esc(O.fmtMoney(q.subtotalCents))}</b>. Pickup ${esc(q.pickup.label)} at ${esc(q.pickup.storeName)}.</p>` : `<p><b>A few things to sort out:</b></p><ul>${why.map(m => `<li>${esc(m)}</li>`).join('')}</ul>`)
+;
+      } catch (e) {
+        out.className = 'ck-res no'; out.innerHTML = '<p><b>We couldn\'t reach the shop\'s system to check your order.</b> Your basket is saved. Please try again in a moment, or call the shop.</p>';
+      } finally { checking = false; $('#ckBtn').disabled = !basket.lines.length; $('#ckBtn').textContent = 'Check my order'; }
+    }
+    $('#ckBtn').addEventListener('click', check);
+    const payMsg = cat.settings.checkout && cat.settings.checkout.unavailableMessage;
+    $('#payBtn').disabled = !(cat.settings.checkout && cat.settings.checkout.enabled); $('#payNote').textContent = payMsg || '';
+
+    // the order as plain text, for a call or an Instagram message. It says plainly that nothing is paid.
+    function orderText() {
+      const q = basket.price(), out = ['Hi Nuts Now! I\'d like to order for pickup (not paid yet):'];
+      q.lines.forEach(L => { if (L.type === 'mix') { out.push(`• ${L.name} (${L.weight}${L.cents != null ? ', ' + O.fmtMoney(L.cents) : ''}):`); L.components.forEach(c => out.push(`   – ${c.qty} ${c.name}${c.cents != null ? ' (' + O.fmtMoney(c.cents) + ')' : ''}`)); } else out.push(`• ${L.qty} ${L.name}${L.cents != null ? ' (' + O.fmtMoney(L.cents) + ')' : ''}`); });
+      out.push(`Total weight: ${O.fmtWeight(q.weightUnits)}`);
+      if (q.subtotalCents) out.push(`Subtotal: ${O.fmtMoney(q.subtotalCents)}${q.unpricedCount ? ' + items priced at the counter' : ''}`);
+      const c = pk.at && O.checkPickup(cat, pk, Date.now()); if (c && c.ok) out.push(`Pickup: ${c.label} at ${c.storeName}`);
+      return out.join('\n');
+    }
+    const copy = async () => { try { await navigator.clipboard.writeText(orderText()); return true; } catch (e) { return false; } };
+    $('#bkCopy').addEventListener('click', async () => { if (await copy()) toast('Copied. Paste it into a message to the shop.'); else prompt('Copy your order:', orderText()); });
+    $('#bkIg').addEventListener('click', () => copy().then(ok => ok && toast('Copied. Paste it in the DM')));
+    const callLink = () => { const s = O.store(cat, pk.store) || cat.stores[0]; $('#bkCall').href = 'tel:' + s.phone; $('#bkCall').textContent = 'Call ' + s.name; };
+    basket.on(callLink); callLink();
+
+    /* ===== open / close ===== */
+    let opener = null;
+    function openBasket() { opener = document.activeElement; renderBasket(); if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', ''); document.documentElement.classList.add('bk-open'); window.__lenis && window.__lenis.stop(); $('#bkTitle').focus(); }
+    function closeBasket() { if (dlg.open) dlg.close(); }
+    dlg.addEventListener('close', () => { document.documentElement.classList.remove('bk-open'); window.__lenis && window.__lenis.start(); if (opener && opener.focus) opener.focus(); });
+    dlg.addEventListener('click', e => { if (e.target === dlg) closeBasket(); });
+    $('#bkOpen').addEventListener('click', openBasket); $('#bkClose').addEventListener('click', closeBasket); $('#bkShop').addEventListener('click', () => { closeBasket(); });
+    $$('[data-open-basket]').forEach(b => b.addEventListener('click', openBasket));
+    window.__basket = { open: openBasket, close: closeBasket, basket, orderText, get pickup() { return pk; } };
+    renderBasket();
+  });
 })();
 </script>
 </body>
