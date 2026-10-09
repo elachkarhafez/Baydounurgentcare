@@ -1,0 +1,41 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "routes": [
+    {
+      "src": "/(.*)",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*(GPTBot|ChatGPT|OAI\\-SearchBot|OpenAI|ClaudeBot|Claude\\-User|Claude\\-SearchBot|Claude\\-Web|Claude|anthropic|CCBot|PerplexityBot|Perplexity|Bytespider|TikTokSpider|Amazonbot|meta\\-externalagent|meta\\-externalfetcher|FacebookBot|cohere|Diffbot|YouBot|Omgilibot|omgili|ImagesiftBot|Timpibot|AI2Bot|Ai2Bot\\-Dolma|DuckAssistBot|MistralAI|PanguBot|Kangaroo\\sBot|img2dataset|webzio|Novellum|Brightbot|iaskspider|ICC\\-Crawler|Scrapy|Google\\-CloudVertexBot|GoogleOther|GoogleAgent|Google\\-NotebookLM|Gemini|Devin|FirecrawlAgent|Firecrawl|Crawl4AI|Jina|TavilyBot|Manus|DeepSeek|Grok|xAI|Kimi|Doubao|YisouSpider|PetalBot|Andibot|bigsur\\.ai|Cotoyogi|Factset|FriendlyCrawler|ISSCyberRiskCrawler|Meltwater|Quora\\-Bot|Sidetrade|VelenPublicWebCrawler|wpbot|LinerBot|Thinkbot|Character\\-AI|Applebot\\-Extended|HeadlessChrome|Headless|Puppeteer|puppeteer|Playwright|playwright|PhantomJS|Selenium|selenium|python\\-requests|python\\-httpx|python\\-urllib|aiohttp|httpx|curl/|Wget|wget|Go\\-http\\-client|node\\-fetch|undici|axios|okhttp|Java/|libwww|HTTrack|SiteSucker|WebCopier|Teleport|Offline\\sExplorer|Apify|ScrapingBee|Zyte|ZenRows|Bright\\sData|colly|Nutch|Screaming\\sFrog|SemrushBot\\-OCOB|Ahrefs\\-Bot\\-AI).*"
+        }
+      ],
+      "mitigate": {
+        "action": "deny"
+      }
+    },
+    {
+      "src": "/(.*)",
+      "missing": [
+        {
+          "type": "header",
+          "key": "user-agent"
+        }
+      ],
+      "mitigate": {
+        "action": "deny"
+      }
+    },
+    {
+      "src": "/(.*)",
+      "headers": {
+        "X-Robots-Tag": "noai, noimageai, noarchive",
+        "TDM-Reservation": "1",
+        "tdm-reservation": "1",
+        "X-Frame-Options": "SAMEORIGIN",
+        "Referrer-Policy": "strict-origin-when-cross-origin"
+      },
+      "continue": true
+    }
+  ]
+}
