@@ -182,6 +182,7 @@
     if (!hrs) return { ok: false, reason: `${s.name} is closed that day. Please choose another day.` };
     if (min > hrs.lastPickup) return { ok: false, reason: `The last pickup at ${s.name} is ${fmtClock(hrs.lastPickup)}. Please choose an earlier time.` };
     const ok = pickupSlots(catalog, s.id, z.date, nowMs).some(x => Date.parse(x.at) === t);
+    if (!ok && t <= nowMs) return { ok: false, reason: 'That pickup time has already passed. Please choose a new one.' };
     if (!ok) return { ok: false, reason: t < nowMs + (catalog.settings.pickup.prepMinutes || 0) * 60000 ? 'That time is too soon for us to get your order ready. Please choose a later time.' : 'That pickup time is no longer available. Please choose another.' };
     return { ok: true, store: s.id, storeName: s.name, label: `${fmtClock(min)} on ${new Date(Date.UTC(z.y, z.m - 1, z.d)).toLocaleDateString('en-US', { timeZone: 'UTC', weekday: 'long', month: 'long', day: 'numeric' })}`, at: new Date(t).toISOString() };
   }

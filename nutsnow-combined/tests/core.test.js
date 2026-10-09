@@ -109,6 +109,10 @@ test('pickup: Allen Park uses its own hours (Sunday last pickup 8 PM)', () => {
   const sun = '2026-10-18', s = core.pickupSlots(C, 'ap', sun, at(sun, '08:00'));
   assert.equal(s[0].label, '10 AM'); assert.equal(s[s.length - 1].label, '8 PM');
 });
+test('pickup: a time that has passed says so', () => {
+  assert.match(core.checkPickup(C, { store: DH, at: iso(at(DAY, '12:00')) }, at(DAY, '15:00')).reason, /already passed/);
+  assert.match(core.checkPickup(C, { store: DH, at: iso(at(DAY, '15:15')) }, at(DAY, '15:00')).reason, /too soon/);
+});
 test('pickup: closures and days too far ahead offer nothing', () => {
   const c = fixture(); c.settings.pickup.closures = [DAY];
   assert.deepEqual(core.pickupSlots(c, DH, DAY, at(DAY, '08:00')), []);
