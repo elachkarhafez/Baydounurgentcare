@@ -5,8 +5,8 @@ How the ordering on nutsnow-combined works, how to keep it up to date, and what 
 ## What's built
 
 - **Shop by aisle** (`#order`): six aisles (Nuts, Seeds, Dried fruit, Sweets, Chocolate, Candy) and 28 items sold loose by weight. Each card shows a picture, name, description, price per lb (or "Price coming soon") and a − / + amount control, then **Add to basket** or **Add to my mix**.
-- **Roaster**: pick a nut (cashews, pistachios or hazelnuts) and an amount (¼ to 1 lb), hold Roast, and pour the batch into the jar. The batch goes into the mix as that product at that weight. The roast colour is only for show.
-- **Mix builder** (the jar): pour any mixable items in ¼, ½ or 1 lb scoops, then fine-tune each item with − / + or remove it. It shows each item's price per lb and subtotal, plus the total weight and mix subtotal. **Add mix to basket** seals the jar and adds it as one basket line ("Mix #1") with its items listed. Mixes are never merged together. **Edit this mix** in the basket loads it back into the jar, with **Save changes** / **Cancel editing**. An unfinished jar is kept and restored afterwards.
+- **Hero**: the roaster plays as a short animation (raw → golden) next to the headline. There's nothing to press. "Start your order" jumps to the shop right under it.
+- **Your mix** (panel beside the products; on phones it sits under them, with a bar at the bottom to jump to it): tap **Add to my mix** on any card, then fine-tune each item with − / + or remove it. It shows each item's price per lb and subtotal, the total weight and the mix subtotal. **Add mix to basket** adds it as one basket line ("Mix #1") with its items listed. Mixes are never merged together. **Edit this mix** in the basket loads it back into the panel, with **Save** / **Cancel editing**. A mix you were building is kept and restored afterwards.
 - **Basket** (the Basket button in the nav). It holds:
   - regular items (adding the same product twice adds to one line) and mixes
   - editable amounts, remove buttons, and an itemised breakdown of each mix
@@ -23,7 +23,7 @@ How the ordering on nutsnow-combined works, how to keep it up to date, and what 
 | `data/catalog.json` | **The file the owner edits.** Products, prices, pictures, aisles, store hours, pickup rules, checkout switch. |
 | `js/order-core.js` | All pricing, amount rules and pickup-time logic, shared by the page and the server. |
 | `api/quote.js` | Vercel function: `POST /api/quote` re-prices a basket and re-checks pickup. |
-| `index.html` | The page: the roaster's nut/amount pick, the jar mix builder, the `#order` shop, the basket dialog and pickup. Hours in the Visit section now come from the catalog too. |
+| `index.html` | The page: the roaster animation, the `#order` shop with the mix panel, the basket dialog and pickup. Hours in the Visit section come from the catalog too. Colours follow the store's lime-green logo. |
 | `tests/core.test.js` | Unit tests (pricing, rounding, validation, pickup cutoffs, DST, the API handler). |
 | `tests/e2e.mjs`, `tests/serve.js` | Browser tests of the full journeys, plus a local server that runs the API. |
 

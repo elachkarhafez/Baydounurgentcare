@@ -13,40 +13,34 @@ async function page(vp, port, mobile, time) {
   const p = await ctx.newPage(); p.errs = []; p.on('pageerror', e => p.errs.push(e.message)); p.on('console', m => m.type() === 'error' && p.errs.push(m.text()));
   await p.goto(`http://127.0.0.1:${port}/index.html?noopen`); await p.waitForTimeout(1200); return p;
 }
-const state = p => p.evaluate(() => ({ lines: JSON.parse(localStorage.getItem('nn-basket-v1') || '{}').lines || [], jar: window.__flow.jar && window.__flow.jar.state }));
+const state = p => p.evaluate(() => ({ lines: JSON.parse(localStorage.getItem('nn-basket-v1') || '{}').lines || [], mix: window.__mix ? window.__mix.comps : [] }));
 const text = (p, s) => p.textContent(s);
 
 for (const [tag, vp, mobile] of [['d', { width: 1440, height: 900 }, false], ['m', { width: 390, height: 844 }, true]]) {
   // a fixed store time: Wednesday 14 Oct 2026, 4:50 PM in Detroit (20:50 UTC); browser clock zone is Tokyo on purpose
   const T = Date.parse('2026-10-14T20:50:00Z');
   const p = await page(vp, 8791, mobile, T);
-  // roast: choose pistachios, ¾ lb, hold to golden, pour
-  await p.click('#roastNut [data-id="pistachios"]'); await p.click('#roastAmt [data-u="3"]');
-  ok(`${tag} roast amount label`, (await text(p, '#toJar')) === 'Pour ¾ lb into the jar');
-  await (await p.$('#holdBtn')).scrollIntoViewIfNeeded(); await p.waitForTimeout(300);
-  const bb = await (await p.$('#holdBtn')).boundingBox();
-  await p.mouse.move(bb.x + bb.width / 2, bb.y + bb.height / 2); await p.mouse.down();
-  await p.waitForFunction(() => window.__flow.drum.roast >= .62, null, { timeout: 9000, polling: 16 }).catch(async e => { console.log('roast stuck at', await p.evaluate(() => [window.__flow.drum.roast, window.__flow.drum.busy, window.__flow.drum.done, document.querySelector('#verdict').textContent])); throw e; }); await p.mouse.up(); await p.waitForTimeout(200);
-  await p.click('#toJar'); await p.waitForTimeout(2600);
+  // mix: from the shop cards. Pistachios ¾ lb, cashews ½ lb, BBQ ¼ lb twice then − once in the mix panel
+  await p.evaluate(() => document.querySelector('#order').scrollIntoView());
+  ok(`${tag} hero is just the animation (no controls)`, !(await p.$('#holdBtn')) && !(await p.$('#jarCv')) && !!(await p.$('#drumCv')));
+  const card = id => `.pcard[data-id="${id}"]`;
+  await p.click(`${card('pistachios')} [data-act="more"]`); await p.click(`${card('pistachios')} [data-act="more"]`); await p.click(`${card('pistachios')} [data-act="mix"]`);
+  await p.click(`${card('cashews')} [data-act="more"]`); await p.click(`${card('cashews')} [data-act="mix"]`);
+  await p.click(`${card('bbq')} [data-act="mix"]`); await p.click(`${card('bbq')} [data-act="mix"]`);
+  await p.click('#mixList li[data-id="bbq"] [data-act="less"]'); await p.waitForTimeout(200);
   let s = await state(p);
-  ok(`${tag} roast pours the chosen product + amount`, JSON.stringify(s.jar.comps) === '[{"productId":"pistachios","units":3}]', JSON.stringify(s.jar.comps));
-  // mix: add cashews ½ lb (scoop ½), bbq ¼ lb, then edit with + / −
-  await p.click('#sizes [data-u="2"]'); await p.click('.sw[data-id="cashews"]'); await p.click('#sizes [data-u="1"]'); await p.click('.sw[data-id="bbq"]'); await p.click('.sw[data-id="bbq"]');
-  await p.click('#bagList li[data-id="bbq"] [data-act="less"]'); await p.waitForTimeout(400);
-  s = await state(p);
-  ok(`${tag} mix builder amounts`, JSON.stringify(s.jar.comps) === '[{"productId":"pistachios","units":3},{"productId":"cashews","units":2},{"productId":"bbq","units":1}]', JSON.stringify(s.jar.comps));
-  ok(`${tag} mix subtotal (½ cashews $6 + ¼ bbq $4 + ¾ pistachios $15 = $25.00)`, (await text(p, '#bagSub')) === '$25.00', await text(p, '#bagSub'));
-  ok(`${tag} mix weight`, (await text(p, '#bagTot')) === '1½ lb');
-  await p.screenshot({ path: `${OUT}/${tag}-1-mix.png` });
-  await p.click('#mixAdd'); await p.waitForTimeout(1900);
+  ok(`${tag} mix amounts`, JSON.stringify(s.mix) === '[{"productId":"pistachios","units":3},{"productId":"cashews","units":2},{"productId":"bbq","units":1}]', JSON.stringify(s.mix));
+  ok(`${tag} mix subtotal (½ cashews $6 + ¼ bbq $4 + ¾ pistachios $15 = $25.00)`, (await text(p, '#mixSub')) === '$25.00', await text(p, '#mixSub'));
+  ok(`${tag} mix weight`, (await text(p, '#mixTot')) === '1½ lb');
+  await (await p.$('#mixPanel')).scrollIntoViewIfNeeded(); await p.screenshot({ path: `${OUT}/${tag}-1-mix.png` });
+  await p.click('#mixAdd'); await p.waitForTimeout(400);
   s = await state(p);
   ok(`${tag} mix added as one basket line`, s.lines.length === 1 && s.lines[0].type === 'mix' && s.lines[0].name === 'Mix #1' && s.lines[0].components.length === 3);
-  ok(`${tag} jar empties after adding`, s.jar.comps.length === 0);
-  // a second, identical mix stays separate
-  await p.click('.sw[data-id="cashews"]'); await p.click('.sw[data-id="cashews"]'); await p.click('#mixAdd'); await p.waitForTimeout(1900);
+  ok(`${tag} mix empties after adding`, s.mix.length === 0);
+  // a second, identical-ish mix stays separate
+  await p.click(`${card('cashews')} [data-act="mix"]`); await p.click('#mixAdd'); await p.waitForTimeout(300);
   s = await state(p); ok(`${tag} second mix stays separate`, s.lines.length === 2 && s.lines[1].name === 'Mix #2');
   // the shop: Candy → Gummies ×3 steps (¾ lb) to the basket; walnuts ¼ lb; za'atar unavailable
-  await p.evaluate(() => document.querySelector('#order').scrollIntoView());
   await p.click('#oCats [data-id="candy"]');
   const g = '.pcard[data-id="gummies"]';
   await p.click(`${g} [data-act="more"]`); await p.click(`${g} [data-act="more"]`);
@@ -86,13 +80,13 @@ for (const [tag, vp, mobile] of [['d', { width: 1440, height: 900 }, false], ['m
   // edit Mix #1 from the basket: remove bbq, save → total drops by $4
   const m1 = (await state(p)).lines.find(l => l.name === 'Mix #1').id;
   await p.click(`#bkLines li[data-id="${m1}"] [data-act="edit"]`); await p.waitForTimeout(900);
-  ok(`${tag} editing mix loads it into the jar`, /Editing Mix #1/.test(await text(p, '#bagTitle')));
-  await p.click('#bagList li[data-id="bbq"] [data-act="rm"]'); await p.waitForTimeout(300);
+  ok(`${tag} editing mix loads it into the mix panel`, /Editing Mix #1/.test(await text(p, '#mixH')));
+  await p.click('#mixList li[data-id="bbq"] [data-act="rm"]'); await p.waitForTimeout(300);
   await p.click('#mixSave'); await p.waitForTimeout(400);
   s = await state(p); const m1b = s.lines.find(l => l.id === m1);
   ok(`${tag} saved mix edit`, m1b.components.length === 2 && !m1b.components.some(c => c.productId === 'bbq'));
   // cancel an edit keeps the mix as it was
-  await p.evaluate(id => window.__flow.jar.edit(id), m1); await p.click('.sw[data-id="cashews"]'); await p.click('#mixCancel'); await p.waitForTimeout(300);
+  await p.evaluate(id => window.__mix.edit(id), m1); await p.click('#oCats [data-id="nuts"]'); await p.click('.pcard[data-id="walnuts"] [data-act="mix"]'); await p.click('#mixCancel'); await p.waitForTimeout(300);
   s = await state(p); ok(`${tag} cancel edit changes nothing`, JSON.stringify(s.lines.find(l => l.id === m1).components) === JSON.stringify(m1b.components));
   // persistence: reload keeps everything
   await p.reload(); await p.waitForTimeout(1500);
