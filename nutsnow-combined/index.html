@@ -27,7 +27,7 @@
 .dark,.roast,footer,.v .cap,.card .tx{--bg:#10120b;--bg-2:#181b12;--bg-3:#22261a;--ink:#f4f1e4;--ink-2:#d2d0c0;--muted:#a6a896;--fg-rgb:244,241,228;--line:rgba(244,241,228,.14);--gold-ink:#b5e06b;--warn-ink:var(--warn-ink);color:var(--ink)}
 .roast,footer{background:var(--bg)}
 *{box-sizing:border-box;margin:0;padding:0}
-html{-webkit-text-size-adjust:100%;overflow-x:clip}html.lenis,html.lenis body{height:auto}.lenis.lenis-smooth{scroll-behavior:auto!important}
+html{-webkit-text-size-adjust:100%;overflow-x:clip}
 body{background:var(--bg);color:var(--ink);font:400 16.5px/1.6 "Geist",system-ui,sans-serif;overflow-x:clip;-webkit-font-smoothing:antialiased}
 img{display:block;max-width:100%;height:auto}
 [hidden]{display:none!important}
@@ -44,11 +44,10 @@ button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
 .btn-line{border:1px solid rgba(var(--fg-rgb),.3)}.btn-line:hover{border-color:var(--ink);background:rgba(var(--fg-rgb),.06)}
 .reveal{opacity:0;transform:translateY(28px);transition:opacity 1s cubic-bezier(.2,.7,.2,1),transform 1s cubic-bezier(.2,.7,.2,1)}
 .reveal.in{opacity:1;transform:none}
-.grain{position:fixed;inset:0;pointer-events:none;z-index:90;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
 
 /* nav */
-.nav{position:fixed;top:0;left:0;right:0;z-index:50;transition:background .4s,backdrop-filter .4s}
-.nav.solid{background:rgba(246,242,228,.88);box-shadow:0 1px 0 var(--line);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;transition:background .35s,box-shadow .35s}
+.nav.solid{background:rgba(246,242,228,.97);box-shadow:0 1px 0 var(--line);}
 .nav .wrap{display:flex;align-items:center;gap:28px;height:76px}
 .brand{font-family:"Instrument Serif";font-size:30px;text-decoration:none;letter-spacing:-.01em;line-height:1}
 .brand em{color:var(--gold-ink)}
@@ -70,6 +69,11 @@ button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
 .stage canvas{position:absolute;inset:0;width:100%;height:100%}
 .stage-cap{position:absolute;left:0;right:0;bottom:0;text-align:center;font-family:"Geist Mono";font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
 .stage-cap b{color:var(--gold-ink);font-weight:500}
+.hero .eyebrow,.hero h1 span,.hero .lede,.hero .cta{animation:rise .9s cubic-bezier(.2,.8,.2,1) both}
+.hero h1 span:nth-child(1){animation-delay:.08s}.hero h1 span:nth-child(2){animation-delay:.18s}.hero .lede{animation-delay:.3s}.hero .cta{animation-delay:.4s}
+.stage{animation:drumIn 1.2s cubic-bezier(.2,.8,.2,1) .15s both}
+@keyframes rise{from{opacity:0;transform:translateY(22px)}}
+@keyframes drumIn{from{opacity:0;transform:translateY(16px) scale(.94)}}
 .linkish{font-size:14px;color:var(--muted);text-decoration:underline;text-underline-offset:3px;display:inline-block}
 .linkish:hover{color:var(--ink)}
 .bag{margin-top:26px;padding:20px 22px;border-radius:var(--r);background:var(--bg-2);border:1px solid var(--line)}
@@ -77,7 +81,9 @@ button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
 .bag-h .serif{font-size:30px}
 .bag-h b{font-family:"Geist Mono";font-weight:500;font-size:18px;color:var(--gold-ink);white-space:nowrap}
 .bag ul{list-style:none;margin-top:12px;max-height:340px;overflow-y:auto;scrollbar-width:thin}
-.bag li{display:grid;grid-template-columns:34px minmax(0,1fr) auto auto;gap:12px;align-items:center;padding:8px 0;border-top:1px solid var(--line);animation:payIn .4s both}
+.bag li{display:grid;grid-template-columns:34px minmax(0,1fr) auto auto;gap:12px;align-items:center;padding:8px 0;border-top:1px solid var(--line)}
+.bag li.new{animation:rowIn .45s cubic-bezier(.2,.8,.2,1) both}
+@keyframes rowIn{from{opacity:0;transform:translateX(14px)}}
 .bag li>i{width:34px;height:34px;border-radius:50%;background-size:cover;background-position:center;background-color:var(--bg-3)}
 .bag li>i.tile{background-size:115%}
 .bag li span{font-size:14.5px;line-height:1.3}
@@ -123,7 +129,7 @@ button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
 .track-x{display:flex;gap:28px;padding:0 max(20px,(100vw - 1280px)/2);width:max-content}
 .panel{width:min(78vw,1080px);height:min(74vh,700px);display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);border-radius:28px;overflow:hidden;background:var(--bg-2);border:1px solid var(--line);flex:none}
 .panel .ph{position:relative;overflow:hidden}
-.panel .ph img{position:absolute;inset:-4% -4%;width:108%;height:108%;object-fit:cover;will-change:transform}
+.panel .ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .panel .ph::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent 60%,var(--bg-2))}
 .panel .tx{padding:44px 40px;display:flex;flex-direction:column;min-width:0}
 .panel .no{font-family:"Geist Mono";font-size:12px;letter-spacing:.14em;color:var(--muted)}
@@ -254,35 +260,42 @@ footer small{grid-column:1/-1;border-top:1px solid var(--line);padding-top:22px;
 .o-how{list-style:none;display:flex;gap:10px;flex-wrap:wrap;margin:-20px 0 34px}
 .o-how li{display:flex;align-items:center;gap:10px;padding:10px 16px 10px 10px;border-radius:999px;border:1px solid var(--line);font-size:15px;color:var(--ink-2)}
 .o-how b{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--gold);color:#1a140a;font:500 12px "Geist Mono"}
-.ocats{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:2px 2px 6px}.ocats::-webkit-scrollbar{display:none}
-.ocats button{flex:none;display:flex;align-items:center;gap:8px;min-height:48px;padding:0 18px;border-radius:999px;border:1px solid rgba(var(--fg-rgb),.22);font-size:16px;color:var(--ink);transition:background .2s,color .2s,border-color .2s}
-.ocats button small{font-family:"Geist Mono";font-size:11.5px;color:var(--muted)}
-.ocats button:hover{border-color:var(--ink)}
-.ocats button[aria-selected="true"]{background:var(--gold);color:#1a140a;border-color:var(--gold-ink)}.ocats button[aria-selected="true"] small{color:#2f4a10}
-.o-crumb{margin:18px 0 22px;font-size:15px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 8px;align-items:baseline}
+.ocats{position:relative;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:4px;border-radius:999px;background:var(--bg-2);border:1px solid var(--line);width:max-content;max-width:100%}.ocats::-webkit-scrollbar{display:none}
+.ocats .pill{position:absolute;top:4px;bottom:4px;left:0;border-radius:999px;background:var(--gold);transition:transform .45s cubic-bezier(.2,.8,.2,1),width .45s cubic-bezier(.2,.8,.2,1);pointer-events:none}
+.ocats button{position:relative;z-index:1;flex:none;display:flex;align-items:center;gap:8px;min-height:46px;padding:0 18px;border-radius:999px;font-size:15.5px;color:var(--ink-2);transition:color .3s}
+.ocats button small{font-family:"Geist Mono";font-size:11.5px;color:var(--muted);transition:color .3s}
+.ocats button:hover{color:var(--ink)}
+.ocats button[aria-selected="true"]{color:#15170f;font-weight:600}.ocats button[aria-selected="true"] small{color:#2f4a10}
+.o-crumb{margin:16px 0 20px;font-size:15px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 8px;align-items:baseline}
 .o-crumb b{color:var(--ink);font-weight:600}.o-crumb i{font-style:normal}.o-crumb .n{font-family:"Geist Mono";font-size:12px}.o-crumb .d{flex-basis:100%;color:var(--ink-2)}
-.ogrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;outline:none}
-.pcard{display:flex;flex-direction:column;border-radius:var(--r);background:var(--bg-2);border:1px solid var(--line);overflow:hidden;transition:border-color .3s,box-shadow .3s}
-.pcard.added{animation:added 1s ease-out}
-@keyframes added{0%{box-shadow:0 0 0 0 rgba(140,198,63,.6);border-color:var(--gold-ink)}100%{box-shadow:0 0 0 14px rgba(140,198,63,0)}}
-.pimg{position:relative;aspect-ratio:4/3;background:radial-gradient(closest-side,rgba(140,198,63,.12),transparent 80%),var(--bg-3);display:grid;place-items:center;overflow:hidden}
-.pimg img{width:78%;height:86%;object-fit:contain;filter:drop-shadow(0 14px 14px rgba(40,35,10,.25))}
-.pimg.photo img{width:100%;height:100%;object-fit:cover;filter:none}
-.noimg{display:grid;place-items:center;width:100%;height:100%;font-family:"Geist Mono";font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.ogrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:16px;outline:none}
+.pcard{display:flex;flex-direction:column;border-radius:20px;background:var(--bg-2);border:1px solid var(--line);overflow:hidden;transition:border-color .3s,box-shadow .4s,transform .4s cubic-bezier(.2,.8,.2,1)}
+.ogrid.swap .pcard{animation:cardIn .55s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i) * 45ms)}
+@keyframes cardIn{from{opacity:0;transform:translateY(18px) scale(.98)}}
+.pcard.added{animation:added .9s ease-out}
+@keyframes added{0%{box-shadow:0 0 0 0 rgba(140,198,63,.7);border-color:var(--gold)}100%{box-shadow:0 0 0 12px rgba(140,198,63,0)}}
+.pimg{position:relative;aspect-ratio:4/3;background:var(--bg-3);overflow:hidden}
+.pimg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .8s cubic-bezier(.2,.8,.2,1)}
+.pimg.ill img{object-fit:contain;padding:10%}
+@media (hover:hover) and (pointer:fine){.pcard:hover{box-shadow:0 18px 40px -24px rgba(40,45,10,.35);transform:translateY(-3px)}.pcard:hover .pimg img{transform:scale(1.045)}}
+.noimg{display:grid;place-items:center;position:absolute;inset:0;font-family:"Geist Mono";font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
 .pthumbs{position:absolute;bottom:8px;left:0;right:0;display:flex;justify-content:center;gap:6px}
-.pthumbs button{width:22px;height:22px;border-radius:50%;display:grid;place-items:center}.pthumbs button::after{content:"";width:8px;height:8px;border-radius:50%;background:rgba(var(--fg-rgb),.4)}.pthumbs button[aria-pressed="true"]::after{background:var(--gold)}
-.pbody{padding:18px 18px 20px;display:flex;flex-direction:column;gap:8px;flex:1}
-.pbody h3{font-family:"Instrument Serif";font-weight:400;font-size:28px;line-height:1.05}
-.pdesc{color:var(--ink-2);font-size:15.5px;line-height:1.45}
-.pprice{font-family:"Geist Mono";font-size:16px;color:var(--gold-ink);margin-top:2px}
-.pprice.none{color:var(--ink-2);font-size:14px}.pprice small{display:block;font-family:"Geist";font-size:13px;color:var(--muted);margin-top:2px}
-.prow{display:flex;align-items:center;gap:10px;margin-top:auto;padding-top:10px;flex-wrap:wrap}
-.prow .lbl{font-size:14px;color:var(--muted);flex-basis:100%}
-.psub{font-family:"Geist Mono";font-weight:500;font-size:16px;margin-left:auto}
-.pacts{display:flex;flex-direction:column;gap:8px;margin-top:8px}.pacts .btn{justify-content:center;min-height:48px}
-.pna{margin-top:auto;padding-top:10px;color:var(--muted);font-size:15px}
+.pthumbs button{width:22px;height:22px;border-radius:50%;display:grid;place-items:center}.pthumbs button::after{content:"";width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.6)}.pthumbs button[aria-pressed="true"]::after{background:var(--gold)}
+.pbody{padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px;flex:1}
+.pbody h3{font-family:"Instrument Serif";font-weight:400;font-size:25px;line-height:1.05}
+.pdesc{color:var(--ink-2);font-size:14.5px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pprice{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-family:"Geist Mono";font-size:14.5px;color:var(--gold-ink);margin-top:auto;padding-top:6px}
+.pprice .none{color:var(--muted);font-family:"Geist";font-size:13.5px}
+.psub{font-weight:500;color:var(--ink);font-size:15px}
+.pcard .qty.big{justify-content:space-between;margin-top:4px}
+.pacts{display:flex;gap:8px;margin-top:8px}.pacts .btn{flex:1 1 0;justify-content:center;min-height:46px;padding:0 10px;font-size:14.5px}
+.pacts .btn-gold{flex-grow:1.35}
+.btn .sm{display:none}
+.btn:active{transform:scale(.97)}
+.pna{margin-top:auto;padding-top:8px;color:var(--muted);font-size:14.5px}
 .pcard.off .pimg{opacity:.45}
-.qty.big{padding:3px}.qty.big button{width:44px;height:44px;font-size:22px}.qty.big output{font-family:"Geist Mono";font-size:15px;min-width:64px;text-align:center}
+.qty.big{padding:3px}.qty.big button{width:44px;height:44px;font-size:22px;transition:background .2s,transform .15s}.qty.big button:active{transform:scale(.88)}.qty.big output,.qty.big b{display:inline-block;font-family:"Geist Mono";font-size:15px;min-width:64px;text-align:center}
+.flyer{position:fixed;z-index:120;width:64px;height:64px;border-radius:50%;object-fit:cover;pointer-events:none;box-shadow:0 10px 24px -8px rgba(0,0,0,.45);border:2px solid #fff}
 .o-note{margin-top:26px;color:var(--muted);font-size:14px;max-width:46em}
 .o-empty,.o-err{color:var(--ink-2);font-size:16px;padding:20px 0}
 /* the mix list: name + price on one line, amount and line total under it */
@@ -310,7 +323,7 @@ footer small{grid-column:1/-1;border-top:1px solid var(--line);padding-top:22px;
 /* basket dialog */
 html.bk-open{overflow:hidden}
 .basket{border:0;padding:0;margin:0 0 0 auto;width:min(560px,100vw);max-width:100vw;height:100dvh;max-height:100dvh;background:var(--bg-2);color:var(--ink);box-shadow:-30px 0 80px rgba(0,0,0,.6)}
-.basket::backdrop{background:rgba(8,7,5,.72);backdrop-filter:blur(3px)}
+.basket::backdrop{background:rgba(21,23,15,.55)}
 .basket[open]{animation:bkIn .45s cubic-bezier(.2,.8,.2,1)}
 @keyframes bkIn{from{transform:translateX(40px);opacity:0}}
 .bk-in{height:100%;overflow-y:auto;overscroll-behavior:contain;padding:22px 24px 40px}
@@ -327,7 +340,7 @@ html.bk-open{overflow:hidden}
 .bl{border:1px solid var(--line);border-radius:18px;padding:14px;background:var(--bg)}
 .bl.bad{border-color:rgba(226,86,60,.6)}
 .bl-item{display:grid;grid-template-columns:56px minmax(0,1fr) auto;gap:12px;align-items:center}
-.bl-img{width:56px;height:56px;object-fit:contain;border-radius:12px;background:var(--bg-3)}
+.bl-img{width:56px;height:56px;object-fit:cover;border-radius:12px;background:var(--bg-3)}
 .bl-main b{display:block;font-size:16.5px;font-weight:600}.bl-main span{font-family:"Geist Mono";font-size:12.5px;color:var(--muted)}
 .bl-pr{font-family:"Geist Mono";font-weight:500;font-size:16px;white-space:nowrap}
 .bl-acts{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px;flex-wrap:wrap}
@@ -372,19 +385,25 @@ html.bk-open{overflow:hidden}
 }
 .order .head h2{font-size:clamp(48px,5.4vw,88px)}
 @media (max-width:560px){
-  .ogrid{grid-template-columns:minmax(0,1fr);gap:12px}
-  .pcard{display:grid;grid-template-columns:104px minmax(0,1fr)}
-  .pimg{aspect-ratio:auto;height:100%;min-height:120px;align-items:start;padding-top:14px}.pimg img{width:88px;height:88px}
-  .pbody{padding:14px 14px 16px 4px;gap:6px}.pbody h3{font-size:24px}.pdesc{font-size:15px}
-  .prow .lbl{display:none}.pacts{flex-direction:row;flex-wrap:wrap}.pacts .btn{flex:1 1 auto;padding:12px 14px;font-size:14.5px}
+  .ocats{width:auto;border-radius:16px}
+  .ogrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .pcard{border-radius:16px}
+  .pimg{aspect-ratio:1/1}
+  .pbody{padding:10px 10px 12px;gap:4px}
+  .pbody h3{font-size:18.5px;line-height:1.1}
+  .pdesc{display:none}
+  .pprice{font-size:12.5px;padding-top:2px;flex-wrap:wrap;gap:2px 6px}.pprice .none{font-size:12px}.psub{font-size:13px}
+  .pcard .qty.big button{width:38px;height:38px;font-size:20px}.pcard .qty.big output{min-width:0;flex:1;font-size:13.5px}
+  .pacts{gap:6px;margin-top:6px}.pacts .btn{min-height:42px;font-size:14px;padding:0 6px}
+  .btn .lg{display:none}.btn .sm{display:inline}
   .nav .bk-btn{padding:10px 14px}
 }
-@media (prefers-reduced-motion:reduce){.basket[open],.pcard.added,.bk-btn.bump{animation:none}}
+}
+@media (prefers-reduced-motion:reduce){.basket[open],.pcard.added,.bk-btn.bump,.ogrid.swap .pcard,.hero .eyebrow,.hero h1 span,.hero .lede,.hero .cta,.stage,.bag li{animation:none}.ocats .pill,.pimg img,.pcard{transition:none}}
 @media (max-width:900px){.toast{top:74px;bottom:auto;width:max-content;max-width:calc(100% - 32px);text-align:center;transform:translate(-50%,-20px)}.toast.on{transform:translate(-50%,0)}}
 </style>
 </head>
 <body>
-<div class="grain" aria-hidden="true"></div>
 
 <header class="nav" id="nav">
   <div class="wrap">
@@ -541,7 +560,7 @@ html.bk-open{overflow:hidden}
   </div>
 </footer>
 <dialog class="basket" id="basket" aria-labelledby="bkTitle">
-  <div class="bk-in" data-lenis-prevent>
+  <div class="bk-in">
     <div class="bk-top"><h2 class="serif" id="bkTitle" tabindex="-1">Your <em>basket</em></h2><button class="btn btn-line bk-x" type="button" id="bkClose">Close <span aria-hidden="true">×</span></button></div>
     <div class="bk-warn" id="bkWarn" role="alert" hidden></div>
     <section class="bk-sec" aria-labelledby="bkS1">
@@ -700,7 +719,6 @@ NN.ready.then(cat => {
 </script>
 <script src="assets/lib/gsap.min.js"></script>
 <script src="assets/lib/ScrollTrigger.min.js"></script>
-<script src="assets/lib/lenis.min.js"></script>
 <script>
 /* ---------- HERO: the roaster, as a short loop ----------
    A drum (canvas) of cashews, pistachios and hazelnuts tumbling with verlet physics. It plays on its own:
@@ -791,7 +809,7 @@ NN.ready.then(cat => {
     raf = visible && !document.hidden ? requestAnimationFrame(loop) : 0;
   }
   function kick() { if (!S) return; if (RM) { roast = GOLD; for (let i = 0; i < 120; i++) physics(); draw(); caption(7); return; } if (!raf && visible) { t0 = performance.now(); raf = requestAnimationFrame(loop); } }
-  const size = () => { const r = cv.getBoundingClientRect(); if (!r.width) return; D = Math.min(2, devicePixelRatio || 1); S = r.width; HH = r.height; cv.width = Math.round(S * D); cv.height = Math.round(HH * D); kick(); };
+  const size = () => { const r = cv.getBoundingClientRect(); if (!r.width) return; D = Math.min(1.5, devicePixelRatio || 1); S = r.width; HH = r.height; cv.width = Math.round(S * D); cv.height = Math.round(HH * D); kick(); };
   if ('ResizeObserver' in window) new ResizeObserver(size).observe(cv); else addEventListener('resize', size);
   new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible) kick(); }).observe(cv);
   document.addEventListener('visibilitychange', kick);
@@ -800,16 +818,15 @@ NN.ready.then(cat => {
   const nav = $('#nav'); const onS = () => nav.classList.toggle('solid', scrollY > 30); addEventListener('scroll', onS, { passive: true }); onS();
   const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -8% 0px' });
   $$('.reveal').forEach(el => io.observe(el));
-  let lenis = null;
-  if (!RM && typeof Lenis !== 'undefined') { lenis = window.__lenis = new Lenis({ lerp: .085 }); if (HAS_G) { lenis.on('scroll', ScrollTrigger.update); gsap.ticker.add(t => lenis.raf(t * 1000)); gsap.ticker.lagSmoothing(0); } else { const f = t => { lenis.raf(t); requestAnimationFrame(f); }; requestAnimationFrame(f); } }
-  window.__scrollTo = el => { const y = el.getBoundingClientRect().top + scrollY - 80; lenis ? lenis.scrollTo(y, { duration: 1.1 }) : scrollTo({ top: y, behavior: RM ? 'auto' : 'smooth' }); };
-  $$('a[href^="#"]').forEach(a => a.addEventListener('click', e => { const id = a.getAttribute('href'); const tg = id.length > 1 && $(id); if (!tg) return; e.preventDefault(); const y = tg.getBoundingClientRect().top + scrollY - 70; lenis ? lenis.scrollTo(y, { duration: 1.5 }) : scrollTo({ top: y, behavior: RM ? 'auto' : 'smooth' }); }));
+  // native scrolling (no smooth-scroll library: it made the page feel like it lagged behind the finger)
+  const goTo = y => scrollTo({ top: y, behavior: RM ? 'auto' : 'smooth' });
+  window.__scrollTo = el => goTo(el.getBoundingClientRect().top + scrollY - 80);
+  $$('a[href^="#"]').forEach(a => a.addEventListener('click', e => { const id = a.getAttribute('href'); const tg = id.length > 1 && $(id); if (!tg) return; e.preventDefault(); goTo(tg.getBoundingClientRect().top + scrollY - 70); }));
   // the aisles: pinned, scrolled sideways on desktop, with a slow parallax inside each photo
   if (HAS_G && !RM && !MOBILE) {
     gsap.registerPlugin(ScrollTrigger);
     const track = $('#trackX'), dist = () => track.scrollWidth - innerWidth;
-    const tw = gsap.to(track, { x: () => -dist(), ease: 'none', scrollTrigger: { trigger: '#pinbox', start: 'top top', end: () => '+=' + dist(), pin: true, scrub: .8, invalidateOnRefresh: true, anticipatePin: 1 } });
-    $$('.panel .ph img').forEach(img => gsap.fromTo(img, { xPercent: 4 }, { xPercent: -4, ease: 'none', scrollTrigger: { trigger: img.closest('.panel'), containerAnimation: tw, start: 'left right', end: 'right left', scrub: true } }));
+    gsap.to(track, { x: () => -dist(), ease: 'none', scrollTrigger: { trigger: '#pinbox', start: 'top top', end: () => '+=' + dist(), pin: true, scrub: .8, invalidateOnRefresh: true, anticipatePin: 1 } });
     gsap.fromTo('.roast .bgimg img', { scale: 1.12 }, { scale: 1, ease: 'none', scrollTrigger: { trigger: '.roast', start: 'top bottom', end: 'bottom top', scrub: true } });
     addEventListener('load', () => ScrollTrigger.refresh());
   }
@@ -830,41 +847,53 @@ NN.ready.then(cat => {
     const pick = {};   // the amount chosen on each card, in units
     let active = cats[0].id;
     const amount = p => pick[p.id] || O.rules(cat, p).min;
-    const card = p => { const off = p.available === false, u = amount(p), sub = O.lineCents(p, u), pl = O.priceLabel(p);
-      return `<article class="pcard${off ? ' off' : ''}" data-id="${p.id}">
-        <div class="pimg${p.images[0] && p.images[0].kind === 'photo' ? ' photo' : ''}">${imgTag(p)}${p.images.length > 1 ? `<div class="pthumbs">${p.images.map((im, i) => `<button type="button" data-act="img" data-i="${i}" aria-label="Photo ${i + 1} of ${p.images.length}" aria-pressed="${i === 0}"></button>`).join('')}</div>` : ''}</div>
+    const card = (p, i) => { const off = p.available === false, u = amount(p), sub = O.lineCents(p, u), pl = O.priceLabel(p), n = esc(p.name);
+      return `<article class="pcard${off ? ' off' : ''}" data-id="${p.id}" style="--i:${i}">
+        <div class="pimg${p.images[0] && p.images[0].kind === 'illustration' ? ' ill' : ''}">${imgTag(p)}${p.images.length > 1 ? `<div class="pthumbs">${p.images.map((im, k) => `<button type="button" data-act="img" data-i="${k}" aria-label="Photo ${k + 1} of ${p.images.length}" aria-pressed="${k === 0}"></button>`).join('')}</div>` : ''}</div>
         <div class="pbody">
-          <h3>${esc(p.name)}</h3>
+          <h3>${n}</h3>
           ${p.description ? `<p class="pdesc">${esc(p.description)}</p>` : ''}
-          <p class="pprice${pl ? '' : ' none'}">${pl ? esc(pl) : 'Price coming soon<small>Weighed and priced at the counter</small>'}</p>
+          <p class="pprice">${pl ? `<span>${esc(pl)}</span>` : '<span class="none">Price coming soon</span>'}<b class="psub">${sub != null ? O.fmtMoney(sub) : ''}</b></p>
           ${off ? '<p class="pna">Not available right now</p>' : `
-          <div class="prow"><span class="lbl" id="q-${p.id}">Amount</span>
-            <div class="qty big" role="group" aria-labelledby="q-${p.id}"><button type="button" data-act="less" aria-label="Less ${esc(p.name)}">−</button><output aria-live="polite">${O.fmtQty(p, u)}</output><button type="button" data-act="more" aria-label="More ${esc(p.name)}">+</button></div>
-            <b class="psub">${sub != null ? O.fmtMoney(sub) : ''}</b></div>
-          <div class="pacts"><button class="btn btn-gold" type="button" data-act="add">Add to basket</button>${p.mixable && p.sellBy !== 'each' ? '<button class="btn btn-line" type="button" data-act="mix">Add to my mix</button>' : ''}</div>`}
+          <div class="qty big" role="group" aria-label="Amount of ${n}"><button type="button" data-act="less" aria-label="Less ${n}">−</button><output aria-live="polite">${O.fmtQty(p, u)}</output><button type="button" data-act="more" aria-label="More ${n}">+</button></div>
+          <div class="pacts"><button class="btn btn-gold" type="button" data-act="add" aria-label="Add ${n} to basket"><span class="lg">Add to basket</span><span class="sm">Add</span></button>${p.mixable && p.sellBy !== 'each' ? `<button class="btn btn-line" type="button" data-act="mix" aria-label="Add ${n} to my mix"><span class="lg">Add to my mix</span><span class="sm">+ Mix</span></button>` : ''}</div>`}
         </div></article>`; };
-    function renderShop() {
+    // a small round copy of the product photo flies from the card to where it went (basket button / mix)
+    const fly = (from, to) => { if (RM || !from || !to) return Promise.resolve(); const a = from.getBoundingClientRect(), b = to.getBoundingClientRect(); if (!a.width || !b.width) return Promise.resolve();
+      const im = document.createElement('img'); im.className = 'flyer'; im.src = from.currentSrc || from.src; im.alt = ''; document.body.appendChild(im);
+      const x0 = a.left + a.width / 2 - 32, y0 = a.top + a.height / 2 - 32, x1 = b.left + b.width / 2 - 32, y1 = b.top + b.height / 2 - 32, mx = (x0 + x1) / 2, my = Math.min(y0, y1) - 90;
+      const an = im.animate([{ transform: `translate(${x0}px,${y0}px) scale(.6)`, opacity: 0 }, { transform: `translate(${x0}px,${y0 - 20}px) scale(1)`, opacity: 1, offset: .15 }, { transform: `translate(${mx}px,${my}px) scale(.85)`, offset: .55 }, { transform: `translate(${x1}px,${y1}px) scale(.3)`, opacity: .6 }], { duration: 720, easing: 'cubic-bezier(.5,0,.3,1)' });
+      return an.finished.catch(() => {}).then(() => im.remove()); };
+    const tick = (out, dir) => { if (RM) return; out.animate([{ transform: `translateY(${dir * 8}px)`, opacity: .3 }, { transform: 'none', opacity: 1 }], { duration: 220, easing: 'cubic-bezier(.2,.8,.2,1)' }); };
+    window.__fly = fly; window.__tick = tick;
+    // tabs are drawn once; a lime pill slides under the selected one
+    $('#oCats').innerHTML = '<span class="pill" aria-hidden="true"></span>' + cats.map(x => { const n = prods.filter(p => p.category === x.id).length; return `<button type="button" role="tab" aria-selected="${x.id === active}" aria-controls="oGrid" data-id="${x.id}">${esc(x.name)}<small>${n}</small></button>`; }).join('');
+    const pill = () => { const b = $(`#oCats [data-id="${active}"]`), pl = $('#oCats .pill'); if (!b) return; pl.style.width = b.offsetWidth + 'px'; pl.style.transform = `translateX(${b.offsetLeft}px)`; };
+    function renderShop(swap) {
       const c = cats.find(x => x.id === active), list = prods.filter(p => p.category === active);
-      $('#oCats').innerHTML = cats.map(x => { const n = prods.filter(p => p.category === x.id).length; return `<button type="button" role="tab" aria-selected="${x.id === active}" aria-controls="oGrid" data-id="${x.id}">${esc(x.name)}<small>${n}</small></button>`; }).join('');
+      $$('#oCats button').forEach(b => b.setAttribute('aria-selected', b.dataset.id === active)); pill();
       $('#oCrumb').innerHTML = `<span>Shop</span> <i aria-hidden="true">›</i> <b>${esc(c.name)}</b> <span class="n">${list.length} item${list.length === 1 ? '' : 's'}</span>${c.description ? `<span class="d">${esc(c.description)}</span>` : ''}`;
-      $('#oGrid').innerHTML = list.length ? list.map(card).join('') : '<p class="o-empty">Nothing in this aisle online yet. Pop in to see what\'s in the bins.</p>';
+      const g = $('#oGrid'); g.classList.remove('swap'); if (swap) { void g.offsetWidth; g.classList.add('swap'); }
+      g.innerHTML = list.length ? list.map(card).join('') : '<p class="o-empty">Nothing in this aisle online yet. Pop in to see what\'s in the bins.</p>';
     }
-    renderShop();
-    $('#oCats').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; active = b.dataset.id; renderShop(); $('#oGrid').focus({ preventScroll: true }); });
-    $('#oCats').addEventListener('keydown', e => { if (!/Arrow(Left|Right)/.test(e.key)) return; const bs = $$('#oCats button'), i = bs.findIndex(b => b.dataset.id === active), n = bs[(i + (e.key === 'ArrowRight' ? 1 : bs.length - 1)) % bs.length]; active = n.dataset.id; renderShop(); $(`#oCats [data-id="${active}"]`).focus(); });
+    renderShop(false);
+    addEventListener('resize', pill); document.fonts && document.fonts.ready.then(pill);
+    const pickTab = id => { if (id === active) return; active = id; renderShop(true); const b = $(`#oCats [data-id="${active}"]`); const box = $('#oCats'); box.scrollTo({ left: b.offsetLeft - box.clientWidth / 2 + b.offsetWidth / 2, behavior: RM ? 'auto' : 'smooth' }); };
+    $('#oCats').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; pickTab(b.dataset.id); $('#oGrid').focus({ preventScroll: true }); });
+    $('#oCats').addEventListener('keydown', e => { if (!/Arrow(Left|Right)/.test(e.key)) return; const bs = $$('#oCats button'), i = bs.findIndex(b => b.dataset.id === active), n = bs[(i + (e.key === 'ArrowRight' ? 1 : bs.length - 1)) % bs.length]; pickTab(n.dataset.id); n.focus(); });
     $('#oGrid').addEventListener('click', e => {
       const b = e.target.closest('button'), el = e.target.closest('.pcard'); if (!b || !el) return;
       const p = P()[el.dataset.id], a = b.dataset.act, r = O.rules(cat, p);
       if (a === 'img') { const im = p.images[+b.dataset.i], img = $('.pimg img', el); if (img && im) { img.src = im.src; img.alt = im.alt || p.name; } $$('.pthumbs button', el).forEach(x => x.setAttribute('aria-pressed', x === b)); return; }
-      if (a === 'more' || a === 'less') { const u = amount(p), n = a === 'more' ? O.stepQty(cat, p, u, 1) : Math.max(r.min, O.stepQty(cat, p, u, -1)); pick[p.id] = n; $('output', el).textContent = O.fmtQty(p, n); const s = O.lineCents(p, n); $('.psub', el).textContent = s != null ? O.fmtMoney(s) : ''; return; }
-      if (a === 'add') { const err = basket.addItem(p.id, amount(p)); if (err) return toast(err); toast(`Added ${O.fmtQty(p, amount(p))} of ${p.name} to your basket.`); bumpBasket(); el.classList.remove('added'); void el.offsetWidth; el.classList.add('added'); return; }
-      if (a === 'mix') { if (mix.add(p.id, amount(p))) { toast(`${O.fmtQty(p, amount(p))} of ${p.name} added to your mix.`); el.classList.remove('added'); void el.offsetWidth; el.classList.add('added'); } }
+      if (a === 'more' || a === 'less') { const u = amount(p), n = a === 'more' ? O.stepQty(cat, p, u, 1) : Math.max(r.min, O.stepQty(cat, p, u, -1)); if (n === u) return; pick[p.id] = n; const out = $('output', el); out.textContent = O.fmtQty(p, n); tick(out, a === 'more' ? 1 : -1); const s = O.lineCents(p, n); $('.psub', el).textContent = s != null ? O.fmtMoney(s) : ''; return; }
+      if (a === 'add') { const err = basket.addItem(p.id, amount(p)); if (err) return toast(err); toast(`Added ${O.fmtQty(p, amount(p))} of ${p.name} to your basket.`); el.classList.remove('added'); void el.offsetWidth; el.classList.add('added'); fly($('.pimg img', el), $('#bkOpen')).then(bumpBasket); return; }
+      if (a === 'mix') { if (mix.add(p.id, amount(p))) { toast(`${O.fmtQty(p, amount(p))} of ${p.name} added to your mix.`); el.classList.remove('added'); void el.offsetWidth; el.classList.add('added'); const pr = $('#mixPanel').getBoundingClientRect(), panelSeen = pr.width && pr.top < innerHeight && pr.bottom > 0; fly($('.pimg img', el), panelSeen ? $('#mixTot') : $('#mixBar .btn')); } }
     });
 
     /* ===== your mix: several items in one bag, each at its own weight and price ===== */
     const mix = (() => {
       const saved = storeLS.get('nn-mix-v1') || {}, okC = c => c && P()[c.productId] && Number.isInteger(c.units) && c.units > 0;
-      let comps = (Array.isArray(saved.comps) ? saved.comps : []).filter(okC);
+      let comps = (Array.isArray(saved.comps) ? saved.comps : []).filter(okC), fresh = null;
       let editing = saved.editing && basket.find(saved.editing) ? saved.editing : null, stash = editing && Array.isArray(saved.stash) ? saved.stash.filter(okC) : null, busy = false;
       const save = () => storeLS.set('nn-mix-v1', { comps, editing, stash });
       const units = pid => (comps.find(c => c.productId === pid) || {}).units || 0;
@@ -874,11 +903,11 @@ NN.ready.then(cat => {
         if (u <= 0) comps = comps.filter(x => x !== c); else if (c) c.units = u; else comps.push({ productId: pid, units: u });
         render(); return true;
       }
-      const add = (pid, u) => set(pid, units(pid) + u);
+      const add = (pid, u) => { fresh = pid; return set(pid, units(pid) + u); };
       function render() {
         const q = comps.length ? O.priceBasket(cat, [{ type: 'mix', id: 'mix', name: 'Your mix', components: comps }]).lines[0] : null, total = comps.reduce((s, c) => s + c.units, 0), m = editing && basket.find(editing);
         $('#mixList').innerHTML = comps.map((c, i) => { const p = P()[c.productId], li = q.components[i], im = p.images[0];
-          return `<li data-id="${p.id}"><i style="background-image:url(${esc(im ? im.src : '')})"></i><span class="nm">${esc(p.name)}<small>${esc(O.priceLabel(p) || 'Priced at the counter')}</small></span>
+          return `<li data-id="${p.id}"${p.id === fresh ? ' class="new"' : ''}><i style="background-image:url(${esc(im ? im.src : '')})"></i><span class="nm">${esc(p.name)}<small>${esc(O.priceLabel(p) || 'Priced at the counter')}</small></span>
             <div class="qty big"><button type="button" data-act="less" aria-label="Less ${esc(p.name)}">−</button><b aria-live="polite">${O.fmtWeight(c.units)}</b><button type="button" data-act="more" aria-label="More ${esc(p.name)}">+</button></div>
             <b class="pr">${li.cents != null ? O.fmtMoney(li.cents) : '—'}</b><button type="button" class="x" data-act="rm" aria-label="Remove ${esc(p.name)} from the mix">×</button></li>`; }).join('');
         $('#mixEmpty').hidden = !!comps.length; $('#mixFoot').hidden = !comps.length && !m;
@@ -890,7 +919,7 @@ NN.ready.then(cat => {
         if (m) $('#mixSave').textContent = `Save ${m.name}`;
         $('#mixAdd').disabled = busy || !comps.length;
         $('#mixBarTxt').textContent = comps.length ? `${m ? m.name : 'Your mix'}: ${comps.length} item${comps.length === 1 ? '' : 's'} · ${O.fmtWeight(total)}${q && q.cents != null ? ' · ' + O.fmtMoney(q.cents) : ''}` : '';
-        $('#mixBar').classList.toggle('on', !!comps.length);
+        $('#mixBar').classList.toggle('on', !!comps.length); fresh = null;
         save();
       }
       function toBasket() {
@@ -908,7 +937,7 @@ NN.ready.then(cat => {
       }
       function cancelEdit(quiet) { editing = null; comps = stash || []; stash = null; render(); if (!quiet) toast('No changes made.'); }
       $('#mixList').addEventListener('click', e => { const b = e.target.closest('button'), li = e.target.closest('li'); if (!b || !li) return; const pid = li.dataset.id, p = P()[pid], u = units(pid), a = b.dataset.act;
-        if (a === 'more') set(pid, O.stepQty(cat, p, u, 1)); else if (a === 'less') set(pid, O.stepQty(cat, p, u, -1)); else if (a === 'rm') set(pid, 0); });
+        if (a === 'more' || a === 'less') { const d = a === 'more' ? 1 : -1; set(pid, O.stepQty(cat, p, u, d)); const o = $(`#mixList li[data-id="${pid}"] .qty b`); if (o) tick(o, d); } else if (a === 'rm') set(pid, 0); });
       $('#mixAdd').addEventListener('click', toBasket); $('#mixSave').addEventListener('click', () => saveEdit()); $('#mixCancel').addEventListener('click', () => cancelEdit());
       $('#mixClear').addEventListener('click', () => { comps = []; render(); toast('Your mix is empty.'); });
       $('#mixBar button').addEventListener('click', () => window.__scrollTo($('#mixPanel')));
@@ -954,7 +983,7 @@ NN.ready.then(cat => {
       const b = e.target.closest('button'), li = e.target.closest('.bl'); if (!b || !li) return;
       const L = basket.find(li.dataset.id); if (!L) return; const a = b.dataset.act;
       if (a === 'rm') { basket.remove(L.id); toast(`${L.type === 'mix' ? L.name : (P()[L.productId] || {}).name || 'Item'} removed.`); $('#bkTitle').focus(); }
-      else if (a === 'more' || a === 'less') { const p = P()[L.productId], n = O.stepQty(cat, p, L.units, a === 'more' ? 1 : -1); if (n && O.checkQty(cat, p, n, false)) return toast(O.checkQty(cat, p, n, false)); basket.setUnits(L.id, n); if (!n) toast(`${p.name} removed.`); }
+      else if (a === 'more' || a === 'less') { const p = P()[L.productId], n = O.stepQty(cat, p, L.units, a === 'more' ? 1 : -1); if (n && O.checkQty(cat, p, n, false)) return toast(O.checkQty(cat, p, n, false)); basket.setUnits(L.id, n); if (!n) toast(`${p.name} removed.`); else { const o = $(`#bkLines li[data-id="${L.id}"] output`); if (o) window.__tick(o, a === 'more' ? 1 : -1); } }
       else if (a === 'edit') { closeBasket(); mix.edit(L.id); setTimeout(() => window.__scrollTo($('#mixPanel')), 50); toast(`Editing ${L.name}. Change it in the mix panel, then press Save.`); }
     });
     $('#bkWarn').addEventListener('click', e => { if (e.target.id === 'bkAccept') basket.acceptPrices(); });
@@ -1031,9 +1060,9 @@ NN.ready.then(cat => {
 
     /* ===== open / close ===== */
     let opener = null;
-    function openBasket() { opener = document.activeElement; renderBasket(); if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', ''); document.documentElement.classList.add('bk-open'); window.__lenis && window.__lenis.stop(); $('#bkTitle').focus(); }
+    function openBasket() { opener = document.activeElement; renderBasket(); if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', ''); document.documentElement.classList.add('bk-open'); $('#bkTitle').focus(); }
     function closeBasket() { if (dlg.open) dlg.close(); }
-    dlg.addEventListener('close', () => { document.documentElement.classList.remove('bk-open'); window.__lenis && window.__lenis.start(); if (opener && opener.focus) opener.focus(); });
+    dlg.addEventListener('close', () => { document.documentElement.classList.remove('bk-open'); if (opener && opener.focus) opener.focus(); });
     dlg.addEventListener('click', e => { if (e.target === dlg) closeBasket(); });
     $('#bkOpen').addEventListener('click', openBasket); $('#bkClose').addEventListener('click', closeBasket); $('#bkShop').addEventListener('click', () => { closeBasket(); });
     $$('[data-open-basket]').forEach(b => b.addEventListener('click', openBasket));
