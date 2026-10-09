@@ -43,7 +43,7 @@ Everything is in **`data/catalog.json`**. Edit it on GitHub (pencil icon) and co
   - `kind: "photo"` shows the picture full-bleed.
   - Extra entries show as dots under the main picture.
   - An optional `"srcset"` gives responsive sizes.
-  - The current pictures are 3D illustrations (`kind: "illustration"`). Swap them as real photos arrive. If a picture fails to load, the card says "Photo coming soon".
+  - The current pictures are stock photos from Unsplash (`kind: "stock"`, free Unsplash License, photographer in `credit`), saved square at 600 px in `img/products/<id>.webp`. Swap them for the shop's own photos as they arrive. If a picture fails to load, the card says "Photo coming soon".
 - **Hours and pickup**: `stores[].hours` uses day numbers (0 = Sunday) with `open`, `close` and `lastPickup` as "HH:MM" in 24-hour time. `settings.pickup` holds:
   - `timeZone`
   - `prepMinutes` (minimum time between ordering and pickup)

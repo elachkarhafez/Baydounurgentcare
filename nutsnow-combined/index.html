@@ -295,7 +295,7 @@ footer small{grid-column:1/-1;border-top:1px solid var(--line);padding-top:22px;
 .pna{margin-top:auto;padding-top:8px;color:var(--muted);font-size:14.5px}
 .pcard.off .pimg{opacity:.45}
 .qty.big{padding:3px}.qty.big button{width:44px;height:44px;font-size:22px;transition:background .2s,transform .15s}.qty.big button:active{transform:scale(.88)}.qty.big output,.qty.big b{display:inline-block;font-family:"Geist Mono";font-size:15px;min-width:64px;text-align:center}
-.flyer{position:fixed;z-index:120;width:64px;height:64px;border-radius:50%;object-fit:cover;pointer-events:none;box-shadow:0 10px 24px -8px rgba(0,0,0,.45);border:2px solid #fff}
+.flyer{position:fixed;left:0;top:0;z-index:120;width:64px;height:64px;border-radius:50%;object-fit:cover;pointer-events:none;box-shadow:0 10px 24px -8px rgba(0,0,0,.45);border:2px solid #fff}
 .o-note{margin-top:26px;color:var(--muted);font-size:14px;max-width:46em}
 .o-empty,.o-err{color:var(--ink-2);font-size:16px;padding:20px 0}
 /* the mix list: name + price on one line, amount and line total under it */
@@ -311,6 +311,7 @@ footer small{grid-column:1/-1;border-top:1px solid var(--line);padding-top:22px;
 .mixp ul{max-height:52vh}
 .mixp .qty.big button{width:40px;height:40px}
 .mixp .row .btn{flex:1 1 auto;justify-content:center;min-height:48px}
+.mixp .bag-sum{flex-direction:column;align-items:stretch;gap:4px}.mixp .bag-sum>span{font-size:14px}.mixp #mixSub{text-align:left}.mixp #mixSub small{max-width:none;margin-top:4px}
 .mixbar{display:none}
 @media (max-width:1100px){.o-layout{grid-template-columns:minmax(0,1fr)}.mixp{position:relative;top:0}.mixp ul{max-height:none}}
 @media (max-width:900px){
@@ -385,6 +386,7 @@ html.bk-open{overflow:hidden}
 }
 .order .head h2{font-size:clamp(48px,5.4vw,88px)}
 @media (max-width:560px){
+  .order{padding-top:56px}
   .ocats{width:auto;border-radius:16px}
   .ogrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
   .pcard{border-radius:16px}
@@ -448,7 +450,7 @@ html.bk-open{overflow:hidden}
         <div class="ocats" id="oCats" role="tablist" aria-label="Aisles" data-needs-catalog></div>
         <p class="o-crumb" id="oCrumb" aria-live="polite"></p>
         <div class="ogrid" id="oGrid" tabindex="-1"></div>
-        <p class="o-note">Product pictures are illustrations for now. The shop's own photos will replace them. Prices that aren't online yet are weighed and priced at the counter.</p>
+        <p class="o-note">Product photos are stock images for now (from Unsplash); the shop's own photos will replace them. Prices that aren't online yet are weighed and priced at the counter.</p>
       </div>
       <aside class="bag mixp" id="mixPanel" aria-labelledby="mixH">
         <div class="bag-h"><h3 class="serif" id="mixH">Your <em>mix</em></h3><b id="mixTot">0 lb</b></div>
@@ -743,8 +745,8 @@ NN.ready.then(cat => {
 
   const cv = $('#drumCv'), ctx = cv.getContext('2d'), cap = $('#roastCap');
   const ROWS = CONFIG.roastNuts.map(id => CONFIG.atlas.indexOf(id));
-  let S = 0, HH = 0, D = 1, raf = 0, visible = true, holding = false, roast = 0, omega = .008, ang = 0, t0 = performance.now(), steam = [], clock = 0, said = '';
-  const N = 64, nuts = [...Array(N)].map((_, i) => ({ x: 0, y: 0, px: 0, py: 0, row: ROWS[i % 3], col: (i / 3 | 0) % 3, a: Math.random() * 6.28, s: .92 + Math.random() * .16 }));
+  let odd = false, S = 0, HH = 0, D = 1, raf = 0, visible = true, holding = false, roast = 0, omega = .008, ang = 0, t0 = performance.now(), steam = [], clock = 0, said = '';
+  const N = 64, nuts = [...Array(N)].map((_, i) => ({ x: 0, y: 0, px: 0, py: 0, row: ROWS[i % 3], ri: i % 3, col: (i / 3 | 0) % 3, a: Math.random() * 6.28, s: .92 + Math.random() * .16 }));
   const fill = () => nuts.forEach(n => { n.x = (Math.random() - .5) * .3; n.y = .1 + Math.random() * .2; n.px = n.x; n.py = n.y; }); fill();
   const RW = .355, RN = .036;   // window radius, nut radius (fractions of the drum size)
   const CY = .47;               // drum centre, as a fraction of the stage width (the stand sits below it)
@@ -762,37 +764,53 @@ NN.ready.then(cat => {
       for (const n of nuts) n.a += ((n.x - n.px) * -n.y + (n.y - n.py) * n.x) * 40 + omega * .5;
     }
     const rr = (x, y, w, h, r) => { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); };
+    // the parts that never move are drawn once per size into two cached layers (under / over the burner glow),
+    // so each frame only paints the glow, the flames, the window, the nuts and the glass
+    let under = null, over = null;
+    function layers() {
+      const mk = () => { const c = document.createElement('canvas'); c.width = cv.width; c.height = cv.height; const x = c.getContext('2d'); x.setTransform(D, 0, 0, D, 0, 0); return [c, x]; };
+      const c = S / 2, cy = S * CY, R = S * .43; let x, g;
+      [under, x] = mk();
+      x.save(); x.shadowColor = 'rgba(0,0,0,.35)'; x.shadowBlur = 40; x.shadowOffsetY = 20;
+      g = x.createLinearGradient(0, cy + R * .7, 0, HH); g.addColorStop(0, '#2a251f'); g.addColorStop(1, '#151210');
+      x.fillStyle = g; x.beginPath(); x.moveTo(c - R * .55, cy + R * .6); x.lineTo(c + R * .55, cy + R * .6); x.lineTo(c + R * .78, HH - S * .05); x.lineTo(c - R * .78, HH - S * .05); x.closePath(); x.fill(); x.restore();
+      g = x.createLinearGradient(c - R, 0, c + R, 0); g.addColorStop(0, '#5d5850'); g.addColorStop(.3, '#bdb6aa'); g.addColorStop(.55, '#8a847a'); g.addColorStop(.8, '#d4cdc0'); g.addColorStop(1, '#5d5850');
+      x.beginPath(); x.roundRect ? x.roundRect(c - R * .95, HH - S * .065, R * 1.9, S * .03, 6) : x.rect(c - R * .95, HH - S * .065, R * 1.9, S * .03); x.fillStyle = g; x.fill();
+      [over, x] = mk();
+      const body = x.createRadialGradient(c - R * .3, cy - R * .35, R * .1, c, cy, R); body.addColorStop(0, '#4e4a42'); body.addColorStop(.55, '#26231e'); body.addColorStop(1, '#13110e');
+      x.fillStyle = body; x.beginPath(); x.arc(c, cy, R, 0, 7); x.fill();
+      x.strokeStyle = 'rgba(140,198,63,.7)'; x.lineWidth = S * .01; x.beginPath(); x.arc(c, cy, R * .965, 0, 7); x.stroke();
+      x.fillStyle = 'rgba(232,226,200,.5)'; for (let i = 0; i < 24; i++) { const a = i / 24 * 6.283; x.beginPath(); x.arc(c + Math.cos(a) * R * .89, cy + Math.sin(a) * R * .89, S * .0065, 0, 7); x.fill(); }
+      x.fillStyle = '#b5e06b'; x.font = `500 ${S * .026}px "Geist Mono", monospace`; x.textAlign = 'center'; x.fillText('NUTS NOW · ROASTERY', c, cy + R * .93 - S * .008);
+    }
+    // the 3 nuts × 3 variants, blended to the current roast colour, cached until the colour moves a notch
+    const CELL = 72; let sheet = null, sheetLv = -1;
+    function sheetFor(level) {
+      const q = Math.round(level * 48) / 48; if (sheet && q === sheetLv) return sheet; sheetLv = q;
+      if (!sheet) { sheet = document.createElement('canvas'); sheet.width = CELL * 3; sheet.height = CELL * ROWS.length; }
+      const x = sheet.getContext('2d'); x.setTransform(1, 0, 0, 1, 0, 0); x.clearRect(0, 0, sheet.width, sheet.height);
+      ROWS.forEach((row, ri) => { for (let col = 0; col < 3; col++) { x.setTransform(1, 0, 0, 1, col * CELL + CELL / 2, ri * CELL + CELL / 2); nut(x, q, row, col, CELL); } });
+      return sheet;
+    }
     function draw() {
-      const c = S / 2, cy = S * CY; ctx.setTransform(D, 0, 0, D, 0, 0); ctx.clearRect(0, 0, S, HH);
+      if (!under) layers();
+      const c = S / 2, cy = S * CY; ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, cv.width, cv.height); ctx.drawImage(under, 0, 0); ctx.setTransform(D, 0, 0, D, 0, 0);
       const heat = holding ? Math.min(1, .35 + roast) : Math.max(0, roast * .4);
-      const R = S * .43;
-      // stand + burner under the drum
-      ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.6)'; ctx.shadowBlur = 40; ctx.shadowOffsetY = 20;
-      let g = ctx.createLinearGradient(0, cy + R * .7, 0, HH); g.addColorStop(0, '#2a251f'); g.addColorStop(1, '#151210');
-      ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(c - R * .55, cy + R * .6); ctx.lineTo(c + R * .55, cy + R * .6); ctx.lineTo(c + R * .78, HH - S * .05); ctx.lineTo(c - R * .78, HH - S * .05); ctx.closePath(); ctx.fill(); ctx.restore();
-      g = ctx.createLinearGradient(c - R, 0, c + R, 0); g.addColorStop(0, '#5d5850'); g.addColorStop(.3, '#bdb6aa'); g.addColorStop(.55, '#8a847a'); g.addColorStop(.8, '#d4cdc0'); g.addColorStop(1, '#5d5850');
-      rr(c - R * .95, HH - S * .065, R * 1.9, S * .03, 6); ctx.fillStyle = g; ctx.fill();
-      // burner glow
-      const fg = ctx.createRadialGradient(c, cy + R * 1.02, S * .02, c, cy + R * .9, S * .45); fg.addColorStop(0, `rgba(255,130,50,${.12 + heat * .55})`); fg.addColorStop(1, 'rgba(255,120,40,0)'); ctx.fillStyle = fg; ctx.fillRect(0, 0, S, HH);
-      for (let i = -3; i <= 3; i++) { const h = S * (.018 + heat * .03) * (1 + .3 * Math.sin(ang * 3 + i)); ctx.fillStyle = `rgba(${255},${150 + heat * 40 | 0},70,${.25 + heat * .6})`; ctx.beginPath(); ctx.ellipse(c + i * R * .12, cy + R * 1.05 - h / 2, S * .009, h, 0, 0, 7); ctx.fill(); }
-      // drum body
-      const body = ctx.createRadialGradient(c - R * .3, cy - R * .35, R * .1, c, cy, R); body.addColorStop(0, '#4e4a42'); body.addColorStop(.55, '#26231e'); body.addColorStop(1, '#13110e');
-      ctx.fillStyle = body; ctx.beginPath(); ctx.arc(c, cy, R, 0, 7); ctx.fill();
-      ctx.strokeStyle = 'rgba(232,194,122,.6)'; ctx.lineWidth = S * .01; ctx.beginPath(); ctx.arc(c, cy, R * .965, 0, 7); ctx.stroke();
-      for (let i = 0; i < 24; i++) { const a = i / 24 * 6.283 + ang * .2; ctx.fillStyle = 'rgba(232,210,170,.5)'; ctx.beginPath(); ctx.arc(c + Math.cos(a) * R * .89, cy + Math.sin(a) * R * .89, S * .0065, 0, 7); ctx.fill(); }
-      // window: warm interior
+      const R = S * .43, gy = cy + R * .95, gr = S * .4;
+      // burner glow + flames (only the area around the burner is painted)
+      const fg = ctx.createRadialGradient(c, gy + R * .07, S * .02, c, gy, gr); fg.addColorStop(0, `rgba(255,130,50,${.12 + heat * .55})`); fg.addColorStop(1, 'rgba(255,120,40,0)'); ctx.fillStyle = fg; ctx.fillRect(c - gr, gy - gr, gr * 2, gr * 2);
+      for (let i = -3; i <= 3; i++) { const h = S * (.018 + heat * .03) * (1 + .3 * Math.sin(ang * 3 + i)); ctx.fillStyle = `rgba(255,${150 + heat * 40 | 0},70,${.25 + heat * .6})`; ctx.beginPath(); ctx.ellipse(c + i * R * .12, cy + R * 1.05 - h / 2, S * .009, h, 0, 0, 7); ctx.fill(); }
+      ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.drawImage(over, 0, 0); ctx.setTransform(D, 0, 0, D, 0, 0);
+      // window: warm interior, vanes, the nuts
       const rw = RW * S, inside = ctx.createRadialGradient(c, cy + rw * .3, rw * .1, c, cy, rw); inside.addColorStop(0, `rgb(${70 + heat * 120 | 0},${38 + heat * 40 | 0},${18})`); inside.addColorStop(1, '#120c06');
       ctx.save(); ctx.beginPath(); ctx.arc(c, cy, rw, 0, 7); ctx.clip(); ctx.fillStyle = inside; ctx.fillRect(c - rw, cy - rw, rw * 2, rw * 2);
       ctx.strokeStyle = 'rgba(255,255,255,.07)'; ctx.lineWidth = S * .02; for (let i = 0; i < 3; i++) { const a = ang + i * 2.094; ctx.beginPath(); ctx.moveTo(c + Math.cos(a) * rw * .2, cy + Math.sin(a) * rw * .2); ctx.lineTo(c + Math.cos(a) * rw, cy + Math.sin(a) * rw); ctx.stroke(); }
-      if (tints) { const sz = RN * S * 2.6; for (const n of nuts) { ctx.save(); ctx.translate(c + n.x * S, cy + n.y * S); ctx.rotate(n.a); nut(ctx, roast, n.row, n.col, sz * n.s); ctx.restore(); } }
-      if (roast > .78) { ctx.fillStyle = `rgba(40,30,25,${(roast - .78) * 1.6})`; ctx.fillRect(c - rw, cy - rw, rw * 2, rw * 2); }
+      if (tints) { const sz = RN * S * 2.6, sh = sheetFor(roast); for (const n of nuts) { const co = Math.cos(n.a), si = Math.sin(n.a), w = sz * n.s; ctx.setTransform(D * co, D * si, -D * si, D * co, D * (c + n.x * S), D * (cy + n.y * S)); ctx.drawImage(sh, n.col * CELL, n.ri * CELL, CELL, CELL, -w / 2, -w / 2, w, w); } ctx.setTransform(D, 0, 0, D, 0, 0); }
       ctx.restore();
       // glass: brass rim + reflection
       ctx.strokeStyle = '#8a7650'; ctx.lineWidth = S * .016; ctx.beginPath(); ctx.arc(c, cy, rw + S * .008, 0, 7); ctx.stroke();
       ctx.strokeStyle = 'rgba(255,255,255,.2)'; ctx.lineWidth = S * .024; ctx.lineCap = 'round'; ctx.beginPath(); ctx.arc(c, cy, rw * .82, 3.6, 4.4); ctx.stroke(); ctx.lineWidth = S * .01; ctx.beginPath(); ctx.arc(c, cy, rw * .82, 4.55, 4.75); ctx.stroke();
       for (const p of steam) { ctx.fillStyle = `rgba(243,236,224,${Math.max(0, p.a) * .16})`; ctx.beginPath(); ctx.arc(p.x * S, p.y * S, p.r * S, 0, 7); ctx.fill(); }
-      // brand plate
-      ctx.fillStyle = '#e8c27a'; ctx.font = `500 ${S * .026}px "Geist Mono", monospace`; ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic'; ctx.fillText('NUTS NOW · ROASTERY', c, cy + R * .93 - S * .008);
     }
   // the loop: 0–1.2 s raw and idling, 1.2–6 s burner on (raw → golden), 6–9 s golden and slowing, then a fresh batch
   const LOOP = 9.6, GOLD = .66;
@@ -805,14 +823,15 @@ NN.ready.then(cat => {
     omega += ((holding ? .055 : .008) - omega) * Math.min(1, dt * 3); ang += omega * 1.6;
     if (holding && roast > .25 && Math.random() < .5) steam.push({ x: .5 + (Math.random() - .5) * .3, y: CY - .3, r: .02 + Math.random() * .02, a: .8 });
     for (const p of steam) { p.y -= dt * .08; p.r += dt * .03; p.a -= dt * .5; } steam = steam.filter(p => p.a > 0);
-    physics(); draw(); caption(clock);
+    physics(); odd = !odd; if (odd) draw(); caption(clock);
     raf = visible && !document.hidden ? requestAnimationFrame(loop) : 0;
   }
   function kick() { if (!S) return; if (RM) { roast = GOLD; for (let i = 0; i < 120; i++) physics(); draw(); caption(7); return; } if (!raf && visible) { t0 = performance.now(); raf = requestAnimationFrame(loop); } }
-  const size = () => { const r = cv.getBoundingClientRect(); if (!r.width) return; D = Math.min(1.5, devicePixelRatio || 1); S = r.width; HH = r.height; cv.width = Math.round(S * D); cv.height = Math.round(HH * D); kick(); };
+  const size = () => { const r = cv.getBoundingClientRect(); if (!r.width) return; D = Math.min(1.5, devicePixelRatio || 1); S = r.width; HH = r.height; cv.width = Math.round(S * D); cv.height = Math.round(HH * D); under = null; kick(); };
   if ('ResizeObserver' in window) new ResizeObserver(size).observe(cv); else addEventListener('resize', size);
   new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible) kick(); }).observe(cv);
   document.addEventListener('visibilitychange', kick);
+  document.fonts && document.fonts.ready.then(() => { under = null; kick(); });
 
   /* page motion */
   const nav = $('#nav'); const onS = () => nav.classList.toggle('solid', scrollY > 30); addEventListener('scroll', onS, { passive: true }); onS();
@@ -861,7 +880,7 @@ NN.ready.then(cat => {
     // a small round copy of the product photo flies from the card to where it went (basket button / mix)
     const fly = (from, to) => { if (RM || !from || !to) return Promise.resolve(); const a = from.getBoundingClientRect(), b = to.getBoundingClientRect(); if (!a.width || !b.width) return Promise.resolve();
       const im = document.createElement('img'); im.className = 'flyer'; im.src = from.currentSrc || from.src; im.alt = ''; document.body.appendChild(im);
-      const x0 = a.left + a.width / 2 - 32, y0 = a.top + a.height / 2 - 32, x1 = b.left + b.width / 2 - 32, y1 = b.top + b.height / 2 - 32, mx = (x0 + x1) / 2, my = Math.min(y0, y1) - 90;
+      const x0 = a.left + a.width / 2 - 32, y0 = a.top + a.height / 2 - 32, x1 = b.left + b.width / 2 - 32, y1 = b.top + b.height / 2 - 32, mx = (x0 + x1) / 2 + (x1 > x0 ? -40 : 40), my = Math.max(70, Math.min(y0, y1) - 90);
       const an = im.animate([{ transform: `translate(${x0}px,${y0}px) scale(.6)`, opacity: 0 }, { transform: `translate(${x0}px,${y0 - 20}px) scale(1)`, opacity: 1, offset: .15 }, { transform: `translate(${mx}px,${my}px) scale(.85)`, offset: .55 }, { transform: `translate(${x1}px,${y1}px) scale(.3)`, opacity: .6 }], { duration: 720, easing: 'cubic-bezier(.5,0,.3,1)' });
       return an.finished.catch(() => {}).then(() => im.remove()); };
     const tick = (out, dir) => { if (RM) return; out.animate([{ transform: `translateY(${dir * 8}px)`, opacity: .3 }, { transform: 'none', opacity: 1 }], { duration: 220, easing: 'cubic-bezier(.2,.8,.2,1)' }); };
