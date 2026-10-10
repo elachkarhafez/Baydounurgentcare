@@ -76,11 +76,15 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   radial-gradient(50% 45% at 70% 55%,rgba(255,61,154,.18),transparent 70%),
   radial-gradient(40% 40% at 85% 25%,rgba(59,232,255,.12),transparent 70%),
   repeating-linear-gradient(90deg,rgba(255,255,255,.025) 0 1px,transparent 1px 90px),var(--night)}
-#hero::after{content:"";position:absolute;inset:auto 0 0;height:20%;background:linear-gradient(transparent,var(--night));pointer-events:none}
-#heroCanvas{position:absolute;right:2%;top:10%;width:56%;height:80%;z-index:1}
+#hero::after{content:"";position:absolute;inset:auto 0 0;height:16%;background:linear-gradient(transparent,var(--night));pointer-events:none;z-index:1}
+#heroCanvas{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+#hero .hero__copy::before{content:"";position:absolute;inset:0 -20% 0 -40%;z-index:-1;background:radial-gradient(60% 60% at 30% 50%,rgba(11,7,16,.82),transparent 75%);pointer-events:none}
+.hero-h{font-size:clamp(2.3rem,3.8vw,3.7rem);margin:16px 0 18px}
+.tapsign{position:absolute;z-index:2;right:clamp(18px,8vw,130px);bottom:clamp(30px,8vh,70px);padding:9px 14px;border:1px solid var(--line2);border-radius:999px;color:var(--cyan);background:rgba(11,7,16,.6)}
+@media (max-width:900px){.tapsign{display:none}}
 .hero__fb{position:absolute;right:6%;top:52%;width:min(440px,36vw);transform:translateY(-50%);z-index:1;display:none;border-radius:18px;overflow:hidden;box-shadow:0 0 0 2px var(--pink),0 0 40px rgba(255,61,154,.4)}
 .hero__fb.on{display:block}
-.hero__copy{position:relative;z-index:2;display:flex;flex-direction:column;justify-content:center;max-width:var(--max);width:100%;margin:0 auto;padding:calc(var(--navh) + 20px) var(--pad) 80px;pointer-events:none}
+.hero__copy{position:relative;z-index:2;isolation:isolate;display:flex;flex-direction:column;justify-content:center;max-width:var(--max);width:100%;margin:0 auto;padding:calc(var(--navh) + 20px) var(--pad) 80px;pointer-events:none}
 .hero__copy>*{max-width:540px;pointer-events:auto}
 .sign{display:inline-block;margin:14px 0 18px}
 .sign .l1{display:block;font:400 clamp(4rem,10vw,9rem)/.82 var(--disp);color:#fff;text-transform:uppercase;text-shadow:0 0 2px #fff,0 0 10px var(--red),0 0 28px var(--red),0 0 60px rgba(255,45,85,.6)}
@@ -99,7 +103,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .ready .fade.d1{transition-delay:.15s}.ready .fade.d2{transition-delay:.25s}.ready .fade.d3{transition-delay:.35s}.ready .fade.d4{transition-delay:.45s}
 @media (max-width:900px){
   #hero{min-height:0;max-height:none;display:block}
-  #heroCanvas{position:relative;width:100%;height:46svh;min-height:290px;top:auto;margin-top:var(--navh)}
+  #heroCanvas{position:relative;inset:auto;width:100%;height:58svh;min-height:340px;margin-top:var(--navh)}
+  #hero .hero__copy::before{display:none}
   .hero__fb{position:relative;right:auto;top:auto;transform:none;width:auto;margin:calc(var(--navh) + 16px) var(--pad) 0}
   .board{position:relative;left:auto;bottom:auto;transform:none;margin:-8px var(--pad) 0;overflow-x:auto;scrollbar-width:none}
   .board span{padding:7px 9px;font-size:.62rem;flex:none}
@@ -201,21 +206,18 @@ footer a:hover{color:var(--cyan)}
 <main>
 <!-- ============ HERO ============ -->
 <section id="hero" class="hero" aria-label="Batter Up Chicken Co.">
-  <canvas id="heroCanvas" role="img" aria-label="A hot chicken tender being brined, battered, fried, seasoned and sauced on Texas toast"></canvas>
-  <div class="hero__fb" id="heroFb"><img src="assets/img/sliders.webp" alt="Hot chicken tenders on Texas toast with sauce, fries and pickles" width="904" height="1200"></div>
+  <canvas id="heroCanvas" role="img" aria-label="The Batter Up neon sign flickering on, then the rooster says Batter up"></canvas>
+  <div class="hero__fb" id="heroFb"><img src="assets/img/logo.webp" alt="Batter Up Chicken Co. neon logo" width="600" height="600"></div>
+  <button class="tapsign mono fade d4" id="tapSign" type="button">Tap the sign</button>
   <div class="hero__copy">
-    <div class="mono neon-c fade">Hot chicken food truck · Newport, TN</div>
-    <h1 class="sign" aria-label="Batter up! Chicken Co.">
-      <span class="l1 flick">Batter Up!</span>
-      <span class="l2 neon-p">Chicken Co.</span>
-    </h1>
+    <div class="mono neon-c fade">Batter Up Chicken Co. · Newport, TN</div>
+    <h1 class="h hero-h fade d1">Hot chicken,<br>brined, battered &amp;<br><span class="neon-p">seasoned to order.</span></h1>
     <p class="lede fade d1" id="lede"></p>
     <div class="ctas fade d2">
       <a class="btn btn--hot" href="#menu">See the lineup <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 2v12M3 9l5 5 5-5"/></svg></a>
       <a class="btn btn--line" href="#find">Find the truck</a>
     </div>
   </div>
-  <div class="board fade d4" id="board" aria-hidden="true"><span>Brined</span><span>Battered</span><span>Fried</span><span>Seasoned</span><span>Sauced</span><span>Order up!</span></div>
 </section>
 
 <!-- ============ LINEUP ============ -->
@@ -302,7 +304,7 @@ footer a:hover{color:var(--cyan)}
 /* ===================== CONFIG: all business data ===================== */
 const CONFIG = {
   name: "Batter Up Chicken Co.",
-  lede: "The biggest, juiciest hot chicken tenders and sliders in East Tennessee. Brined, battered and seasoned to order.",
+  lede: "The biggest, juiciest hot chicken tenders and sliders in East Tennessee, out of a food truck in Newport.",
   address: "1421 TN-73", city: "Newport, TN",
   maps: "https://www.google.com/maps/search/?api=1&query=1421+TN-73+Newport+TN",
   facebook: "https://www.facebook.com/p/Batter-Up-Chicken-Co-61587330862041/",
@@ -334,28 +336,23 @@ $("#lineup").innerHTML = CONFIG.lineup.map((d, i) => `<article class="dish rv"><
 $("#stops").innerHTML = `<li class="mono" style="border:0;color:var(--flame)"><span>Recent stops</span><span></span></li>` + CONFIG.stops.map(s => `<li><span>${esc(s[0])}</span><span>${esc(s[1])}</span></li>`).join("");
 
 /* ===================== hero: the whole order in 3D ===================== */
-const board = $$("#board span"), STEPS = ["Brined", "Battered", "Fried", "Seasoned", "Sauced", "Order up!"];
-function lightBoard(label) {
-  const k = STEPS.indexOf(label);
-  board.forEach((b, i) => { b.className = i < k ? "done" : i === k ? (label === "Order up!" ? "up" : "on") : ""; });
-}
 function fallback(c, fb) { $(c).style.display = "none"; $(fb).classList.add("on"); }
 let turn = null;
 (async () => {
-  if (!webgl()) { fallback("#heroCanvas", "#heroFb"); fallback("#turnCanvas", "#turnFb"); $("#board").style.display = "none"; return; }
+  if (!webgl()) { fallback("#heroCanvas", "#heroFb"); fallback("#turnCanvas", "#turnFb"); $("#tapSign").style.display = "none"; return; }
   try {
     const { mountTender } = await import("./assets/tender.js");
-    const hero = await mountTender($("#heroCanvas"), { auto: true, angle: .55, zoom: PHONE ? 1.08 : 1.3, onStep: lightBoard });
-    window.__hero = hero;
-    // replay the order every so often while it's on screen
-    let again = null; const loop = () => { clearTimeout(again); again = setTimeout(() => { if (!RM && $("#heroCanvas").getBoundingClientRect().bottom > 0) hero.play(); loop(); }, 16000); }; loop();
+    const { mountNeon } = await import("./assets/neon.js");
+    const sign = await mountNeon($("#heroCanvas"), {});
+    window.__sign = sign;
+    $("#tapSign").addEventListener("click", () => sign.talk());
     const io = new IntersectionObserver(async ([e]) => {
       if (!e.isIntersecting) return; io.disconnect();
       turn = await mountTender($("#turnCanvas"), { angle: .45, zoom: PHONE ? 1.1 : 1 });
       window.__turn = turn;
     }, { rootMargin: "300px" });
     io.observe($("#turnCanvas"));
-  } catch (e) { fallback("#heroCanvas", "#heroFb"); fallback("#turnCanvas", "#turnFb"); $("#board").style.display = "none"; }
+  } catch (e) { fallback("#heroCanvas", "#heroFb"); fallback("#turnCanvas", "#turnFb"); $("#tapSign").style.display = "none"; }
 })();
 
 /* ===================== your turn: hold to batter / fry / season ===================== */

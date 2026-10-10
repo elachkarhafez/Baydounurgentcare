@@ -126,7 +126,7 @@ export async function mountTender(canvas, o = {}) {
     const p = new THREE.Points(g, m); p.frustumCulled = false; world.add(p);
     return { pos, vel, life, g, m, n };
   }
-  const bub = particles(160, 0xfff6e0, .03, .85), spice = particles(220, 0xb22a10, .022), steamP = particles(70, 0xffffff, .09, .18);
+  const bub = particles(70, 0xfff6e0, .022, .55), spice = particles(110, 0xb22a10, .018, .8), steamP = particles(40, 0xffffff, .08, .1);
   bub.m.blending = THREE.AdditiveBlending;
 
   // ---- state ----
@@ -185,9 +185,9 @@ export async function mountTender(canvas, o = {}) {
   const rnd = (a, b) => a + Math.random() * (b - a);
   function tickParticles(dt) {
     const cy = tenderG.position.y;
-    stepParticles(bub, dt, i => { bub.pos.set([rnd(-.6, .6), cy + rnd(-.18, .05), rnd(-.18, .18)], i * 3); bub.vel.set([rnd(-.1, .1), rnd(.25, .6), rnd(-.1, .1)], i * 3); bub.life[i] = rnd(.3, .8); }, Math.round(emitBub * 4),
+    stepParticles(bub, dt, i => { bub.pos.set([rnd(-.6, .6), cy + rnd(-.18, .05), rnd(-.18, .18)], i * 3); bub.vel.set([rnd(-.1, .1), rnd(.25, .6), rnd(-.1, .1)], i * 3); bub.life[i] = rnd(.3, .8); }, Math.round(emitBub * 2),
       (i, dt) => { bub.pos[i * 3] += bub.vel[i * 3] * dt; bub.pos[i * 3 + 1] += bub.vel[i * 3 + 1] * dt; bub.pos[i * 3 + 2] += bub.vel[i * 3 + 2] * dt; });
-    stepParticles(spice, dt, i => { spice.pos.set([rnd(-.6, .6), cy + rnd(.5, .8), rnd(-.2, .2)], i * 3); spice.vel.set([rnd(-.05, .05), rnd(-.6, -.3), rnd(-.05, .05)], i * 3); spice.life[i] = 1.2; }, Math.round(emitSpice * 5),
+    stepParticles(spice, dt, i => { spice.pos.set([rnd(-.6, .6), cy + rnd(.5, .8), rnd(-.2, .2)], i * 3); spice.vel.set([rnd(-.05, .05), rnd(-.6, -.3), rnd(-.05, .05)], i * 3); spice.life[i] = 1.2; }, Math.round(emitSpice * 2),
       (i, dt) => { spice.vel[i * 3 + 1] -= 2.5 * dt; spice.pos[i * 3] += spice.vel[i * 3] * dt; spice.pos[i * 3 + 1] += spice.vel[i * 3 + 1] * dt; spice.pos[i * 3 + 2] += spice.vel[i * 3 + 2] * dt; if (spice.pos[i * 3 + 1] < cy + TR * .5) spice.life[i] = 0; });
     const steamOn = st.fry > .7 ? 1 : 0;
     stepParticles(steamP, dt, i => { steamP.pos.set([rnd(-.5, .5), cy + .12, rnd(-.12, .12)], i * 3); steamP.vel.set([rnd(-.04, .04), rnd(.18, .32), rnd(-.04, .04)], i * 3); steamP.life[i] = rnd(1.2, 2.2); }, steamOn && Math.random() < .3 ? 1 : 0,
