@@ -1,11 +1,11 @@
 /* =====================================================================
-   Brew’d: the 3D cup for "Build your cup".
-   Same method as the Coffee Talks cappuccino: three.js, studio HDRI, physical materials,
+   Sillbird (fictional concept by ElaSystems): the 3D cup for "Build your cup".
+   three.js, studio HDRI, physical materials,
    lathe-turned geometry, a transparent shadow catcher so the card shows through.
    - iced: a clear tapered cup; the drink pours in layer by layer (clipping plane reveals a
      stacked colour column bottom → top), ice drops in, cold foam settles, lid + straw go on
-   - hot: a paper cup with a kraft sleeve printed بروود brew’d, steam rising
-   Bundle: .claude/skills/ela-studio/kit/build3d/build.sh brewdcoffee/src/cup.js brewdcoffee/assets/cup.js
+   - hot: a paper cup with a kraft sleeve printed سلبرد sillbird, steam rising
+   Bundle: .claude/skills/ela-studio/kit/build3d/build.sh demos/coffee-trailer/src/cup.js demos/coffee-trailer/assets/cup.js
    ===================================================================== */
 import * as THREE from 'three';
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
@@ -86,8 +86,8 @@ export async function mountCup(canvas, o = {}) {
   const decalTex = (() => {
     const c = document.createElement('canvas'); c.width = 1024; c.height = 512; const x = c.getContext('2d');
     x.fillStyle = '#fff'; x.textAlign = 'center'; x.textBaseline = 'middle';
-    x.font = '700 150px Ruqaa, serif'; x.fillText('بروود', 512, 190);
-    x.font = '170px Gloock, Georgia, serif'; x.fillText('brew’d', 512, 350);
+    x.font = '700 150px Ruqaa, serif'; x.fillText('سلبرد', 512, 190);
+    x.font = '150px Gloock, Georgia, serif'; x.fillText('sillbird', 512, 350);
     const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; return t;
   })();
   {
@@ -128,8 +128,8 @@ export async function mountCup(canvas, o = {}) {
     x.fillStyle = '#6b4a33'; x.fillRect(0, 0, 2048, 400);
     for (let i = 0; i < 4000; i++) { x.fillStyle = `rgba(${Math.random() > .5 ? '255,230,200' : '30,15,5'},${Math.random() * .05})`; x.fillRect(Math.random() * 2048, Math.random() * 400, 2, 2); }
     x.fillStyle = '#f4ede3'; x.textAlign = 'center'; x.textBaseline = 'middle';
-    x.font = '170px Gloock, Georgia, serif'; x.fillText('brew’d', 1024 + 300, 220);
-    x.fillStyle = '#e3c587'; x.font = '700 120px Ruqaa, serif'; x.fillText('بروود', 1024 - 320, 215);
+    x.font = '128px Gloock, Georgia, serif'; x.fillText('sillbird', 1550, 222);
+    x.fillStyle = '#e3c587'; x.font = '700 120px Ruqaa, serif'; x.fillText('سلبرد', 1205, 210);
     const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; return t;
   })();
   const sl = new THREE.Mesh(new THREE.CylinderGeometry(hr(.66) + .006, hr(.34) + .006, .32, 96, 1, true), new THREE.MeshPhysicalMaterial({ map: sleeveTex, roughness: .85 }));
@@ -254,5 +254,7 @@ export async function mountCup(canvas, o = {}) {
   new IntersectionObserver(([e]) => { visible = e.isIntersecting; start(); }).observe(canvas);
   document.addEventListener('visibilitychange', start);
   apply(); placeCam(); renderer.compile(scene, camera); renderer.render(scene, camera); start();
-  return { set, state: st, renderer };
+  // view(): aim the camera (used for the stills on the page); parts: for posed stills
+  const view = (a = 0, e = 0) => { taz = az = a; tel = el = e; };
+  return { set, state: st, renderer, view, parts: { lid, strawG, stream } };
 }
