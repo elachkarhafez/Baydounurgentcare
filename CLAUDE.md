@@ -15,3 +15,12 @@ Whenever the user says a business doesn't want its site (or "said no", "passed",
 4. `git rm` the original folder.
 5. Mark the business as declined in `signatures.md`.
 6. Report the new link.
+
+## Standing rule: 3D method for designs
+
+From now on, build every product/hero design (cups, drinks, food, objects) as a real 3D model using the Coffee Talks cup method, not flat SVG or canvas drawings:
+- three.js bundled per site with `.claude/skills/ela-studio/kit/build3d/build.sh <site>/src/<name>.js <site>/assets/<name>.js` (esbuild + three, served from the site).
+- Studio HDRI (`kit/build3d/assets/studio-512.hdr`), `MeshPhysicalMaterial` (clearcoat, sheen, transparency), lathe-turned geometry, a `ShadowMaterial` shadow catcher on a transparent canvas so the page shows through, soft key/rim/fill lights, pointer drift on fine pointers, render only while visible.
+- Animate with a small step sequencer (pour, drop, settle), and keep a drawn fallback if WebGL or the module fails.
+- References: `coffeetalks/src/cup.js` (cappuccino with latte art) and `brewdcoffee/src/cup.js` (iced cup with layered drink, ice, foam, lid, straw; hot paper cup).
+

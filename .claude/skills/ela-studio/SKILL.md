@@ -25,6 +25,8 @@ Reference files (read them when you reach the phase that needs them):
 
 ---
 
+> **Standing rule from the user: designs are built in real 3D.** Every product/hero design (cups, drinks, food, objects) uses the Coffee Talks cup method: three.js bundled with `kit/build3d/build.sh`, studio HDRI, physical materials, lathe geometry, transparent shadow catcher, sequenced animation, drawn fallback. See `coffeetalks/src/cup.js` and `brewdcoffee/src/cup.js`. Don't ship flat SVG/canvas product drawings.
+
 ## Phase 1: Intake (keep it short)
 
 Get, or decide yourself, these five things. Ask the user only for what you can't find or reasonably pick:

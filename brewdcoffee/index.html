@@ -189,6 +189,9 @@ html:not(.js) #intro{display:none}
 .cupcard::before{content:"";position:absolute;inset:0;background:radial-gradient(60% 50% at 50% 30%,rgba(255,200,130,.16),transparent 70%)}
 .cupwrap{position:relative;height:clamp(300px,34vw,420px);display:grid;place-items:center}
 .cupwrap svg{height:clamp(280px,32vw,400px);width:auto;max-width:100%;overflow:visible}
+.cupwrap canvas{position:absolute;left:-12%;right:-12%;top:-8%;width:124%;height:116%;opacity:0;transition:opacity .8s}
+.cupwrap canvas.on{opacity:1}
+.cupwrap.has3d svg{visibility:hidden}
 .cupname{position:relative;text-align:center;margin-top:6px}
 .cupname b{display:block;font:400 clamp(28px,2.6vw,36px)/1.05 Gloock,serif}
 .cupname span{display:block;margin-top:6px;font:500 11px/1 "Geist Mono",monospace;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-2)}
@@ -360,7 +363,7 @@ footer a{color:var(--cream);text-underline-offset:3px}
           <p class="note" id="boardNote"></p>
         </div>
         <div class="cupcard" aria-live="polite">
-          <div class="cupwrap"><svg id="cup" viewBox="0 0 300 400" role="img" aria-label="Your drink"></svg></div>
+          <div class="cupwrap" id="cupwrap"><svg id="cup" viewBox="0 0 300 400" role="img" aria-label="Your drink"></svg><canvas id="cup3d" hidden aria-hidden="true"></canvas></div>
           <div class="cupname"><b id="cupName">Strawberry Matcha</b><span id="cupSub">Iced · whole milk</span></div>
           <div class="opts">
             <div class="optrow" id="rowTemp"><span>Temp</span><button class="chip" data-temp="iced" aria-pressed="true">Iced</button><button class="chip" data-temp="hot" aria-pressed="false">Hot</button></div>
@@ -762,7 +765,7 @@ function updateCup(pour) {
   if (hot) ST.foam = false;
   $('#cupName').textContent = it.n;
   $('#cupSub').textContent = [hot ? 'Hot' : 'Iced', milky ? ({ whole: 'whole milk', oat: 'oat milk', almond: 'almond milk' })[ST.milk] : null, ST.shot ? 'extra shot' : null, ST.foam ? 'cold foam' : null].filter(Boolean).join(' · ');
-  $('#price').textContent = money(priceOf());
+  $('#price').textContent = money(priceOf()); push3d();
   const hc = cupSvg.querySelector('.hotcup'), cold = [...cupSvg.children].filter(n => !n.classList.contains('hotcup') && n.tagName !== 'defs');
   if (G) { gsap.to(hc, { opacity: hot ? 1 : 0, duration: .5 }); gsap.to(cold, { opacity: hot ? 0 : 1, duration: .5 }); }
   else { hc.setAttribute('opacity', hot ? 1 : 0); cold.forEach(n => n.setAttribute('opacity', hot ? 0 : 1)); }
@@ -781,6 +784,22 @@ function updateCup(pour) {
       .fromTo(cupSvg.querySelectorAll('.cube'), { y: -60, opacity: 0 }, { y: 0, opacity: 1, duration: .8, stagger: .06, ease: 'back.out(1.6)' }, '-=.8');
   } else { draw(); if (G) gsap.fromTo(liq, { scaleY: .97 }, { scaleY: 1, transformOrigin: '50% 100%', duration: .5, ease: 'elastic.out(1,.5)' }); }
 }
+let cup3d = null, last3d = null;
+function push3d() {
+  if (!cup3d) return; const it = ST.item, hot = ST.temp === 'hot';
+  if (hot) { cup3d.set({ hot: true }); return; }
+  let layers = it.layers.slice(); const milky = !it.refresher && !it.tea; if (ST.shot) layers.splice(layers.length - (milky ? 1 : 0), 0, 'shot');
+  const hts = layers.map(k => k === 'shot' ? 36 : (it.refresher ? 250 : (k === 'milk' ? 110 : k === 'matcha' ? 90 : 60))); const sum = hts.reduce((a, b) => a + b, 0);
+  cup3d.set({ layers: layers.map((k, i) => ({ c: COLORS[k], h: hts[i] / sum })), foam: ST.foam, fruit: it.fruit || null, hot: false });
+}
+(() => {
+  const cv = $('#cup3d'), wrap = $('#cupwrap');
+  const go = () => import('./assets/cup.js').then(m => { cv.hidden = false; return m.mountCup(cv, { assets: 'assets/' }); })
+    .then(api => { cup3d = api; wrap.classList.add('has3d'); push3d(); requestAnimationFrame(() => cv.classList.add('on')); window.__cup3d = api; })
+    .catch(e => { console.warn('3D cup unavailable', e); cv.hidden = true; wrap.classList.remove('has3d'); });
+  const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { io.disconnect(); go(); } }, { rootMargin: '900px 0px' });
+  io.observe($('#menu'));
+})();
 renderItems(); updateCup(false);
 $('#sendOrder').addEventListener('click', async () => {
   const it = ST.item, milky = !it.refresher && !it.tea;
