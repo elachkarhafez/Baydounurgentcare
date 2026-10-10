@@ -25,7 +25,7 @@ Reference files (read them when you reach the phase that needs them):
 
 ---
 
-> **Standing rule from the user: designs are built in real 3D.** Every product/hero design (cups, drinks, food, objects) uses the Coffee Talks cup method: three.js bundled with `kit/build3d/build.sh`, studio HDRI, physical materials, lathe geometry, transparent shadow catcher, sequenced animation, drawn fallback. See `coffeetalks/src/cup.js` and `demos/coffee-trailer/src/cup.js`. Don't ship flat SVG/canvas product drawings.
+> **Standing rule from the user: designs are built in real 3D.** Every product/hero design (cups, drinks, food, objects) uses the Coffee Talks cup method: three.js bundled with `kit/build3d/build.sh`, studio HDRI, physical materials, lathe geometry, transparent shadow catcher, sequenced animation, drawn fallback. See `coffeetalks/src/cup.js` and `demos/coffee-trailer/src/cup.js`. Don't ship flat SVG/canvas product drawings. For realism use `kit/library/` (see its README): texture food from the client's own photos with `phototex.py`, real CC0 materials/HDRIs/models from the cache or `fetch.py`, image→3D side items with `i23d.py`, GTAO on desktop. Reference: `fireandfeastcommerce/src/platter.js`.
 
 ## Phase 1: Intake (keep it short)
 

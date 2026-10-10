@@ -6,6 +6,8 @@ Everything here is tested and in production (The Fudge Fix, CareMed, The Lab Atl
 kit/
   research/ig.mjs        one command: name, counts, captions, phone/address, post images, contact sheet (~30 s)
   build3d/               a studio-lit 3D object that builds itself on scroll (the Fudge Fix engine)
+  library/               real assets for 3D: 6,308-asset catalog (Poly Haven, ambientCG, Sketchfab), cached CC0 models/materials/HDRIs,
+                         photo→texture, image→3D (TRELLIS on HF), GLB split/repaint. Read library/README.md for any 3D design.
     src/engine.js        stage: lights, HDRI, shadows, post, camera path, physics clocks, gating, height map, loop, QA hooks
     src/primitives.js    plate · slab · disc · sheet · dome · sauce · scatter · topper
     src/materials.js     porcelain gold chrome sauce cream crumbSide crumbTop bake meat cheese leaf candy matte
