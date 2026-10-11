@@ -1,0 +1,995 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noai, noimageai">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Med2Med · Your lecture in, a full study pack out</title>
+<meta name="description" content="Done-for-you study packs made from your own lecture slides: an Anki deck, a one-page summary, a slide-by-slide study guide and practice questions in your own private study site. Built by a med student, for med students.">
+<meta property="og:title" content="Med2Med · Your lecture in, a full study pack out">
+<meta property="og:description" content="Anki deck, one-page summary, study guide and practice questions, made from your own slides. From $10.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://med2med.vercel.app/img/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#f1efe9">
+<link rel="icon" href="img/icon.svg" type="image/svg+xml">
+<link rel="preload" href="assets/fonts/unbounded.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/geist.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="modulepreload" href="assets/unbox.js">
+<style>
+@font-face{font-family:"Unbounded";src:url(assets/fonts/unbounded.woff2) format("woff2");font-weight:500 800;font-display:swap}
+@font-face{font-family:"Geist";src:url(assets/fonts/geist.woff2) format("woff2");font-weight:400 700;font-display:swap}
+@font-face{font-family:"JetBrains Mono";src:url(assets/fonts/jetbrains-mono.woff2) format("woff2");font-weight:500 600;font-display:swap}
+/* Med2Med · sneaker-drop store + study OS + exam sheet
+   palette: studio paper, ink, highlighter lime, scantron red
+   type: Unbounded (display) · Geist (text) · JetBrains Mono (labels, prices) */
+:root{
+  --bg:#f1efe9; --paper:#fbfaf6; --card:#ffffff; --ink:#121316; --ink2:#2b2d33; --muted:#62656d; --line:#dcd9d1;
+  --lime:#d4f53c; --lime2:#c4e82a; --red:#d93b30; --blue:#3b5bdb;
+  --pad:clamp(16px,4vw,56px); --r:18px; --maxw:1240px;
+  --fd:"Unbounded",system-ui,sans-serif; --ft:"Geist",system-ui,-apple-system,sans-serif; --fm:"JetBrains Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--ink);font:400 17px/1.55 var(--ft);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+a{color:inherit}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+:focus-visible{outline:3px solid var(--blue);outline-offset:3px;border-radius:6px}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--pad)}
+.mono{font-family:var(--fm);font-size:13px;letter-spacing:.06em;text-transform:uppercase}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;height:52px;padding:0 24px;border-radius:999px;background:var(--ink);color:#fff;font-weight:600;text-decoration:none;font-size:16px;white-space:nowrap;transition:transform .2s,background .2s}
+.btn:hover{transform:translateY(-1px)}
+.btn.lime{background:var(--lime);color:var(--ink)}
+.btn.ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
+.btn.sm{height:40px;padding:0 16px;font-size:14px}
+h2{font:800 clamp(30px,5vw,64px)/1.02 var(--fd);letter-spacing:-.035em}
+h3{font:700 22px/1.2 var(--ft);letter-spacing:-.01em}
+.sub{color:var(--muted);font-size:clamp(16px,1.6vw,19px);max-width:56ch}
+section{position:relative}
+
+/* ---------- header ---------- */
+.top{position:fixed;inset:0 0 auto 0;z-index:50;display:flex;align-items:center;gap:20px;padding:14px var(--pad);transition:background .25s,box-shadow .25s}
+.top.solid{background:rgba(241,239,233,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 1px 0 var(--line)}
+.logo{font:800 20px/1 var(--fd);letter-spacing:-.03em;text-decoration:none;display:flex;align-items:center;gap:10px}
+.logo i{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:8px;background:var(--ink);color:var(--lime);font:800 11px/1 var(--fd);font-style:normal}
+.nav{display:flex;gap:22px;margin-left:auto;align-items:center}
+.nav a{text-decoration:none;font-size:15px;font-weight:500;color:var(--ink2)}
+.nav a:hover{color:var(--ink)}
+.nav .login{font-size:14px;color:var(--muted)}
+.nav a.btn{color:#fff}
+@media (max-width:900px){.nav a:not(.login){display:none}.nav{gap:14px}}
+
+/* ---------- 1. the drop (3D unboxing) ---------- */
+.drop{height:300vh}
+.stage{position:sticky;top:0;height:100svh;overflow:hidden;background:radial-gradient(120% 80% at 50% 62%,#fbfaf6 0%,var(--bg) 60%)}
+.stage canvas{position:absolute;inset:0;width:100%;height:100%;z-index:2;opacity:0;transition:opacity .6s}
+.stage.gl canvas{opacity:1}
+.hl{position:absolute;inset:0;z-index:1;display:flex;flex-direction:column;justify-content:space-between;align-items:center;text-align:center;padding:clamp(84px,12vh,120px) var(--pad) clamp(96px,15vh,150px);pointer-events:none}
+.hl h1{font:800 clamp(34px,7vw,116px)/.92 var(--fd);letter-spacing:-.05em;margin:0}
+.hl .l2{color:transparent;-webkit-text-stroke:2px var(--ink);background:linear-gradient(90deg,var(--ink) 0 var(--fill,0%),transparent var(--fill,0%));-webkit-background-clip:text;background-clip:text}
+.hl .kick{margin-bottom:12px;color:var(--muted)}
+.tag{position:absolute;z-index:3;left:0;top:0;pointer-events:none;opacity:0;transition:opacity .35s;display:flex;align-items:center;gap:8px;white-space:nowrap}
+.tag b{display:block;width:10px;height:10px;border-radius:50%;background:var(--ink);box-shadow:0 0 0 4px rgba(212,245,60,.9)}
+.tag span{background:var(--ink);color:#fff;font:600 13px/1 var(--ft);padding:8px 11px;border-radius:999px}
+.tag span em{font-style:normal;color:var(--lime);font-family:var(--fm);font-size:11px;margin-left:6px}
+.cue{white-space:nowrap;position:absolute;z-index:4;left:50%;bottom:clamp(28px,5vh,48px);transform:translateX(-50%);display:flex;align-items:center;gap:12px;transition:opacity .3s}
+.cue .lidico{width:34px;height:26px;position:relative}
+.cue .lidico:before,.cue .lidico:after{content:"";position:absolute;left:3px;right:3px;border-radius:3px;background:var(--ink)}
+.cue .lidico:before{bottom:0;height:13px}
+.cue .lidico:after{left:0;right:0;top:4px;height:6px;animation:lid 1.6s ease-in-out infinite}
+@keyframes lid{0%,55%,100%{transform:none}25%{transform:translateY(-6px) rotate(-8deg)}}
+.buybar{position:absolute;z-index:4;left:50%;bottom:clamp(20px,4vh,40px);transform:translate(-50%,20px);opacity:0;pointer-events:none;transition:opacity .4s,transform .4s;display:flex;gap:8px;background:var(--paper);padding:8px;border-radius:999px;box-shadow:0 10px 40px rgba(18,19,22,.12),0 0 0 1px var(--line)}
+.buybar.on{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+.buybar a{display:flex;align-items:baseline;gap:8px;text-decoration:none;padding:10px 16px;border-radius:999px;font-weight:600;font-size:15px;white-space:nowrap}
+.buybar a i{font-style:normal;font-family:var(--fm);font-size:13px;color:var(--muted)}
+.buybar a.hot{background:var(--ink);color:#fff}.buybar a.hot i{color:var(--lime)}
+.fallback{display:none}
+.stage.no3d .fallback{display:flex;position:absolute;inset:0;z-index:2;align-items:center;justify-content:center;gap:16px;padding:0 var(--pad)}
+@media (max-width:640px){.buybar a{padding:10px 12px;font-size:14px}.buybar a i{font-size:12px}.tag span{font-size:12px;padding:7px 9px}.tag span em{display:none}}
+@media (max-width:760px){.buybar{display:none}}
+
+/* ---------- mockups: drawn at a fixed design width, scaled to fit by JS (.fit) ---------- */
+.fit{position:relative}
+.fit>.mk{position:absolute;left:0;top:0;transform-origin:0 0}
+.mk{border-radius:14px;overflow:hidden;background:#fff;box-shadow:0 1px 0 var(--line),0 18px 40px -18px rgba(18,19,22,.25);user-select:none;-webkit-user-select:none}
+.mk-anki{width:380px;height:245px;padding:24px 28px;display:flex;flex-direction:column}
+.mk-anki .m{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font:500 11px var(--fm);letter-spacing:.06em;text-transform:uppercase}
+.mk-anki .m b{background:var(--lime);color:var(--ink);border-radius:99px;padding:4px 10px;font:600 11px var(--fm)}
+.mk-anki p{margin:auto 0;text-align:center;font:600 21px/1.3 var(--ft);padding:0 6px}
+.mk-anki .sa{border-top:2px dashed var(--line);padding-top:10px;text-align:center;color:var(--muted);font-size:14px}
+.mk-one{width:300px;height:388px;background:var(--paper)}
+.mk-one .hd{background:var(--ink);color:var(--lime);font:800 12px/1 var(--fd);padding:20px 22px 16px}
+.mk-one h4{font:700 18px/1.15 var(--ft);padding:16px 22px 14px}
+.mk-one .g{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 22px}
+.mk-one .g div{border:1.5px solid var(--line);border-radius:8px;padding:10px 10px 14px;font-size:10.5px;line-height:1.3}
+.mk-one .g strong{display:block;font-size:11.5px;margin-bottom:5px}
+.mk-one .g mark{background:rgba(212,245,60,.8);padding:0 2px}
+.ln{display:block;height:5px;border-radius:3px;background:#e7e4dd;margin-top:6px}
+.ln.s{width:62%}
+.mk-guide{width:300px;height:388px;background:#f6f3eb;padding:0 0 18px;display:flex;flex-direction:column;gap:14px}
+.mk-guide .gh{background:var(--lime);padding:18px 22px 14px;font:800 13px/1.1 var(--fd);letter-spacing:-.01em}
+.mk-guide .gh span{display:block;font:500 10px var(--fm);letter-spacing:.06em;margin-top:5px}
+.mk-guide .r{display:grid;grid-template-columns:100px 1fr;gap:14px;align-items:start;padding:0 22px}
+.mk-guide .sl{height:72px;background:#fff;border:1.5px solid var(--line);border-radius:6px;padding:8px;font:600 8px/1.2 var(--fm);color:var(--muted)}
+.mk-guide .sl i{display:block;height:4px;border-radius:2px;background:var(--ink);width:70%;margin:6px 0 5px}
+.mk-guide .r p{font-size:11.5px;line-height:1.38}
+.mk-guide .r p b{background:rgba(212,245,60,.8)}
+.mk-qs{width:230px;height:420px;background:#0d0e11;color:#fff;padding:24px 16px 16px;display:flex;flex-direction:column;gap:7px;border-radius:26px}
+.mk-qs .m{color:var(--lime);font:600 10px var(--fm);letter-spacing:.06em}
+.mk-qs p{font:600 14px/1.3 var(--ft);margin:4px 0 6px}
+.mk-qs .o{display:flex;gap:9px;align-items:center;background:rgba(255,255,255,.07);border-radius:9px;padding:8px 10px;font-size:11.5px}
+.mk-qs .o i{font:600 10px var(--fm);font-style:normal;opacity:.8}
+.mk-qs .o.ok{background:var(--lime);color:var(--ink)}
+.mk-qs .o.no{background:rgba(217,59,48,.25);text-decoration:line-through}
+.mk-qs .ex{margin-top:auto;font-size:10.5px;line-height:1.35;color:rgba(255,255,255,.7);border-top:1px solid rgba(255,255,255,.15);padding-top:8px}
+.mk-site{width:560px;height:350px;background:#f7f6f2;padding:18px;display:grid;grid-template-columns:118px 1fr;gap:18px}
+.mk-site nav{background:var(--ink);border-radius:10px;padding:16px 14px;display:flex;flex-direction:column;gap:12px;color:rgba(255,255,255,.7);font:500 11px var(--ft)}
+.mk-site nav b{color:var(--lime);font:800 11px var(--fd);margin-bottom:8px}
+.mk-site nav span.on{color:#fff}
+.mk-site .cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-content:start}
+.mk-site .cards div{background:#fff;border-radius:10px;padding:12px;box-shadow:0 1px 0 var(--line);font-size:10px;color:var(--muted)}
+.mk-site .cards strong{display:block;font-size:13px;margin:3px 0 8px;color:var(--ink)}
+.mk-site .bar{height:5px;border-radius:3px;background:#e7e4dd;overflow:hidden;margin:4px 0 7px}
+.mk-site .bar i{display:block;height:100%;background:var(--ink)}
+.mk-site .bar.g i{background:var(--lime2)}
+.mk-cap{position:absolute;right:12px;bottom:9px;font:600 9px var(--fm);letter-spacing:.08em;color:rgba(18,19,22,.35)}
+.mk-qs .mk-cap{color:rgba(255,255,255,.3)}
+.mk{position:relative}
+
+/* ---------- 2. what's in the pack ---------- */
+.inside{padding:clamp(80px,12vw,150px) 0 clamp(60px,8vw,110px)}
+.inside .head{display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap;margin-bottom:clamp(30px,5vw,56px)}
+.shelf{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(12px,1.6vw,22px)}
+.item{background:var(--card);border-radius:var(--r);padding:14px 14px 18px;display:flex;flex-direction:column;gap:14px;box-shadow:0 1px 0 var(--line)}
+.item .art{background:var(--bg);border-radius:12px;aspect-ratio:1;display:grid;place-items:center;overflow:hidden}
+.item .art .fit{width:84%}
+.item .art .fit.w-qs{width:46%}
+.item .art .fit.w-one,.item .art .fit.w-guide{width:60%}
+.item .no{color:var(--muted)}
+.item p{color:var(--muted);font-size:15px;line-height:1.45}
+@media (max-width:980px){.shelf{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.shelf{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 calc(var(--pad)*-1);padding:0 var(--pad) 8px;scrollbar-width:none}.shelf::-webkit-scrollbar{display:none}.item{flex:0 0 78%;scroll-snap-align:center}}
+
+/* ---------- 3. study OS (how it works) ---------- */
+.os{padding:clamp(70px,10vw,130px) 0;background:var(--ink);color:#fff;overflow:hidden}
+.os .grid{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:clamp(24px,4vw,64px);align-items:center}
+.os h2{color:#fff;font-size:clamp(28px,3.1vw,46px)}
+.os .sub{color:rgba(255,255,255,.66)}
+.os .facts{display:flex;flex-direction:column;gap:22px}
+.os .facts div{border-top:1px solid rgba(255,255,255,.16);padding-top:14px}
+.os .facts .mono{color:var(--lime);font-size:12px}
+.os .facts p{color:rgba(255,255,255,.78);font-size:15px;margin-top:6px}
+.phone{width:min(340px,82vw);aspect-ratio:9/19.2;border-radius:52px;padding:12px;background:linear-gradient(145deg,#4a4d55,#1a1b1f 40%,#5c6069 70%,#24262b);box-shadow:0 40px 90px -30px rgba(212,245,60,.25),0 0 0 1px rgba(255,255,255,.1) inset;position:relative}
+.screen{position:relative;height:100%;border-radius:41px;overflow:hidden;background:radial-gradient(120% 70% at 20% 0%,#d4f53c 0%,#7fa31a 28%,#1d2a10 62%,#0b0c0e 100%)}
+.island{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:96px;height:28px;border-radius:20px;background:#000;z-index:5}
+.lock{position:absolute;inset:0;padding:64px 14px 20px;display:flex;flex-direction:column;align-items:center;transition:opacity .5s,transform .5s}
+.lock .clock{font:700 68px/1 var(--ft);letter-spacing:-.03em;color:#fff;text-shadow:0 2px 20px rgba(0,0,0,.2)}
+.lock .date{font-weight:600;color:rgba(255,255,255,.9);margin:6px 0 26px;font-size:15px}
+.notes{width:100%;display:flex;flex-direction:column;gap:8px}
+.note{display:grid;grid-template-columns:34px 1fr;gap:10px;background:rgba(245,245,240,.82);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);color:var(--ink);border-radius:20px;padding:11px 12px;transform:translateY(-14px) scale(.96);opacity:0;transition:transform .55s cubic-bezier(.2,.9,.25,1.2),opacity .4s}
+.note.in{transform:none;opacity:1}
+.note i{width:34px;height:34px;border-radius:9px;background:var(--ink);color:var(--lime);display:grid;place-items:center;font:800 10px var(--fd);font-style:normal}
+.note .t{display:flex;justify-content:space-between;gap:6px;font-size:13px;font-weight:700}
+.note .t span{font-weight:500;color:var(--muted);font-size:12px}
+.note p{font-size:13px;line-height:1.3;color:var(--ink2);margin-top:1px}
+.home{position:absolute;inset:0;padding:70px 18px 20px;opacity:0;transform:scale(1.08);transition:opacity .5s,transform .5s;pointer-events:none;display:flex;flex-direction:column}
+.screen.unlocked .lock{opacity:0;transform:scale(.94);pointer-events:none}
+.screen.unlocked .home{opacity:1;transform:none;pointer-events:auto}
+.home .apps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px 10px;margin-top:8px}
+.app{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11.5px;font-weight:500;color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.4)}
+.app i{width:60px;height:60px;border-radius:16px;display:grid;place-items:center;font-style:normal;background:linear-gradient(160deg,#fdfdf8,#d9dbd2);box-shadow:0 6px 16px rgba(0,0,0,.25),inset 0 1px 0 #fff;color:var(--ink)}
+.app i svg{width:28px;height:28px}
+.app.hot i{background:linear-gradient(160deg,#e8ff7a,#b8dc1c)}
+.home .w{margin-top:auto;background:rgba(245,245,240,.85);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-radius:22px;padding:14px 16px;color:var(--ink)}
+.home .w .mono{font-size:10px;color:var(--muted)}
+.home .w strong{display:block;font:800 26px/1.1 var(--fd);margin:4px 0}
+.home .w .bar{height:6px;border-radius:3px;background:#dedcd4;overflow:hidden}.home .w .bar i{display:block;height:100%;width:0;background:var(--ink);transition:width 1.2s .3s}
+.screen.unlocked .home .w .bar i{width:35%}
+.appview{position:absolute;inset:0;background:var(--paper);color:var(--ink);padding:62px 20px 22px;transform:translateY(100%);transition:transform .45s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column;gap:12px;z-index:4}
+.appview.on{transform:none}
+.appview .x{align-self:flex-start;font-weight:600;color:var(--blue);font-size:15px}
+.appview h4{font:800 24px/1.1 var(--fd);letter-spacing:-.03em}
+.appview p{font-size:14.5px;color:var(--ink2)}
+.appview .go{margin-top:auto}
+.replay{margin-top:18px;color:rgba(255,255,255,.6);font-size:14px;display:inline-flex;gap:8px;align-items:center}
+.replay:hover{color:#fff}
+@media (max-width:980px){.os .grid{grid-template-columns:minmax(0,1fr);justify-items:center;text-align:left}.os .grid>div{width:100%}.os .facts{display:grid;grid-template-columns:1fr 1fr;gap:18px}}
+@media (max-width:520px){.os .facts{grid-template-columns:1fr}}
+
+/* ---------- 4. the exam sheet (sample) ---------- */
+.sample{padding:clamp(80px,11vw,140px) 0}
+.sample .head{display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap;margin-bottom:28px}
+.sheet{position:relative;background:var(--paper);border-radius:6px;box-shadow:0 1px 0 var(--line),0 30px 60px -30px rgba(18,19,22,.3);overflow:hidden;max-width:980px;margin:0 auto;user-select:none;-webkit-user-select:none}
+.sheet:before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 .4 0 0 0 0 .38 0 0 0 0 .3 0 0 0 .08 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
+.wm{position:absolute;inset:-40%;pointer-events:none;z-index:3;transform:rotate(-24deg);display:flex;flex-wrap:wrap;gap:30px 60px;align-content:center;justify-content:center;font:800 22px var(--fd);color:rgba(18,19,22,.06);letter-spacing:.1em}
+.sh-top{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:16px clamp(16px,3vw,32px);border-bottom:2px solid var(--ink);position:relative;z-index:2}
+.sh-top .ttl{font-weight:700}
+.sh-top .mode{background:var(--ink);color:var(--lime);border-radius:99px;padding:4px 10px;font-size:11px}
+.sh-top .tmr{margin-left:auto;font-family:var(--fm);font-weight:600}
+.navq{display:flex;gap:6px}
+.navq button{width:34px;height:34px;border-radius:50%;border:2px solid var(--ink);font:600 13px var(--fm);position:relative}
+.navq button.cur{background:var(--ink);color:#fff}
+.navq button.ok{background:var(--lime);border-color:var(--ink)}
+.navq button.bad{background:var(--red);border-color:var(--red);color:#fff}
+.navq button.fl:after{content:"";position:absolute;top:-5px;right:-5px;width:10px;height:10px;border-radius:50%;background:#f59f00;border:2px solid var(--paper)}
+.qbody{position:relative;z-index:2;padding:clamp(20px,3.5vw,40px) clamp(16px,3vw,32px) clamp(24px,3vw,36px);transition:filter .25s}
+.sheet.blurred .qbody{filter:blur(9px)}
+.qmeta{display:flex;gap:10px;flex-wrap:wrap;color:var(--muted);margin-bottom:14px}
+.stem{font:600 clamp(19px,2.2vw,26px)/1.35 var(--ft);max-width:52ch;margin-bottom:22px}
+.opts{display:flex;flex-direction:column;gap:8px;max-width:720px}
+.opt{display:grid;grid-template-columns:40px 1fr auto;align-items:center;gap:12px;text-align:left;padding:10px 14px 10px 10px;border-radius:12px;transition:background .2s;position:relative;min-height:54px}
+.opt:hover{background:rgba(18,19,22,.04)}
+.bub{width:34px;height:34px;border-radius:50%;border:2px solid var(--ink);display:grid;place-items:center;font:600 13px var(--fm);transition:background .2s,color .2s}
+.opt .tx{font-size:clamp(16px,1.6vw,18px)}
+.opt .why{grid-column:2/4;font-size:14.5px;color:var(--ink2);display:none;line-height:1.4}
+.opt.x .tx{text-decoration:line-through;text-decoration-thickness:2px;color:var(--muted)}
+.opt .xb{opacity:0;width:32px;height:32px;border-radius:8px;display:grid;place-items:center;color:var(--muted)}
+.opt:hover .xb,.opt .xb:focus-visible{opacity:1}
+.sheet.done .opt .xb{display:none}
+.sheet.done .opt{cursor:default}
+.sheet.done .opt .why{display:block}
+.opt.right{background:rgba(212,245,60,.45)}
+.opt.right .bub{background:var(--ink);color:var(--lime)}
+.opt.picked:not(.right) .bub{background:var(--red);border-color:var(--red);color:#fff}
+.opt.picked:not(.right) .tx{text-decoration:line-through;text-decoration-color:var(--red);text-decoration-thickness:2px}
+.explain{display:none;margin-top:22px;max-width:780px;border-top:2px dashed var(--line);padding-top:20px;gap:20px;grid-template-columns:minmax(0,1fr) 220px}
+.sheet.done .explain{display:grid}
+.explain .verdict{font:800 22px/1.1 var(--fd);letter-spacing:-.02em;margin-bottom:8px}
+.explain .verdict.ok{color:#4a6b00}.explain .verdict.no{color:var(--red)}
+.slide{background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:14px;aspect-ratio:1.35;display:flex;flex-direction:column;gap:8px;font-size:12.5px;line-height:1.35}
+.slide .mono{font-size:10px;color:var(--muted)}
+.slide b{display:block;height:5px;width:60%;background:var(--ink);border-radius:3px}
+.sh-foot{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:14px clamp(16px,3vw,32px);border-top:1.5px solid var(--line);position:relative;z-index:2}
+.sh-foot .keys{color:var(--muted);font-size:12px;margin-right:auto}
+.kb{display:inline-block;border:1.5px solid var(--line);border-bottom-width:3px;border-radius:6px;padding:0 6px;font:600 11px/18px var(--fm);color:var(--ink2);background:#fff}
+.score{display:none;position:relative;z-index:2;padding:clamp(28px,5vw,56px) clamp(16px,3vw,32px);grid-template-columns:auto 1fr;gap:clamp(20px,4vw,48px);align-items:center}
+.sheet.final .score{display:grid}
+.sheet.final .qbody,.sheet.final .sh-foot{display:none}
+.score .big{font:800 clamp(64px,11vw,140px)/.9 var(--fd);letter-spacing:-.05em}
+.score .big small{font-size:.38em;color:var(--muted)}
+.score h3{font:800 clamp(22px,2.8vw,34px)/1.1 var(--fd);letter-spacing:-.03em;margin-bottom:10px}
+.score .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+@media (max-width:720px){.explain{grid-template-columns:minmax(0,1fr)}.score{grid-template-columns:minmax(0,1fr)}.sh-foot .keys{display:none}.navq button{width:30px;height:30px}}
+
+/* ---------- 5. the drop (packages) ---------- */
+.packs{padding:clamp(60px,9vw,120px) 0}
+.packs .head{margin-bottom:clamp(28px,4vw,48px);display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap}
+.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(12px,1.8vw,24px)}
+.tile{background:var(--card);border-radius:22px;padding:14px 14px 20px;display:flex;flex-direction:column;gap:14px;text-decoration:none;box-shadow:0 1px 0 var(--line);transition:transform .25s,box-shadow .25s;position:relative}
+.tile:hover{transform:translateY(-4px);box-shadow:0 1px 0 var(--line),0 30px 50px -30px rgba(18,19,22,.35)}
+.tile .art{position:relative;background:var(--bg);border-radius:14px;aspect-ratio:1.05;overflow:hidden}
+.tile .art .mk{position:absolute}
+.tile .flag{position:absolute;left:12px;top:12px;z-index:3;background:var(--ink);color:var(--lime);border-radius:99px;padding:5px 10px;font:600 11px var(--fm);letter-spacing:.06em}
+.tile .row{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:0 6px}
+.tile .nm{font:800 clamp(19px,2vw,24px)/1.1 var(--fd);letter-spacing:-.03em}
+.tile .pr{font:600 20px var(--fm)}
+.tile .ds{color:var(--muted);font-size:15px;padding:0 6px;min-height:3em}
+.tile .btn{margin:0 6px}
+@media (max-width:900px){.tiles{grid-template-columns:minmax(0,1fr)}.tile .art{aspect-ratio:1.5}}
+/* composed art inside tiles */
+.tile .art .fit{position:absolute}
+.c-deck .a1{width:62%;left:12%;top:20%;transform:rotate(-7deg)}
+.c-deck .a2{width:62%;left:20%;top:14%;transform:rotate(3deg)}
+.c-deck .a3{width:30%;right:7%;top:36%;transform:rotate(8deg)}
+.c-pack .a1{width:30%;left:6%;top:22%;transform:rotate(-7deg)}
+.c-pack .a2{width:30%;left:30%;top:12%;transform:rotate(2deg)}
+.c-pack .a3{width:46%;left:10%;top:58%;transform:rotate(-3deg)}
+.c-pack .a4{width:24%;right:8%;top:16%;transform:rotate(7deg)}
+.c-five .num{position:absolute;right:7%;bottom:5%;font:800 clamp(48px,6vw,88px)/1 var(--fd);letter-spacing:-.06em;color:var(--ink)}
+.c-five .num small{font-size:.24em;letter-spacing:.02em;margin-left:6px}
+
+/* ---------- 6. pricing ---------- */
+.pricing{padding:clamp(60px,8vw,110px) 0;border-top:1px solid var(--line)}
+.ptable{margin-top:32px;border-top:2px solid var(--ink)}
+.prow{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,2fr) auto;gap:20px;align-items:center;padding:20px 0;border-bottom:1px solid var(--line)}
+.prow .n{font:800 clamp(18px,2vw,22px)/1.2 var(--fd);letter-spacing:-.02em}
+.prow .d{color:var(--muted);font-size:15.5px}
+.prow .p{font:600 22px var(--fm);text-align:right}
+.prow .p small{display:block;font-size:12px;color:var(--muted);font-weight:500}
+@media (max-width:720px){.prow{grid-template-columns:minmax(0,1fr) auto}.prow .d{grid-column:1/-1;grid-row:2}}
+.access{margin-top:28px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.access div{background:var(--card);border-radius:16px;padding:20px;box-shadow:0 1px 0 var(--line)}
+.access .mono{color:var(--muted);font-size:11px}
+.access strong{display:block;font:800 26px/1.1 var(--fd);margin:8px 0 6px;letter-spacing:-.03em}
+.access p{font-size:15px;color:var(--ink2)}
+@media (max-width:820px){.access{grid-template-columns:minmax(0,1fr)}}
+
+/* ---------- 7. story ---------- */
+.story{padding:clamp(70px,10vw,130px) 0;background:var(--lime)}
+.story .grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:clamp(24px,5vw,80px);align-items:start}
+.story h2{font-size:clamp(34px,6vw,84px)}
+.story p{font-size:clamp(17px,1.7vw,20px);line-height:1.55;margin-bottom:16px;max-width:52ch}
+.story .ai{margin-top:26px;background:var(--ink);color:#fff;border-radius:18px;padding:20px 22px}
+.story .ai .mono{color:var(--lime);font-size:11px}
+.story .ai p{color:rgba(255,255,255,.85);font-size:16px;margin:8px 0 0}
+@media (max-width:860px){.story .grid{grid-template-columns:minmax(0,1fr)}}
+
+/* ---------- 8. faq ---------- */
+.faq{padding:clamp(70px,10vw,130px) 0}
+.faq .grid{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.4fr);gap:clamp(24px,5vw,80px)}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;gap:20px;padding:20px 0;font-weight:600;font-size:clamp(17px,1.7vw,19px)}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:after{content:"+";font:500 24px/1 var(--fm);transition:transform .25s}
+.faq details[open] summary:after{transform:rotate(45deg)}
+.faq details p{padding:0 0 22px;color:var(--ink2);max-width:62ch}
+@media (max-width:860px){.faq .grid{grid-template-columns:minmax(0,1fr)}}
+
+/* ---------- footer ---------- */
+footer{background:var(--ink);color:rgba(255,255,255,.75);padding:clamp(56px,8vw,96px) 0 calc(36px + env(safe-area-inset-bottom))}
+footer .big{font:800 clamp(44px,11vw,168px)/.86 var(--fd);letter-spacing:-.06em;color:var(--lime);margin-bottom:36px}
+footer .cols{display:flex;gap:30px 60px;flex-wrap:wrap;justify-content:space-between;align-items:flex-end}
+footer a{color:#fff;text-decoration:none}
+footer a:hover{text-decoration:underline}
+footer .links{display:flex;gap:22px;flex-wrap:wrap}
+footer .fine{margin-top:36px;padding-top:20px;border-top:1px solid rgba(255,255,255,.14);font-size:13px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.ela{display:inline-flex;align-items:center;gap:8px;color:rgba(255,255,255,.6)}
+.ela b{color:#fff}
+
+/* ---------- mobile buy bar ---------- */
+.mbar{display:none}
+@media (max-width:760px){
+  .mbar{display:flex;position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:60;gap:8px;transform:translateY(140%);transition:transform .35s}
+  .mbar.on{transform:none}
+  .mbar a{flex:1;height:52px;box-shadow:0 10px 30px rgba(18,19,22,.25)}
+  footer{padding-bottom:calc(96px + env(safe-area-inset-bottom))}
+}
+
+/* ---------- overlay pages (package pages, order form, terms, privacy, log in) ---------- */
+.page{position:fixed;inset:0;z-index:80;background:var(--bg);overflow-y:auto;overscroll-behavior:contain;transform:translateY(24px);opacity:0;visibility:hidden;transition:opacity .3s,transform .3s,visibility 0s .3s}
+.page.on{transform:none;opacity:1;visibility:visible;transition:opacity .3s,transform .3s}
+.page .bar{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:16px;padding:14px var(--pad);background:rgba(241,239,233,.9);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.page .bar .close{margin-left:auto;font-weight:600;display:flex;align-items:center;gap:8px}
+.page .inner{max-width:var(--maxw);margin:0 auto;padding:clamp(24px,4vw,48px) var(--pad) 80px}
+.pdp{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:clamp(24px,4vw,64px);align-items:start}
+.gal .main{background:#fff;border-radius:22px;aspect-ratio:1.1;display:grid;place-items:center;padding:9%;box-shadow:0 1px 0 var(--line);position:relative;overflow:hidden}
+.gal .main .fit{width:78%}
+.gal .main .fit.w-qs{width:36%}
+.gal .main .fit.w-one,.gal .main .fit.w-guide{width:50%}
+.gal .main .cap{position:absolute;left:18px;bottom:14px;color:var(--muted)}
+.gal .thumbs{display:flex;gap:10px;margin-top:12px;overflow-x:auto;padding-bottom:4px}
+.gal .thumbs button{flex:0 0 84px;height:84px;border-radius:14px;background:#fff;box-shadow:0 1px 0 var(--line);display:grid;place-items:center;padding:12px;overflow:hidden;opacity:.6;transition:opacity .2s}
+.gal .thumbs button.on{opacity:1;box-shadow:0 0 0 2px var(--ink)}
+.gal .thumbs .fit{width:100%;pointer-events:none}
+.gal .thumbs .fit.w-qs{width:46%}
+.gal .thumbs .fit.w-one,.gal .thumbs .fit.w-guide{width:66%}
+.buy{position:sticky;top:90px}
+.buy h1{font:800 clamp(32px,4.4vw,56px)/1 var(--fd);letter-spacing:-.04em;margin:10px 0 12px}
+.buy .price{font:600 30px var(--fm);margin:18px 0 6px;display:flex;align-items:baseline;gap:12px}
+.buy .price s{font-size:18px;color:var(--muted)}
+.checks{list-style:none;margin:18px 0;display:flex;flex-direction:column;gap:10px}
+.checks li{display:grid;grid-template-columns:24px 1fr;gap:10px;align-items:start}
+.checks li:before{content:"";width:22px;height:22px;border-radius:50%;background:var(--lime) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 12.5l4 4 8-9' fill='none' stroke='%23121316' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/16px no-repeat;margin-top:1px}
+.rush{display:flex;align-items:center;gap:14px;background:#fff;border-radius:16px;padding:14px 16px;box-shadow:0 1px 0 var(--line);margin:18px 0;cursor:pointer}
+.rush input{position:absolute;opacity:0;pointer-events:none}
+.sw{flex:0 0 46px;height:28px;border-radius:99px;background:#d6d3cb;position:relative;transition:background .2s}
+.sw:after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:transform .2s}
+.rush input:checked+.sw{background:var(--ink)}
+.rush input:checked+.sw:after{transform:translateX(18px);background:var(--lime)}
+.rush input:focus-visible+.sw{outline:3px solid var(--blue);outline-offset:3px}
+.rush b{display:block}
+.rush small{color:var(--muted);font-size:14px}
+.deliv{color:var(--muted);font-size:14.5px;margin:6px 0 18px}
+.buy .btn{width:100%;height:58px;font-size:17px}
+.related{margin-top:clamp(48px,6vw,80px)}
+.related .tiles{margin-top:20px}
+@media (max-width:900px){.pdp{grid-template-columns:minmax(0,1fr)}.buy{position:static}}
+.form{max-width:640px;margin:0 auto}
+.form h1{font:800 clamp(28px,4vw,44px)/1.05 var(--fd);letter-spacing:-.04em;margin:8px 0 10px}
+.form .sum{display:flex;justify-content:space-between;gap:12px;background:#fff;border-radius:16px;padding:16px 18px;box-shadow:0 1px 0 var(--line);margin:18px 0 26px;font-weight:600}
+.form .sum span:last-child{font-family:var(--fm)}
+.f{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.f label{font-weight:600;font-size:15px}
+.f small{color:var(--muted);font-size:13.5px}
+.f input,.f textarea,.f select{font:inherit;font-size:16px;padding:13px 14px;border-radius:12px;border:1.5px solid var(--line);background:#fff;color:var(--ink);width:100%}
+.f input:focus,.f textarea:focus{outline:none;border-color:var(--ink)}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:520px){.f2{grid-template-columns:minmax(0,1fr)}}
+.own{display:grid;grid-template-columns:22px 1fr;gap:10px;align-items:start;margin:8px 0 22px;font-size:15px}
+.own input{width:20px;height:20px;margin-top:2px;accent-color:var(--ink)}
+.note-box{background:#fff;border-left:4px solid var(--lime2);border-radius:10px;padding:14px 16px;font-size:14.5px;color:var(--ink2);margin:18px 0}
+.err{color:var(--red);font-size:14px;margin-top:-8px;margin-bottom:12px;min-height:1em}
+.legal{max-width:760px;margin:0 auto}
+.legal .draft{background:#fff3bf;border:1.5px solid #f2d36b;border-radius:12px;padding:12px 16px;font-weight:600;margin-bottom:24px}
+.legal h1{font:800 clamp(30px,4vw,48px)/1 var(--fd);letter-spacing:-.04em;margin-bottom:24px}
+.legal h3{margin:26px 0 8px;font-size:18px}
+.legal p,.legal li{color:var(--ink2);font-size:16px}
+.legal ul{padding-left:20px;display:flex;flex-direction:column;gap:6px}
+
+@media (prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;animation:none!important}.drop{height:auto}.stage{position:relative}}
+</style>
+</head>
+<body>
+<header class="top" id="top">
+  <a class="logo" href="#" aria-label="Med2Med home"><i>M2</i>Med2Med</a>
+  <nav class="nav" aria-label="Main">
+    <a href="#inside">What you get</a>
+    <a href="#how">How it works</a>
+    <a href="#sample">Try a sample</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#faq">FAQ</a>
+    <a class="login" href="#/login">Log in</a>
+    <a class="btn sm" href="#packs">Buy a pack</a>
+  </nav>
+</header>
+
+<main>
+<!-- 1. the drop: 3D unboxing -->
+<section class="drop" id="drop" aria-label="Med2Med study pack">
+  <div class="stage" id="stage">
+    <div class="hl">
+      <div>
+        <p class="kick mono">Built by a med student, for med students</p>
+        <h1>Your lecture in.</h1>
+      </div>
+      <h1 class="l2" id="l2" aria-label="A full study pack out.">A full study pack out.</h1>
+    </div>
+    <canvas id="gl" aria-hidden="true"></canvas>
+    <div class="fallback" aria-hidden="true" id="fb"></div>
+    <div class="tag" data-for="deck"><b></b><span>Anki deck<em>.APKG</em></span></div>
+    <div class="tag" data-for="onepager"><b></b><span>One-page summary<em>PDF</em></span></div>
+    <div class="tag" data-for="guide"><b></b><span>Slide-by-slide guide<em>PDF</em></span></div>
+    <div class="tag" data-for="phone"><b></b><span>~20 practice questions<em>STUDY SITE</em></span></div>
+    <div class="cue mono" id="cue"><span class="lidico" aria-hidden="true"></span>Scroll to open the pack</div>
+    <nav class="buybar" id="buybar" aria-label="Packages"></nav>
+  </div>
+</section>
+
+<!-- 2. what's in the pack -->
+<section class="inside" id="inside">
+  <div class="wrap">
+    <div class="head">
+      <div>
+        <p class="mono" style="color:var(--muted);margin-bottom:12px">What's in the pack</p>
+        <h2>Four things.<br>All from your slides.</h2>
+      </div>
+      <p class="sub">Send the lecture your exam is actually written from. You get back everything you need to learn it, made from that lecture and nothing else.</p>
+    </div>
+    <div class="shelf" id="shelf"></div>
+  </div>
+</section>
+
+<!-- 3. study OS: how it works -->
+<section class="os" id="how" aria-label="How it works">
+  <div class="wrap grid">
+    <div>
+      <p class="mono" style="color:var(--lime);margin-bottom:14px">How it works</p>
+      <h2>Three notifications.<br>That's the whole process.</h2>
+      <p class="sub" style="margin-top:18px">Upload your slides. We build your pack. You study in your own private site, on your phone or laptop.</p>
+      <button class="replay" id="replay" type="button"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>Play it again</button>
+    </div>
+    <div class="phone" id="phone">
+      <div class="screen" id="screen">
+        <div class="island"></div>
+        <div class="lock">
+          <div class="clock">9:41</div>
+          <div class="date">Monday</div>
+          <div class="notes" id="notes"></div>
+        </div>
+        <div class="home" aria-label="Study site apps">
+          <div class="apps" id="apps"></div>
+          <div class="w"><span class="mono">Carbohydrate Metabolism · Sample</span><strong>7 of 20 done</strong><div class="bar"><i></i></div></div>
+        </div>
+        <div class="appview" id="appview" role="dialog" aria-modal="false" aria-labelledby="avt">
+          <button class="x" type="button" id="avx">‹ Home</button>
+          <h4 id="avt"></h4><p id="avp"></p><a class="btn sm go" id="avgo" href="#sample">Try it below</a>
+        </div>
+      </div>
+    </div>
+    <div class="facts">
+      <div><span class="mono">What to send</span><p>PDF or PowerPoint, up to 100 MB per lecture. A recording or transcript is optional and makes the emphasis sharper.</p></div>
+      <div><span class="mono">AI-assisted, checked by Ali</span><p>An AI-assisted system drafts each pack from your slides. Ali checks it against them before it's delivered.</p></div>
+      <div><span class="mono">10 lectures a week</span><p>We cap each week so every pack gets checked. If the week is full, you'll see the next start date before you pay.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. exam sheet: live sample -->
+<section class="sample" id="sample" aria-label="Sample practice questions">
+  <div class="wrap">
+    <div class="head">
+      <div>
+        <p class="mono" style="color:var(--muted);margin-bottom:12px">Try it · no login</p>
+        <h2>This is what your<br>lecture becomes.</h2>
+      </div>
+      <p class="sub">A real sample from the study site in Tutor mode: answer, then see why every option is right or wrong, and which slide it came from.</p>
+    </div>
+    <div class="sheet" id="sheet" tabindex="-1">
+      <div class="wm" aria-hidden="true" id="wm"></div>
+      <div class="sh-top">
+        <span class="ttl">Carbohydrate Metabolism Basics</span>
+        <span class="mode mono">Tutor</span>
+        <div class="navq" id="navq" aria-label="Questions"></div>
+        <span class="tmr" id="tmr" aria-label="Time">0:00</span>
+      </div>
+      <div class="qbody" id="qbody" aria-live="polite"></div>
+      <div class="sh-foot">
+        <span class="keys"><span class="kb">1</span>–<span class="kb">5</span> answer · <span class="kb">F</span> flag · <span class="kb">←</span><span class="kb">→</span> move · right-click to cross out</span>
+        <button class="btn sm ghost" id="flag" type="button">Flag</button>
+        <button class="btn sm ghost" id="prev" type="button">Previous</button>
+        <button class="btn sm" id="next" type="button">Next</button>
+      </div>
+      <div class="score" id="score"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. packages -->
+<section class="packs" id="packs" aria-label="Packages">
+  <div class="wrap">
+    <div class="head">
+      <div>
+        <p class="mono" style="color:var(--muted);margin-bottom:12px">The packs</p>
+        <h2>Pick your pack.</h2>
+      </div>
+      <p class="sub">One-time prices. No account needed until checkout. Need it fast? Add rush delivery on any pack.</p>
+    </div>
+    <div class="tiles" id="tiles"></div>
+  </div>
+</section>
+
+<!-- 6. pricing -->
+<section class="pricing" id="pricing">
+  <div class="wrap">
+    <p class="mono" style="color:var(--muted);margin-bottom:12px">Pricing</p>
+    <h2>Every price, on one page.</h2>
+    <div class="ptable" id="ptable"></div>
+    <div class="access">
+      <div><span class="mono">With every pack</span><strong>30 days</strong><p>of access to your private study site, included.</p></div>
+      <div><span class="mono">After that</span><strong>$9/month</strong><p>to keep the practice questions open. Your deck and PDFs are yours forever.</p></div>
+      <div><span class="mono">Exam bundles</span><strong>10+ lectures</strong><p>Got a whole block? <a href="#" id="bundleLink">Contact us for exam bundles.</a></p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 7. story -->
+<section class="story" id="story">
+  <div class="wrap grid">
+    <h2>Built by a med student, for med students.</h2>
+    <div>
+      <p>Med2Med is run by Ali, a med student. When your exams are written by your own faculty, the big commercial question banks don't line up with your lectures. So he started building study packs straight from the slides instead.</p>
+      <p>It's open to any student whose exams come from their own lectures: preclinical blocks, PA, nursing, pharmacy, dental and undergrad science.</p>
+      <div class="ai">
+        <span class="mono">Straight answer on AI</span>
+        <p>Packs are made with an AI-assisted system and checked by Ali against your slides before delivery. If you'd rather no AI be used at all, contact us before you order.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 8. faq -->
+<section class="faq" id="faq">
+  <div class="wrap grid">
+    <div>
+      <p class="mono" style="color:var(--muted);margin-bottom:12px">FAQ</p>
+      <h2>Questions.</h2>
+      <p class="sub" style="margin-top:16px">Something else? <a href="#" class="mailto">Email us</a>.</p>
+    </div>
+    <div id="faqlist"></div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="big">Med2Med</div>
+    <div class="cols">
+      <div>
+        <p style="color:#fff;font-weight:600;margin-bottom:6px">Your lecture in, a full study pack out.</p>
+        <a href="#" class="mailto" id="footmail"></a>
+      </div>
+      <div class="links">
+        <a href="#pricing">Pricing</a>
+        <a href="#/terms">Terms</a>
+        <a href="#/privacy">Privacy</a>
+        <a href="#" class="mailto">Contact</a>
+        <a href="#/login">Log in</a>
+      </div>
+    </div>
+    <div class="fine">
+      <span>© <span id="yr"></span> Med2Med. Study materials only. Not affiliated with any school.</span>
+      <a class="ela" href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener">Site by <b>ElaSystems</b></a>
+    </div>
+  </div>
+</footer>
+
+<div class="mbar" id="mbar"><a class="btn" href="#packs">Buy a pack · from $10</a><a class="btn lime" href="#sample" style="flex:0 0 auto;padding:0 18px">Try it</a></div>
+
+<!-- overlay page (package pages, order form, legal, log in) -->
+<div class="page" id="page" role="dialog" aria-modal="true" aria-label="Med2Med">
+  <div class="bar"><a class="logo" href="#" aria-label="Back to Med2Med"><i>M2</i>Med2Med</a><button class="close" id="pclose" type="button">Close <span aria-hidden="true">✕</span></button></div>
+  <div class="inner" id="pinner"></div>
+</div>
+
+<script>
+/* ===================== CONFIG: everything the page renders ===================== */
+const CONFIG = {
+  brand: 'Med2Med',
+  email: 'aloush062004@gmail.com',
+  live: false, // concept build: Buy sends the order by email until Stripe is connected
+  packages: [
+    { id: 'deck', name: 'Deck', price: 10, lectures: 1, unit: '1 lecture', flag: null,
+      blurb: 'The quick one. Your lecture as an Anki deck plus a one-page summary.',
+      includes: ['Anki deck (.apkg) made from your slides', 'One-page summary (PDF)', 'Works with Anki desktop, AnkiMobile and AnkiDroid', 'One free revision within 7 days'],
+      rush: { label: '24-hour delivery', price: 10 }, gallery: ['anki', 'one'], art: 'deck' },
+    { id: 'study-pack', name: 'Study Pack', price: 15, lectures: 1, unit: '1 lecture', flag: 'Most complete',
+      blurb: 'Everything for one lecture: deck, summary, slide-by-slide guide and practice questions.',
+      includes: ['Anki deck (.apkg)', 'One-page summary (PDF)', 'Slide-by-slide study guide (PDF)', 'About 20 practice questions in your private study site', '30 days of study-site access included', 'One free revision within 7 days'],
+      rush: { label: '24-hour delivery', price: 10 }, gallery: ['qs', 'anki', 'one', 'guide', 'site'], art: 'pack' },
+    { id: 'five-pack', name: '5-Lecture Pack', price: 70, lectures: 5, unit: '5 lectures', flag: 'Exam week', compare: 75,
+      blurb: 'Five full Study Packs for the lectures your next exam covers.',
+      includes: ['5 full Study Packs (deck, summary, guide, ~20 questions each)', 'All five lectures in one study site, test across them', '30 days of study-site access included', 'One free revision within 7 days'],
+      rush: { label: '2-day delivery', price: 30 }, gallery: ['site', 'qs', 'guide', 'anki', 'one'], art: 'five' },
+  ],
+  subscription: 9,
+  weeklyCapacity: 10,
+  items: [
+    { key: 'anki', name: 'Anki deck', file: '.apkg', text: 'Cards made from your slides. Import into Anki desktop, AnkiMobile or AnkiDroid.' },
+    { key: 'one', name: 'One-page summary', file: 'PDF', text: 'The whole lecture on one page, with the high-yield lines highlighted.' },
+    { key: 'guide', name: 'Study guide', file: 'PDF', text: 'Slide by slide: what each slide is really saying, in plain words.' },
+    { key: 'qs', name: 'Practice questions', file: 'Study site', text: 'About 20 questions written from your lecture, with an explanation for every option.' },
+  ],
+  apps: [
+    { k: 'lib', n: 'Library', hot: false, t: 'Library', d: 'A card for every lecture in your account: question count, how much you\'ve answered and how much you got right. Open one for its objectives and downloads.', go: null },
+    { k: 'test', n: 'Create test', hot: true, t: 'Create test', d: 'Tutor mode (answer after each question) or Exam mode (results at the end). Pick unused, incorrect, flagged or all questions, choose lectures, count and timer.', go: '#sample' },
+    { k: 'rev', n: 'To review', hot: false, t: 'To review', d: 'Every question you miss points back to the slide it came from. Mark the slide reviewed. Miss it again and it comes back.', go: null },
+    { k: 'perf', n: 'Performance', hot: false, t: 'Performance', d: 'Your score over time, by lecture and by type of question, plus every past test.', go: null },
+    { k: 'dl', n: 'Downloads', hot: false, t: 'Downloads', d: 'Your deck, one-page summary and study guide for every lecture. These stay yours, even if you stop the subscription.', go: null },
+    { k: 'ord', n: 'Orders', hot: false, t: 'Orders', d: 'Each lecture you ordered and where it is: queued, in progress or delivered, with the expected date.', go: '#packs' },
+  ],
+  notes: [
+    { t: 'Lecture received', when: '9:12 PM', d: 'Glycolysis-lecture.pdf · We\'ll start building your pack.' },
+    { t: 'Ali is checking your pack', when: '10:40 AM', d: 'Every card and question is checked against your slides.' },
+    { t: 'Your Study Pack is ready ✓', when: '6:05 PM', d: 'Deck, summary, study guide and 20 questions. Tap to study.' },
+  ],
+  // sample pack (made-up content from the build brief, safe to show)
+  sample: {
+    title: 'Carbohydrate Metabolism Basics',
+    questions: [
+      { id: 'Q01', stem: 'Which enzyme catalyzes the committed, rate-limiting step of glycolysis?', options: ['Hexokinase', 'Phosphofructokinase-1', 'Pyruvate kinase', 'Glyceraldehyde-3-phosphate dehydrogenase', 'Aldolase'], answer: 1, explanation: 'Phosphofructokinase-1 converts fructose 6-phosphate to fructose 1,6-bisphosphate, the committed and main regulated step of glycolysis.', why: ['Traps glucose in the cell but is not the committed step.', 'Correct: the committed, rate-limiting step.', 'Regulated, but it acts at the last step.', 'Not a major regulatory enzyme.', 'Splits fructose 1,6-bisphosphate; not regulated.'], difficulty: 'easy', level: 'foundational', slide: 'slide 3', claim: 'PFK-1 catalyzes the committed step.' },
+      { id: 'Q02', stem: 'Which enzyme is the main regulated step that bypasses phosphofructokinase-1 in gluconeogenesis?', options: ['Glucose-6-phosphatase', 'Pyruvate carboxylase', 'Fructose-1,6-bisphosphatase', 'PEP carboxykinase', 'Hexokinase'], answer: 2, explanation: 'Fructose-1,6-bisphosphatase reverses the PFK-1 reaction and is the key regulated step of gluconeogenesis.', why: ['Bypasses hexokinase, not PFK-1.', 'Starts the pyruvate kinase bypass.', 'Correct: reverses the PFK-1 step.', 'Part of the pyruvate kinase bypass.', 'A glycolytic enzyme.'], difficulty: 'medium', level: 'application', slide: 'slide 5', claim: 'F-1,6-BPase bypasses PFK-1.' },
+      { id: 'Q03', stem: 'A fasting person\'s liver is making glucose. Which molecule most directly activates pyruvate carboxylase in this state?', options: ['Insulin', 'Acetyl-CoA', 'Fructose 2,6-bisphosphate', 'AMP', 'Citrate'], answer: 1, explanation: 'Acetyl-CoA from fatty acid oxidation allosterically activates pyruvate carboxylase, pushing pyruvate toward gluconeogenesis during fasting.', why: ['A hormone that opposes gluconeogenesis.', 'Correct: the allosteric activator.', 'Activates PFK-1, favoring glycolysis.', 'Signals low energy; favors glycolysis.', 'Inhibits PFK-1; not the activator here.'], difficulty: 'medium', level: 'integration', slide: 'slide 6', claim: 'Acetyl-CoA activates pyruvate carboxylase.' },
+    ],
+  },
+  faq: [
+    ['Do I need the lecture recording?', 'No. Slides alone work. A recording or transcript makes the emphasis sharper.'],
+    ['Which Anki apps does it work with?', 'Any that imports .apkg files: Anki desktop, AnkiMobile and AnkiDroid.'],
+    ['How do I use the practice questions?', 'Log in on any phone or computer. Your progress is saved to your account.'],
+    ['Do you use AI?', 'Yes. An AI-assisted system drafts each pack from your slides, and Ali checks it against them before delivery. If you want no AI used, contact us before ordering.'],
+    ['Can you make a deck from an MCAT or board prep book?', 'We build from your own class materials only. We don\'t copy commercial prep books or question banks.'],
+    ['Will you do my assignments or quizzes?', 'No. Study materials only.'],
+    ['What if a card is wrong?', 'One free revision within 7 days for anything that doesn\'t match your slides.'],
+    ['What happens after 30 days?', 'Your deck and PDFs are yours forever. The practice-question site stays open for $9/month, and nothing is lost if you pause and come back within 60 days.'],
+    ['Are my files private?', 'Yes. They are used only for your order, never shared or resold, and deleted 30 days after delivery.'],
+  ],
+};
+
+/* ===================== helpers ===================== */
+const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const pkg = id => CONFIG.packages.find(p => p.id === id);
+const mail = (subject, body) => `mailto:${CONFIG.email}?subject=${encodeURIComponent(subject)}${body ? '&body=' + encodeURIComponent(body) : ''}`;
+$('#yr').textContent = new Date().getFullYear();
+$$('.mailto').forEach(a => a.href = mail('Med2Med question'));
+$('#footmail').textContent = CONFIG.email;
+$('#bundleLink').href = mail('Exam bundle', 'Hi! I have about __ lectures for my next exam (course: __, exam date: __).');
+
+/* mockups: art-directed placeholders (sample content) until real screenshots exist.
+   Each is drawn at a fixed design width and scaled to its box by fitAll(). */
+const fitW = { anki: 380, one: 300, guide: 300, qs: 230, site: 560 };
+const wrapMk = (k, html, cls = '') => `<div class="fit w-${k} ${cls}" data-w="${fitW[k]}">${html}</div>`;
+const MK = {
+  anki: (c) => wrapMk('anki', `<div class="mk mk-anki"><div class="m"><span>Glycolysis · card 14</span><b>ANKI</b></div><p>Which enzyme catalyzes the committed step of glycolysis?</p><div class="sa">Show answer</div></div>`, c),
+  one: (c) => wrapMk('one', `<div class="mk mk-one"><div class="hd">ONE-PAGE SUMMARY</div><h4>Carbohydrate Metabolism Basics</h4><div class="g"><div><strong>Regulated steps</strong><mark>PFK-1 = committed step</mark><i class="ln"></i><i class="ln s"></i><i class="ln"></i></div><div><strong>Bypasses</strong><mark>F-1,6-BPase reverses PFK-1</mark><i class="ln"></i><i class="ln s"></i></div><div><strong>Fasting liver</strong><mark>Acetyl-CoA → pyruvate carboxylase</mark><i class="ln"></i><i class="ln s"></i></div><div><strong>High yield</strong><mark>F-2,6-BP turns PFK-1 on</mark><i class="ln"></i><i class="ln s"></i></div></div></div>`, c),
+  guide: (c) => wrapMk('guide', `<div class="mk mk-guide"><div class="gh">STUDY GUIDE<span>SLIDE BY SLIDE · CARB METABOLISM</span></div>${[3, 5, 6].map((n, i) => `<div class="r"><div class="sl">SLIDE ${n}<i></i><span class="ln"></span><span class="ln s"></span></div><p>${['<b>PFK-1</b> is the committed step. Insulin and F-2,6-BP turn it on.', '<b>F-1,6-BPase</b> undoes PFK-1 when the liver makes glucose.', 'Fasting: <b>acetyl-CoA</b> switches pyruvate carboxylase on.'][i]}</p></div>`).join('')}</div>`, c),
+  qs: (c) => wrapMk('qs', `<div class="mk mk-qs"><span class="m">TUTOR · Q1 OF 20</span><p>Which enzyme catalyzes the committed, rate-limiting step of glycolysis?</p>${['Hexokinase', 'Phosphofructokinase-1', 'Pyruvate kinase', 'G3P dehydrogenase', 'Aldolase'].map((t, i) => `<div class="o ${i === 1 ? 'ok' : i === 0 ? 'no' : ''}"><i>${'ABCDE'[i]}</i>${t}</div>`).join('')}<div class="ex">PFK-1 is the committed step. From slide 3.</div><span class="mk-cap">SAMPLE</span></div>`, c),
+  site: (c) => wrapMk('site', `<div class="mk mk-site"><nav><b>MED2MED</b><span class="on">Library</span><span>Create test</span><span>To review</span><span>Performance</span><span>Downloads</span><span>Orders</span></nav><div class="cards">${[['Lecture 7', 'Glycolysis', 80, 72], ['Lecture 8', 'Gluconeogenesis', 55, 81], ['Lecture 9', 'Glycogen', 30, 64], ['Lecture 10', 'Pentose phosphate', 10, 90]].map(([a, b, x, y]) => `<div>${a}<strong>${b}</strong>Answered<div class="bar"><i style="width:${x}%"></i></div>Correct<div class="bar g"><i style="width:${y}%"></i></div></div>`).join('')}</div><span class="mk-cap">SAMPLE</span></div>`, c),
+};
+const fitRO = new ResizeObserver(es => es.forEach(e => fitOne(e.target)));
+function fitOne(f) { const m = f.firstElementChild; if (!m) return; const s = f.clientWidth / +f.dataset.w; m.style.transform = `scale(${s})`; f.style.height = m.offsetHeight * s + 'px'; }
+function fitAll(root = document) { root.querySelectorAll('.fit').forEach(f => { if (!f.dataset.on) { f.dataset.on = 1; fitRO.observe(f); } fitOne(f); }); }
+const MKNAME = { anki: 'Anki deck', one: 'One-page summary', guide: 'Study guide', qs: 'Practice question (Tutor mode)', site: 'Your study site: Library' };
+const ART = {
+  deck: () => `<div class="art c-deck">${MK.anki('a1')}${MK.anki('a2')}${MK.one('a3')}</div>`,
+  pack: () => `<div class="art c-pack">${MK.one('a1')}${MK.guide('a2')}${MK.anki('a3')}${MK.qs('a4')}</div>`,
+  five: () => `<div class="art c-five">${[0, 1, 2, 3, 4].map(i => MK.guide('').replace('class="fit', `style="width:26%;left:${5 + i * 10}%;top:${10 + i * 4}%;transform:rotate(${-9 + i * 4}deg)" class="fit`)).join('')}<div class="num">×5<small>LECTURES</small></div></div>`,
+};
+
+/* ===================== 1. drop: 3D unboxing ===================== */
+const stage = $('#stage'), drop = $('#drop'), l2 = $('#l2'), cue = $('#cue'), buybar = $('#buybar');
+buybar.innerHTML = CONFIG.packages.map((p, i) => `<a href="#/${p.id}" class="${i === 1 ? 'hot' : ''} ${i === 2 ? 'x5' : ''}">${esc(p.name)} <i>$${p.price}</i></a>`).join('');
+$('#fb').innerHTML = `<div style="width:min(26vw,240px)">${MK.anki()}</div><div style="width:min(18vw,170px)">${MK.one()}</div><div style="width:min(18vw,170px)">${MK.guide()}</div><div style="width:min(13vw,120px)">${MK.qs()}</div>`; fitAll($('#fb'));
+let unbox = null;
+function dropProgress() {
+  if (RM) return 1;
+  const r = drop.getBoundingClientRect(); const span = drop.offsetHeight - innerHeight;
+  return Math.max(0, Math.min(1, -r.top / (span * .82)));
+}
+const tags = $$('.tag');
+function paintDrop() {
+  const p = dropProgress();
+  l2.style.setProperty('--fill', Math.round(Math.max(0, Math.min(1, (p - .55) / .4)) * 100) + '%');
+  cue.style.opacity = p > .04 ? 0 : 1;
+  buybar.classList.toggle('on', p > .9);
+  if (unbox) {
+    unbox.setProgress(p);
+  }
+}
+function tagLoop() {
+  if (unbox) {
+    const A = unbox.anchors(), narrow = innerWidth < 640;
+    for (const a of A) {
+      const el = tags.find(t => t.dataset.for === a.name); if (!el) continue;
+      const left = a.name === 'deck' || a.name === 'onepager';
+      const w = el.offsetWidth;
+      let x = left ? a.x - w + 6 : a.x - 6, y = a.y - 34;
+      if (narrow) { x = Math.max(8, Math.min(innerWidth - w - 8, a.x - w / 2)); y = a.y - (a.name === 'onepager' ? 74 : 44); }
+      el.style.transform = `translate(${x}px,${y}px)`; el.style.flexDirection = left && !narrow ? 'row-reverse' : 'row';
+      el.style.opacity = a.t;
+    }
+  }
+  requestAnimationFrame(tagLoop);
+}
+addEventListener('scroll', paintDrop, { passive: true });
+addEventListener('resize', paintDrop);
+(async () => {
+  try {
+    const t0 = performance.now();
+    const { mountUnbox } = await import('./assets/unbox.js');
+    unbox = await mountUnbox($('#gl'), { assets: 'assets/' });
+    window.__unbox = unbox;
+    stage.classList.add('gl');
+    const p = dropProgress(); unbox.setProgress(p, true);
+    // teach it in-world: the lid lifts a little and drops back
+    if (!RM && p < .02) { setTimeout(() => unbox.setProgress(.075), 500); setTimeout(() => { if (dropProgress() < .02) unbox.setProgress(0); }, 1300); }
+    requestAnimationFrame(tagLoop);
+  } catch (e) {
+    console.warn('3D unavailable', e); stage.classList.add('no3d'); cue.style.display = 'none';
+  }
+  paintDrop();
+})();
+
+/* header + mobile bar */
+const hdr = $('#top'), mbar = $('#mbar');
+function chrome() { hdr.classList.toggle('solid', scrollY > 40); mbar.classList.toggle('on', scrollY > innerHeight * .9); }
+addEventListener('scroll', chrome, { passive: true }); chrome();
+
+/* ===================== 2. shelf ===================== */
+$('#shelf').innerHTML = CONFIG.items.map((it, i) => `<article class="item"><div class="art"><div style="width:100%;display:grid;place-items:center">${MK[it.key]()}</div></div><div><span class="mono no">0${i + 1} · ${esc(it.file)}</span><h3 style="margin:6px 0 6px">${esc(it.name)}</h3><p>${esc(it.text)}</p></div></article>`).join('');
+
+/* ===================== 3. study OS ===================== */
+const ICON = {
+  lib: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="5" height="16" rx="1"/><rect x="10" y="4" width="5" height="16" rx="1"/><path d="M17.5 5l3 14"/></svg>',
+  test: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="6" cy="7" r="2"/><circle cx="6" cy="17" r="2"/><path d="M11 7h9M11 17h9"/><path d="M4.8 7l.9.9 1.6-1.8"/></svg>',
+  rev: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="12" rx="2"/><path d="M8 21h8M12 17v4"/><path d="M8 11l2.5 2.5L16 8"/></svg>',
+  perf: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 20h18"/><path d="M5 16l4-5 4 3 6-8"/></svg>',
+  dl: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 4v11M7 10l5 5 5-5"/><path d="M4 20h16"/></svg>',
+  ord: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16l-1.5 12h-13z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>',
+};
+$('#notes').innerHTML = CONFIG.notes.map(n => `<div class="note"><i>M2</i><div><div class="t">${esc(n.t)}<span>${esc(n.when)}</span></div><p>${esc(n.d)}</p></div></div>`).join('');
+$('#apps').innerHTML = CONFIG.apps.map(a => `<button class="app ${a.hot ? 'hot' : ''}" type="button" data-k="${a.k}"><i>${ICON[a.k]}</i>${esc(a.n)}</button>`).join('');
+const screen = $('#screen'), av = $('#appview');
+let osTimers = [];
+function playOS() {
+  osTimers.forEach(clearTimeout); osTimers = [];
+  screen.classList.remove('unlocked'); av.classList.remove('on');
+  const ns = $$('.note'); ns.forEach(n => n.classList.remove('in'));
+  if (RM) { ns.forEach(n => n.classList.add('in')); screen.classList.add('unlocked'); return; }
+  ns.forEach((n, i) => osTimers.push(setTimeout(() => n.classList.add('in'), 500 + i * 1300)));
+  osTimers.push(setTimeout(() => screen.classList.add('unlocked'), 500 + ns.length * 1300 + 900));
+}
+let osPlayed = false;
+new IntersectionObserver(es => { if (es[0].isIntersecting && !osPlayed) { osPlayed = true; playOS(); } }, { threshold: .45 }).observe($('#phone'));
+$('#replay').onclick = playOS;
+$('#apps').addEventListener('click', e => {
+  const b = e.target.closest('.app'); if (!b) return;
+  const a = CONFIG.apps.find(x => x.k === b.dataset.k);
+  $('#avt').textContent = a.t; $('#avp').textContent = a.d;
+  const go = $('#avgo'); go.style.display = a.go ? '' : 'none'; if (a.go) { go.href = a.go; go.textContent = a.go === '#sample' ? 'Try it below' : 'See the packs'; }
+  av.classList.add('on'); $('#avx').focus({ preventScroll: true });
+});
+$('#avx').onclick = () => av.classList.remove('on');
+
+/* ===================== 4. exam sheet ===================== */
+const S = CONFIG.sample, sheet = $('#sheet');
+const st = { i: 0, picked: S.questions.map(() => null), flag: S.questions.map(() => false), x: S.questions.map(() => new Set()), t0: null, secs: 0, done: false };
+$('#wm').innerHTML = Array.from({ length: 60 }, () => '<span>SAMPLE</span>').join('');
+function renderQ() {
+  const q = S.questions[st.i], pk = st.picked[st.i], answered = pk !== null;
+  sheet.classList.toggle('done', answered);
+  $('#qbody').innerHTML = `
+    <div class="qmeta mono"><span>Question ${st.i + 1} of ${S.questions.length}</span><span>·</span><span>${esc(q.difficulty)}</span><span>·</span><span>${esc(q.level)}</span></div>
+    <p class="stem">${esc(q.stem)}</p>
+    <div class="opts" role="radiogroup" aria-label="Answer options">${q.options.map((o, k) => `
+      <div class="opt ${answered && k === q.answer ? 'right' : ''} ${answered && k === pk ? 'picked' : ''} ${st.x[st.i].has(k) ? 'x' : ''}" data-k="${k}">
+        <button class="bub" type="button" role="radio" aria-checked="${k === pk}" aria-label="${'ABCDE'[k]}: ${esc(o)}" ${answered ? 'disabled' : ''}>${'ABCDE'[k]}</button>
+        <span class="tx">${esc(o)}</span>
+        <button class="xb" type="button" aria-label="Cross out ${'ABCDE'[k]}" title="Cross out"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><path d="M4 20L20 4"/></svg></button>
+        <span class="why">${esc(q.why[k])}</span>
+      </div>`).join('')}</div>
+    <div class="explain">${answered ? `<div><div class="verdict ${pk === q.answer ? 'ok' : 'no'}">${pk === q.answer ? 'Correct.' : 'Not quite. It\'s ' + 'ABCDE'[q.answer] + '.'}</div><p>${esc(q.explanation)}</p></div>
+      <div class="slide"><span class="mono">From your lecture · ${esc(q.slide)}</span><b></b><span>${esc(q.claim)}</span><i class="ln"></i><i class="ln s"></i></div>` : ''}</div>`;
+  $$('#navq button').forEach((b, k) => { b.className = (k === st.i ? 'cur ' : '') + (st.picked[k] === null ? '' : st.picked[k] === S.questions[k].answer ? 'ok ' : 'bad ') + (st.flag[k] ? 'fl' : ''); b.setAttribute('aria-current', k === st.i); });
+  $('#prev').disabled = st.i === 0; $('#prev').style.opacity = st.i === 0 ? .4 : 1;
+  const last = st.i === S.questions.length - 1;
+  $('#next').textContent = last ? 'See results' : 'Next';
+  $('#flag').textContent = st.flag[st.i] ? 'Unflag' : 'Flag';
+}
+$('#navq').innerHTML = S.questions.map((q, k) => `<button type="button" aria-label="Question ${k + 1}">${k + 1}</button>`).join('');
+$('#navq').onclick = e => { const b = e.target.closest('button'); if (!b) return; st.i = $$('#navq button').indexOf(b); renderQ(); };
+function answer(k) {
+  if (st.picked[st.i] !== null || st.final) return;
+  if (st.t0 === null) startTimer();
+  st.picked[st.i] = k; renderQ();
+}
+function startTimer() { st.t0 = performance.now(); const tick = () => { if (st.final) return; st.secs = Math.floor((performance.now() - st.t0) / 1000); $('#tmr').textContent = `${Math.floor(st.secs / 60)}:${String(st.secs % 60).padStart(2, '0')}`; setTimeout(tick, 500); }; tick(); }
+function move(d) { st.i = Math.max(0, Math.min(S.questions.length - 1, st.i + d)); renderQ(); }
+function finish() {
+  st.final = true; sheet.classList.add('final');
+  const right = st.picked.filter((p, k) => p === S.questions[k].answer).length, n = S.questions.length;
+  const miss = S.questions.filter((q, k) => st.picked[k] !== null && st.picked[k] !== q.answer).map(q => q.slide);
+  const skipped = st.picked.filter(p => p === null).length;
+  $('#score').innerHTML = `<div class="big">${right}<small>/${n}</small></div>
+    <div><h3>${right === n ? 'Clean sweep. Now imagine it with your own lecture.' : 'That\'s the point of practice. Now imagine it with your own lecture.'}</h3>
+    <p class="sub">${miss.length ? `Slides to review: ${miss.map(esc).join(', ')}. In your study site those go straight to <b>To review</b>.` : skipped ? `${skipped} skipped. In your study site, unused questions stay in the pool.` : 'In your study site, every test is tracked in Performance.'} Time: ${Math.floor(st.secs / 60)}:${String(st.secs % 60).padStart(2, '0')}.</p>
+    <div class="row"><a class="btn" href="#/study-pack">Get a Study Pack · $15</a><button class="btn ghost" type="button" id="retake">Retake these questions</button></div></div>`;
+  $('#retake').onclick = () => { Object.assign(st, { i: 0, picked: S.questions.map(() => null), x: S.questions.map(() => new Set()), t0: null, secs: 0, final: false }); $('#tmr').textContent = '0:00'; sheet.classList.remove('final'); renderQ(); };
+}
+$('#qbody').addEventListener('click', e => {
+  const o = e.target.closest('.opt'); if (!o) return; const k = +o.dataset.k;
+  if (e.target.closest('.xb')) { if (st.picked[st.i] !== null) return; const s = st.x[st.i]; s.has(k) ? s.delete(k) : s.add(k); renderQ(); return; }
+  if (!st.x[st.i].has(k)) answer(k);
+});
+// protections, shown the way the real study site does them: no copy, right-click crosses out, blur on leave
+sheet.addEventListener('contextmenu', e => { e.preventDefault(); const o = e.target.closest('.opt'); if (o && st.picked[st.i] === null) { const k = +o.dataset.k, s = st.x[st.i]; s.has(k) ? s.delete(k) : s.add(k); renderQ(); } });
+['copy', 'cut', 'dragstart'].forEach(ev => sheet.addEventListener(ev, e => e.preventDefault()));
+addEventListener('blur', () => sheet.classList.add('blurred')); addEventListener('focus', () => sheet.classList.remove('blurred'));
+$('#prev').onclick = () => move(-1);
+$('#next').onclick = () => st.i === S.questions.length - 1 ? finish() : move(1);
+$('#flag').onclick = () => { st.flag[st.i] = !st.flag[st.i]; renderQ(); };
+let sheetInView = false;
+new IntersectionObserver(es => sheetInView = es[0].intersectionRatio > .4, { threshold: [0, .4, .8] }).observe(sheet);
+addEventListener('keydown', e => {
+  if (!sheetInView || st.final || $('#page').classList.contains('on') || e.metaKey || e.ctrlKey || e.altKey || /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) return;
+  const k = e.key.toUpperCase();
+  if ('12345'.includes(k) && k.length === 1) { answer(+k - 1); e.preventDefault(); }
+  else if ('ABCDE'.includes(k) && k.length === 1) { answer('ABCDE'.indexOf(k)); e.preventDefault(); }
+  else if (k === 'F') { $('#flag').click(); e.preventDefault(); }
+  else if (e.key === 'ArrowRight') { $('#next').click(); e.preventDefault(); }
+  else if (e.key === 'ArrowLeft') { move(-1); e.preventDefault(); }
+});
+renderQ();
+
+/* ===================== 5. tiles + 6. pricing ===================== */
+const tileHTML = p => `<a class="tile" href="#/${p.id}">${p.flag ? `<span class="flag">${esc(p.flag)}</span>` : ''}${ART[p.art]()}<div class="row"><span class="nm">${esc(p.name)}</span><span class="pr">$${p.price}</span></div><p class="ds">${esc(p.blurb)}</p><span class="btn">View &amp; buy</span></a>`;
+$('#tiles').innerHTML = CONFIG.packages.map(tileHTML).join('');
+$('#ptable').innerHTML = CONFIG.packages.map(p => `<div class="prow"><div class="n">${esc(p.name)}<div class="mono" style="color:var(--muted);font-size:11px;margin-top:4px">${esc(p.unit)}</div></div><div class="d">${esc(p.includes.slice(0, p.id === 'deck' ? 2 : 4).join(' · '))}<br><span style="color:var(--ink)">Rush: ${esc(p.rush.label)} +$${p.rush.price}</span></div><div class="p">$${p.price}${p.compare ? `<small>vs $${p.compare} separately</small>` : '<small>one-time</small>'}</div></div>`).join('');
+
+/* ===================== 7. faq ===================== */
+fitAll();
+$('#faqlist').innerHTML = CONFIG.faq.map(([q, a]) => `<details><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join('');
+
+/* ===================== overlay pages (hash routes) ===================== */
+const page = $('#page'), pin = $('#pinner');
+let lastFocus = null;
+function openPage(html, label) {
+  pin.innerHTML = html; page.setAttribute('aria-label', label); page.scrollTop = 0;
+  if (!page.classList.contains('on')) { lastFocus = document.activeElement; page.classList.add('on'); document.documentElement.style.overflow = 'hidden'; }
+  fitAll(pin);
+  setTimeout(() => (pin.querySelector('h1') || $('#pclose')).focus?.({ preventScroll: true }), 50);
+}
+function closePage() { page.classList.remove('on'); document.documentElement.style.overflow = ''; if (location.hash.startsWith('#/')) history.pushState('', '', location.pathname + location.search); lastFocus?.focus?.({ preventScroll: true }); }
+$('#pclose').onclick = closePage;
+addEventListener('keydown', e => { if (e.key === 'Escape' && page.classList.contains('on')) closePage(); });
+
+function pdp(p) {
+  const g = p.gallery;
+  return `<div class="pdp">
+    <div class="gal"><div class="main" id="gmain"><div style="width:100%;display:grid;place-items:center">${MK[g[0]]()}</div><span class="cap mono">${esc(MKNAME[g[0]])}</span></div>
+      <div class="thumbs" role="tablist">${g.map((k, i) => `<button type="button" role="tab" aria-selected="${!i}" class="${i ? '' : 'on'}" data-k="${k}" aria-label="${esc(MKNAME[k])}"><div style="width:100%;display:grid;place-items:center">${MK[k]()}</div></button>`).join('')}</div>
+      <p class="mono" style="color:var(--muted);margin-top:10px;font-size:11px">Sample content shown. Your pack is made from your own lecture.</p></div>
+    <div class="buy">
+      ${p.flag ? `<span class="mono" style="background:var(--ink);color:var(--lime);padding:5px 10px;border-radius:99px;font-size:11px">${esc(p.flag)}</span>` : ''}
+      <h1 tabindex="-1">${esc(p.name)}</h1>
+      <p class="sub">${esc(p.blurb)}</p>
+      <ul class="checks">${p.includes.map(i => `<li>${esc(i)}</li>`).join('')}</ul>
+      <label class="rush"><input type="checkbox" id="rush"><span class="sw"></span><span><b>${esc(p.rush.label)}</b><small>+$${p.rush.price}${p.lectures > 1 ? ' on the pack' : ' per lecture'}</small></span></label>
+      <p class="deliv" id="deliv">Standard delivery. You'll see your delivery date before you pay. We take ${CONFIG.weeklyCapacity} lectures a week.</p>
+      <div class="price"><span id="pp">$${p.price}</span>${p.compare ? `<s>$${p.compare}</s>` : ''}</div>
+      <p class="deliv">One-time. Includes 30 days of study-site access, then $${CONFIG.subscription}/month if you want to keep it.</p>
+      <a class="btn" id="buynow" href="#/order/${p.id}">Buy now</a>
+    </div>
+  </div>
+  <div class="related"><h2 style="font-size:clamp(26px,3vw,38px)">Other packs</h2><div class="tiles">${CONFIG.packages.filter(x => x.id !== p.id).map(tileHTML).join('')}</div></div>`;
+}
+function wirePdp(p) {
+  const rush = $('#rush', pin);
+  const upd = () => { $('#pp', pin).textContent = '$' + (p.price + (rush.checked ? p.rush.price : 0)); $('#deliv', pin).textContent = rush.checked ? `${p.rush.label}. Rush depends on this week's capacity; you'll see it before you pay.` : `Standard delivery. You'll see your delivery date before you pay. We take ${CONFIG.weeklyCapacity} lectures a week.`; $('#buynow', pin).href = `#/order/${p.id}${rush.checked ? '/rush' : ''}`; };
+  rush.onchange = upd;
+  $$('.thumbs button', pin).forEach(b => b.onclick = () => { $$('.thumbs button', pin).forEach(x => { x.classList.toggle('on', x === b); x.setAttribute('aria-selected', x === b); }); $('#gmain', pin).innerHTML = `<div style="width:100%;display:grid;place-items:center">${MK[b.dataset.k]()}</div><span class="cap mono">${esc(MKNAME[b.dataset.k])}</span>`; fitAll(pin); });
+}
+function orderForm(p, rush) {
+  const total = p.price + (rush ? p.rush.price : 0);
+  return `<div class="form">
+    <a href="#/${p.id}" class="mono" style="color:var(--muted);text-decoration:none">‹ ${esc(p.name)}</a>
+    <h1 tabindex="-1">Your order</h1>
+    <p class="sub">No account needed. We set it up from your email after checkout.</p>
+    <div class="sum"><span>${esc(p.name)}${rush ? ' + ' + esc(p.rush.label) : ''}</span><span>$${total}</span></div>
+    <form id="of" novalidate>
+      <div class="f"><label for="em">Email</label><input id="em" type="email" autocomplete="email" required placeholder="you@school.edu"><small>Your receipt and study-site login go here.</small></div>
+      <div class="f2"><div class="f"><label for="co">Course name</label><input id="co" required placeholder="e.g. Metabolism block"></div>
+      <div class="f"><label for="ex">Exam date</label><input id="ex" type="date" required></div></div>
+      <div class="f"><label for="lt">Lecture${p.lectures > 1 ? 's' : ''}</label><input id="lt" value="${p.lectures} lecture${p.lectures > 1 ? 's' : ''}" readonly><small>PDF or PowerPoint, up to 100 MB per lecture.</small></div>
+      <div class="f"><label for="up">Your slides</label><input id="up" type="file" accept=".pdf,.ppt,.pptx,application/pdf,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation" ${p.lectures > 1 ? 'multiple' : ''}></div>
+      <div class="f"><label for="nt">Transcript or recording notes <span style="color:var(--muted);font-weight:500">(optional)</span></label><textarea id="nt" rows="3" placeholder="Anything the lecturer stressed, or a link to the recording"></textarea></div>
+      <div class="f"><label for="pq">Instructor practice questions <span style="color:var(--muted);font-weight:500">(optional)</span></label><textarea id="pq" rows="2" placeholder="Paste them or say you'll attach them"></textarea></div>
+      <label class="own"><input type="checkbox" id="own" required><span>These are my own course materials, for my personal study.</span></label>
+      <p class="err" id="ferr" role="alert"></p>
+      <button class="btn" type="submit" style="width:100%;height:58px">Continue to checkout · $${total}</button>
+    </form>
+  </div>`;
+}
+function wireForm(p, rush) {
+  $('#of', pin).onsubmit = e => {
+    e.preventDefault();
+    const em = $('#em', pin).value.trim(), co = $('#co', pin).value.trim(), ex = $('#ex', pin).value, own = $('#own', pin).checked;
+    const files = [...$('#up', pin).files];
+    const big = files.find(f => f.size > 100 * 1024 * 1024);
+    const err = !/^\S+@\S+\.\S+$/.test(em) ? 'Add the email we should send your pack to.' : !co ? 'Add the course name.' : !ex ? 'Add your exam date.' : big ? `${big.name} is over 100 MB.` : !own ? 'Tick the box to confirm these are your own course materials.' : '';
+    $('#ferr', pin).textContent = err; if (err) return;
+    const total = p.price + (rush ? p.rush.price : 0);
+    const body = `Package: ${p.name}${rush ? ' + ' + p.rush.label : ''} ($${total})\nEmail: ${em}\nCourse: ${co}\nExam date: ${ex}\nLectures: ${p.lectures}\nFiles: ${files.length ? files.map(f => f.name).join(', ') + ' (attach them to this email)' : 'I will attach my slides to this email'}\nNotes: ${$('#nt', pin).value.trim() || '-'}\nPractice questions: ${$('#pq', pin).value.trim() || '-'}\nI confirm these are my own course materials, for my personal study.`;
+    openPage(`<div class="form"><p class="mono" style="color:var(--muted)">Almost there</p><h1 tabindex="-1">Send your order</h1>
+      <p class="sub">Online checkout is being connected. For now, your order goes to Ali by email, and he replies with your delivery date and a payment link.</p>
+      <div class="sum"><span>${esc(p.name)}${rush ? ' + ' + esc(p.rush.label) : ''}</span><span>$${total}</span></div>
+      <div class="note-box">Attach your slides to the email before you send it.</div>
+      <a class="btn" style="width:100%;height:58px" href="${esc(mail('Med2Med order: ' + p.name, body))}">Open the email</a>
+      <p class="deliv" style="margin-top:16px">What happens next: you get an "Order received" email, then "In progress", then "Delivered" with a link to your study site.</p></div>`, 'Send your order');
+  };
+}
+const LEGAL = {
+  terms: ['Terms of use', [
+    ['Personal use only', 'Every pack is for the student who ordered it, for their own study. You may not share, resell, publish or give away any deck, PDF or question.'],
+    ['No copying into AI tools', 'You may not copy, paste or upload pack content (cards, summaries, guides, questions or explanations) into AI tools or other services.'],
+    ['Breaking these terms', 'If you share, resell or copy the content, your account ends without a refund.'],
+    ['AI-assisted content', 'Packs are made with an AI-assisted system and checked by Ali against your slides before delivery. They are study aids, not a guarantee of exam results.'],
+    ['Your files', 'Uploaded course files are used only for your order and deleted 30 days after delivery.'],
+    ['Access', 'Each pack purchase includes 30 days of study-site access. After that, access continues at $9/month. Your deck and PDFs stay yours. If access lapses, your account is kept for 60 days.'],
+    ['Revisions', 'One free revision within 7 days for anything that doesn\'t match your slides.'],
+    ['What we don\'t do', 'We build from your own class materials only. We don\'t copy commercial prep books or question banks, and we don\'t do assignments or quizzes.'],
+  ]],
+  privacy: ['Privacy', [
+    ['What we collect', 'Your email, the course details you give us, your uploaded course files, and your study activity in the study site (answers, scores, flags).'],
+    ['How we use it', 'Only to make your pack, run your study site and send you order and account emails. We never sell or share your data or files.'],
+    ['Your files', 'Uploaded course files are stored privately, used only for your order and deleted 30 days after delivery.'],
+    ['Payments', 'Payments are handled by our payment processor. We never see or store your full card details.'],
+    ['Analytics', 'We only use privacy-friendly analytics with no ad tracking.'],
+    ['Your choices', 'Email us to see, export or delete your data at any time.'],
+  ]],
+};
+function legal(k) {
+  const [t, items] = LEGAL[k];
+  return `<div class="legal"><div class="draft">Draft: Ali to review</div><h1 tabindex="-1">${t}</h1>${items.map(([h, p]) => `<h3>${esc(h)}</h3><p>${esc(p)}</p>`).join('')}<h3>Contact</h3><p><a href="${mail('Med2Med ' + t)}">${CONFIG.email}</a></p></div>`;
+}
+function login() {
+  return `<div class="form"><p class="mono" style="color:var(--muted)">Study site</p><h1 tabindex="-1">Log in</h1><p class="sub">No passwords. Enter your email and we'll send you a login link.</p>
+    <form id="lf"><div class="f" style="margin-top:20px"><label for="lem">Email</label><input id="lem" type="email" autocomplete="email" placeholder="you@school.edu"></div><button class="btn" style="width:100%" type="submit">Email me a login link</button></form>
+    <div class="note-box" id="lmsg" hidden>The private study site opens with the full launch. Until then, <a href="#sample" data-close>try the sample questions</a>.</div></div>`;
+}
+function route() {
+  const h = decodeURIComponent(location.hash);
+  if (!h.startsWith('#/')) { if (page.classList.contains('on')) { page.classList.remove('on'); document.documentElement.style.overflow = ''; } return; }
+  const parts = h.slice(2).split('/');
+  if (pkg(parts[0])) { const p = pkg(parts[0]); openPage(pdp(p), p.name); wirePdp(p); document.title = `${p.name} · Med2Med`; return; }
+  if (parts[0] === 'order' && pkg(parts[1])) { const p = pkg(parts[1]), r = parts[2] === 'rush'; openPage(orderForm(p, r), 'Your order'); wireForm(p, r); return; }
+  if (LEGAL[parts[0]]) { openPage(legal(parts[0]), LEGAL[parts[0]][0]); return; }
+  if (parts[0] === 'login') { openPage(login(), 'Log in'); $('#lf', pin).onsubmit = e => { e.preventDefault(); $('#lmsg', pin).hidden = false; }; return; }
+}
+pin.addEventListener('click', e => { if (e.target.closest('[data-close]')) { closePage(); } });
+addEventListener('hashchange', () => { route(); if (!location.hash.startsWith('#/')) document.title = 'Med2Med · Your lecture in, a full study pack out'; });
+route();
+</script>
+</body>
+</html>
