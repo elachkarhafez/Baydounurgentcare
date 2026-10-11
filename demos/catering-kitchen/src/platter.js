@@ -1,21 +1,22 @@
 /* =====================================================================
-   Fire & Feast: "Feed the table". Their Mediterranean combo tray, built
-   in real 3D and laid out for 3, 5, 7 or 10 people.
-   Hammered silver tray → a bed of yellow rice spreads → beef + chicken
-   kabob, chicken tikka, cream chop drop in rows → beef + chicken shawarma
-   rain onto the front edge → stews, turshi and pita set down around it.
+   Cedarloom Kitchen (fictional concept by ElaSystems): "Feed the table".
+   A Mediterranean combo tray built in real 3D and laid out for 3, 5, 7
+   or 10 people.
+   Hammered silver tray → a bed of saffron rice spreads → beef + chicken
+   kofta, chicken tikka and breaded cutlets drop in rows → shawarma rains
+   onto the front edge → stews, pickles and pita set down around it.
    api.build(size) re-lays the tray for a new head count.
 
-   Realism pass:
-   - every food surface is textured from their own photos (kit/library/phototex.py:
-     crop → seamless tile → normal map), so the rice, char, breading and stews
-     are the real thing
-   - tray: ambientCG Metal051B hammered metal (CC0) normal + roughness
-   - lighting: Poly Haven cowboy_town_saloon HDRI (CC0, downsized with hdrsize.py)
-   - real geometry detail: instanced rice grains on the dome, parsley flecks,
-     hand-pressed kofta, puffy pita, contact shadows
+   Every food surface is generated in code: periodic value noise + cellular
+   (Worley) noise paint seamless colour tiles (rice grains, grill marks,
+   breadcrumb, pita blisters, beans in tomato sauce...) and the same height
+   field becomes a normal map. No photos.
+   - tray: ambientCG Metal051B hammered-metal normal map (CC0)
+   - lighting: Poly Haven cowboy_town_saloon HDRI (CC0, downsized)
+   - geometry detail: instanced rice grains, parsley flecks, hand-pressed
+     kofta, puffy pita, beans + potato in the stews, contact shadows
    - desktop: GTAO ambient occlusion through EffectComposer (alpha kept)
-   Bundle: kit/build3d/build.sh fireandfeastcommerce/src/platter.js fireandfeastcommerce/assets/platter.js
+   Bundle: kit/build3d/build.sh demos/catering-kitchen/src/platter.js demos/catering-kitchen/assets/platter.js
    ===================================================================== */
 import * as THREE from 'three';
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
@@ -24,7 +25,6 @@ import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { GTAOPass } from 'three/examples/jsm/postprocessing/GTAOPass.js';
 import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
 const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
@@ -44,6 +44,94 @@ function canvasTex(w, h, draw) { const c = document.createElement('canvas'); c.w
 // planar UVs (x,z) for lathe parts that should read as a flat surface
 function planarUV(geo, s = 1) { const p = geo.attributes.position, uv = geo.attributes.uv; for (let i = 0; i < p.count; i++) uv.setXY(i, p.getX(i) * s + .5, p.getZ(i) * s + .5); uv.needsUpdate = true; return geo; }
 
+/* ---------------- procedural food textures (all seamless) ---------------- */
+const hash = (i, s) => { let h = Math.imul(i ^ 0x9e3779b9, 374761393) ^ Math.imul(s + 1, 668265263); h = Math.imul(h ^ (h >>> 13), 1274126177); return ((h ^ (h >>> 16)) >>> 0) / 4294967296; };
+const wrap = (a, P) => ((a % P) + P) % P;
+// periodic value noise with Pu x Pv cells per tile
+function vnoise(Pu, Pv, s) {
+  return (u, v) => {
+    const x = u * Pu, y = v * Pv, xi = Math.floor(x), yi = Math.floor(y), fx = x - xi, fy = y - yi, sx = fx * fx * (3 - 2 * fx), sy = fy * fy * (3 - 2 * fy);
+    const g = (a, b) => hash(wrap(a, Pu) + wrap(b, Pv) * Pu, s);
+    const a = g(xi, yi), b = g(xi + 1, yi), c = g(xi, yi + 1), d = g(xi + 1, yi + 1);
+    return a + (b - a) * sx + (c - a) * sy + (a - b - c + d) * sx * sy;
+  };
+}
+function fbm(Pu, Pv, s, oct = 4) { const ns = []; for (let i = 0; i < oct; i++) ns.push(vnoise(Pu << i, Pv << i, s + i * 31)); return (u, v) => { let t = 0, a = .5, n = 0; for (const f of ns) { t += f(u, v) * a; n += a; a *= .5; } return t / n; }; }
+// periodic cellular noise → [d1, d2, cell id]; stretch > 1 gives elongated, randomly turned cells (rice, beans)
+function worley(Pu, Pv, s, jit = .9, stretch = 1) {
+  return (u, v) => {
+    const x = u * Pu, y = v * Pv, xi = Math.floor(x), yi = Math.floor(y); let d1 = 9, d2 = 9, id = 0;
+    for (let j = -1; j <= 1; j++) for (let i = -1; i <= 1; i++) {
+      const cx = xi + i, cy = yi + j, k = wrap(cx, Pu) + wrap(cy, Pv) * Pu;
+      let dx = cx + .5 + (hash(k, s) - .5) * jit - x, dy = cy + .5 + (hash(k, s + 7) - .5) * jit - y;
+      if (stretch !== 1) { const a = hash(k, s + 3) * Math.PI, c = Math.cos(a), sn = Math.sin(a), lx = dx * c - dy * sn, ly = dx * sn + dy * c; dx = lx; dy = ly * stretch; }
+      const d = Math.hypot(dx, dy);
+      if (d < d1) { d2 = d1; d1 = d; id = hash(k, s + 13); } else if (d < d2) d2 = d;
+    }
+    return [d1, d2, id];
+  };
+}
+const ss = (a, b, x) => { const t = clamp((x - a) / (b - a)); return t * t * (3 - 2 * t); };
+const hx = h => [(h >> 16 & 255) / 255, (h >> 8 & 255) / 255, (h & 255) / 255];
+const mix = (a, b, t) => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t];
+const mul = (a, k) => [a[0] * k, a[1] * k, a[2] * k];
+// fn(u, v) → [r, g, b, height]; returns [colour map, normal map]
+function gen(W, H, fn, strength = 3, rep = [1, 1], aniso = 1) {
+  const c = document.createElement('canvas'); c.width = W; c.height = H; const g = c.getContext('2d'), img = g.createImageData(W, H), hh = new Float32Array(W * H);
+  for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+    const o = fn((x + .5) / W, (y + .5) / H), i = y * W + x;
+    img.data[i * 4] = clamp(o[0]) * 255; img.data[i * 4 + 1] = clamp(o[1]) * 255; img.data[i * 4 + 2] = clamp(o[2]) * 255; img.data[i * 4 + 3] = 255; hh[i] = o[3];
+  }
+  g.putImageData(img, 0, 0);
+  const n = document.createElement('canvas'); n.width = W; n.height = H; const gn = n.getContext('2d'), nd = gn.createImageData(W, H);
+  const at = (x, y) => hh[wrap(y, H) * W + wrap(x, W)];
+  for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+    const dx = (at(x + 1, y) - at(x - 1, y)) * strength, dy = (at(x, y + 1) - at(x, y - 1)) * strength;
+    let nx = -dx, ny = dy, nz = 1; const l = Math.hypot(nx, ny, nz); nx /= l; ny /= l; nz /= l; const i = (y * W + x) * 4;
+    nd.data[i] = (nx * .5 + .5) * 255; nd.data[i + 1] = (ny * .5 + .5) * 255; nd.data[i + 2] = (nz * .5 + .5) * 255; nd.data[i + 3] = 255;
+  }
+  gn.putImageData(nd, 0, 0);
+  const T = (cv, srgb) => { const t = new THREE.CanvasTexture(cv); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(...rep); t.anisotropy = aniso; if (srgb) t.colorSpace = THREE.SRGBColorSpace; return t; };
+  return [T(c, true), T(n, false)];
+}
+
+function foodTextures(aniso, R) { // R = base resolution
+  const tx = {};
+  // saffron rice: elongated grains, a few paler ones, dark gaps between
+  { const w = worley(16, 22, 101, .9, 2.6), n = fbm(4, 4, 7, 3); const deep = hx(0xc27a0c), gold = hx(0xf0b22a), pale = hx(0xf6e2a6), gap = hx(0x7a4a08);
+    [tx.rice, tx.riceN] = gen(R, R, (u, v) => { const [d1, d2, id] = w(u, v), gr = 1 - ss(.22, .42, d1), e = ss(0, .1, d2 - d1), k = .88 + .24 * n(u, v); const base = id > .84 ? pale : mix(deep, gold, id / .84); return [...mul(mix(gap, base, gr * e * .9 + .1), k), gr * e * .85 + n(u, v) * .15]; }, 4, [5, 5], aniso); }
+  // grilled kofta: browned mince, crusty speckle, dark grill bars across the length (v)
+  const kofta = (s, lo, hi, charC, spice) => { const n = fbm(6, 6, s, 4), l = fbm(3, 3, s + 9, 3), cr = worley(30, 30, s + 4, 1); const A = hx(lo), B = hx(hi), C = hx(charC), S = hx(spice);
+    return gen(R, R, (u, v) => { const nv = n(u, v), m = Math.abs(((v * 5 + nv * .5) % 1) - .5), bar = (1 - ss(.02, .08, m)) * ss(.3, .6, l(u, v) + .15), [d1] = cr(u, v), sp = 1 - ss(.08, .2, d1);
+      let col = mix(A, B, nv); col = mix(col, S, sp * .35); col = mix(col, C, bar * .6); return [...col, l(u, v) * .55 + nv * .3 + sp * .1 - bar * .25]; }, 5, [2, 1], aniso); };
+  [tx.beef, tx.beefN] = kofta(201, 0x4c2414, 0x7a3e20, 0x160904, 0x9a4a22);
+  [tx.chick, tx.chickN] = kofta(301, 0xb06a2c, 0xd89848, 0x3a1a08, 0xc8501c);
+  // chicken tikka: deep orange marinade with charred patches
+  { const n = fbm(5, 5, 401, 4), p = fbm(3, 3, 405, 3); const A = hx(0xc4461a), B = hx(0xe87a2c), C = hx(0x24100a);
+    [tx.tikka, tx.tikkaN] = gen(R, R, (u, v) => { const nv = n(u, v), ch = ss(.56, .7, p(u, v) + nv * .15); return [...mix(mix(A, B, nv), C, ch * .9), nv * .6 + ch * .3]; }, 4, [1, 1], aniso); }
+  // breaded cutlet: golden crumb
+  { const w = worley(44, 44, 501, 1), n = fbm(4, 4, 503, 3); const A = hx(0xa8642a), B = hx(0xeab066), G = hx(0x6a3a14);
+    [tx.chop, tx.chopN] = gen(R, R, (u, v) => { const [d1, d2, id] = w(u, v), cr = 1 - ss(.15, .5, d1), e = ss(0, .14, d2 - d1); return [...mul(mix(G, mix(A, B, id * .7 + n(u, v) * .3), cr * e * .85 + .15), .95 + n(u, v) * .1), cr * e]; }, 6, [1.2, 1.2], aniso); }
+  // shawarma: long fibres, seared edges, a little rendered fat
+  const shaw = (s, lo, hi, sear, fat) => { const f = vnoise(64, 6, s), f2 = vnoise(24, 3, s + 2), n = fbm(4, 4, s + 5, 3); const A = hx(lo), B = hx(hi), C = hx(sear), F = hx(fat);
+    return gen(R, R, (u, v) => { const fib = f(u, v) * .6 + f2(u, v) * .4, sr = ss(.6, .78, n(u, v)), ft = ss(.78, .9, f2(u, v)) * .6; let col = mix(A, B, fib); col = mix(col, F, ft); col = mix(col, C, sr * .85); return [...col, fib * .7 - sr * .2]; }, 4, [.35, .35], aniso); };
+  [tx.shawb, tx.shawbN] = shaw(601, 0x5a2a14, 0x8e4a24, 0x1c0c06, 0xc08a5a);
+  [tx.shawc, tx.shawcN] = shaw(701, 0xc0782c, 0xe2a650, 0x5a2a0c, 0xf0d080);
+  // pita: pale bread, toasted blisters, flour dust
+  { const w = worley(7, 7, 801, 1), n = fbm(5, 5, 803, 4), d = worley(60, 60, 805, 1); const A = hx(0xe2c088), B = hx(0xf0dbb0), T = hx(0xa8642a), D = hx(0x5a2e12), W = hx(0xfaf2e0);
+    [tx.pita, tx.pitaN] = gen(R, R, (u, v) => { const nv = n(u, v), [d1] = w(u, v), bl = 1 - ss(.12, .34 + nv * .1, d1), core = 1 - ss(0, .14, d1), [e1] = d(u, v), fl = (1 - ss(.05, .15, e1)) * .5; let col = mix(A, B, nv); col = mix(col, T, bl * .75); col = mix(col, D, core * .6); col = mix(col, W, fl * (1 - bl)); return [...col, bl * .5 + nv * .4]; }, 4, [1.4, 1.4], aniso); }
+  // white beans in tomato sauce
+  { const w = worley(9, 14, 901, .9, 1.6), n = fbm(4, 6, 903, 3); const A = hx(0x9a2c14), B = hx(0xd0562a), Be = hx(0xf0e2c2), Bd = hx(0xc8a878);
+    [tx.bean, tx.beanN] = gen(R, R, (u, v) => { const [d1] = w(u, v), b = 1 - ss(.26, .34, d1), sh = ss(0, .3, d1); let col = mix(A, B, n(u, v)); col = mix(col, mix(Be, Bd, sh), b); return [...col, b * (1 - sh * .6) + n(u, v) * .1]; }, 5, [1, 1.6], aniso); }
+  // curry potato stew: turmeric sauce with potato + carrot pieces
+  { const w = worley(6, 8, 1001, .9), n = fbm(4, 5, 1003, 3); const A = hx(0xc8801a), B = hx(0xe8ae3a), P = hx(0xf2d68e), Cr = hx(0xe2702a);
+    [tx.curry, tx.curryN] = gen(R, R, (u, v) => { const [d1, , id] = w(u, v), c = 1 - ss(.22, .3, d1); let col = mix(A, B, n(u, v)); col = mix(col, id > .8 ? Cr : P, c * .9); return [...col, c * .7 + n(u, v) * .2]; }, 4, [1, 1.4], aniso); }
+  // pickles: cauliflower, carrot, pink turnip, pepper in brine
+  { const w = worley(6, 12, 1101, 1), n = fbm(4, 4, 1103, 3); const cols = [0xf2c94c, 0xe9b43a, 0xe8772a, 0xf7e08a, 0xd8607a].map(hx), G = hx(0x7a5a22);
+    [tx.turshi, tx.turshiN] = gen(R, R, (u, v) => { const [d1, d2, id] = w(u, v), e = ss(0, .12, d2 - d1); return [...mul(mix(G, cols[(id * 5) | 0], e * .9 + .1), .9 + n(u, v) * .2), e]; }, 4, [1, 2], aniso); }
+  return tx;
+}
+
 export async function mountPlatter(canvas, o = {}) {
   const A0 = o.assets || 'assets/';
   const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -58,42 +146,20 @@ export async function mountPlatter(canvas, o = {}) {
   const scene = new THREE.Scene(), camera = new THREE.PerspectiveCamera(30, 1, .05, 60), world = new THREE.Group(); scene.add(world);
   const aniso = Math.min(8, renderer.capabilities.getMaxAnisotropy());
 
-  // ---- load: HDRI + photo textures, all before the first frame ----
-  const tl = new THREE.TextureLoader();
-  const T = (name, rep = [1, 1], srgb = true) => new Promise(res => tl.load(A0 + 'tex/' + name + '.webp', t => { t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(...rep); t.anisotropy = aniso; if (srgb) t.colorSpace = THREE.SRGBColorSpace; res(t); }, undefined, () => res(null)));
+  // ---- load: HDRI + the CC0 hammered-metal normal; food textures are generated ----
   const hdr = name => new Promise(res => new RGBELoader().load(A0 + name, t => res(t), undefined, () => res(null)));
-  // side dishes generated from their photos (kit/library/i23d.py → TRELLIS); built versions are the fallback
-  // (generated meshes ship without normals: compute smooth ones, or lighting + GTAO read them as black)
-  const glb = name => new Promise(res => new GLTFLoader().load(A0 + 'models/' + name + '.glb', g => { g.scene.traverse(m => { if (m.isMesh && !m.geometry.attributes.normal) { m.geometry.computeVertexNormals(); m.material.flatShading = false; } }); res(g.scene); }, undefined, () => res(null)));
-  const [env, tx, scans] = await Promise.all([
-    hdr('saloon-512.hdr').then(e => e || hdr('studio-512.hdr')),
-    Promise.all([
-      T('metal_n', [4, 4], false), null,
-      T('rice', [5, 5]), T('rice_n', [5, 5], false),
-      T('beef', [2, 1]), T('beef_n', [2, 1], false), T('chick', [2, 1]), T('chick_n', [2, 1], false),
-      T('tikka'), T('tikka_n', [1, 1], false), T('chop', [1.2, 1.2]), T('chop_n', [1.2, 1.2], false),
-      T('shawb', [.35, .35]), T('shawb_n', [.35, .35], false), T('shawc', [.35, .35]), T('shawc_n', [.35, .35], false),
-      T('pita', [1.4, 1.4]), T('pita_n', [1.4, 1.4], false),
-      T('bean', [1, 1.6]), T('bean_n', [1, 1.6], false), T('curry', [1, 1.4]), T('curry_n', [1, 1.4], false),
-      T('turshi', [1, 2]), T('turshi_n', [1, 2], false)
-    ]).then(a => Object.fromEntries(['metalN', 'metalR', 'rice', 'riceN', 'beef', 'beefN', 'chick', 'chickN', 'tikka', 'tikkaN', 'chop', 'chopN', 'shawb', 'shawbN', 'shawc', 'shawcN', 'pita', 'pitaN', 'bean', 'beanN', 'curry', 'curryN', 'turshi', 'turshiN'].map((k, i) => [k, a[i]]))),
-    // add 'turshi' / 'pita' here once those are generated (no 404s for models that don't exist)
-    Promise.all((o.scans || ['bean', 'curry']).map(n => glb(n).then(m => [n, m]))).then(Object.fromEntries)
-  ]);
-  // normalise a scanned model: sit it on y=0, centre it, scale to a target width; generated GLBs
-  // leave metallic unset (= 1 in glTF), so force a glaze-like dielectric
-  const fit = (src, width) => { const g = src.clone(true), box = new THREE.Box3().setFromObject(g), sz = box.getSize(new THREE.Vector3()), c = box.getCenter(new THREE.Vector3()), k = width / Math.max(sz.x, sz.z);
-    g.traverse(m => { if (m.isMesh) { m.castShadow = true; m.receiveShadow = false; if (m.material) { m.material = m.material.clone(); m.material.envMapIntensity = .9; m.material.metalness = 0; m.material.roughness = .32; } } });
-    const w = new THREE.Group(); g.position.set(-c.x, -box.min.y, -c.z); w.add(g); w.scale.setScalar(k); const o2 = new THREE.Group(); o2.add(w); return o2; };
+  const metalN = await new Promise(res => new THREE.TextureLoader().load(A0 + 'mat/hammered-n.webp', t => { t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(4, 4); t.anisotropy = aniso; res(t); }, undefined, () => res(null)));
+  const env = await hdr('saloon-512.hdr').then(e => e || hdr('studio-512.hdr'));
+  const tx = foodTextures(aniso, SMALL ? 192 : 256); tx.metalN = metalN;
   if (env) { env.mapping = THREE.EquirectangularReflectionMapping; scene.environment = env; scene.environmentRotation.set(0, 2.2, 0); scene.environmentIntensity = .75; }
 
-  // warm pass light, a fire-orange glow from below-left, cool rim
+  // warm pass light, a low orange glow from below-left (the grill), cool rim
   const key = new THREE.DirectionalLight(0xfff0dc, 2.3); key.position.set(1.5, 5, 2.5);
   key.castShadow = true; key.shadow.mapSize.set(2048, 2048); key.shadow.radius = 5; key.shadow.bias = -.0004; key.shadow.normalBias = .012;
   Object.assign(key.shadow.camera, { left: -3, right: 3, top: 3, bottom: -3, near: .5, far: 12 });
-  const fire = new THREE.PointLight(0xff6a1f, 4, 6, 1.6); fire.position.set(-2.2, .6, 1.2);
+  const glow = new THREE.PointLight(0xff6a1f, 4, 6, 1.6); glow.position.set(-2.2, .6, 1.2);
   const rim = new THREE.DirectionalLight(0xffe2c0, .8); rim.position.set(-3, 2.2, -3);
-  scene.add(key, fire, rim, new THREE.HemisphereLight(0xfff3e4, 0x20140c, .25));
+  scene.add(key, glow, rim, new THREE.HemisphereLight(0xfff3e4, 0x20140c, .25));
   const floor = new THREE.Mesh(new THREE.PlaneGeometry(14, 14), new THREE.ShadowMaterial({ opacity: .5, color: 0x000000 }));
   floor.rotation.x = -Math.PI / 2; floor.receiveShadow = true; world.add(floor);
   // soft contact shadow under tray + bowls (the shadow map alone looks pasted on)
@@ -102,14 +168,14 @@ export async function mountPlatter(canvas, o = {}) {
   const blob = (s) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), blobMat); m.rotation.x = -Math.PI / 2; m.position.y = .002; m.scale.set(s, s, 1); m.renderOrder = -1; return m; };
   const sh = m => { m.castShadow = true; m.receiveShadow = true; return m; };
 
-  // ---- materials (photo-textured) ----
+  // ---- materials (procedural textures) ----
   const silver = new THREE.MeshPhysicalMaterial({ color: 0xd3dce6, metalness: 1, roughness: .3, normalMap: tx.metalN, normalScale: new THREE.Vector2(.55, .55), clearcoat: .4, clearcoatRoughness: .2 });
   const food = (map, nmap, o2 = {}) => new THREE.MeshPhysicalMaterial({ map, normalMap: nmap, normalScale: new THREE.Vector2(1.2, 1.2), roughness: .55, ...o2 });
   const rice = food(tx.rice, tx.riceN, { roughness: .6, sheen: .35, sheenColor: new THREE.Color(0xffe2a0) });
   const beefMat = food(tx.beef, tx.beefN, { roughness: .5, clearcoat: .35, clearcoatRoughness: .45, normalScale: new THREE.Vector2(1.8, 1.8) });
   const chickMat = food(tx.chick, tx.chickN, { roughness: .5, clearcoat: .3, clearcoatRoughness: .45, normalScale: new THREE.Vector2(1.6, 1.6) });
-  const tikkaMat = food(tx.tikka, tx.tikkaN, { color: new THREE.Color(1.35, 1.2, 1.1), roughness: .45, clearcoat: .45, clearcoatRoughness: .35, normalScale: new THREE.Vector2(1.6, 1.6) });
-  const chopMat = food(tx.chop, tx.chopN, { color: 0xd8b48e, roughness: .75, normalScale: new THREE.Vector2(2.2, 2.2), sheen: .3, sheenColor: new THREE.Color(0xffc070) });
+  const tikkaMat = food(tx.tikka, tx.tikkaN, { roughness: .45, clearcoat: .45, clearcoatRoughness: .35, normalScale: new THREE.Vector2(1.6, 1.6) });
+  const chopMat = food(tx.chop, tx.chopN, { roughness: .75, normalScale: new THREE.Vector2(2.2, 2.2), sheen: .3, sheenColor: new THREE.Color(0xffc070) });
   const shawB = food(tx.shawb, tx.shawbN, { roughness: .5, clearcoat: .4, clearcoatRoughness: .4, side: THREE.DoubleSide });
   const shawC = food(tx.shawc, tx.shawcN, { roughness: .5, clearcoat: .4, clearcoatRoughness: .4, side: THREE.DoubleSide });
   const porcelain = new THREE.MeshPhysicalMaterial({ color: 0xf7f3ec, roughness: .16, clearcoat: 1, clearcoatRoughness: .05 });
@@ -117,7 +183,8 @@ export async function mountPlatter(canvas, o = {}) {
   const stewCurry = food(tx.curry, tx.curryN, { roughness: .22, clearcoat: 1, clearcoatRoughness: .04, normalScale: new THREE.Vector2(.6, .6) });
   const turshiMat = food(tx.turshi, tx.turshiN, { roughness: .3, clearcoat: .8, clearcoatRoughness: .15 });
   const pitaMat = food(tx.pita, tx.pitaN, { roughness: .82, sheen: .4, sheenColor: new THREE.Color(0xfff0d0), side: THREE.DoubleSide });
-  const potatoMat = food(tx.curry, tx.curryN, { color: 0xffd9a0, roughness: .4, clearcoat: .7 });
+  const potatoMat = food(tx.curry, tx.curryN, { color: 0xfff0c8, roughness: .4, clearcoat: .7 });
+  const beanMat = new THREE.MeshPhysicalMaterial({ color: 0xf1e4c6, roughness: .35, clearcoat: .9, clearcoatRoughness: .1, sheen: .3, sheenColor: new THREE.Color(0xfff4dc) });
   const parsleyMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: .55, side: THREE.DoubleSide });
   const grainMat = new THREE.MeshPhysicalMaterial({ color: 0xffffff, roughness: .42, clearcoat: .3, clearcoatRoughness: .5 });
 
@@ -201,6 +268,7 @@ export async function mountPlatter(canvas, o = {}) {
     } else {
       const s = new THREE.Mesh(planarUV(new THREE.CircleGeometry(.139, 48).rotateX(-Math.PI / 2), 3.4), fill === 'bean' ? stewBean : stewCurry); s.position.y = .1; s.receiveShadow = true; g.add(s);
       if (fill === 'curry') for (let i = 0; i < 6; i++) { const b2 = sh(new THREE.Mesh(new RoundedBoxGeometry(.045, .035, .04, 2, .012), potatoMat)); b2.position.set(rnd(-.08, .08), .097, rnd(-.08, .08)); b2.rotation.set(rnd(-.3, .3), rnd(0, 3), 0); g.add(b2); }
+      if (fill === 'bean') { const bn = new THREE.InstancedMesh(new THREE.SphereGeometry(1, 14, 10), beanMat, 16); bn.castShadow = bn.receiveShadow = true; for (let k = 0; k < 16; k++) { const a = rnd(0, 6.28), r = Math.sqrt(rnd(0, 1)) * .1; P.set(Math.cos(a) * r, .1, Math.sin(a) * r); E1.set(rnd(-.3, .3), rnd(0, 6.28), rnd(-.2, .2)); Q.setFromEuler(E1); S1.set(.013, .009, .02); M.compose(P, Q, S1); bn.setMatrixAt(k, M); } g.add(bn); }
     }
     return g;
   }
@@ -245,7 +313,7 @@ export async function mountPlatter(canvas, o = {}) {
     // bowls + pita around the back of the tray
     const sides = [];
     const fills = ['curry', 'bean', 'curry'].slice(0, C.bowls);
-    const side = (name, width, make) => { if (scans[name]) { const g = fit(scans[name], width); const bl = blob(width * 1.35); bl.position.y = .003; g.add(bl); g.userData.stew = name !== 'pita' && name !== 'turshi'; return g; } return make(); };
+    const side = (name, width, make) => make(); // every side dish is built in code
     fills.forEach((f, i) => { const b = side(f === 'bean' ? 'bean' : 'curry', .33, () => bowl(f)); b.rotation.y = rnd(-.4, .4); b.userData.home = new THREE.Vector3(-A * .55 + i * A * .55, 0, -B - .3); b.userData.side = true; b.userData.delay = .1 + i * .08; sides.push(b); });
     const tu = side('turshi', .33, () => bowl('turshi')); tu.scale.multiplyScalar(.8); tu.userData.home = new THREE.Vector3(A * .98, 0, -B * .8 - .12); tu.userData.side = true; tu.userData.delay = .35; sides.push(tu);
     const pi = side('pita', .42, pitaStack); pi.userData.home = new THREE.Vector3(-A - .3, 0, -B * .2); pi.userData.side = true; pi.userData.delay = .42; sides.push(pi);
@@ -318,7 +386,7 @@ export async function mountPlatter(canvas, o = {}) {
     raf = 0; const dt = clamp((now - last) / 1000, 0, .1); last = now; t0 += dt;
     if (L && buildT < 1) { buildT = clamp(buildT + dt / 2.4); placeAll(L, buildT); }
     clearLeaving(dt);
-    fire.intensity = 3.4 + Math.sin(t0 * 9) * .4 + Math.sin(t0 * 23) * .25;
+    glow.intensity = 3.4 + Math.sin(t0 * 9) * .4 + Math.sin(t0 * 23) * .25;
     az += (taz + (RM ? 0 : Math.sin(t0 * .2) * .06) - az) * .05; el += (tel - el) * .05; placeCam();
     if (composer) composer.render(dt); else renderer.render(scene, camera);
     if (visible && !document.hidden) raf = requestAnimationFrame(frame);
