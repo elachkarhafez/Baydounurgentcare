@@ -1,12 +1,12 @@
 /* =====================================================================
-   AVRA Greek Frozen Yogurt: "Avra means breeze."
-   Their white cup (olive branch + AVRA print) in real 3D: the Greek yogurt
+   Thymelight (ElaSystems concept): a Greek frozen yogurt cup in real 3D.
+   Printed paper cup (Greek-key band, thyme sprig, wordmark), the yogurt
    pipes in as a ridged swirl, the pairing drops on (pistachio + honey,
    fig + honey, honeycomb + crunch) and honey drizzles down the swirl.
    An olive branch hangs over the cup and sways in a breeze you make by
-   moving the pointer (or scrolling); strong gusts shake loose a few leaves.
-   api.pair(name) swaps the toppings.
-   Bundle: kit/build3d/build.sh avragreekfrozenyogurt/src/cup.js avragreekfrozenyogurt/assets/cup.js
+   moving the pointer (or scrolling / tapping); strong gusts shake loose a
+   few leaves. api.pair(name) swaps the toppings.
+   Bundle: kit/build3d/build.sh demos/greek-froyo/src/cup.js demos/greek-froyo/assets/cup.js
    ===================================================================== */
 import * as THREE from 'three';
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
@@ -43,20 +43,26 @@ export async function mountCup(canvas, o = {}) {
   floor.rotation.x = -Math.PI / 2; floor.receiveShadow = true; world.add(floor);
   const sh = m => { m.castShadow = true; m.receiveShadow = true; return m; };
 
-  // ---- the cup (their print: olive branch + AVRA + GREEK FROZEN YOGURT) ----
+  // ---- the cup (concept print: Greek-key band, thyme sprig, wordmark) ----
   const R0 = .4, R1 = .54, CH = .64;
   const print = canvasTex(2048, 512, (g, w, h) => {
     const pg = g.createLinearGradient(0, 0, 0, h); pg.addColorStop(0, '#fbf9f4'); pg.addColorStop(1, '#f1ece2'); g.fillStyle = pg; g.fillRect(0, 0, w, h);
     for (let i = 0; i < 9000; i++) { g.fillStyle = `rgba(120,100,80,${Math.random() * .05})`; g.fillRect(Math.random() * w, Math.random() * h, 1, 1); }
+    // Greek-key (meander) bands, top and bottom
+    const key = (y0, s) => { g.fillStyle = '#1f4f7a'; g.fillRect(0, y0, w, s * .14); g.fillRect(0, y0 + s * 1.06, w, s * .14);
+      g.strokeStyle = '#1f4f7a'; g.lineWidth = s * .12; g.lineCap = 'square';
+      for (let x = 0; x < w; x += s) { g.beginPath(); const t = y0 + s * .3, b = y0 + s * .9; g.moveTo(x + s * .1, b); g.lineTo(x + s * .1, t); g.lineTo(x + s * .8, t); g.lineTo(x + s * .8, b - s * .05); g.lineTo(x + s * .35, b - s * .05); g.lineTo(x + s * .35, t + s * .3); g.lineTo(x + s * .58, t + s * .3); g.stroke(); } };
+    key(26, 46); key(h - 82, 46);
     const logo = cx => {
       g.save(); g.translate(cx, 0);
-      // olive branch
-      g.strokeStyle = '#5b4a33'; g.lineWidth = 3.5; g.beginPath(); g.moveTo(-72, 196); g.quadraticCurveTo(-4, 170, 70, 120); g.stroke();
-      const leaf = (x, y, a, l, up) => { g.save(); g.translate(x, y); g.rotate(a); g.fillStyle = up ? '#6f7d4a' : '#55623a'; g.beginPath(); g.moveTo(0, 0); g.quadraticCurveTo(l * .5, -l * .22, l, 0); g.quadraticCurveTo(l * .5, l * .22, 0, 0); g.fill(); g.restore(); };
-      [[-48, 186, -2.2, 46, 1], [-30, 180, -.9, 44, 0], [-8, 172, -2.4, 48, 1], [10, 162, -.7, 46, 0], [30, 150, -2.5, 46, 1], [46, 138, -.6, 42, 0], [62, 126, -1.6, 40, 1]].forEach(a => leaf(...a));
-      g.fillStyle = '#4a3627'; g.textAlign = 'center';
-      g.font = '500 108px "Bodoni Moda", Didot, Georgia, serif'; g.fillText('A V R A', 0, 318);
-      g.font = '600 30px "DM Sans", Arial, sans-serif'; g.fillText('G R E E K   F R O Z E N   Y O G U R T', 0, 368);
+      // thyme sprig
+      g.strokeStyle = '#6b5a3e'; g.lineWidth = 3; g.beginPath(); g.moveTo(-60, 214); g.quadraticCurveTo(0, 196, 62, 150); g.stroke();
+      const leaf = (x, y, a, l, c) => { g.save(); g.translate(x, y); g.rotate(a); g.fillStyle = c; g.beginPath(); g.ellipse(l / 2, 0, l / 2, l * .26, 0, 0, Math.PI * 2); g.fill(); g.restore(); };
+      for (let i = 0; i < 9; i++) { const u = i / 8, x = -54 + u * 112, y = 212 - u * 58 - Math.sin(u * 3) * 6; leaf(x, y, -1.9 - u * .4, 20 - u * 6, i % 2 ? '#6f7d4a' : '#55623a'); leaf(x + 4, y + 2, -.4 - u * .3, 20 - u * 6, i % 2 ? '#55623a' : '#7d8a5a'); }
+      g.fillStyle = '#d99a1c'; g.beginPath(); g.arc(64, 146, 7, 0, Math.PI * 2); g.fill();
+      g.fillStyle = '#2f2a24'; g.textAlign = 'center';
+      g.font = 'italic 500 104px "Bodoni Moda", Didot, Georgia, serif'; g.fillText('Thymelight', 0, 322);
+      g.fillStyle = '#1f4f7a'; g.font = '600 28px "DM Sans", Arial, sans-serif'; g.fillText('G R E E K   F R O Z E N   Y O G U R T', 0, 372);
       g.restore();
     };
     logo(w * .25); logo(w * .75);

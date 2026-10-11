@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noai, noimageai">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Venice Barbershop · Est. 2010 · Venice, FL · $26 Cuts with a Hot Lather Neck Shave</title>
+<meta name="description" content="Venice Barbershop on S Tamiami Trail, next to the courthouse in Venice, FL. Every $26 haircut comes with a hot lather neck shave and a shoulder massage. Straight razor shaves, beard work, Dads & Lads. Walk in. Cash only.">
+<meta property="og:title" content="Venice Barbershop · Est. 2010">
+<meta property="og:description" content="Walk in. Sit down. Relax. Every haircut comes with a hot lather neck shave and a shoulder massage.">
+<meta property="og:image" content="img/og.jpg">
+<meta name="theme-color" content="#0f6f72">
+<link rel="icon" href="img/icon.png">
+<link rel="preload" href="assets/fonts/zilla-slab-700.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="modulepreload" href="assets/lather.js">
+<style>
+@font-face{font-family:"Zilla Slab";src:url(assets/fonts/zilla-slab-700.woff2) format("woff2");font-weight:700;font-display:swap}
+@font-face{font-family:"Zilla Slab";src:url(assets/fonts/zilla-slab-600.woff2) format("woff2");font-weight:600;font-display:swap}
+@font-face{font-family:"Inter Tight";src:url(assets/fonts/inter-tight.woff2) format("woff2");font-weight:100 900;font-display:swap}
+/* Venice Barbershop. Material world: teal walls, striped capes, a barber pole, hot lather in a mug, a straight razor,
+   a cream menu board with red rules. Feeling: friendly, old-school, no fuss. Palette: their teal, deep teal, cream paper,
+   pole red, navy. Type: Zilla Slab (their menu board's slab caps), Inter Tight (text). Motion: easy, warm, a little steam. */
+:root{--teal:#0f6f72;--teal2:#0b4f53;--teal3:#e3efee;--paper:#faf6ee;--cream:#f3ede1;--red:#c8332b;--navy:#1f2b4a;--ink:#1c2729;--mute:#5d6a6b;--line:rgba(28,39,41,.14);
+--disp:"Zilla Slab",Rockwell,Georgia,serif;--sans:"Inter Tight",system-ui,sans-serif;--pad:clamp(16px,4vw,56px);--navh:68px;--ease:cubic-bezier(.2,.7,.2,1)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;overflow-x:clip;scroll-padding-top:calc(var(--navh) + 10px)}
+body{background:var(--paper);color:var(--ink);font:400 1.02rem/1.6 var(--sans);-webkit-font-smoothing:antialiased;overflow-x:clip}
+a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+img{display:block;max-width:100%;height:auto}
+.wrap{max-width:1220px;margin:0 auto;padding:0 var(--pad)}
+.h2{font:700 clamp(2.2rem,5vw,4rem)/1 var(--disp);letter-spacing:-.01em;color:var(--teal2)}
+.h2 em{font-style:normal;color:var(--red)}
+.kick{display:inline-flex;align-items:center;gap:10px;font:700 .78rem/1 var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--red)}
+.kick::before{content:"";width:26px;height:10px;background:repeating-linear-gradient(-55deg,var(--red) 0 4px,#fff 4px 8px,var(--navy) 8px 12px,#fff 12px 16px);border-radius:2px}
+.lead{color:#3c4a4c;font-size:1.1rem;max-width:560px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;height:54px;padding:0 24px;border-radius:999px;font:700 1rem/1 var(--sans);transition:transform .2s var(--ease),background .2s,box-shadow .2s;white-space:nowrap}
+.btn svg{width:18px;height:18px}
+.btn--t{background:var(--teal);color:#fff;box-shadow:0 10px 24px -12px rgba(15,111,114,.8)}.btn--t:hover{background:var(--teal2);transform:translateY(-2px)}
+.btn--r{background:var(--red);color:#fff}.btn--r:hover{transform:translateY(-2px)}
+.btn--o{box-shadow:inset 0 0 0 2px var(--teal);color:var(--teal2)}.btn--o:hover{background:var(--teal3)}
+.rv{opacity:0;transform:translateY(26px);transition:opacity .9s var(--ease),transform .9s var(--ease)}.rv.in{opacity:1;transform:none}
+
+/* opener: a barber-pole wipe */
+.open{position:fixed;inset:0;z-index:100;pointer-events:none;overflow:hidden}
+.open i{position:absolute;inset:-50% -50%;background:repeating-linear-gradient(-55deg,var(--red) 0 60px,#fff 60px 120px,var(--navy) 120px 180px,#fff 180px 240px);animation:pole 1.25s cubic-bezier(.7,0,.2,1) forwards}
+.open b{position:absolute;inset:0;display:grid;place-items:center;font:700 clamp(2rem,6vw,4rem)/1 var(--disp);color:var(--teal2);background:var(--paper);animation:ofade .5s .1s ease forwards reverse;opacity:0}
+@keyframes pole{0%{transform:translateY(0)}100%{transform:translateY(-110%)}}
+.open.done{display:none}
+
+/* nav */
+.nav{position:fixed;inset:0 0 auto;height:var(--navh);z-index:60;transition:background .3s,box-shadow .3s}
+.nav.scrolled{background:rgba(250,246,238,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 1px 0 var(--line)}
+.nav .wrap{height:100%;display:flex;align-items:center;gap:22px}
+.brand{display:flex;align-items:center;gap:10px;font:700 1.2rem/1 var(--disp);color:var(--teal2)}
+.brand img{width:40px;height:40px;border-radius:10px}
+.brand small{display:block;font:600 .64rem/1 var(--sans);letter-spacing:.2em;color:var(--red);margin-top:4px}
+.nav__links{display:flex;gap:24px;margin-left:auto;font:600 .92rem/1 var(--sans)}
+.nav__links a{opacity:.75}.nav__links a:hover{opacity:1}
+.nav .btn{height:44px;padding:0 18px;font-size:.92rem}
+@media (max-width:900px){.nav__links{display:none}.nav .btn{margin-left:auto}.brand span{display:none}}
+
+/* hero */
+.hero{min-height:100svh;padding:calc(var(--navh) + 24px) 0 40px;display:flex;align-items:center}
+.hero .wrap{width:100%;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(20px,4vw,60px);align-items:center}
+.status{display:inline-flex;align-items:center;gap:9px;padding:8px 14px;border-radius:99px;background:#fff;box-shadow:inset 0 0 0 1px var(--line);font:600 .86rem/1 var(--sans)}
+.status i{width:9px;height:9px;border-radius:50%;background:#a3aaa9}.status.open i{background:#2fb36b;box-shadow:0 0 0 4px rgba(47,179,107,.18)}
+.hero h1{font:700 clamp(3rem,7vw,6.2rem)/.92 var(--disp);color:var(--teal2);letter-spacing:-.015em;margin:20px 0 18px}
+.hero h1 span{display:block}.hero h1 span:nth-child(3){color:var(--red)}
+.price{display:inline-flex;align-items:baseline;gap:10px;margin-top:22px;padding:12px 18px;background:var(--cream);border-radius:14px;box-shadow:inset 0 0 0 1px var(--line)}
+.price b{font:700 2.2rem/1 var(--disp);color:var(--teal2)}.price span{font-size:.9rem;color:var(--mute);max-width:240px;line-height:1.35}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.chips span{padding:8px 13px;border-radius:99px;background:var(--teal3);color:var(--teal2);font:600 .84rem/1 var(--sans)}
+.ctas{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+.stage{position:relative;aspect-ratio:1/1.02;border-radius:32px;background:radial-gradient(90% 70% at 50% 30%,#1a8a8d 0%,var(--teal) 45%,var(--teal2) 100%);overflow:hidden;box-shadow:0 40px 80px -40px rgba(11,79,83,.7)}
+.stage::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(255,255,255,.04) 0 1px,transparent 1px 64px),repeating-linear-gradient(0deg,rgba(255,255,255,.04) 0 1px,transparent 1px 64px);mask-image:linear-gradient(transparent 55%,#000 70%)}
+.stage::after{content:"";position:absolute;left:0;right:0;bottom:0;height:34%;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.12))}
+#gl{position:absolute;inset:0;width:100%;height:100%;z-index:1}
+.fallback{position:absolute;inset:12% 18% 22%;z-index:1;display:none}
+.nogl .fallback{display:block}.nogl #gl{display:none}
+.stage .hud{position:absolute;z-index:2;left:0;right:0;bottom:22px;display:flex;flex-direction:column;align-items:center;gap:12px;pointer-events:none}
+.holdbtn{pointer-events:auto;position:relative;display:flex;align-items:center;gap:12px;height:62px;padding:0 26px 0 10px;border-radius:99px;background:#fff;color:var(--teal2);font:700 1.05rem/1 var(--sans);box-shadow:0 14px 30px -12px rgba(0,0,0,.45);touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;transition:transform .2s var(--ease)}
+.holdbtn:active,.holdbtn.on{transform:scale(.96)}
+.ring{width:44px;height:44px;flex:0 0 44px}
+.ring circle{fill:none;stroke-width:4}
+.ring .bg{stroke:var(--teal3)}.ring .fg{stroke:var(--red);stroke-linecap:round;transform:rotate(-90deg);transform-origin:50% 50%;stroke-dasharray:113.1;stroke-dashoffset:113.1}
+.callout{position:absolute;z-index:3;top:20px;left:20px;display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:14px;background:rgba(255,255,255,.95);color:var(--teal2);font:700 .9rem/1.2 var(--sans);box-shadow:0 10px 24px -12px rgba(0,0,0,.4);transition:opacity .4s}
+.callout svg{width:22px;height:22px;color:var(--red)}
+.callout.gone{opacity:0;pointer-events:none}
+.callout.nudge,.holdbtn.nudge{animation:nudge .9s var(--ease)}
+@keyframes nudge{20%{transform:translateX(-6px) rotate(-1deg)}40%{transform:translateX(6px) rotate(1deg)}60%{transform:translateX(-4px)}80%{transform:translateX(3px)}}
+.payoff{position:absolute;z-index:3;left:20px;right:20px;top:20px;padding:16px 18px;border-radius:18px;background:rgba(255,255,255,.96);color:var(--teal2);box-shadow:0 16px 36px -16px rgba(0,0,0,.45);opacity:0;transform:translateY(-10px);transition:opacity .5s var(--ease),transform .5s var(--ease);pointer-events:none}
+.payoff.on{opacity:1;transform:none}
+.payoff b{display:block;font:700 1.35rem/1.1 var(--disp)}
+.payoff span{font-size:.92rem;color:var(--mute)}
+@media (max-width:900px){.hero{align-items:flex-start}.hero .wrap{grid-template-columns:1fr}.stage{order:-1;aspect-ratio:1/.92}.hero h1{font-size:clamp(2.8rem,13vw,4.2rem);margin-top:16px}.ctas .btn{flex:1 1 auto}}
+
+/* marquee */
+.marq{background:var(--teal2);color:#fff;overflow:hidden;padding:18px 0}
+.marq__t{display:flex;gap:36px;width:max-content;animation:marq 34s linear infinite;font:700 clamp(1.05rem,2vw,1.4rem)/1 var(--disp);letter-spacing:.06em;text-transform:uppercase}
+.marq__t span{display:flex;align-items:center;gap:36px}.marq__t span::after{content:"";width:26px;height:10px;border-radius:3px;background:repeating-linear-gradient(-55deg,var(--red) 0 4px,#fff 4px 8px,#9fb3d9 8px 12px,#fff 12px 16px)}
+@keyframes marq{to{transform:translateX(-50%)}}
+
+/* the works (pinned) */
+.works{position:relative;height:420vh;background:var(--cream)}
+.works__stage{position:sticky;top:0;height:100svh;display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(20px,4vw,60px);align-items:center;max-width:1220px;margin:0 auto;padding:calc(var(--navh) + 16px) var(--pad) 30px}
+.steps{position:relative;min-height:330px}
+.step{position:absolute;inset:0 0 auto;opacity:0;transform:translateY(20px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+.step.on{opacity:1;transform:none}
+.step i{font:700 .82rem/1 var(--sans);letter-spacing:.18em;color:var(--red);font-style:normal}
+.step h3{font:700 clamp(2.4rem,5vw,4.2rem)/1 var(--disp);color:var(--teal2);margin:14px 0 14px}
+.step p{font-size:1.1rem;color:#3c4a4c;max-width:460px}
+.step .tagp{display:inline-block;margin-top:16px;padding:7px 12px;border-radius:99px;background:#fff;font:700 .86rem/1 var(--sans);color:var(--teal2);box-shadow:inset 0 0 0 1px var(--line)}
+.dots{display:flex;gap:8px;margin-top:26px}.dots i{width:40px;height:4px;border-radius:4px;background:rgba(15,111,114,.18);overflow:hidden;position:relative}.dots i b{position:absolute;inset:0;background:var(--teal);transform-origin:left;transform:scaleX(0)}
+.frames{position:relative;height:min(74svh,620px)}
+.frame{position:absolute;inset:0;border-radius:26px;overflow:hidden;clip-path:inset(0 0 100% 0 round 26px);transition:clip-path 1s cubic-bezier(.7,0,.2,1);box-shadow:0 40px 70px -40px rgba(11,79,83,.6)}
+.frame.on{clip-path:inset(0 0 0 0 round 26px)}
+.frame img{width:100%;height:100%;object-fit:cover;transform:scale(1.12);transition:transform 4s ease-out}
+.frame.on img{transform:scale(1)}
+.frame figcaption{position:absolute;left:16px;bottom:16px;padding:7px 12px;border-radius:99px;background:rgba(255,255,255,.92);font:600 .82rem/1 var(--sans);color:var(--teal2)}
+@media (max-width:900px){.works{height:460vh}.works__stage{grid-template-columns:1fr;align-content:start;gap:16px}.frames{height:44svh;order:-1}.steps{min-height:230px}.step h3{font-size:2.3rem;margin:8px 0}.step p{font-size:1rem}}
+
+/* the shave */
+.shave{padding:clamp(90px,12vw,150px) 0;background:var(--paper)}
+.shave .wrap{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(24px,5vw,70px);align-items:center}
+.shave figure{position:relative;border-radius:28px;overflow:hidden;aspect-ratio:4/3;box-shadow:0 40px 70px -40px rgba(11,79,83,.6)}
+.shave figure img{width:100%;height:100%;object-fit:cover}
+.quote{font:700 clamp(1.8rem,3.6vw,2.9rem)/1.12 var(--disp);color:var(--teal2);margin:18px 0}
+.quote em{font-style:normal;color:var(--red)}
+.cite{font-size:.9rem;color:var(--mute)}
+.shave ul{list-style:none;display:grid;gap:8px;margin:20px 0}
+.shave li{display:flex;gap:10px;align-items:center;font-weight:600}
+.shave li::before{content:"";width:18px;height:18px;border-radius:50%;background:var(--teal3) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5 10.5l3 3 7-7' fill='none' stroke='%230f6f72' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E") center/14px no-repeat}
+@media (max-width:900px){.shave .wrap{grid-template-columns:1fr}}
+
+/* menu board + cash calculator */
+.menu{padding:clamp(90px,12vw,150px) 0;background:var(--teal);color:#fff;position:relative;overflow:hidden}
+.menu .h2{color:#fff}.menu .h2 em{color:#ffd9d4}.menu .kick{color:#ffd9d4}
+.menu .lead{color:#d7ecea}
+.mgrid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr);gap:clamp(20px,4vw,50px);margin-top:40px;align-items:start}
+.board{background:var(--cream);color:var(--ink);border-radius:22px;padding:clamp(18px,3vw,34px);box-shadow:0 40px 80px -40px rgba(0,0,0,.6);border-top:6px solid var(--teal2)}
+.mi{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:14px;align-items:center;padding:14px 0;border-bottom:1px solid rgba(200,51,43,.35)}
+.mi h4{font:700 clamp(1.05rem,2vw,1.35rem)/1.1 var(--disp);color:var(--teal);text-transform:uppercase;letter-spacing:.02em}
+.mi p{font-size:.86rem;color:#7a7f7c;margin-top:3px}
+.mi .pr{font:700 1.5rem/1 var(--disp);color:var(--ink);text-align:right}.mi .pr small{display:block;font:500 .7rem/1 var(--sans);color:#7a7f7c;margin-top:3px}
+.step2{display:flex;align-items:center;gap:6px}
+.step2 button{width:34px;height:34px;border-radius:50%;box-shadow:inset 0 0 0 1.5px var(--teal);color:var(--teal);font:700 1.1rem/1 var(--sans);display:grid;place-items:center}
+.step2 button:hover{background:var(--teal3)}
+.step2 output{min-width:18px;text-align:center;font:700 1rem/1 var(--sans)}
+.pair{display:flex;align-items:center;gap:12px;margin:22px 0 4px;font:600 .78rem/1 var(--sans);letter-spacing:.2em;color:var(--teal);text-transform:uppercase}
+.pair::before,.pair::after{content:"";flex:1;height:1px;background:var(--teal);opacity:.5}
+.cash{position:sticky;top:calc(var(--navh) + 20px);background:#fff;color:var(--ink);border-radius:22px;padding:24px;box-shadow:0 40px 80px -40px rgba(0,0,0,.6)}
+.cash h3{font:700 1.5rem/1 var(--disp);color:var(--teal2)}
+.bill{margin:18px 0;display:grid;place-items:center;aspect-ratio:2.35/1;border-radius:12px;background:linear-gradient(135deg,#dfe9d8,#c9dcc4);box-shadow:inset 0 0 0 6px #fff,inset 0 0 0 7px #9bb79a;position:relative;overflow:hidden}
+.bill::before{content:"";position:absolute;width:40%;aspect-ratio:1;border-radius:50%;box-shadow:inset 0 0 0 2px rgba(60,100,60,.35)}
+.bill b{position:relative;font:700 clamp(2.4rem,5vw,3.2rem)/1 var(--disp);color:#24502a}
+.bill.bump{animation:bump .35s var(--ease)}@keyframes bump{40%{transform:scale(1.05)}}
+.cash ul{list-style:none;display:grid;gap:6px;font-size:.92rem;color:#3c4a4c;min-height:24px}
+.cash li{display:flex;justify-content:space-between;gap:10px}
+.cash .note{margin-top:14px;padding:12px 14px;border-radius:12px;background:var(--teal3);color:var(--teal2);font-size:.9rem;font-weight:600}
+.cash .warn{margin-top:10px;font-size:.86rem;color:var(--red);display:none}.cash .warn.on{display:block}
+@media (max-width:980px){.mgrid{grid-template-columns:1fr}.cash{position:relative;top:0}}
+
+/* regulars + barbers */
+.chairs{padding:clamp(90px,12vw,150px) 0}
+.chairs .wrap{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:clamp(24px,5vw,70px);align-items:center}
+.names{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.names span{display:flex;align-items:center;gap:10px;padding:10px 16px 10px 10px;border-radius:99px;background:var(--cream);font:700 1.15rem/1 var(--disp);color:var(--teal2)}
+.names span i{width:30px;height:30px;border-radius:50%;background:repeating-linear-gradient(-55deg,var(--red) 0 5px,#fff 5px 10px,var(--navy) 10px 15px,#fff 15px 20px)}
+.pics{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pics figure{border-radius:22px;overflow:hidden;aspect-ratio:4/5;box-shadow:0 30px 60px -36px rgba(11,79,83,.6)}
+.pics figure:nth-child(2){transform:translateY(40px)}
+.pics img{width:100%;height:100%;object-fit:cover}
+@media (max-width:900px){.chairs .wrap{grid-template-columns:1fr}.pics figure:nth-child(2){transform:none}}
+
+/* visit */
+.visit{padding:clamp(80px,10vw,130px) 0;background:var(--cream)}
+.vgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:36px}
+.vcard{background:#fff;border-radius:22px;padding:26px;box-shadow:inset 0 0 0 1px var(--line)}
+.vcard h3{font:700 1.3rem/1 var(--disp);color:var(--teal2);margin-bottom:12px}
+.vcard p{color:#3c4a4c}
+.hours div{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line);font-size:.95rem}
+.hours div.today{color:var(--red);font-weight:700}
+.vcard .btn{margin-top:16px;width:100%}
+@media (max-width:900px){.vgrid{grid-template-columns:1fr}}
+.close{padding:clamp(90px,12vw,150px) 0;text-align:center;background:var(--teal2);color:#fff;position:relative;overflow:hidden}
+.close::before{content:"";position:absolute;left:0;right:0;top:0;height:14px;background:repeating-linear-gradient(-55deg,var(--red) 0 22px,#fff 22px 44px,var(--navy) 44px 66px,#fff 66px 88px)}
+.close .h2{color:#fff;font-size:clamp(2.6rem,7vw,5.6rem)}.close .h2 em{color:#ffd9d4}
+.close p{color:#cfe5e3;margin:16px auto 0;max-width:520px}
+.close .ctas{justify-content:center}
+.close .btn--o{box-shadow:inset 0 0 0 2px #fff;color:#fff}.close .btn--o:hover{background:rgba(255,255,255,.1)}
+footer{padding:40px 0 calc(36px + env(safe-area-inset-bottom));background:var(--paper)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:16px 30px;justify-content:space-between;align-items:center;font-size:.9rem;color:var(--mute)}
+footer a{text-decoration:underline}
+.bar{position:fixed;inset:auto 0 0;z-index:70;display:none;grid-template-columns:1fr 1fr;gap:8px;padding:8px 10px calc(8px + env(safe-area-inset-bottom));background:rgba(250,246,238,.95);backdrop-filter:blur(10px);box-shadow:0 -1px 0 var(--line)}
+.bar a{height:48px;border-radius:99px;display:flex;align-items:center;justify-content:center;font:700 .95rem/1 var(--sans)}
+.bar a:first-child{background:var(--teal);color:#fff}.bar a:last-child{box-shadow:inset 0 0 0 2px var(--teal);color:var(--teal2)}
+@media (max-width:900px){.bar{display:grid}footer{padding-bottom:calc(96px + env(safe-area-inset-bottom))}}
+:focus-visible{outline:3px solid var(--red);outline-offset:3px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.open{display:none}.marq__t{animation:none}.rv,.step,.frame,.frame img{opacity:1;transform:none!important;transition:none!important;clip-path:none!important}}
+</style>
+</head>
+<body>
+<div class="open" id="open" aria-hidden="true"><i></i></div>
+
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Venice Barbershop, back to top"><img src="img/logo.webp" alt="" width="300" height="300"><span>Venice Barbershop<small>EST 2010</small></span></a>
+    <nav class="nav__links" aria-label="Main"><a href="#works">The works</a><a href="#menu">Menu</a><a href="#visit">Visit</a></nav>
+    <a class="btn btn--t" href="tel:+19417167570">Call 941-716-7570</a>
+  </div>
+</header>
+
+<main id="top">
+<section class="hero" aria-label="Venice Barbershop">
+  <div class="wrap">
+    <div>
+      <span class="status" id="status"><i></i><span id="statusTxt">Walk-ins welcome</span></span>
+      <h1><span>Walk in.</span><span>Sit down.</span><span>Relax.</span></h1>
+      <p class="lead">Every haircut comes with a hot lather neck shave and a shoulder massage. No extra charge. Never has been.</p>
+      <div class="price"><b>$26</b><span>haircut, neck shave and shoulder massage, all in</span></div>
+      <div class="chips"><span>Walk-ins welcome</span><span>Cash only · ATM inside</span><span>Next to the courthouse</span></div>
+      <div class="ctas">
+        <a class="btn btn--t" href="tel:+19417167570"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>941-716-7570</a>
+        <a class="btn btn--o" id="dirTop" href="#" target="_blank" rel="noopener">Get directions</a>
+      </div>
+    </div>
+    <div class="stage" id="stage">
+      <canvas id="gl" aria-label="A 3D shaving mug, brush and straight razor. Hold the button to whip up hot lather."></canvas>
+      <svg class="fallback" viewBox="0 0 200 200" aria-hidden="true"><ellipse cx="100" cy="176" rx="70" ry="8" fill="rgba(0,0,0,.18)"/><path d="M58 88h84l-6 82a8 8 0 0 1-8 7H72a8 8 0 0 1-8-7z" fill="#11777a"/><rect x="58" y="112" width="84" height="22" fill="#f3ede1"/><g fill="#fffdf8"><circle cx="70" cy="86" r="12"/><circle cx="88" cy="78" r="15"/><circle cx="108" cy="76" r="16"/><circle cx="126" cy="82" r="13"/><circle cx="138" cy="90" r="9"/><circle cx="98" cy="66" r="11"/></g></svg>
+      <div class="callout" id="callout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11V5.5a1.5 1.5 0 0 1 3 0V11m0-1.5a1.5 1.5 0 0 1 3 0V11m0-.5a1.5 1.5 0 0 1 3 0V15a6 6 0 0 1-6 6h-1a6 6 0 0 1-5-2.7L3.6 14a1.5 1.5 0 0 1 2.5-1.7L9 15"/></svg><span id="calloutTxt">Press and hold to whip up the lather</span></div>
+      <div class="payoff" id="payoff" aria-live="polite"><b>That's the hot lather.</b><span>It comes with every $26 haircut, along with a shoulder massage.</span></div>
+      <div class="hud"><button class="holdbtn" id="hold" type="button" aria-label="Hold to lather"><svg class="ring" viewBox="0 0 44 44"><circle class="bg" cx="22" cy="22" r="18"/><circle class="fg" id="ring" cx="22" cy="22" r="18"/></svg><span id="holdTxt">Hold to lather</span></button></div>
+    </div>
+  </div>
+</section>
+
+<div class="marq" aria-hidden="true"><div class="marq__t" id="marq"></div></div>
+
+<section class="works" id="works" aria-label="The works">
+  <div class="works__stage">
+    <div>
+      <span class="kick">The works · $26</span>
+      <div class="steps" id="steps" style="margin-top:18px"></div>
+      <div class="dots" id="dots"></div>
+    </div>
+    <div class="frames" id="frames"></div>
+  </div>
+</section>
+
+<section class="shave" aria-label="The traditional shave">
+  <div class="wrap">
+    <figure class="rv"><img src="img/shave.webp" alt="A barber giving a hot lather straight razor shave at Venice Barbershop" width="1080" height="810" loading="lazy"></figure>
+    <div class="rv">
+      <span class="kick">The traditional shave · $35</span>
+      <p class="quote">Still the only place in Venice doing a <em>real</em> hot lather straight razor shave.</p>
+      <p class="cite">In the shop's own words.</p>
+      <ul><li>Hot towel</li><li>Hot lather</li><li>A real straight razor blade</li><li>Add it to a haircut for $56</li></ul>
+      <a class="btn btn--r" href="tel:+19417167570">Call ahead or just walk in</a>
+    </div>
+  </div>
+</section>
+
+<section class="menu" id="menu" aria-label="Menu and cash calculator">
+  <div class="wrap">
+    <span class="kick rv">The menu</span>
+    <h2 class="h2 rv" style="margin-top:16px">Know what to bring. <em>It's cash only.</em></h2>
+    <p class="lead rv" style="margin-top:14px">Tap + on what you're getting (bring the whole family if you want) and it tells you how much cash to have on you. There's an ATM in the shop if you forget.</p>
+    <div class="mgrid">
+      <div class="board rv" id="board"></div>
+      <aside class="cash rv" aria-label="Cash to bring">
+        <h3>Bring this much cash</h3>
+        <div class="bill" id="bill"><b id="total">$0</b></div>
+        <ul id="lines"><li style="color:#8a908e">Nothing picked yet.</li></ul>
+        <p class="warn" id="warn">Dads &amp; Lads is for a dad and his sons 18 and under, so pick at least two.</p>
+        <p class="note">Cash only. The ATM's right in the shop if you need it. Tip not included.</p>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<section class="chairs" aria-label="The barbers">
+  <div class="wrap">
+    <div class="rv">
+      <span class="kick">On the chairs</span>
+      <h2 class="h2" style="margin-top:16px">Same faces, <em>same chair.</em></h2>
+      <p class="lead" style="margin-top:14px">Sam, Will and John are on the chairs. Walk in, grab a seat, and whoever's free next takes care of you.</p>
+      <div class="names"><span><i></i>Sam</span><span><i></i>Will</span><span><i></i>John</span></div>
+    </div>
+    <div class="pics">
+      <figure class="rv"><img src="img/client-smile.webp" alt="A smiling regular in a striped cape at Venice Barbershop" width="1080" height="1350" loading="lazy"></figure>
+      <figure class="rv"><img src="img/client-cape.webp" alt="A regular with a fresh cut and trimmed beard" width="1080" height="1350" loading="lazy"></figure>
+    </div>
+  </div>
+</section>
+
+<section class="visit" id="visit" aria-label="Visit">
+  <div class="wrap">
+    <span class="kick rv">Visit</span>
+    <h2 class="h2 rv" style="margin-top:16px">Right next to <em>the courthouse.</em></h2>
+    <div class="vgrid">
+      <div class="vcard rv"><h3>Where</h3><p>3956 S Tamiami Trail<br>Venice, Florida</p><p style="margin-top:8px;color:var(--mute);font-size:.92rem">Right next to the courthouse.</p><a class="btn btn--t" id="dirCard" href="#" target="_blank" rel="noopener">Get directions</a></div>
+      <div class="vcard rv"><h3>When</h3><div class="hours" id="hours"></div><p style="margin-top:10px;color:var(--mute);font-size:.88rem">Saturday's last walk-in is 1:45. Call for weekday opening times and Sundays.</p></div>
+      <div class="vcard rv"><h3>How</h3><p>Walk in whenever. Cash only, and the ATM's right in the shop.</p><a class="btn btn--o" href="tel:+19417167570">Call 941-716-7570</a></div>
+    </div>
+  </div>
+</section>
+
+<section class="close" aria-label="Come in">
+  <div class="wrap">
+    <h2 class="h2">Looking rough? <em>Don't.</em></h2>
+    <p>$26 gets you the cut, a hot lather neck shave and a shoulder massage. Walk in, sit down, relax.</p>
+    <div class="ctas"><a class="btn btn--r" href="tel:+19417167570">Call 941-716-7570</a><a class="btn btn--o" id="dirClose" href="#" target="_blank" rel="noopener">Get directions</a></div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© <span id="yr"></span> Venice Barbershop · Est. 2010 · 3956 S Tamiami Trail, Venice, FL</span>
+    <span><a href="https://www.instagram.com/venicebarbershopest2010/" target="_blank" rel="noopener">Instagram</a> · Site by <a href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener">ElaSystems</a></span>
+  </div>
+</footer>
+<nav class="bar" aria-label="Quick actions"><a href="tel:+19417167570">Call</a><a id="dirBar" href="#" target="_blank" rel="noopener">Directions</a></nav>
+
+<script type="module">
+const CONFIG = {
+  phone: "941-716-7570", tel: "+19417167570",
+  address: "3956 S Tamiami Trail, Venice, FL",
+  // known hours: weekdays close at 6 (opening time not posted), Saturday 10–2 (last walk-in 1:45), Sunday not posted
+  hours: { mon: [null, "18:00"], tue: [null, "18:00"], wed: [null, "18:00"], thu: [null, "18:00"], fri: [null, "18:00"], sat: ["10:00", "14:00"], sun: "call" },
+  menu: [
+    ["Haircut", 26, "Includes hot lather neck shave & shoulder massage"],
+    ["Dads & Lads Special", 22, "Dad & son age 18 & under · no limit on kids", "each"],
+    ["Basic Beard", 20, "Beard trim, straight razor lineup"],
+    ["Classic Beard", 30, "Beard trim, straight razor lineup, hot towel"],
+    ["Executive Beard", 35, "Beard trim, straight razor lineup, hot towel, beard cleanse, finished with balm or oil"],
+    ["The Traditional Shave", 35, "Hot towel, hot lather, real straight razor"],
+    "Paired with a haircut",
+    ["Haircut + Basic", 40], ["Haircut + Classic", 46], ["Haircut + Executive", 56], ["Haircut + Traditional Shave", 56]
+  ],
+  works: [
+    ["01", "Walk in.", "No appointment needed. Come in, grab a seat, and you're next.", "Walk-ins welcome", "img/shop-cut.webp", "In the chair at Venice Barbershop"],
+    ["02", "The cut.", "Whatever you came in for, done right by Sam, Will or John.", "$26", "img/client-smile.webp", "A regular, fresh out of the chair"],
+    ["03", "Hot lather neck shave.", "Hot lather and a straight razor to clean up the neckline. Comes with every haircut.", "Included", "img/shave.webp", "Hot lather, real blade"],
+    ["04", "Shoulder massage.", "A quick shoulder massage before you get up. We don't charge extra for it. Never have.", "Included", "img/client-cape.webp", "Done. Looking sharp."]
+  ]
+};
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
+const RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
+$("#yr").textContent = new Date().getFullYear();
+const maps = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent("3956 S Tamiami Trail, Venice, FL");
+["#dirTop", "#dirCard", "#dirClose", "#dirBar"].forEach(s => $(s).href = maps);
+setTimeout(() => $("#open").classList.add("done"), 1400);
+
+/* ---------- hours + status (Venice, FL is Eastern time) ---------- */
+const NAMES = { mon: "Monday", tue: "Tuesday", wed: "Wednesday", thu: "Thursday", fri: "Friday", sat: "Saturday", sun: "Sunday" }, ORDER = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
+const fmt = hm => { let [h, m] = hm.split(":").map(Number); const ap = h >= 12 ? "PM" : "AM"; h = h % 12 || 12; return m ? `${h}:${String(m).padStart(2, "0")} ${ap}` : `${h} ${ap}`; };
+const now = () => { const p = new Intl.DateTimeFormat("en-US", { timeZone: "America/New_York", weekday: "short", hour: "2-digit", minute: "2-digit", hour12: false }).formatToParts(new Date()); const g = t => p.find(x => x.type === t).value; return { d: g("weekday").slice(0, 3).toLowerCase(), m: (+g("hour") % 24) * 60 + +g("minute") }; };
+{ const { d, m } = now(), h = CONFIG.hours[d], toM = s => { const [a, b] = s.split(":").map(Number); return a * 60 + b; }; let open = false, txt = "Walk-ins welcome";
+  if (d === "sat") { if (m >= 600 && m < 825) { open = true; txt = "Open now · last walk-in 1:45"; } else if (m < 600) txt = "Opens today at 10 AM"; else txt = "Closed · see you Monday"; }
+  else if (Array.isArray(h)) { txt = m < toM(h[1]) ? "Walk in today until 6 PM" : "Closed for today · back tomorrow"; open = m < toM(h[1]); }
+  else txt = "Sunday: call ahead";
+  $("#status").classList.toggle("open", open); $("#statusTxt").textContent = txt;
+  $("#hours").innerHTML = ORDER.map(k => { const v = CONFIG.hours[k]; const t = v === "call" ? "Call ahead" : v[0] ? `${fmt(v[0])} – ${fmt(v[1])}` : `Until ${fmt(v[1])}`; return `<div class="${k === d ? "today" : ""}"><span>${NAMES[k]}</span><span>${t}</span></div>`; }).join(""); }
+
+/* ---------- marquee ---------- */
+{ const w = ["Hot lather neck shave", "Shoulder massage", "Straight razor shaves", "Beard trims", "Dads & Lads", "Walk in", "Cash only", "Est. 2010"]; const one = w.map(x => `<span>${esc(x)}</span>`).join(""); $("#marq").innerHTML = one + one; }
+
+/* ---------- the works (pinned) ---------- */
+$("#steps").innerHTML = CONFIG.works.map(([n, t, p, tag]) => `<div class="step"><i>STEP ${n}</i><h3>${esc(t)}</h3><p>${esc(p)}</p><span class="tagp">${esc(tag)}</span></div>`).join("");
+$("#dots").innerHTML = CONFIG.works.map(() => "<i><b></b></i>").join("");
+$("#frames").innerHTML = CONFIG.works.map(([, , , , src, alt]) => `<figure class="frame"><img src="${src}" alt="${esc(alt)}" loading="lazy"><figcaption>${esc(alt)}</figcaption></figure>`).join("");
+const works = $("#works"); let wi = -1;
+function worksScroll() {
+  const r = works.getBoundingClientRect(), k = clamp(-r.top / (r.height - innerHeight)), n = CONFIG.works.length, f = k * n, i = Math.min(n - 1, Math.floor(f));
+  if (i !== wi) { wi = i; $$(".step").forEach((e, j) => e.classList.toggle("on", j === i)); $$(".frame").forEach((e, j) => e.classList.toggle("on", j <= i)); }
+  $$("#dots b").forEach((b, j) => b.style.transform = `scaleX(${j < i ? 1 : j === i ? f - i : 0})`);
+}
+addEventListener("scroll", worksScroll, { passive: true }); worksScroll();
+
+/* ---------- menu board + cash calculator ---------- */
+const qty = {};
+$("#board").innerHTML = CONFIG.menu.map(it => typeof it === "string" ? `<p class="pair">${esc(it)}</p>` :
+  `<div class="mi"><div><h4>${esc(it[0])}</h4>${it[2] ? `<p>${esc(it[2])}</p>` : ""}</div><div class="pr">$${it[1]}${it[3] ? `<small>${esc(it[3])}</small>` : ""}</div><div class="step2"><button type="button" data-n="${esc(it[0])}" data-d="-1" aria-label="Remove one ${esc(it[0])}">−</button><output data-q="${esc(it[0])}">0</output><button type="button" data-n="${esc(it[0])}" data-d="1" aria-label="Add one ${esc(it[0])}">+</button></div></div>`).join("");
+const price = Object.fromEntries(CONFIG.menu.filter(x => typeof x !== "string").map(x => [x[0], x[1]]));
+$$(".step2 button").forEach(b => b.addEventListener("click", () => { const n = b.dataset.n; qty[n] = Math.max(0, Math.min(12, (qty[n] || 0) + +b.dataset.d)); calc(); }));
+function calc() {
+  let total = 0; const rows = [];
+  Object.entries(qty).forEach(([n, q]) => { if (!q) return; total += q * price[n]; rows.push(`<li><span>${q} × ${esc(n)}</span><span>$${q * price[n]}</span></li>`); });
+  $$("output[data-q]").forEach(o => o.textContent = qty[o.dataset.q] || 0);
+  $("#lines").innerHTML = rows.join("") || `<li style="color:#8a908e">Nothing picked yet.</li>`;
+  $("#warn").classList.toggle("on", qty["Dads & Lads Special"] === 1);
+  const t = $("#total"); if (t.textContent !== "$" + total) { t.textContent = "$" + total; if (!RM) { const b = $("#bill"); b.classList.remove("bump"); void b.offsetWidth; b.classList.add("bump"); } }
+}
+calc();
+
+/* ---------- reveals + nav ---------- */
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { rootMargin: "0px 0px -8% 0px" });
+$$(".rv").forEach(el => io.observe(el));
+const nav = $("#nav"), ns = () => nav.classList.toggle("scrolled", scrollY > 20); addEventListener("scroll", ns, { passive: true }); ns();
+
+/* ---------- hold to lather ---------- */
+const holdBtn = $("#hold"), callout = $("#callout"), ring = $("#ring"); let lather = null, touched = false, done = false;
+if (!matchMedia("(hover: hover) and (pointer: fine)").matches) $("#calloutTxt").textContent = "Press and hold the button to whip up the lather";
+const setRing = l => { ring.style.strokeDashoffset = String(113.1 * (1 - l)); };
+const press = on => { if (on && !touched) { touched = true; callout.classList.add("gone"); } holdBtn.classList.toggle("on", on); lather && lather.hold(on); if (!lather && on) fullDone(); };
+holdBtn.addEventListener("pointerdown", e => { e.preventDefault(); holdBtn.setPointerCapture(e.pointerId); press(true); });
+["pointerup", "pointercancel", "lostpointercapture"].forEach(ev => holdBtn.addEventListener(ev, () => press(false)));
+holdBtn.addEventListener("keydown", e => { if ((e.key === " " || e.key === "Enter") && !e.repeat) { e.preventDefault(); press(true); } });
+holdBtn.addEventListener("keyup", e => { if (e.key === " " || e.key === "Enter") press(false); });
+holdBtn.addEventListener("contextmenu", e => e.preventDefault());
+function fullDone() { if (done) return; done = true; setRing(1); $("#payoff").classList.add("on"); $("#holdTxt").textContent = "Hot lather, ready"; callout.classList.add("gone"); }
+setTimeout(() => { if (!touched) { callout.classList.add("nudge"); holdBtn.classList.add("nudge"); } }, 3500);
+
+const webgl = () => { try { const c = document.createElement("canvas"); return !!(c.getContext("webgl2") || c.getContext("webgl")); } catch (e) { return false; } };
+(async () => {
+  if (!webgl()) { $("#stage").classList.add("nogl"); return; }
+  try {
+    await Promise.race([document.fonts.load('700 74px "Zilla Slab"'), new Promise(r => setTimeout(r, 1500))]);
+    const { mountLather } = await import("./assets/lather.js");
+    lather = await mountLather($("#gl"), { onLevel: setRing, onFull: fullDone });
+    window.__lather = lather;
+  } catch (e) { console.error(e); $("#stage").classList.add("nogl"); }
+})();
+</script>
+</body>
+</html>
