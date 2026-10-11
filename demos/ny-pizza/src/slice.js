@@ -1,12 +1,12 @@
 /* =====================================================================
-   Joe's Pizza Ann Arbor: "Fold it like a New Yorker."
+   Brickglow Pizza (concept): "Fold it like a New Yorker."
    A whole NY cheese pie on an aluminum tray. One slice lifts out (cheese
    strands stretch and snap) and the tip flops, the way a real NY slice
    does. Press and hold to fold it lengthwise: the fold stiffens the slice,
    and holding on takes bites (scalloped, shader-discarded) until only the
    crust is left; then the next slice comes up.
    api.top('cheese' | 'pepperoni') repaints the pie.
-   Bundle: kit/build3d/build.sh joespizzaannarbor/src/slice.js joespizzaannarbor/assets/slice.js
+   Bundle: kit/build3d/build.sh demos/ny-pizza/src/slice.js demos/ny-pizza/assets/slice.js
    ===================================================================== */
 import * as THREE from 'three';
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
@@ -29,7 +29,14 @@ export async function mountSlice(canvas, o = {}) {
   const scene = new THREE.Scene(), camera = new THREE.PerspectiveCamera(30, 1, .05, 60), world = new THREE.Group(); scene.add(world);
   const [env, pepImg] = await Promise.all([
     new Promise(res => new RGBELoader().load(A0 + 'studio-512.hdr', res, undefined, () => res(null))),
-    new Promise(res => { const i = new Image(); i.onload = () => res(i); i.onerror = () => res(null); i.src = A0 + 'tex/pep.png'; })
+    Promise.resolve((() => { // pepperoni drawn in code: cured red disc, darker rim, fat flecks, a little char
+      const c = document.createElement('canvas'); c.width = c.height = 128; const g = c.getContext('2d'); let sd = 5; const r = (a, b) => { sd = (sd * 16807) % 2147483647; return a + (b - a) * sd / 2147483647; };
+      const gr = g.createRadialGradient(60, 58, 4, 64, 64, 60); gr.addColorStop(0, '#d2452a'); gr.addColorStop(.7, '#b8301c'); gr.addColorStop(.92, '#8e2010'); gr.addColorStop(1, 'rgba(110,25,10,0)');
+      g.fillStyle = gr; g.beginPath(); g.arc(64, 64, 60, 0, 7); g.fill();
+      for (let i = 0; i < 46; i++) { const a = r(0, 6.28), d = r(0, 48); g.fillStyle = `rgba(250,${200 + r(0, 40) | 0},${170 + r(0, 40) | 0},${r(.35, .7)})`; g.beginPath(); g.ellipse(64 + Math.cos(a) * d, 64 + Math.sin(a) * d, r(1.5, 4), r(1, 2.5), r(0, 3), 0, 7); g.fill(); }
+      for (let i = 0; i < 10; i++) { const a = r(0, 6.28); g.fillStyle = 'rgba(60,15,5,.45)'; g.beginPath(); g.arc(64 + Math.cos(a) * 55, 64 + Math.sin(a) * 55, r(3, 7), 0, 7); g.fill(); }
+      const hl = g.createRadialGradient(48, 44, 2, 48, 44, 26); hl.addColorStop(0, 'rgba(255,220,190,.35)'); hl.addColorStop(1, 'rgba(255,220,190,0)'); g.fillStyle = hl; g.fillRect(0, 0, 128, 128);
+      return c; })())
   ]);
   if (env) { env.mapping = THREE.EquirectangularReflectionMapping; scene.environment = env; scene.environmentIntensity = .8; scene.environmentRotation.set(0, .6, 0); }
   const key = new THREE.DirectionalLight(0xfff2e2, 2.4); key.position.set(2, 5, 3);
@@ -59,7 +66,7 @@ export async function mountSlice(canvas, o = {}) {
     pepSpots = [];
     if (topping === 'pepperoni' && pepImg) {
       for (let ring = 0; ring < 3; ring++) { const n = [6, 13, 19][ring], rr = [.2, .5, .76][ring]; for (let i = 0; i < n; i++) { const a = i / n * Math.PI * 2 + ring * .4 + rnd(-.1, .1), r2 = rr * (c - 40) + rnd(-12, 12), x = c + Math.cos(a) * r2, y = c + Math.sin(a) * r2, s = rnd(54, 66);
-        g.save(); g.translate(x, y); g.rotate(rnd(0, 6)); g.shadowColor = 'rgba(120,30,10,.5)'; g.shadowBlur = 6; g.filter = 'saturate(1.25) brightness(.92)'; g.drawImage(pepImg, -s / 2, -s / 2, s, s); g.restore(); g.filter = 'none';
+        g.save(); g.translate(x, y); g.rotate(rnd(0, 6)); g.shadowColor = 'rgba(120,30,10,.5)'; g.shadowBlur = 6; g.drawImage(pepImg, -s / 2, -s / 2, s, s); g.restore();
         g.strokeStyle = 'rgba(110,25,10,.55)'; g.lineWidth = 3; g.beginPath(); g.arc(x, y, s * .46, 0, 7); g.stroke(); pepSpots.push([x / w, y / w, s / w]); } }
     }
     cheeseTex.needsUpdate = true;
