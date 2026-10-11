@@ -1,11 +1,11 @@
 /* =====================================================================
-   The Gallery: "On View". Their arched G monogram built as a real object:
-   a bronze double arch on a black-marble plinth, with their own footage
-   playing inside it behind glass.
+   Plinth Hall (ElaSystems concept): "On view". A bronze double arch on a
+   black-marble plinth, with a painting drawn in code (a 2D canvas passed in
+   as o.picture) hanging inside it behind glass.
    Sequence: plinth rises → outer arch casts upward → inner arch traces
    down → the picture fades up behind the glass → a light sweep crosses it.
-   Scroll pushes the camera toward the frame (setPush 0..1).
-   Bundle: kit/build3d/build.sh thegallerymi/src/arch.js thegallerymi/assets/arch.js
+   Call api.refresh() after redrawing the picture canvas.
+   Bundle: kit/build3d/build.sh demos/food-hall/src/arch.js demos/food-hall/assets/arch.js
    ===================================================================== */
 import * as THREE from 'three';
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
@@ -14,7 +14,7 @@ const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
 const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 const easeOut = t => 1 - Math.pow(1 - t, 3);
 
-// picture opening: 9:16 like the footage
+// picture opening: 9:16 portrait canvas
 const W = 1, H = 1.78, T = .085, GAP = .05, T2 = .022, BASE = .46;
 
 function archPath(p, w, h, y0) { // rectangle with a semicircle top, counter-clockwise
@@ -46,7 +46,7 @@ function marble(w, h, seed = 7, label) {
   g.filter = 'blur(1.4px)'; for (let i = 0; i < 26; i++) vein(.05 + rnd() * .08, 1 + rnd() * 3, 40 + rnd() * 90);
   g.filter = 'blur(.5px)'; for (let i = 0; i < 9; i++) vein(.25 + rnd() * .35, .6 + rnd() * 1.2, 50 + rnd() * 80);
   g.filter = 'none';
-  // granite sparkle, like their bar top
+  // granite sparkle
   for (let i = 0; i < 900; i++) { g.fillStyle = `rgba(255,250,240,${rnd() * .22})`; g.fillRect(rnd() * w, rnd() * h, 1.2, 1.2); }
   if (label) label(g, w, h);
   return c;
@@ -90,9 +90,9 @@ export async function mountArch(canvas, o = {}) {
     g.font = '500 44px Cinzel, "Bodoni Moda", serif'; g.textAlign = 'center'; g.textBaseline = 'middle';
     g.letterSpacing = '14px';
     const gr = g.createLinearGradient(0, h * .3, 0, h * .7); gr.addColorStop(0, '#e9cf9f'); gr.addColorStop(.5, '#b38a55'); gr.addColorStop(1, '#8a6436');
-    g.fillStyle = gr; g.fillText('THE  GALLERY', w / 2, h * .46);
+    g.fillStyle = gr; g.fillText('PLINTH  HALL', w / 2, h * .46);
     g.font = '500 17px Cinzel, serif'; g.letterSpacing = '9px'; g.fillStyle = 'rgba(214,186,140,.75)';
-    g.fillText('A CULINARY + LOUNGE EXPERIENCE', w / 2, h * .72);
+    g.fillText('FOOD HALL + LOUNGE', w / 2, h * .72);
   });
   const mtex = c => { const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; return t; };
   const stone = map => new THREE.MeshPhysicalMaterial({ map, roughness: .36, clearcoat: .35, clearcoatRoughness: .2, metalness: 0, envMapIntensity: .22 });
@@ -126,9 +126,9 @@ export async function mountArch(canvas, o = {}) {
   const back = new THREE.Mesh(new THREE.ShapeGeometry(archPath(new THREE.Shape(), W + 2 * (GAP + T2) + .02, H + 2 * (GAP + T2) + .02, -(GAP + T2) - .01), 96), new THREE.MeshStandardMaterial({ color: 0x0b0b0c, roughness: .9, transparent: true, opacity: 0 }));
   back.position.z = -.061; arch.add(back);
 
-  // ---- the picture: their footage, mapped into the arch opening ----
+  // ---- the picture: a painting drawn in code, mapped into the arch opening ----
   let vtex = null;
-  if (o.video) { vtex = new THREE.VideoTexture(o.video); vtex.colorSpace = THREE.SRGBColorSpace; vtex.generateMipmaps = false; vtex.minFilter = THREE.LinearFilter; }
+  if (o.picture) { vtex = new THREE.CanvasTexture(o.picture); vtex.colorSpace = THREE.SRGBColorSpace; vtex.generateMipmaps = false; vtex.minFilter = THREE.LinearFilter; vtex.anisotropy = 4; }
   const picGeo = new THREE.ShapeGeometry(archPath(new THREE.Shape(), W, H, 0), 96);
   { const uv = picGeo.attributes.uv, pos = picGeo.attributes.position; for (let i = 0; i < uv.count; i++) uv.setXY(i, (pos.getX(i) + W / 2) / W, pos.getY(i) / H); }
   const picMat = new THREE.MeshBasicMaterial({ map: vtex, color: vtex ? 0xffffff : 0x1a1714, toneMapped: false, transparent: true, opacity: 0 });
@@ -220,6 +220,7 @@ export async function mountArch(canvas, o = {}) {
   return {
     state: st, renderer,
     setPush(p) { st.push = clamp(p); start(); },
+    refresh() { if (vtex) vtex.needsUpdate = true; start(); },
     replay() { Object.assign(st, { plinth: 0, outer: 0, inner: 0, pic: 0 }); intro(); start(); }
   };
 }
