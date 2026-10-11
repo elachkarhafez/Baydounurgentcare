@@ -14,13 +14,15 @@ Declined→concept conversions inherit their original row and are not logged aga
 | Abe's Barbershop | Hero left text / 3D object right | tap to snip, drag to turn | Black + gold cinematic | Letterbox title cards | 4-shot pinned story | Runtime/price slate | Dark | Cinzel |
 | WebIgnite | Fixed WebGL background (globe) | pick city → Ignite | Dark + fire gradient | Letterbox title cards | 4-scene pinned phone film | Audit form | Dark | Bricolage |
 | Venice Barbershop | Hero left text / 3D object in panel | hold to fill (lather) | Teal + cream menu-board | Pole wipe | 4-step pinned story | Cash calculator | Light | Zilla Slab |
-| Hines & Co. | Full-bleed 3D hero + sections | drag to clean (meter) | Dark + sunset gradient | Logo wipe | Photo strip | DM quote builder | Dark | Anton |
+| Hines & Co. (v1, replaced) | Full-bleed 3D hero + sections | drag to clean (meter) | Dark + sunset gradient | Logo wipe | Photo strip | DM quote builder | Dark | Anton |
+| Hines & Co. v2 | Live & reactive (E) + video-led trailer (B) | scrub the week / pick a day | Light weather-app + Swiss | none | Reel trailer (scroll-scrubbed clips) | Wash forecast, best day | Light | Hanken Grotesk |
 
 **What the last 5 rows rule out for the next build:**
-- **Format:** fixed WebGL background, and the hero-object + sections format.
-- **Verbs:** hold or drag to fill, tap/drag an object, pick → watch, type to rebuild.
+- **Format:** fixed WebGL background, the hero-object + sections format, live & reactive, and video-led trailer.
+- **Verbs:** hold or drag to fill, tap/drag an object, pick → watch, scrub a timeline/day strip.
 - **Intros:** letterbox and wipes.
 - **Stories:** pinned numbered stories.
-- **Tools:** builder → total/message.
-- **Palette:** dark, which was used in 4 of the last 5 builds, so the next build should be light.
-- **Display faces:** Anton, Bricolage, Cinzel, Zilla, Big Shoulders.
+- **Tools:** builder → total/message, forecast/best-day picker.
+- **Visual language:** Swiss / weather-app.
+- **Palette:** dark is still used in 3 of the last 5 builds, so lean light or mid-tone.
+- **Display faces:** Hanken Grotesk, Anton, Bricolage, Cinzel, Zilla.
