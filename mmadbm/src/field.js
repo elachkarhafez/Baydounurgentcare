@@ -95,6 +95,18 @@ export async function mountField(canvas, o = {}) {
     return out;
   }
 
+  // swap a share of a shape's particles onto a double octagon frame (flat top, slight depth)
+  function octagon(base, { cx = 0, cy = 0, R = 4, share = .3, seed = 21 } = {}) {
+    const out = base.slice(), r = mulberry(seed), step = Math.round(1 / share);
+    const vx = k => Math.cos(Math.PI / 8 + k * Math.PI / 4 - Math.PI / 2), vy = k => Math.sin(Math.PI / 8 + k * Math.PI / 4 - Math.PI / 2);
+    for (let i = 0; i < N; i += step) {
+      const ring = r() < .68 ? 1 : .9, rr = R * ring, k = r() * 8 | 0, t = r();
+      const x = vx(k) + (vx(k + 1) - vx(k)) * t, y = vy(k) + (vy(k + 1) - vy(k)) * t, j = (r() - .5) * .07 * R / 4;
+      out[i * 3] = cx + x * rr + j; out[i * 3 + 1] = cy - y * rr + j; out[i * 3 + 2] = (r() - .5) * .3;
+    }
+    return out;
+  }
+
   // layout per viewport: centred on phones, pushed right on desktop where the copy is left
   const side = () => (viewW > 14 ? viewW * .23 : 0);
   let brand = '';
@@ -106,7 +118,8 @@ export async function mountField(canvas, o = {}) {
     reach: () => textShape([{ t: '130K+' }, { t: 'FOLLOWERS', size: .3, weight: 800, track: .22 }], { width: Math.min(viewW * (viewW > 14 ? .4 : .8), 11), cx: side(), cy: viewW > 14 ? .2 : 2.6, seed: 12 }),
     phone: () => phoneShape({ cx: side() * 1.05, cy: viewW > 14 ? 0 : 1.2, h: Math.min(viewH * (viewW > 14 ? .78 : .5), 11.5) }),
     brand: () => textShape([{ t: 'PRESENTED BY', size: .27, weight: 800, track: .2 }, { t: (brand || 'YOUR BRAND').toUpperCase() }], { width: Math.min(viewW * (viewW > 14 ? .74 : .86), 17), cy: viewW > 14 ? 1.6 : 2.4, seed: 13 }),
-    dbm: () => textShape([{ t: 'DBM' }], { width: Math.min(viewW * (viewW > 14 ? .42 : .7), 10), cy: viewW > 14 ? 1.2 : 1.8, seed: 14 })
+    dbm: () => { const R = Math.min(viewW * (viewW > 14 ? .19 : .4), 3.7), cy = viewW > 14 ? 1.9 : 2.1;
+      return octagon(textShape([{ t: 'DBM' }], { width: R * 1.25, cy, seed: 14 }), { cy, R }); }
   };
   const cache = {};
   const keyOf = k => (k === 'brand' ? 'brand:' + brand : k);
@@ -185,7 +198,7 @@ export async function mountField(canvas, o = {}) {
   // slam shockwave
   const ringMat = new THREE.ShaderMaterial({ transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, uniforms: { uA: { value: 0 } },
     vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.); }',
-    fragmentShader: 'uniform float uA; varying vec2 vUv; void main(){ float r = length(vUv - .5) * 2.; float a = smoothstep(.86, .97, r) * smoothstep(1., .97, r); gl_FragColor = vec4(vec3(1., .3, .22) * a * uA, a * uA); }' });
+    fragmentShader: 'uniform float uA; varying vec2 vUv; void main(){ vec2 q = abs(vUv - .5) * 2.; float r = max(max(q.x, q.y), (q.x + q.y) * .7071) * 1.0824; float a = smoothstep(.86, .97, r) * smoothstep(1., .97, r); gl_FragColor = vec4(vec3(1., .3, .22) * a * uA, a * uA); }' });
   const ring = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), ringMat); ring.visible = false; scene.add(ring);
   let ringT = 9, shake = 0;
   function slam() { ringT = 0; ring.visible = true; shake = 1; U.uSurge.value = 1.3; }
