@@ -37,7 +37,7 @@ python3 $L/fetch.py polyhaven:comfy_cafe /tmp/h && python3 $L/hdrsize.py /tmp/h/
      `geometry.computeVertexNormals()`, `metalness = 0`, or they render black (and GTAO reads them as fully occluded).
 3. **Sketchfab** models need `SKETCHFAB_TOKEN` (free account → Settings → Password & API). CC-BY needs a credit line in the footer; skip NonCommercial.
 
-## Render recipe that sells it (see `fireandfeastcommerce/src/platter.js`)
+## Render recipe that sells it (see `demos/catering-kitchen/src/platter.js`)
 - HDRI from `hdri/` matched to the venue (warm restaurant for food) at `environmentIntensity` .7–.9.
 - Real texture maps on everything; normal maps from `phototex.py` at `normalScale` 1.2–2.
 - Geometry detail where the eye lands: instanced rice grains, parsley flecks, lumpy hand-pressed kofta.

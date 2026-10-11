@@ -5,6 +5,8 @@ description: Build a standout, animated, single-file marketing website for a loc
 
 # ElaSystems Studio: niche websites that people screenshot
 
+> **Evolve, don't repeat (user feedback, read first).** The user called the sites "repetitive and boring, they aren't evolving". Every build had become the same page: headline left with a 3D object right, a hold/drag-to-fill meter toy, a four-step pinned story, a calculator, a marquee and a letterbox intro. From now on, every build starts by picking a **format** from `references/formats.md`, passes the cooldown bans checked against `references/novelty.md`, and pitches **three different directions** to the user before building (Phase 3). Novelty is part of the job, not a bonus.
+
 This is the playbook behind the Baydoun Urgent Care, Stack Shack, Vella Bakehouse, Mr. 2 Weeks, Bagel & Co, Halcyon Cuts, Vantage Detail, Halvark Strength, Lumen Skin, Marrowick Estates and Inkwell & Oak sites. Follow every phase in order. The thing that makes these sites work is not "more animation". It's **one idea that only fits this business**, built properly, wrapped in a site that's genuinely useful.
 
 ## Fast path: use the kit's tools, not its concepts (target: 10 minutes)
@@ -13,9 +15,11 @@ This is the playbook behind the Baydoun Urgent Care, Stack Shack, Vella Bakehous
 
 `kit/` holds tested production *infrastructure*: one-command research, compositor-only openers, the ElaDrag interaction helper, QA scripts, verify-live, product tiles, libs, and the build3d engine (opt-in only, see above). Use the infrastructure freely; invent the concept fresh every time. **Read `kit/README.md` before Phase 2.**
 
-Time budget: research 1 min (`kit/research/ig.mjs` in the background) → concept 1 min → build 4 min (copy closest site/example, edit CONFIG + layers) → check 2 min (`kit/qa/states.mjs`, `shoot.mjs`, scripted payoff) → ship 1 min (`kit/qa/verify-live.sh`). Run independent steps in parallel (research while choosing the concept; QA desktop and phone together; a subagent for a second site).
+Time budget: research 1 min (`kit/research/ig.mjs` in the background) → read `novelty.md` + pitch three directions 2 min (then wait for the pick) → build 4 min (copy closest site/example, edit CONFIG + layers) → check 2 min (`kit/qa/states.mjs`, `shoot.mjs`, scripted payoff) → ship 1 min (`kit/qa/verify-live.sh`). Run independent steps in parallel (research while choosing the concept; QA desktop and phone together; a subagent for a second site).
 
 Reference files (read them when you reach the phase that needs them):
+- `references/formats.md`: the format catalog, the cooldown ban list, visual languages and the three-directions pitch. **Read it before every new build.**
+- `references/novelty.md`: the ledger of recent builds (format, verb, visual language, intro, story, tool, palette, face). The last 5 rows decide what's banned next.
 - `references/declined.md`: what to do when a business says no (generic concept + retire the old link).
 - `references/signatures.md`: catalogue of signature interactions by niche, with how each was built.
 - `references/boilerplate.md`: the HTML skeleton, CDN tags, CONFIG pattern, smooth-scroll setup, ElaSystems badge.
@@ -25,7 +29,7 @@ Reference files (read them when you reach the phase that needs them):
 
 ---
 
-> **Standing rule from the user: designs are built in real 3D.** Every product/hero design (cups, drinks, food, objects) uses the Coffee Talks cup method: three.js bundled with `kit/build3d/build.sh`, studio HDRI, physical materials, lathe geometry, transparent shadow catcher, sequenced animation, drawn fallback. See `coffeetalks/src/cup.js` and `demos/coffee-trailer/src/cup.js`. Don't ship flat SVG/canvas product drawings. For realism use `kit/library/` (see its README): texture food from the client's own photos with `phototex.py`, real CC0 materials/HDRIs/models from the cache or `fetch.py`, image→3D side items with `i23d.py`, GTAO on desktop. Reference: `fireandfeastcommerce/src/platter.js`.
+> **Standing rule from the user: designs are built in real 3D.** 3D is a medium, not a layout: the product can be the world you move through, the paper object, the game piece or the thing on a map. It is never "one object beside the headline" by default (see `formats.md`). Every product/hero design (cups, drinks, food, objects) uses the Coffee Talks cup method: three.js bundled with `kit/build3d/build.sh`, studio HDRI, physical materials, lathe geometry, transparent shadow catcher, sequenced animation, drawn fallback. See `coffeetalks/src/cup.js` and `demos/coffee-trailer/src/cup.js`. Don't ship flat SVG/canvas product drawings. For realism use `kit/library/` (see its README): texture food from the client's own photos with `phototex.py`, real CC0 materials/HDRIs/models from the cache or `fetch.py`, image→3D side items with `i23d.py`, GTAO on desktop. Reference: `demos/catering-kitchen/src/platter.js`.
 
 ## Phase 1: Intake (keep it short)
 
@@ -47,27 +51,36 @@ Get, or decide yourself, these five things. Ask the user only for what you can't
   - **The one thing they're proudest of**
   - **The main action** a visitor should take: book, order, call, visit, or get a quote.
 
-## Phase 3: The concept (most important step)
+## Phase 3: Format, directions, then concept (most important step)
 
-> **Read the room first.** A playful toy is right for food, gyms, car shops and local service brands. For fashion, luxury, design-led and premium brands it reads as gimmicky (the first C4U menswear version, a drag-clothes-onto-a-rug game, was rejected as "stupid"). For those, the signature is the *experience*: editorial layout, their best photography huge, and slick motion (curtain intro, clip-path image reveals, a pinned horizontal collection rail, scroll-zoom detail shots, word-by-word text reveals). If unsure which way a client leans, ask.
+1. **Read `references/novelty.md`.** Write down what the last 5 rows rule out: format, primary verb, intro, story and tool type. Also note the visual language used in the last 3 and how many recent builds were dark.
+2. **Read `references/formats.md`.** Pick candidate formats that grow from the brand read. Some examples:
+   - a detailer who posts cinematic reels → video-led trailer
+   - a pop-up that moves around → map-first
+   - a cash-only barber with a menu board → the page *is* the menu board / receipt
+   - a gym → game-first
+   - a family shop since 1985 → documentary
+3. **Pitch three directions** to the user using the format in `formats.md` §4:
+   - Each one differs in format, primary verb and visual language, and all three pass the bans.
+   - Recommend one, then wait for the pick.
+   - Skip this only for declined→concept conversions, edits, or when the user dictated the format or said "just build it" (then build your recommendation and list the other two as alternates in the hand-off).
+4. **Then design the concept inside the chosen format:**
+   - **It's the product or the craft.** Not generic decoration: their cut, their wash, their dish, their counter, their footage.
+   - **It's interactive in the format's own way.** Scroll-driving a camera, playing, panning, choosing, tossing, printing, reading a live state. "Hold until the meter fills" is retired.
+   - **It's taught in-world.** The thing demonstrates itself first (a ghost hand, an auto-play beat, or the first scroll performs the action). It must still be obvious in two seconds; a real visitor once missed a small grey hint, so make the demo unmissable. The hand-icon callout pill is retired.
+   - **It has a payoff that fits the format.** A score card, an arrival, a printed receipt, a lit-up window. Not a toast card at 100%.
+   - **It works on phones and has a static fallback** (reduced motion, no WebGL).
+5. **The rest of the page follows the format.** There is no mandatory "one scroll story + one tool".
+   - Include only what the format needs: real info (services, prices, hours, contact) laid out in the format's own language.
+   - The "useful tool" must change shape from recent builds: a comparator, a live board, a map, an archive, a subscription schedule, or none at all if the format already is the tool.
 
-Pick **one signature interaction**: a playable piece of the business itself, built in code, that sits in or near the hero. Rules:
+> **Read the room.** Playful formats (game-first, toy box, page-is-the-object) suit food, gyms, car shops and local services. Fashion, luxury and premium brands want editorial, documentary or one-continuous-world, with their best photography huge. The first C4U menswear version, a drag-clothes-onto-a-rug game, was rejected as "stupid". If unsure, put one of each in the three directions.
 
-- It must be **the product or the craft**, not generic decoration. A barber pole that spins toward your cursor, a dirty car you scrub clean, a barbell you grind to lockout, a burger that stacks and explodes, a cinnamon roll you can turn, a floor plan that builds into a house as you scroll, ink that swirls in water.
-- It must be **interactive**: cursor, drag, hold, click or scroll. Not just a looping video.
-- It should have a **payoff**: a headline that swaps at 100% clean, a "PR!" at five reps, the burger restacking.
-- It needs a **mobile version** (touch or drag, or auto-play) and a **static fallback** (reduced motion, no WebGL).
-- It must be **obvious in the first two seconds**. Put a bold callout right on or next to it that names the action ("Grab the photo & shake it", with a hand icon and an arrow pointing at it), use touch wording on phones, and add an idle nudge: if nobody touches it for ~3s, it wiggles. Hide the callout for good after the first interaction. Small grey hint text under the piece is not enough; a real visitor missed it.
-
-Then pick two supporting pieces:
-- **One scroll story**: a pinned, scrubbed section that walks through their process (the six-step detail, the skin fade by guard number, the ritual).
-- **One genuinely useful tool**: booking steps, a size-based pricing toggle, a calculator, a quiz, menu filters, a live "Open now / Closes at 9" status computed from the hours.
-
-Check `references/signatures.md` for what's been done and ideas for new niches. Don't reuse the same signature for two different clients.
+Check `references/signatures.md` for how past pieces were built. Never reuse a signature for two clients.
 
 ## Phase 4: Design system
 
-Read `references/design.md`. Then decide, and write down at the top of the CSS:
+Read `references/design.md`. Pick the **visual language** from `formats.md` §3: not the same one as the last 3 builds, and no more than one of the last three dark. Then decide, and write down at the top of the CSS:
 - **Palette**: 5–7 tokens as CSS variables on `:root`, pulled from the niche's material world. One loud accent and one supporting accent max.
 - **Type**: a display face with character, a clean text face and, optionally, a mono for labels and prices. All from Google Fonts.
 - **Layout grid and spacing**: use `clamp()` everywhere, with `--pad: clamp(16px, 4vw, 56px)`.
@@ -77,16 +90,18 @@ Read `references/design.md`. Then decide, and write down at the top of the CSS:
 
 One folder per site containing a single `index.html` (all CSS and JS inline, libraries from CDN). Start from `references/boilerplate.md`.
 
-Standard section order (adapt, don't force):
-1. **Loader**: on-brand, under 1.8s, skippable. It should feel like part of the brand, not a spinner.
-2. **Hero**: the headline, the signature interaction and the main call to action. Nav with a sticky "Book / Order / Call" button.
-3. **Marquee or proof strip**: short phrases in the brand voice.
-4. **Services / menu / listings**: built from CONFIG data, with prices if they have them.
-5. **Scroll story**: pinned and scrubbed.
-6. **Useful tool**: booking, pricing, quiz or calculator.
-7. **Gallery / Instagram / about**: real posts for a real client; drawn SVG art for concepts.
-8. **Visit**: hours table with today highlighted, live open/closed status, address, map link, phone.
-9. **Big closing call to action, then the footer**: footer includes the ElaSystems badge (see boilerplate).
+There is **no standard section order** any more. The old order produced the same page every time: loader → hero → marquee → services → pinned story → tool → gallery → visit → CTA. Structure the page the way the chosen format needs it:
+- **One continuous world:** a single scene with no sections.
+- **Page-is-the-object:** one long object.
+- **Single screen:** one screen with drawers.
+- **Trailer:** chapters.
+
+Every site still needs these, wherever the format puts them:
+- the business's real info: what they sell, prices if public, hours, location, contact
+- a clear primary call to action that's always reachable (sticky on phones)
+- the footer credit / ElaSystems badge (see boilerplate)
+
+An intro is optional and must be under 1.8s and skippable. Letterbox title cards and logo wipes are retired; if you use an intro, it belongs to the format, like a receipt printing or a camera lifting off.
 
 Build rules:
 - **All business data lives in one `CONFIG` object** at the top of the script: name, phone, address, hours, services and prices, socials. The page renders from it, so a new client is a data swap.
@@ -123,6 +138,8 @@ Then **look at the screenshots** (desktop 1440×900 and phone 390×844) and fix:
 
 Also script the signature interaction itself in Playwright (drag, hold, click) and confirm the payoff fires. Clicks only count once you've seen the result.
 
+**Novelty check (before shipping):** put the desktop hero screenshot next to the last three builds' heroes. If someone could mistake it for one of them (same layout, same palette mood, same type feel), it isn't done. Change the composition, not just the colours.
+
 ## Phase 7: Ship
 
 1. **Name check**: before claiming a `<name>.vercel.app` or inventing a concept brand, make sure the name isn't a real business in that niche. If it is, rename the concept. Also `curl https://<name>.vercel.app` first: if it returns anything but `DEPLOYMENT_NOT_FOUND`, someone else owns that subdomain and your deploy will only get a private team URL, so pick another name (The Family Doc ended up on `familydoc-clinics`).
@@ -132,7 +149,8 @@ Also script the signature interaction itself in Playwright (drag, hold, click) a
    - With the Vercel MCP: `create_deployment` with `gitSource` (org, repo, ref, sha), `target: "production"` and `projectSettings: { rootDirectory: "<folder>", framework: null, buildCommand: null, installCommand: null, outputDirectory: null }`.
    - With the CLI: run `vercel --prod` from inside the folder.
 5. **Verify live**: `curl` the production URL until it returns 200 and contains a string unique to this build. Only then hand over the link.
-6. **Hand off**: give the link, two or three lines on what's interactive, and what the client needs to send to replace any placeholders.
+6. **Log it**: add a row to `references/novelty.md` (format, verb, visual language, intro, story, tool, palette, display face), plus the usual `signatures.md` row.
+7. **Hand off**: give the link, two or three lines on what's interactive, and what the client needs to send to replace any placeholders.
 
 ## When a business says no
 

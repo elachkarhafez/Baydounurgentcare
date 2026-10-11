@@ -24,3 +24,12 @@ From now on, build every product/hero design (cups, drinks, food, objects) as a 
 - Animate with a small step sequencer (pour, drop, settle), and keep a drawn fallback if WebGL or the module fails.
 - References: `coffeetalks/src/cup.js` (cappuccino with latte art) and `demos/coffee-trailer/src/cup.js` (iced cup with layered drink, ice, foam, lid, straw; hot paper cup).
 
+## Standing rule: keep evolving, don't repeat
+
+The user said the sites were getting "repetitive and boring, they aren't evolving". For every new site:
+- **Pick a format first.** Choose from `.claude/skills/ela-studio/references/formats.md`, such as one continuous 3D world, a video-led trailer, the page as the object, game-first, live and reactive, choose your path, editorial, map-first or single screen.
+- **Check the bans.** Read `references/novelty.md`. Don't repeat the format, primary interaction, intro, story or tool of the last 5 builds, or the visual language of the last 3.
+- **Retired patterns.** The house-style tells listed in `formats.md` §2 are retired, including the hold/drag meter toys, headline-left with a 3D object on the right, hand-icon callouts, four-step pinned stories and letterbox intros.
+- **Pitch three different directions** to the user (format · verb · visual language), recommend one, and build what they pick. Skip this for declined→concept conversions, edits, or when the user says "just build it".
+- **Log the build** in `novelty.md` after shipping.
+

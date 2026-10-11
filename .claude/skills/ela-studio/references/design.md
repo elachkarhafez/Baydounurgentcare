@@ -10,6 +10,13 @@
 | Warm, playful (bakery, bagels) | Bagel Fat One, Bricolage Grotesque, DM Serif Display | DM Sans | none |
 | Quiet luxury (real estate) | Cormorant | Instrument Sans | JetBrains Mono |
 | Cinematic, clinical-calm (medical) | Instrument Serif italic | Inter Tight | none |
+| Risograph / zine | Archivo Black, Rubik Mono One | Space Grotesk | Space Mono |
+| Swiss / technical | Hanken Grotesk (huge numerals) | Hanken Grotesk | IBM Plex Mono |
+| Clay / toy | Fredoka, Baloo 2 | Nunito | none |
+| Newspaper | Old Standard TT, Bodoni Moda | Source Serif 4 | none |
+| Retro signage | Bungee, Monoton (sparingly) | Work Sans | none |
+
+Rotate faces: don't use the same display face as any of the last 3 builds (`novelty.md`).
 
 Rules:
 - Never ship an Inter-only site. The display face carries the personality.
@@ -51,6 +58,18 @@ Rules:
 - **Reduced motion**: skip smooth scroll and scrubbing, show end states, and keep the signature usable without animation.
 
 ## Anti-patterns (things that make it look AI-generated)
+
+**Our own house-style tells (retired, see `formats.md` §2):** these made ten ElaSystems sites in a row look like one template.
+- A headline on the left with one 3D object on the right.
+- A hold or drag meter with a payoff card.
+- A hand-icon callout pill.
+- A four-step pinned story with dashes.
+- Letterbox title-card intros and logo wipes.
+- A services marquee, film grain everywhere, fade-up on every block.
+- A tinted near-black page with one gradient accent.
+- Anton, Big Shoulders or Cinzel as the default display face.
+
+If a draft has three or more of these, start the layout over.
 
 - Purple-to-blue gradients on everything, and glassmorphism cards for no reason.
 - Emoji as icons. Draw simple stroke SVG icons instead (24×24 viewBox, 1.3–1.6 stroke width).
