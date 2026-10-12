@@ -148,6 +148,7 @@ Also script the signature interaction itself in Playwright (drag, hold, click) a
 4. **Deploy to Vercel** as a static site with no build step, using the site folder as the root directory.
    - With the Vercel MCP: `create_deployment` with `gitSource` (org, repo, ref, sha), `target: "production"` and `projectSettings: { rootDirectory: "<folder>", framework: null, buildCommand: null, installCommand: null, outputDirectory: null }`.
    - With the CLI: run `vercel --prod` from inside the folder.
+   - If the Vercel connector drops mid-session (its tools vanish and won't reload until a new session), don't stall: `npm i -g vercel`, run `vercel login` in the background and give the user the device-approval URL it prints (no token is pasted anywhere), then `vercel deploy --prod --yes --scope elachkarhafezs-projects` from inside the site folder. The project name is the folder name.
 5. **Verify live**: `curl` the production URL until it returns 200 and contains a string unique to this build. Only then hand over the link.
 6. **Log it**: add a row to `references/novelty.md` (format, verb, visual language, intro, story, tool, palette, display face), plus the usual `signatures.md` row.
 7. **Hand off**: give the link, two or three lines on what's interactive, and what the client needs to send to replace any placeholders.
