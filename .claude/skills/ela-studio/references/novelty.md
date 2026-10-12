@@ -19,10 +19,10 @@ Declined→concept conversions inherit their original row and are not logged aga
 | Med2Med (concept for a real client) | Product-showcase store (sneaker drop) + App/OS UI + game-first sample | scroll to unbox; tap apps; answer questions (keys 1–5) | Photoreal product, light studio + exam-sheet print | none (in-world lid peek) | Notification-driven how-it-works | Sample quiz → score card; package pages with rush toggle | Light | Unbounded |
 **What the last 5 rows rule out for the next build:**
 - **Format:** fixed WebGL background, the hero-object + sections format, live & reactive, and video-led trailer.
-- **Verbs:** hold or drag to fill, tap/drag an object, pick → watch, scrub a timeline/day strip, scroll-to-unbox, quiz.
+- **Verbs:** hold or drag to fill, tap/drag an object, pick → watch, scrub a timeline/day strip, scroll-to-unbox, quiz, tap-to-flip.
 - **Intros:** letterbox and wipes.
 - **Stories:** pinned numbered stories.
 - **Tools:** builder → total/message, forecast/best-day picker.
-- **Visual language:** Swiss / weather-app, photoreal product studio, exam-sheet print.
+- **Visual language:** risograph print, Swiss / weather-app, photoreal product studio.
 - **Palette:** dark is still used in 3 of the last 5 builds, so lean light or mid-tone.
-- **Display faces:** Unbounded, Hanken Grotesk, Anton, Bricolage, Cinzel.
+- **Display faces:** Archivo, Unbounded, Hanken Grotesk, Anton, Bricolage.
