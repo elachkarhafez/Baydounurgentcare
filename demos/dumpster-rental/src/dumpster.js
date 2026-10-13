@@ -1,11 +1,11 @@
 /* =====================================================================
-   ClearVue Disposal: "Clear the driveway."
-   Their orange roll-off drops onto the driveway, then the junk pile
+   Tipjar Roll-Off (ElaSystems concept): "Clear the driveway."
+   An orange roll-off drops onto the driveway, then the junk pile
    (boxes, mattress, chair, planks, tire, trash bags) gets tossed in piece
    by piece. Tap a piece to throw it yourself; api.clear() throws the rest,
    api.reset() brings the mess back.
    Materials from kit/library (ambientCG Cardboard001 / Planks001 / Fabric002, CC0).
-   Bundle: kit/build3d/build.sh clearvuedisposal/src/dumpster.js clearvuedisposal/assets/dumpster.js
+   Bundle: kit/build3d/build.sh demos/dumpster-rental/src/dumpster.js demos/dumpster-rental/assets/dumpster.js
    ===================================================================== */
 import * as THREE from 'three';
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
@@ -75,15 +75,15 @@ export async function mountDumpster(canvas, o = {}) {
   const topB = topF.clone(); topB.position.x = -L / 2 - .01; dump.add(topB);
   const hook = sh(new THREE.Mesh(new THREE.BoxGeometry(.12, .34, .12), steel)); hook.position.set(L / 2 - .1, .2, 0); dump.add(hook);
   for (const z of [-.32, .32]) { const roller = sh(new THREE.Mesh(new THREE.CylinderGeometry(.06, .06, .12, 16).rotateX(Math.PI / 2), steel)); roller.position.set(-L / 2 + .1, .06, z); dump.add(roller); }
-  // their side sign: ClearVue · clearvuedisposal.com · 586-234-1317
+  // side sign: fictional Tipjar Roll-Off brand
   const signT = canvasTex(1024, 512, (g, w, h) => {
     g.fillStyle = '#f7f6f2'; g.fillRect(0, 0, w, h);
     g.fillStyle = '#e4511b'; g.textBaseline = 'alphabetic';
     const big = 'bold 210px Archivo, Arial, sans-serif', sm = 'bold 150px Archivo, Arial, sans-serif'; let x = 40;
-    for (const [t, f] of [['C', big], ['LEAR', sm], ['V', big], ['UE', sm]]) { g.font = f; g.fillText(t, x, 220); x += g.measureText(t).width + 4; }
-    g.fillStyle = '#2b2b2b'; g.font = '600 56px Archivo, Arial, sans-serif'; g.fillText('C L E A R V U E D I S P O S A L . C O M', 44, 300);
-    g.font = '800 132px Archivo, Arial, sans-serif'; g.fillText('586-234-1317', 40, 440);
-    g.fillStyle = '#e4511b'; g.font = '700 34px Archivo, Arial, sans-serif'; g.fillText('FAST · EZ · AFFORDABLE DUMPSTER SOLUTIONS', 46, 492);
+    for (const [t, f] of [['T', big], ['IP', sm], ['J', big], ['AR', sm]]) { g.font = f; g.fillText(t, x, 220); x += g.measureText(t).width + 4; }
+    g.fillStyle = '#2b2b2b'; g.font = '600 56px Archivo, Arial, sans-serif'; g.fillText('R O L L - O F F   ·   C O N C E P T', 44, 300);
+    g.font = '800 132px Archivo, Arial, sans-serif'; g.fillText('@ELA.SYSTEMS', 40, 440);
+    g.fillStyle = '#e4511b'; g.font = '700 34px Archivo, Arial, sans-serif'; g.fillText('DROP · FILL · HAUL · SAMPLE BRAND', 46, 492);
   });
   const sign = new THREE.Mesh(new THREE.PlaneGeometry(.78, .39), new THREE.MeshPhysicalMaterial({ map: signT, roughness: .35, clearcoat: .6 }));
   sign.position.set(.55, Y0 + H * .52, W / 2 + .046); dump.add(sign);
