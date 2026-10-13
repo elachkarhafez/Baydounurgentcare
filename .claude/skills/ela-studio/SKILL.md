@@ -9,6 +9,9 @@ description: Build a standout, animated, single-file marketing website for a loc
 
 This is the playbook behind the Baydoun Urgent Care, Stack Shack, Vella Bakehouse, Mr. 2 Weeks, Bagel & Co, Halcyon Cuts, Vantage Detail, Halvark Strength, Lumen Skin, Marrowick Estates and Inkwell & Oak sites. Follow every phase in order. The thing that makes these sites work is not "more animation". It's **one idea that only fits this business**, built properly, wrapped in a site that's genuinely useful.
 
+
+> **User feedback (Carioca's):** the 3D "Rio to the chair" journey was rejected as gimmicky ("looks like shit… stop making me bullshit like that wasting my credits"). When a client has little content (few photos, no prices or address), default to a clean, professional, photo-led site and skip the toy. Ask before spending a big 3D build on a thin brand.
+
 ## Fast path: use the kit's tools, not its concepts (target: 10 minutes)
 
 > **Standing rule from the user: never reuse a signature concept unless they ask for it by name.** The Fudge Fix "3D object builds itself on scroll" (build3d) was made for The Fudge Fix only. Do NOT default to it for food, products or anything else. Use it only when the user explicitly asks ("do it like Fudge Fix", "3D build on scroll"). The same goes for every other signature in `references/signatures.md`: each client gets a concept invented for *their* business. Check the last few rows of signatures.md before choosing, and if your idea resembles one of them, pick something else.
