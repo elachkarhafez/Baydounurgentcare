@@ -146,6 +146,15 @@ const sparks = new THREE.Points(spGeo, new THREE.ShaderMaterial({ transparent: t
   fragmentShader: `varying float vA; void main(){ float d = length(gl_PointCoord - .5); if (d > .5) discard; gl_FragColor = vec4(vec3(1., .62, .25) * (1. - d * 2.) * 2.2, vA * (1. - d * 2.)); }` }));
 inner.add(sparks);
 const spark = [...Array(SP)].map(() => ({ p: new THREE.Vector3(), v: new THREE.Vector3(), life: 0, max: 1 }));
+/* ---------- sparks in the drum: embers flicking up off the hot bed (a burst when the machine jolts) ----------
+   each spark is drawn as a short trail of shrinking glowing dots, so it reads as a streak at any size */
+const DS = 120, TR = 9, dsGeo = new THREE.BufferGeometry(), dsPos = new Float32Array(DS * TR * 3), dsA = new Float32Array(DS * TR), dsS = new Float32Array(DS * TR);
+dsGeo.setAttribute('position', new THREE.BufferAttribute(dsPos, 3)); dsGeo.setAttribute('a', new THREE.BufferAttribute(dsA, 1)); dsGeo.setAttribute('s', new THREE.BufferAttribute(dsS, 1));
+const drumSparks = new THREE.Points(dsGeo, new THREE.ShaderMaterial({ transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, toneMapped: false,
+  vertexShader: `attribute float a; attribute float s; varying float vA; void main(){ vA = a; vec4 mv = modelViewMatrix * vec4(position,1.); gl_PointSize = s * 34. / -mv.z; gl_Position = projectionMatrix * mv; }`,
+  fragmentShader: `varying float vA; void main(){ float d = length(gl_PointCoord - .5); if (d > .5) discard; float k = 1. - d * 2.; k *= k; vec3 c = mix(vec3(1., .3, .04), vec3(1., .82, .45), k); gl_FragColor = vec4(c * k * 4.2 * vA, vA * k); }` }));
+drumSparks.frustumCulled = false; inner.add(drumSparks);
+const dsp = [...Array(DS)].map(() => ({ p: new THREE.Vector3(), v: new THREE.Vector3(), life: 0, max: 1, sz: 1 }));
 
 /* ---------- nuts ---------- */
 const types = [
@@ -215,6 +224,15 @@ function step(dt) {
   for (const s of spark) { if (s.life <= 0 && r() < .02) { s.p.set((r() - .5) * FB.w * .8, FB.top - FB.h + .1, (r() - .5) * .12 + .02); s.v.set((r() - .5) * .08, .25 + r() * .35, (r() - .5) * .05 + .05); s.life = s.max = .6 + r() * .9; } }
   spark.forEach((s, k) => { if (s.life > 0) { s.life -= dt; s.v.y += .15 * dt; s.v.x += (r() - .5) * .3 * dt; s.p.addScaledVector(s.v, dt); } spPos[k * 3] = s.p.x; spPos[k * 3 + 1] = s.p.y; spPos[k * 3 + 2] = s.p.z; spA[k] = Math.max(0, s.life / s.max) * (s.life > 0 ? 1 : 0); });
   spGeo.attributes.position.needsUpdate = spGeo.attributes.a.needsUpdate = true;
+  // drum sparks: spawn at a nut in the bed, float up and out with a little drag, die on the wall
+  const jolt = T > SHAKE_AT && T < SHAKE_AT + SHAKE_LEN * .7, rate = jolt ? .5 : .1;
+  for (const s of dsp) { if (s.life <= 0 && r() < rate) { const n = nuts[Math.floor(r() * nuts.length)], k = jolt ? 1.5 : 1;
+      s.p.set(n.p.x + (r() - .5) * .01, n.p.y + .008, n.p.z + .01); s.v.set((r() - .5) * .5 * k, (.35 + r() * .75) * k, (r() - .3) * .25); s.life = s.max = .35 + r() * .6; s.sz = .7 + r() * .6; } }
+  dsp.forEach((s, i) => { if (s.life > 0) { s.life -= dt; s.v.y -= 1.4 * dt; s.v.multiplyScalar(1 - 1.1 * dt); s.p.addScaledVector(s.v, dt);
+      if (Math.hypot(s.p.x, s.p.y) > R - .006 || s.p.z < -L / 2 || s.p.z > L / 2 + .06) s.life = 0; }
+    const f = s.life > 0 ? Math.min(1, s.life / s.max * 1.6) * (.78 + .22 * Math.sin(T * 47 + i * 3.1)) : 0;
+    for (let k = 0; k < TR; k++) { const j = i * TR + k; dsPos[j * 3] = s.p.x - s.v.x * k * .0055; dsPos[j * 3 + 1] = s.p.y - s.v.y * k * .0055; dsPos[j * 3 + 2] = s.p.z - s.v.z * k * .0055; dsA[j] = f * (1 - k / TR) * .8; dsS[j] = s.sz * (1 - k * .085); } });
+  dsGeo.attributes.position.needsUpdate = dsGeo.attributes.a.needsUpdate = dsGeo.attributes.s.needsUpdate = true;
   syncNuts();
 }
 
@@ -228,7 +246,7 @@ composer.addPass(new OutputPass());
 for (let i = 0; i < 4 * FPS; i++) step(1 / FPS);
 T = 0; ang = 0;
 window.__frames = (LOOP + FADE) * FPS;
-const fx = [...flames, belly, sparks], white = new THREE.MeshBasicMaterial({ color: '#ffffff', side: THREE.DoubleSide });
+const fx = [...flames, belly, sparks, drumSparks], white = new THREE.MeshBasicMaterial({ color: '#ffffff', side: THREE.DoubleSide });
 const mats = new Set(); inner.traverse(o => { if (o.isMesh) mats.add(o.material); });
 window.__render = i => {
   if (i > 0) step(1 / FPS);
