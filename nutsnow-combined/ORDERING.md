@@ -26,8 +26,20 @@ How the ordering on nutsnow-combined works, how to keep it up to date, and what 
 | `api/quote.js` | Vercel function: `POST /api/quote` re-prices a basket and re-checks pickup. |
 | `index.html` | The page: the roaster animation, the `#order` shop with the mix panel, the basket dialog and pickup. Hours in the Visit section come from the catalog too. Colours follow the store's lime-green logo. |
 | `img/roaster.mp4`, `img/roaster.webm`, `img/roaster-poster.webp`, `img/roaster-mask.webp` | The hero roaster loop (12 s, seamless, machine on white, shown with `mix-blend-mode:multiply`) and its silhouette (a cream shape behind the video so the belts pass behind the machine). Made from `src/roaster/` (see below); `src` is not deployed. |
+| `img/logo.jpg`, `img/roaster-mask-calm.webp` | The shop's own round logo (used only in the intro) and the roaster's silhouette while it's calm, which cuts the belts and hero atmosphere out behind the machine. |
 | `tests/core.test.js` | Unit tests (pricing, rounding, validation, pickup cutoffs, DST, the API handler). |
 | `tests/e2e.mjs`, `tests/serve.js` | Browser tests of the full journeys, plus a local server that runs the API. |
+
+## Cinematic layer (decoration only)
+
+Everything for the intro, the hero atmosphere, the page-wide ambient light and the nav polish lives in `<style id="cine">` (end of `<head>`) and the last `<script>` in `index.html`. Nothing in the shop, basket, pickup or API depends on it.
+
+- **Intro**: about 2.3 s, once per browser session (`sessionStorage` key `nn-intro`). Tapping, scrolling, Esc or **Skip intro** ends it at once. It's skipped for reduced motion and for links straight to a section.
+- **Hero atmosphere**: warm graded light, slow smoke wisps, a few embers and aroma rings behind the roaster. The roaster video itself is unchanged.
+- **Ambient light**: a tiny canvas behind the sections without their own background. It blends fresh green, golden, roasted and pistachio tones as you scroll, then calms to plain cream before the footer.
+- **Nav**: translucent when stuck, an underline on the section you're in, anchor jumps that go into browser history (back/forward work) and move keyboard focus to the section.
+- **Accessibility and battery**: every layer is click-through, pauses in hidden tabs and goes still for reduced motion.
+- **Undoing it**: delete those two blocks (plus `#intro`, `#ambient`, `#atmo` and the `at-warm`/`at-waves` elements). The checkpoint branch `checkpoint/nutsnow-pre-cinematic` has the site from just before.
 
 ## Keeping it up to date (owner)
 

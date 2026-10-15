@@ -448,8 +448,92 @@ html.bk-open{overflow:hidden}
 @media (prefers-reduced-motion:reduce){.shopline i,.rline i,.rline .heat,.roaster,.occ,.stage-cap,.stage-cap b::before{animation:none}.basket[open],.pcard.added,.bk-btn.bump,.ogrid.swap .pcard,.hero .eyebrow,.hero h1 span,.hero .lede,.hero .cta,.stage,.bag li{animation:none}.ocats .pill,.pimg img,.pcard{transition:none}}
 @media (max-width:900px){.toast{top:74px;bottom:auto;width:max-content;max-width:calc(100% - 32px);text-align:center;transform:translate(-50%,-20px)}.toast.on{transform:translate(-50%,0)}}
 </style>
+<style id="cine">
+/* ===== Cinematic layer (added on top of the site; nothing above was changed to make it work) =====
+   Intro, hero atmosphere, page-wide ambient light and nav polish. All decorative layers are
+   pointer-events:none, animate only transform/opacity, pause in hidden tabs and are off for reduced motion. */
+
+/* --- intro: once per browser session. html.nn-intro-on is set by the inline script below before first paint --- */
+.nn-intro{display:none}
+html.nn-intro-on .nn-intro{position:fixed;inset:0;z-index:200;display:grid;place-items:center;overflow:hidden;background:#f6f2e4;cursor:pointer;animation:inOut .65s cubic-bezier(.4,0,.2,1) 1.65s forwards}
+html.nn-intro-on .nn-intro.nn-skip{animation:inOut .28s ease forwards}
+.in-glow{position:absolute;inset:0;margin:auto;width:min(110vw,820px);height:min(110vw,820px);border-radius:50%;background:radial-gradient(closest-side,rgba(255,204,128,.62),rgba(236,178,88,.26) 44%,rgba(140,198,63,.11) 70%,rgba(140,198,63,0));opacity:0;transform:scale(.55);animation:inGlow .8s cubic-bezier(.2,.7,.2,1) forwards}
+@keyframes inGlow{to{opacity:1;transform:scale(1)}}
+.in-smoke{position:absolute;inset:0;margin:auto;width:0;height:0}
+.in-smoke i{position:absolute;left:min(-15vw,-95px);top:max(-62vw,-330px);width:min(30vw,190px);height:min(56vw,340px);border-radius:50%;background:radial-gradient(closest-side,rgba(150,128,104,.12),rgba(150,128,104,0));opacity:0;animation:inSmoke 1.95s cubic-bezier(.25,.6,.3,1) .35s forwards}
+.in-smoke i:nth-child(2){--sx:-52px;animation-delay:.45s}.in-smoke i:nth-child(3){--sx:48px;animation-delay:.56s}
+@keyframes inSmoke{0%{opacity:0;transform:translate3d(var(--sx,0px),50px,0) scale(.6,.5)}35%{opacity:.9}100%{opacity:0;transform:translate3d(calc(var(--sx,0px) * 1.7),-170px,0) scale(1.15,1.35)}}
+.in-logo{position:relative;width:min(40vw,156px);aspect-ratio:1;border-radius:50%;overflow:hidden;opacity:0;transform:scale(.82);box-shadow:0 22px 50px -16px rgba(59,105,17,.5),0 0 0 1px rgba(59,105,17,.12);animation:inLogo .65s cubic-bezier(.2,.8,.2,1) .6s forwards,inLift .65s cubic-bezier(.4,0,.2,1) 1.65s forwards}
+.in-logo img{display:block;width:104%;height:104%;margin:-2%;object-fit:cover}
+@keyframes inLogo{to{opacity:1;transform:scale(1)}}
+@keyframes inLift{from{opacity:1;transform:scale(1)}to{opacity:1;transform:scale(1.06)}}
+.in-sheen{position:absolute;inset:-25%;background:linear-gradient(105deg,rgba(255,250,228,0) 40%,rgba(255,250,228,.7) 50%,rgba(255,250,228,0) 60%);transform:translate3d(-100%,0,0);animation:inSheen .42s cubic-bezier(.4,0,.2,1) 1.24s forwards}
+@keyframes inSheen{to{transform:translate3d(100%,0,0)}}
+@keyframes inOut{to{opacity:0;visibility:hidden}}
+.in-skip{position:absolute;right:max(16px,env(safe-area-inset-right));bottom:max(18px,env(safe-area-inset-bottom));font:500 11px/1 "Geist Mono",ui-monospace,monospace;letter-spacing:.14em;text-transform:uppercase;color:#45473a;padding:12px 15px;border-radius:999px;border:1px solid rgba(21,23,15,.16);background:rgba(255,253,246,.75);cursor:pointer;opacity:0;animation:inBtn .3s ease .2s forwards}
+.in-skip:focus-visible{outline:2px solid #3b6911;outline-offset:2px}
+@keyframes inBtn{to{opacity:1}}
+
+/* --- hero atmosphere: under the belts (z -2), inside the hero's own stacking context --- */
+.atmo{position:absolute;inset:0;z-index:-2;pointer-events:none;overflow:hidden}
+.atmo::before{content:"";position:absolute;inset:0;background:radial-gradient(55% 45% at 10% 0%,rgba(140,198,63,.11),rgba(140,198,63,0) 70%),radial-gradient(60% 55% at 100% 100%,rgba(150,96,44,.09),rgba(150,96,44,0) 70%),radial-gradient(65% 50% at 0% 100%,rgba(233,181,74,.08),rgba(233,181,74,0) 70%),linear-gradient(180deg,rgba(255,250,236,.55),rgba(246,242,228,0) 42%)}
+.at-smoke{position:absolute;width:min(46vw,560px);height:min(62vw,720px);border-radius:50%;background:radial-gradient(closest-side,rgba(128,100,74,.1),rgba(128,100,74,.04) 55%,rgba(128,100,74,0));opacity:0;will-change:transform,opacity;animation:atSmoke var(--d,22s) ease-in-out var(--dl,0s) infinite}
+@keyframes atSmoke{0%{opacity:0;transform:translate3d(0,16%,0) scale(.8)}25%{opacity:1}65%{opacity:.75}100%{opacity:0;transform:translate3d(var(--sx,6%),-34%,0) scale(1.25)}}
+.at-ember{position:absolute;width:var(--s,4px);height:var(--s,4px);border-radius:50%;background:radial-gradient(circle,rgba(255,220,140,.95),rgba(236,164,64,.55) 45%,rgba(236,164,64,0) 72%);opacity:0;will-change:transform,opacity;animation:atEmber var(--d,10s) linear var(--dl,0s) infinite}
+@keyframes atEmber{0%{opacity:0;transform:translate3d(0,0,0)}12%{opacity:var(--o,.7)}80%{opacity:calc(var(--o,.7) * .6)}100%{opacity:0;transform:translate3d(var(--sx,10px),var(--rise,-220px),0)}}
+/* soft roasting warmth behind the machine; .occ::after carries the identical light so the machine's
+   silhouette cut-out matches what is around it */
+.at-warm,.occ::after{position:absolute;inset:-22%;background:radial-gradient(closest-side at 50% 54%,rgba(255,178,96,.28),rgba(255,178,96,.11) 48%,rgba(255,178,96,0) 76%);pointer-events:none}
+.at-warm{animation:atWarm 5.5s ease-in-out infinite alternate}
+.occ::after{content:"";animation:atWarm 5.5s ease-in-out infinite alternate}
+@keyframes atWarm{from{opacity:.62}to{opacity:1}}
+/* aroma waves: rings drifting out from behind the drum */
+.at-waves{position:absolute;inset:-30%;pointer-events:none;-webkit-mask:linear-gradient(#000 0 0),url(img/roaster-mask-calm.webp) center/62.5% 62.5% no-repeat;-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0),url(img/roaster-mask-calm.webp) center/62.5% 62.5% no-repeat;mask-composite:exclude}
+.at-waves i{position:absolute;left:47.5%;top:46.25%;width:52.5%;aspect-ratio:1;margin:-26.25% 0 0 -26.25%;border-radius:50%;border:1.5px solid rgba(140,198,63,.42);opacity:0;will-change:transform,opacity;animation:atWave 10.5s cubic-bezier(.2,.5,.3,1) infinite}
+.at-waves i:nth-child(2){border-color:rgba(214,150,70,.4);animation-delay:-3.5s}.at-waves i:nth-child(3){animation-delay:-7s}
+@keyframes atWave{0%{opacity:0;transform:scale(.5)}18%{opacity:.6}100%{opacity:0;transform:scale(1.22)}}
+.atmo.nn-off *,.atmo.nn-off::before{animation-play-state:paused}
+.hero.nn-cut .rline,.hero.nn-cut .atmo{-webkit-mask:linear-gradient(#000 0 0),url(img/roaster-mask-calm.webp) var(--rx) var(--ry)/var(--rw) var(--rh) no-repeat;-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0),url(img/roaster-mask-calm.webp) var(--rx) var(--ry)/var(--rw) var(--rh) no-repeat;mask-composite:exclude}
+.hero.nn-cut .occ{display:none}
+
+/* --- page-wide ambient light (a tiny canvas, upscaled): shows through the sections that have no
+   background of their own and drifts from one warm palette to the next as you scroll --- */
+#ambient{position:fixed;left:0;top:0;width:100%;height:100lvh;z-index:-1;pointer-events:none}
+
+/* --- nav: translucent when stuck, an underline for the section you're in, anchors clear the bar --- */
+.nav.solid{background:rgba(246,242,228,.96)}
+@media (min-width:1001px) and (hover:hover){@supports ((-webkit-backdrop-filter:blur(1px)) or (backdrop-filter:blur(1px))){.nav.solid{background:rgba(246,242,228,.74);-webkit-backdrop-filter:saturate(1.4) blur(14px);backdrop-filter:saturate(1.4) blur(14px)}}}
+.nav ul a{position:relative}
+.nav ul a::after{content:"";position:absolute;left:0;right:0;bottom:-7px;height:1.5px;border-radius:2px;background:var(--gold-ink);transform:scaleX(0);transform-origin:right center;transition:transform .45s cubic-bezier(.2,.8,.2,1)}
+.nav ul a:hover::after,.nav ul a.nn-on::after{transform:scaleX(1);transform-origin:left center}
+.nav ul a.nn-on{color:var(--ink)}
+section[id],main[id]{scroll-margin-top:84px}
+@media (max-width:1000px){section[id],main[id]{scroll-margin-top:70px}}
+[data-nn-focus]:focus{outline:none}
+
+/* --- hidden tab: hold every ambient loop --- */
+.nn-hidden .atmo *,.nn-hidden .atmo::before,.nn-hidden .rline i,.nn-hidden .rline .heat,.nn-hidden .shopline i,.nn-hidden .at-warm,.nn-hidden .occ::after,.nn-hidden .at-waves i{animation-play-state:paused}
+
+@media (prefers-reduced-motion:reduce){
+  html.nn-intro-on .nn-intro{display:none}
+  .at-smoke,.at-ember,.at-waves{display:none}
+  .at-warm,.occ::after{animation:none;opacity:.85}
+  .nav ul a::after{transition:none}
+}
+</style>
+<script>
+/* decide before first paint whether this visit gets the intro: once per session, not for reduced motion, not on deep links */
+try { if (!sessionStorage.getItem('nn-intro') && !location.hash && !matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('nn-intro-on'); } catch (e) {}
+</script>
 </head>
 <body>
+<div class="nn-intro" id="intro">
+  <div class="in-glow" aria-hidden="true"></div>
+  <div class="in-smoke" aria-hidden="true"><i></i><i></i><i></i></div>
+  <div class="in-logo"><img src="img/logo.jpg" alt="Nuts Now" width="200" height="200" decoding="async"><i class="in-sheen" aria-hidden="true"></i></div>
+  <button type="button" class="in-skip" id="inSkip">Skip intro</button>
+</div>
+<canvas id="ambient" aria-hidden="true"></canvas>
 
 <header class="nav" id="nav">
   <div class="wrap">
@@ -468,6 +552,7 @@ html.bk-open{overflow:hidden}
 
 <main id="top">
 <section class="hero" id="pound">
+  <div class="atmo" id="atmo" aria-hidden="true"></div>
   <div class="rline" id="line" aria-hidden="true"></div>
   <div class="wrap">
     <div class="hcopy">
@@ -477,7 +562,7 @@ html.bk-open{overflow:hidden}
       <div class="cta"><a class="btn btn-gold" href="#order">Start your order</a><a class="btn btn-line" href="#visit">Hours &amp; shops</a></div>
     </div>
     <div class="stage" aria-label="The Nuts Now roaster: cashews, pistachios and hazelnuts tumbling in a lime drum over gas flames" role="img">
-      <div class="rbox"><i class="occ"></i><video class="roaster" id="roastVid" muted loop playsinline preload="metadata" poster="img/roaster-poster.webp" width="768" height="912" aria-hidden="true"><source src="img/roaster.webm" type="video/webm"><source src="img/roaster.mp4" type="video/mp4"></video></div>
+      <div class="rbox"><i class="at-warm" aria-hidden="true"></i><div class="at-waves" aria-hidden="true"><i></i><i></i><i></i></div><i class="occ"></i><video class="roaster" id="roastVid" muted loop playsinline preload="metadata" poster="img/roaster-poster.webp" width="768" height="912" aria-hidden="true"><source src="img/roaster.webm" type="video/webm"><source src="img/roaster.mp4" type="video/mp4"></video></div>
       <p class="stage-cap"><b>Roasting now</b> · Allen Park</p>
     </div>
   </div>
@@ -1176,6 +1261,118 @@ NN.ready.then(cat => {
     $$('[data-open-basket]').forEach(b => b.addEventListener('click', openBasket));
     window.__basket = { open: openBasket, close: closeBasket, basket, orderText, get pickup() { return pk; } };
     renderBasket();
+  });
+})();
+</script>
+<script>
+/* ===== Cinematic layer: intro, hero atmosphere, ambient light, nav polish (self-contained) ===== */
+(() => {
+  const root = document.documentElement, RMQ = matchMedia('(prefers-reduced-motion: reduce)'), q = s => document.querySelector(s);
+
+  /* intro: plays once per session; click, tap, scroll, Esc or the button skip it; never locks scrolling */
+  const intro = q('#intro');
+  if (intro && root.classList.contains('nn-intro-on')) {
+    try { sessionStorage.setItem('nn-intro', '1'); } catch (e) {}
+    let gone = false;
+    const finish = fast => {
+      if (gone) return; gone = true;
+      intro.style.pointerEvents = 'none';
+      if (fast) intro.classList.add('nn-skip');
+      setTimeout(() => { intro.remove(); root.classList.remove('nn-intro-on'); }, fast ? 320 : 700);
+      ['keydown', 'wheel', 'touchstart'].forEach(t => removeEventListener(t, onAny));
+    };
+    const onAny = e => { if (e.type !== 'keydown' || ['Escape', 'Enter', ' ', 'Spacebar'].includes(e.key) || e.key.startsWith('Arrow') || e.key.startsWith('Page')) finish(true); };
+    intro.addEventListener('click', () => finish(true));
+    ['keydown', 'wheel', 'touchstart'].forEach(t => addEventListener(t, onAny, { passive: true }));
+    setTimeout(() => { if (!gone) { intro.style.pointerEvents = 'none'; setTimeout(() => finish(false), 10); } }, 1650);
+  } else if (intro) intro.remove();
+
+  /* tab hidden: pause the ambient CSS loops */
+  document.addEventListener('visibilitychange', () => root.classList.toggle('nn-hidden', document.hidden));
+
+  /* hero atmosphere: smoke wisps and a few embers around the roaster (none for reduced motion) */
+  const atmo = q('#atmo'), hero = q('.hero'), stage = q('.stage');
+  if (atmo && hero && stage && !RMQ.matches) {
+    const h = hero.getBoundingClientRect(), r = stage.getBoundingClientRect();
+    const cx = (r.left + r.width * .46 - h.left) / h.width * 100, cy = (r.top + r.height * .4 - h.top) / h.height * 100, phone = innerWidth < 900;
+    let html = '';
+    [[-26, -22, 24, 0], [-6, -30, 29, -9], [-18, -12, 34, -19]].forEach(([dx, dy, d, dl], i) => { html += `<i class="at-smoke" style="left:${(cx + dx).toFixed(1)}%;top:${(cy + dy).toFixed(1)}%;--d:${d}s;--dl:${dl}s;--sx:${i % 2 ? -7 : 8}%"></i>`; });
+    let sd = 7; const rnd = () => (sd = sd * 16807 % 2147483647) / 2147483647;
+    for (let i = 0, n = phone ? 8 : 14; i < n; i++) {
+      const x = cx + (rnd() - .5) * (phone ? 70 : 34), y = cy + 6 + rnd() * 30;
+      html += `<i class="at-ember" style="left:${x.toFixed(1)}%;top:${y.toFixed(1)}%;--s:${(2.5 + rnd() * 3).toFixed(1)}px;--d:${(7 + rnd() * 7).toFixed(1)}s;--dl:${(-rnd() * 12).toFixed(1)}s;--sx:${Math.round((rnd() - .5) * 60)}px;--rise:${-Math.round(160 + rnd() * 160)}px;--o:${(.45 + rnd() * .4).toFixed(2)}"></i>`;
+    }
+    atmo.innerHTML = html;
+    new IntersectionObserver(es => atmo.classList.toggle('nn-off', !es[0].isIntersecting)).observe(hero);
+  }
+
+  /* place the machine's silhouette on the belts and atmosphere layers so they pass behind it */
+  const vid = q('#roastVid'), rl = q('#line');
+  if (hero && vid && rl && atmo && CSS.supports && (CSS.supports('mask-composite', 'exclude') || CSS.supports('-webkit-mask-composite', 'xor'))) {
+    const cut = () => { const v = vid.getBoundingClientRect(); if (!v.width) return;
+      [rl, atmo].forEach(el => { const b = el.getBoundingClientRect(); el.style.setProperty('--rx', (v.left - b.left).toFixed(1) + 'px'); el.style.setProperty('--ry', (v.top - b.top).toFixed(1) + 'px'); el.style.setProperty('--rw', v.width.toFixed(1) + 'px'); el.style.setProperty('--rh', v.height.toFixed(1) + 'px'); });
+      hero.classList.add('nn-cut'); };
+    // measure once the entrance animation has settled, and again on resize / when fonts land
+    setTimeout(cut, 1500); addEventListener('resize', () => requestAnimationFrame(cut), { passive: true }); document.fonts && document.fonts.ready.then(() => setTimeout(cut, 50)); addEventListener('load', cut);
+  }
+
+  /* ambient light: soft pools of colour behind the sections without their own background, blending
+     from one palette to the next by scroll position, calming to plain cream towards the footer */
+  const cv = q('#ambient'), ctx = cv && cv.getContext('2d');
+  if (ctx) {
+    const P = { // [x, y, radius (of the longer side), r, g, b, alpha]
+      fresh: [[.08, .12, .75, 140, 198, 63, .17], [.92, .88, .65, 233, 181, 74, .11], [.62, .42, .5, 255, 238, 205, .3]],
+      golden: [[.9, .14, .7, 236, 172, 72, .17], [.08, .86, .62, 176, 112, 52, .1], [.45, .5, .5, 255, 232, 186, .26]],
+      roast: [[.12, .2, .7, 160, 104, 50, .13], [.9, .8, .62, 233, 181, 74, .12], [.55, .48, .5, 255, 240, 214, .24]],
+      pist: [[.9, .2, .68, 140, 198, 63, .16], [.1, .82, .62, 201, 143, 69, .1], [.5, .5, .5, 250, 244, 226, .24]],
+      calm: [[.5, .2, .7, 246, 242, 228, 0], [.5, .8, .62, 246, 242, 228, 0], [.5, .5, .5, 246, 242, 228, 0]]
+    };
+    // the real sections, in page order, and the palette each one sits in
+    const stops = [['#aisles', 'fresh'], ['#viral', 'golden'], ['#viral + section', 'roast'], ['#plan', 'pist'], ['#visit', 'fresh'], ['.feed', 'calm'], ['footer', 'calm']]
+      .map(([sel, pal]) => ({ el: q(sel), pal: P[pal] })).filter(s => s.el);
+    const K = 8; let W = 0, H = 0, need = true, last = 0;
+    const size = () => { W = Math.max(8, Math.ceil(innerWidth / K)); H = Math.max(8, Math.ceil(innerHeight / K)); cv.width = W; cv.height = H; need = true; };
+    const anchor = el => { const b = el.getBoundingClientRect(); return b.top + scrollY + Math.min(b.height, innerHeight) / 2; };
+    let A = []; const measure = () => { A = stops.map(s => anchor(s.el)); };
+    const draw = t => {
+      const y = scrollY + innerHeight / 2; let a = 0, b = 0, f = 0;
+      if (y <= A[0]) a = b = 0; else if (y >= A[A.length - 1]) a = b = A.length - 1;
+      else { for (let i = 0; i < A.length - 1; i++) if (y >= A[i] && y < A[i + 1]) { a = i; b = i + 1; f = (y - A[i]) / (A[i + 1] - A[i]); break; } }
+      f = f * f * (3 - 2 * f);
+      ctx.clearRect(0, 0, W, H); const M = Math.max(W, H), drift = RMQ.matches ? 0 : 1;
+      stops[a].pal.forEach((pa, i) => {
+        const pb = stops[b].pal[i], m = k => pa[k] + (pb[k] - pa[k]) * f;
+        const x = (m(0) + drift * .035 * Math.sin(t / 9000 + i * 2.1)) * W, yy = (m(1) + drift * .03 * Math.cos(t / 11000 + i * 1.7)) * H, rr = m(2) * M, al = m(6);
+        if (al < .004) return;
+        const g = ctx.createRadialGradient(x, yy, 0, x, yy, rr), c = `${Math.round(m(3))},${Math.round(m(4))},${Math.round(m(5))}`;
+        g.addColorStop(0, `rgba(${c},${al})`); g.addColorStop(.55, `rgba(${c},${(al * .45).toFixed(3)})`); g.addColorStop(1, `rgba(${c},0)`);
+        ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+      });
+    };
+    // only draw while a see-through section is on screen; drift slowly at ~20 fps, or only on scroll for reduced motion
+    const visible = () => { const top = stops[0].el.getBoundingClientRect().top; return top < innerHeight; };
+    const loop = t => { requestAnimationFrame(loop); if (!visible()) return; if (!need && (RMQ.matches || t - last < 50)) return; last = t; need = false; draw(t); };
+    size(); measure();
+    addEventListener('resize', () => { size(); measure(); }, { passive: true });
+    addEventListener('load', measure); setTimeout(measure, 1500);
+    addEventListener('scroll', () => { need = true; }, { passive: true });
+    requestAnimationFrame(loop);
+  }
+
+  /* nav: underline the section you're in, keep anchor jumps in history (back/forward work), move focus there */
+  const links = [...document.querySelectorAll('.nav ul a[href^="#"]')].map(a => ({ a, el: q(a.getAttribute('href')) })).filter(l => l.el);
+  let ticking = 0;
+  const mark = () => { ticking = 0; const line = innerHeight * .38; let cur = null; links.forEach(l => { if (l.el.getBoundingClientRect().top <= line) cur = l; });
+    if (cur && cur.el.getBoundingClientRect().bottom < line * .5) cur = null;
+    links.forEach(l => { const on = l === cur; l.a.classList.toggle('nn-on', on); if (on) l.a.setAttribute('aria-current', 'location'); else l.a.removeAttribute('aria-current'); }); };
+  addEventListener('scroll', () => { if (!ticking) ticking = requestAnimationFrame(mark); }, { passive: true }); mark();
+  document.addEventListener('click', e => {
+    const a = e.target.closest && e.target.closest('a[href^="#"]'); if (!a || !e.defaultPrevented) return; // the site already scrolled smoothly
+    const id = a.getAttribute('href'), tg = id.length > 1 && q(id); if (!tg) return;
+    if (location.hash !== id) history.pushState(null, '', id);
+    const focus = () => { if (!tg.hasAttribute('tabindex')) { tg.setAttribute('tabindex', '-1'); tg.setAttribute('data-nn-focus', ''); } tg.focus({ preventScroll: true }); };
+    if ('onscrollend' in window) addEventListener('scrollend', focus, { once: true }); else setTimeout(focus, 900);
+    setTimeout(() => removeEventListener('scrollend', focus), 2000);
   });
 })();
 </script>
