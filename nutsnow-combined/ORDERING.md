@@ -26,7 +26,7 @@ How the ordering on nutsnow-combined works, how to keep it up to date, and what 
 | `api/quote.js` | Vercel function: `POST /api/quote` re-prices a basket and re-checks pickup. |
 | `index.html` | The page: the roaster animation, the `#order` shop with the mix panel, the basket dialog and pickup. Hours in the Visit section come from the catalog too. Colours follow the store's lime-green logo. |
 | `img/roaster.mp4`, `img/roaster.webm`, `img/roaster-poster.webp`, `img/roaster-mask.webp` | The hero roaster loop (12 s, seamless, machine on white, shown with `mix-blend-mode:multiply`) and its silhouette (a cream shape behind the video so the belts pass behind the machine). Made from `src/roaster/` (see below); `src` is not deployed. |
-| `img/logo.jpg`, `img/roaster-mask-calm.webp` | The shop's own round logo (used only in the intro) and the roaster's silhouette while it's calm, which cuts the belts and hero atmosphere out behind the machine. |
+| `img/logo-hd.webp`, `img/roaster-mask-calm.webp` | The shop's round logo, redrawn as sharp vector art from their 200 px original (`src/logo/logo.html`; used only in the intro) and the roaster's silhouette while it's calm, which cuts the belts and hero atmosphere out behind the machine. |
 | `tests/core.test.js` | Unit tests (pricing, rounding, validation, pickup cutoffs, DST, the API handler). |
 | `tests/e2e.mjs`, `tests/serve.js` | Browser tests of the full journeys, plus a local server that runs the API. |
 
