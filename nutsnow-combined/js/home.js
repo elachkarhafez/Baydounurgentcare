@@ -39,16 +39,16 @@
     const KEYS = Object.keys(NUT), TW = 640, LH = 64;
     const tile = (seed, roasted) => {
       let sd = seed; const rnd = () => (sd = (sd * 16807) % 2147483647) / 2147483647;
-      const ink = roasted ? '#6b3f1a' : '#3b6911', rail = roasted ? '#8a5a2b' : '#3b6911';
+      const ink = roasted ? '#0e0f0b' : '#3b6911', rail = roasted ? '#0e0f0b' : '#3b6911';
       let t = ''; for (let k = 0; k < TW; k += 16) { const L = k % 64 === 0 ? 7 : 3.5; t += `M${k + .5} 3V${3 + L}M${k + .5} ${LH - 3}V${LH - 3 - L}`; }
       let out = `<path d="M0 3H${TW}M0 ${LH - 3}H${TW}${t}" stroke="${rail}" stroke-opacity=".3" stroke-width="1" fill="none"/>`;
       ['¼ LB', '½ LB', '¾ LB', '1 LB'].forEach((l, k) => { out += `<text x="${k * 160 + 4}" y="15" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="7.5" letter-spacing="1" fill="${rail}" fill-opacity=".45">${l}</text>`; });
       let x = 14 + rnd() * 20;
       while (x < TW - 54) {
         const n = NUT[KEYS[Math.floor(rnd() * KEYS.length)]], sc = .74 + rnd() * .24, r = Math.round(rnd() * 70 - 35);
-        let g = roasted ? `<path d="${n.o}" fill="${n.f}" stroke="${ink}" stroke-width="1.5" stroke-linejoin="round"/>` : `<path d="${n.o}" fill="none" stroke="${ink}" stroke-width="1.7" stroke-linejoin="round"/>`;
-        if (n.k) g += roasted ? `<path d="${n.k}" fill="${n.kf}" stroke="${ink}" stroke-width="1.2"/>` : `<path d="${n.k}" fill="none" stroke="${ink}" stroke-width="1.3"/>`;
-        if (n.d) g += `<path d="${n.d}" fill="none" stroke="${roasted ? (n.dc || ink) : ink}" stroke-opacity="${roasted ? .75 : 1}" stroke-width="1.3" stroke-linecap="round"/>`;
+        let g = roasted ? `<path d="${n.o}" fill="#24261c" stroke="${ink}" stroke-width="1.5" stroke-linejoin="round"/>` : `<path d="${n.o}" fill="none" stroke="${ink}" stroke-width="1.7" stroke-linejoin="round"/>`;
+        if (n.k) g += roasted ? `<path d="${n.k}" fill="#9bd40c" stroke="${ink}" stroke-width="1.2"/>` : `<path d="${n.k}" fill="none" stroke="${ink}" stroke-width="1.3"/>`;
+        if (n.d) g += `<path d="${n.d}" fill="none" stroke="${roasted ? '#9bd40c' : ink}" stroke-opacity="${roasted ? .8 : 1}" stroke-width="1.3" stroke-linecap="round"/>`;
         out += `<g transform="translate(${x.toFixed(1)} 8) rotate(${r} 24 24) translate(24 24) scale(${sc.toFixed(2)}) translate(-24 -24)">${g}</g>`;
         x += 48 * sc + 18 + rnd() * 46;
       }
@@ -72,7 +72,7 @@
     place(); setTimeout(place, 1400); addEventListener('resize', () => requestAnimationFrame(place), { passive: true }); document.fonts && document.fonts.ready.then(place); addEventListener('load', place);
     if (!RM) new IntersectionObserver(es => line.classList.toggle('off', !es[0].isIntersecting)).observe(hero);
     // a few embers drifting up from the roaster
-    if (atmo && !RM) {
+    if (false && atmo && !RM) { // embers retired: the brand look is black, lime and cream
       const h = hero.getBoundingClientRect(), r = $('.stage').getBoundingClientRect(), cx = (r.left + r.width * .46 - h.left) / h.width * 100, cy = (r.top + r.height * .4 - h.top) / h.height * 100;
       let sd = 7, html = ''; const rnd = () => (sd = sd * 16807 % 2147483647) / 2147483647;
       for (let i = 0, n = PHONE ? 7 : 12; i < n; i++) html += `<i class="at-ember" style="left:${(cx + (rnd() - .5) * (PHONE ? 60 : 30)).toFixed(1)}%;top:${(cy + 6 + rnd() * 30).toFixed(1)}%;--s:${(2.5 + rnd() * 3).toFixed(1)}px;--d:${(7 + rnd() * 7).toFixed(1)}s;--dl:${(-rnd() * 12).toFixed(1)}s;--sx:${Math.round((rnd() - .5) * 60)}px;--rise:${-Math.round(160 + rnd() * 160)}px;--o:${(.45 + rnd() * .4).toFixed(2)}"></i>`;

@@ -224,7 +224,7 @@ ${scripts.map(s => `<script src="/js/${s}.js?v=${V[s === 'checkout' ? 'co' : s]}
   }).join('')}</div>`;
   // homepage: four big shortcuts right under the hero
   const quickNav = () => `<nav class="qnav" aria-label="${esc(t.qs.label)}">${[
-    [u('/shop/'), t.qn.all, t.qn.allS(nOrder), img('mixed-nuts')],
+    [u('/shop/nuts-seeds/'), t.qn.nuts, t.qn.nutsS, img('cashews-seasoned')],
     [u('/shop/dubai-chocolate/'), t.qn.dubai, t.qn.dubaiS, img('dubai-chocolate')],
     [u('/shop/swedish-candy/'), t.qn.swedish, t.qn.swedishS, img('swedish-skulls')],
     [u('/stores/'), t.qn.stores, t.qn.storesS, null]
@@ -257,7 +257,7 @@ ${scripts.map(s => `<script src="/js/${s}.js?v=${V[s === 'checkout' ? 'co' : s]}
       <p class="lede">${t.hero.lede(nOrder, cashewN)}</p>
       <div class="cta"><a class="btn btn-lime" href="${u('/shop/')}">${t.hero.start} ${I.arrow}</a><a class="btn btn-black" href="${u('/stores/')}">${I.pin} ${t.hero.find}</a></div>
       <div class="proof">${ratingLine()}<span>${t.hero.roasted}</span><span>${t.hero.ready}</span><span>${I.truck} DoorDash · Uber</span></div>
-      <div class="stores-mini">${S.map(storePill).join('')}</div>
+      <a class="shopall" href="${u('/shop/')}"><span class="sa-ph" aria-hidden="true">${['cashews', 'gummy-bears', 'dubai-chocolate', 'dried-mango'].map(k => `<img src="${img(k)}" alt="" width="46" height="46">`).join('')}</span><span class="sa-tx"><b>${t.sa.h}</b><small>${t.sa.s(nOrder, CATS.length)}</small></span><span class="sa-go" aria-hidden="true">${I.arrow}</span></a>
     </div>
     <div class="stage" aria-label="${t.hero.stageAria}" role="img">
       <div class="rbox"><i class="at-warm" aria-hidden="true"></i><i class="occ"></i><video class="roaster" id="roastVid" muted loop playsinline preload="metadata" poster="/img/roaster-poster.webp" width="768" height="912" aria-hidden="true"><source src="/img/roaster.webm" type="video/webm"><source src="/img/roaster.mp4" type="video/mp4"></video></div>

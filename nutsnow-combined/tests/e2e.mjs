@@ -24,7 +24,8 @@ for (const [tag, vp, mobile] of [['d', { width: 1440, height: 900 }, false], ['m
   // home
   await go(p, '/');
   ok(`${tag} home: order + find-a-store calls to action`, await p.$('.hero a[href="/shop/"]') && await p.$('.hero a[href="/stores/"]'));
-  ok(`${tag} home: store pills say open/closed`, /Open now|Opens|Closed/.test(await p.textContent('.stores-mini')), (await p.textContent('.stores-mini')).replace(/\s+/g, ' '));
+  ok(`${tag} home: shop status shows open/closed`, /Open now|Opens|Closed/.test(await p.textContent('.store-cards')), (await p.textContent('.store-cards')).replace(/\s+/g, ' ').slice(0, 120));
+  ok(`${tag} home: big shop-everything block in the hero`, (await p.getAttribute('.hero .shopall', 'href')) === '/shop/' && /707 items/.test(await p.textContent('.hero .shopall')));
   ok(`${tag} home: real Google rating shown`, /4\.9/.test(await p.textContent('.proof')));
   ok(`${tag} home: no horizontal scroll`, !(await overflow(p)));
   ok(`${tag} home: pickup shop defaults to Allen Park`, (await p.textContent('.store-switch [data-store-name]')).trim() === 'Allen Park');
