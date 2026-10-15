@@ -56,9 +56,10 @@ button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
 .nav .btn{padding:10px 18px;font-size:14px}
 @media (max-width:1000px){.nav ul{display:none}.nav .btn{margin-left:auto}.nav .wrap{height:64px}.brand{font-size:26px}}
 
-/* hero: their round lime logo badge, alive. The roaster video plays inside it like a porthole, a stamp of
-   "Fresh roasted traditions" turns slowly round it, and real 3D nuts drift at three depths behind */
-.hero{position:relative;padding:118px 0 80px;overflow:hidden;isolation:isolate}
+/* hero: the roaster stands on the page by itself (a 3D render on white, shown with multiply so the white
+   vanishes and its shadow lands on the cream), and behind it runs the roast line: belts of raw nuts going in,
+   roasted nuts coming out */
+.hero{position:relative;padding:118px 0 80px;overflow:hidden;isolation:isolate;background:var(--bg)}
 .hero::before{content:"";position:absolute;right:-12vw;top:-6%;width:72vw;height:110%;background:radial-gradient(closest-side,rgba(140,198,63,.22),rgba(140,198,63,.07) 55%,transparent 75%);pointer-events:none;z-index:-2}
 .hero .wrap{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);column-gap:56px;align-items:center;position:relative}
 .hero h1{font-size:clamp(56px,6.6vw,108px);margin:18px 0 22px}
@@ -66,34 +67,46 @@ button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
 .hero .lede{color:var(--ink-2);font-size:clamp(16px,1.3vw,18px);max-width:32em}
 .hero .cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:28px}
 .hero .cta .btn{min-height:52px;font-size:16px;padding:0 24px}
-.stage{position:relative;width:100%;max-width:520px;justify-self:center}
-.badge{position:relative;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 32% 28%,#b5e06b,#8cc63f 48%,#6fa22c 100%);box-shadow:0 40px 80px -30px rgba(60,90,15,.55),inset 0 -10px 30px rgba(40,70,10,.25)}
-.ring{position:absolute;inset:0;width:100%;height:100%;animation:ring 60s linear infinite}
-.ring text{font:600 9.6px "Geist Mono",monospace;letter-spacing:.32em;fill:#1d2a0c}
-@keyframes ring{to{transform:rotate(360deg)}}
-.port{position:absolute;inset:13.5%;border-radius:50%;overflow:hidden;background:#120c08 url(img/roaster-poster.webp) center/cover;box-shadow:0 0 0 6px #15170f,0 0 0 9px rgba(255,255,255,.35),inset 0 0 40px rgba(0,0,0,.6);transform:translateZ(0)}
-.port video{width:100%;height:100%;object-fit:cover;object-position:50% 46%;display:block}
-.port::after{content:"";position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 35% 25%,rgba(255,255,255,.18),transparent 40%),radial-gradient(circle,transparent 62%,rgba(0,0,0,.35));pointer-events:none}
-.stage-cap{margin-top:16px;text-align:center;font-family:"Geist Mono";font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.stage{position:relative;width:100%;max-width:600px;justify-self:center}
+/* no transform/opacity on .stage: that would isolate the multiply and show the video's white box */
+.rbox{position:relative}
+.roaster{position:relative;display:block;width:100%;height:auto;aspect-ratio:768/912;mix-blend-mode:multiply}
+/* cream in the machine's silhouette (every frame's, merged) so the belts pass behind it, not through it */
+.occ{position:absolute;inset:0;background:var(--bg);-webkit-mask:url(img/roaster-mask.webp) center/100% 100% no-repeat;mask:url(img/roaster-mask.webp) center/100% 100% no-repeat}
+.roaster,.occ{animation:drumIn 1.2s cubic-bezier(.2,.8,.2,1) .15s both}
+.stage-cap{position:relative;display:table;margin:6px auto 0;padding:7px 14px;border-radius:999px;background:var(--bg);border:1px solid var(--line);text-align:center;font-family:"Geist Mono";font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
 .stage-cap b{color:var(--gold-ink);font-weight:500}.stage-cap b::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:#e2563c;margin-right:8px;vertical-align:1px;box-shadow:0 0 0 3px rgba(226,86,60,.2);animation:live 1.6s ease-in-out infinite}
 @keyframes live{50%{opacity:.35}}
 .hero .eyebrow,.hero h1 span,.hero .lede,.hero .cta{animation:rise .9s cubic-bezier(.2,.8,.2,1) both}
 .hero h1 span:nth-child(1){animation-delay:.08s}.hero h1 span:nth-child(2){animation-delay:.18s}.hero .lede{animation-delay:.3s}.hero .cta{animation-delay:.4s}
-.stage{animation:drumIn 1.2s cubic-bezier(.2,.8,.2,1) .15s both}
+.stage-cap{animation:rise .9s cubic-bezier(.2,.8,.2,1) .5s both}
 @keyframes rise{from{opacity:0;transform:translateY(22px)}}
 @keyframes drumIn{from{opacity:0;transform:translateY(16px) scale(.94)}}
-/* drifting nuts: three depth layers, each moved by scroll at its own speed */
-.drift{position:absolute;inset:0;pointer-events:none;z-index:-1;overflow:hidden}
-.drift .lyr{position:absolute;inset:0;will-change:transform}
-.drift i{position:absolute;display:block;background:url(img/pieces.webp) no-repeat;animation:float var(--d,14s) ease-in-out var(--dl,0s) infinite alternate}
-.drift .far i{filter:blur(2.5px);opacity:.45}.drift .mid i{opacity:.8}.drift .near i{filter:drop-shadow(0 14px 12px rgba(40,50,10,.25))}
-@keyframes float{from{transform:translate(0,0) rotate(var(--r0,0deg))}to{transform:translate(var(--dx,20px),var(--dy,-30px)) rotate(var(--r1,40deg))}}
+/* the roast line: each belt is one SVG tile strip drawn twice, lime outlines (raw) left of the roaster and golden
+   fills (roasted) right of it, split at the roaster (--split, set by JS). The strips only translate, on the GPU. */
+.line{position:absolute;inset:0;z-index:-1;pointer-events:none;display:grid;grid-template-rows:repeat(var(--n,5),1fr);padding:96px 0 28px;--split:70%;--tw:640px}
+.lane{position:relative;align-self:center;height:64px}
+.half{position:absolute;top:0;bottom:0;overflow:hidden}
+.half.raw{left:0;width:var(--split);opacity:.42;-webkit-mask:linear-gradient(90deg,rgba(0,0,0,.28),rgba(0,0,0,.28) 50%,#000 82%);mask:linear-gradient(90deg,rgba(0,0,0,.28),rgba(0,0,0,.28) 50%,#000 82%)}
+.half.done{left:var(--split);right:0;opacity:.9}
+.half i{position:absolute;top:0;bottom:0;left:calc(-1 * var(--tw));right:0;background-repeat:repeat-x;background-size:var(--tw) 64px;animation:belt var(--t,30s) linear var(--o,0s) infinite;will-change:transform}
+.half.done i{background-position:calc(-1 * var(--split)) 0}
+@keyframes belt{to{transform:translate3d(640px,0,0)}}
+.line.off i,.line.off .heat{animation-play-state:paused}
+/* the heat: a warm column where raw becomes roasted */
+.heat{position:absolute;top:8%;bottom:6%;left:var(--split);-webkit-mask:linear-gradient(transparent,#000 25%,#000 75%,transparent);mask:linear-gradient(transparent,#000 25%,#000 75%,transparent);width:260px;margin-left:-130px;background:linear-gradient(90deg,rgba(255,140,50,0),rgba(255,140,50,.13) 30%,rgba(255,170,80,.2) 50%,rgba(255,140,50,.13) 70%,rgba(255,140,50,0));animation:heat 2.6s ease-in-out infinite alternate}
+@keyframes heat{to{opacity:.5;transform:scaleX(.8)}}
 .linkish{font-size:14px;color:var(--muted);text-decoration:underline;text-underline-offset:3px;display:inline-block}
 .linkish:hover{color:var(--ink)}
-/* the shop: a faint roastery-sack print of nut outlines, a scoop-curved top edge, big outlined type */
+/* the shop: scale-paper ruling (the belts' ¼ lb ticks, carried on), a scoop-curved top edge, big outlined type */
 .order{position:relative;background:#f1ecdc;isolation:isolate}
+/* the roasted nuts come off the line into the shop: one belt along the top of the order section (not on phones) */
+.shopline{position:absolute;left:0;right:0;top:24px;height:64px;overflow:hidden;z-index:-1;opacity:.6;pointer-events:none;-webkit-mask:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);mask:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
+.shopline i{position:absolute;top:0;bottom:0;left:-640px;right:0;background-repeat:repeat-x;background-size:640px 64px;animation:belt 36s linear infinite;will-change:transform}
+.shopline.off i{animation-play-state:paused}
+@media (max-width:900px){.shopline{display:none}}
 .order::before{content:"";position:absolute;left:0;right:0;top:-38px;height:40px;background:#f1ecdc;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 40' preserveAspectRatio='none'%3E%3Cpath d='M0 40 C 360 0 1080 0 1440 40 Z'/%3E%3C/svg%3E") center/100% 100%;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 40' preserveAspectRatio='none'%3E%3Cpath d='M0 40 C 360 0 1080 0 1440 40 Z'/%3E%3C/svg%3E") center/100% 100%}
-.order::after{content:"";position:absolute;inset:0;z-index:-1;opacity:.07;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180' fill='none' stroke='%231d3a0c' stroke-width='2.2' stroke-linecap='round'%3E%3Cpath d='M28 40c-10 6-12 22-2 30 8 6 20 4 24-4M30 44c4-4 12-4 16 2'/%3E%3Cellipse cx='128' cy='38' rx='14' ry='9' transform='rotate(-30 128 38)'/%3E%3Cpath d='M118 44c6-2 14-8 18-14'/%3E%3Ccircle cx='70' cy='118' r='11'/%3E%3Cpath d='M64 109c4-3 9-3 12 0'/%3E%3Cpath d='M140 120c-8 0-14 8-12 16 4 8 18 8 22 0 3-8-2-16-10-16zM136 124c0 6 2 12 6 16'/%3E%3Cpath d='M22 150c6-8 16-8 22 0M90 60c8-6 18-4 22 4'/%3E%3C/svg%3E");background-size:180px 180px}
+.order::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(59,105,17,.07) 0 1px,transparent 1px 64px),repeating-linear-gradient(90deg,rgba(59,105,17,.07) 0 1px,transparent 1px 64px),repeating-linear-gradient(90deg,rgba(59,105,17,.04) 0 1px,transparent 1px 16px);-webkit-mask:linear-gradient(transparent,#000 160px,#000 70%,transparent);mask:linear-gradient(transparent,#000 160px,#000 70%,transparent)}
 .order .head{position:relative}
 .order .head::before{content:"BY THE POUND";position:absolute;right:0;top:-34px;font-family:"Instrument Serif";font-size:clamp(70px,11vw,170px);line-height:1;color:transparent;-webkit-text-stroke:1.5px rgba(59,105,17,.16);white-space:nowrap;pointer-events:none;z-index:-1}
 .bag{margin-top:26px;padding:20px 22px;border-radius:var(--r);background:var(--bg-2);border:1px solid var(--line)}
@@ -119,13 +132,13 @@ button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
 @keyframes payIn{from{opacity:0;transform:translateY(14px)}}
 @media (max-width:900px){
   .hero{padding:86px 0 64px}
-  .drift i.mid-x{display:none}
+  .line{padding:0;inset:auto 0;top:var(--lt,0);height:var(--lh,100%)}.half.raw{opacity:.4;-webkit-mask:none;mask:none}.half.done{opacity:.8}.heat{width:170px;margin-left:-85px}
   .hero .wrap{display:flex;flex-direction:column}
   .hcopy{display:contents}
   .hcopy .eyebrow{order:1}.hero h1{order:2}.stage{order:3}.hero .lede{order:4;margin-top:4px}.hero .cta{order:5;margin-top:18px}
   .hero h1{font-size:clamp(46px,13vw,80px);margin:10px 0 4px}
   .hero .lede{font-size:15.5px}
-  .stage{max-width:300px;margin:4px auto 0}.stage-cap{margin-top:10px}
+  .stage{max-width:340px;margin:0 auto}.stage-cap{margin-top:2px}
   .order .head::before{top:-70px;right:auto;left:0;font-size:60px}
   .hero .cta .btn{flex:1 1 auto;justify-content:center}
   .bag{padding:18px 16px}.bag li{gap:8px}.qty b{min-width:44px}
@@ -427,7 +440,7 @@ html.bk-open{overflow:hidden}
   .nav .bk-btn{padding:10px 14px}
 }
 }
-@media (prefers-reduced-motion:reduce){.ring,.drift i,.stage-cap b::before{animation:none}.basket[open],.pcard.added,.bk-btn.bump,.ogrid.swap .pcard,.hero .eyebrow,.hero h1 span,.hero .lede,.hero .cta,.stage,.bag li{animation:none}.ocats .pill,.pimg img,.pcard{transition:none}}
+@media (prefers-reduced-motion:reduce){.shopline i,.line i,.heat,.roaster,.occ,.stage-cap,.stage-cap b::before{animation:none}.basket[open],.pcard.added,.bk-btn.bump,.ogrid.swap .pcard,.hero .eyebrow,.hero h1 span,.hero .lede,.hero .cta,.stage,.bag li{animation:none}.ocats .pill,.pimg img,.pcard{transition:none}}
 @media (max-width:900px){.toast{top:74px;bottom:auto;width:max-content;max-width:calc(100% - 32px);text-align:center;transform:translate(-50%,-20px)}.toast.on{transform:translate(-50%,0)}}
 </style>
 </head>
@@ -450,7 +463,7 @@ html.bk-open{overflow:hidden}
 
 <main id="top">
 <section class="hero" id="pound">
-  <div class="drift" id="drift" aria-hidden="true"></div>
+  <div class="line" id="line" aria-hidden="true"></div>
   <div class="wrap">
     <div class="hcopy">
       <p class="eyebrow">Nuts Now · Allen Park &amp; Dearborn Heights</p>
@@ -459,16 +472,14 @@ html.bk-open{overflow:hidden}
       <div class="cta"><a class="btn btn-gold" href="#order">Start your order</a><a class="btn btn-line" href="#visit">Hours &amp; shops</a></div>
     </div>
     <div class="stage" aria-label="The Nuts Now roaster: cashews, pistachios and hazelnuts tumbling in a lime drum over gas flames" role="img">
-      <div class="badge" aria-hidden="true">
-        <svg class="ring" viewBox="0 0 200 200"><defs><path id="ringPath" d="M100,100 m-86,0 a86,86 0 1,1 172,0 a86,86 0 1,1 -172,0"/></defs><text><textPath href="#ringPath" textLength="535">FRESH ROASTED TRADITIONS · ALLEN PARK · DEARBORN HEIGHTS · </textPath></text></svg>
-        <div class="port"><video id="roastVid" muted loop playsinline preload="metadata" poster="img/roaster-poster.webp" aria-hidden="true"><source src="img/roaster.webm" type="video/webm"><source src="img/roaster.mp4" type="video/mp4"></video></div>
-      </div>
+      <div class="rbox"><i class="occ"></i><video class="roaster" id="roastVid" muted loop playsinline preload="metadata" poster="img/roaster-poster.webp" width="768" height="912" aria-hidden="true"><source src="img/roaster.webm" type="video/webm"><source src="img/roaster.mp4" type="video/mp4"></video></div>
       <p class="stage-cap"><b>Roasting now</b> · Allen Park</p>
     </div>
   </div>
 </section>
 
 <section class="sec order" id="order" aria-labelledby="orderH">
+  <div class="shopline" id="shopline" aria-hidden="true"><i></i></div>
   <div class="wrap">
     <div class="head">
       <div><p class="eyebrow">Order for pickup</p><h2 class="serif" id="orderH">Pick it. Weigh it. <em>Pick it up.</em></h2></div>
@@ -754,28 +765,64 @@ NN.ready.then(cat => {
 <script>
 (() => {
   const HAS_G = typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined';
-  /* ---------- HERO: the roaster video in the logo badge ----------
+  /* ---------- HERO: the roaster, standing on the page ----------
      The roaster is a pre-rendered 3D loop (src/roaster/: a stainless drum turning over gas flames, cashews,
      pistachios and hazelnuts tumbling with real physics). A video costs a phone next to nothing to play, so it
-     looks photoreal without the lag a live 3D scene would bring. It only plays while on screen. */
+     looks photoreal without the lag a live 3D scene would bring. It was rendered on white and is shown with
+     mix-blend-mode:multiply, so only the machine and its shadow show. It only plays while on screen. */
   const vid = $('#roastVid');
   if (vid) {
     if (RM) vid.removeAttribute('autoplay');
     else new IntersectionObserver(es => { const v = es[0].isIntersecting; if (v) { const p = vid.play(); p && p.catch(() => {}); } else vid.pause(); }, { threshold: .15 }).observe(vid);
   }
-  /* ---------- drifting nuts: real 3D-rendered pieces at three depths ---------- */
-  const drift = $('#drift');
-  if (drift) {
-    const sprite = (id, sz) => { const row = CONFIG.atlas.indexOf(id), col = Math.floor(Math.random() * 3), k = sz / 96; return `width:${sz}px;height:${sz}px;background-size:${336 * k}px auto;background-position:${-(col * 112 + 8) * k}px ${-(row * 112 + 8) * k}px`; };
-    const L = { far: [], mid: [], near: [] };
-    // [layer, id, left %, top %, size px]
-    [['far', 'pistachios', 8, 12, 46], ['far', 'cashews', 36, 6, 40], ['far', 'hazelnuts', 52, 78, 44], ['far', 'pecans', 22, 88, 50], ['far', 'cashews', 94, 58, 42], ['far', 'pistachios', 66, 4, 38],
-     ['mid', 'cashews', 3, 52, 62], ['mid', 'hazelnuts', 46, 20, 54], ['mid', 'walnuts', 90, 26, 70], ['mid', 'pistachios', 41, 92, 60],
-     ['near', 'cashews', 57, 64, 92], ['near', 'pistachios', 95, 84, 86], ['near', 'hazelnuts', -2, 30, 80]]
-      .forEach(([l, id, x, y, sz], i) => L[l].push(`<i${x > 10 && x < 86 ? ' class="mid-x"' : ''} style="left:${x}%;top:${y}%;${sprite(id, sz)};--d:${11 + (i * 7) % 9}s;--dl:${-(i * 1.7)}s;--dx:${(i % 3 - 1) * 26}px;--dy:${-18 - (i * 5) % 26}px;--r0:${(i * 47) % 90 - 45}deg;--r1:${(i * 47) % 90 + 15}deg"></i>`));
-    drift.innerHTML = Object.entries(L).map(([k, v]) => `<div class="lyr ${k}" data-k="${k}">${v.join('')}</div>`).join('');
-    if (!RM) { const lyr = $$('.lyr', drift), sp = { far: .08, mid: .2, near: .38 }; let tick = 0;
-      addEventListener('scroll', () => { if (tick) return; tick = requestAnimationFrame(() => { tick = 0; const y = Math.min(scrollY, innerHeight * 1.2); lyr.forEach(l => { l.style.transform = `translate3d(0,${-y * sp[l.dataset.k]}px,0)`; }); }); }, { passive: true }); }
+  /* ---------- the roast line ----------
+     Belts of nuts run left to right behind the hero, through the roaster: raw (lime outlines) going in, roasted
+     (golden) coming out. The belts are measuring tape, ticked in ¼ lb. One SVG tile per belt, drawn twice. */
+  const line = $('#line');
+  if (line) {
+    // 48×48 icons: o = outline, d = detail lines, f = roasted fill, k/kf = an inner part with its own fill
+    const NUT = {
+      cashew: { o: 'M13 33C8 24 13 12 24 10C32 8 39 11 40 16C41 20 37 21 34 19C29 17 23 18 21 23C19 28 22 32 23 35C24 39 17 39 13 33Z', d: 'M17 31C15 25 18 17 26 14', f: '#dfae68' },
+      almond: { o: 'M24 6C33 12 37 24 34 34C32 40 28 42 24 42C20 42 16 40 14 34C11 24 15 12 24 6Z', d: 'M24 12C22 20 22 30 24 38M19 20l1 1M28 26l1 1M20 31l1 1', f: '#b9774a' },
+      hazelnut: { o: 'M24 10C31 10 37 17 37 26C37 35 31 41 24 41C17 41 11 35 11 26C11 17 17 10 24 10Z', d: 'M13 22C18 18 30 18 35 22M22 10L24 6L26 10', f: '#a4683c' },
+      pistachio: { o: 'M10 28C10 18 20 10 30 11C38 12 41 19 39 26C37 34 28 39 20 38C13 37 10 33 10 28Z', k: 'M17 26C20 20 27 17 33 19C31 25 24 29 17 26Z', kf: '#9cc95a', f: '#ead3a6' },
+      walnut: { o: 'M24 8C32 8 39 15 39 24C39 33 32 40 24 40C16 40 9 33 9 24C9 15 16 8 24 8Z', d: 'M24 10V38M17 14C21 18 21 22 17 25C21 28 21 32 17 35M31 14C27 18 27 22 31 25C27 28 27 32 31 35', f: '#b98a4e' },
+      pecan: { o: 'M8 24C8 17 16 13 24 13C32 13 40 17 40 24C40 31 32 35 24 35C16 35 8 31 8 24Z', d: 'M11 24H37M14 19C18 21 22 21 26 19C30 21 34 21 37 20M14 29C18 27 22 27 26 29C30 27 34 27 37 28', f: '#8a5130' },
+      peanut: { o: 'M18 7C24 7 27 12 26 17C25 20 25 22 27 25C31 30 30 40 22 41C15 42 11 36 13 30C14 27 15 25 14 22C12 15 12 7 18 7Z', d: 'M16 14l2 2M21 12l2 2M16 32l2 2M21 35l2 2M23 29l2 2', f: '#d4a066' },
+      sunflower: { o: 'M24 6C30 12 33 22 31 32C30 38 27 42 24 42C21 42 18 38 17 32C15 22 18 12 24 6Z', d: 'M21 14C20 22 20 30 21 38M27 14C28 22 28 30 27 38', f: '#4a4038', dc: '#efe6d2' },
+      pumpkin: { o: 'M24 7C31 11 35 21 33 31C32 38 28 42 24 42C20 42 16 38 15 31C13 21 17 11 24 7Z', k: 'M24 12C28 16 30 23 29 31C28 35 26 37 24 37C22 37 20 35 19 31C18 23 20 16 24 12Z', kf: '#8fb04f', f: '#d9cfa4' }
+    };
+    const KEYS = Object.keys(NUT), TW = 640, LH = 64;
+    const tile = (seed, roasted) => {
+      let sd = seed; const rnd = () => (sd = (sd * 16807) % 2147483647) / 2147483647;
+      const ink = roasted ? '#6b3f1a' : '#3b6911', rail = roasted ? '#8a5a2b' : '#3b6911';
+      let t = '';
+      for (let k = 0; k < TW; k += 16) { const L = k % 64 === 0 ? 7 : 3.5; t += `M${k + .5} 3V${3 + L}M${k + .5} ${LH - 3}V${LH - 3 - L}`; }
+      let out = `<path d="M0 3H${TW}M0 ${LH - 3}H${TW}${t}" stroke="${rail}" stroke-opacity=".3" stroke-width="1" fill="none"/>`;
+      ['¼ LB', '½ LB', '¾ LB', '1 LB'].forEach((l, k) => { out += `<text x="${k * 160 + 4}" y="15" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="7.5" letter-spacing="1" fill="${rail}" fill-opacity=".45">${l}</text>`; });
+      let x = 14 + rnd() * 20;
+      while (x < TW - 54) {
+        const n = NUT[KEYS[Math.floor(rnd() * KEYS.length)]], sc = .74 + rnd() * .24, r = Math.round(rnd() * 70 - 35);
+        let g = roasted ? `<path d="${n.o}" fill="${n.f}" stroke="${ink}" stroke-width="1.5" stroke-linejoin="round"/>` : `<path d="${n.o}" fill="none" stroke="${ink}" stroke-width="1.7" stroke-linejoin="round"/>`;
+        if (n.k) g += roasted ? `<path d="${n.k}" fill="${n.kf}" stroke="${ink}" stroke-width="1.2"/>` : `<path d="${n.k}" fill="none" stroke="${ink}" stroke-width="1.3"/>`;
+        if (n.d) g += `<path d="${n.d}" fill="none" stroke="${roasted ? (n.dc || ink) : ink}" stroke-opacity="${roasted ? .75 : 1}" stroke-width="1.3" stroke-linecap="round"/>`;
+        out += `<g transform="translate(${x.toFixed(1)} 8) rotate(${r} 24 24) translate(24 24) scale(${sc.toFixed(2)}) translate(-24 -24)">${g}</g>`;
+        x += 48 * sc + 18 + rnd() * 46;
+      }
+      return `url("data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="${TW}" height="${LH}" viewBox="0 0 ${TW} ${LH}">${out}</svg>`)}")`;
+    };
+    // phone: the belts run only in the band behind the machine, clear of the text above and below it
+    const PHONE = matchMedia('(max-width:900px)').matches, N = PHONE ? 3 : 5, SPEED = [34, 27, 40, 30, 37, 25];
+    line.style.setProperty('--n', N);
+    line.innerHTML = '<div class="heat"></div>' + Array.from({ length: N }, (_, i) => `<div class="lane" style="--t:${SPEED[i]}s;--o:${(-i * 5.3).toFixed(1)}s"><div class="half raw"><i></i></div><div class="half done"><i></i></div></div>`).join('');
+    $$('.lane', line).forEach((ln, i) => { const [a, b] = $$('i', ln); a.style.backgroundImage = tile(i * 7919 + 11, false); b.style.backgroundImage = tile(i * 7919 + 11, true); });
+    // split at the machine: the drum sits a little left of the video's centre
+    const split = () => { const v = $('#roastVid') || $('.stage'), r = v.getBoundingClientRect(), h = line.parentElement.getBoundingClientRect(); line.style.setProperty('--split', Math.round(r.left + r.width * .45 - h.left) + 'px');
+      if (PHONE) { line.style.setProperty('--lt', Math.round(r.top - h.top + r.height * .1) + 'px'); line.style.setProperty('--lh', Math.round(r.height * .78) + 'px'); } };
+    split(); addEventListener('resize', split, { passive: true }); document.fonts && document.fonts.ready.then(split);
+    if (!RM) new IntersectionObserver(es => line.classList.toggle('off', !es[0].isIntersecting)).observe(line);
+    const shop = $('#shopline');
+    if (shop && !PHONE) { $('i', shop).style.backgroundImage = tile(424242, true); if (!RM) new IntersectionObserver(es => shop.classList.toggle('off', !es[0].isIntersecting)).observe(shop); }
   }
 
   /* page motion */

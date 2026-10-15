@@ -1,8 +1,11 @@
 /* Nuts Now roaster: an offline 3D render that becomes the hero video.
    A stainless drum with lifting vanes turns over a row of gas flames; cashews, pistachios and hazelnuts tumble
    inside it with real (verlet) physics. Rendered frame by frame in headless Chromium (src/roaster/render.mjs),
-   then encoded to a seamless loop: the tail is crossfaded into the head, so physics, flames and smoke need not
-   be periodic. Only the drum's turn is: LOOP is a whole number of vane passes. */
+   then encoded to a seamless loop: the tail is crossfaded into the head, so physics and flames need not be
+   periodic. The drum's turn and the machine's shake are: LOOP is a whole number of vane passes and hum cycles.
+   Each frame is three passes: the beauty render (on black), a white silhouette mask, and the floor shadow.
+   render.mjs saves them; the encode step composites the machine onto white so the page can show it with
+   mix-blend-mode:multiply (white vanishes into whatever is behind it, the shadow darkens it). */
 import * as THREE from 'three';
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
@@ -12,7 +15,7 @@ import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
 import { SHAPES } from '../../../.claude/skills/ela-studio/kit/build3d/src/shapes.js';
 import { rng, fbm } from '../../../.claude/skills/ela-studio/kit/build3d/src/util.js';
 
-const W = 960, H = 1200, FPS = 30;
+const W = 1080, H = 1350, FPS = 30;
 const LOOP = 8, FADE = 1;                       // seconds; render LOOP + FADE, crossfade the tail into the head
 const R = .19, L = .28, VANES = 4;              // drum radius / length (m), lifting vanes
 const OMEGA = 2 * Math.PI / 4;                  // one turn every 4 s → 2 turns per loop, vanes line up
@@ -20,53 +23,48 @@ const r = rng(20261015);
 
 const canvas = document.createElement('canvas'); canvas.width = W; canvas.height = H; document.body.appendChild(canvas);
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: true });
-renderer.setPixelRatio(1); renderer.setSize(W, H, false);
+renderer.setPixelRatio(1); renderer.setSize(W, H, false); renderer.setClearColor(0x000000, 1);
 renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = .9; renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-const scene = new THREE.Scene(); scene.background = new THREE.Color('#0d0906'); scene.fog = new THREE.Fog('#0d0906', 1.5, 3.4);
+const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(31, W / H, .01, 30);
-camera.position.set(.34, .36, 1.18); camera.lookAt(-.01, -.13, .02);
+camera.position.set(.47, .5, 1.62); camera.lookAt(-.005, -.125, .02);
+const FLOOR = -.452;
+// the machine shakes as one piece, rocking on its feet: rig pivots at the floor, inner holds everything
+const rig = new THREE.Group(); rig.position.y = FLOOR; scene.add(rig); const inner = new THREE.Group(); inner.position.y = -FLOOR; rig.add(inner);
 
 /* ---------- environment + light ---------- */
 const env = await new RGBELoader().loadAsync('../../../.claude/skills/ela-studio/kit/build3d/assets/studio-512.hdr');
-env.mapping = THREE.EquirectangularReflectionMapping; scene.environment = env; scene.environmentIntensity = .16; scene.environmentRotation.set(0, 2.2, 0);
-const key = new THREE.SpotLight('#ffe7c7', 1.6, 5, .5, .8, 1.2); key.position.set(-.35, .9, .95); key.target.position.set(0, -.1, 0);
+env.mapping = THREE.EquirectangularReflectionMapping; scene.environment = env; scene.environmentIntensity = .34; scene.environmentRotation.set(0, 2.2, 0);
+const key = new THREE.SpotLight('#ffe7c7', 1.25, 5, .5, .8, 1.2); key.position.set(-.22, 1.15, .8); key.target.position.set(0, -.1, 0);
 key.castShadow = true; key.shadow.mapSize.set(2048, 2048); key.shadow.bias = -.0004; key.shadow.normalBias = .012; key.shadow.radius = 6; scene.add(key, key.target);
 // a work lamp aimed into the drum so the bed of nuts reads
-const lamp = new THREE.SpotLight('#ffe6c4', .95, 3, .3, .85, 1.2); lamp.position.set(.1, .32, .62); lamp.target.position.set(0, -.13, -.02); scene.add(lamp, lamp.target);
+const lamp = new THREE.SpotLight('#ffe6c4', .42, 3, .3, .85, 1.2); lamp.position.set(.1, .32, .62); lamp.target.position.set(0, -.13, -.02); scene.add(lamp, lamp.target);
 const rim = new THREE.DirectionalLight('#9fb8ff', .35); rim.position.set(-1.2, .6, -.8); scene.add(rim);
-scene.add(new THREE.HemisphereLight('#3a2a1f', '#120a06', .2));
+scene.add(new THREE.HemisphereLight('#fff1dc', '#3a2a1f', .38));
 // fire light: flickering warm points under the drum, and heat glowing inside it
-const fireL = [-.12, 0, .12].map(z => { const p = new THREE.PointLight('#ff7a2a', .35, 1.2, 1.6); p.position.set(0, -R - .06, z * .8); scene.add(p); return p; });
-const heat = new THREE.PointLight('#ff9a4a', .12, .5, 2); heat.position.set(0, -.12, 0); scene.add(heat);
+// a faint warm glow inside the drum (roasting heat), weak: in physical units a small value is already bright up close
+const heat = new THREE.PointLight('#ff9550', .006, .32, 2); heat.position.set(0, .04, .06); inner.add(heat);
+// short range (physical units: anything bigger floods the nuts through the steel, these lights cast no shadow)
+const fireL = [-.1, .1].map(x => { const p = new THREE.PointLight('#ff7a2a', .05, .1, 2); p.position.set(x, -R - .07, .03); inner.add(p); return p; });
 
-/* ---------- backdrop: dark roastery with warm out-of-focus lights ---------- */
-{
-  const c = document.createElement('canvas'); c.width = 1024; c.height = 1280; const x = c.getContext('2d');
-  const g = x.createLinearGradient(0, 0, 0, 1280); g.addColorStop(0, '#1b120c'); g.addColorStop(.55, '#120c08'); g.addColorStop(1, '#070504'); x.fillStyle = g; x.fillRect(0, 0, 1024, 1280);
-  const rr = rng(7); x.filter = 'blur(18px)';
-  for (let i = 0; i < 26; i++) { const px = rr() * 1024, py = 120 + rr() * 640, s = 30 + rr() * 90, w = rr(); const gg = x.createRadialGradient(px, py, 0, px, py, s); const col = w < .7 ? '255,170,90' : '190,230,120'; gg.addColorStop(0, `rgba(${col},${.22 + rr() * .3})`); gg.addColorStop(1, `rgba(${col},0)`); x.fillStyle = gg; x.beginPath(); x.arc(px, py, s, 0, 7); x.fill(); }
-  x.filter = 'none';
-  // shelves of bins, very soft, so the dark has some depth
-  x.globalAlpha = .18; x.fillStyle = '#3a2a1c'; for (let k = 0; k < 4; k++) x.fillRect(0, 300 + k * 150, 1024, 6); x.globalAlpha = 1;
-  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace;
-  const bg = new THREE.Mesh(new THREE.PlaneGeometry(4.2, 5.25), new THREE.MeshBasicMaterial({ map: t, toneMapped: false })); bg.position.set(-.35, .2, -2.4); scene.add(bg);
-}
-// floor: dark worn steel / concrete, catches the fire light
-const floor = new THREE.Mesh(new THREE.PlaneGeometry(6, 6), new THREE.MeshStandardMaterial({ color: '#1e1814', roughness: .66, metalness: .2 }));
-floor.rotation.x = -Math.PI / 2; floor.position.y = -.47; floor.receiveShadow = true; scene.add(floor);
+// floor: only its shadow is kept (shadow pass), plus a soft contact blob so the legs sit on the page
+const floor = new THREE.Mesh(new THREE.PlaneGeometry(6, 6), new THREE.ShadowMaterial({ color: '#ffffff', opacity: 1, toneMapped: false }));
+floor.rotation.x = -Math.PI / 2; floor.position.y = FLOOR; floor.receiveShadow = true; scene.add(floor);
+const ao = (() => { const c = document.createElement('canvas'); c.width = c.height = 256; const x = c.getContext('2d'); const g = x.createRadialGradient(128, 128, 0, 128, 128, 128); g.addColorStop(0, 'rgba(255,255,255,.8)'); g.addColorStop(.5, 'rgba(255,255,255,.35)'); g.addColorStop(1, 'rgba(255,255,255,0)'); x.fillStyle = g; x.fillRect(0, 0, 256, 256);
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(.66, .5), new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(c), transparent: true, depthWrite: false, toneMapped: false })); m.rotation.x = -Math.PI / 2; m.position.set(0, FLOOR + .001, 0); scene.add(m); return m; })();
 
 /* ---------- the roaster ---------- */
-const steel = new THREE.MeshPhysicalMaterial({ color: '#c9c6c0', metalness: 1, roughness: .3, clearcoat: .2, clearcoatRoughness: .4 });
-const steelIn = new THREE.MeshPhysicalMaterial({ color: '#6b625a', metalness: .9, roughness: .45, side: THREE.BackSide });
+const steel = new THREE.MeshPhysicalMaterial({ color: '#aeaba5', metalness: 1, roughness: .36, clearcoat: .2, clearcoatRoughness: .4 });
+const steelIn = new THREE.MeshPhysicalMaterial({ color: '#7a6f64', metalness: .9, roughness: .45, side: THREE.BackSide, emissive: '#5a2008', emissiveIntensity: .5 }); // hot inside
 const iron = new THREE.MeshStandardMaterial({ color: '#1d1b19', metalness: .6, roughness: .55 });
 const lime = new THREE.MeshPhysicalMaterial({ color: '#8cc63f', roughness: .28, clearcoat: 1, clearcoatRoughness: .08, metalness: .05 });
-const drum = new THREE.Group(); scene.add(drum);
+const drum = new THREE.Group(); inner.add(drum);
 const dark = new THREE.MeshPhysicalMaterial({ color: '#1a1714', metalness: .75, roughness: .42, clearcoat: .3, clearcoatRoughness: .5 });
 {
   const shell = new THREE.Mesh(new THREE.CylinderGeometry(R + .005, R + .005, L, 128, 1, true), steel); shell.rotation.x = Math.PI / 2; shell.castShadow = shell.receiveShadow = true; drum.add(shell);
   const inner = new THREE.Mesh(new THREE.CylinderGeometry(R, R, L, 128, 1, true), steelIn); inner.rotation.x = Math.PI / 2; inner.receiveShadow = true; drum.add(inner);
-  const back = new THREE.Mesh(new THREE.CircleGeometry(R, 64), new THREE.MeshPhysicalMaterial({ color: '#2e2620', metalness: .8, roughness: .5 })); back.position.z = -L / 2; back.receiveShadow = true; drum.add(back);
+  const back = new THREE.Mesh(new THREE.CircleGeometry(R, 64), new THREE.MeshPhysicalMaterial({ color: '#3a3028', metalness: .8, roughness: .5, emissive: '#5a2008', emissiveIntensity: .45 })); back.position.z = -L / 2; back.receiveShadow = true; drum.add(back);
   // front: a steel funnel narrowing to the mouth, like a real drum roaster, with a rolled edge
   const fz = L / 2, cone = new THREE.Mesh(new THREE.CylinderGeometry(R * .8, R + .006, .045, 160, 1, true), new THREE.MeshPhysicalMaterial({ color: '#86c13b', roughness: .3, clearcoat: 1, clearcoatRoughness: .06, side: THREE.DoubleSide }));
   cone.rotation.x = Math.PI / 2; cone.position.z = fz + .0225; cone.castShadow = true; drum.add(cone);
@@ -82,7 +80,7 @@ const vaneAt = (k, ang) => ang + k * 2 * Math.PI / VANES;
 // firebox under the drum: black steel box, open at the top, with a window in front onto the burner
 const FB = { w: R * 2.3, h: .15, d: L + .05, top: -R - .012 };
 {
-  const fb = new THREE.Group(); scene.add(fb); const y0 = FB.top - FB.h / 2;
+  const fb = new THREE.Group(); inner.add(fb); const y0 = FB.top - FB.h / 2;
   const plate = (w, h, d, x, y, z) => { const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), dark); m.position.set(x, y, z); m.castShadow = m.receiveShadow = true; fb.add(m); return m; };
   plate(FB.w, FB.h, .008, 0, y0, -FB.d / 2); plate(.008, FB.h, FB.d, -FB.w / 2, y0, 0); plate(.008, FB.h, FB.d, FB.w / 2, y0, 0); plate(FB.w, .008, FB.d, 0, FB.top - FB.h, 0);
   // front plate with a window cut out
@@ -122,27 +120,25 @@ const flameMat = seed => new THREE.ShaderMaterial({
       float body = smoothstep(1., .35, d) * smoothstep(.98, .5 + .3 * n, y) * smoothstep(.0, .08, y);
       // blue at the root (gas burning clean), yellow-orange above it, a deeper red-orange at the licking tips
       float blue = smoothstep(.42, .08, y) * smoothstep(1., .2, d);
-      vec3 hot = mix(vec3(1., .36, .07), vec3(1., .72, .28), smoothstep(.7, .15, d) * smoothstep(.95, .3, y));
+      vec3 hot = mix(vec3(1., .26, .04), vec3(1., .58, .16), smoothstep(.7, .15, d) * smoothstep(.95, .3, y));
       vec3 col = mix(hot, vec3(.25, .45, 1.), blue * .85) * body;
-      col += vec3(1., .85, .6) * pow(max(body - .35, 0.), 2.) * smoothstep(.6, .25, y) * .9;
+      col += vec3(1., .8, .5) * pow(max(body - .35, 0.), 2.) * smoothstep(.6, .25, y) * .3;
       float a = clamp(body * (1. - blue * .5), 0., 1.) * uHeat;
-      gl_FragColor = vec4(col * .95 * uHeat, a);
+      gl_FragColor = vec4(col * .62 * uHeat, a);
     }`
 });
-const flames = []; { const N = 11; for (let row = 0; row < 2; row++) for (let i = 0; i < N; i++) { const x = -FB.w / 2 + .03 + i * (FB.w - .06) / (N - 1); const f = new THREE.Mesh(new THREE.PlaneGeometry(.05, .1), flameMat(r() * 50)); f.position.set(x + row * .012, FB.top - FB.h + .03 + .05, .11 - row * .07); f.renderOrder = 2; scene.add(f); flames.push(f); } }
+const flames = []; { const N = 11; for (let row = 0; row < 2; row++) for (let i = 0; i < N; i++) { const x = -FB.w / 2 + .03 + i * (FB.w - .06) / (N - 1); const f = new THREE.Mesh(new THREE.PlaneGeometry(.05, .1), flameMat(r() * 50)); f.position.set(x + row * .012, FB.top - FB.h + .03 + .05, .11 - row * .07); f.renderOrder = 2; inner.add(f); flames.push(f); } }
 // a soft orange glow on the drum's belly where the flames lick it
 const glowTex = (() => { const c = document.createElement('canvas'); c.width = c.height = 256; const x = c.getContext('2d'); const g = x.createRadialGradient(128, 128, 0, 128, 128, 128); g.addColorStop(0, 'rgba(255,140,60,1)'); g.addColorStop(.4, 'rgba(255,90,30,.35)'); g.addColorStop(1, 'rgba(255,60,20,0)'); x.fillStyle = g; x.fillRect(0, 0, 256, 256); const t = new THREE.CanvasTexture(c); return t; })();
-const belly = new THREE.Mesh(new THREE.PlaneGeometry(.46, .2), new THREE.MeshBasicMaterial({ map: glowTex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: .55, toneMapped: false })); belly.position.set(0, -R - .02, .12); scene.add(belly);
+const belly = new THREE.Mesh(new THREE.PlaneGeometry(.46, .2), new THREE.MeshBasicMaterial({ map: glowTex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: .55, toneMapped: false })); belly.position.set(0, -R - .02, .12); inner.add(belly);
 
-/* ---------- sparks + heat haze ---------- */
+/* ---------- sparks ---------- */
 const SP = 70, spGeo = new THREE.BufferGeometry(), spPos = new Float32Array(SP * 3), spA = new Float32Array(SP); spGeo.setAttribute('position', new THREE.BufferAttribute(spPos, 3)); spGeo.setAttribute('a', new THREE.BufferAttribute(spA, 1));
 const sparks = new THREE.Points(spGeo, new THREE.ShaderMaterial({ transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, toneMapped: false,
   vertexShader: `attribute float a; varying float vA; void main(){ vA = a; vec4 mv = modelViewMatrix * vec4(position,1.); gl_PointSize = 5.5 * a / -mv.z; gl_Position = projectionMatrix * mv; }`,
   fragmentShader: `varying float vA; void main(){ float d = length(gl_PointCoord - .5); if (d > .5) discard; gl_FragColor = vec4(vec3(1., .62, .25) * (1. - d * 2.) * 2.2, vA * (1. - d * 2.)); }` }));
-scene.add(sparks);
+inner.add(sparks);
 const spark = [...Array(SP)].map(() => ({ p: new THREE.Vector3(), v: new THREE.Vector3(), life: 0, max: 1 }));
-const smokeTex = (() => { const c = document.createElement('canvas'); c.width = c.height = 256; const x = c.getContext('2d'), im = x.createImageData(256, 256); for (let j = 0; j < 256; j++) for (let i = 0; i < 256; i++) { const dx = (i - 128) / 128, dy = (j - 128) / 128, rr2 = Math.min(1, Math.hypot(dx, dy)); const n = .5 + .5 * fbm(i / 48, j / 48, 3.3, 4); const a = Math.max(0, (1 - rr2) ** 2) * n; const k = (j * 256 + i) * 4; im.data[k] = 235; im.data[k + 1] = 225; im.data[k + 2] = 210; im.data[k + 3] = a * 255; } x.putImageData(im, 0, 0); return new THREE.CanvasTexture(x.canvas); })();
-const puffs = [...Array(10)].map((_, i) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshBasicMaterial({ map: smokeTex, transparent: true, depthWrite: false, opacity: 0, color: '#d8c8b4' })); scene.add(m); return { m, t0: i / 10 * 6, x: (r() - .5) * .25, z: L / 2 + .02 + r() * .08, sp: .6 + r() * .5, rot: r() * 6 }; });
 
 /* ---------- nuts ---------- */
 const types = [
@@ -150,9 +146,9 @@ const types = [
   { geo: SHAPES.pistachio(.66), n: 150, rad: .0094, colors: ['#c4a678', '#b8996a', '#cdb085', '#ad8e60'] },
   { geo: SHAPES.hazelnut(.66), n: 150, rad: .0094, colors: ['#8a522b', '#7b4723', '#9a5e33', '#6f3f1f'] }
 ];
-const nutMat = new THREE.MeshPhysicalMaterial({ color: '#ffffff', roughness: .5, clearcoat: .55, clearcoatRoughness: .32, sheen: .35, sheenColor: new THREE.Color('#ffd9a0') });
+const nutMat = new THREE.MeshPhysicalMaterial({ color: '#ffffff', roughness: .55, clearcoat: .22, clearcoatRoughness: .35 });
 const nuts = []; const tmpM = new THREE.Matrix4(), tmpQ = new THREE.Quaternion(), tmpS = new THREE.Vector3(1, 1, 1), tmpV = new THREE.Vector3();
-types.forEach(t => { t.mesh = new THREE.InstancedMesh(t.geo, nutMat, t.n); t.mesh.castShadow = t.mesh.receiveShadow = true; scene.add(t.mesh);
+types.forEach(t => { t.mesh = new THREE.InstancedMesh(t.geo, nutMat, t.n); t.mesh.castShadow = t.mesh.receiveShadow = true; inner.add(t.mesh);
   for (let i = 0; i < t.n; i++) { const c = new THREE.Color(t.colors[i % t.colors.length]).offsetHSL(0, (r() - .5) * .05, (r() - .5) * .06); t.mesh.setColorAt(i, c);
     nuts.push({ t, i, p: new THREE.Vector3(), q: new THREE.Vector3(), rad: t.rad * (.9 + r() * .2), rot: new THREE.Quaternion().setFromEuler(new THREE.Euler(r() * 6, r() * 6, r() * 6)) }); } });
 // drop them in from above on a loose lattice (no overlaps), shuffled so the three kinds mix
@@ -189,21 +185,26 @@ let T = 0;
 function step(dt) {
   const sub = 6; for (let s = 0; s < sub; s++) { ang += OMEGA * dt / sub; physics(dt / sub); }
   T += dt;
+  // alive: a motor hum (whole cycles per LOOP) and a thump each time a vane passes the bottom (every 1 s),
+  // the machine rocking on its feet; the drum rattles a little on its rollers on top of that
+  const P2 = 2 * Math.PI, hum = (f, s) => Math.sin(P2 * f * T + s), ph = T % 1, kAmp = [1, .72, .9, .62, 1.08, .78, .86, .66][Math.floor(T + 1e-6) % 8];
+  const kick = Math.exp(-ph / .12) * Math.sin(P2 * 6 * ph) * kAmp;
+  rig.position.set(.001 * hum(7.5, 0) + .0027 * kick, FLOOR + .0005 * hum(11.25, 1) + .0018 * Math.abs(kick), .0005 * hum(3.75, 2));
+  rig.rotation.set(.0011 * hum(5, .5) + .005 * kick, 0, .0016 * hum(7.5, 1.3) + .014 * kick);
+  drum.position.set(.0008 * hum(11.25, 2.1), .0006 * hum(7.5, .7) + .0013 * Math.abs(kick), 0);
   drum.rotation.z = ang; vanes.forEach((v, k) => { const a = vaneAt(k, 0); v.position.set(Math.cos(a) * (R - .018), Math.sin(a) * (R - .018), 0); v.rotation.z = a; });
   flames.forEach((f, i) => { f.material.uniforms.uT.value = T + i * .37; f.lookAt(camera.position.x, f.position.y, camera.position.z); const fl = 1 + .08 * Math.sin(T * 13 + i * 1.7) + .05 * Math.sin(T * 29 + i); f.scale.set(1, fl, 1); });
-  fireL.forEach((l, i) => { l.intensity = .32 + .08 * Math.sin(T * 11 + i * 2) + .05 * Math.sin(T * 23.7 + i); }); heat.intensity = .12 + .02 * Math.sin(T * 7);
+  fireL.forEach((l, i) => { l.intensity = .05 + .012 * Math.sin(T * 11 + i * 2) + .008 * Math.sin(T * 23.7 + i); });
   belly.material.opacity = .3 + .05 * Math.sin(T * 9.3);
   // sparks pop off the burner now and then
   for (const s of spark) { if (s.life <= 0 && r() < .02) { s.p.set((r() - .5) * FB.w * .8, FB.top - FB.h + .1, (r() - .5) * .12 + .02); s.v.set((r() - .5) * .08, .25 + r() * .35, (r() - .5) * .05 + .05); s.life = s.max = .6 + r() * .9; } }
   spark.forEach((s, k) => { if (s.life > 0) { s.life -= dt; s.v.y += .15 * dt; s.v.x += (r() - .5) * .3 * dt; s.p.addScaledVector(s.v, dt); } spPos[k * 3] = s.p.x; spPos[k * 3 + 1] = s.p.y; spPos[k * 3 + 2] = s.p.z; spA[k] = Math.max(0, s.life / s.max) * (s.life > 0 ? 1 : 0); });
   spGeo.attributes.position.needsUpdate = spGeo.attributes.a.needsUpdate = true;
-  // heat haze / roast smoke drifting up out of the drum mouth
-  puffs.forEach(p => { const k = ((T + p.t0) % 6) / 6, y = R * .3 + k * .45, s = .1 + k * .34; p.m.position.set(p.x * .7 + Math.sin(k * 3 + p.rot) * .04, y, p.z + .05 + k * .08); p.m.scale.set(s, s, s); p.m.rotation.z = p.rot + k * .6; p.m.lookAt(camera.position); p.m.material.opacity = Math.sin(Math.PI * k) * .085; });
   syncNuts();
 }
 
 /* ---------- post: bloom on the flames ---------- */
-const composer = new EffectComposer(renderer); composer.setPixelRatio(1); composer.setSize(W, H);
+const composer = new EffectComposer(renderer, new THREE.WebGLRenderTarget(W, H, { type: THREE.HalfFloatType, samples: 4 })); composer.setPixelRatio(1); composer.setSize(W, H);
 composer.addPass(new RenderPass(scene, camera));
 composer.addPass(new UnrealBloomPass(new THREE.Vector2(W, H), .5, .45, 1.05));
 composer.addPass(new OutputPass());
@@ -212,6 +213,20 @@ composer.addPass(new OutputPass());
 for (let i = 0; i < 4 * FPS; i++) step(1 / FPS);
 T = 0; ang = 0;
 window.__frames = (LOOP + FADE) * FPS;
-window.__render = i => { if (i > 0) step(1 / FPS); composer.render(); return canvas.toDataURL('image/png'); };
+const fx = [...flames, belly, sparks], white = new THREE.MeshBasicMaterial({ color: '#ffffff', side: THREE.DoubleSide });
+const mats = new Set(); inner.traverse(o => { if (o.isMesh) mats.add(o.material); });
+window.__render = i => {
+  if (i > 0) step(1 / FPS);
+  floor.visible = ao.visible = false; composer.render(); const beauty = canvas.toDataURL('image/png');
+  const tm = renderer.toneMapping; renderer.toneMapping = THREE.NoToneMapping; fx.forEach(o => { o.visible = false; });
+  // the mask must be pure white: instance colours would tint it (and let the page show through the nuts)
+  const ic = types.map(t => t.mesh.instanceColor); types.forEach(t => { t.mesh.instanceColor = null; });
+  scene.overrideMaterial = white; renderer.render(scene, camera); const mask = canvas.toDataURL('image/png'); scene.overrideMaterial = null;
+  types.forEach((t, k) => { t.mesh.instanceColor = ic[k]; });
+  mats.forEach(m => { m.colorWrite = false; }); floor.visible = ao.visible = true; renderer.render(scene, camera); const shadow = canvas.toDataURL('image/png');
+  mats.forEach(m => { m.colorWrite = true; }); fx.forEach(o => { o.visible = true; }); renderer.toneMapping = tm;
+  return [beauty, mask, shadow];
+};
+window.__dbg = { key, lamp, rim, fireL, heat, scene, renderer, nutMat, composer, types, canvas };
 window.__nuts = nuts; window.__R = R; window.__L = L;
 window.__ready = true;

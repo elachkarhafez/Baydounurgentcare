@@ -5,7 +5,7 @@ How the ordering on nutsnow-combined works, how to keep it up to date, and what 
 ## What's built
 
 - **Shop by aisle** (`#order`): six aisles (Nuts, Seeds, Dried fruit, Sweets, Chocolate, Candy) and 28 items sold loose by weight. Each card shows a picture, name, description, price per lb (or "Price coming soon") and a − / + amount control, then **Add to basket** or **Add to my mix**.
-- **Hero**: a looping video of a 3D-rendered roaster (real flames, cashews, pistachios and hazelnuts tumbling in a lime drum) sits in a round "logo badge" next to the headline. It only plays while it is on screen and stays still for people who turn off motion. "Start your order" jumps to the shop right under it.
+- **Hero**: a looping video of a 3D-rendered roaster (gas flames, cashews, pistachios and hazelnuts tumbling in a lime drum, the whole machine shaking as it runs) stands on the page by itself with its own shadow. Behind it runs the "roast line": belts marked in ¼ lb carry raw nuts (lime outlines) into the roaster and roasted ones (golden) out the other side. A belt of roasted nuts also runs along the top of the shop. The video only plays while on screen; nothing moves for people who turn off motion. "Start your order" jumps to the shop right under it.
 - **Product animations**: each card plays its own short animation (pieces pour, pop, roll, rain and so on) once as it scrolls into view. Hover or tap the photo to replay it.
 - **Your mix** (panel beside the products; on phones it sits under them, with a bar at the bottom to jump to it): tap **Add to my mix** on any card, then fine-tune each item with − / + or remove it. It shows each item's price per lb and subtotal, the total weight and the mix subtotal. **Add mix to basket** adds it as one basket line ("Mix #1") with its items listed. Mixes are never merged together. **Edit this mix** in the basket loads it back into the panel, with **Save** / **Cancel editing**. A mix you were building is kept and restored afterwards.
 - **Basket** (the Basket button in the nav). It holds:
@@ -25,7 +25,7 @@ How the ordering on nutsnow-combined works, how to keep it up to date, and what 
 | `js/order-core.js` | All pricing, amount rules and pickup-time logic, shared by the page and the server. |
 | `api/quote.js` | Vercel function: `POST /api/quote` re-prices a basket and re-checks pickup. |
 | `index.html` | The page: the roaster animation, the `#order` shop with the mix panel, the basket dialog and pickup. Hours in the Visit section come from the catalog too. Colours follow the store's lime-green logo. |
-| `img/roaster.mp4`, `img/roaster.webm`, `img/roaster-poster.webp` | The hero roaster loop (8 s, seamless). Made from `src/roaster/` (see below); `src` is not deployed. |
+| `img/roaster.mp4`, `img/roaster.webm`, `img/roaster-poster.webp`, `img/roaster-mask.webp` | The hero roaster loop (8 s, seamless, machine on white, shown with `mix-blend-mode:multiply`) and its silhouette (a cream shape behind the video so the belts pass behind the machine). Made from `src/roaster/` (see below); `src` is not deployed. |
 | `tests/core.test.js` | Unit tests (pricing, rounding, validation, pickup cutoffs, DST, the API handler). |
 | `tests/e2e.mjs`, `tests/serve.js` | Browser tests of the full journeys, plus a local server that runs the API. |
 
@@ -98,7 +98,13 @@ The scene is `src/roaster/scene.js` (three.js). From the repo root:
 
 ```bash
 bash .claude/skills/ela-studio/kit/build3d/build.sh nutsnow-combined/src/roaster/scene.js nutsnow-combined/src/roaster/bundle.js
-python3 -m http.server 8765 &                     # serve the repo root
-node nutsnow-combined/src/roaster/render.mjs /tmp/rf   # 270 PNG frames (8 s + 1 s tail, 30 fps)
+python3 -m http.server 8765 &                          # serve the repo root
+node nutsnow-combined/src/roaster/render.mjs /tmp/rf   # 270 frames (8 s + 1 s tail, 30 fps), 3 passes each
 ```
-Then blend frames 240–269 into 0–29 (so the loop has no jump), keep 0–239, scale to 720×900 and encode `roaster.mp4` (H.264, `+faststart`) and `roaster.webm` (VP9). Frame 0 becomes the poster.
+Each frame is saved as three passes: `f` (the machine on black), `m` (its white silhouette) and `s` (the floor shadow). Then:
+
+1. Composite each frame onto white: `out = f + 255·(1 − m)·(1 − 0.42·blur(s))`, with the shadow fading out 140 px from the frame edges.
+2. Blend frames 240–269 into 0–29 so the loop has no jump. The drum turn and the shake repeat exactly every 8 s; only the nuts need the blend.
+3. Crop to (120, 150, 1080, 1290) and scale to 768×912.
+4. Encode `roaster.mp4` (H.264, `+faststart`) and `roaster.webm` (VP9). Frame 0 becomes the poster.
+5. Merge every frame's silhouette, grow it 1 px, and save it as `roaster-mask.webp` with alpha.
