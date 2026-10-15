@@ -5,7 +5,8 @@ How the ordering on nutsnow-combined works, how to keep it up to date, and what 
 ## What's built
 
 - **Shop by aisle** (`#order`): six aisles (Nuts, Seeds, Dried fruit, Sweets, Chocolate, Candy) and 28 items sold loose by weight. Each card shows a picture, name, description, price per lb (or "Price coming soon") and a − / + amount control, then **Add to basket** or **Add to my mix**.
-- **Hero**: the roaster plays as a short animation (raw → golden) next to the headline. There's nothing to press. "Start your order" jumps to the shop right under it.
+- **Hero**: a looping video of a 3D-rendered roaster (real flames, cashews, pistachios and hazelnuts tumbling in a lime drum) sits in a round "logo badge" next to the headline. It only plays while it is on screen and stays still for people who turn off motion. "Start your order" jumps to the shop right under it.
+- **Product animations**: each card plays its own short animation (pieces pour, pop, roll, rain and so on) once as it scrolls into view. Hover or tap the photo to replay it.
 - **Your mix** (panel beside the products; on phones it sits under them, with a bar at the bottom to jump to it): tap **Add to my mix** on any card, then fine-tune each item with − / + or remove it. It shows each item's price per lb and subtotal, the total weight and the mix subtotal. **Add mix to basket** adds it as one basket line ("Mix #1") with its items listed. Mixes are never merged together. **Edit this mix** in the basket loads it back into the panel, with **Save** / **Cancel editing**. A mix you were building is kept and restored afterwards.
 - **Basket** (the Basket button in the nav). It holds:
   - regular items (adding the same product twice adds to one line) and mixes
@@ -24,6 +25,7 @@ How the ordering on nutsnow-combined works, how to keep it up to date, and what 
 | `js/order-core.js` | All pricing, amount rules and pickup-time logic, shared by the page and the server. |
 | `api/quote.js` | Vercel function: `POST /api/quote` re-prices a basket and re-checks pickup. |
 | `index.html` | The page: the roaster animation, the `#order` shop with the mix panel, the basket dialog and pickup. Hours in the Visit section come from the catalog too. Colours follow the store's lime-green logo. |
+| `img/roaster.mp4`, `img/roaster.webm`, `img/roaster-poster.webp` | The hero roaster loop (8 s, seamless). Made from `src/roaster/` (see below); `src` is not deployed. |
 | `tests/core.test.js` | Unit tests (pricing, rounding, validation, pickup cutoffs, DST, the API handler). |
 | `tests/e2e.mjs`, `tests/serve.js` | Browser tests of the full journeys, plus a local server that runs the API. |
 
@@ -89,3 +91,14 @@ node tests/serve.js 8791 /tmp/nn-test.json 2026-10-14T20:50:00Z &   # test price
 node tests/e2e.mjs /tmp/e2e                                    # browser journeys, desktop + phone
 ```
 `make-test-catalog.js` writes **illustrative** test prices to a temp file only. Never put test prices in `data/catalog.json`.
+
+## Re-rendering the roaster video
+
+The scene is `src/roaster/scene.js` (three.js). From the repo root:
+
+```bash
+bash .claude/skills/ela-studio/kit/build3d/build.sh nutsnow-combined/src/roaster/scene.js nutsnow-combined/src/roaster/bundle.js
+python3 -m http.server 8765 &                     # serve the repo root
+node nutsnow-combined/src/roaster/render.mjs /tmp/rf   # 270 PNG frames (8 s + 1 s tail, 30 fps)
+```
+Then blend frames 240–269 into 0–29 (so the loop has no jump), keep 0–239, scale to 720×900 and encode `roaster.mp4` (H.264, `+faststart`) and `roaster.webm` (VP9). Frame 0 becomes the poster.

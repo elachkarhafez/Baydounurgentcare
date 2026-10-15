@@ -56,26 +56,46 @@ button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
 .nav .btn{padding:10px 18px;font-size:14px}
 @media (max-width:1000px){.nav ul{display:none}.nav .btn{margin-left:auto}.nav .wrap{height:64px}.brand{font-size:26px}}
 
-/* hero: the roaster turns on its own; the shop starts right under it */
-.hero{position:relative;padding:118px 0 30px;overflow:hidden}
-.hero::before{content:"";position:absolute;right:-10vw;top:10%;width:70vw;height:80%;background:radial-gradient(closest-side,rgba(140,198,63,.13),transparent 70%);pointer-events:none}
-.hero .wrap{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);column-gap:56px;align-items:center;position:relative}
+/* hero: their round lime logo badge, alive. The roaster video plays inside it like a porthole, a stamp of
+   "Fresh roasted traditions" turns slowly round it, and real 3D nuts drift at three depths behind */
+.hero{position:relative;padding:118px 0 80px;overflow:hidden;isolation:isolate}
+.hero::before{content:"";position:absolute;right:-12vw;top:-6%;width:72vw;height:110%;background:radial-gradient(closest-side,rgba(140,198,63,.22),rgba(140,198,63,.07) 55%,transparent 75%);pointer-events:none;z-index:-2}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);column-gap:56px;align-items:center;position:relative}
 .hero h1{font-size:clamp(56px,6.6vw,108px);margin:18px 0 22px}
 .hero h1 span{display:block}
 .hero .lede{color:var(--ink-2);font-size:clamp(16px,1.3vw,18px);max-width:32em}
 .hero .cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:28px}
 .hero .cta .btn{min-height:52px;font-size:16px;padding:0 24px}
-.stage{position:relative;width:100%;max-width:420px;justify-self:center;aspect-ratio:5/6}
-.stage canvas{position:absolute;inset:0;width:100%;height:100%}
-.stage-cap{position:absolute;left:0;right:0;bottom:0;text-align:center;font-family:"Geist Mono";font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
-.stage-cap b{color:var(--gold-ink);font-weight:500}
+.stage{position:relative;width:100%;max-width:520px;justify-self:center}
+.badge{position:relative;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 32% 28%,#b5e06b,#8cc63f 48%,#6fa22c 100%);box-shadow:0 40px 80px -30px rgba(60,90,15,.55),inset 0 -10px 30px rgba(40,70,10,.25)}
+.ring{position:absolute;inset:0;width:100%;height:100%;animation:ring 60s linear infinite}
+.ring text{font:600 9.6px "Geist Mono",monospace;letter-spacing:.32em;fill:#1d2a0c}
+@keyframes ring{to{transform:rotate(360deg)}}
+.port{position:absolute;inset:13.5%;border-radius:50%;overflow:hidden;background:#120c08 url(img/roaster-poster.webp) center/cover;box-shadow:0 0 0 6px #15170f,0 0 0 9px rgba(255,255,255,.35),inset 0 0 40px rgba(0,0,0,.6);transform:translateZ(0)}
+.port video{width:100%;height:100%;object-fit:cover;object-position:50% 46%;display:block}
+.port::after{content:"";position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 35% 25%,rgba(255,255,255,.18),transparent 40%),radial-gradient(circle,transparent 62%,rgba(0,0,0,.35));pointer-events:none}
+.stage-cap{margin-top:16px;text-align:center;font-family:"Geist Mono";font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.stage-cap b{color:var(--gold-ink);font-weight:500}.stage-cap b::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:#e2563c;margin-right:8px;vertical-align:1px;box-shadow:0 0 0 3px rgba(226,86,60,.2);animation:live 1.6s ease-in-out infinite}
+@keyframes live{50%{opacity:.35}}
 .hero .eyebrow,.hero h1 span,.hero .lede,.hero .cta{animation:rise .9s cubic-bezier(.2,.8,.2,1) both}
 .hero h1 span:nth-child(1){animation-delay:.08s}.hero h1 span:nth-child(2){animation-delay:.18s}.hero .lede{animation-delay:.3s}.hero .cta{animation-delay:.4s}
 .stage{animation:drumIn 1.2s cubic-bezier(.2,.8,.2,1) .15s both}
 @keyframes rise{from{opacity:0;transform:translateY(22px)}}
 @keyframes drumIn{from{opacity:0;transform:translateY(16px) scale(.94)}}
+/* drifting nuts: three depth layers, each moved by scroll at its own speed */
+.drift{position:absolute;inset:0;pointer-events:none;z-index:-1;overflow:hidden}
+.drift .lyr{position:absolute;inset:0;will-change:transform}
+.drift i{position:absolute;display:block;background:url(img/pieces.webp) no-repeat;animation:float var(--d,14s) ease-in-out var(--dl,0s) infinite alternate}
+.drift .far i{filter:blur(2.5px);opacity:.45}.drift .mid i{opacity:.8}.drift .near i{filter:drop-shadow(0 14px 12px rgba(40,50,10,.25))}
+@keyframes float{from{transform:translate(0,0) rotate(var(--r0,0deg))}to{transform:translate(var(--dx,20px),var(--dy,-30px)) rotate(var(--r1,40deg))}}
 .linkish{font-size:14px;color:var(--muted);text-decoration:underline;text-underline-offset:3px;display:inline-block}
 .linkish:hover{color:var(--ink)}
+/* the shop: a faint roastery-sack print of nut outlines, a scoop-curved top edge, big outlined type */
+.order{position:relative;background:#f1ecdc;isolation:isolate}
+.order::before{content:"";position:absolute;left:0;right:0;top:-38px;height:40px;background:#f1ecdc;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 40' preserveAspectRatio='none'%3E%3Cpath d='M0 40 C 360 0 1080 0 1440 40 Z'/%3E%3C/svg%3E") center/100% 100%;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 40' preserveAspectRatio='none'%3E%3Cpath d='M0 40 C 360 0 1080 0 1440 40 Z'/%3E%3C/svg%3E") center/100% 100%}
+.order::after{content:"";position:absolute;inset:0;z-index:-1;opacity:.07;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180' fill='none' stroke='%231d3a0c' stroke-width='2.2' stroke-linecap='round'%3E%3Cpath d='M28 40c-10 6-12 22-2 30 8 6 20 4 24-4M30 44c4-4 12-4 16 2'/%3E%3Cellipse cx='128' cy='38' rx='14' ry='9' transform='rotate(-30 128 38)'/%3E%3Cpath d='M118 44c6-2 14-8 18-14'/%3E%3Ccircle cx='70' cy='118' r='11'/%3E%3Cpath d='M64 109c4-3 9-3 12 0'/%3E%3Cpath d='M140 120c-8 0-14 8-12 16 4 8 18 8 22 0 3-8-2-16-10-16zM136 124c0 6 2 12 6 16'/%3E%3Cpath d='M22 150c6-8 16-8 22 0M90 60c8-6 18-4 22 4'/%3E%3C/svg%3E");background-size:180px 180px}
+.order .head{position:relative}
+.order .head::before{content:"BY THE POUND";position:absolute;right:0;top:-34px;font-family:"Instrument Serif";font-size:clamp(70px,11vw,170px);line-height:1;color:transparent;-webkit-text-stroke:1.5px rgba(59,105,17,.16);white-space:nowrap;pointer-events:none;z-index:-1}
 .bag{margin-top:26px;padding:20px 22px;border-radius:var(--r);background:var(--bg-2);border:1px solid var(--line)}
 .bag-h{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
 .bag-h .serif{font-size:30px}
@@ -98,13 +118,15 @@ button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
 .reset{font-size:13px;color:var(--muted);text-decoration:underline;text-underline-offset:3px}.reset:hover{color:var(--ink)}
 @keyframes payIn{from{opacity:0;transform:translateY(14px)}}
 @media (max-width:900px){
-  .hero{padding:86px 0 10px}
+  .hero{padding:86px 0 64px}
+  .drift i.mid-x{display:none}
   .hero .wrap{display:flex;flex-direction:column}
   .hcopy{display:contents}
   .hcopy .eyebrow{order:1}.hero h1{order:2}.stage{order:3}.hero .lede{order:4;margin-top:4px}.hero .cta{order:5;margin-top:18px}
   .hero h1{font-size:clamp(46px,13vw,80px);margin:10px 0 4px}
   .hero .lede{font-size:15.5px}
-  .stage{max-width:240px;margin:0 auto}
+  .stage{max-width:300px;margin:4px auto 0}.stage-cap{margin-top:10px}
+  .order .head::before{top:-70px;right:auto;left:0;font-size:60px}
   .hero .cta .btn{flex:1 1 auto;justify-content:center}
   .bag{padding:18px 16px}.bag li{gap:8px}.qty b{min-width:44px}
   .bag-h .serif{font-size:25px}.bag-h b{font-size:16px}
@@ -274,7 +296,11 @@ footer small{grid-column:1/-1;border-top:1px solid var(--line);padding-top:22px;
 @keyframes cardIn{from{opacity:0;transform:translateY(18px) scale(.98)}}
 .pcard.added{animation:added .9s ease-out}
 @keyframes added{0%{box-shadow:0 0 0 0 rgba(140,198,63,.7);border-color:var(--gold)}100%{box-shadow:0 0 0 12px rgba(140,198,63,0)}}
-.pimg{position:relative;aspect-ratio:4/3;background:var(--bg-3);overflow:hidden}
+.pimg{position:relative;aspect-ratio:4/3;background:var(--bg-3);overflow:hidden;cursor:pointer}
+.pfx{position:absolute;inset:0;pointer-events:none;z-index:2}
+.pfx i{position:absolute;left:0;top:0;background:url(img/pieces.webp) no-repeat;filter:drop-shadow(0 6px 6px rgba(0,0,0,.35));will-change:transform}
+.pfx b{position:absolute;left:0;top:0;width:7px;height:7px;border-radius:50%;will-change:transform}
+.pfx b.glint{width:14px;height:14px;border-radius:0;background:radial-gradient(closest-side,#fff,rgba(255,255,255,0));clip-path:polygon(50% 0,60% 40%,100% 50%,60% 60%,50% 100%,40% 60%,0 50%,40% 40%)}
 .pimg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .8s cubic-bezier(.2,.8,.2,1)}
 .pimg.ill img{object-fit:contain;padding:10%}
 @media (hover:hover) and (pointer:fine){.pcard:hover{box-shadow:0 18px 40px -24px rgba(40,45,10,.35);transform:translateY(-3px)}.pcard:hover .pimg img{transform:scale(1.045)}}
@@ -401,7 +427,7 @@ html.bk-open{overflow:hidden}
   .nav .bk-btn{padding:10px 14px}
 }
 }
-@media (prefers-reduced-motion:reduce){.basket[open],.pcard.added,.bk-btn.bump,.ogrid.swap .pcard,.hero .eyebrow,.hero h1 span,.hero .lede,.hero .cta,.stage,.bag li{animation:none}.ocats .pill,.pimg img,.pcard{transition:none}}
+@media (prefers-reduced-motion:reduce){.ring,.drift i,.stage-cap b::before{animation:none}.basket[open],.pcard.added,.bk-btn.bump,.ogrid.swap .pcard,.hero .eyebrow,.hero h1 span,.hero .lede,.hero .cta,.stage,.bag li{animation:none}.ocats .pill,.pimg img,.pcard{transition:none}}
 @media (max-width:900px){.toast{top:74px;bottom:auto;width:max-content;max-width:calc(100% - 32px);text-align:center;transform:translate(-50%,-20px)}.toast.on{transform:translate(-50%,0)}}
 </style>
 </head>
@@ -424,6 +450,7 @@ html.bk-open{overflow:hidden}
 
 <main id="top">
 <section class="hero" id="pound">
+  <div class="drift" id="drift" aria-hidden="true"></div>
   <div class="wrap">
     <div class="hcopy">
       <p class="eyebrow">Nuts Now · Allen Park &amp; Dearborn Heights</p>
@@ -431,9 +458,12 @@ html.bk-open{overflow:hidden}
       <p class="lede">Our family has roasted nuts and seeds in Allen Park for 15+ years. Order anything by weight, mix your own, and pick it up at either shop.</p>
       <div class="cta"><a class="btn btn-gold" href="#order">Start your order</a><a class="btn btn-line" href="#visit">Hours &amp; shops</a></div>
     </div>
-    <div class="stage">
-      <canvas id="drumCv" role="img" aria-label="Cashews, pistachios and hazelnuts tumbling in the Nuts Now roaster, turning from raw to golden."></canvas>
-      <p class="stage-cap" id="roastCap" aria-hidden="true">Raw cashews, pistachios &amp; hazelnuts</p>
+    <div class="stage" aria-label="The Nuts Now roaster: cashews, pistachios and hazelnuts tumbling in a lime drum over gas flames" role="img">
+      <div class="badge" aria-hidden="true">
+        <svg class="ring" viewBox="0 0 200 200"><defs><path id="ringPath" d="M100,100 m-86,0 a86,86 0 1,1 172,0 a86,86 0 1,1 -172,0"/></defs><text><textPath href="#ringPath" textLength="535">FRESH ROASTED TRADITIONS · ALLEN PARK · DEARBORN HEIGHTS · </textPath></text></svg>
+        <div class="port"><video id="roastVid" muted loop playsinline preload="metadata" poster="img/roaster-poster.webp" aria-hidden="true"><source src="img/roaster.webm" type="video/webm"><source src="img/roaster.mp4" type="video/mp4"></video></div>
+      </div>
+      <p class="stage-cap"><b>Roasting now</b> · Allen Park</p>
     </div>
   </div>
 </section>
@@ -722,116 +752,31 @@ NN.ready.then(cat => {
 <script src="assets/lib/gsap.min.js"></script>
 <script src="assets/lib/ScrollTrigger.min.js"></script>
 <script>
-/* ---------- HERO: the roaster, as a short loop ----------
-   A drum (canvas) of cashews, pistachios and hazelnuts tumbling with verlet physics. It plays on its own:
-   the burner comes on, the drum spins up and the nuts tint raw → golden (pre-tinted copies of the sprite
-   atlas, crossfaded), it rests on golden, then a fresh raw batch drops in. Nothing to press: the shop is
-   right under it. Pauses offscreen; reduced motion shows one still, golden frame. */
 (() => {
   const HAS_G = typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined';
-  let tints = null;
-  const atlas = new Image(); atlas.src = 'img/pieces.webp';
-  atlas.onload = () => {
-    const base = document.createElement('canvas'); base.width = atlas.naturalWidth; base.height = atlas.naturalHeight; const bx = base.getContext('2d', { willReadFrequently: true }); bx.drawImage(atlas, 0, 0);
-    const src = bx.getImageData(0, 0, base.width, base.height);
-    const mk = f => { const c = document.createElement('canvas'); c.width = base.width; c.height = base.height; const x = c.getContext('2d'), im = new ImageData(new Uint8ClampedArray(src.data), src.width, src.height), d = im.data; for (let i = 0; i < d.length; i += 4) if (d[i + 3]) { const o = f(d[i], d[i + 1], d[i + 2]); d[i] = o[0]; d[i + 1] = o[1]; d[i + 2] = o[2]; } x.putImageData(im, 0, 0); return c; };
-    const raw = (r, g, b) => { const l = (r * .3 + g * .59 + b * .11); return [l * .5 + 128, l * .48 + 118, l * .36 + 92]; };
-    tints = [mk(raw), mk((r, g, b) => { const q = raw(r, g, b); return [(r + q[0]) / 2, (g + q[1]) / 2, (b + q[2]) / 2]; }), mk((r, g, b) => [Math.min(255, r * 1.02 + 8), g * .86, b * .62]), mk((r, g, b) => [r * .42 + 8, g * .3 + 3, b * .22])];
-    kick();
-  };
-  // draw one nut sprite at a roast level (crossfade between neighbouring tints)
-  const nut = (x, level, row, col, s) => { const f = Math.min(2.999, level * 3), i0 = f | 0, t = f - i0, sx = col * 112 + 8, sy = row * 112 + 8;
-    x.globalAlpha = 1; x.drawImage(tints[i0], sx, sy, 96, 96, -s / 2, -s / 2, s, s); if (t > .02) { x.globalAlpha = t; x.drawImage(tints[i0 + 1], sx, sy, 96, 96, -s / 2, -s / 2, s, s); } x.globalAlpha = 1; };
-
-  const cv = $('#drumCv'), ctx = cv.getContext('2d'), cap = $('#roastCap');
-  const ROWS = CONFIG.roastNuts.map(id => CONFIG.atlas.indexOf(id));
-  let odd = false, S = 0, HH = 0, D = 1, raf = 0, visible = true, holding = false, roast = 0, omega = .008, ang = 0, t0 = performance.now(), steam = [], clock = 0, said = '';
-  const N = 64, nuts = [...Array(N)].map((_, i) => ({ x: 0, y: 0, px: 0, py: 0, row: ROWS[i % 3], ri: i % 3, col: (i / 3 | 0) % 3, a: Math.random() * 6.28, s: .92 + Math.random() * .16 }));
-  const fill = () => nuts.forEach(n => { n.x = (Math.random() - .5) * .3; n.y = .1 + Math.random() * .2; n.px = n.x; n.py = n.y; }); fill();
-  const RW = .355, RN = .036;   // window radius, nut radius (fractions of the drum size)
-  const CY = .47;               // drum centre, as a fraction of the stage width (the stand sits below it)
-    function physics() {
-      const g = .00042, lim = RW - RN;
-      for (const n of nuts) { const vx = (n.x - n.px) * .992, vy = (n.y - n.py) * .992; n.px = n.x; n.py = n.y; n.x += vx; n.y += vy + g; }
-      for (let it = 0; it < 3; it++) {
-        for (let i = 0; i < N; i++) { const a = nuts[i];
-          for (let j = i + 1; j < N; j++) { const b = nuts[j], dx = b.x - a.x, dy = b.y - a.y, m = RN * 2 * .9, d2 = dx * dx + dy * dy; if (d2 < m * m && d2 > 1e-9) { const d = Math.sqrt(d2), k = (m - d) / d * .5; a.x -= dx * k; a.y -= dy * k; b.x += dx * k; b.y += dy * k; } }
-          const d = Math.hypot(a.x, a.y); if (d > lim) { const nx = a.x / d, ny = a.y / d; a.x = nx * lim; a.y = ny * lim;
-            // the drum wall drags nuts along with it (that's what makes them tumble)
-            const tx = -ny, ty = nx, vt = (a.x - a.px) * tx + (a.y - a.py) * ty, wall = omega * lim, dv = (wall - vt) * .35; a.px -= tx * dv; a.py -= ty * dv; }
-        }
-      }
-      for (const n of nuts) n.a += ((n.x - n.px) * -n.y + (n.y - n.py) * n.x) * 40 + omega * .5;
-    }
-    const rr = (x, y, w, h, r) => { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); };
-    // the parts that never move are drawn once per size into two cached layers (under / over the burner glow),
-    // so each frame only paints the glow, the flames, the window, the nuts and the glass
-    let under = null, over = null;
-    function layers() {
-      const mk = () => { const c = document.createElement('canvas'); c.width = cv.width; c.height = cv.height; const x = c.getContext('2d'); x.setTransform(D, 0, 0, D, 0, 0); return [c, x]; };
-      const c = S / 2, cy = S * CY, R = S * .43; let x, g;
-      [under, x] = mk();
-      x.save(); x.shadowColor = 'rgba(0,0,0,.35)'; x.shadowBlur = 40; x.shadowOffsetY = 20;
-      g = x.createLinearGradient(0, cy + R * .7, 0, HH); g.addColorStop(0, '#2a251f'); g.addColorStop(1, '#151210');
-      x.fillStyle = g; x.beginPath(); x.moveTo(c - R * .55, cy + R * .6); x.lineTo(c + R * .55, cy + R * .6); x.lineTo(c + R * .78, HH - S * .05); x.lineTo(c - R * .78, HH - S * .05); x.closePath(); x.fill(); x.restore();
-      g = x.createLinearGradient(c - R, 0, c + R, 0); g.addColorStop(0, '#5d5850'); g.addColorStop(.3, '#bdb6aa'); g.addColorStop(.55, '#8a847a'); g.addColorStop(.8, '#d4cdc0'); g.addColorStop(1, '#5d5850');
-      x.beginPath(); x.roundRect ? x.roundRect(c - R * .95, HH - S * .065, R * 1.9, S * .03, 6) : x.rect(c - R * .95, HH - S * .065, R * 1.9, S * .03); x.fillStyle = g; x.fill();
-      [over, x] = mk();
-      const body = x.createRadialGradient(c - R * .3, cy - R * .35, R * .1, c, cy, R); body.addColorStop(0, '#4e4a42'); body.addColorStop(.55, '#26231e'); body.addColorStop(1, '#13110e');
-      x.fillStyle = body; x.beginPath(); x.arc(c, cy, R, 0, 7); x.fill();
-      x.strokeStyle = 'rgba(140,198,63,.7)'; x.lineWidth = S * .01; x.beginPath(); x.arc(c, cy, R * .965, 0, 7); x.stroke();
-      x.fillStyle = 'rgba(232,226,200,.5)'; for (let i = 0; i < 24; i++) { const a = i / 24 * 6.283; x.beginPath(); x.arc(c + Math.cos(a) * R * .89, cy + Math.sin(a) * R * .89, S * .0065, 0, 7); x.fill(); }
-      x.fillStyle = '#b5e06b'; x.font = `500 ${S * .026}px "Geist Mono", monospace`; x.textAlign = 'center'; x.fillText('NUTS NOW · ROASTERY', c, cy + R * .93 - S * .008);
-    }
-    // the 3 nuts × 3 variants, blended to the current roast colour, cached until the colour moves a notch
-    const CELL = 72; let sheet = null, sheetLv = -1;
-    function sheetFor(level) {
-      const q = Math.round(level * 48) / 48; if (sheet && q === sheetLv) return sheet; sheetLv = q;
-      if (!sheet) { sheet = document.createElement('canvas'); sheet.width = CELL * 3; sheet.height = CELL * ROWS.length; }
-      const x = sheet.getContext('2d'); x.setTransform(1, 0, 0, 1, 0, 0); x.clearRect(0, 0, sheet.width, sheet.height);
-      ROWS.forEach((row, ri) => { for (let col = 0; col < 3; col++) { x.setTransform(1, 0, 0, 1, col * CELL + CELL / 2, ri * CELL + CELL / 2); nut(x, q, row, col, CELL); } });
-      return sheet;
-    }
-    function draw() {
-      if (!under) layers();
-      const c = S / 2, cy = S * CY; ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, cv.width, cv.height); ctx.drawImage(under, 0, 0); ctx.setTransform(D, 0, 0, D, 0, 0);
-      const heat = holding ? Math.min(1, .35 + roast) : Math.max(0, roast * .4);
-      const R = S * .43, gy = cy + R * .95, gr = S * .4;
-      // burner glow + flames (only the area around the burner is painted)
-      const fg = ctx.createRadialGradient(c, gy + R * .07, S * .02, c, gy, gr); fg.addColorStop(0, `rgba(255,130,50,${.12 + heat * .55})`); fg.addColorStop(1, 'rgba(255,120,40,0)'); ctx.fillStyle = fg; ctx.fillRect(c - gr, gy - gr, gr * 2, gr * 2);
-      for (let i = -3; i <= 3; i++) { const h = S * (.018 + heat * .03) * (1 + .3 * Math.sin(ang * 3 + i)); ctx.fillStyle = `rgba(255,${150 + heat * 40 | 0},70,${.25 + heat * .6})`; ctx.beginPath(); ctx.ellipse(c + i * R * .12, cy + R * 1.05 - h / 2, S * .009, h, 0, 0, 7); ctx.fill(); }
-      ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.drawImage(over, 0, 0); ctx.setTransform(D, 0, 0, D, 0, 0);
-      // window: warm interior, vanes, the nuts
-      const rw = RW * S, inside = ctx.createRadialGradient(c, cy + rw * .3, rw * .1, c, cy, rw); inside.addColorStop(0, `rgb(${70 + heat * 120 | 0},${38 + heat * 40 | 0},${18})`); inside.addColorStop(1, '#120c06');
-      ctx.save(); ctx.beginPath(); ctx.arc(c, cy, rw, 0, 7); ctx.clip(); ctx.fillStyle = inside; ctx.fillRect(c - rw, cy - rw, rw * 2, rw * 2);
-      ctx.strokeStyle = 'rgba(255,255,255,.07)'; ctx.lineWidth = S * .02; for (let i = 0; i < 3; i++) { const a = ang + i * 2.094; ctx.beginPath(); ctx.moveTo(c + Math.cos(a) * rw * .2, cy + Math.sin(a) * rw * .2); ctx.lineTo(c + Math.cos(a) * rw, cy + Math.sin(a) * rw); ctx.stroke(); }
-      if (tints) { const sz = RN * S * 2.6, sh = sheetFor(roast); for (const n of nuts) { const co = Math.cos(n.a), si = Math.sin(n.a), w = sz * n.s; ctx.setTransform(D * co, D * si, -D * si, D * co, D * (c + n.x * S), D * (cy + n.y * S)); ctx.drawImage(sh, n.col * CELL, n.ri * CELL, CELL, CELL, -w / 2, -w / 2, w, w); } ctx.setTransform(D, 0, 0, D, 0, 0); }
-      ctx.restore();
-      // glass: brass rim + reflection
-      ctx.strokeStyle = '#8a7650'; ctx.lineWidth = S * .016; ctx.beginPath(); ctx.arc(c, cy, rw + S * .008, 0, 7); ctx.stroke();
-      ctx.strokeStyle = 'rgba(255,255,255,.2)'; ctx.lineWidth = S * .024; ctx.lineCap = 'round'; ctx.beginPath(); ctx.arc(c, cy, rw * .82, 3.6, 4.4); ctx.stroke(); ctx.lineWidth = S * .01; ctx.beginPath(); ctx.arc(c, cy, rw * .82, 4.55, 4.75); ctx.stroke();
-      for (const p of steam) { ctx.fillStyle = `rgba(243,236,224,${Math.max(0, p.a) * .16})`; ctx.beginPath(); ctx.arc(p.x * S, p.y * S, p.r * S, 0, 7); ctx.fill(); }
-    }
-  // the loop: 0–1.2 s raw and idling, 1.2–6 s burner on (raw → golden), 6–9 s golden and slowing, then a fresh batch
-  const LOOP = 9.6, GOLD = .66;
-  const caption = t => { const c = t < 1.2 ? 'Raw' : t < 6 ? 'Roasting' : 'Golden'; if (c !== said) { said = c; cap.innerHTML = c === 'Golden' ? '<b>Golden.</b> Roasted fresh in Allen Park' : c === 'Roasting' ? 'Roasting <b>…</b>' : 'Raw cashews, pistachios &amp; hazelnuts'; } };
-  function loop(now) {
-    const dt = Math.max(0, Math.min(.05, (now - t0) / 1000)); t0 = now;
-    clock += dt; if (clock > LOOP) { clock = 0; roast = 0; fill(); }
-    holding = clock > 1.2 && clock < 6;
-    if (holding) roast = Math.min(GOLD, roast + dt * GOLD / 4.8);
-    omega += ((holding ? .055 : .008) - omega) * Math.min(1, dt * 3); ang += omega * 1.6;
-    if (holding && roast > .25 && Math.random() < .5) steam.push({ x: .5 + (Math.random() - .5) * .3, y: CY - .3, r: .02 + Math.random() * .02, a: .8 });
-    for (const p of steam) { p.y -= dt * .08; p.r += dt * .03; p.a -= dt * .5; } steam = steam.filter(p => p.a > 0);
-    physics(); odd = !odd; if (odd) draw(); caption(clock);
-    raf = visible && !document.hidden ? requestAnimationFrame(loop) : 0;
+  /* ---------- HERO: the roaster video in the logo badge ----------
+     The roaster is a pre-rendered 3D loop (src/roaster/: a stainless drum turning over gas flames, cashews,
+     pistachios and hazelnuts tumbling with real physics). A video costs a phone next to nothing to play, so it
+     looks photoreal without the lag a live 3D scene would bring. It only plays while on screen. */
+  const vid = $('#roastVid');
+  if (vid) {
+    if (RM) vid.removeAttribute('autoplay');
+    else new IntersectionObserver(es => { const v = es[0].isIntersecting; if (v) { const p = vid.play(); p && p.catch(() => {}); } else vid.pause(); }, { threshold: .15 }).observe(vid);
   }
-  function kick() { if (!S) return; if (RM) { roast = GOLD; for (let i = 0; i < 120; i++) physics(); draw(); caption(7); return; } if (!raf && visible) { t0 = performance.now(); raf = requestAnimationFrame(loop); } }
-  const size = () => { const r = cv.getBoundingClientRect(); if (!r.width) return; D = Math.min(1.5, devicePixelRatio || 1); S = r.width; HH = r.height; cv.width = Math.round(S * D); cv.height = Math.round(HH * D); under = null; kick(); };
-  if ('ResizeObserver' in window) new ResizeObserver(size).observe(cv); else addEventListener('resize', size);
-  new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible) kick(); }).observe(cv);
-  document.addEventListener('visibilitychange', kick);
-  document.fonts && document.fonts.ready.then(() => { under = null; kick(); });
+  /* ---------- drifting nuts: real 3D-rendered pieces at three depths ---------- */
+  const drift = $('#drift');
+  if (drift) {
+    const sprite = (id, sz) => { const row = CONFIG.atlas.indexOf(id), col = Math.floor(Math.random() * 3), k = sz / 96; return `width:${sz}px;height:${sz}px;background-size:${336 * k}px auto;background-position:${-(col * 112 + 8) * k}px ${-(row * 112 + 8) * k}px`; };
+    const L = { far: [], mid: [], near: [] };
+    // [layer, id, left %, top %, size px]
+    [['far', 'pistachios', 8, 12, 46], ['far', 'cashews', 36, 6, 40], ['far', 'hazelnuts', 52, 78, 44], ['far', 'pecans', 22, 88, 50], ['far', 'cashews', 94, 58, 42], ['far', 'pistachios', 66, 4, 38],
+     ['mid', 'cashews', 3, 52, 62], ['mid', 'hazelnuts', 46, 20, 54], ['mid', 'walnuts', 90, 26, 70], ['mid', 'pistachios', 41, 92, 60],
+     ['near', 'cashews', 57, 64, 92], ['near', 'pistachios', 95, 84, 86], ['near', 'hazelnuts', -2, 30, 80]]
+      .forEach(([l, id, x, y, sz], i) => L[l].push(`<i${x > 10 && x < 86 ? ' class="mid-x"' : ''} style="left:${x}%;top:${y}%;${sprite(id, sz)};--d:${11 + (i * 7) % 9}s;--dl:${-(i * 1.7)}s;--dx:${(i % 3 - 1) * 26}px;--dy:${-18 - (i * 5) % 26}px;--r0:${(i * 47) % 90 - 45}deg;--r1:${(i * 47) % 90 + 15}deg"></i>`));
+    drift.innerHTML = Object.entries(L).map(([k, v]) => `<div class="lyr ${k}" data-k="${k}">${v.join('')}</div>`).join('');
+    if (!RM) { const lyr = $$('.lyr', drift), sp = { far: .08, mid: .2, near: .38 }; let tick = 0;
+      addEventListener('scroll', () => { if (tick) return; tick = requestAnimationFrame(() => { tick = 0; const y = Math.min(scrollY, innerHeight * 1.2); lyr.forEach(l => { l.style.transform = `translate3d(0,${-y * sp[l.dataset.k]}px,0)`; }); }); }, { passive: true }); }
+  }
 
   /* page motion */
   const nav = $('#nav'); const onS = () => nav.classList.toggle('solid', scrollY > 30); addEventListener('scroll', onS, { passive: true }); onS();
@@ -885,6 +830,97 @@ NN.ready.then(cat => {
       return an.finished.catch(() => {}).then(() => im.remove()); };
     const tick = (out, dir) => { if (RM) return; out.animate([{ transform: `translateY(${dir * 8}px)`, opacity: .3 }, { transform: 'none', opacity: 1 }], { duration: 220, easing: 'cubic-bezier(.2,.8,.2,1)' }); };
     window.__fly = fly; window.__tick = tick;
+    /* ===== each product's own animation =====
+       Real 3D-rendered pieces of that product (the img/pieces.webp sprite sheet) act out something that suits it:
+       cashews pour into a pile, pistachios pop, hazelnuts roll, seeds rain, dried fruit drifts, discs flip like coins,
+       gummies bounce, Swedish Fish swim... Transform/opacity only (WAAPI), pieces removed when done. Plays when a card
+       first comes into view, and again on hover or tap of the photo. Off for reduced motion. */
+    const FX = (() => {
+      const rnd = (a, b) => a + Math.random() * (b - a), pick = a => a[Math.floor(Math.random() * a.length)];
+      const ROW = id => CONFIG.atlas.indexOf(id);
+      const P = {
+        cashews: { m: 'pour', n: 9 }, bbq: { m: 'pour', n: 8, dust: '#b8421b' }, zaatar: { m: 'pour', n: 8, dust: '#5d6e22' },
+        pistachios: { m: 'pop', n: 8 }, pecans: { m: 'stack', n: 6 }, hazelnuts: { m: 'roll', n: 6 }, walnuts: { m: 'clap', n: 2 },
+        mix: { m: 'swirl', n: 10, rows: ['cashews', 'pistachios', 'hazelnuts', 'pecans', 'walnuts'] },
+        pumpkin: { m: 'rain', n: 16 }, melon: { m: 'rain', n: 20, k: .7 }, lemon: { m: 'rain', n: 20, k: .7 },
+        strawberries: { m: 'drop', n: 6 }, mango: { m: 'drift', n: 6 }, kiwi: { m: 'coin', n: 6 }, pineapple: { m: 'spin', n: 5 },
+        delight: { m: 'jelly', n: 6, dust: '#ffffff' }, dates: { m: 'drop', n: 5 }, stuffed: { m: 'slide', n: 5 },
+        bulkchoc: { m: 'pour', n: 8 }, wrapped: { m: 'toss', n: 7, glint: 1 }, discs: { m: 'coin', n: 8 },
+        gummies: { m: 'bounce', n: 7 }, sours: { m: 'wiggle', n: 7, glint: 1 }, blue: { m: 'bounce', n: 7, glint: 1 },
+        licorice: { m: 'twirl', n: 5 }, swedish: { m: 'burst', n: 10 }, fish: { m: 'swim', n: 4 }, pretzels: { m: 'spin', n: 5 }
+      };
+      const T = (x, y, r = 0, sx = 1, sy = sx) => `translate(${x.toFixed(1)}px,${y.toFixed(1)}px) rotate(${r.toFixed(0)}deg) scale(${sx},${sy})`;
+      // each motion returns, per piece, the keyframes and timing
+      const M = {
+        pour: (W, H, s, i) => { const x = rnd(.05, .95) * W - s / 2, y = H - s * rnd(.5, .95), r0 = rnd(-90, 90), r1 = r0 + rnd(-140, 140);
+          return { kf: [{ transform: T(x, -s * 1.2, r0), opacity: 1 }, { transform: T(x, y, r1), offset: .45, easing: 'cubic-bezier(.3,0,.6,.4)' }, { transform: T(x, y - s * .3, r1 + 10), offset: .55 }, { transform: T(x, y, r1), offset: .65, opacity: 1 }, { transform: T(x, y, r1), opacity: 0 }], dur: 1900, delay: i * 70 }; },
+        drop: (W, H, s, i) => { const x = rnd(.08, .92) * W - s / 2, y = H - s * rnd(.55, .9), r = rnd(-30, 30);
+          return { kf: [{ transform: T(x, -s * 1.3, r), opacity: 1 }, { transform: T(x, y, r), offset: .42, easing: 'cubic-bezier(.4,0,.8,.6)' }, { transform: T(x, y + s * .06, r, 1.18, .78), offset: .5 }, { transform: T(x, y, r, .95, 1.06), offset: .6 }, { transform: T(x, y, r), offset: .72, opacity: 1 }, { transform: T(x, y, r), opacity: 0 }], dur: 1800, delay: i * 110 }; },
+        pop: (W, H, s, i) => { const x0 = rnd(.15, .85) * W - s / 2, x1 = x0 + rnd(-.25, .25) * W, top = rnd(.08, .4) * H, r = rnd(-200, 200);
+          return { kf: [{ transform: T(x0, H, 0), opacity: 1 }, { transform: T((x0 + x1) / 2, top, r / 2), offset: .45, easing: 'cubic-bezier(.2,.6,.4,1)' }, { transform: T(x1, H + s, r), opacity: 1 }], dur: 1300, delay: i * 120 + rnd(0, 80), easing: 'cubic-bezier(.3,0,.7,1)' }; },
+        roll: (W, H, s, i) => { const y = H - s * .95 - (i % 2) * s * .5, dir = i % 2 ? -1 : 1, x0 = dir > 0 ? -s : W, x1 = dir > 0 ? W : -s, deg = (x1 - x0) / (Math.PI * s) * 360;
+          return { kf: [{ transform: T(x0, y, 0) }, { transform: T(x1, y, deg) }], dur: 1700 + rnd(0, 400), delay: i * 160, easing: 'cubic-bezier(.25,.1,.25,1)' }; },
+        rain: (W, H, s, i) => { const x = rnd(0, 1) * W - s / 2, r = rnd(-180, 180);
+          return { kf: [{ transform: T(x, -s, r), opacity: 1 }, { transform: T(x + rnd(-20, 20), H + s, r + rnd(-200, 200)), opacity: 1 }], dur: 900 + rnd(0, 500), delay: i * 55 + rnd(0, 60), easing: 'cubic-bezier(.45,0,.9,.6)' }; },
+        drift: (W, H, s, i) => { const x = rnd(.1, .8) * W, kf = []; for (let k = 0; k <= 6; k++) { const t = k / 6; kf.push({ transform: T(x + Math.sin(t * Math.PI * 3 + i) * W * .1, -s + t * (H + s * 2), Math.sin(t * Math.PI * 3 + i) * 35), offset: t }); }
+          return { kf, dur: 2300 + rnd(0, 500), delay: i * 220, easing: 'linear' }; },
+        coin: (W, H, s, i) => { const x = rnd(.08, .85) * W, y = H - s * rnd(.6, .95), kf = []; for (let k = 0; k <= 8; k++) { const t = k / 8, yy = -s + Math.min(1, t / .6) ** 2 * (y + s); kf.push({ transform: T(x, yy, 0, t < .75 ? Math.cos(t * Math.PI * 6) : 1, 1), offset: t * .8 }); } kf.push({ transform: T(x, y, 0), opacity: 0 });
+          return { kf, dur: 1900, delay: i * 90, easing: 'linear' }; },
+        spin: (W, H, s, i) => { const x = rnd(.12, .78) * W, y = H - s * rnd(.65, 1);
+          return { kf: [{ transform: T(x, -s * 1.3, 0), opacity: 1 }, { transform: T(x, y, 540), offset: .55, easing: 'cubic-bezier(.3,0,.5,1)' }, { transform: T(x, y, 560), offset: .75, opacity: 1 }, { transform: T(x, y, 560), opacity: 0 }], dur: 1900, delay: i * 130 }; },
+        jelly: (W, H, s, i) => { const x = rnd(.08, .85) * W, y = H - s * rnd(.55, .9);
+          return { kf: [{ transform: T(x, -s, 0), opacity: 1 }, { transform: T(x, y, 0, .9, 1.12), offset: .38, easing: 'cubic-bezier(.4,0,.9,.5)' }, { transform: T(x, y + s * .1, 0, 1.3, .7), offset: .45 }, { transform: T(x, y - s * .08, 0, .88, 1.16), offset: .55 }, { transform: T(x, y, 0, 1.06, .94), offset: .63 }, { transform: T(x, y, 0), offset: .74, opacity: 1 }, { transform: T(x, y, 0), opacity: 0 }], dur: 2000, delay: i * 120 }; },
+        bounce: (W, H, s, i) => { const x0 = rnd(.05, .6) * W, dx = rnd(.15, .35) * W, y = H - s * .9, kf = [{ transform: T(x0, -s, 0), offset: 0, opacity: 1 }]; let h = y + s, t = .35, xx = x0;
+          for (let b = 0; b < 3; b++) { kf.push({ transform: T(xx += dx * .35, y, b * 40, 1.12, .86), offset: Math.min(.86, t) }); h *= .42; t += .14 + b * .02; if (t < .86) kf.push({ transform: T(xx += dx * .15, y - h, b * 40 + 20), offset: Math.min(.86, t) }); t += .1; }
+          kf.push({ transform: T(xx, y, 120), offset: .9, opacity: 1 }, { transform: T(xx, y, 120), opacity: 0 }); kf.forEach((k, j) => { if (j && k.offset <= kf[j - 1].offset) k.offset = Math.min(.89, kf[j - 1].offset + .01); });
+          return { kf, dur: 2000, delay: i * 120, easing: 'ease-in-out' }; },
+        stack: (W, H, s, i) => { const x = W * .5 - s / 2 + (i % 2 ? .12 : -.12) * W, y = H - s * .7 - i * s * .32;
+          return { kf: [{ transform: T(W + s, y - s, 20), opacity: 1 }, { transform: T(x, y, rnd(-8, 8)), offset: .4, easing: 'cubic-bezier(.2,.9,.3,1.2)' }, { transform: T(x, y, 0), offset: .78, opacity: 1 }, { transform: T(x, y, 0), opacity: 0 }], dur: 2100, delay: i * 140 }; },
+        clap: (W, H, s, i) => { const y = H * .5 - s / 2, side = i ? 1 : -1, x1 = W / 2 - s / 2 + side * s * .32;
+          return { kf: [{ transform: T(W / 2 - s / 2 + side * W * .6, y, side * 60, side, 1), opacity: 1 }, { transform: T(x1, y, 0, side, 1), offset: .4, easing: 'cubic-bezier(.5,0,.7,1)' }, { transform: T(x1 + side * 4, y, side * 4, side * 1.06, .94), offset: .47 }, { transform: T(x1, y, 0, side, 1), offset: .58 }, { transform: T(x1, y, 0, side, 1), offset: .8, opacity: 1 }, { transform: T(x1, y + s * .1, 0, side * .9, .9), opacity: 0 }], dur: 1900, delay: 0, k: 1.5 }; },
+        swirl: (W, H, s, i, n) => { const cx = W / 2 - s / 2, cy = H / 2 - s / 2, R0 = Math.min(W, H) * .32, a0 = i / n * Math.PI * 2, kf = []; for (let k = 0; k <= 10; k++) { const t = k / 10, a = a0 + t * Math.PI * 2.2, rr = R0 * (t < .8 ? 1 - .25 * Math.sin(t * Math.PI) : 1 + (t - .8) * 6); kf.push({ transform: T(cx + Math.cos(a) * rr, cy + Math.sin(a) * rr * .7, a * 57), opacity: t < .1 ? t * 10 : t > .85 ? (1 - t) / .15 : 1, offset: t }); }
+          return { kf, dur: 2200, delay: 0, easing: 'linear' }; },
+        toss: (W, H, s, i) => { const x0 = -s, y0 = H * .8, x1 = rnd(.15, .85) * W, y1 = H - s * rnd(.6, .95), top = rnd(.05, .3) * H;
+          return { kf: [{ transform: T(x0, y0, -60), opacity: 1 }, { transform: T((x0 + x1) / 2, top, 120), offset: .3, easing: 'cubic-bezier(.3,.6,.5,1)' }, { transform: T(x1, y1, 260), offset: .55, easing: 'cubic-bezier(.5,0,.9,.6)' }, { transform: T(x1, y1, 260), offset: .78, opacity: 1 }, { transform: T(x1, y1, 260), opacity: 0 }], dur: 2000, delay: i * 100 }; },
+        wiggle: (W, H, s, i) => { const x = rnd(.05, .8) * W, y = rnd(.15, .75) * H, kf = [{ transform: T(x, y, 0, 0), opacity: 0 }]; for (let k = 1; k <= 7; k++) kf.push({ transform: T(x + Math.sin(k) * 4, y, (k % 2 ? 22 : -22), 1, 1), opacity: 1, offset: k / 9 }); kf.push({ transform: T(x, y, 0, .2), opacity: 0 });
+          return { kf, dur: 1900, delay: i * 90, easing: 'ease-in-out' }; },
+        twirl: (W, H, s, i) => { const dir = i % 2 ? 1 : -1, y = rnd(.15, .7) * H, x0 = dir > 0 ? -s * 1.5 : W + s * .5, x1 = dir > 0 ? W + s * .5 : -s * 1.5;
+          return { kf: [{ transform: T(x0, y, 0) }, { transform: T((x0 + x1) / 2, y - s * .4, dir * 360) , offset: .5 }, { transform: T(x1, y, dir * 720) }], dur: 1600 + rnd(0, 300), delay: i * 180, easing: 'cubic-bezier(.4,0,.6,1)' }; },
+        burst: (W, H, s, i, n) => { const cx = W / 2 - s / 2, cy = H / 2 - s / 2, a = i / n * Math.PI * 2 + rnd(-.2, .2), d = Math.max(W, H) * rnd(.45, .7);
+          return { kf: [{ transform: T(cx, cy, 0, .2), opacity: 0 }, { transform: T(cx + Math.cos(a) * d * .35, cy + Math.sin(a) * d * .35, rnd(-90, 90), 1.1), opacity: 1, offset: .3, easing: 'cubic-bezier(.2,.8,.3,1)' }, { transform: T(cx + Math.cos(a) * d, cy + Math.sin(a) * d + s, rnd(-260, 260), .9), opacity: 0 }], dur: 1500, delay: i * 25, easing: 'cubic-bezier(.4,0,.8,.6)' }; },
+        swim: (W, H, s, i) => { const dir = i % 2 ? -1 : 1, base = H * (.25 + i * .17), kf = []; for (let k = 0; k <= 10; k++) { const t = k / 10, x = dir > 0 ? -s * 1.5 + t * (W + s * 3) : W + s * 1.5 - t * (W + s * 3), wv = Math.sin(t * Math.PI * 4 + i); kf.push({ transform: T(x, base + wv * H * .05, Math.cos(t * Math.PI * 4 + i) * 12 * dir, dir, 1), offset: t }); }
+          return { kf, dur: 2600 + rnd(0, 500), delay: i * 260, easing: 'linear' }; },
+        slide: (W, H, s, i) => { const y = H - s * .85 - (i % 2) * s * .4, x = W * (.08 + i * .17);
+          return { kf: [{ transform: T(-s * 1.5, y, -40), opacity: 1 }, { transform: T(x, y, 6), offset: .38, easing: 'cubic-bezier(.2,.9,.3,1.15)' }, { transform: T(x, y, 0), offset: .78, opacity: 1 }, { transform: T(x, y, 0), opacity: 0 }], dur: 2000, delay: i * 120 }; }
+      };
+      function play(card, force) {
+        if (RM || !card || card.dataset.fx === '1') return; const id = card.dataset.id, cfg = P[id]; if (!cfg) return;
+        const box = $('.pimg', card), W = box.clientWidth, H = box.clientHeight; if (!W) return;
+        card.dataset.fx = '1'; const layer = document.createElement('div'); layer.className = 'pfx'; layer.setAttribute('aria-hidden', 'true'); box.appendChild(layer);
+        const s = Math.round(W * (cfg.k ? .2 * cfg.k : .2)), bs = s * 3 / .857, all = [];
+        for (let i = 0; i < cfg.n; i++) {
+          const rowId = cfg.rows ? cfg.rows[i % cfg.rows.length] : id, rw = ROW(rowId), col = Math.floor(Math.random() * 3), el = document.createElement('i');
+          const cell = bs / 3, off = cell * 8 / 112;
+          el.style.cssText = `width:${s}px;height:${s}px;background-size:${bs}px auto;background-position:${-(col * cell + off)}px ${-(rw * cell + off)}px`;
+          layer.appendChild(el); const a = M[cfg.m](W, H, s, i, cfg.n);
+          all.push(el.animate(a.kf, { duration: a.dur, delay: a.delay, easing: a.easing || 'linear', fill: 'both' }).finished.catch(() => {}));
+        }
+        if (cfg.dust || cfg.glint) for (let i = 0; i < (cfg.glint ? 5 : 12); i++) { const d = document.createElement('b'); d.className = cfg.glint ? 'glint' : 'dust'; if (cfg.dust) d.style.background = cfg.dust; layer.appendChild(d);
+          const x = rnd(.05, .95) * W, y = cfg.glint ? rnd(.1, .8) * H : H - rnd(.05, .3) * H;
+          all.push(d.animate(cfg.glint ? [{ transform: `translate(${x}px,${y}px) scale(0) rotate(0deg)`, opacity: 0 }, { transform: `translate(${x}px,${y}px) scale(1) rotate(90deg)`, opacity: 1, offset: .5 }, { transform: `translate(${x}px,${y}px) scale(0) rotate(180deg)`, opacity: 0 }]
+            : [{ transform: `translate(${x}px,${y}px) scale(.4)`, opacity: 0 }, { transform: `translate(${x + rnd(-10, 10)}px,${y - 14}px) scale(1)`, opacity: .9, offset: .3 }, { transform: `translate(${x + rnd(-24, 24)}px,${y - rnd(30, 60)}px) scale(1.6)`, opacity: 0 }],
+            { duration: cfg.glint ? 700 : 1300, delay: 500 + i * (cfg.glint ? 260 : 60), easing: 'ease-out', fill: 'both' }).finished.catch(() => {})); }
+        Promise.all(all).then(() => { layer.remove(); card.dataset.fx = ''; });
+      }
+      // first time each card is properly on screen, it plays once (staggered as a row comes in)
+      const seen = new WeakSet();
+      const io = new IntersectionObserver(es => { let k = 0; es.forEach(e => { if (e.isIntersecting && !seen.has(e.target)) { seen.add(e.target); const c = e.target; setTimeout(() => play(c), 250 + (k++) * 160); } }); }, { threshold: .65 });
+      return { play, watch: () => $$('#oGrid .pcard').forEach(c => io.observe(c)) };
+    })();
+    window.__fx = FX;
+    if (matchMedia('(hover: hover) and (pointer: fine)').matches) $('#oGrid').addEventListener('mouseover', e => { const im = e.target.closest('.pimg'); if (im && !im.contains(e.relatedTarget)) FX.play(im.closest('.pcard')); });
+    $('#oGrid').addEventListener('click', e => { const im = e.target.closest('.pimg'); if (im && !e.target.closest('button')) FX.play(im.closest('.pcard')); });
+
     // tabs are drawn once; a lime pill slides under the selected one
     $('#oCats').innerHTML = '<span class="pill" aria-hidden="true"></span>' + cats.map(x => { const n = prods.filter(p => p.category === x.id).length; return `<button type="button" role="tab" aria-selected="${x.id === active}" aria-controls="oGrid" data-id="${x.id}">${esc(x.name)}<small>${n}</small></button>`; }).join('');
     const pill = () => { const b = $(`#oCats [data-id="${active}"]`), pl = $('#oCats .pill'); if (!b) return; pl.style.width = b.offsetWidth + 'px'; pl.style.transform = `translateX(${b.offsetLeft}px)`; };
@@ -894,6 +930,7 @@ NN.ready.then(cat => {
       $('#oCrumb').innerHTML = `<span>Shop</span> <i aria-hidden="true">›</i> <b>${esc(c.name)}</b> <span class="n">${list.length} item${list.length === 1 ? '' : 's'}</span>${c.description ? `<span class="d">${esc(c.description)}</span>` : ''}`;
       const g = $('#oGrid'); g.classList.remove('swap'); if (swap) { void g.offsetWidth; g.classList.add('swap'); }
       g.innerHTML = list.length ? list.map(card).join('') : '<p class="o-empty">Nothing in this aisle online yet. Pop in to see what\'s in the bins.</p>';
+      if (typeof FX !== 'undefined') FX.watch();
     }
     renderShop(false);
     addEventListener('resize', pill); document.fonts && document.fonts.ready.then(pill);

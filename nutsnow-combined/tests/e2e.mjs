@@ -22,7 +22,7 @@ for (const [tag, vp, mobile] of [['d', { width: 1440, height: 900 }, false], ['m
   const p = await page(vp, 8791, mobile, T);
   // mix: from the shop cards. Pistachios ¾ lb, cashews ½ lb, BBQ ¼ lb twice then − once in the mix panel
   await p.evaluate(() => document.querySelector('#order').scrollIntoView());
-  ok(`${tag} hero is just the animation (no controls)`, !(await p.$('#holdBtn')) && !(await p.$('#jarCv')) && !!(await p.$('#drumCv')));
+  ok(`${tag} hero is just the animation (no controls)`, !(await p.$('#holdBtn')) && !(await p.$('#jarCv')) && !!(await p.$('#roastVid')));
   const card = id => `.pcard[data-id="${id}"]`;
   await p.click(`${card('pistachios')} [data-act="more"]`); await p.click(`${card('pistachios')} [data-act="more"]`); await p.click(`${card('pistachios')} [data-act="mix"]`);
   await p.click(`${card('cashews')} [data-act="more"]`); await p.click(`${card('cashews')} [data-act="mix"]`);
