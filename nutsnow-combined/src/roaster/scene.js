@@ -59,6 +59,9 @@ const steel = new THREE.MeshPhysicalMaterial({ color: '#aeaba5', metalness: 1, r
 const steelIn = new THREE.MeshPhysicalMaterial({ color: '#7a6f64', metalness: .9, roughness: .45, side: THREE.BackSide, emissive: '#5a2008', emissiveIntensity: .5 }); // hot inside
 const iron = new THREE.MeshStandardMaterial({ color: '#1d1b19', metalness: .6, roughness: .55 });
 const lime = new THREE.MeshPhysicalMaterial({ color: '#8cc63f', roughness: .28, clearcoat: 1, clearcoatRoughness: .08, metalness: .05 });
+// luxury trim: glossy black enamel bands and brass hardware against the steel and the lime
+const blackGloss = new THREE.MeshPhysicalMaterial({ color: '#0c0c0d', metalness: .35, roughness: .2, clearcoat: 1, clearcoatRoughness: .04 });
+const brassM = new THREE.MeshPhysicalMaterial({ color: '#b8923f', metalness: 1, roughness: .26 });
 const drum = new THREE.Group(); inner.add(drum);
 const dark = new THREE.MeshPhysicalMaterial({ color: '#1a1714', metalness: .75, roughness: .42, clearcoat: .3, clearcoatRoughness: .5 });
 {
@@ -68,11 +71,12 @@ const dark = new THREE.MeshPhysicalMaterial({ color: '#1a1714', metalness: .75, 
   // front: a steel funnel narrowing to the mouth, like a real drum roaster, with a rolled edge
   const fz = L / 2, cone = new THREE.Mesh(new THREE.CylinderGeometry(R * .8, R + .006, .045, 160, 1, true), new THREE.MeshPhysicalMaterial({ color: '#86c13b', roughness: .3, clearcoat: 1, clearcoatRoughness: .06, side: THREE.DoubleSide }));
   cone.rotation.x = Math.PI / 2; cone.position.z = fz + .0225; cone.castShadow = true; drum.add(cone);
-  const mouth = new THREE.Mesh(new THREE.TorusGeometry(R * .8, .0055, 16, 160), steel); mouth.position.z = fz + .045; drum.add(mouth);
+  const mouth = new THREE.Mesh(new THREE.TorusGeometry(R * .8, .0062, 16, 160), blackGloss); mouth.position.z = fz + .045; drum.add(mouth);
   // their lime enamel band round the drum's front, with rivets
-  const band = new THREE.Mesh(new THREE.CylinderGeometry(R + .009, R + .009, .03, 128, 1, true), steel); band.rotation.x = Math.PI / 2; band.position.z = fz - .022; drum.add(band);
-  for (const z of [-L / 2 + .02, .0]) { const b = new THREE.Mesh(new THREE.TorusGeometry(R + .006, .0032, 10, 128), steel); b.position.z = z; drum.add(b); }
-  const riv = new THREE.InstancedMesh(new THREE.SphereGeometry(.0034, 10, 8), steel, 40); const m = new THREE.Matrix4();
+  const band = new THREE.Mesh(new THREE.CylinderGeometry(R + .009, R + .009, .036, 128, 1, true), blackGloss); band.rotation.x = Math.PI / 2; band.position.z = fz - .022; drum.add(band);
+  for (const z of [-L / 2 + .02, .0]) { const b = new THREE.Mesh(new THREE.TorusGeometry(R + .006, .0052, 12, 128), blackGloss); b.position.z = z; b.castShadow = true; drum.add(b); }
+  const rear = new THREE.Mesh(new THREE.TorusGeometry(R + .004, .0062, 12, 128), blackGloss); rear.position.z = -L / 2; drum.add(rear);
+  const riv = new THREE.InstancedMesh(new THREE.SphereGeometry(.0034, 10, 8), brassM, 40); const m = new THREE.Matrix4();
   for (let i = 0; i < 40; i++) { const a = i / 40 * Math.PI * 2; m.makeTranslation(Math.cos(a) * (R + .009), Math.sin(a) * (R + .009), fz - .022); riv.setMatrixAt(i, m); } drum.add(riv);
 }
 const vanes = []; for (let k = 0; k < VANES; k++) { const v = new THREE.Mesh(new THREE.BoxGeometry(.04, .004, L * .96), new THREE.MeshPhysicalMaterial({ color: '#8f877e', metalness: .9, roughness: .38 })); v.castShadow = v.receiveShadow = true; drum.add(v); vanes.push(v); }
@@ -82,7 +86,8 @@ const FB = { w: R * 2.3, h: .15, d: L + .05, top: -R - .012 };
 {
   const fb = new THREE.Group(); inner.add(fb); const y0 = FB.top - FB.h / 2;
   const plate = (w, h, d, x, y, z) => { const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), dark); m.position.set(x, y, z); m.castShadow = m.receiveShadow = true; fb.add(m); return m; };
-  plate(FB.w, FB.h, .008, 0, y0, -FB.d / 2); plate(.008, FB.h, FB.d, -FB.w / 2, y0, 0); plate(.008, FB.h, FB.d, FB.w / 2, y0, 0); plate(FB.w, .008, FB.d, 0, FB.top - FB.h, 0);
+  plate(FB.w, FB.h, .008, 0, y0, -FB.d / 2);
+  const lip = new THREE.Mesh(new THREE.BoxGeometry(FB.w + .006, .005, .006), brassM); lip.position.set(0, FB.top - .001, FB.d / 2 + .002); fb.add(lip); plate(.008, FB.h, FB.d, -FB.w / 2, y0, 0); plate(.008, FB.h, FB.d, FB.w / 2, y0, 0); plate(FB.w, .008, FB.d, 0, FB.top - FB.h, 0);
   // front plate with a window cut out
   const sh = new THREE.Shape(); sh.moveTo(-FB.w / 2, -FB.h / 2); sh.lineTo(FB.w / 2, -FB.h / 2); sh.lineTo(FB.w / 2, FB.h / 2); sh.lineTo(-FB.w / 2, FB.h / 2); sh.closePath();
   const hole = new THREE.Path(); const hw = FB.w * .36, hh = FB.h * .3; hole.moveTo(-hw, -hh); hole.lineTo(hw, -hh); hole.lineTo(hw, hh); hole.lineTo(-hw, hh); hole.closePath(); sh.holes.push(hole);
@@ -93,9 +98,9 @@ const FB = { w: R * 2.3, h: .15, d: L + .05, top: -R - .012 };
   const wall = new THREE.Mesh(new THREE.PlaneGeometry(FB.w - .02, FB.h - .01), new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(gc), toneMapped: false, color: new THREE.Color(.42, .4, .4) })); wall.position.set(0, y0, -FB.d / 2 + .006); fb.add(wall);
   for (const pz of [.11, .04]) { const pipe = new THREE.Mesh(new THREE.CylinderGeometry(.009, .009, FB.w - .02, 20), new THREE.MeshPhysicalMaterial({ color: '#5c5047', metalness: .9, roughness: .45 })); pipe.rotation.z = Math.PI / 2; pipe.position.set(0, FB.top - FB.h + .028, pz); fb.add(pipe); }
   // legs, a control knob, and the rollers the drum rides on
-  for (const x of [-FB.w / 2 + .012, FB.w / 2 - .012]) for (const z of [-FB.d / 2 + .012, FB.d / 2 - .012]) plate(.02, .1, .02, x, FB.top - FB.h - .05, z);
+  for (const x of [-FB.w / 2 + .012, FB.w / 2 - .012]) for (const z of [-FB.d / 2 + .012, FB.d / 2 - .012]) { plate(.02, .1, .02, x, FB.top - FB.h - .05, z); const cap = new THREE.Mesh(new THREE.BoxGeometry(.024, .012, .024), brassM); cap.position.set(x, FB.top - FB.h - .094, z); cap.castShadow = true; fb.add(cap); }
   const knob = new THREE.Mesh(new THREE.CylinderGeometry(.013, .013, .012, 24), new THREE.MeshPhysicalMaterial({ color: '#b08a3e', metalness: 1, roughness: .25 })); knob.rotation.x = Math.PI / 2; knob.position.set(FB.w / 2 - .035, y0, FB.d / 2 + .012); fb.add(knob);
-  for (const sx of [-1, 1]) for (const z of [-L / 2 + .03, L / 2 - .03]) { const ro = new THREE.Mesh(new THREE.CylinderGeometry(.018, .018, .022, 24), steel); ro.rotation.x = Math.PI / 2; ro.position.set(sx * R * .62, -R * .83, z); fb.add(ro); }
+  for (const sx of [-1, 1]) for (const z of [-L / 2 + .03, L / 2 - .03]) { const ro = new THREE.Mesh(new THREE.CylinderGeometry(.018, .018, .022, 24), blackGloss); ro.rotation.x = Math.PI / 2; ro.position.set(sx * R * .62, -R * .83, z); fb.add(ro); }
 }
 
 /* ---------- gas flames: billboard planes with a moving noise flame shader ---------- */
