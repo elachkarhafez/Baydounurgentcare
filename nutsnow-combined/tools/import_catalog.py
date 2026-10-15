@@ -19,8 +19,8 @@ from image_rules import key_for
 
 # website aisles, in the order shoppers see them
 CATS = [
-    ("nuts-seeds", "Nuts & Seeds", "Nuts & Seeds", "Roasted in small batches at our Allen Park roastery. Cashews in 30 flavours, almonds, pistachios, pecans, seeds and mixes."),
-    ("candy", "Candy", "Candy", "The candy wall: gummies, sours, laces, jelly beans and Swedish pick & mix, all by the pound."),
+    ("nuts-seeds", "Nuts & Seeds", "Nuts & Seeds", "Roasted at our place in Allen Park. Cashews in more flavours than you'll get through, plus almonds, pistachios, pecans, seeds and mixes."),
+    ("candy", "Candy", "Candy", "Gummies, sours, laces, jelly beans and Swedish pick & mix, all by the pound."),
     ("chocolate", "Chocolate", "Chocolate & Confections", "Dubai chocolate, kunafa bars, chocolate-covered nuts and fruit, malt balls and Jordan almonds."),
     ("dried-fruit-dates", "Dried Fruit & Dates", "Dried Fruit & Dates", "Stuffed dates, chili mango, Turkish apricots, raisins and dried fruit by the pound."),
     ("turkish-delight-sweets", "Turkish Delight & Sweets", "Traditional Sweets", "Turkish delight, malban, nougat, halawa and sesame bars."),
@@ -34,8 +34,8 @@ SHEET_TO_CAT = {sheet: cid for cid, _, sheet, _ in CATS}
 
 # shopper collections that cut across aisles
 COLLECTIONS = [
-    ("dubai-chocolate", "Dubai Chocolate", r"dubai|kunafa|kanafa", "Everything Dubai: the pistachio-kunafa chocolate, plus Dubai cheesecake, muffins, dates and ice cream."),
-    ("swedish-candy", "Swedish Candy", r"swedish|s-marke|bubs|sgab", "Real Swedish pick & mix: Bubs, S-Marke, sour skulls and freeze-dried candy."),
+    ("dubai-chocolate", "Dubai Chocolate", r"dubai|kunafa|kanafa", "The pistachio-kunafa chocolate bars, plus Dubai cheesecake, muffins, dates and ice cream."),
+    ("swedish-candy", "Swedish Candy", r"swedish|s-marke|bubs|sgab", "Swedish pick & mix: Bubs, S-Marke, sour skulls and freeze-dried candy."),
     ("sugar-free", "Sugar Free", r"sugar ?free", "Sugar-free candy, sweets and ice cream."),
 ]
 

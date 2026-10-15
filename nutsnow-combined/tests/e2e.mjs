@@ -30,6 +30,14 @@ for (const [tag, vp, mobile] of [['d', { width: 1440, height: 900 }, false], ['m
   ok(`${tag} home: pickup shop defaults to Allen Park`, (await p.textContent('.store-switch [data-store-name]')).trim() === 'Allen Park');
   await p.click('.store-switch'); await p.waitForTimeout(250); await p.check('input[name=pickstore][value=dh]'); await p.waitForTimeout(500);
   ok(`${tag} store picker: Dearborn Heights saved and shown`, await p.evaluate(() => localStorage.getItem('nn-store')) === 'dh' && (await p.textContent('.store-switch [data-store-name]')).trim() === 'Dearborn Heights' && !(await p.isVisible('#storeSheet .picker')));
+  // aisle transition: pieces cover the screen, the aisle opens, the overlay clears
+  await p.evaluate(() => { sessionStorage.removeItem('nn-tx'); });
+  const tile = p.locator('.aisle[href="/shop/candy/"], a[href="/shop/candy/"]').first(); await tile.scrollIntoViewIfNeeded();
+  await tile.click(); await p.waitForTimeout(250);
+  const covered = await p.evaluate(() => !!document.querySelector('.tx canvas') && !!document.querySelector('.tx-logo'));
+  await p.waitForURL('**/shop/candy/'); await p.waitForTimeout(1600);
+  ok(`${tag} aisle transition: logo + pieces, then the aisle opens clean`, covered && p.url().endsWith('/shop/candy/') && await p.$$eval('.tx', x => x.length) === 0 && !(await p.evaluate(() => document.documentElement.classList.contains('nn-tx'))));
+  await go(p, '/');
   ok(`${tag} language link goes to the Arabic page`, (await p.getAttribute('.topbar .lang', 'href')) === '/ar/');
   // aisle page: filter + sort
   await go(p, '/shop/nuts-seeds/');

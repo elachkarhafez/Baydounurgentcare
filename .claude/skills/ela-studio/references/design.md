@@ -21,7 +21,7 @@ Rotate faces: don't use the same display face as any of the last 3 builds (`nove
 Rules:
 - Never ship an Inter-only site. The display face carries the personality.
 - Use one display face, with italics for emphasis words.
-- Size display type with `clamp()`. Heroes are big (`clamp(56px, 11vw, 180px)` is normal).
+- Size display type with `clamp()` and rem, inside the ranges in `formatting.md` (hero headline 40–56px desktop, 30–38px mobile). Make impact with the face, colour and layout, not with sheer size.
 - Load only the weights you use, with `display=swap`.
 
 ## Palette method

@@ -33,3 +33,23 @@ The user said the sites were getting "repetitive and boring, they aren't evolvin
 - **Pitch three different directions** to the user (format · verb · visual language), recommend one, and build what they pick. Skip this for declined→concept conversions, edits, or when the user says "just build it".
 - **Log the build** in `novelty.md` after shipping.
 
+
+## Standing rule: formatting standards (mandatory acceptance criteria)
+
+Every site, new or edited, follows `.claude/skills/ela-studio/references/formatting.md`. The user called out oversized type, huge heroes and too much scrolling. In short:
+- **Type**: hero headline 40–56px desktop / 30–38px mobile; section headings 28–40 / 24–30; body 15–17 / 14–16; buttons 14–16. Use `clamp()` + rem.
+- **Hero**: at 1366×768 the hero headline, supporting text and main call to action are visible without scrolling. No `100vh` / `min-h-screen` sections.
+- **Spacing**: section padding 48–80px desktop, 32–56px mobile; container 1100–1200px; no horizontal overflow.
+- **Existing projects**: keep the functionality, branding, colours, assets and animations. Change only layout, scale and spacing.
+- **Before calling a site done**, take Playwright screenshots at 1366×768, 1440×900, 1920×1080, 390×844 and 768×1024, plus a zoom/large-text check. Never claim a visual test you didn't run.
+
+## Standing rule: human copy, no AI tells
+
+Write copy like the owner talks (see `references/design.md` Copy rules). Avoid these AI tells:
+- em-dash asides
+- "not just X, it's Y"
+- rule-of-three slogans
+- fragment taglines ("Pistachio. Kunafa. Gone fast.")
+- kicker-label-over-every-heading
+- "elevate / curated / crafted / experience / journey"
+- generic font stacks (Inter, Geist, Instrument Serif accents, mono eyebrow labels)

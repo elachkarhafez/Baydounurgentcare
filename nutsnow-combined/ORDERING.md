@@ -20,6 +20,31 @@ A multi-page shop for Nuts Now (Allen Park and Dearborn Heights), in English at 
 - **Stores** (`/stores/`): hours, maps, directions, call buttons, Google rating per shop, and DoorDash / Uber Eats buttons once their store links exist.
 - **About** (`/about/`), with a contact form. Until the shop gives an email (`settings.contactEmail` in the catalog), it copies the message and points to the call and Instagram buttons; with an email set, it opens the customer's email app. **Photo credits** (`/credits/`) lists every product photo's author and license.
 
+## Aisle transition
+
+Tapping any aisle or the Shop link drops a mix of nuts and candy over the screen around the logo. Once the screen is covered, the next page opens and the pile falls away (`js/transition.js`, about 0.8 s each way). It is skipped for people who turn off motion, and for links opened in a new tab.
+
+- **The pieces** are real 3D models rendered once into `img/tx/pieces.webp` (48 sprites):
+  - nuts: cashews, almonds, pistachios, hazelnuts, walnuts, pecans
+  - candy: gummy bears, sour worms, peach rings, Swedish fish, licorice, truffles, candy-coated chocolates, yogurt pretzels, dried mango
+- **To re-render** after changing `src/pieces/scene.js`, run from the repo root:
+  ```bash
+  bash .claude/skills/ela-studio/kit/build3d/build.sh nutsnow-combined/src/pieces/scene.js nutsnow-combined/src/pieces/bundle.js
+  python3 -m http.server 8765 &
+  node nutsnow-combined/src/pieces/render.mjs /tmp/pieces
+  ```
+  Then pack the PNGs eight across at 160 px into `img/tx/pieces.webp`, in file order.
+
+## Type and layout
+
+- **Fonts**: Archivo everywhere (condensed for headings and prices, italic for the tagline), with Cairo for Arabic.
+- **Sizes** follow the ELA formatting standards:
+  - hero headline 53–56px on laptops and desktops, 30–34px on phones
+  - section headings 38–40px / 24px
+  - body text 15–17px
+  - container 1200px
+- **Tested** at 1366×768, 1440×900, 1920×1080, 390×844 and 768×1024, plus 200% zoom and a 20px browser font. Nothing overflows sideways, and the hero headline, text and buttons fit on a 1366×768 laptop without scrolling.
+
 ## Delivery: DoorDash and Uber
 
 Delivery prices come live from **DoorDash Drive** and **Uber Direct** through `api/delivery.js`. Both are courier services that deliver from your own shop, booked from your own website. They need the shop's own business accounts, and the keys go only into the Vercel project's **Environment Variables** (never into the code):

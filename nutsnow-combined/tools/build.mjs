@@ -20,7 +20,7 @@ const IG = 'https://www.instagram.com/nutsnow.co/', TT = 'https://www.tiktok.com
 /* ---------- shared helpers ---------- */
 const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const ver = f => crypto.createHash('md5').update(fs.readFileSync(path.join(ROOT, f))).digest('hex').slice(0, 8);
-const V = { css: ver('css/site.css'), core: ver('js/order-core.js'), site: ver('js/site.js'), home: ver('js/home.js'), co: ver('js/checkout.js') };
+const V = { css: ver('css/site.css'), core: ver('js/order-core.js'), site: ver('js/site.js'), home: ver('js/home.js'), co: ver('js/checkout.js'), tx: ver('js/transition.js') };
 const imgOk = new Set(fs.existsSync(path.join(ROOT, 'img/p')) ? fs.readdirSync(path.join(ROOT, 'img/p')).filter(f => f.endsWith('.webp')).map(f => f.slice(0, -5)) : []);
 const img = k => `/img/p/${imgOk.has(k) ? k : '_soon'}.webp`;
 const P = cat.products, byId = Object.fromEntries(P.map(p => [p.id, p]));
@@ -135,8 +135,8 @@ function build(L) {
 <meta property="og:type" content="website"><meta property="og:site_name" content="Nuts Now"><meta property="og:locale" content="${ar ? 'ar_AR' : 'en_US'}"><meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(desc)}"><meta property="og:url" content="${url}"><meta property="og:image" content="${SITE}${ogImg}">
 <link rel="icon" href="/img/logo-hd.webp" type="image/webp"><link rel="apple-touch-icon" href="/img/logo-hd.webp">
 ${ar ? '<link rel="preload" href="/assets/fonts/cairo-arabic.woff2" as="font" type="font/woff2" crossorigin>' : '<link rel="preload" href="/assets/fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>'}
-<link rel="preload" href="/assets/fonts/geist.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/css/site.css?v=${V.css}">
+<script>try{var x=JSON.parse(sessionStorage.getItem('nn-tx'));if(x&&Date.now()-x.t<8000&&!matchMedia('(prefers-reduced-motion: reduce)').matches){document.documentElement.classList.add('nn-tx');var l=document.createElement('link');l.rel='preload';l.as='image';l.href='/img/tx/pieces.webp';document.head.appendChild(l)}}catch(e){}</script>
 ${intro ? `<script>try{if(!sessionStorage.getItem('nn-intro')&&!location.hash&&!matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('nn-intro-on')}catch(e){}</script>` : ''}
 ${ld ? `<script type="application/ld+json">${JSON.stringify(ld).replace(/</g, '\\u003c')}</script>` : ''}
 </head>
@@ -162,6 +162,7 @@ ${sheets(pth)}
 <script>window.NN_STORES=${STORES_JS};window.NN_T=${CLIENT_T};window.NN_PF=${JSON.stringify(PF)}</script>
 <script src="/js/order-core.js?v=${V.core}"></script>
 <script src="/js/site.js?v=${V.site}"></script>
+<script src="/js/transition.js?v=${V.tx}"></script>
 ${scripts.map(s => `<script src="/js/${s}.js?v=${V[s === 'checkout' ? 'co' : s]}"></script>`).join('\n')}
 </body>
 </html>
@@ -235,7 +236,7 @@ ${scripts.map(s => `<script src="/js/${s}.js?v=${V[s === 'checkout' ? 'co' : s]}
       <h1 class="h1">${t.hero.h1}</h1>
       <p class="lede">${t.hero.lede(nOrder, cashewN)}</p>
       <div class="cta"><a class="btn btn-lime" href="${u('/shop/')}">${t.hero.start} ${I.arrow}</a><a class="btn btn-black" href="${u('/stores/')}">${I.pin} ${t.hero.find}</a></div>
-      <div class="proof">${ratingLine()}<span>🔥 ${t.hero.roasted}</span><span>⏱ ${t.hero.ready}</span><span>${I.truck} DoorDash · Uber</span></div>
+      <div class="proof">${ratingLine()}<span>${t.hero.roasted}</span><span>${t.hero.ready}</span><span>${I.truck} DoorDash · Uber</span></div>
       <div class="stores-mini">${S.map(storePill).join('')}</div>
     </div>
     <div class="stage" aria-label="${t.hero.stageAria}" role="img">
@@ -246,43 +247,37 @@ ${scripts.map(s => `<script src="/js/${s}.js?v=${V[s === 'checkout' ? 'co' : s]}
 </section>
 
 <section class="sec" style="padding-top:clamp(24px,3vw,40px)"><div class="wrap">
-  <div class="sec-h"><div><p class="kicker">${t.aisles.k}</p><h2 class="h2">${t.aisles.h}</h2></div><a class="more" href="${u('/shop/')}">${t.aisles.all}</a></div>
+  <div class="sec-h"><div><h2 class="h2">${t.aisles.h}</h2></div><a class="more" href="${u('/shop/')}">${t.aisles.all}</a></div>
   ${aisleTiles()}
 </div></section>
 
 <section class="sec" style="padding-top:0"><div class="wrap">
-  <div class="sec-h"><div><p class="kicker">${t.viral.k}</p><h2 class="h2">${t.viral.h}</h2></div><a class="more" href="${u('/shop/dubai-chocolate/')}">${t.viral.more}</a></div>
+  <div class="sec-h"><div><h2 class="h2">${t.viral.h}</h2></div><a class="more" href="${u('/shop/dubai-chocolate/')}">${t.viral.more}</a></div>
   <div class="scroller">${feat.map(p => card(p, { showCat: true })).join('')}</div>
 </div></section>
 
 <section class="sec" style="padding-top:0"><div class="wrap">
   <div class="spot rv"><div class="ph"><img src="${img('dubai-chocolate')}" alt="${esc(t.dubai.alt)}" width="640" height="640" loading="lazy"></div>
-  <div class="tx"><p class="kicker">${t.dubai.k}</p><h2 class="h2">${t.dubai.h} <span class="script" style="color:var(--lime)">${t.dubai.hs}</span></h2>
+  <div class="tx"><h2 class="h2">${t.dubai.h}</h2>
   <p class="lede">${t.dubai.lede(COLS[0].count)}</p>
   <ul>${dubai.map(p => `<li><a href="${u(`/product/${p.slug}/`)}" dir="auto">${esc(p.name)}</a><b>${moneyShort(p.priceCents)} <small style="font:500 12px var(--body);color:#c9c7b8">${esc(unitTail(p))}</small></b></li>`).join('')}</ul>
   <a class="btn btn-lime" href="${u('/shop/dubai-chocolate/')}">${t.dubai.cta} ${I.arrow}</a></div></div>
 </div></section>
 
 <section class="band sec"><div class="wrap">
-  <div class="sec-h"><div><p class="kicker">${t.roast.k}</p><h2 class="h2">${t.roast.h}<br><span class="script" style="color:var(--lime)">${t.roast.hs}</span></h2>
+  <div class="sec-h"><div><h2 class="h2">${t.roast.h}</h2>
   <div class="stats"><div><b>${cashewN}</b><span>${t.roast.cashews}</span></div><div><b>${almondN}</b><span>${t.roast.almonds}</span></div><div><b>${nutsN}</b><span>${t.roast.nuts}</span></div></div></div>
   <a class="more" href="${u('/shop/nuts-seeds/')}">${t.roast.all}</a></div>
   <div class="grid">${nuts.map(p => card(p)).join('')}</div>
 </div></section>
 
-<section class="sec"><div class="wrap">
-  <div class="sec-h"><div><p class="kicker">${t.how.k}</p><h2 class="h2">${t.how.h}</h2></div></div>
-  <div class="steps"><div class="step rv"><div><b>${t.how.s1}</b><p>${t.how.s1p}</p></div></div>
-  <div class="step rv"><div><b>${t.how.s2}</b><p>${t.how.s2p}</p></div></div>
-  <div class="step rv"><div><b>${t.how.s3}</b><p>${t.how.s3p}</p></div></div></div>
-</div></section>
 ${REV && REV.quotes && REV.quotes.length ? `
 <section class="sec" style="padding-top:0"><div class="wrap">
-  <div class="sec-h"><div><p class="kicker">${t.rev.k}</p><div class="rating"><span class="big">${esc(REV.rating.value)}</span><div><span class="stars" aria-label="${esc(REV.rating.value)}">★★★★★</span><p class="muted" style="margin:0">${ar ? `على غوغل · ${REV.stores.ap.count.toLocaleString('en-US')} تقييم في ألن بارك و${REV.stores.dh.count} في ديربورن هايتس` : esc(REV.rating.label)}</p></div></div></div>${REV.rating.url ? `<a class="more" href="${esc(REV.rating.url)}" target="_blank" rel="noopener">${t.rev.read}</a>` : ''}</div>
+  <div class="sec-h"><div><div class="rating"><span class="big">${esc(REV.rating.value)}</span><div><span class="stars" aria-label="${esc(REV.rating.value)}">★★★★★</span><p class="muted" style="margin:0">${ar ? `على غوغل · ${REV.stores.ap.count.toLocaleString('en-US')} تقييم في ألن بارك و${REV.stores.dh.count} في ديربورن هايتس` : esc(REV.rating.label)}</p></div></div></div>${REV.rating.url ? `<a class="more" href="${esc(REV.rating.url)}" target="_blank" rel="noopener">${t.rev.read}</a>` : ''}</div>
   <div class="quotes">${REV.quotes.map(q => `<figure class="quote" lang="en" dir="ltr"><span class="stars" aria-hidden="true">${'★'.repeat(q.stars || 5)}</span><p>“${esc(q.text)}”</p><footer><b>${esc(q.name)}</b><span>${esc(q.site)} · ${esc(q.store)}</span></footer></figure>`).join('')}</div>
 </div></section>` : ''}
 <section class="sec" style="padding-top:0"><div class="wrap">
-  <div class="sec-h"><div><p class="kicker">${t.visit.k}</p><h2 class="h2">${t.visit.h}</h2></div><a class="more" href="${u('/stores/')}">${t.visit.more}</a></div>
+  <div class="sec-h"><div><h2 class="h2">${t.visit.h}</h2></div><a class="more" href="${u('/stores/')}">${t.visit.more}</a></div>
   <div class="store-cards">${S.map(s => storeCard(s, false)).join('')}</div>
 </div></section>`;
     write(PF.slice(1) + (PF ? '/' : '') + 'index.html', layout({ p: '/', page: 'pg-home', intro: true, scripts: ['home'], ld: orgLd(), title: t.title.home, desc: t.desc.home(nOrder), body }));
@@ -335,7 +330,7 @@ ${REV && REV.quotes && REV.quotes.length ? `
     <div class="pr-big">${p.priceCents != null ? `<span class="price">${money(p.priceCents)}</span><small>${esc(unitTail(p))}</small>` : `<span class="price" style="font-size:34px">${t.priceInStore}</span>`}</div>
     ${qty}
     <ul class="facts">${facts.map(f => `<li>${esc(f)}</li>`).join('')}</ul></div></div>
-  ${more.length ? `<section style="padding-bottom:70px"><div class="sec-h"><div><p class="kicker">${t.pdp.alsoLike}</p><h2 class="h3">${esc(t.pdp.moreOf(subName(p.sub)))}</h2></div><a class="more" href="${u(`/shop/${c.id}/`)}">${esc(t.pdp.allOf(catName(c)))}</a></div><div class="scroller">${more.map(x => card(x)).join('')}</div></section>` : ''}</div>`;
+  ${more.length ? `<section style="padding-bottom:70px"><div class="sec-h"><div><h2 class="h3">${esc(t.pdp.moreOf(subName(p.sub)))}</h2></div><a class="more" href="${u(`/shop/${c.id}/`)}">${esc(t.pdp.allOf(catName(c)))}</a></div><div class="scroller">${more.map(x => card(x)).join('')}</div></section>` : ''}</div>`;
     write(`${PF.slice(1)}${PF ? '/' : ''}product/${p.slug}/index.html`, layout({ p: `/product/${p.slug}/`, page: 'pg-pdp', ld, ogImg: img(p.img), title: `${p.name}${p.priceCents != null ? ' · ' + loc(N.priceLabel(p)) : ''} | ${ar ? 'نَتس ناو' : 'Nuts Now'}`, desc: ar ? `${p.name} من نَتس ناو${p.priceCents != null ? `، ${loc(N.priceLabel(p))}` : ''}. ${subName(p.sub)}، ${catName(c)}. اطلب أونلاين للاستلام في ألن بارك أو ديربورن هايتس، أو للتوصيل.` : `${p.name} at Nuts Now${p.priceCents != null ? `, ${N.priceLabel(p)}` : ''}. ${p.sub}, ${c.name}. Order online for pickup in Allen Park or Dearborn Heights, or delivery.`, body }));
   });
 
@@ -344,7 +339,7 @@ ${REV && REV.quotes && REV.quotes.length ? `
     const drinks = cat.drinks.map(d => `${esc(ar ? AR.drinks[d.name] || d.name : d.name)} ${moneyShort(d.priceCents)}`).join(' · ');
     const body = `<div class="wrap page-h">${crumbs([['/', t.shop.home], [null, t.nav.stores]])}<h1 class="h1">${t.stores.h}</h1><p class="lede">${t.stores.lede}</p></div>
   <section class="wrap" style="padding-bottom:30px"><div class="store-cards">${S.map(s => `<div>${storeCard(s, true)}<iframe class="map" style="margin-top:12px" title="${esc(t.stores.map(storeName(s)))}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=${encodeURIComponent('Nuts Now ' + s.address.join(' '))}&output=embed${ar ? '&hl=ar' : ''}"></iframe></div>`).join('')}</div></section>
-  <section class="sec" style="padding-top:30px"><div class="wrap"><div class="sec-h"><div><p class="kicker">${t.stores.good}</p><h2 class="h2">${t.stores.goodH}</h2></div></div>
+  <section class="sec" style="padding-top:30px"><div class="wrap"><div class="sec-h"><div><h2 class="h2">${t.stores.goodH}</h2></div></div>
   <div class="steps"><div class="step"><div><b>${t.stores.b1}</b><p>${t.stores.b1p(cat.settings.pickup.prepMinutes)}</p></div></div>
   <div class="step"><div><b>${t.stores.b2}</b><p>${t.stores.b2p}</p></div></div>
   <div class="step"><div><b>${t.stores.b3}</b><p>${t.stores.b3p(drinks)}</p></div></div></div></div></section>`;
@@ -356,11 +351,11 @@ ${REV && REV.quotes && REV.quotes.length ? `
     const email = cat.settings.contactEmail || null, a = t.about;
     const body = `<div class="wrap page-h">${crumbs([['/', t.shop.home], [null, t.nav.about]])}</div>
   <section class="wrap" style="padding-bottom:40px"><div class="about-grid"><div class="ph"><img src="/img/post1.jpg" alt="${esc(a.alt)}" width="800" height="1000" loading="lazy"></div>
-  <div class="prose"><p class="kicker">${a.k}</p><h1 class="h1" style="margin:10px 0 18px">${a.h}</h1>
+  <div class="prose"><h1 class="h1" style="margin:0 0 18px">${a.h}</h1>
   <p>${a.p1}</p><p>${a.p2}</p><p>${a.p3}</p>
   <p style="display:flex;gap:10px;flex-wrap:wrap;margin-top:22px"><a class="btn btn-lime" href="${u('/shop/')}">${a.shop}</a><a class="btn btn-line" href="${u('/stores/')}">${a.find}</a></p></div></div></section>
   <section class="sec" style="padding-top:20px" id="contact"><div class="wrap"><div class="about-grid" style="align-items:start">
-    <div><p class="kicker">${a.ck}</p><h2 class="h2" style="margin:10px 0 14px">${a.ch}</h2><p class="lede">${a.cl}</p>
+    <div><h2 class="h2" style="margin:0 0 14px">${a.ch}</h2><p class="lede">${a.cl}</p>
       <div style="display:grid;gap:10px;margin-top:20px;max-width:420px">${S.map(s => `<a class="btn btn-black" href="tel:${esc(s.phone)}">${I.phone} ${esc(storeName(s))} · <span dir="ltr">${esc(s.phoneLabel)}</span></a>`).join('')}<a class="btn btn-line" href="${IG}" target="_blank" rel="noopener">${I.ig} ${a.ig}</a></div></div>
     <form class="co-step" id="contactForm" style="margin:0" novalidate><h3 class="h3" style="margin-bottom:14px">${a.form}</h3>
       <div class="field"><label for="cfName">${a.name}</label><input id="cfName" required autocomplete="name"></div>
