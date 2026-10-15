@@ -216,6 +216,26 @@ ${scripts.map(s => `<script src="/js/${s}.js?v=${V[s === 'checkout' ? 'co' : s]}
   <div class="acts"><a class="btn btn-black btn-s" href="${dirLink(s)}" target="_blank" rel="noopener">${I.pin} ${t.visit.directions}</a><a class="btn btn-line btn-s" href="tel:${esc(s.phone)}" dir="ltr">${I.phone} ${esc(s.phoneLabel)}</a>
   ${['doordash', 'ubereats'].map(k => DEL[k] && DEL[k].storeUrls && DEL[k].storeUrls[s.id] ? `<a class="btn btn-line btn-s" href="${esc(DEL[k].storeUrls[s.id])}" target="_blank" rel="noopener">${k === 'doordash' ? 'DoorDash' : 'Uber Eats'}</a>` : '').join('')}</div></div>`;
   const aisleTiles = () => `<div class="aisles">${[...COLS.slice(0, 2).map(c => ({ href: u(`/shop/${c.id}/`), name: colName(c), n: c.count, k: CAT_IMG[c.id], tag: c.id === 'dubai-chocolate' ? t.aisles.viral : t.aisles.new })), ...CATS.map(c => ({ href: u(`/shop/${c.id}/`), name: catName(c), n: c.count, k: CAT_IMG[c.id] }))].map(c => `<a class="aisle" href="${c.href}"><span class="ph"><img src="${img(c.k)}" alt="" width="320" height="320" loading="lazy">${c.tag ? `<span class="tag">${c.tag}</span>` : ''}</span><b>${esc(c.name)}</b><small>${t.items(c.n)}</small></a>`).join('')}</div>`;
+  // homepage: broad aisle tiles (photo grid) with shortcut chips into the busiest sub-aisles
+  const DEPT_SIZE = { 'nuts-seeds': 'big', candy: 'wide', spices: 'wide', pantry: 'wide' };
+  const deptTiles = () => `<div class="depts">${CATS.map(c => {
+    const size = DEPT_SIZE[c.id] || '', subs = size ? [...P.filter(p => p.category === c.id).reduce((m, p) => m.set(p.sub, (m.get(p.sub) || 0) + 1), new Map())].sort((x, y) => y[1] - x[1]).slice(0, size === 'big' ? 4 : 3) : [];
+    return `<div class="dept ${size}"><a class="dept-main" href="${u(`/shop/${c.id}/`)}"><img src="${img(CAT_IMG[c.id])}" alt="" width="640" height="640" loading="lazy"><span class="dept-tx"><b>${esc(catName(c))}</b><small>${t.items(c.count)}</small></span><span class="dept-go" aria-hidden="true">${I.arrow}</span></a>${subs.length ? `<div class="dept-subs">${subs.map(([sb, n]) => `<a href="${u(`/shop/${c.id}/`)}?type=${encodeURIComponent(sb)}">${esc(subName(sb))} <small>${n}</small></a>`).join('')}</div>` : ''}</div>`;
+  }).join('')}</div>`;
+  // homepage: four big shortcuts right under the hero
+  const quickNav = () => `<nav class="qnav" aria-label="${esc(t.qs.label)}">${[
+    [u('/shop/'), t.qn.all, t.qn.allS(nOrder), img('mixed-nuts')],
+    [u('/shop/dubai-chocolate/'), t.qn.dubai, t.qn.dubaiS, img('dubai-chocolate')],
+    [u('/shop/swedish-candy/'), t.qn.swedish, t.qn.swedishS, img('swedish-skulls')],
+    [u('/stores/'), t.qn.stores, t.qn.storesS, null]
+  ].map(([h, ti, sub, ph]) => `<a class="qn" href="${h}"><span class="qn-ph">${ph ? `<img src="${ph}" alt="" width="96" height="96" loading="lazy">` : I.pin}</span><span class="qn-tx"><b>${ti}</b><small>${sub}</small></span>${I.arrow}</a>`).join('')}</nav>`;
+  // homepage: quick shop, one tab per aisle, eight things you can add right here
+  const quickShop = feat => {
+    const pick = items => { const seen = new Set(), a = [], b = []; items.forEach(p => (seen.has(p.img) ? b : (seen.add(p.img), a)).push(p)); return [...a, ...b].slice(0, 8); };
+    const tabs = [{ id: 'popular', name: t.qs.popular, items: feat.slice(0, 8), href: u('/shop/'), n: nOrder, cname: t.shop.title }, ...CATS.map(c => ({ id: c.id, name: catName(c), items: pick(P.filter(p => p.category === c.id && p.orderable)), href: u(`/shop/${c.id}/`), n: c.count, cname: catName(c) }))].filter(x => x.items.length);
+    return `<div class="qs-tabs chips" role="tablist" aria-label="${esc(t.qs.label)}">${tabs.map((x, i) => `<button type="button" class="chip" role="tab" id="qs-t-${x.id}" aria-controls="qs-p-${x.id}" aria-selected="${!i}" tabindex="${i ? -1 : 0}">${esc(x.name)}</button>`).join('')}</div>
+  ${tabs.map((x, i) => `<div class="qs-panel" role="tabpanel" id="qs-p-${x.id}" aria-labelledby="qs-t-${x.id}"${i ? ' hidden' : ''}><div class="scroller">${x.items.map(p => card(p, { showCat: x.id === 'popular' })).join('')}</div><p class="qs-all"><a class="btn btn-black" href="${x.href}">${esc(t.qs.all(x.n, x.cname))} ${I.arrow}</a></p></div>`).join('')}`;
+  };
   const ratingLine = () => REV && REV.rating ? `<span><span class="stars" aria-hidden="true">★★★★★</span> <b>${esc(REV.rating.value)}</b> ${t.hero.onGoogle} · ${esc(REV.rating.count)} ${t.hero.reviews}</span>` : '';
   const orgLd = () => ({ '@context': 'https://schema.org', '@graph': S.map(s => ({ '@type': 'Store', name: `Nuts Now ${s.name}`, image: SITE + '/img/logo-hd.webp', telephone: s.phoneLabel, url: SITE + '/stores/', address: { '@type': 'PostalAddress', streetAddress: s.address[0], addressLocality: s.address[1].split(',')[0], addressRegion: 'MI', postalCode: (s.address[1].match(/\d{5}/) || [''])[0], addressCountry: 'US' }, ...(REV && REV.stores && REV.stores[s.id] ? { aggregateRating: { '@type': 'AggregateRating', ratingValue: REV.stores[s.id].rating, reviewCount: REV.stores[s.id].count } } : {}), openingHoursSpecification: [0, 1, 2, 3, 4, 5, 6].filter(d => s.hours[d]).map(d => ({ '@type': 'OpeningHoursSpecification', dayOfWeek: T.en.days[d], opens: s.hours[d].open, closes: s.hours[d].close })) })) });
   const crumbs = (items) => `<nav class="crumbs" aria-label="Breadcrumb">${items.map(([h, l], i) => h ? `<a href="${u(h)}">${esc(l)}</a>` : `<span>${esc(l)}</span>`).join('')}</nav>`;
@@ -246,14 +266,16 @@ ${scripts.map(s => `<script src="/js/${s}.js?v=${V[s === 'checkout' ? 'co' : s]}
   </div>
 </section>
 
-<section class="sec" style="padding-top:clamp(24px,3vw,40px)"><div class="wrap">
+<div class="wrap qnav-wrap">${quickNav()}</div>
+
+<section class="sec" style="padding-top:clamp(28px,3.4vw,44px)"><div class="wrap">
   <div class="sec-h"><div><h2 class="h2">${t.aisles.h}</h2></div><a class="more" href="${u('/shop/')}">${t.aisles.all}</a></div>
-  ${aisleTiles()}
+  ${deptTiles()}
 </div></section>
 
-<section class="sec" style="padding-top:0"><div class="wrap">
-  <div class="sec-h"><div><h2 class="h2">${t.viral.h}</h2></div><a class="more" href="${u('/shop/dubai-chocolate/')}">${t.viral.more}</a></div>
-  <div class="scroller">${feat.map(p => card(p, { showCat: true })).join('')}</div>
+<section class="sec qshop" style="padding-top:0"><div class="wrap">
+  <div class="sec-h"><div><h2 class="h2">${t.qs.h}</h2><p class="muted" style="margin-top:6px">${t.qs.p}</p></div></div>
+  ${quickShop(feat)}
 </div></section>
 
 <section class="sec" style="padding-top:0"><div class="wrap">

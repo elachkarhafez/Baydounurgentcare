@@ -30,6 +30,13 @@ for (const [tag, vp, mobile] of [['d', { width: 1440, height: 900 }, false], ['m
   ok(`${tag} home: pickup shop defaults to Allen Park`, (await p.textContent('.store-switch [data-store-name]')).trim() === 'Allen Park');
   await p.click('.store-switch'); await p.waitForTimeout(250); await p.check('input[name=pickstore][value=dh]'); await p.waitForTimeout(500);
   ok(`${tag} store picker: Dearborn Heights saved and shown`, await p.evaluate(() => localStorage.getItem('nn-store')) === 'dh' && (await p.textContent('.store-switch [data-store-name]')).trim() === 'Dearborn Heights' && !(await p.isVisible('#storeSheet .picker')));
+  // homepage navigation: quick links, aisle tiles with shortcut chips, quick shop tabs
+  ok(`${tag} home: four quick links + ten aisle tiles + shortcut chips`, (await p.$$eval('.qnav .qn', x => x.length)) === 4 && (await p.$$eval('.depts .dept', x => x.length)) === 10 && (await p.getAttribute('.dept-subs a', 'href')).includes('?type='));
+  await p.click('#qs-t-candy'); await p.waitForTimeout(250);
+  ok(`${tag} home: quick shop tab switches aisle`, await p.isVisible('#qs-p-candy .card') && !(await p.isVisible('#qs-p-popular')) && (await p.getAttribute('#qs-t-candy', 'aria-selected')) === 'true');
+  await p.locator('#qs-p-candy .card [data-add]').first().click(); await p.waitForTimeout(400);
+  ok(`${tag} home: add from quick shop`, (await bag(p)).length === 1);
+  await p.evaluate(() => localStorage.removeItem('nn-bag-v2')); await go(p, '/');
   // aisle transition: pieces cover the screen, the aisle opens, the overlay clears
   await p.evaluate(() => { sessionStorage.removeItem('nn-tx'); });
   const tile = p.locator('.aisle[href="/shop/candy/"], a[href="/shop/candy/"]').first(); await tile.scrollIntoViewIfNeeded();

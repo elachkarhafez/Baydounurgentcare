@@ -80,3 +80,22 @@
     }
   }
 })();
+
+/* Quick shop tabs on the homepage: one aisle at a time, arrow keys move between tabs */
+(() => {
+  const list = document.querySelector('.qs-tabs'); if (!list) return;
+  const tabs = [...list.querySelectorAll('[role=tab]')];
+  const show = (tab, focus) => {
+    tabs.forEach(t => { const on = t === tab; t.setAttribute('aria-selected', on); t.tabIndex = on ? 0 : -1; document.getElementById(t.getAttribute('aria-controls')).hidden = !on; });
+    if (focus) tab.focus();
+    tab.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'smooth' });
+  };
+  list.addEventListener('click', e => { const t = e.target.closest('[role=tab]'); if (t) show(t); });
+  list.addEventListener('keydown', e => {
+    const i = tabs.indexOf(document.activeElement); if (i < 0) return;
+    const rtl = document.documentElement.dir === 'rtl', next = { ArrowRight: rtl ? -1 : 1, ArrowLeft: rtl ? 1 : -1 }[e.key];
+    if (next) { e.preventDefault(); show(tabs[(i + next + tabs.length) % tabs.length], true); }
+    if (e.key === 'Home') { e.preventDefault(); show(tabs[0], true); }
+    if (e.key === 'End') { e.preventDefault(); show(tabs[tabs.length - 1], true); }
+  });
+})();
