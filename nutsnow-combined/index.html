@@ -84,17 +84,17 @@ button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
 @keyframes drumIn{from{opacity:0;transform:translateY(16px) scale(.94)}}
 /* the roast line: each belt is one SVG tile strip drawn twice, lime outlines (raw) left of the roaster and golden
    fills (roasted) right of it, split at the roaster (--split, set by JS). The strips only translate, on the GPU. */
-.line{position:absolute;inset:0;z-index:-1;pointer-events:none;display:grid;grid-template-rows:repeat(var(--n,5),1fr);padding:96px 0 28px;--split:70%;--tw:640px}
-.lane{position:relative;align-self:center;height:64px}
-.half{position:absolute;top:0;bottom:0;overflow:hidden}
-.half.raw{left:0;width:var(--split);opacity:.42;-webkit-mask:linear-gradient(90deg,rgba(0,0,0,.28),rgba(0,0,0,.28) 50%,#000 82%);mask:linear-gradient(90deg,rgba(0,0,0,.28),rgba(0,0,0,.28) 50%,#000 82%)}
-.half.done{left:var(--split);right:0;opacity:.9}
-.half i{position:absolute;top:0;bottom:0;left:calc(-1 * var(--tw));right:0;background-repeat:repeat-x;background-size:var(--tw) 64px;animation:belt var(--t,30s) linear var(--o,0s) infinite;will-change:transform}
-.half.done i{background-position:calc(-1 * var(--split)) 0}
+.rline{position:absolute;inset:0;z-index:-1;pointer-events:none;display:grid;grid-template-rows:repeat(var(--n,5),1fr);padding:96px 0 28px;--split:70%;--tw:640px}
+.rline .lane{position:relative;align-self:center;height:64px}
+.rline .half{position:absolute;top:0;bottom:0;overflow:hidden}
+.rline .half.raw{left:0;width:var(--split);opacity:.42;-webkit-mask:linear-gradient(90deg,rgba(0,0,0,.28),rgba(0,0,0,.28) 50%,#000 82%);mask:linear-gradient(90deg,rgba(0,0,0,.28),rgba(0,0,0,.28) 50%,#000 82%)}
+.rline .half.done{left:var(--split);right:0;opacity:.9}
+.rline .half i{position:absolute;top:0;bottom:0;left:calc(-1 * var(--tw));right:0;background-repeat:repeat-x;background-size:var(--tw) 64px;animation:belt var(--t,30s) linear var(--o,0s) infinite;will-change:transform}
+.rline .half.done i{background-position:calc(-1 * var(--split)) 0}
 @keyframes belt{to{transform:translate3d(640px,0,0)}}
-.line.off i,.line.off .heat{animation-play-state:paused}
+.rline.off i,.rline.off .heat{animation-play-state:paused}
 /* the heat: a warm column where raw becomes roasted */
-.heat{position:absolute;top:8%;bottom:6%;left:var(--split);-webkit-mask:linear-gradient(transparent,#000 25%,#000 75%,transparent);mask:linear-gradient(transparent,#000 25%,#000 75%,transparent);width:260px;margin-left:-130px;background:linear-gradient(90deg,rgba(255,140,50,0),rgba(255,140,50,.13) 30%,rgba(255,170,80,.2) 50%,rgba(255,140,50,.13) 70%,rgba(255,140,50,0));animation:heat 2.6s ease-in-out infinite alternate}
+.rline .heat{position:absolute;top:8%;bottom:6%;left:var(--split);-webkit-mask:linear-gradient(transparent,#000 25%,#000 75%,transparent);mask:linear-gradient(transparent,#000 25%,#000 75%,transparent);width:260px;margin-left:-130px;background:linear-gradient(90deg,rgba(255,140,50,0),rgba(255,140,50,.13) 30%,rgba(255,170,80,.2) 50%,rgba(255,140,50,.13) 70%,rgba(255,140,50,0));animation:heat 2.6s ease-in-out infinite alternate}
 @keyframes heat{to{opacity:.5;transform:scaleX(.8)}}
 .linkish{font-size:14px;color:var(--muted);text-decoration:underline;text-underline-offset:3px;display:inline-block}
 .linkish:hover{color:var(--ink)}
@@ -132,8 +132,9 @@ button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
 @keyframes payIn{from{opacity:0;transform:translateY(14px)}}
 @media (max-width:900px){
   .hero{padding:86px 0 64px}
-  .line{padding:0;inset:auto 0;top:var(--lt,0);height:var(--lh,100%)}.half.raw{opacity:.4;-webkit-mask:none;mask:none}.half.done{opacity:.8}.heat{width:170px;margin-left:-85px}
-  .hero .wrap{display:flex;flex-direction:column}
+  .rline{padding:0;inset:auto 0;top:var(--lt,0);height:var(--lh,100%)}.rline .half.raw{opacity:.4;-webkit-mask:none;mask:none}.rline .half.done{opacity:.8}.rline .heat{width:170px;margin-left:-85px}
+  .hero .wrap{display:flex;flex-direction:column;align-items:stretch}
+  .hero .eyebrow{font-size:clamp(9.5px,2.9vw,12px);letter-spacing:.12em;white-space:nowrap}
   .hcopy{display:contents}
   .hcopy .eyebrow{order:1}.hero h1{order:2}.stage{order:3}.hero .lede{order:4;margin-top:4px}.hero .cta{order:5;margin-top:18px}
   .hero h1{font-size:clamp(46px,13vw,80px);margin:10px 0 4px}
@@ -161,6 +162,9 @@ button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
 .aisles{position:relative;overflow:hidden}
 .aisles .intro{padding:120px 0 40px}
 .pinbox{height:100vh;display:flex;align-items:center;overflow:hidden}
+/* no pinning (reduced motion, or GSAP didn't load): a plain sideways scroller you can swipe or trackpad through */
+.pinbox.free{height:auto;padding:10px 0 70px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scrollbar-width:thin}
+.pinbox.free .panel{scroll-snap-align:center}
 .track-x{display:flex;gap:28px;padding:0 max(20px,(100vw - 1280px)/2);width:max-content}
 .panel{width:min(78vw,1080px);height:min(74vh,700px);display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);border-radius:28px;overflow:hidden;background:var(--bg-2);border:1px solid var(--line);flex:none}
 .panel .ph{position:relative;overflow:hidden}
@@ -240,7 +244,8 @@ button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
 .two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
 .ticket{position:sticky;top:96px;background:var(--bg-3);border:1px solid var(--line);border-radius:28px;padding:26px}
 .tk-tray{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-bottom:18px}
-.tk-tray i{aspect-ratio:1;overflow-wrap:anywhere;border-radius:12px;background:var(--bg-2);border:1px dashed rgba(var(--fg-rgb),.14);display:grid;place-items:center;font:500 10px/1.15 "Geist Mono";text-align:center;padding:4px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;font-style:normal}
+.tk-tray i{aspect-ratio:1;overflow-wrap:normal;word-break:normal;hyphens:auto;-webkit-hyphens:auto;border-radius:12px;background:var(--bg-2);border:1px dashed rgba(var(--fg-rgb),.14);display:grid;place-items:center;font:500 10px/1.15 "Geist Mono";text-align:center;padding:4px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;font-style:normal}
+.wide-only{display:inline}@media (max-width:900px){.wide-only{display:none}.tk-tray i{font-size:clamp(8px,2.3vw,10px);letter-spacing:0}}
 .tk-tray i.f{background:rgba(140,198,63,.14);border:1px solid rgba(140,198,63,.45);color:var(--gold-ink)}
 .tk-msg{white-space:pre-wrap;font-size:15px;line-height:1.6;margin:0 0 18px;min-height:120px;color:var(--ink-2)}
 .tk-actions{display:grid;gap:8px}.tk-actions .btn{justify-content:center}
@@ -440,7 +445,7 @@ html.bk-open{overflow:hidden}
   .nav .bk-btn{padding:10px 14px}
 }
 }
-@media (prefers-reduced-motion:reduce){.shopline i,.line i,.heat,.roaster,.occ,.stage-cap,.stage-cap b::before{animation:none}.basket[open],.pcard.added,.bk-btn.bump,.ogrid.swap .pcard,.hero .eyebrow,.hero h1 span,.hero .lede,.hero .cta,.stage,.bag li{animation:none}.ocats .pill,.pimg img,.pcard{transition:none}}
+@media (prefers-reduced-motion:reduce){.shopline i,.rline i,.rline .heat,.roaster,.occ,.stage-cap,.stage-cap b::before{animation:none}.basket[open],.pcard.added,.bk-btn.bump,.ogrid.swap .pcard,.hero .eyebrow,.hero h1 span,.hero .lede,.hero .cta,.stage,.bag li{animation:none}.ocats .pill,.pimg img,.pcard{transition:none}}
 @media (max-width:900px){.toast{top:74px;bottom:auto;width:max-content;max-width:calc(100% - 32px);text-align:center;transform:translate(-50%,-20px)}.toast.on{transform:translate(-50%,0)}}
 </style>
 </head>
@@ -463,7 +468,7 @@ html.bk-open{overflow:hidden}
 
 <main id="top">
 <section class="hero" id="pound">
-  <div class="line" id="line" aria-hidden="true"></div>
+  <div class="rline" id="line" aria-hidden="true"></div>
   <div class="wrap">
     <div class="hcopy">
       <p class="eyebrow">Nuts Now · Allen Park &amp; Dearborn Heights</p>
@@ -513,7 +518,7 @@ html.bk-open{overflow:hidden}
   <div class="wrap intro">
     <div class="head">
       <div><p class="eyebrow">The aisles</p><h2 class="serif reveal">Walk the <em>shop.</em></h2></div>
-      <p class="reveal">Nine aisles, from the roastery's own cashews to Dubai chocolate and a candy wall. Scroll sideways through all of it.</p>
+      <p class="reveal">Nine aisles, from the roastery's own cashews to Dubai chocolate and a candy wall.<span class="wide-only"> Scroll sideways through all of it.</span></p>
     </div>
   </div>
   <div class="pinbox" id="pinbox"><div class="track-x" id="trackX"></div></div>
@@ -840,7 +845,7 @@ NN.ready.then(cat => {
     gsap.to(track, { x: () => -dist(), ease: 'none', scrollTrigger: { trigger: '#pinbox', start: 'top top', end: () => '+=' + dist(), pin: true, scrub: .8, invalidateOnRefresh: true, anticipatePin: 1 } });
     gsap.fromTo('.roast .bgimg img', { scale: 1.12 }, { scale: 1, ease: 'none', scrollTrigger: { trigger: '.roast', start: 'top bottom', end: 'bottom top', scrub: true } });
     addEventListener('load', () => ScrollTrigger.refresh());
-  }
+  } else $('#pinbox').classList.add('free');
 })();
 </script>
 <script>

@@ -2,7 +2,7 @@
    A stainless drum with lifting vanes turns over a row of gas flames; cashews, pistachios and hazelnuts tumble
    inside it with real (verlet) physics. Rendered frame by frame in headless Chromium (src/roaster/render.mjs),
    then encoded to a seamless loop: the tail is crossfaded into the head, so physics and flames need not be
-   periodic. The drum's turn and the machine's shake are: LOOP is a whole number of vane passes and hum cycles.
+   periodic. The drum's turn is (LOOP is a whole number of turns), and the one hard shake sits mid-loop, away from the seam.
    Each frame is three passes: the beauty render (on black), a white silhouette mask, and the floor shadow.
    render.mjs saves them; the encode step composites the machine onto white so the page can show it with
    mix-blend-mode:multiply (white vanishes into whatever is behind it, the shadow darkens it). */
@@ -16,7 +16,7 @@ import { SHAPES } from '../../../.claude/skills/ela-studio/kit/build3d/src/shape
 import { rng, fbm } from '../../../.claude/skills/ela-studio/kit/build3d/src/util.js';
 
 const W = 1080, H = 1350, FPS = 30;
-const LOOP = 8, FADE = 1;                       // seconds; render LOOP + FADE, crossfade the tail into the head
+const LOOP = 12, FADE = 1;                       // seconds; render LOOP + FADE, crossfade the tail into the head
 const R = .19, L = .28, VANES = 4;              // drum radius / length (m), lifting vanes
 const OMEGA = 2 * Math.PI / 4;                  // one turn every 4 s → 2 turns per loop, vanes line up
 const r = rng(20261015);
@@ -90,7 +90,7 @@ const FB = { w: R * 2.3, h: .15, d: L + .05, top: -R - .012 };
   const brass = new THREE.MeshPhysicalMaterial({ color: '#b08a3e', metalness: 1, roughness: .3 }); for (const [w, h, x, y] of [[hw * 2 + .012, .006, 0, hh + .003], [hw * 2 + .012, .006, 0, -hh - .003], [.006, hh * 2, hw + .003, 0], [.006, hh * 2, -hw - .003, 0]]) { const bar = new THREE.Mesh(new THREE.BoxGeometry(w, h, .006), brass); bar.position.set(x, y0 + y, FB.d / 2 + .009); fb.add(bar); }
   // glowing refractory back wall inside the firebox
   const gc = document.createElement('canvas'); gc.width = 256; gc.height = 64; const gx = gc.getContext('2d'); const gg = gx.createLinearGradient(0, 64, 0, 0); gg.addColorStop(0, '#ff8a2a'); gg.addColorStop(.5, '#a8320c'); gg.addColorStop(1, '#2a0a04'); gx.fillStyle = gg; gx.fillRect(0, 0, 256, 64);
-  const wall = new THREE.Mesh(new THREE.PlaneGeometry(FB.w - .02, FB.h - .01), new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(gc), toneMapped: false, color: new THREE.Color(.75, .75, .75) })); wall.position.set(0, y0, -FB.d / 2 + .006); fb.add(wall);
+  const wall = new THREE.Mesh(new THREE.PlaneGeometry(FB.w - .02, FB.h - .01), new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(gc), toneMapped: false, color: new THREE.Color(.42, .4, .4) })); wall.position.set(0, y0, -FB.d / 2 + .006); fb.add(wall);
   for (const pz of [.11, .04]) { const pipe = new THREE.Mesh(new THREE.CylinderGeometry(.009, .009, FB.w - .02, 20), new THREE.MeshPhysicalMaterial({ color: '#5c5047', metalness: .9, roughness: .45 })); pipe.rotation.z = Math.PI / 2; pipe.position.set(0, FB.top - FB.h + .028, pz); fb.add(pipe); }
   // legs, a control knob, and the rollers the drum rides on
   for (const x of [-FB.w / 2 + .012, FB.w / 2 - .012]) for (const z of [-FB.d / 2 + .012, FB.d / 2 - .012]) plate(.02, .1, .02, x, FB.top - FB.h - .05, z);
@@ -113,21 +113,28 @@ const flameMat = seed => new THREE.ShaderMaterial({
       float t = uT * 2.8;
       float n = fbm(vec3(p.x * 2.6, p.y * 2.4 - t, uSeed));
       float n2 = fbm(vec3(p.x * 6.0 + 3.1, p.y * 5.5 - t * 1.6, uSeed + 9.));
-      float bend = (n * .32 + n2 * .1) * smoothstep(.15, 1., y);
+      float bend = (n * .5 + n2 * .16) * smoothstep(.1, 1., y);
       // a teardrop: widest a little above the jet, a soft licking tip
       float w = .5 * pow(sin(3.14159 * clamp(y * .92 + .08, 0., 1.)), .7) * (1. - .35 * y) * (1. + .22 * n2);
       float d = abs(x + bend) / max(w, .001);
       float body = smoothstep(1., .35, d) * smoothstep(.98, .5 + .3 * n, y) * smoothstep(.0, .08, y);
       // blue at the root (gas burning clean), yellow-orange above it, a deeper red-orange at the licking tips
-      float blue = smoothstep(.42, .08, y) * smoothstep(1., .2, d);
-      vec3 hot = mix(vec3(1., .26, .04), vec3(1., .58, .16), smoothstep(.7, .15, d) * smoothstep(.95, .3, y));
-      vec3 col = mix(hot, vec3(.25, .45, 1.), blue * .85) * body;
-      col += vec3(1., .8, .5) * pow(max(body - .35, 0.), 2.) * smoothstep(.6, .25, y) * .3;
-      float a = clamp(body * (1. - blue * .5), 0., 1.) * uHeat;
-      gl_FragColor = vec4(col * .62 * uHeat, a);
+      float blue = smoothstep(.26, .03, y) * smoothstep(1., .35, d);
+      // linear-space fire colours (sRGB-looking values turn pastel after the output transform)
+      vec3 hot = mix(vec3(1., .085, .004), vec3(1., .3, .03), smoothstep(.75, .1, d) * smoothstep(1., .3, y)) * (.8 + .4 * n2);
+      vec3 col = mix(hot, vec3(.01, .05, .7), blue * .92) * body;
+      col += vec3(1., .42, .07) * pow(max(body - .4, 0.), 2.) * smoothstep(.7, .2, y) * .6;
+      float a = clamp(body * (1. - blue * .7), 0., 1.) * min(uHeat, 1.);
+      gl_FragColor = vec4(col * .7 * uHeat, a);
     }`
 });
-const flames = []; { const N = 11; for (let row = 0; row < 2; row++) for (let i = 0; i < N; i++) { const x = -FB.w / 2 + .03 + i * (FB.w - .06) / (N - 1); const f = new THREE.Mesh(new THREE.PlaneGeometry(.05, .1), flameMat(r() * 50)); f.position.set(x + row * .012, FB.top - FB.h + .03 + .05, .11 - row * .07); f.renderOrder = 2; inner.add(f); flames.push(f); } }
+// no two alike: each flame gets its own spot along the burner, size, speed, flicker rhythm and lean, and grows from its jet
+const flames = []; { const N = 11; for (let row = 0; row < 2; row++) for (let i = 0; i < N; i++) {
+  const x = -FB.w / 2 + .03 + i * (FB.w - .06) / (N - 1) + (r() - .5) * .014, w = .055 + r() * .025, h = .065 + r() * .05;
+  const f = new THREE.Mesh(new THREE.PlaneGeometry(w, h).translate(0, h / 2, 0), flameMat(r() * 50));
+  f.position.set(x + row * .012, FB.top - FB.h + .03 + (r() - .5) * .006, .11 - row * .07 + (r() - .5) * .014); f.renderOrder = 2;
+  f.userData = { sp: .7 + r() * .7, ph: [r() * 6.3, r() * 6.3, r() * 6.3, r() * 6.3], fq: [2.2 + r() * 2.5, 5.5 + r() * 4, .35 + r() * .5, .6 + r() * .9], heat: .8 + r() * .35, off: r() * 40 };
+  f.material.uniforms.uHeat.value = f.userData.heat; inner.add(f); flames.push(f); } }
 // a soft orange glow on the drum's belly where the flames lick it
 const glowTex = (() => { const c = document.createElement('canvas'); c.width = c.height = 256; const x = c.getContext('2d'); const g = x.createRadialGradient(128, 128, 0, 128, 128, 128); g.addColorStop(0, 'rgba(255,140,60,1)'); g.addColorStop(.4, 'rgba(255,90,30,.35)'); g.addColorStop(1, 'rgba(255,60,20,0)'); x.fillStyle = g; x.fillRect(0, 0, 256, 256); const t = new THREE.CanvasTexture(c); return t; })();
 const belly = new THREE.Mesh(new THREE.PlaneGeometry(.46, .2), new THREE.MeshBasicMaterial({ map: glowTex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: .55, toneMapped: false })); belly.position.set(0, -R - .02, .12); inner.add(belly);
@@ -158,9 +165,9 @@ for (let i = nuts.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1));
 
 let ang = 0;
 const CELL = .022, grid = new Map(), key3 = p => (Math.floor(p.x / CELL) * 73856093) ^ (Math.floor(p.y / CELL) * 19349663) ^ (Math.floor(p.z / CELL) * 83492791);
-function physics(dt) {
+function physics(dt, A = [0, 0, 0]) {
   const g = -9.8, damp = .995, lim = R - .002;
-  for (const n of nuts) { const vx = (n.p.x - n.q.x) * damp, vy = (n.p.y - n.q.y) * damp, vz = (n.p.z - n.q.z) * damp; n.q.copy(n.p); n.p.x += vx; n.p.y += vy + g * dt * dt; n.p.z += vz; }
+  for (const n of nuts) { const vx = (n.p.x - n.q.x) * damp, vy = (n.p.y - n.q.y) * damp, vz = (n.p.z - n.q.z) * damp; n.q.copy(n.p); n.p.x += vx - A[0] * dt * dt; n.p.y += vy + (g - A[1]) * dt * dt; n.p.z += vz - A[2] * dt * dt; }
   for (let it = 0; it < 4; it++) {
     grid.clear(); for (let i = 0; i < nuts.length; i++) { const n = nuts[i], k = key3(n.p); let c = grid.get(k); if (!c) grid.set(k, c = []); c.push(i); }
     for (let i = 0; i < nuts.length; i++) { const a = nuts[i], cx = Math.floor(a.p.x / CELL), cy = Math.floor(a.p.y / CELL), cz = Math.floor(a.p.z / CELL);
@@ -182,18 +189,26 @@ function syncNuts() { for (const n of nuts) { tmpM.compose(n.p, n.rot, tmpS); n.
 
 /* ---------- time ---------- */
 let T = 0;
+/* calm most of the time; once per loop the machine gives a hard, rattling jolt that dies away.
+   S(t) = [x, y, z, rotX, rotZ] of the rig (pivoting on its feet); D(t) = where that puts the drum. */
+const P2 = 2 * Math.PI, SHAKE_AT = 6.2, SHAKE_LEN = 1.6, HD = -FLOOR;
+function S(t) { const u = t - SHAKE_AT; if (u <= 0 || u >= SHAKE_LEN) return [0, 0, 0, 0, 0];
+  const e = Math.min(1, u / .07) * Math.exp(-u / .42) * (1 - u / SHAKE_LEN);
+  return [.007 * e * Math.sin(P2 * 8.3 * u), .004 * e * Math.abs(Math.sin(P2 * 6.1 * u + .6)), .003 * e * Math.sin(P2 * 5.3 * u + 1.1), .011 * e * Math.sin(P2 * 7.1 * u + .4), .028 * e * Math.sin(P2 * 8.3 * u + .9)]; }
+const D = t => { const s = S(t); return [s[0] - HD * Math.sin(s[4]), s[1], s[2] + HD * Math.sin(s[3])]; };
 function step(dt) {
-  const sub = 6; for (let s = 0; s < sub; s++) { ang += OMEGA * dt / sub; physics(dt / sub); }
+  const sub = 6; for (let s = 0; s < sub; s++) { const t = T + s * dt / sub, h = dt / sub, a = D(t - h), b = D(t), c = D(t + h); ang += OMEGA * h; physics(h, [0, 1, 2].map(k => (a[k] - 2 * b[k] + c[k]) / (h * h))); }
   T += dt;
-  // alive: a motor hum (whole cycles per LOOP) and a thump each time a vane passes the bottom (every 1 s),
-  // the machine rocking on its feet; the drum rattles a little on its rollers on top of that
-  const P2 = 2 * Math.PI, hum = (f, s) => Math.sin(P2 * f * T + s), ph = T % 1, kAmp = [1, .72, .9, .62, 1.08, .78, .86, .66][Math.floor(T + 1e-6) % 8];
-  const kick = Math.exp(-ph / .12) * Math.sin(P2 * 6 * ph) * kAmp;
-  rig.position.set(.001 * hum(7.5, 0) + .0027 * kick, FLOOR + .0005 * hum(11.25, 1) + .0018 * Math.abs(kick), .0005 * hum(3.75, 2));
-  rig.rotation.set(.0011 * hum(5, .5) + .005 * kick, 0, .0016 * hum(7.5, 1.3) + .014 * kick);
-  drum.position.set(.0008 * hum(11.25, 2.1), .0006 * hum(7.5, .7) + .0013 * Math.abs(kick), 0);
+  const sh = S(T); rig.position.set(sh[0], FLOOR + sh[1], sh[2]); rig.rotation.set(sh[3], 0, sh[4]);
+  // the drum rattles on its rollers while the machine jolts
+  const rat = Math.hypot(sh[0], sh[4] * .3); drum.position.set(rat * .25 * Math.sin(P2 * 13.7 * T), rat * .3 * Math.abs(Math.sin(P2 * 11.3 * T)), 0);
   drum.rotation.z = ang; vanes.forEach((v, k) => { const a = vaneAt(k, 0); v.position.set(Math.cos(a) * (R - .018), Math.sin(a) * (R - .018), 0); v.rotation.z = a; });
-  flames.forEach((f, i) => { f.material.uniforms.uT.value = T + i * .37; f.lookAt(camera.position.x, f.position.y, camera.position.z); const fl = 1 + .08 * Math.sin(T * 13 + i * 1.7) + .05 * Math.sin(T * 29 + i); f.scale.set(1, fl, 1); });
+  flames.forEach(f => { const u = f.userData, q = (k, a) => Math.sin(P2 * u.fq[k] * T + u.ph[k]) * a;
+    f.material.uniforms.uT.value = T * u.sp + u.off;
+    // flicker: two rhythms of its own plus now-and-then surges, a little breathing in width, a lazy lean
+    const surge = Math.pow(Math.max(0, Math.sin(P2 * u.fq[2] * T + u.ph[2])), 6) * .35, fl = 1 + q(0, .13) + q(1, .07) + surge - .08;
+    f.lookAt(camera.position.x, f.position.y, camera.position.z); f.rotateZ(q(3, .1) + Math.sin(P2 * .23 * T + u.ph[0]) * .05);
+    f.scale.set(1 + q(1, .05) - surge * .15, fl, 1); });
   fireL.forEach((l, i) => { l.intensity = .05 + .012 * Math.sin(T * 11 + i * 2) + .008 * Math.sin(T * 23.7 + i); });
   belly.material.opacity = .3 + .05 * Math.sin(T * 9.3);
   // sparks pop off the burner now and then
@@ -228,5 +243,6 @@ window.__render = i => {
   return [beauty, mask, shadow];
 };
 window.__dbg = { key, lamp, rim, fireL, heat, scene, renderer, nutMat, composer, types, canvas };
+window.__render.skip = i => { if (i > 0) step(1 / FPS); return ''; };
 window.__nuts = nuts; window.__R = R; window.__L = L;
 window.__ready = true;
