@@ -19,7 +19,7 @@ from image_rules import key_for
 
 # website aisles, in the order shoppers see them
 CATS = [
-    ("nuts-seeds", "Nuts & Seeds", "Nuts & Seeds", "Roasted at our place in Allen Park. Cashews in more flavours than you'll get through, plus almonds, pistachios, pecans, seeds and mixes."),
+    ("nuts-seeds", "Nuts & Seeds", "Nuts & Seeds", "Roasted at our place in Allen Park. Cashews in more flavors than you'll get through, plus almonds, pistachios, pecans, seeds and mixes."),
     ("candy", "Candy", "Candy", "Gummies, sours, laces, jelly beans and Swedish pick & mix, all by the pound."),
     ("chocolate", "Chocolate", "Chocolate & Confections", "Dubai chocolate, kunafa bars, chocolate-covered nuts and fruit, malt balls and Jordan almonds."),
     ("dried-fruit-dates", "Dried Fruit & Dates", "Dried Fruit & Dates", "Stuffed dates, chili mango, Turkish apricots, raisins and dried fruit by the pound."),
@@ -108,6 +108,7 @@ def clean(name):
     n = re.sub(r"\s+", " ", str(name)).strip()
     n = MULTI.sub("", n)
     n = re.sub(r"^Swedish Candy ", "", n)
+    n = re.sub(r"([Ff])lavour", r"\1lavor", n)  # US spelling on the site
     n = re.sub(r"^Packaged Nuts Now (.+)$", r"\1 (Nuts Now jar)", n)
     for rx, to in FIXES: n = re.sub(rx, to, n)
     if n == n.lower() or n == n.upper(): n = n.title()

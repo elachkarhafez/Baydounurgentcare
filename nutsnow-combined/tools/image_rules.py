@@ -1,6 +1,6 @@
 """Which photo each product shows. Rules are per category and ordered: the first regex that matches the
 product NAME wins, then the same rules are tried on "name | subcategory". Several products share a photo
-when they look the same on the shelf (e.g. the flavoured crispy cashews)."""
+when they look the same on the shelf (e.g. the flavored crispy cashews)."""
 import re
 
 RULES = {
