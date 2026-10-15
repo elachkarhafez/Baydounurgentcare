@@ -18,6 +18,7 @@ module.exports = (req, res) => {
     ? { type: 'mix', id: String(l.id || ''), name: String(l.name || 'Custom mix').slice(0, 40), components: (l.components || []).map(c => ({ productId: String(c && c.productId || ''), units: c && c.units })) }
     : { type: 'item', id: String(l && l.id || ''), productId: String(l && l.productId || ''), units: l && l.units });
   const pickup = body.pickup && typeof body.pickup === 'object' ? { store: String(body.pickup.store || ''), at: String(body.pickup.at || '') } : null;
+  const delivery = body.delivery && typeof body.delivery === 'object' ? { store: String(body.delivery.store || '') } : null;
   const clientTotalCents = Number.isInteger(body.clientTotalCents) ? body.clientTotalCents : null;
-  res.status(200).json(core.quote(catalog, { lines, pickup, clientTotalCents }, Date.now()));
+  res.status(200).json(core.quote(catalog, { lines, pickup, delivery, clientTotalCents }, Date.now()));
 };

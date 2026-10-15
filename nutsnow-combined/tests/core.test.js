@@ -6,9 +6,10 @@ const real = require('../data/catalog.json');
 
 const fixture = (over = {}) => {
   const c = JSON.parse(JSON.stringify(real));
-  const set = { cashews: 1200, bbq: 1600, pistachios: 2000, hazelnuts: 1200, gummies: 799, delight: 1333 };
-  c.products.forEach(p => { if (set[p.id] != null) p.priceCents = set[p.id]; });
-  c.products.push({ id: 'baklava-test', category: 'sweets', name: 'Baklava (test)', sellBy: 'each', priceCents: 250, available: true, mixable: false, images: [] });
+  // test-only products (ids that can't clash with the real catalog's nn-c… ids)
+  const w = (id, priceCents, mixable = true) => ({ id, slug: id, category: 'nuts-seeds', sub: 'Test', name: id, img: 'cashews', sellBy: 'weight', priceCents, orderable: true, mixable });
+  c.products.push(w('cashews', 1200), w('bbq', 1600), w('pistachios', 2000), w('hazelnuts', 1200), w('gummies', 799), w('delight', 1333), w('zaatar', null));
+  c.products.push({ id: 'baklava-test', slug: 'baklava-test', category: 'cakes-desserts', name: 'Baklava (test)', sellBy: 'each', priceCents: 250, orderable: true, mixable: false });
   return Object.assign(c, over);
 };
 const C = fixture();
@@ -62,8 +63,9 @@ test('validation: unavailable, unknown and unpriced products', () => {
   const c = fixture(); c.products.find(p => p.id === 'bbq').available = false;
   assert.match(core.priceBasket(c, [item('bbq', 1)]).errors[0].msg, /isn't available/);
   assert.match(core.priceBasket(C, [item('nope', 1)]).errors[0].msg, /no longer on our menu/);
-  const r = core.priceBasket(C, [item('walnuts', 1)]); // no price yet
-  assert.equal(r.errors.length, 0); assert.equal(r.unpricedCount, 1); assert.equal(r.complete, false);
+  const c2 = fixture(); c2.products.find(p => p.id === 'zaatar').orderable = false; // no verified price: priced in the shop
+  const r = core.priceBasket(c2, [item('zaatar', 1)]);
+  assert.match(r.errors[0].msg, /priced in the shop/); assert.equal(r.complete, false);
 });
 test('mixes stay separate and validate as a group', () => {
   const r = core.priceBasket(C, [mix([{ productId: 'cashews', units: 1 }], 'Mix #1'), mix([{ productId: 'cashews', units: 1 }], 'Mix #2')]);
@@ -155,16 +157,22 @@ test('api/quote handler: rejects GET and bad bodies, prices from the real catalo
   const call = (method, body) => { const r = { code: 0, json: null, headers: {} }; handler({ method, body }, { setHeader: (k, v) => { r.headers[k] = v; }, status(c) { r.code = c; return this; }, json(j) { r.json = j; } }); return r; };
   assert.equal(call('GET').code, 405);
   assert.equal(call('POST', 'nope').code, 400);
-  const r = call('POST', { lines: [{ type: 'item', productId: 'cashews', units: 2 }], clientTotalCents: 0 });
-  assert.equal(r.code, 200); assert.equal(r.json.ok, false); // real catalog has no prices yet, and no pickup chosen
-  assert.equal(r.json.unpricedCount, 1);
+  // Grilled Cashews, $13.99/lb in the real catalog: ½ lb = $7.00 (6.995 rounds half up)
+  const r = call('POST', { lines: [{ type: 'item', productId: 'nn-c0510', units: 2 }], clientTotalCents: 0 });
+  assert.equal(r.code, 200); assert.equal(r.json.ok, false); // no pickup chosen and the client total is wrong
+  assert.equal(r.json.subtotalCents, 700); assert.equal(r.json.priceChanged, true);
+  // an item without a verified price can't be ordered
+  const u = call('POST', { lines: [{ type: 'item', productId: 'nn-c0007', units: 1 }] });
+  assert.match(u.json.errors[0].msg, /priced in the shop/);
 });
-test('real catalog: every product is well-formed and has an image file', () => {
+test('real catalog: every product is well-formed, priced only when verified, and has a photo', () => {
   const fs = require('fs'), path = require('path'), ids = new Set();
   real.products.forEach(p => {
     assert.ok(!ids.has(p.id), 'duplicate ' + p.id); ids.add(p.id);
     assert.ok(real.categories.some(c => c.id === p.category), p.id);
     assert.ok(p.priceCents === null || Number.isInteger(p.priceCents), p.id);
-    p.images.forEach(im => assert.ok(fs.existsSync(path.join(__dirname, '..', im.src)), im.src));
+    assert.equal(p.orderable, p.priceCents !== null, p.id + ' orderable iff priced');
+    assert.ok(p.slug && /^[a-z0-9-]+$/.test(p.slug), p.id);
+    assert.ok(fs.existsSync(path.join(__dirname, '..', 'img/p', p.img + '.webp')), 'photo ' + p.img);
   });
 });

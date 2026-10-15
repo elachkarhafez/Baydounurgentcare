@@ -29,7 +29,7 @@
       each,
       min: p.minUnits != null ? p.minUnits : each ? 1 : (w.minUnitsPerProduct != null ? w.minUnitsPerProduct : 1),
       step: p.stepUnits != null ? p.stepUnits : each ? 1 : (w.stepUnits != null ? w.stepUnits : 1),
-      max: p.maxUnits != null ? p.maxUnits : (w.maxUnitsPerLine != null ? w.maxUnitsPerLine : null)
+      max: p.maxUnits != null ? p.maxUnits : each ? ((catalog.settings && catalog.settings.eachMax) || null) : (w.maxUnitsPerLine != null ? w.maxUnitsPerLine : null)
     };
   }
   const isWhole = n => typeof n === 'number' && Number.isInteger(n);
@@ -39,13 +39,26 @@
     const n = Math.round(units), w = Math.floor(n / UNITS_PER_LB), f = ['', '¼', '½', '¾'][n % UNITS_PER_LB];
     return (w ? w + f : (f || '0')) + ' lb';
   }
-  const fmtQty = (p, units) => p && p.sellBy === 'each' ? units + (units === 1 ? ' piece' : ' pieces') : fmtWeight(units);
+  // pieces: "1 piece", "2 boxes", "3 packs of 2"
+  const UNIT_WORDS = { each: ['piece', 'pieces'], box: ['box', 'boxes'], bag: ['bag', 'bags'], pack: ['pack', 'packs'] };
+  function fmtQty(p, units) {
+    if (!p || p.sellBy !== 'each') return fmtWeight(units);
+    const w = UNIT_WORDS[p.unit] || UNIT_WORDS.each;
+    return units + ' ' + (units === 1 ? w[0] : w[1]) + (p.unit === 'pack' && p.packSize ? ' of ' + p.packSize : '');
+  }
   function fmtMoney(cents) {
     if (cents == null) return '';
     const neg = cents < 0, c = Math.abs(cents);
     return (neg ? '−' : '') + '$' + Math.floor(c / 100).toLocaleString('en-US') + '.' + String(c % 100).padStart(2, '0');
   }
-  const priceLabel = p => p.priceCents == null ? null : fmtMoney(p.priceCents) + (p.sellBy === 'each' ? ' each' : ' / lb');
+  // "$11.99 / lb", "$6.99 each", "$10.99 / box", "$12.00 for 2"
+  function priceLabel(p) {
+    if (!p || p.priceCents == null) return null;
+    if (p.sellBy !== 'each') return fmtMoney(p.priceCents) + ' / lb';
+    if (p.unit === 'pack' && p.packSize) return fmtMoney(p.priceCents) + ' for ' + p.packSize;
+    if (p.unit === 'box' || p.unit === 'bag') return fmtMoney(p.priceCents) + ' / ' + p.unit;
+    return fmtMoney(p.priceCents) + ' each';
+  }
 
   /* ---------- pricing ---------- */
   // cents for one product at a quantity; null when the product has no price yet
@@ -58,6 +71,7 @@
   function checkQty(catalog, p, units, inMix) {
     if (!p) return 'This item is no longer on our menu.';
     if (p.available === false) return `${p.name} isn't available right now.`;
+    if (p.orderable === false) return `${p.name} is priced in the shop, so it can't be ordered online yet. Ask for it when you pick up.`;
     if (inMix && !p.mixable) return `${p.name} can't go in a mix.`;
     if (!isWhole(units)) return `${p.name}: please choose the amount with the + and − buttons.`;
     const r = rules(catalog, p);
@@ -173,24 +187,33 @@
   }
   // re-check a chosen time against the rules right now
   function checkPickup(catalog, pick, nowMs) {
-    if (!pick || !pick.store || !pick.at) return { ok: false, reason: 'Please choose a pickup shop and time.' };
+    if (!pick || !pick.store || !pick.at) return { ok: false, code: 'missing', reason: 'Please choose a pickup shop and time.' };
     const s = store(catalog, pick.store);
-    if (!s) return { ok: false, reason: 'Please choose one of our two shops for pickup.' };
+    if (!s) return { ok: false, code: 'store', reason: 'Please choose one of our two shops for pickup.' };
     const t = Date.parse(pick.at);
-    if (!isFinite(t)) return { ok: false, reason: 'That pickup time is not valid. Please choose it again.' };
+    if (!isFinite(t)) return { ok: false, code: 'invalid', reason: 'That pickup time is not valid. Please choose it again.' };
     const z = zoned(t, catalog.settings.pickup.timeZone), min = z.h * 60 + z.mi, hrs = dayHours(catalog, s, z.date);
-    if (!hrs) return { ok: false, reason: `${s.name} is closed that day. Please choose another day.` };
-    if (min > hrs.lastPickup) return { ok: false, reason: `The last pickup at ${s.name} is ${fmtClock(hrs.lastPickup)}. Please choose an earlier time.` };
+    if (!hrs) return { ok: false, code: 'closed', reason: `${s.name} is closed that day. Please choose another day.` };
+    if (min > hrs.lastPickup) return { ok: false, code: 'late', reason: `The last pickup at ${s.name} is ${fmtClock(hrs.lastPickup)}. Please choose an earlier time.` };
     const ok = pickupSlots(catalog, s.id, z.date, nowMs).some(x => Date.parse(x.at) === t);
-    if (!ok && t <= nowMs) return { ok: false, reason: 'That pickup time has already passed. Please choose a new one.' };
-    if (!ok) return { ok: false, reason: t < nowMs + (catalog.settings.pickup.prepMinutes || 0) * 60000 ? 'That time is too soon for us to get your order ready. Please choose a later time.' : 'That pickup time is no longer available. Please choose another.' };
+    if (!ok && t <= nowMs) return { ok: false, code: 'passed', reason: 'That pickup time has already passed. Please choose a new one.' };
+    if (!ok) return { ok: false, code: 'gone', reason: t < nowMs + (catalog.settings.pickup.prepMinutes || 0) * 60000 ? 'That time is too soon for us to get your order ready. Please choose a later time.' : 'That pickup time is no longer available. Please choose another.' };
     return { ok: true, store: s.id, storeName: s.name, label: `${fmtClock(min)} on ${new Date(Date.UTC(z.y, z.m - 1, z.d)).toLocaleDateString('en-US', { timeZone: 'UTC', weekday: 'long', month: 'long', day: 'numeric' })}`, at: new Date(t).toISOString() };
+  }
+
+  // delivery goes out as soon as the shop has it ready: the shop must still be taking orders today
+  function checkDelivery(catalog, d, nowMs) {
+    const s = d && store(catalog, d.store);
+    if (!s) return { ok: false, code: 'store', reason: 'Please choose the shop to deliver from.' };
+    const today = zoned(nowMs, catalog.settings.pickup.timeZone).date, first = pickupSlots(catalog, s.id, today, nowMs)[0];
+    if (!first) return { ok: false, code: 'closedNow', reason: `${s.name} isn't taking delivery orders any more today. Please choose pickup for tomorrow, or the other shop.` };
+    return { ok: true, mode: 'delivery', store: s.id, storeName: s.name, label: `ready for the courier from ${first.label} today`, at: first.at };
   }
 
   /* The full check the server runs before anything can be paid for. clientTotalCents is only compared,
      never trusted: if it differs from the catalog total the customer is told prices changed. */
   function quote(catalog, req, nowMs) {
-    const body = req || {}, priced = priceBasket(catalog, body.lines), pickup = checkPickup(catalog, body.pickup, nowMs);
+    const body = req || {}, priced = priceBasket(catalog, body.lines), pickup = body.delivery ? checkDelivery(catalog, body.delivery, nowMs) : checkPickup(catalog, body.pickup, nowMs);
     const priceChanged = body.clientTotalCents != null && body.clientTotalCents !== priced.subtotalCents;
     const co = catalog.settings.checkout || {};
     return {
@@ -200,5 +223,5 @@
     };
   }
 
-  return { UNITS_PER_LB, index, rules, fmtWeight, fmtQty, fmtMoney, priceLabel, lineCents, checkQty, stepQty, priceBasket, zoned, zonedToUtc, addDays, fmtClock, dayHours, pickupSlots, pickupDays, checkPickup, quote, store };
+  return { UNITS_PER_LB, index, rules, fmtWeight, fmtQty, fmtMoney, priceLabel, lineCents, checkQty, stepQty, priceBasket, zoned, zonedToUtc, addDays, fmtClock, dayHours, pickupSlots, pickupDays, checkPickup, checkDelivery, quote, store };
 });
