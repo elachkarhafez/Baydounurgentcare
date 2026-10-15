@@ -1,0 +1,791 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="robots" content="noai, noimageai">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>HelloKookie | Home-baked Kookies · Dearborn, MI</title>
+  <meta name="description" content="HelloKookie is a little home bakery in Dearborn, MI. Chocolate Chip, Snickerdoodle and Cinnamon Swirl Kookies by the dozen. Order by Instagram DM, local pickup.">
+  <meta property="og:title" content="HelloKookie | You owe someone a box.">
+  <meta property="og:description" content="Home-baked Kookies in Dearborn, MI. Order by DM, local pickup.">
+  <meta property="og:image" content="img/box-still.webp">
+  <meta name="theme-color" content="#fde9ef">
+  <link rel="preload" href="fonts/playfairdisplay-normal-500_800.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/pinyonscript-normal-400.woff2" as="font" type="font/woff2" crossorigin>
+  <style>
+    @font-face { font-family: "Playfair Display"; font-style: normal; font-weight: 500 800; font-display: swap; src: url(fonts/playfairdisplay-normal-500_800.woff2) format("woff2"); }
+    @font-face { font-family: "Playfair Display"; font-style: italic; font-weight: 500 700; font-display: swap; src: url(fonts/playfairdisplay-italic-500_700.woff2) format("woff2"); }
+    @font-face { font-family: "Pinyon Script"; font-style: normal; font-weight: 400; font-display: swap; src: url(fonts/pinyonscript-normal-400.woff2) format("woff2"); }
+    @font-face { font-family: "Montserrat"; font-style: normal; font-weight: 500 700; font-display: swap; src: url(fonts/montserrat.woff2) format("woff2"); }
+
+    /* =============================================================
+       HELLOKOOKIE
+       Material world: blush pink boxes with a scalloped paper liner,
+       white lace ribbon tied in a bow, red and pink gingham, silver
+       sundae cups, big thick cookies with a melty middle, a cinnamon
+       swirl piped in cream cheese frosting. Their brand is pink, bows
+       and hearts; the cookies are the colour.
+       Motion: soft. Things tie, unwrap, float and settle.
+       ============================================================= */
+    :root {
+      --cream: #fff8f5;
+      --blush: #fde9ef;
+      --pink: #f8c9d7;
+      --pink-2: #f3a9c0;
+      --rose: #e2588e;
+      --rose-d: #c63d74;
+      --cocoa: #3a2218;
+      --cocoa-2: #5b3a2a;
+      --butter: #e9b86c;
+      --muted: #7d5a5f;
+      --line: rgba(198,61,116,.22);
+      --serif: "Playfair Display", "Bodoni 72", Didot, Georgia, serif;
+      --script: "Pinyon Script", "Snell Roundhand", cursive;
+      --sans: "Montserrat", system-ui, sans-serif;
+      --pad: clamp(16px, 4.2vw, 60px);
+      --ease: cubic-bezier(.65,.05,.25,1);
+      --ease-out: cubic-bezier(.16,1,.3,1);
+      --gingham: repeating-linear-gradient(0deg, rgba(226,88,142,.16) 0 14px, transparent 14px 28px), repeating-linear-gradient(90deg, rgba(226,88,142,.16) 0 14px, transparent 14px 28px);
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; overflow-x: clip; }
+    html.lenis, html.lenis body { height: auto; }
+    .lenis.lenis-smooth { scroll-behavior: auto !important; }
+    body { margin: 0; background: var(--cream); color: var(--cocoa); font: 500 16.5px/1.6 var(--sans); overflow-x: clip; -webkit-font-smoothing: antialiased; }
+    img, svg, canvas, video { display: block; max-width: 100%; }
+    img { height: auto; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+    input { font: inherit; }
+    :focus-visible { outline: 3px solid var(--rose); outline-offset: 3px; }
+    ::selection { background: var(--pink); color: var(--cocoa); }
+    .wrap { padding: 0 var(--pad); max-width: 1400px; margin: 0 auto; }
+    h1, h2, h3 { margin: 0; font-family: var(--serif); font-weight: 700; line-height: .98; letter-spacing: -.01em; }
+    h2 { font-size: clamp(44px, 6.6vw, 104px); }
+    h2 em, h1 em { font-family: var(--script); font-style: normal; font-weight: 400; color: var(--rose); letter-spacing: 0; line-height: .7; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 10px; font: 700 11.5px/1 var(--sans); letter-spacing: .32em; text-transform: uppercase; color: var(--rose-d); }
+    .eyebrow svg { width: 26px; height: 14px; }
+    .lede { font-size: clamp(16px, 1.25vw, 19px); color: var(--muted); max-width: 46ch; margin: 22px 0 0; }
+    .chars { display: inline-block; }
+    .chars .c { display: inline-block; will-change: transform; }
+    .btn { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 10px; height: 56px; padding: 0 28px; border-radius: 999px; border: 1.5px solid var(--cocoa); background: transparent; color: var(--cocoa); font: 700 12.5px/1 var(--sans); letter-spacing: .18em; text-transform: uppercase; white-space: nowrap; overflow: hidden; isolation: isolate; transition: color .35s var(--ease-out), border-color .35s; }
+    .btn::before { content: ""; position: absolute; inset: 0; border-radius: inherit; background: var(--cocoa); transform: scaleX(0); transform-origin: right; transition: transform .5s var(--ease-out); z-index: -1; }
+    @media (hover: hover) { .btn:hover { color: var(--cream); } .btn:hover::before { transform: scaleX(1); transform-origin: left; } }
+    .btn.rose { background: var(--rose); border-color: var(--rose); color: #fff; }
+    .btn.rose::before { background: var(--cocoa); }
+    @media (hover: hover) { .btn.rose:hover { border-color: var(--cocoa); } }
+    .btn svg { width: 18px; height: 18px; flex: none; }
+    .heart { color: var(--rose); }
+
+    /* ---------- loader: a lace bow ties itself ---------- */
+    .loader { position: fixed; inset: 0; z-index: 500; display: grid; place-items: center; background: var(--blush); }
+    .loader .in { display: grid; justify-items: center; gap: 14px; }
+    .loader svg.bow { width: 150px; height: 84px; overflow: visible; }
+    .loader .bow path { fill: none; stroke: var(--rose); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+    .loader .wm { font: 700 34px/1 var(--serif); color: var(--rose-d); opacity: 0; }
+    html.rm .loader, html:not(.js) .loader { display: none; }
+
+    /* ---------- header ---------- */
+    header { position: fixed; left: 0; right: 0; top: 0; z-index: 90; transition: background .4s, box-shadow .4s, transform .5s var(--ease-out); }
+    header.scrolled { background: rgba(255,248,245,.9); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); box-shadow: 0 1px 0 var(--line); }
+    header.hide { transform: translateY(-110%); }
+    .nav { display: flex; align-items: center; justify-content: space-between; gap: 20px; height: 78px; }
+    .brand { position: relative; font: 700 25px/1 var(--serif); color: var(--rose-d); letter-spacing: -.01em; }
+    .brand .dot { position: relative; }
+    .brand .dot::after { content: "♥"; position: absolute; left: 50%; top: -.36em; transform: translateX(-50%); font-size: .42em; color: var(--rose); }
+    .nav nav { display: flex; gap: 30px; font: 600 11.5px/1 var(--sans); letter-spacing: .22em; text-transform: uppercase; }
+    .nav nav a { position: relative; padding: 8px 0; }
+    .nav nav a::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1.5px; background: var(--rose); transform: scaleX(0); transform-origin: right; transition: transform .45s var(--ease-out); }
+    @media (hover: hover) { .nav nav a:hover::after { transform: scaleX(1); transform-origin: left; } }
+    .nav .btn { height: 44px; padding: 0 20px; font-size: 11px; }
+    @media (max-width: 900px) { .nav nav { display: none; } .nav { height: 64px; } .brand { font-size: 21px; } .nav .btn { height: 40px; padding: 0 16px; } }
+
+    /* ---------- hero ---------- */
+    .hero { position: relative; min-height: 100vh; min-height: 100svh; padding: 128px 0 90px; overflow: clip; background: radial-gradient(90% 70% at 50% 0%, #fff 0%, var(--blush) 60%, var(--pink) 130%); }
+    .hero::before { content: ""; position: absolute; inset: auto 0 0 0; height: 38%; background: var(--gingham); -webkit-mask: linear-gradient(transparent, #000 70%); mask: linear-gradient(transparent, #000 70%); opacity: .55; }
+    .hero-in { position: relative; z-index: 2; text-align: center; }
+    .hero h1 { font-size: clamp(54px, 9.4vw, 168px); line-height: .9; margin: 22px auto 0; max-width: 12ch; }
+    .hero h1 .row { display: block; overflow: hidden; padding: .06em 0 .08em; }
+    .hero h1 .row > span { display: inline-block; }
+    .hero h1 em { font-size: 1.12em; display: inline-block; padding: 0 .06em; transform: translateY(.06em); }
+    .hero .lede { margin: 26px auto 0; text-align: center; }
+    .ctas { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 32px; }
+    .reels3 { position: relative; display: flex; justify-content: center; align-items: flex-end; gap: clamp(14px, 2vw, 30px); margin-top: clamp(46px, 6vw, 80px); perspective: 1400px; }
+    .rcard { position: relative; flex: none; width: clamp(180px, 19vw, 290px); aspect-ratio: 9/16; border-radius: 26px; overflow: hidden; background: var(--pink); box-shadow: 0 30px 70px -26px rgba(122,40,70,.5), 0 0 0 6px #fff; }
+    .rcard video, .rcard img { width: 100%; height: 100%; object-fit: cover; }
+    .rcard.l { transform: rotate(-7deg) translateY(30px); }
+    .rcard.r { transform: rotate(7deg) translateY(30px); }
+    .rcard.c { width: clamp(210px, 22vw, 330px); z-index: 2; }
+    .rcard .lbl { position: absolute; left: 12px; bottom: 12px; padding: 7px 12px; border-radius: 999px; background: rgba(255,248,245,.92); font: 700 10px/1 var(--sans); letter-spacing: .16em; text-transform: uppercase; color: var(--rose-d); }
+    .sticker { position: absolute; z-index: 3; width: 128px; height: 128px; right: calc(50% - clamp(210px, 22vw, 330px)/2 - 64px); top: -40px; display: grid; place-items: center; text-align: center; border-radius: 50%; background: var(--rose); color: #fff; font: 700 10.5px/1.35 var(--sans); letter-spacing: .14em; text-transform: uppercase; box-shadow: 0 14px 30px -10px rgba(198,61,116,.6); }
+    .sticker svg { position: absolute; inset: 0; width: 100%; height: 100%; animation: spin 18s linear infinite; }
+    .sticker b { font: 400 34px/1 var(--script); letter-spacing: 0; text-transform: none; display: block; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @media (min-width: 1100px) {
+      .hero h1 { font-size: clamp(84px, 7.6vw, 150px); }
+      .reels3 { margin-top: 60px; }
+      .rcard.l, .rcard.r { position: absolute; width: clamp(190px, 15vw, 270px); }
+      .rcard.l { left: 0; bottom: calc(100% - 40px); }
+      .rcard.r { right: 0; bottom: calc(100% - 140px); }
+    }
+    @media (max-width: 720px) {
+      .hero { padding-top: 104px; }
+      .reels3 { gap: 0; }
+      .rcard { width: 42vw; border-radius: 20px; box-shadow: 0 24px 50px -22px rgba(122,40,70,.5), 0 0 0 4px #fff; }
+      .rcard.c { width: 50vw; }
+      .rcard.l { margin-right: -10vw; } .rcard.r { margin-left: -10vw; }
+      .sticker { width: 96px; height: 96px; right: 4px; top: -30px; font-size: 8.5px; }
+      .sticker b { font-size: 26px; }
+    }
+
+    /* ---------- ribbon marquee ---------- */
+    .ribbon { position: relative; z-index: 3; background: var(--rose); color: #fff; padding: 18px 0; overflow: hidden; transform: rotate(-1.6deg); margin: -26px -2vw 0; box-shadow: 0 10px 30px -14px rgba(198,61,116,.7); }
+    .ribbon::before, .ribbon::after { content: ""; position: absolute; left: 0; right: 0; height: 6px; background: radial-gradient(circle at 6px 0, transparent 4px, rgba(255,255,255,.85) 4.5px) 0 0/12px 6px repeat-x; }
+    .ribbon::before { top: 4px; } .ribbon::after { bottom: 4px; transform: scaleY(-1); }
+    .ribbon .track { display: flex; width: max-content; will-change: transform; }
+    .ribbon span { display: flex; align-items: center; gap: 28px; padding-right: 28px; font: 600 italic clamp(22px, 2.6vw, 34px)/1 var(--serif); white-space: nowrap; }
+    .ribbon span i { font-style: normal; font-size: .7em; opacity: .85; }
+
+    /* ---------- flavours ---------- */
+    section { position: relative; }
+    .flavors { padding: clamp(110px, 13vw, 190px) 0 clamp(80px, 9vw, 140px); }
+    .sec-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 30px; flex-wrap: wrap; }
+    .sec-head .lede { margin: 0; }
+    .fl-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(16px, 2vw, 28px); margin-top: clamp(44px, 5vw, 70px); }
+    .fl { position: relative; padding: 30px 28px 32px; border-radius: 30px; background: #fff; border: 1px solid var(--line); overflow: hidden; display: flex; flex-direction: column; }
+    .fl::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 58%; background: var(--fb, var(--blush)); }
+    .fl::after { content: ""; position: absolute; left: 0; right: 0; top: calc(58% - 9px); height: 18px; background: radial-gradient(circle at 9px 0, var(--fb, var(--blush)) 9px, transparent 9.5px) 0 0/18px 18px repeat-x; }
+    .fl .num { position: relative; z-index: 1; display: flex; justify-content: space-between; font: 700 11px/1 var(--sans); letter-spacing: .24em; text-transform: uppercase; color: var(--rose-d); }
+    .fl .plate { position: relative; z-index: 1; width: 78%; aspect-ratio: 1; margin: 26px auto 10px; }
+    .fl .plate::before { content: ""; position: absolute; inset: 6% 6% -2%; border-radius: 50%; background: radial-gradient(closest-side, rgba(90,30,40,.28), transparent); filter: blur(10px); transform: translateY(8%); }
+    .fl .plate svg { position: relative; width: 100%; height: 100%; }
+    .fl h3 { position: relative; z-index: 1; font-size: clamp(30px, 2.6vw, 40px); margin-top: 22px; }
+    .fl h3 em { font-family: var(--script); font-style: normal; font-weight: 400; color: var(--rose); font-size: 1.2em; }
+    .fl p { position: relative; z-index: 1; margin: 12px 0 0; color: var(--muted); }
+    .fl .tagnew { position: absolute; z-index: 2; top: 76px; right: 22px; padding: 8px 12px; border-radius: 999px; background: var(--rose); color: #fff; font: 700 10px/1 var(--sans); letter-spacing: .18em; text-transform: uppercase; transform: rotate(8deg); }
+    .fl.f1 { --fb: #fbe3c8; } .fl.f2 { --fb: #f9e9df; } .fl.f3 { --fb: var(--pink); }
+    @media (max-width: 900px) { .fl-grid { grid-template-columns: 1fr; } .fl .plate { width: 62%; } }
+
+    /* ---------- cinnamon feature (scroll reveal) ---------- */
+    .feature { height: 230vh; }
+    .feature .stick { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; display: grid; place-items: center; }
+    .feature .ph { position: absolute; inset: 0; clip-path: inset(var(--it, 30%) var(--il, 34%) var(--it, 30%) var(--il, 34%) round var(--ir, 40px)); }
+    .feature .ph picture { display: block; width: 100%; height: 100%; }
+    .feature .ph img { width: 100%; height: 100%; object-fit: cover; transform: scale(var(--sc, 1.25)); }
+    .feature .ph::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(40,18,12,.72), rgba(40,18,12,.15) 60%, transparent); opacity: var(--sh, 0); }
+    .feature .txt { position: relative; z-index: 2; width: 100%; color: #fff; opacity: var(--to, 0); transform: translateY(calc((1 - var(--to, 0)) * 40px)); }
+    .feature .txt h2 { max-width: 9ch; }
+    .feature .txt h2 em { color: var(--pink); }
+    .feature .txt p { max-width: 36ch; color: rgba(255,255,255,.88); font-size: clamp(16px, 1.3vw, 19px); margin: 20px 0 30px; }
+    .feature .txt .eyebrow { color: var(--pink); }
+    .feature .btn { border-color: #fff; color: #fff; }
+    .feature .btn::before { background: #fff; }
+    @media (hover: hover) { .feature .btn:hover { color: var(--cocoa); } }
+    .feature .pre { position: absolute; z-index: 1; top: 12vh; left: 0; right: 0; text-align: center; opacity: calc(1 - var(--to, 0) * 2); }
+    .feature .pre h2 { font-size: clamp(36px, 5vw, 76px); }
+    html.rm .feature { height: auto; }
+    html.rm .feature .stick { position: relative; height: 90vh; }
+    html.rm .feature .ph { clip-path: none; }
+    html.rm .feature .ph::after { opacity: 1; }
+    html.rm .feature .txt { opacity: 1; transform: none; }
+    html.rm .feature .pre { display: none; }
+
+    /* ---------- reels ---------- */
+    .reels { padding: clamp(100px, 12vw, 170px) 0; background: linear-gradient(var(--cream), var(--blush)); }
+    .rl-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(12px, 1.6vw, 22px); margin-top: clamp(40px, 5vw, 64px); }
+    .rl { position: relative; }
+    .rl .v { position: relative; aspect-ratio: 9/16; border-radius: 22px; overflow: hidden; background: var(--pink); box-shadow: 0 20px 50px -28px rgba(122,40,70,.55); }
+    .rl .v video, .rl .v img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .rl .v img { transition: opacity .4s; }
+    .rl.playing .v img { opacity: 0; }
+    .rl .snd { position: absolute; z-index: 2; right: 12px; bottom: 12px; display: inline-flex; align-items: center; gap: 8px; height: 38px; padding: 0 14px; border-radius: 999px; background: rgba(255,248,245,.94); color: var(--rose-d); font: 700 10px/1 var(--sans); letter-spacing: .16em; text-transform: uppercase; }
+    .rl .snd svg { width: 15px; height: 15px; }
+    .rl figcaption { margin-top: 14px; font: 500 italic 16px/1.45 var(--serif); color: var(--cocoa-2); }
+    .rl figcaption small { display: block; margin-top: 4px; font: 700 10px/1 var(--sans); font-style: normal; letter-spacing: .2em; text-transform: uppercase; color: var(--rose-d); }
+    .rl.big .v { box-shadow: 0 0 0 5px var(--rose), 0 20px 50px -28px rgba(122,40,70,.55); }
+    .rl-foot { display: flex; justify-content: center; margin-top: 50px; }
+    @media (max-width: 900px) {
+      .rl-grid { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; margin-left: calc(var(--pad) * -1); margin-right: calc(var(--pad) * -1); padding: 0 var(--pad) 8px; scrollbar-width: none; }
+      .rl-grid::-webkit-scrollbar { display: none; }
+      .rl { flex: none; width: 66vw; scroll-snap-align: center; }
+    }
+
+    /* ---------- IOU maker ---------- */
+    .iou { padding: clamp(100px, 12vw, 170px) 0; background: var(--blush); overflow: clip; }
+    .iou::before { content: ""; position: absolute; inset: 0; background: var(--gingham); opacity: .35; -webkit-mask: radial-gradient(70% 60% at 50% 50%, transparent 30%, #000); mask: radial-gradient(70% 60% at 50% 50%, transparent 30%, #000); }
+    .iou-grid { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: clamp(30px, 5vw, 90px); align-items: center; }
+    .iou h2 { max-width: 10ch; }
+    .form { margin-top: 34px; display: grid; gap: 22px; max-width: 480px; }
+    .field label, .field .lab { display: block; font: 700 11px/1 var(--sans); letter-spacing: .22em; text-transform: uppercase; color: var(--rose-d); margin-bottom: 10px; }
+    .field input { width: 100%; height: 56px; padding: 0 20px; border-radius: 16px; border: 1.5px solid var(--line); background: #fff; color: var(--cocoa); font: 600 italic 20px/1 var(--serif); outline: none; transition: border-color .3s, box-shadow .3s; }
+    .field input:focus { border-color: var(--rose); box-shadow: 0 0 0 4px rgba(226,88,142,.15); }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip { height: 42px; padding: 0 16px; border-radius: 999px; border: 1.5px solid var(--line); background: #fff; font: 600 13px/1 var(--sans); color: var(--cocoa-2); transition: background .3s, color .3s, border-color .3s, transform .3s var(--ease-out); }
+    .chip[aria-pressed="true"] { background: var(--rose); border-color: var(--rose); color: #fff; }
+    @media (hover: hover) { .chip:hover { transform: translateY(-2px); } }
+    .iou .acts { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 6px; }
+    .card-wrap { position: relative; justify-self: center; width: min(100%, 470px); }
+    .card-wrap canvas { width: 100%; height: auto; aspect-ratio: 4/5; border-radius: 22px; box-shadow: 0 40px 80px -36px rgba(122,40,70,.6); background: var(--pink); }
+    .card-wrap .pin { position: absolute; left: 50%; top: -20px; width: 86px; height: 46px; transform: translateX(-50%) rotate(-4deg); }
+    .toast { position: fixed; z-index: 300; left: 50%; bottom: 96px; transform: translate(-50%, 20px); padding: 14px 20px; border-radius: 999px; background: var(--cocoa); color: #fff; font: 600 13px/1 var(--sans); opacity: 0; pointer-events: none; transition: opacity .3s, transform .4s var(--ease-out); }
+    .toast.on { opacity: 1; transform: translate(-50%, 0); }
+    @media (max-width: 900px) { .iou-grid { grid-template-columns: 1fr; } .card-wrap { order: -1; width: min(100%, 400px); } }
+
+    /* ---------- order ---------- */
+    .order { padding: clamp(100px, 12vw, 170px) 0 clamp(80px, 9vw, 130px); }
+    .or-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(30px, 5vw, 90px); align-items: start; }
+    .steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; border-top: 1px solid var(--line); }
+    .steps li { display: grid; grid-template-columns: 70px minmax(0, 1fr); gap: 16px; padding: 28px 0; border-bottom: 1px solid var(--line); }
+    .steps b { font: 400 54px/.8 var(--script); color: var(--rose); }
+    .steps h3 { font-size: clamp(24px, 2vw, 30px); }
+    .steps p { margin: 8px 0 0; color: var(--muted); }
+    .pickup { margin-top: 34px; display: flex; align-items: center; gap: 16px; padding: 22px 24px; border-radius: 20px; background: var(--blush); border: 1px solid var(--line); }
+    .pickup svg { width: 30px; height: 30px; flex: none; color: var(--rose); }
+    .pickup strong { display: block; font: 700 11.5px/1.3 var(--sans); letter-spacing: .2em; text-transform: uppercase; color: var(--rose-d); }
+    .pickup span { color: var(--muted); font-size: 15px; }
+    .order .ctas { justify-content: flex-start; }
+    @media (max-width: 900px) { .or-grid { grid-template-columns: 1fr; } .steps li { grid-template-columns: 54px minmax(0, 1fr); } }
+
+    /* ---------- footer ---------- */
+    footer { position: relative; overflow: clip; background: var(--rose); color: #fff; padding: clamp(80px, 9vw, 120px) 0 30px; }
+    footer .big { font: 700 clamp(70px, 15vw, 250px)/.82 var(--serif); letter-spacing: -.03em; text-align: center; white-space: nowrap; }
+    footer .big em { font: 400 .9em/1 var(--script); letter-spacing: 0; color: var(--pink); display: inline-block; margin-right: -.04em; }
+    footer .bow { width: 120px; height: 64px; margin: 0 auto 20px; color: #fff; }
+    footer .row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 14px; margin-top: 60px; padding-top: 22px; border-top: 1px solid rgba(255,255,255,.35); font: 600 11.5px/1.6 var(--sans); letter-spacing: .16em; text-transform: uppercase; }
+    footer .row a { border-bottom: 1px solid rgba(255,255,255,.5); }
+
+    /* ---------- mobile order bar ---------- */
+    .mbar { position: fixed; z-index: 80; left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom)); display: none; gap: 8px; transform: translateY(150%); transition: transform .5s var(--ease-out); }
+    .mbar.on { transform: none; }
+    .mbar .btn { flex: 1; height: 52px; padding: 0 12px; font-size: 11px; background: var(--cream); box-shadow: 0 12px 30px -12px rgba(122,40,70,.5); }
+    .mbar .btn.rose { background: var(--rose); }
+    @media (max-width: 720px) { .mbar { display: flex; } footer { padding-bottom: 96px; } }
+
+    /* reveal */
+    html.js:not(.rm) [data-rv] { opacity: 0; transform: translateY(40px); }
+    @media (prefers-reduced-motion: reduce) { .sticker svg { animation: none; } }
+  </style>
+  <script>
+    document.documentElement.classList.add('js');
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('rm');
+  </script>
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="bow" viewBox="0 0 120 64"><path d="M60 30 C44 12 18 2 10 12 C2 22 16 40 60 32 M60 30 C76 12 102 2 110 12 C118 22 104 40 60 32 M60 32 C52 40 40 52 32 62 M60 32 C68 40 80 52 88 62" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="60" cy="31" rx="6" ry="5" fill="currentColor"/></symbol>
+      <symbol id="ig" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.3" cy="6.7" r="1.2" fill="currentColor"/></symbol>
+      <symbol id="dm" viewBox="0 0 24 24"><path d="M21 3 L3 10.5 L10 13 L13 20 Z M10 13 L21 3" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+    </defs>
+  </svg>
+
+  <div class="loader" aria-hidden="true">
+    <div class="in">
+      <svg class="bow" viewBox="0 0 120 64"><path d="M60 30 C44 12 18 2 10 12 C2 22 16 40 60 32"/><path d="M60 30 C76 12 102 2 110 12 C118 22 104 40 60 32"/><path d="M60 32 C52 40 40 52 32 62"/><path d="M60 32 C68 40 80 52 88 62"/></svg>
+      <div class="wm">HelloKookie</div>
+    </div>
+  </div>
+
+  <header id="hdr">
+    <div class="wrap nav">
+      <a class="brand" href="#top" aria-label="HelloKookie home">HelloKook<span class="dot">i</span>e</a>
+      <nav aria-label="Main">
+        <a href="#flavors">Flavors</a><a href="#reels">Reels</a><a href="#iou">Owe a box</a><a href="#order">Order</a>
+      </nav>
+      <a class="btn rose" data-dm href="#" target="_blank" rel="noopener"><svg><use href="#dm"/></svg>Order</a>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero" id="top">
+      <div class="wrap hero-in">
+        <span class="eyebrow" data-hi><svg><use href="#bow"/></svg>Baked in Dearborn, MI<svg><use href="#bow"/></svg></span>
+        <h1 aria-label="Say hello to your new favorite Kookie">
+          <span class="row"><span>Say <em>hello</em> to</span></span>
+          <span class="row"><span>your new</span></span>
+          <span class="row"><span>favorite Kookie.</span></span>
+        </h1>
+        <p class="lede" data-hi>Big, thick cookies with a soft, melty middle. Chocolate Chip, Snickerdoodle and Cinnamon Swirl, boxed by the dozen and tied with a bow.</p>
+        <div class="ctas" data-hi>
+          <a class="btn rose" data-dm href="#" target="_blank" rel="noopener"><svg><use href="#dm"/></svg>DM to order</a>
+          <a class="btn" href="#flavors">See the flavors</a>
+        </div>
+        <div class="reels3" data-reels3>
+          <div class="rcard l" data-par="-40"><video muted loop playsinline preload="metadata" poster="vid/icecream.jpg" data-src="vid/icecream.mp4" aria-label="A warm Kookie broken over vanilla ice cream"></video><span class="lbl">Over ice cream</span></div>
+          <div class="rcard c" data-par="-90"><video muted loop playsinline preload="metadata" poster="vid/box.jpg" data-src="vid/box.mp4" aria-label="A pink box packed with a row of chocolate chip Kookies"></video><span class="lbl">The box</span></div>
+          <div class="rcard r" data-par="-20"><video muted loop playsinline preload="metadata" poster="vid/swirl.jpg" data-src="vid/swirl.mp4" aria-label="Cinnamon Swirl Kookies on a fall table"></video><span class="lbl">Cinnamon Swirl</span></div>
+          <div class="sticker" aria-hidden="true">
+            <svg viewBox="0 0 100 100"><defs><path id="circ" d="M50 50 m-38 0 a38 38 0 1 1 76 0 a38 38 0 1 1 -76 0"/></defs><text style="font:700 8.6px Montserrat,sans-serif;letter-spacing:2.6px" fill="#fff"><textPath href="#circ">LOCAL PICKUP · DEARBORN · ORDER BY DM · </textPath></text></svg>
+            <span><b>by the</b>dozen</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="ribbon" aria-hidden="true"><div class="track" data-track></div></div>
+
+    <!-- FLAVORS -->
+    <section class="flavors" id="flavors">
+      <div class="wrap">
+        <div class="sec-head">
+          <div><span class="eyebrow"><svg><use href="#bow"/></svg>The menu</span><h2 style="margin-top:18px" data-split>Three Kookies. <em>No</em> bad picks.</h2></div>
+          <p class="lede">Every box is a dozen. Pick one flavor or mix them, just tell us in your DM.</p>
+        </div>
+        <div class="fl-grid">
+          <article class="fl f1" data-rv>
+            <div class="num"><span>No. 01</span><span>The classic</span></div>
+            <div class="plate" data-cookie="choc"></div>
+            <h3>Chocolate <em>Chip</em></h3>
+            <p>Crisp, golden edges, a thick soft center and melty chocolate in every bite. The one that started it all.</p>
+          </article>
+          <article class="fl f2" data-rv>
+            <div class="num"><span>No. 02</span><span>Soft &amp; buttery</span></div>
+            <div class="plate" data-cookie="doodle"></div>
+            <h3>Snicker<em>doodle</em></h3>
+            <p>Rolled in cinnamon sugar with a crackly top and a soft, buttery middle. Cozy in cookie form.</p>
+          </article>
+          <article class="fl f3" data-rv>
+            <span class="tagnew">New ♡</span>
+            <div class="num"><span>No. 03</span><span>Just added</span></div>
+            <div class="plate" data-cookie="swirl"></div>
+            <h3>Cinnamon <em>Swirl</em></h3>
+            <p>A cinnamon Kookie topped with a swirl of cream cheese frosting. Our newest one on the menu.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- CINNAMON FEATURE -->
+    <section class="feature" data-feature aria-label="Cinnamon Swirl">
+      <div class="stick">
+        <div class="pre"><span class="eyebrow">Now on the menu</span><h2 style="margin-top:14px">Say hello to&hellip;</h2></div>
+        <div class="ph"><picture><source media="(max-width: 720px)" srcset="img/swirl-tall.webp"><img src="img/swirl-wide.webp" alt="Two Cinnamon Swirl Kookies on a scalloped plate surrounded by little pumpkins" width="1080" height="810" loading="lazy"></picture></div>
+        <div class="wrap txt">
+          <span class="eyebrow">New · Fall favorite</span>
+          <h2 style="margin-top:16px">Cinnamon <em>Swirl.</em></h2>
+          <p>A cinnamon Kookie topped with cream cheese frosting, piped in a swirl all the way to the edge.</p>
+          <a class="btn" data-dm href="#" target="_blank" rel="noopener"><svg><use href="#dm"/></svg>Get a box</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- REELS -->
+    <section class="reels" id="reels">
+      <div class="wrap">
+        <div class="sec-head">
+          <div><span class="eyebrow"><svg><use href="#bow"/></svg>On the feed</span><h2 style="margin-top:18px" data-split>Straight from <em>the</em> reels.</h2></div>
+          <a class="btn" data-ig href="#" target="_blank" rel="noopener"><svg><use href="#ig"/></svg>@hellookookiee</a>
+        </div>
+        <div class="rl-grid" data-reels>
+          <figure class="rl" data-rv><div class="v"><video muted loop playsinline preload="none" data-src="vid/box.mp4"></video><img src="vid/box.jpg" alt="A row of chocolate chip Kookies in a pink box" loading="lazy" width="540" height="960"></div><figcaption>“Whoever sent you this reel, you owe them a box of Kookies.”<small>Tag someone 🎀</small></figcaption></figure>
+          <figure class="rl" data-rv><div class="v"><video muted loop playsinline preload="none" data-src="vid/icecream.mp4"></video><img src="vid/icecream.jpg" alt="Vanilla ice cream in a silver cup on red gingham" loading="lazy" width="540" height="960"></div><figcaption>“Kookies over ice cream. Immediately yes.”<small>Dessert idea</small></figcaption></figure>
+          <figure class="rl big" data-rv><div class="v"><video loop playsinline preload="none" muted data-src="vid/review.mp4" data-sound></video><img src="vid/review.jpg" alt="A customer opening a box of Kookies in his car" loading="lazy" width="540" height="960"><button class="snd" type="button" data-snd><svg viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path d="M16 9c1.5 1.5 1.5 4.5 0 6M18.5 6.5c3 3 3 8 0 11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Sound on</span></button></div><figcaption>“Place your orders with her, trust me, amazing.”<small>A customer review</small></figcaption></figure>
+          <figure class="rl" data-rv><div class="v"><video muted loop playsinline preload="none" data-src="vid/swirl.mp4"></video><img src="vid/swirl.jpg" alt="Cinnamon Swirl Kookies on a fall table" loading="lazy" width="540" height="960"></div><figcaption>“Say hello to Cinnamon Swirl.”<small>New on the menu</small></figcaption></figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- IOU -->
+    <section class="iou" id="iou">
+      <div class="wrap iou-grid">
+        <div>
+          <span class="eyebrow"><svg><use href="#bow"/></svg>Rule of the house</span>
+          <h2 style="margin-top:18px" data-split>Somebody <em>owes</em> you a box.</h2>
+          <p class="lede">Make it official. Write their name, pick the flavor, and send them the IOU. They'll know what to do.</p>
+          <div class="form">
+            <div class="field"><label for="who">Who owes you?</label><input id="who" maxlength="22" placeholder="their name" autocomplete="off" value=""></div>
+            <div class="field"><span class="lab">The flavor</span><div class="chips" data-group="flavor">
+              <button class="chip" type="button" aria-pressed="true">Chocolate Chip</button><button class="chip" type="button" aria-pressed="false">Snickerdoodle</button><button class="chip" type="button" aria-pressed="false">Cinnamon Swirl</button><button class="chip" type="button" aria-pressed="false">Surprise me</button>
+            </div></div>
+            <div class="field"><span class="lab">Why they owe you</span><div class="chips" data-group="why">
+              <button class="chip" type="button" aria-pressed="true">They sent me the reel</button><button class="chip" type="button" aria-pressed="false">My birthday</button><button class="chip" type="button" aria-pressed="false">Lost a bet</button><button class="chip" type="button" aria-pressed="false">Just because</button>
+            </div></div>
+            <div class="acts">
+              <button class="btn rose" type="button" data-share><svg viewBox="0 0 24 24"><path d="M12 3v12M7 8l5-5 5 5M5 14v6h14v-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Send the IOU</button>
+              <button class="btn" type="button" data-save>Save image</button>
+            </div>
+          </div>
+        </div>
+        <div class="card-wrap" data-rv>
+          <canvas id="iouc" width="1080" height="1350" role="img" aria-label="IOU card: one box of Kookies"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- ORDER -->
+    <section class="order" id="order">
+      <div class="wrap or-grid">
+        <div>
+          <span class="eyebrow"><svg><use href="#bow"/></svg>How to order</span>
+          <h2 style="margin-top:18px" data-split>Three steps <em>to</em> a box.</h2>
+          <p class="lede">We're a little home bakery, so every order goes through Instagram. Send a DM and we'll take it from there.</p>
+          <div class="ctas">
+            <a class="btn rose" data-dm href="#" target="_blank" rel="noopener"><svg><use href="#dm"/></svg>DM @hellookookiee</a>
+            <a class="btn" data-ig href="#" target="_blank" rel="noopener"><svg><use href="#ig"/></svg>Follow along</a>
+          </div>
+        </div>
+        <div>
+          <ol class="steps">
+            <li data-rv><b>1</b><div><h3>Send a DM</h3><p>Tell us how many dozen, which flavors, and the day you'd like them.</p></div></li>
+            <li data-rv><b>2</b><div><h3>We confirm</h3><p>We'll reply with your total and a pickup time that works.</p></div></li>
+            <li data-rv><b>3</b><div><h3>Pick up your box</h3><p>Fresh Kookies, boxed in pink and tied with a bow. Ready to share, or not.</p></div></li>
+          </ol>
+          <div class="pickup" data-rv>
+            <svg viewBox="0 0 24 24"><path d="M12 22s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.6" fill="currentColor"/></svg>
+            <div><strong>Local pickup only</strong><span>Dearborn, MI. Exact spot shared when your order is confirmed.</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <svg class="bow" aria-hidden="true"><use href="#bow"/></svg>
+      <div class="big" aria-label="HelloKookie"><em>Hello</em>Kookie</div>
+      <div class="row">
+        <span>© <span id="yr"></span> HelloKookie · Dearborn, MI</span>
+        <span><a data-ig href="#" target="_blank" rel="noopener">Instagram</a> &nbsp;·&nbsp; <a href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener">Site by ElaSystems</a></span>
+      </div>
+    </div>
+  </footer>
+
+  <div class="mbar" id="mbar">
+    <a class="btn" href="#iou">Owe a box</a>
+    <a class="btn rose" data-dm href="#" target="_blank" rel="noopener"><svg><use href="#dm"/></svg>DM to order</a>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+  <script>
+  (function () {
+    var CONFIG = {
+      ig: 'https://www.instagram.com/hellookookiee/',
+      dm: 'https://ig.me/m/hellookookiee',
+      handle: '@hellookookiee'
+    };
+    var root = document.documentElement;
+    var RM = root.classList.contains('rm');
+    var $ = function (s, c) { return (c || document).querySelector(s); };
+    var $$ = function (s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); };
+
+    $$('[data-ig]').forEach(function (a) { a.href = CONFIG.ig; });
+    $$('[data-dm]').forEach(function (a) { a.href = CONFIG.dm; });
+    $('#yr').textContent = new Date().getFullYear();
+
+    var toastT;
+    function toast(msg) { var t = $('#toast'); t.textContent = msg; t.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(function () { t.classList.remove('on'); }, 2400); }
+
+    /* ---------- ribbon text ---------- */
+    var words = ['Chocolate Chip', 'Snickerdoodle', 'Cinnamon Swirl', 'Local pickup in Dearborn', 'By the dozen', 'Order by DM'];
+    var unit = '<span>' + words.map(function (w) { return w + ' <i>♥</i>'; }).join(' ') + '</span>';
+    var track = $('[data-track]'); track.innerHTML = unit + unit + unit + unit;
+
+    /* ---------- illustrated cookies ---------- */
+    function rng(seed) { return function () { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }; }
+    function blobPath(cx, cy, r, n, amp, rand) {
+      var pts = [];
+      for (var i = 0; i < n; i++) { var a = i / n * Math.PI * 2; var rr = r * (1 + (rand() - .5) * amp); pts.push([cx + Math.cos(a) * rr, cy + Math.sin(a) * rr]); }
+      var d = '';
+      for (var j = 0; j < n; j++) {
+        var p0 = pts[(j - 1 + n) % n], p1 = pts[j], p2 = pts[(j + 1) % n], p3 = pts[(j + 2) % n];
+        if (j === 0) d += 'M' + p1[0].toFixed(1) + ' ' + p1[1].toFixed(1);
+        var c1x = p1[0] + (p2[0] - p0[0]) / 6, c1y = p1[1] + (p2[1] - p0[1]) / 6, c2x = p2[0] - (p3[0] - p1[0]) / 6, c2y = p2[1] - (p3[1] - p1[1]) / 6;
+        d += 'C' + c1x.toFixed(1) + ' ' + c1y.toFixed(1) + ' ' + c2x.toFixed(1) + ' ' + c2y.toFixed(1) + ' ' + p2[0].toFixed(1) + ' ' + p2[1].toFixed(1);
+      }
+      return d + 'Z';
+    }
+    function cookie(kind) {
+      var R = rng(kind === 'choc' ? 11 : kind === 'doodle' ? 23 : 37);
+      var id = 'k' + kind;
+      var base = { choc: ['#e8b46a', '#c98a43', '#9a5f2a'], doodle: ['#f4d6a2', '#e0b57a', '#b98552'], swirl: ['#c2814a', '#9a5a2e', '#6e3a1c'] }[kind];
+      var s = '<svg viewBox="0 0 200 200" aria-hidden="true"><defs>' +
+        '<radialGradient id="' + id + 'g" cx="45%" cy="40%" r="62%"><stop offset="0" stop-color="' + base[0] + '"/><stop offset=".72" stop-color="' + base[1] + '"/><stop offset="1" stop-color="' + base[2] + '"/></radialGradient>' +
+        '<filter id="' + id + 'n" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="4"/><feColorMatrix values="0 0 0 0 .35  0 0 0 0 .2  0 0 0 0 .1  0 0 0 .55 0"/><feComposite in2="SourceGraphic" operator="in"/></filter>' +
+        '</defs>';
+      var edge = blobPath(100, 100, 86, 22, .07, R);
+      s += '<path d="' + edge + '" fill="' + base[2] + '" transform="translate(0 4)" opacity=".5"/>';
+      s += '<path d="' + edge + '" fill="url(#' + id + 'g)"/>';
+      s += '<path d="' + edge + '" fill="#000" filter="url(#' + id + 'n)" opacity=".7"/>';
+      // cracks
+      var cr = kind === 'doodle' ? 9 : 5;
+      for (var c = 0; c < cr; c++) {
+        var a = R() * 6.28, r0 = 18 + R() * 40, len = 14 + R() * 22, a2 = a + (R() - .5) * .9;
+        var x0 = 100 + Math.cos(a) * r0, y0 = 100 + Math.sin(a) * r0;
+        s += '<path d="M' + x0.toFixed(1) + ' ' + y0.toFixed(1) + ' q' + ((R() - .5) * 12).toFixed(1) + ' ' + ((R() - .5) * 12).toFixed(1) + ' ' + (Math.cos(a2) * len).toFixed(1) + ' ' + (Math.sin(a2) * len).toFixed(1) + '" stroke="' + base[2] + '" stroke-width="' + (1.4 + R() * 1.6).toFixed(1) + '" fill="none" stroke-linecap="round" opacity=".55"/>';
+      }
+      if (kind === 'choc') {
+        for (var i = 0; i < 13; i++) {
+          var ang = R() * 6.28, rr = Math.sqrt(R()) * 64, x = 100 + Math.cos(ang) * rr, y = 100 + Math.sin(ang) * rr, sz = 7 + R() * 9;
+          s += '<path d="' + blobPath(x, y, sz, 7, .5, R) + '" fill="#3a1d10"/><path d="' + blobPath(x - sz * .25, y - sz * .3, sz * .38, 6, .4, R) + '" fill="#6b3a22" opacity=".8"/>';
+        }
+        s += '<path d="' + blobPath(108, 104, 16, 9, .4, R) + '" fill="#2c140a"/><ellipse cx="102" cy="99" rx="7" ry="3.5" fill="#7a4a30" opacity=".7"/>';
+      }
+      if (kind === 'doodle') {
+        for (var k = 0; k < 170; k++) {
+          var a3 = R() * 6.28, r3 = Math.sqrt(R()) * 82;
+          s += '<circle cx="' + (100 + Math.cos(a3) * r3).toFixed(1) + '" cy="' + (100 + Math.sin(a3) * r3).toFixed(1) + '" r="' + (.8 + R() * 1.4).toFixed(1) + '" fill="' + (R() > .5 ? '#8a4a22' : '#fff4dc') + '" opacity=".75"/>';
+        }
+      }
+      if (kind === 'swirl') {
+        var d = 'M100 100';
+        for (var t = 0; t <= 4.3 * Math.PI * 2; t += .18) { var rr2 = 3 + t * 2.62; d += 'L' + (100 + Math.cos(t) * rr2).toFixed(1) + ' ' + (100 + Math.sin(t) * rr2).toFixed(1); }
+        s += '<path d="' + d + '" fill="none" stroke="#7a4a2a" stroke-width="10" stroke-linecap="round" opacity=".35" transform="translate(1.5 3)"/>';
+        s += '<path class="frost" d="' + d + '" fill="none" stroke="#fbf1e2" stroke-width="8.5" stroke-linecap="round" stroke-linejoin="round"/>';
+        s += '<path d="' + d + '" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" opacity=".7" transform="translate(-1.2 -1.6)"/>';
+      }
+      s += '<ellipse cx="78" cy="66" rx="34" ry="18" fill="#fff" opacity=".12" transform="rotate(-30 78 66)"/>';
+      return s + '</svg>';
+    }
+    $$('[data-cookie]').forEach(function (el) { el.innerHTML = cookie(el.getAttribute('data-cookie')); });
+
+    /* ---------- videos: play only while on screen ---------- */
+    function loadVid(v) { if (!v.src && v.dataset.src) { v.src = v.dataset.src; } }
+    var vio = new IntersectionObserver(function (ents) {
+      ents.forEach(function (e) {
+        var v = e.target;
+        if (e.isIntersecting) { loadVid(v); var p = v.play(); if (p && p.catch) p.catch(function () {}); var f = v.closest('.rl'); if (f) v.addEventListener('playing', function () { f.classList.add('playing'); }, { once: true }); }
+        else { v.pause(); }
+      });
+    }, { threshold: .35 });
+    if (!RM) $$('video').forEach(function (v) { vio.observe(v); });
+    else $$('video').forEach(function (v) { loadVid(v); v.removeAttribute('loop'); });
+
+    var snd = $('[data-snd]');
+    if (snd) snd.addEventListener('click', function () {
+      var v = snd.parentNode.querySelector('video');
+      loadVid(v);
+      v.muted = !v.muted;
+      if (!v.muted) { v.currentTime = 0; v.play(); snd.closest('.rl').classList.add('playing'); }
+      snd.querySelector('span').textContent = v.muted ? 'Sound on' : 'Mute';
+      $$('video').forEach(function (o) { if (o !== v && !RM) o.muted = true; });
+    });
+
+    /* ---------- IOU card ---------- */
+    var cv = $('#iouc'), cx = cv.getContext('2d');
+    var state = { who: '', flavor: 'Chocolate Chip', why: 'They sent me the reel' };
+    var cookieImgs = {};
+    ['choc', 'doodle', 'swirl'].forEach(function (k) {
+      var img = new Image();
+      img.onload = drawCard;
+      img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(cookie(k).replace('<svg ', '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" '));
+      cookieImgs[k] = img;
+    });
+    function bowPath(c, x, y, s, col) {
+      c.save(); c.translate(x, y); c.scale(s, s); c.translate(-60, -32);
+      c.strokeStyle = col; c.lineWidth = 3.2; c.lineCap = 'round'; c.lineJoin = 'round';
+      ['M60 30 C44 12 18 2 10 12 C2 22 16 40 60 32', 'M60 30 C76 12 102 2 110 12 C118 22 104 40 60 32', 'M60 32 C52 40 40 52 32 62', 'M60 32 C68 40 80 52 88 62'].forEach(function (d) { c.stroke(new Path2D(d)); });
+      c.fillStyle = col; c.beginPath(); c.ellipse(60, 31, 6, 5, 0, 0, 6.29); c.fill();
+      c.restore();
+    }
+    function rr(c, x, y, w, h, r) { c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r); c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath(); }
+    function fit(c, text, font, max, size) { var s = size; do { c.font = font.replace('#', s); s -= 4; } while (c.measureText(text).width > max && s > 30); }
+    function drawCard() {
+      var c = cx, W = 1080, H = 1350;
+      c.clearRect(0, 0, W, H);
+      c.fillStyle = '#fde3ec'; c.fillRect(0, 0, W, H);
+      // gingham
+      c.fillStyle = 'rgba(226,88,142,.13)';
+      for (var i = 0; i < W; i += 60) c.fillRect(i, 0, 30, H);
+      for (var j = 0; j < H; j += 60) c.fillRect(0, j, W, 30);
+      // ticket
+      var x = 90, y = 120, w = W - 180, h = H - 240;
+      c.save(); c.shadowColor = 'rgba(122,40,70,.25)'; c.shadowBlur = 50; c.shadowOffsetY = 20;
+      rr(c, x, y, w, h, 40); c.fillStyle = '#fff8f5'; c.fill(); c.restore();
+      // perforation notches
+      c.fillStyle = '#fde3ec';
+      [y + h * .64].forEach(function (yy) { c.beginPath(); c.arc(x, yy, 30, 0, 6.29); c.arc(x + w, yy, 30, 0, 6.29); c.fill(); });
+      c.strokeStyle = 'rgba(198,61,116,.4)'; c.setLineDash([4, 14]); c.lineWidth = 4; c.lineCap = 'round';
+      c.beginPath(); c.moveTo(x + 50, y + h * .64); c.lineTo(x + w - 50, y + h * .64); c.stroke(); c.setLineDash([]);
+      // inner border
+      rr(c, x + 26, y + 26, w - 52, h - 52, 26); c.strokeStyle = 'rgba(226,88,142,.55)'; c.lineWidth = 3; c.stroke();
+      bowPath(c, W / 2, y + 2, 2.1, '#e2588e');
+      c.textAlign = 'center'; c.textBaseline = 'alphabetic';
+      c.fillStyle = '#c63d74'; c.font = '700 26px Montserrat'; c.letterSpacing = '10px';
+      try { c.letterSpacing = '10px'; } catch (e) {}
+      c.fillText('OFFICIAL  NOTICE', W / 2 + 5, y + 150);
+      try { c.letterSpacing = '0px'; } catch (e) {}
+      c.fillStyle = '#e2588e'; c.font = '700 230px "Playfair Display"'; c.fillText('IOU', W / 2, y + 380);
+      c.fillStyle = '#3a2218'; c.font = 'italic 600 54px "Playfair Display"'; c.fillText('one box of Kookies', W / 2, y + 460);
+      // cookie
+      var key = state.flavor === 'Snickerdoodle' ? 'doodle' : state.flavor === 'Cinnamon Swirl' ? 'swirl' : 'choc';
+      var flv = state.flavor;
+      if (state.flavor === 'Surprise me') { flv = 'Baker’s choice'; }
+      var im = cookieImgs[key];
+      if (im && im.complete && im.naturalWidth) { c.save(); c.globalAlpha = .96; c.drawImage(im, W / 2 - 115, y + 500, 230, 230); c.restore(); }
+      c.fillStyle = '#c63d74'; c.font = '700 26px Montserrat'; try { c.letterSpacing = '6px'; } catch (e) {}
+      c.fillText(flv.toUpperCase(), W / 2 + 3, y + 790);
+      try { c.letterSpacing = '0px'; } catch (e) {}
+      // stub
+      var sy = y + h * .64 + 92;
+      c.textAlign = 'left'; c.fillStyle = 'rgba(58,34,24,.55)'; c.font = '700 22px Montserrat';
+      try { c.letterSpacing = '5px'; } catch (e) {}
+      c.fillText('OWED BY', x + 80, sy); c.fillText('BECAUSE', x + 80, sy + 150);
+      try { c.letterSpacing = '0px'; } catch (e) {}
+      c.fillStyle = '#3a2218';
+      var who = state.who.trim() || 'you know who';
+      fit(c, who, '400 #px "Pinyon Script"', w - 160, 104); c.fillText(who, x + 76, sy + 96);
+      fit(c, state.why, 'italic 600 #px "Playfair Display"', w - 160, 44); c.fillText(state.why, x + 80, sy + 205);
+      c.textAlign = 'center'; c.fillStyle = '#c63d74'; c.font = '700 22px Montserrat';
+      try { c.letterSpacing = '4px'; } catch (e) {}
+      c.fillText('PAY UP AT ' + CONFIG.handle.toUpperCase(), W / 2 + 2, H - 70);
+      try { c.letterSpacing = '0px'; } catch (e) {}
+    }
+    var fontsReady = Promise.all([
+      document.fonts.load('700 100px "Playfair Display"'), document.fonts.load('italic 600 50px "Playfair Display"'),
+      document.fonts.load('400 100px "Pinyon Script"'), document.fonts.load('700 26px Montserrat')
+    ]).catch(function () {});
+    fontsReady.then(drawCard); drawCard();
+    $('#who').addEventListener('input', function (e) { state.who = e.target.value; drawCard(); });
+    $$('[data-group]').forEach(function (g) {
+      var key = g.getAttribute('data-group');
+      g.addEventListener('click', function (e) {
+        var b = e.target.closest('.chip'); if (!b) return;
+        $$('.chip', g).forEach(function (o) { o.setAttribute('aria-pressed', o === b ? 'true' : 'false'); });
+        state[key] = b.textContent; drawCard();
+        if (!RM && window.gsap) gsap.fromTo(cv, { rotate: -1.5, scale: .985 }, { rotate: 0, scale: 1, duration: .6, ease: 'elastic.out(1,.5)' });
+      });
+    });
+    function cardBlob() { return new Promise(function (res) { cv.toBlob(res, 'image/png'); }); }
+    var shareText = function () { return (state.who.trim() ? state.who.trim() + ', you' : 'You') + ' owe me a box of Kookies 🎀 ' + CONFIG.ig; };
+    function save(blob) {
+      var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'hellokookie-iou.png';
+      document.body.appendChild(a); a.click(); a.remove(); setTimeout(function () { URL.revokeObjectURL(a.href); }, 4000);
+    }
+    $('[data-save]').addEventListener('click', function () { cardBlob().then(function (b) { save(b); toast('Saved. Now send it to them ♡'); }); });
+    $('[data-share]').addEventListener('click', function () {
+      cardBlob().then(function (b) {
+        var file = new File([b], 'hellokookie-iou.png', { type: 'image/png' });
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          navigator.share({ files: [file], text: shareText() }).catch(function () {});
+        } else if (navigator.share) {
+          navigator.share({ text: shareText(), url: location.href }).catch(function () {});
+        } else {
+          save(b);
+          if (navigator.clipboard) navigator.clipboard.writeText(shareText()).catch(function () {});
+          toast('Card saved and message copied ♡');
+        }
+      });
+    });
+
+    /* ---------- header + mobile bar ---------- */
+    var hdr = $('#hdr'), mbar = $('#mbar'), lastY = 0;
+    function onScroll() {
+      var y = window.scrollY;
+      hdr.classList.toggle('scrolled', y > 30);
+      hdr.classList.toggle('hide', y > 500 && y > lastY + 2);
+      if (y < lastY - 2) hdr.classList.remove('hide');
+      mbar.classList.toggle('on', y > window.innerHeight * .7 && (window.innerHeight + y) < document.body.scrollHeight - 160);
+      lastY = y;
+    }
+    window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
+    /* ---------- motion ---------- */
+    if (RM || !window.gsap) {
+      $$('[data-rv]').forEach(function (e) { e.style.opacity = 1; e.style.transform = 'none'; });
+      return;
+    }
+    gsap.registerPlugin(ScrollTrigger);
+    var lenis = null;
+    if (window.Lenis && matchMedia('(pointer: fine)').matches) {
+      lenis = new Lenis({ lerp: .1 });
+      lenis.on('scroll', ScrollTrigger.update);
+      gsap.ticker.add(function (t) { lenis.raf(t * 1000); });
+      gsap.ticker.lagSmoothing(0);
+      $$('a[href^="#"]').forEach(function (a) {
+        a.addEventListener('click', function (e) { var h = a.getAttribute('href'); if (h.length < 2) return; var t = $(h); if (!t) return; e.preventDefault(); lenis.scrollTo(t, { offset: h === '#top' ? 0 : -70 }); });
+      });
+    }
+
+    // split headings into chars
+    $$('[data-split]').forEach(function (h) {
+      var out = '';
+      Array.prototype.forEach.call(h.childNodes, function (n) {
+        var txt = n.textContent, isEm = n.nodeType === 1;
+        var chunk = txt.split(' ').map(function (w) { return w ? '<span class="chars">' + w.split('').map(function (ch) { return '<span class="c">' + ch + '</span>'; }).join('') + '</span>' : ''; }).join(' ');
+        out += isEm ? '<em>' + chunk + '</em>' : chunk;
+      });
+      h.setAttribute('aria-label', h.textContent);
+      h.innerHTML = out;
+      gsap.from($$('.c', h), { yPercent: 110, rotate: 6, opacity: 0, duration: .9, ease: 'expo.out', stagger: .018, scrollTrigger: { trigger: h, start: 'top 85%' } });
+    });
+
+    $$('[data-rv]').forEach(function (el) {
+      gsap.to(el, el.classList.contains('rl') && innerWidth > 900 ? { opacity: 1, duration: 1.1, ease: 'power2.out', scrollTrigger: { trigger: el, start: 'top 95%' } } : { opacity: 1, y: 0, duration: 1.1, ease: 'expo.out', scrollTrigger: { trigger: el, start: 'top 88%' } });
+    });
+
+    // intro
+    var tl = gsap.timeline();
+    var lp = $$('.loader .bow path');
+    lp.forEach(function (p) { var L = p.getTotalLength(); p.style.strokeDasharray = L; p.style.strokeDashoffset = L; });
+    tl.to(lp, { strokeDashoffset: 0, duration: .7, ease: 'power2.inOut', stagger: .12 })
+      .to('.loader .wm', { opacity: 1, y: -4, duration: .5, ease: 'power2.out' }, '-=.35')
+      .to('.loader .in', { scale: .9, opacity: 0, duration: .45, ease: 'power2.in' }, '+=.25')
+      .to('.loader', { opacity: 0, duration: .5, ease: 'power2.out', onComplete: function () { $('.loader').remove(); } }, '-=.1')
+      .from('.hero h1 .row > span', { yPercent: 115, duration: 1.1, ease: 'expo.out', stagger: .09 }, '-=.45')
+      .from('[data-hi]', { opacity: 0, y: 20, duration: .8, ease: 'expo.out', stagger: .08 }, '-=.8')
+      .from('.rcard', { y: 160, opacity: 0, duration: 1.3, ease: 'expo.out', stagger: .1 }, '-=.9')
+      .from('.sticker', { scale: 0, rotate: -90, duration: .9, ease: 'back.out(1.6)' }, '-=.7')
+      .from('#hdr', { yPercent: -100, duration: .7, ease: 'expo.out' }, '-=1');
+    $('.loader').addEventListener('click', function () { tl.progress(.4); });
+
+    // hero parallax
+    $$('[data-par]').forEach(function (el) {
+      gsap.to(el, { y: +el.getAttribute('data-par'), ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+    });
+
+    // ribbon marquee reacting to scroll speed
+    var x = 0, w = 0, vel = 0;
+    function measure() { w = track.firstChild.getBoundingClientRect().width; }
+    measure(); window.addEventListener('resize', measure);
+    ScrollTrigger.create({ onUpdate: function (s) { vel = s.getVelocity(); } });
+    gsap.ticker.add(function (t, dt) {
+      var sp = 1.1 + Math.min(Math.abs(vel) / 260, 9);
+      vel *= .92;
+      x -= sp * (dt / 16.7);
+      if (w && x <= -w) x += w;
+      track.style.transform = 'translate3d(' + x.toFixed(2) + 'px,0,0)';
+    });
+
+    // cookies spin in + frosting pipes
+    $$('.fl .plate svg').forEach(function (s, i) {
+      gsap.fromTo(s, { rotate: -50 - i * 20, scale: .7 }, { rotate: 20, scale: 1, ease: 'none', scrollTrigger: { trigger: s, start: 'top 95%', end: 'bottom 30%', scrub: 1 } });
+    });
+    $$('.frost').forEach(function (p) {
+      var L = p.getTotalLength(); p.style.strokeDasharray = L; p.style.strokeDashoffset = L;
+      gsap.to(p, { strokeDashoffset: 0, duration: 2.2, ease: 'power1.inOut', scrollTrigger: { trigger: p.closest('.fl'), start: 'top 70%' } });
+    });
+
+    // cinnamon reveal
+    var feat = $('[data-feature]'), ph = $('.feature .ph'), stick = $('.feature .stick');
+    ScrollTrigger.create({
+      trigger: feat, start: 'top top', end: 'bottom bottom', scrub: true,
+      onUpdate: function (s) {
+        var p = s.progress, a = gsap.utils.clamp(0, 1, p / .6), e = 1 - Math.pow(1 - a, 3);
+        var mob = innerWidth < 720;
+        stick.style.setProperty('--it', ((mob ? 26 : 28) * (1 - e)).toFixed(2) + '%');
+        stick.style.setProperty('--il', ((mob ? 12 : 34) * (1 - e)).toFixed(2) + '%');
+        stick.style.setProperty('--ir', (40 * (1 - e)).toFixed(1) + 'px');
+        stick.style.setProperty('--sc', (1.25 - .25 * e).toFixed(3));
+        var b = gsap.utils.clamp(0, 1, (p - .5) / .25);
+        stick.style.setProperty('--sh', b.toFixed(3));
+        stick.style.setProperty('--to', b.toFixed(3));
+      }
+    });
+
+    // reels: lift on scroll
+    $$('.rl').forEach(function (r, i) {
+      if (innerWidth > 900) gsap.fromTo(r, { y: 60 + (i % 2) * 50 }, { y: (i % 2) * -30, ease: 'none', scrollTrigger: { trigger: '.rl-grid', start: 'top bottom', end: 'bottom top', scrub: true } });
+    });
+
+    // footer wordmark rise
+    gsap.from('footer .big', { yPercent: 40, opacity: 0, duration: 1.2, ease: 'expo.out', scrollTrigger: { trigger: 'footer', start: 'top 80%' } });
+
+    window.addEventListener('load', function () { ScrollTrigger.refresh(); });
+  })();
+  </script>
+</body>
+</html>
