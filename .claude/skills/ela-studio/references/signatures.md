@@ -121,3 +121,4 @@ Each of these was built and shipped. Use them as proof of the pattern, not as te
 | D Town Eatery (@dtowneatery, Ann Arbor + Detroit street food) | Day ↔ Late-night mode flip (circle reveal, skyline lights, neon menu board) | dtowneatery.vercel.app |
 | Detroit Auto Customs (@detroitautocustomsllc, Detroit body shop) | Starlight headliner hero that warps on scroll + drag-around build wall | detroitautocustoms.vercel.app |
 | Paisano's Pizza (@paisanospizza, Dearborn) | Neon sign buzz-on + scroll-scrubbed kitchen frame sequence + NY vs tavern compare slider | paisanospizza.vercel.app |
+| Cookie Dough Monster (@cookiedoughmonster_knox, Knoxville) | Feed-the-mascot drag/tap + scalloped scroll bites with crumbs | cookiedoughmonster.vercel.app |
