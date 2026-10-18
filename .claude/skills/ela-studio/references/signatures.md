@@ -124,3 +124,4 @@ Each of these was built and shipped. Use them as proof of the pattern, not as te
 | Cookie Dough Monster (@cookiedoughmonster_knox, Knoxville) | Feed-the-mascot drag/tap + scalloped scroll bites with crumbs | cookiedoughmonster.vercel.app |
 | Brooklyn Pizza & Bar (@brooklynpizza, Birmingham MI) | Brooklyn after dark: heat-haze oven hero under a lit Brooklyn Bridge skyline, subway-line rail, BROOKLYN station mosaic, floating real halal slices, neon bar sign | thebrooklynpizza.vercel.app |
 | Roadsters Garage (@roadsters_garage, Anaheim tint + detailing) | Single-screen shade studio: live tint slider on a real car they tinted, send-this-shade DM | roadstersgarage.vercel.app |
+| Hit The Rhode Detailing (@hittherhodedetailing, RI mobile detailing) | Nautical-chart map of RI: tap your town, the rig drives there and unpacks water + power, real Square prices to book | hittherhode.vercel.app |
