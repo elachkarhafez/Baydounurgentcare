@@ -13,6 +13,7 @@
   <link rel="icon" href="img/b-mark.png">
 <link rel="preload" href="fonts/cardo-n400.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="img/hero-oven.webp" as="image">
+  <link rel="modulepreload" href="assets/pie.js">
   <style>
     @font-face { font-family: "Cardo"; font-weight: 400; font-display: swap; src: url(fonts/cardo-n400.woff2) format("woff2"); }
     @font-face { font-family: "Cardo"; font-weight: 700; font-display: swap; src: url(fonts/cardo-n700.woff2) format("woff2"); }
@@ -78,16 +79,24 @@
     .hero { position: relative; overflow: hidden; isolation: isolate; border-bottom: 1px solid var(--line); }
     .hero .bg { position: absolute; inset: 0; z-index: -2; }
     .hero .bg img { width: 100%; height: 100%; object-fit: cover; object-position: 70% 50%; transform: scale(1.06); will-change: transform; }
-    .hero::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgba(10,10,10,.96) 0%, rgba(10,10,10,.86) 34%, rgba(10,10,10,.35) 64%, rgba(10,10,10,.15) 100%), linear-gradient(0deg, rgba(10,10,10,.85), transparent 40%); }
+    .hero::before { content: ""; position: absolute; inset: 0; z-index: -1; background: radial-gradient(60% 55% at 50% 78%, rgba(255,120,40,.22), transparent 70%), linear-gradient(180deg, rgba(10,10,10,.9) 0%, rgba(10,10,10,.82) 45%, rgba(10,10,10,.55) 100%); }
     #embers { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; pointer-events: none; }
-    .hero .wrap { padding-top: clamp(48px, 7vw, 96px); padding-bottom: clamp(48px, 7vw, 96px); }
+    .hero .wrap { padding-top: clamp(36px, 4.4vw, 64px); text-align: center; display: flex; flex-direction: column; align-items: center; }
+    .hero .ctas { justify-content: center; }
+    .stage { position: relative; height: clamp(280px, 30vw, 440px); margin-top: clamp(4px, 1vw, 12px); }
+    .stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .stage .peek { position: absolute; left: 50%; bottom: 0; width: min(560px, 80%); transform: translateX(-50%); aspect-ratio: 2 / 1; object-fit: cover; object-position: 50% 30%; border-radius: 50% 50% 0 0 / 100% 100% 0 0; opacity: .9; }
+    .stage.gl .peek { display: none; }
+    .hero .wrap > * { animation: rise .9s var(--ease) both; }
+    .hero .wrap > :nth-child(2) { animation-delay: .08s; } .hero .wrap > :nth-child(3) { animation-delay: .16s; } .hero .wrap > :nth-child(4) { animation-delay: .24s; } .hero .wrap > :nth-child(5) { animation-delay: .32s; }
+    @keyframes rise { from { opacity: 0; transform: translateY(14px); } }
     .hero .est { display: inline-flex; align-items: center; gap: 12px; font: 500 .8125rem/1 var(--sans); letter-spacing: .24em; text-transform: uppercase; color: var(--muted); }
-    .hero .est::before { content: ""; width: 34px; height: 1px; background: var(--ember); }
-    .hero h1 { margin-top: 18px; font-size: clamp(1.875rem, 1.2rem + 2.2vw, 3.5rem); line-height: 1.08; max-width: 15em; }
+    .hero .est::before, .hero .est::after { content: ""; width: 34px; height: 1px; background: var(--ember); }
+    .hero h1 { margin-top: 16px; font-size: clamp(1.875rem, 1.2rem + 2.2vw, 3.5rem); line-height: 1.08; max-width: 17em; text-wrap: balance; }
     .hero h1 em { font-style: italic; color: #ffd9bd; }
-    .hero .lead { margin-top: 18px; max-width: 34em; color: #cdc8c0; }
-    .hero .ctas { margin-top: 28px; }
-    .facts { display: flex; flex-wrap: wrap; gap: 10px 28px; margin-top: 32px; padding-top: 22px; border-top: 1px solid var(--line); max-width: 640px; font: 500 .875rem/1.4 var(--sans); color: var(--muted); }
+    .hero .lead { margin-top: 14px; max-width: 40em; color: #cdc8c0; text-wrap: balance; }
+    .hero .ctas { margin-top: 24px; }
+    .facts { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 26px; margin-top: 18px; font: 500 .875rem/1.4 var(--sans); color: var(--muted); }
     .facts a { color: var(--ink); }
     .status { display: inline-flex; align-items: center; gap: 8px; color: var(--ink); }
     .status i { width: 8px; height: 8px; border-radius: 50%; background: #5f5f5f; }
@@ -102,6 +111,10 @@
     .story .photos img { position: absolute; object-fit: cover; box-shadow: 0 30px 60px -30px #000; }
     .story .photos .a { inset: 0 18% 14% 0; width: 82%; height: 86%; }
     .story .photos .b { right: 0; bottom: 0; width: 46%; height: 52%; border: 6px solid var(--bg); }
+    .yrs { position: absolute; left: -14px; bottom: 4%; display: flex; align-items: center; gap: 12px; padding: 14px 18px; background: var(--blue); color: #fff; box-shadow: 0 20px 40px -20px #000; }
+    .yrs b { font: 400 2.75rem/1 var(--serif); }
+    .yrs span { font: 500 .8125rem/1.25 var(--sans); letter-spacing: .06em; }
+    @media (max-width: 640px) { .hero .est { letter-spacing: .16em; font-size: .75rem; gap: 10px; } .hero .est::before, .hero .est::after { width: 18px; } .yrs { left: 0; padding: 10px 14px; } .yrs b { font-size: 2.125rem; } }
     .story h2 { margin-top: 2px; }
     .story .lead { margin-top: 16px; }
     .goes { list-style: none; margin: 26px 0 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 0 24px; }
@@ -125,12 +138,25 @@
     .item h4 small { font: 600 .6875rem/1 var(--sans); letter-spacing: .12em; text-transform: uppercase; color: var(--blue-hi); }
     .item p { margin-top: 4px; color: var(--dim); font-size: .9063rem; line-height: 1.5; }
     .m-side { position: sticky; top: 96px; }
-    .m-side figure { margin: 0; aspect-ratio: 4 / 5; overflow: hidden; background: #111; }
-    .m-side img { width: 100%; height: 100%; object-fit: cover; transition: opacity .45s var(--ease); }
+    .m-side figure { margin: 0; position: relative; aspect-ratio: 4 / 5; overflow: hidden; background: radial-gradient(80% 60% at 50% 45%, #232733, #121212 75%); border: 1px solid var(--line); }
+    .m-side img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity .45s var(--ease); }
+    .m-side canvas { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; transition: opacity .45s var(--ease); }
+    .tray.gl.pz canvas { opacity: 1; } .tray.gl.pz img { opacity: 0 !important; }
+    .tray figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: 40px 20px 18px; background: linear-gradient(0deg, rgba(10,10,10,.92), transparent); display: none; }
+    .tray.gl.pz figcaption { display: block; }
+    .tray figcaption b { display: block; font: 400 1.25rem/1.2 var(--serif); }
+    .tray figcaption span { display: block; margin-top: 4px; font-size: .875rem; line-height: 1.45; color: var(--muted); }
+    .items.pick .item { cursor: pointer; text-align: left; width: 100%; position: relative; transition: background .25s; }
+    .items.pick .item::after { content: "See it"; position: absolute; right: 0; top: 18px; font: 600 .6875rem/1 var(--sans); letter-spacing: .12em; text-transform: uppercase; color: var(--dim); opacity: 0; transition: opacity .25s; }
+    .items.pick .item[aria-pressed="true"] h4 { color: #fff; }
+    .items.pick .item[aria-pressed="true"]::before { content: ""; position: absolute; left: -14px; top: 18px; bottom: 18px; width: 2px; background: var(--blue-hi); }
+    @media (hover: hover) { .items.pick .item:hover::after { opacity: 1; } .items.pick .item:hover h4 { color: #fff; } }
     .m-side .note { margin-top: 16px; padding: 18px; border: 1px solid var(--line); font-size: .875rem; color: var(--muted); line-height: 1.55; }
     .m-side .note b { color: var(--ink); font-weight: 600; }
-    .m-side .ctas { margin-top: 14px; }
-    .m-side .btn { flex: 1; }
+    .m-side .ctas, .m-foot .ctas { margin-top: 14px; }
+    .m-side .btn, .m-foot .btn { flex: 1; }
+    .m-foot .note { padding: 16px; border: 1px solid var(--line); font-size: .875rem; color: var(--muted); }
+    .m-foot .note b { color: var(--ink); }
     .fadein { animation: fadein .45s var(--ease) both; }
     @keyframes fadein { from { opacity: 0; transform: translateY(8px); } }
 
@@ -221,8 +247,11 @@
       .rv { grid-template-columns: 1fr; }
       .gallery { grid-template-columns: 1fr 1fr; }
       .gallery img:nth-child(n+5) { display: none; }
-      .m-side { position: static; }
-      .m-side figure { aspect-ratio: 16 / 10; }
+      .m-side { position: static; order: -1; }
+      .m-body.pz .m-side { position: sticky; top: 64px; z-index: 5; background: var(--bg-2); padding-bottom: 8px; }
+      .m-side figure { aspect-ratio: auto; height: 240px; }
+      .m-body.pz .m-cta { display: none; }
+      .m-body.pz + .m-foot { display: block !important; margin-top: 22px; }
       .drinks { grid-template-columns: 1fr 1fr 1fr; }
     }
     @media (max-width: 640px) {
@@ -242,6 +271,7 @@
       .mbar { display: flex; }
       footer { padding-bottom: 90px; }
     }
+    @media (max-width: 900px) { .tray figcaption { top: 0; bottom: auto; padding: 12px 14px; background: none; } .tray figcaption b { font-size: 1.0625rem; } .tray figcaption span { display: none; } }
     @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .status.open i { animation: none; } [data-rv] { transition: none; } }
   </style>
   <script>document.documentElement.classList.add('js');</script>
@@ -289,6 +319,10 @@
           <a data-tel href="#">(248) 258-6690</a>
         </div>
       </div>
+      <div class="stage" id="heroStage" aria-hidden="true">
+        <img class="peek" src="img/pie-top.webp" alt="" width="1080" height="1080">
+        <canvas id="heroPie"></canvas>
+      </div>
     </section>
     <div class="awning" aria-hidden="true"></div>
 
@@ -298,6 +332,7 @@
         <div class="photos" data-rv>
           <img class="a" src="img/storefront.webp" alt="The Brooklyn Pizza storefront with its blue and white awning pattern" loading="lazy" width="1454" height="994">
           <img class="b" src="img/oven-pepperoni.webp" alt="A pepperoni pie on the peel in the wood-fired oven" loading="lazy" width="720" height="720">
+          <div class="yrs"><b id="yrs">30</b><span>years on<br>Henrietta Street</span></div>
         </div>
         <div data-rv>
           <span class="rule"></span>
@@ -324,11 +359,15 @@
         <div class="m-body">
           <div class="items" id="items" role="tabpanel"></div>
           <aside class="m-side">
-            <figure><img id="mimg" src="img/margherita.webp" alt="" loading="lazy" width="1080" height="720"></figure>
-            <p class="note"><b>Prices</b> are on our online ordering menu, the app and the boards in the restaurant.</p>
-            <div class="ctas"><a class="btn blue" data-order href="#" target="_blank" rel="noopener">Order online</a><a class="btn" data-pdf href="#" target="_blank" rel="noopener">Full menu (PDF)</a></div>
+            <figure class="tray" id="tray"><img id="mimg" src="img/margherita.webp" alt="" loading="lazy" width="1080" height="720"><canvas id="menuPie" aria-hidden="true"></canvas>
+              <figcaption id="cap" aria-live="polite"><b>Margherita</b><span>Roma tomatoes, fresh and shredded mozzarella, fresh basil. No sauce.</span></figcaption></figure>
+            <div class="m-cta">
+              <p class="note"><b>Prices</b> are on our online ordering menu, the app and the boards in the restaurant.</p>
+              <div class="ctas"><a class="btn blue" data-order href="#" target="_blank" rel="noopener">Order online</a><a class="btn" data-pdf href="#" target="_blank" rel="noopener">Full menu (PDF)</a></div>
+            </div>
           </aside>
         </div>
+        <div class="m-foot" hidden><p class="note"><b>Prices</b> are on our online ordering menu, the app and the boards in the restaurant.</p><div class="ctas"><a class="btn blue" data-order href="#" target="_blank" rel="noopener">Order online</a><a class="btn" data-pdf href="#" target="_blank" rel="noopener">Full menu (PDF)</a></div></div>
       </div>
     </section>
 
@@ -567,22 +606,54 @@
     paint(); setInterval(paint, 60000);
 
     /* ---------- menu tabs ---------- */
-    var tabs = $('#tabs'), items = $('#items'), mimg = $('#mimg'), cur = 0;
+    var tabs = $('#tabs'), items = $('#items'), mimg = $('#mimg'), tray = $('#tray'), cap = $('#cap'), cur = 0, pie3d = null;
     tabs.innerHTML = MENU.map(function (m, i) { return '<button class="tab" role="tab" type="button" id="tab' + i + '" aria-selected="' + (i === 0) + '" aria-controls="items">' + m.t + '</button>'; }).join('');
     function show(i) {
       cur = i; var m = MENU[i];
       $$('.tab', tabs).forEach(function (b, k) { b.setAttribute('aria-selected', k === i ? 'true' : 'false'); b.tabIndex = k === i ? 0 : -1; });
       items.setAttribute('aria-labelledby', 'tab' + i);
-      items.innerHTML = m.items.map(function (it, k) { return '<div class="item fadein" style="animation-delay:' + (k * 30) + 'ms"><h4>' + it[0] + (it[2] ? ' <small>' + it[2] + '</small>' : '') + '</h4><p>' + it[1] + '</p></div>'; }).join('');
-      mimg.style.opacity = 0;
-      setTimeout(function () { mimg.src = 'img/' + m.img + '.webp'; mimg.onload = function () { mimg.style.opacity = 1; }; }, RM ? 0 : 180);
+      var pz = i < 2;
+      items.classList.toggle('pick', pz); $('.m-body').classList.toggle('pz', pz && !!pie3d); tray.classList.toggle('pz', pz);
+      items.innerHTML = m.items.map(function (it, k) {
+        var tag = pz ? 'div role="button" tabindex="0" aria-pressed="false" data-n="' + k + '"' : 'div';
+        return '<' + tag + ' class="item fadein" style="animation-delay:' + (k * 30) + 'ms"><h4>' + it[0] + (it[2] ? ' <small>' + it[2] + '</small>' : '') + '</h4><p>' + it[1] + '</p></' + tag.split(' ')[0] + '>';
+      }).join('');
+      if (pz) pick(i === 0 ? 0 : 1, true);
+      if (!pz || !pie3d) { mimg.style.opacity = 0; setTimeout(function () { mimg.src = 'img/' + m.img + '.webp'; mimg.onload = function () { mimg.style.opacity = 1; }; }, RM ? 0 : 180); }
     }
+    function pick(k, quiet) {
+      var it = MENU[cur].items[k]; if (!it) return;
+      $$('.item', items).forEach(function (b, n) { b.setAttribute('aria-pressed', n === k ? 'true' : 'false'); });
+      cap.innerHTML = '<b>' + it[0] + '</b><span>' + it[1] + '</span>';
+      if (pie3d && pie3d.has(it[0])) pie3d.show(it[0]);
+      if (!quiet && pie3d && innerWidth <= 900) { var r = tray.getBoundingClientRect(); if (r.top < 0 || r.top > 80) scrollTo({ top: scrollY + r.top - 72, behavior: RM ? 'auto' : 'smooth' }); }
+    }
+    var hoverT = 0;
+    items.addEventListener('click', function (e) { var b = e.target.closest('.item[data-n]'); if (b) pick(+b.dataset.n); });
+    items.addEventListener('keydown', function (e) { var b = e.target.closest('.item[data-n]'); if (b && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); pick(+b.dataset.n); } });
+    if (matchMedia('(hover: hover) and (pointer: fine)').matches) items.addEventListener('mouseover', function (e) { var b = e.target.closest('.item[data-n]'); clearTimeout(hoverT); if (b && b.getAttribute('aria-pressed') !== 'true') hoverT = setTimeout(function () { pick(+b.dataset.n, true); }, 380); });
     tabs.addEventListener('click', function (e) { var b = e.target.closest('.tab'); if (b) show($$('.tab', tabs).indexOf(b)); });
     tabs.addEventListener('keydown', function (e) {
       if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
       e.preventDefault(); var n = (cur + (e.key === 'ArrowRight' ? 1 : -1) + MENU.length) % MENU.length; show(n); $$('.tab', tabs)[n].focus();
     });
     show(0);
+
+    /* ---------- the 3D pies (hero peel + menu tray); photos stay as the fallback ---------- */
+    function gl() { try { var c = document.createElement('canvas'); return !!(c.getContext('webgl2') || c.getContext('webgl')); } catch (e) { return false; } }
+    if (gl()) {
+      import('./assets/pie.js').then(function (mod) {
+        mod.mountPie($('#heroPie'), { mode: 'hero', assets: 'assets/' }).then(function () { $('#heroStage').classList.add('gl'); }).catch(function () {});
+        var started = false, mount = function () {
+          if (started) return; started = true;
+          mod.mountPie($('#menuPie'), { mode: 'menu', assets: 'assets/', recipe: MENU[cur].items[0][0] }).then(function (p) {
+            pie3d = p; tray.classList.add('gl'); $('.m-body').classList.toggle('pz', cur < 2);
+            var on = $('.item[aria-pressed="true"]', items); if (on) pick(+on.dataset.n, true);
+          }).catch(function () {});
+        };
+        new IntersectionObserver(function (e, o) { if (e[0].isIntersecting) { o.disconnect(); mount(); } }, { rootMargin: '600px 0px' }).observe(tray);
+      }).catch(function () {});
+    }
 
     /* ---------- embers over the oven ---------- */
     var cv = $('#embers'), cx = cv.getContext('2d'), hero = $('.hero'), W = 0, H = 0, D = 1, parts = [], vis = true;
