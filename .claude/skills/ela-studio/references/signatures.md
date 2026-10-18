@@ -122,3 +122,4 @@ Each of these was built and shipped. Use them as proof of the pattern, not as te
 | Detroit Auto Customs (@detroitautocustomsllc, Detroit body shop) | Starlight headliner hero that warps on scroll + drag-around build wall | detroitautocustoms.vercel.app |
 | Paisano's Pizza (@paisanospizza, Dearborn) | Neon sign buzz-on + scroll-scrubbed kitchen frame sequence + NY vs tavern compare slider | paisanospizza.vercel.app |
 | Cookie Dough Monster (@cookiedoughmonster_knox, Knoxville) | Feed-the-mascot drag/tap + scalloped scroll bites with crumbs | cookiedoughmonster.vercel.app |
+| Brooklyn Pizza & Bar (@brooklynpizza, Birmingham MI) | Formal redesign in their own colours: awning-triangle bands, ember-lit oven hero, tabbed real menu, real catering prices | thebrooklynpizza.vercel.app |
