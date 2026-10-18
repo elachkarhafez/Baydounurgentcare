@@ -123,3 +123,4 @@ Each of these was built and shipped. Use them as proof of the pattern, not as te
 | Paisano's Pizza (@paisanospizza, Dearborn) | Neon sign buzz-on + scroll-scrubbed kitchen frame sequence + NY vs tavern compare slider | paisanospizza.vercel.app |
 | Cookie Dough Monster (@cookiedoughmonster_knox, Knoxville) | Feed-the-mascot drag/tap + scalloped scroll bites with crumbs | cookiedoughmonster.vercel.app |
 | Brooklyn Pizza & Bar (@brooklynpizza, Birmingham MI) | Brooklyn after dark: heat-haze oven hero under a lit Brooklyn Bridge skyline, subway-line rail, BROOKLYN station mosaic, floating real halal slices, neon bar sign | thebrooklynpizza.vercel.app |
+| Roadsters Garage (@roadsters_garage, Anaheim tint + detailing) | Single-screen shade studio: live tint slider on a real car they tinted, send-this-shade DM | roadstersgarage.vercel.app |
