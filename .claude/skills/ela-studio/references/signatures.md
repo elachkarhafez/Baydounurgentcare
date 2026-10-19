@@ -128,4 +128,4 @@ Each of these was built and shipped. Use them as proof of the pattern, not as te
 | Baytna Cafe (@baytnacafe, Dearborn slushie + juice shop) | Horizontal 3D slushie counter: scroll down 18 machines, tap to pour layers, lid + straw at the register with real prices | baytnacafe.vercel.app |
 | Dushanbe Restaurant (@dushanberestaurant, Brooklyn Tajik) | Single-screen 3D dastarkhan on a suzani: dishes land, tap for the Tajik word and story | dushanbe-restaurant.vercel.app |
 | Café Conchas (@cafeconchas_, Montebello brunch café) | 3D tray of conchas: tap to take a bite, crumbs fly, the card shows what it hides | cafeconchas.vercel.app |
-| Furniture King (@furniture_king_mi, Joy Rd Detroit furniture store) | Clean showroom catalog: rotating sale-set showcase, filter chips with FLIP regrid, quick-view sheet; no scroll animation by request | furnitureking.vercel.app |
+| Furniture King (@furniture_king_mi, Joy Rd Detroit furniture store) | v2 royal: black + logo red + gold, a 3D gold crown lowered onto a red velvet cushion, "the throne room" of gilt-framed sets with filter/FLIP and quick view; no scroll animation by request | furnitureking.vercel.app |
