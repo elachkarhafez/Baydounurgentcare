@@ -126,3 +126,4 @@ Each of these was built and shipped. Use them as proof of the pattern, not as te
 | Roadsters Garage (@roadsters_garage, Anaheim tint + detailing) | Single-screen shade studio: live tint slider on a real car they tinted, send-this-shade DM | roadstersgarage.vercel.app |
 | Hit The Rhode Detailing (@hittherhodedetailing, RI mobile detailing) · DECLINED → became Saltmarsh Mobile Detailing (saltmarsh-detailing.vercel.app, demos/mobile-detailing) | Nautical-chart map of RI: tap your town, the rig drives there and unpacks water + power | saltmarsh-detailing.vercel.app |
 | Baytna Cafe (@baytnacafe, Dearborn slushie + juice shop) | Horizontal 3D slushie counter: scroll down 18 machines, tap to pour layers, lid + straw at the register with real prices | baytnacafe.vercel.app |
+| Dushanbe Restaurant (@dushanberestaurant, Brooklyn Tajik) | Single-screen 3D dastarkhan on a suzani: dishes land, tap for the Tajik word and story | dushanbe.vercel.app |
