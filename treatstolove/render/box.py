@@ -64,8 +64,8 @@ def bump(nt, b, scale, strength, dist, kind='noise', coord='Object'):
     nt.links.new(tc.outputs[coord], tx.inputs['Vector']); nt.links.new(tx.outputs[0 if kind == 'noise' else 'Distance'], bp.inputs['Height']); nt.links.new(bp.outputs[0], b.inputs['Normal'])
 
 # ---------------------------------------------------------------- materials
-GOLD = principled('gold', hexc('#e2b75c'), Metallic=1., Roughness=.24)
-bump(GOLD[1], GOLD[2], 900, .25, .00006); GOLD = GOLD[0]
+GOLD = principled('gold', hexc('#d9ad55'), Metallic=1., Roughness=.3)
+bump(GOLD[1], GOLD[2], 420, .55, .00012); GOLD = GOLD[0]
 PLAQUE = principled('plaque', hexc('#efe6d6'), Roughness=.5, **{'Coat Weight': .25, 'Coat Roughness': .2})
 bump(PLAQUE[1], PLAQUE[2], 1400, .06, .00002); PLAQUE = PLAQUE[0]
 def choc_mat():
@@ -128,24 +128,26 @@ def sepal_mesh(w=.0058, h=.0135):
 SEPAL = sepal_mesh()
 def strawberry(loc, rot, s=1., gold_flower=False):
     prof = [(0, 0)]
-    for i in range(1, 26):
-        t = i / 25; z = t * .045
-        r = .0185 * math.sin(pi * min(1, t * .95 + .02)) ** .55 * (1 - .25 * (1 - t) ** 3) * (1 if t < .8 else lerp(1, .55, smooth(.8, 1, t)))
-        prof.append((max(r, .0008), z))
-    prof.append((0, .0458))
+    for i in range(1, 31):
+        t = i / 30; z = t * .046
+        body = math.sin(pi / 2 * min(1, t / .76)) ** .85          # cone out of a soft point
+        top = lerp(1, .42, smooth(.7, 1.0, t) ** 1.4)                # rounded shoulders into the calyx
+        r = .0178 * body * (top if t > .76 else 1) * (1 - .08 * (1 - t) ** 2)
+        prof.append((max(r, .0006), z))
+    prof.append((.0045, .0466)); prof.append((0, .0468))
     o = lathe('berry', prof, 64)
     for v in o.data.vertices:  # gentle lumps so it's not a perfect lathe
         n = Vector((v.co.x, v.co.y, 0)).normalized() if v.co.xy.length > 1e-5 else Vector((0, 0, 0))
         v.co += n * (math.sin(v.co.z * 400 + math.atan2(v.co.y, v.co.x) * 3) * .0004)
     o.data.materials.append(CHOC)
     # calyx: sepals fanned at the top + a short stem
-    for k in range(8):
-        a = k / 8 * 2 * pi + random.uniform(-.15, .15)
+    for k in range(11):
+        a = k / 11 * 2 * pi + random.uniform(-.12, .12)
         sp = link(bpy.data.objects.new('sepal', SEPAL)); sp.data.materials.append(LEAF) if not sp.data.materials else None
         sp.parent = o; sp.location = (cos(a) * .006, sin(a) * .006, .0452)
         sp.rotation_euler = Euler((0, 0, a - pi / 2)); sp.rotation_euler.rotate(Euler((0, 0, 0)))
-        M = Matrix.Rotation(a - pi / 2, 4, 'Z') @ Matrix.Rotation(-1.2 + random.uniform(-.2, .2), 4, 'X')
-        sp.matrix_basis = Matrix.Translation((cos(a) * .006, sin(a) * .006, .0452)) @ M
+        M = Matrix.Rotation(a - pi / 2, 4, 'Z') @ Matrix.Rotation(-1.0 + random.uniform(-.15, .15), 4, 'X') @ Matrix.Diagonal((1.3, 1.25, 1, 1))
+        sp.matrix_basis = Matrix.Translation((cos(a) * .0042, sin(a) * .0042, .0468)) @ M
     bpy.ops.mesh.primitive_cylinder_add(radius=.0011, depth=.008, vertices=12, location=(0, 0, .049)); st = bpy.context.active_object; st.parent = o; st.data.materials.append(LEAF)
     st.matrix_parent_inverse = Matrix.Identity(4); st.location = (0, 0, .049)
     if gold_flower:
@@ -159,6 +161,18 @@ def strawberry(loc, rot, s=1., gold_flower=False):
     o.location = loc; o.rotation_euler = rot; o.scale = (s, s, s)
     return o
 
+DRIZ = principled('drizzle', hexc('#f8f2e8'), Roughness=.25, **{'Subsurface Weight': .3, 'Subsurface Scale': .002, 'Coat Weight': .3})[0]
+def drizzle(berry):
+    pts = []
+    for i in range(80):
+        t = i / 79; z = lerp(.008, .036, t); a = math.sin(t * pi * 9) * 1.1
+        rr = .0182 * math.sin(pi / 2 * min(1, z / .046 / .76)) ** .85 + .0004
+        pts.append((cos(a) * rr, sin(a) * rr, z))
+    cu = bpy.data.curves.new('dz', 'CURVE'); cu.dimensions = '3D'; sp = cu.splines.new('POLY'); sp.points.add(len(pts) - 1)
+    for i, p in enumerate(pts): sp.points[i].co = (*p, 1)
+    cu.bevel_depth = .00055; cu.bevel_resolution = 3; cu.use_fill_caps = True
+    o = link(bpy.data.objects.new('dz', cu)); o.data.materials.append(DRIZ); o.parent = berry; return o
+
 # lay them on their sides in two rows, tips alternating
 berries = []
 rows = [(-.045, [-.11, -.055, 0, .055, .11]), (.045, [-.085, -.03, .025, .08, .125])]
@@ -166,7 +180,8 @@ for ri_, (y, xs) in enumerate(rows):
     for j, x in enumerate(xs):
         flip = (j + ri_) % 2
         rot = (pi / 2 + random.uniform(-.1, .1), 0, (pi / 2 if flip else -pi / 2) + random.uniform(-.25, .25))
-        berries.append(strawberry((x + (-.022 if flip else .022), y + random.uniform(-.006, .006), .028), rot, random.uniform(.95, 1.06), gold_flower=(j % 2 == 1)))
+        berries.append(strawberry((x + (-.022 if flip else .022), y + random.uniform(-.006, .006), .026), rot, random.uniform(.95, 1.06), gold_flower=False))
+        if (j + ri_) % 3 == 1: drizzle(berries[-1])
 
 # gold-painted chocolate flowers on the uncovered berries (world space, facing up)
 def gold_flower(loc, s=1.):
@@ -192,7 +207,10 @@ def frame_mesh(a=.024, b=.03, seg=220, ring=18):
     for i in range(seg):
         t = i / seg * 2 * pi; c = Vector((a * cos(t), b * sin(t), 0))
         tang = Vector((-a * sin(t), b * cos(t), 0)).normalized(); nrm = Vector((tang.y, -tang.x, 0))
-        orn = .0016 * (.5 + .5 * math.cos(t * 12)) ** 2.5 + .0011 * (.5 + .5 * math.cos(t * 4)) ** 4 + .00035 * math.sin(t * 36)
+        from mathutils import noise as _N
+        crest = (.5 + .5 * math.cos(2 * (t - pi / 2))) ** 8
+        lump = _N.noise(Vector((cos(t) * 2.2, sin(t) * 2.2, .3))) * .5 + .5
+        orn = .0034 * lump ** 2 + .0007 * (.5 + .5 * math.cos(t * 22 + lump * 6)) + .0038 * crest * (.75 + .25 * math.cos(t * 30))
         for j in range(ring):
             th = j / ring * 2 * pi
             from mathutils import noise as _n
@@ -208,7 +226,9 @@ plaques = []
 FRAMES = [((-.075, -.01, .052), (.22, -.12, .25)), ((.0, .01, .056), (-.05, .12, -.08)), ((.078, -.012, .051), (.15, .1, -.3))]
 for fi, (loc, rot) in enumerate(FRAMES):
     v, f = frame_mesh(); fr = mesh_obj('frame', v, f); fr.data.materials.append(GOLD)
-    sub = fr.modifiers.new('s', 'SUBSURF'); sub.render_levels = 1
+    sub = fr.modifiers.new('s', 'SUBSURF'); sub.render_levels = 1; sub.levels = 1
+    tex = bpy.data.textures.new('carve', 'CLOUDS'); tex.noise_scale = .0035; tex.noise_depth = 2
+    dsp = fr.modifiers.new('d', 'DISPLACE'); dsp.texture = tex; dsp.strength = .0007; dsp.mid_level = .5; dsp.texture_coords = 'GLOBAL'
     pl_prof = [(0, .0042), (.94, .0042), (1., .0034), (1., .0)]
     # plaque: an oval disc (scaled unit lathe)
     pl = lathe('plaque', [(0, 0), (1, 0), (1, .002), (.985, .0031), (.95, .0036), (.85, .0036), (.6, .0036), (.3, .0036), (0, .0036)], 96); pl.scale = (.0215, .0275, 1); pl.data.materials.append(PLAQUE)
