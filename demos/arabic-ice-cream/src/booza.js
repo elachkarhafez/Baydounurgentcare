@@ -1,5 +1,5 @@
 /* =====================================================================
-   Booza Delight: the stretch.
+   Rosepestle Ice Cream (ElaSystems concept): the stretch.
    A high-detail 3D scoop of booza (Arabic mastic ice cream) in a waffle
    cone, its base rolled in crushed pistachio. Grab it and pull: the scoop
    stretches like real booza, the top rides up with your pointer, the middle
@@ -9,7 +9,7 @@
    slowly and breathes. Kit method: studio HDRI, physical materials with
    generated normal maps, lathe geometry deformed per frame, shadow catcher
    on a transparent canvas, render only while visible.
-   Bundle: .claude/skills/ela-studio/kit/build3d/build.sh boozadelight/src/booza.js boozadelight/assets/booza.js
+   Bundle: .claude/skills/ela-studio/kit/build3d/build.sh demos/arabic-ice-cream/src/booza.js demos/arabic-ice-cream/assets/booza.js
    ===================================================================== */
 import * as THREE from 'three';
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
@@ -98,8 +98,8 @@ export async function mountBooza(canvas, o = {}) {
   const coneProf = []; for (let i = 0; i <= 40; i++) { const t = i / 40; coneProf.push(new THREE.Vector2(.02 + (CONE_R - .02) * Math.pow(t, 1.02), t * CONE_H)); }
   const LIFT = .6; // the cone sits in a ceramic stand
   const cone = new THREE.Mesh(new THREE.LatheGeometry(coneProf, 128), coneMat); cone.castShadow = true; cone.receiveShadow = true; cone.position.y = LIFT; root.add(cone);
-  // sage ceramic stand, like the shop's millwork: round foot, slim stem, cup (all bottom→top)
-  const glaze = new THREE.MeshPhysicalMaterial({ color: 0xa3b383, roughness: .28, clearcoat: 1, clearcoatRoughness: .12, sheen: .3, sheenColor: new THREE.Color(0xffffff) });
+  // glazed ceramic stand: round foot, slim stem, cup (all bottom→top)
+  const glaze = new THREE.MeshPhysicalMaterial({ color: o.glaze || 0xa3b383, roughness: .28, clearcoat: 1, clearcoatRoughness: .12, sheen: .3, sheenColor: new THREE.Color(0xffffff) });
   const stand = new THREE.Mesh(new THREE.LatheGeometry([[0, 0], [.5, 0], [.54, .012], [.55, .04], [.52, .07], [.3, .1], [.14, .14], [.075, .2], [.06, .3], [.06, .56], [.075, .6], [.1, .64], [.15, .72], [.18, .8], [.19, .86], [.17, .87], [.11, .8], [.07, .7]].map(([x, y]) => new THREE.Vector2(x, y)), 128), glaze);
   stand.castShadow = true; stand.receiveShadow = true; root.add(stand);
   const lip = new THREE.Mesh(new THREE.TorusGeometry(.182, .012, 16, 96), new THREE.MeshPhysicalMaterial({ color: 0xd8b56a, metalness: 1, roughness: .25 })); lip.rotation.x = Math.PI / 2; lip.position.y = .862; root.add(lip);
