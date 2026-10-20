@@ -75,13 +75,16 @@ nav.main a:hover{color:#fff;background:rgba(255,255,255,.06)}
 .picker{display:flex;flex-direction:column;align-items:center;gap:14px}
 .picker-label{font-size:.75rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
 .comb{position:relative;width:min(360px,80vw);aspect-ratio:1/1.04}
-.hx{position:absolute;width:33.4%;aspect-ratio:1/1.1547;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);background:rgba(244,246,250,.16);border:0;padding:0;cursor:pointer;transition:transform .35s var(--ease),background-color .3s}
-.hx::before{content:"";position:absolute;inset:3px;clip-path:inherit;background:rgba(14,15,18,.92);transition:background-color .3s}
-.hx span{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;font:600 .8125rem/1.15 var(--sans);padding:0 10px}
-.hx svg{width:24px;height:24px;color:var(--gold)}
-.hx:hover{transform:scale(1.05);background:rgba(244,246,250,.5)}
-.hx[aria-pressed="true"]{background:var(--c,#fff);box-shadow:none;transform:scale(1.06)}
-.hx[aria-pressed="true"]::before{background:rgba(14,15,18,.8)}
+.hx{position:absolute;width:33.4%;aspect-ratio:1/1.1547;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);background:linear-gradient(160deg,rgba(227,168,43,.6),rgba(255,255,255,.07) 42%,rgba(255,255,255,.05) 62%,rgba(227,168,43,.3));border:0;padding:0;cursor:pointer;transition:transform .4s var(--ease)}
+.hx::before{content:"";position:absolute;inset:1.5px;clip-path:inherit;background:radial-gradient(circle at 50% 28%,#1e1f24,#0c0d0f 72%);transition:opacity .3s}
+.hx::after{content:"";position:absolute;inset:1.5px;clip-path:inherit;background:radial-gradient(circle at 50% 40%,color-mix(in srgb,var(--c,#fff) 34%,transparent),transparent 70%),#0c0d0f;opacity:0;transition:opacity .35s var(--ease)}
+.hx span{position:absolute;inset:0;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;text-align:center;font:500 .8125rem/1.2 var(--sans);letter-spacing:.01em;color:#E3E6EB;padding:0 12px}
+.hx svg{width:22px;height:22px;color:var(--gold);transition:color .3s}
+.hx .s{display:none}
+.hx:hover{transform:scale(1.04)}
+.hx[aria-pressed="true"]{background:var(--c,#fff);transform:scale(1.05)}
+.hx[aria-pressed="true"]::after{opacity:1}
+.hx[aria-pressed="true"] span{color:#fff;font-weight:600}
 .hx[aria-pressed="true"] svg{color:var(--c,#fff)}
 .hx:nth-child(1){left:16.6%;top:0}.hx:nth-child(2){left:50.2%;top:0}
 .hx:nth-child(3){left:0;top:28.9%}.hx:nth-child(4){left:33.4%;top:28.9%}.hx:nth-child(5){left:66.8%;top:28.9%}
@@ -113,6 +116,7 @@ nav.main a:hover{color:#fff;background:rgba(255,255,255,.06)}
 .heat .mid{text-align:center;max-width:280px}
 .heat .mid h2{font-size:clamp(1.375rem,1.1rem + .9vw,1.875rem)}
 .heat .mid p{font-size:.875rem;color:var(--muted);margin-top:6px}
+.heat .hm{display:none;font-style:normal;font-size:.8125rem;color:#C9CDD5}
 
 /* work */
 .sec{padding:clamp(48px,6vw,80px) 0}
@@ -123,8 +127,8 @@ nav.main a:hover{color:#fff;background:rgba(255,255,255,.06)}
 .job{position:relative;border-radius:14px;overflow:hidden;aspect-ratio:4/4.6;background:#000;border:1px solid var(--line)}
 .job img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--ease)}
 .job:hover img{transform:scale(1.05)}
-.job figcaption{position:absolute;left:10px;right:10px;bottom:10px;background:rgba(10,10,11,.84);backdrop-filter:blur(6px);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:.875rem;color:#D3D7DE}
-.job figcaption b{display:block;font:400 1.0625rem/1.1 var(--head);letter-spacing:.03em;color:#fff;text-transform:uppercase}
+.job figcaption{position:absolute;left:0;right:0;bottom:0;padding:48px 16px 14px;background:linear-gradient(transparent,rgba(6,6,7,.9) 70%);font-size:.8125rem;color:#B9BEC7}
+.job figcaption b{display:block;font:400 1.125rem/1.1 var(--head);letter-spacing:.04em;color:#fff;text-transform:uppercase;margin-bottom:3px}
 
 /* people */
 .people{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:20px;align-items:stretch}
@@ -136,7 +140,7 @@ nav.main a:hover{color:#fff;background:rgba(255,255,255,.06)}
 .q blockquote{margin:0;font-size:1.0625rem;line-height:1.5}
 .q cite{display:block;margin-top:10px;font-style:normal;font-size:.875rem;color:var(--gold)}
 .warranty{display:flex;align-items:center;gap:16px;background:linear-gradient(135deg,#1C1D22,#121316);border:1px solid rgba(227,168,43,.35);border-radius:16px;padding:20px 22px}
-.warranty b{font:400 3rem/1 var(--head);color:var(--gold)}
+.warranty b{font:400 2.5rem/1 var(--head);color:var(--gold);white-space:nowrap}
 .warranty span{color:#D3D7DE}
 
 /* visit */
@@ -178,12 +182,25 @@ footer a:hover{color:var(--gold)}
   .addr-ph{display:none}
   .brand b{font-size:1.3125rem}
   .cta-row .btn{flex:1 1 auto}
-  .comb{width:min(320px,86vw)}
-  .hx span{font-size:.75rem}
-  .hx svg{width:20px;height:20px}
+  .comb{width:min(300px,80vw)}
+  .hx span{font-size:.75rem;gap:5px;padding:0 6px}
+  .hx svg{width:19px;height:19px}
+  .hx .l{display:none}.hx .s{display:inline}
+  .bay::after{background:linear-gradient(rgba(10,10,11,.66),rgba(10,10,11,.86) 34%,rgba(10,10,11,.6) 70%,var(--black))!important}
+  .people .fam{min-height:0;max-height:none;aspect-ratio:4/3}
+  .vcard .cta-row{display:none}
+  .heat-grid{padding:20px}
+  .heat .side b{font-size:2.75rem;margin:4px 0 2px}
+  .heat .side span{display:none}
+  .heat .hm{display:block}
+  .heat .side small{letter-spacing:.12em}
+  .heat .side small::after{content:"";display:block}
+  .heat{padding-bottom:0}
+  .map{min-height:240px}
   .work{grid-template-columns:1fr 1fr;gap:10px}
-  .job figcaption{padding:8px;font-size:.75rem}
-  .job figcaption b{font-size:.9375rem}
+  .job figcaption{padding:36px 10px 10px}
+  .job figcaption span{display:none}
+  .job figcaption b{font-size:.9375rem;margin:0}
   .mbar{display:grid;grid-template-columns:1fr 1fr;gap:8px;position:fixed;left:0;right:0;bottom:0;z-index:30;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:rgba(10,10,11,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line)}
   .mbar .btn{min-height:46px}
   body{padding-bottom:72px}
@@ -244,9 +261,9 @@ footer a:hover{color:var(--gold)}
 <section class="heat">
   <div class="wrap">
     <div class="heat-grid">
-      <div class="side hot"><small>Without tint</small><b>78%</b><span>Up to 78% of the heat gets into your car.</span></div>
+      <div class="side hot"><small>Without tint</small><b>78%</b><span>Up to 78% of the heat gets into your car.</span><em class="hm">heat gets in</em></div>
       <div class="mid"><h2>Ceramic tint blocks heat</h2><p>Less glare, UV blocked, more privacy and a cleaner look.</p></div>
-      <div class="side cool"><small>With ceramic tint</small><b>98%</b><span>Up to 98% of the heat rejected.</span></div>
+      <div class="side cool"><small>Ceramic tint</small><b>98%</b><span>Up to 98% of the heat rejected.</span><em class="hm">heat rejected</em></div>
     </div>
   </div>
 </section>
@@ -255,12 +272,12 @@ footer a:hover{color:var(--gold)}
   <div class="wrap">
     <div class="sec-head"><h2>Out of the bay</h2><p>A few recent jobs. There's plenty more on our Instagram.</p></div>
     <div class="work">
-      <figure class="job" style="margin:0"><img src="img/cybertruck.webp" alt="A Cybertruck in a color-shift green and blue wrap with two matching kids' quads" width="720" height="900" loading="lazy"><figcaption><b>Cybertruck + the quads</b>Wrapped the truck and the kids' toy quads to match.</figcaption></figure>
-      <figure class="job" style="margin:0"><img src="img/s580.webp" alt="A white Mercedes S580 with blacked-out wheels and tinted windows outside the Northside shop" width="720" height="960" loading="lazy"><figcaption><b>Mercedes S580</b>Chrome delete, wheels blacked out, calipers painted, window tint.</figcaption></figure>
-      <figure class="job" style="margin:0"><img src="img/ppf-blue.webp" alt="A Tesla Model S in satin chrome blue PPF under the hex lights" width="560" height="440" loading="lazy"><figcaption><b>Satin chrome blue PPF</b>Color PPF: the shine of a wrap with real protection.</figcaption></figure>
-      <figure class="job" style="margin:0"><img src="img/escalade.webp" alt="A satin black Cadillac Escalade in the Northside bay with the wheel wall behind" width="720" height="900" loading="lazy"><figcaption><b>Escalade in satin black</b>Fresh out under the hex lights.</figcaption></figure>
-      <figure class="job" style="margin:0"><img src="img/corvette.webp" alt="A happy customer sitting by his white Corvette in the Northside bay" width="640" height="800" loading="lazy"><figcaption><b>C8 Corvette</b>"I'm very impressed."</figcaption></figure>
-      <figure class="job" style="margin:0"><img src="img/classic.webp" alt="A burgundy classic coupe on custom wheels" width="720" height="666" loading="lazy"><figcaption><b>Summer upgrade</b>Gave her a little upgrade for the summer.</figcaption></figure>
+      <figure class="job" style="margin:0"><img src="img/cybertruck.webp" alt="A Cybertruck in a color-shift green and blue wrap with two matching kids' quads" width="720" height="900" loading="lazy"><figcaption><b>Cybertruck + the quads</b><span>Wrapped the truck and the kids' toy quads to match.</span></figcaption></figure>
+      <figure class="job" style="margin:0"><img src="img/s580.webp" alt="A white Mercedes S580 with blacked-out wheels and tinted windows outside the Northside shop" width="720" height="960" loading="lazy"><figcaption><b>Mercedes S580</b><span>Chrome delete, wheels blacked out, calipers painted, window tint.</span></figcaption></figure>
+      <figure class="job" style="margin:0"><img src="img/ppf-blue.webp" alt="A Tesla Model S in satin chrome blue PPF under the hex lights" width="560" height="440" loading="lazy"><figcaption><b>Satin chrome blue PPF</b><span>Color PPF: the shine of a wrap with real protection.</span></figcaption></figure>
+      <figure class="job" style="margin:0"><img src="img/escalade.webp" alt="A satin black Cadillac Escalade in the Northside bay with the wheel wall behind" width="720" height="900" loading="lazy"><figcaption><b>Escalade in satin black</b><span>Fresh out under the hex lights.</span></figcaption></figure>
+      <figure class="job" style="margin:0"><img src="img/corvette.webp" alt="A happy customer sitting by his white Corvette in the Northside bay" width="640" height="800" loading="lazy"><figcaption><b>C8 Corvette</b><span>"I'm very impressed."</span></figcaption></figure>
+      <figure class="job" style="margin:0"><img src="img/classic.webp" alt="A burgundy classic coupe on custom wheels" width="720" height="666" loading="lazy"><figcaption><b>Summer upgrade</b><span>Gave her a little upgrade for the summer.</span></figcaption></figure>
     </div>
   </div>
 </section>
@@ -317,22 +334,22 @@ const I = {
   glass:'<path d="M3 18L5 7h14l2 11z"/><path d="M10 10l-2 4 3-1-1 3"/>',
 };
 const SERVICES = [
-  { id:'tint', name:'Window tint', color:'#2F8BFF', wave:0x2f8bff, img:'s580', alt:'A white Mercedes S580 with tinted windows outside the shop',
+  { id:'tint', short:'Tint', name:'Window tint', color:'#2F8BFF', wave:0x2f8bff, img:'s580', alt:'A white Mercedes S580 with tinted windows outside the shop',
     desc:'Ceramic window tint keeps the heat out and the cabin comfortable, from crystal clear to nearly invisible. You pick how dark you want to go.',
     facts:['Ceramic tint rejects up to 98% of the heat','Blocks harmful UV and cuts glare','More privacy and a cleaner look'], cta:'Call about tint' },
-  { id:'wrap', name:'Vinyl wraps', color:'#9B5CFF', wave:'shift', img:'cybertruck', alt:'A Cybertruck in a color-shift wrap with two matching quads',
+  { id:'wrap', short:'Wraps', name:'Vinyl wraps', color:'#9B5CFF', wave:'shift', img:'cybertruck', alt:'A Cybertruck in a color-shift wrap with two matching quads',
     desc:'Full and partial wraps in any finish, including color shift and satin. Midnight Purple on a Model S, chameleon on a Cybertruck, and the kids\' quads to match.',
     facts:['Color shift, satin, gloss and matte','Chrome delete and blackout trim','Done with precision and care'], cta:'Call about a wrap' },
-  { id:'ppf', name:'Paint protection film', color:'#36C2FF', wave:0x36c2ff, img:'ppf-blue', alt:'A Tesla in satin chrome blue PPF',
+  { id:'ppf', short:'PPF', name:'Paint protection film', color:'#36C2FF', wave:0x36c2ff, img:'ppf-blue', alt:'A Tesla in satin chrome blue PPF',
     desc:'Rock chips happen fast on the freeway. PPF stops them before they start, and color PPF gives you the look of a wrap with real protection.',
     facts:['10 year warranty on our PPF','Clear or colored, like satin chrome blue','Front end or full body'], cta:'Call about PPF' },
-  { id:'ceramic', name:'Ceramic coating', color:'#E3A82B', wave:0xe3a82b, img:'escalade', alt:'A satin black Escalade under the hex lights',
+  { id:'ceramic', short:'Ceramic', name:'Ceramic coating', color:'#E3A82B', wave:0xe3a82b, img:'escalade', alt:'A satin black Escalade under the hex lights',
     desc:'A ceramic coating keeps the paint glossy and easier to clean, and pairs well with PPF or a fresh wrap.',
     facts:['Deep gloss that lasts','Easier washing, less grime sticking','Ask about coating with PPF'], cta:'Call about coating' },
-  { id:'wheels', name:'Wheels & tires', color:'#F4F6FA', wave:0xf4f6fa, img:'classic', alt:'A classic coupe on custom wheels',
+  { id:'wheels', short:'Wheels', name:'Wheels & tires', color:'#F4F6FA', wave:0xf4f6fa, img:'classic', alt:'A classic coupe on custom wheels',
     desc:'A full wheel wall in the shop to pick from, plus wheel blackouts and painted calipers to finish the look.',
     facts:['Wheels and tires on site','Wheel blackout and caliper paint','See the wheel wall in person'], cta:'Call about wheels' },
-  { id:'glass', name:'Windshield protection', color:'#D63B3B', wave:0xd63b3b, img:'corvette', alt:'A white Corvette in the bay',
+  { id:'glass', short:'Windshield', name:'Windshield protection', color:'#D63B3B', wave:0xd63b3b, img:'corvette', alt:'A white Corvette in the bay',
     desc:'Rocks fly. A windshield protector film takes the hit so the glass doesn\'t crack.',
     facts:['Protects the windshield from rock hits','Clear, so you won\'t notice it\'s there','Ask about current pricing'], cta:'Call about windshield film' },
 ];
@@ -340,7 +357,7 @@ let sel = 0, bay = null;
 SERVICES.forEach((s, i) => {
   const b = document.createElement('button'); b.type = 'button'; b.className = 'hx'; b.style.setProperty('--c', s.color);
   b.setAttribute('aria-pressed', i === 0); b.setAttribute('aria-label', s.name);
-  b.innerHTML = `<span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${I[s.id]}</svg>${s.name}</span>`;
+  b.innerHTML = `<span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${I[s.id]}</svg><b class="l" style="font:inherit">${s.name}</b><b class="s" style="font:inherit">${s.short}</b></span>`;
   b.addEventListener('click', () => pick(i));
   $('#comb').appendChild(b);
 });
