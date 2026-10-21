@@ -1,4 +1,4 @@
-# Demo Days: one bathroom, path-traced in three states (before / demo day / after).
+# Studline Demo & Haul (ElaSystems concept): one bathroom, path-traced in three states (before / demo day / after).
 # The page wipes between them with a jagged break line as you drag.
 # usage: blender -b -P room.py -- <out_dir> <state: before|demo|after> [samples] [scale] [view: wide|tall]
 import bpy, bmesh, math, random, sys, os
