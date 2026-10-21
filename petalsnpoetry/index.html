@@ -8,12 +8,12 @@
 <meta name="robots" content="noai, noimageai">
 <meta property="og:title" content="Petals & Poetry Cakery and Cafe">
 <meta property="og:description" content="Watch a Matcha In Bloom get made in 3D, then order yours ahead on Ford Rd.">
-<meta property="og:image" content="img/room.webp">
+<meta property="og:image" content="media/bloom-end.webp">
 <meta name="theme-color" content="#8FAAD2">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%238FAAD2'/%3E%3Crect x='19' y='6' width='26' height='52' rx='13' fill='none' stroke='%23fff' stroke-width='2.5'/%3E%3Cpath d='M24 34h16l-3 13H27z' fill='%23fff'/%3E%3Cpath d='M23 33c0-5 4-6 5-9 2 2 4-1 4-4 2 3 4 3 4 6 2 1 5 3 5 7z' fill='%23fff'/%3E%3C/svg%3E">
 <link rel="preload" href="fonts/bodoni.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/figtree.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="modulepreload" href="assets/bloom.js">
+<link rel="preload" href="media/bloom-start.webp" as="image">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"CafeOrCoffeeShop","name":"Petals & Poetry Cakery and Cafe","address":{"@type":"PostalAddress","streetAddress":"18946 Ford Rd","addressLocality":"Detroit","addressRegion":"MI","postalCode":"48228","addressCountry":"US"},"servesCuisine":["Coffee","Matcha","Desserts"],"sameAs":["https://www.instagram.com/petalsnpoetry.cc/"]}
 </script>
@@ -66,7 +66,7 @@ header.site{position:absolute;top:0;left:0;right:0;z-index:20}
 .hdr .btn{min-height:40px;padding:0 18px;margin-left:6px}
 
 /* hero */
-.hero{position:relative;isolation:isolate;overflow:hidden;padding-top:86px;background:radial-gradient(70% 60% at 50% 62%,#EEF3FA 0,#C9D7EC 45%,#9AB3D8 100%)}
+.hero{position:relative;isolation:isolate;overflow:hidden;padding-top:86px;background:radial-gradient(62% 58% at 50% 64%,#DBE4F0 0,#CCD8E9 46%,#A9BBD6 100%)}
 .hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:90px;background:linear-gradient(transparent,var(--cream));z-index:-1}
 .hero-head{text-align:center;max-width:1010px;margin:0 auto;padding:clamp(4px,1.4vh,16px) 20px 0}
 .hero h1{font-size:clamp(1.9rem,1.1rem + 2.6vw,3.375rem);color:var(--ink)}
@@ -74,9 +74,9 @@ header.site{position:absolute;top:0;left:0;right:0;z-index:20}
 .hero .lead{margin:14px auto 0;max-width:56ch;color:var(--ink-2)}
 .cta-row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:20px}
 .stage{position:relative;height:clamp(420px,calc(100svh - 330px),660px);margin-top:4px}
-.stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
-.giant{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%) scale(.92);margin:0;font:italic 400 clamp(5rem,15vw,13rem)/.9 var(--display);color:#fff;white-space:nowrap;opacity:0;pointer-events:none;letter-spacing:-.02em;transition:opacity 1.6s var(--ease),transform 2.4s var(--ease)}
-.stage.done .giant{opacity:.55;transform:translate(-50%,-50%) scale(1)}
+.stage video,.stage .still{position:absolute;left:50%;top:0;height:100%;aspect-ratio:1;transform:translateX(-50%);object-fit:cover;-webkit-mask-image:radial-gradient(closest-side,#000 74%,transparent 100%);mask-image:radial-gradient(closest-side,#000 74%,transparent 100%)}
+.stage .still{opacity:0;transition:opacity .6s}
+.stage.nofilm .still{opacity:1}.stage.nofilm video,.stage.nofilm .hud{display:none}
 .hud{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);display:flex;align-items:center;gap:12px;padding:8px 10px 8px 16px;border-radius:999px;background:rgba(255,255,255,.72);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 10px 30px -18px rgba(34,49,75,.6);font-size:.875rem;color:var(--ink);white-space:nowrap;transition:opacity .5s}
 .hud .dot{width:8px;height:8px;border-radius:50%;background:#FF9A2E;box-shadow:0 0 0 0 rgba(255,154,46,.6);animation:ping 1.4s infinite}
 @keyframes ping{70%{box-shadow:0 0 0 8px rgba(255,154,46,0)}100%{box-shadow:0 0 0 0 rgba(255,154,46,0)}}
@@ -86,8 +86,6 @@ header.site{position:absolute;top:0;left:0;right:0;z-index:20}
 .stage.done .hud .dot{background:var(--matcha);animation:none}
 .stage.done .hud .bar{display:none}
 .stage.done .hud button{display:inline-block}
-.stage .fb{position:absolute;inset:0;display:none;place-items:center}
-.stage.no3d canvas,.stage.no3d .hud{display:none}.stage.no3d .fb{display:grid}
 
 /* sections */
 .sec{padding:clamp(52px,6vw,84px) 0}
@@ -118,23 +116,25 @@ header.site{position:absolute;top:0;left:0;right:0;z-index:20}
 .petals ellipse{transform-origin:60px 60px;animation:turn 18s linear infinite}
 @keyframes turn{to{transform:rotate(360deg)}}
 
-/* menu turntable */
 .menu-sec{background:linear-gradient(180deg,var(--cream),var(--blue-xl) 40%,var(--cream))}
-.table{position:relative;height:clamp(420px,52vw,580px);border-radius:32px;overflow:hidden;background:radial-gradient(80% 70% at 50% 30%,#FFFFFF,#E3EAF5)}
-.table canvas{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:grab}
-.table canvas:active{cursor:grabbing}
-.card{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);width:min(560px,calc(100% - 28px));display:flex;align-items:center;gap:14px;padding:12px 12px 12px 22px;border-radius:22px;background:rgba(255,255,255,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 20px 40px -26px rgba(34,49,75,.6)}
-.card .info{flex:1;min-width:0}
-.card h3{font-size:1.375rem;color:var(--ink);transition:opacity .35s,transform .45s var(--ease)}
-.card p{font-size:.9375rem;color:var(--muted);transition:opacity .35s .05s,transform .45s .05s var(--ease)}
-.card .price{font-weight:700;color:var(--ink)}
-.card.swap h3,.card.swap p{opacity:0;transform:translateY(8px)}
-.arrows{display:flex;gap:6px}
-.arrows button{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:#fff;color:var(--ink);display:grid;place-items:center;cursor:pointer;transition:background-color .25s,transform .25s}
-.arrows button:hover{background:var(--blue-l)}
-.arrows svg{width:18px;height:18px}
-.hint{position:absolute;top:18px;left:50%;transform:translateX(-50%);font-size:.8125rem;color:var(--muted);background:rgba(255,255,255,.7);padding:6px 12px;border-radius:999px;transition:opacity .6s}
-.hint.gone{opacity:0}
+/* product gallery: path-traced stills, the centred card zooms up */
+.rail{display:flex;gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;padding:12px max(20px,calc((100vw - 1160px) / 2)) 22px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.rail::-webkit-scrollbar{display:none}
+.pc{flex:0 0 clamp(250px,28vw,340px);margin:0;scroll-snap-align:center;border-radius:28px;overflow:hidden;background:#b9c9e3;box-shadow:0 30px 50px -34px rgba(34,49,75,.55);transform:scale(.93);opacity:.72;transition:transform .7s var(--ease),opacity .7s var(--ease)}
+.pc.on{transform:none;opacity:1}
+.pc{display:flex;flex-direction:column}
+.pc figcaption{flex:1}
+.pc .ph{overflow:hidden;aspect-ratio:4/5}
+.pc img{width:100%;height:100%;object-fit:cover;transition:transform 1.4s var(--ease)}
+.pc.on img{transform:scale(1.04)}
+.pc figcaption{padding:16px 20px 20px;background:#fff}
+.pc h3{font-size:1.3125rem;color:var(--ink)}
+.pc p{margin-top:4px;font-size:.9375rem;color:var(--muted)}
+.pc b{color:var(--ink)}
+.rail-nav{display:flex;justify-content:center;gap:8px;margin-top:4px}
+.rail-nav button{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:#fff;color:var(--ink);display:grid;place-items:center;cursor:pointer;transition:background-color .25s}
+.rail-nav button:hover{background:var(--blue-l)}
+.rail-nav svg{width:18px;height:18px}
 .list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:22px}
 .list div{background:#fff;border:1px solid var(--line);border-radius:22px;padding:22px 24px}
 .list h3{font-size:1.25rem;margin-bottom:10px}
@@ -202,11 +202,6 @@ footer a{color:var(--ink);text-decoration:none;font-weight:600}
   .hud .bar{width:60px}
   .bento{grid-template-columns:1fr}
   .tile.wide{grid-column:auto}
-  .table{height:440px;border-radius:24px}
-  .card{padding:10px 10px 10px 16px;gap:10px}
-  .card h3{font-size:1.1875rem}
-  .card p{font-size:.875rem}
-  .arrows button{width:38px;height:38px}
   .list{grid-template-columns:1fr}
   .mbar{display:grid;grid-template-columns:1fr 1fr;gap:8px;position:fixed;left:0;right:0;bottom:0;z-index:30;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:rgba(251,249,245,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line)}
   .mbar .btn{min-height:46px;padding:0 12px}
@@ -258,9 +253,8 @@ footer a{color:var(--ink);text-decoration:none;font-weight:600}
     </div>
   </div>
   <div class="stage" id="stage">
-    <p class="giant" aria-hidden="true">in bloom</p>
-    <canvas id="bloom" aria-label="A 3D Matcha In Bloom being built: a glass, milk and matcha, ice, an icing swirl and piped buttercream flowers"></canvas>
-    <div class="fb"><svg viewBox="0 0 160 240" width="170" aria-hidden="true"><path d="M38 60h84l-8 170H46z" fill="#fff" fill-opacity=".5" stroke="#fff"/><path d="M42 130h76l-4 96H46z" fill="#F4F1E8"/><path d="M40 80h80l-2 52H42z" fill="#8FB257"/><path d="M36 62c0-22 22-30 44-30s44 8 44 30z" fill="#FDFAF4"/><circle cx="80" cy="30" r="16" fill="#E8859D"/><circle cx="56" cy="44" r="11" fill="#86A6D6"/><circle cx="104" cy="44" r="10" fill="#C4A9E8"/></svg></div>
+    <video id="film" muted playsinline preload="auto" poster="media/bloom-start.webp" aria-label="A Matcha In Bloom being built in 3D: the glass is modelled, milk and matcha pour in, ice drops, an icing swirl is piped and buttercream flowers are piped on petal by petal"><source src="media/bloom.webm" type="video/webm"><source src="media/bloom.mp4" type="video/mp4"></video>
+    <img class="still" src="media/bloom-end.webp" alt="Matcha In Bloom: an iced matcha latte in a glass with condensation, topped with an icing swirl and piped buttercream roses and blossoms" width="720" height="720">
     <div class="hud" id="hud" aria-live="polite"><span class="dot"></span><span id="step">Modelling the glass</span><span class="bar"><i id="prog"></i></span><button type="button" id="again">Watch again</button></div>
   </div>
 </section>
@@ -284,15 +278,20 @@ footer a{color:var(--ink);text-decoration:none;font-weight:600}
 
 <section class="sec menu-sec" id="menu">
   <div class="wrap">
-    <div class="sec-head rv"><h2>Spin the counter</h2><p>Drag the table to turn it, or use the arrows. Every drink and sweet here is modelled in 3D.</p></div>
-    <div class="table rv" id="table">
-      <canvas id="lineup" aria-label="A round marble table with our drinks and sweets in 3D. Drag to spin it."></canvas>
-      <span class="hint" id="hint">Drag to spin</span>
-      <div class="card" id="card" aria-live="polite">
-        <div class="info"><h3 id="iname">Matcha In Bloom</h3><p id="idesc"><span class="price">$11.00</span> · Creamy matcha topped with piped icing flowers.</p></div>
-        <div class="arrows"><button type="button" id="prev" aria-label="Previous item"><svg aria-hidden="true"><use href="#l"/></svg></button><button type="button" id="next" aria-label="Next item"><svg aria-hidden="true"><use href="#r"/></svg></button></div>
-      </div>
-    </div>
+    <div class="sec-head rv"><h2>The menu, <i>up close</i></h2><p>Every drink and sweet here was modelled and rendered in 3D. Swipe through.</p></div>
+  </div>
+  <div class="rail rv" id="rail">
+      <figure class="pc" data-k="bloom"><div class="ph"><img src="media/p-bloom.webp" srcset="media/p-bloom-s.webp 480w, media/p-bloom.webp 960w" sizes="(max-width:640px) 70vw, 340px" alt="Matcha In Bloom, rendered in 3D" width="960" height="1200" loading="lazy"></div><figcaption><h3>Matcha In Bloom</h3><p><b>$11.00</b> · Creamy matcha topped with piped icing flowers.</p></figcaption></figure>
+      <figure class="pc" data-k="rasp"><div class="ph"><img src="media/p-rasp.webp" srcset="media/p-rasp-s.webp 480w, media/p-rasp.webp 960w" sizes="(max-width:640px) 70vw, 340px" alt="Raspberry Matcha Glow, rendered in 3D" width="960" height="1200" loading="lazy"></div><figcaption><h3>Raspberry Matcha Glow</h3><p><b>$7.50</b> · Matcha with raspberry.</p></figcaption></figure>
+      <figure class="pc" data-k="banana"><div class="ph"><img src="media/p-banana.webp" srcset="media/p-banana-s.webp 480w, media/p-banana.webp 960w" sizes="(max-width:640px) 70vw, 340px" alt="Golden Banana Matcha, rendered in 3D" width="960" height="1200" loading="lazy"></div><figcaption><h3>Golden Banana Matcha</h3><p><b>$7.50</b> · Matcha with banana.</p></figcaption></figure>
+      <figure class="pc" data-k="mango"><div class="ph"><img src="media/p-mango.webp" srcset="media/p-mango-s.webp 480w, media/p-mango.webp 960w" sizes="(max-width:640px) 70vw, 340px" alt="Mango Dragonfruit Refresher, rendered in 3D" width="960" height="1200" loading="lazy"></div><figcaption><h3>Mango Dragonfruit Refresher</h3><p><b>$6.95</b> · A fruity refresher over ice.</p></figcaption></figure>
+      <figure class="pc" data-k="lavender"><div class="ph"><img src="media/p-lavender.webp" srcset="media/p-lavender-s.webp 480w, media/p-lavender.webp 960w" sizes="(max-width:640px) 70vw, 340px" alt="Lavender Breeze Refresher, rendered in 3D" width="960" height="1200" loading="lazy"></div><figcaption><h3>Lavender Breeze Refresher</h3><p><b>$6.95</b> · A light lavender refresher over ice.</p></figcaption></figure>
+      <figure class="pc" data-k="caramel"><div class="ph"><img src="media/p-caramel.webp" srcset="media/p-caramel-s.webp 480w, media/p-caramel.webp 960w" sizes="(max-width:640px) 70vw, 340px" alt="Caramel Dream Latte, rendered in 3D" width="960" height="1200" loading="lazy"></div><figcaption><h3>Caramel Dream Latte</h3><p><b>Lattes from $6.50</b> · An iced latte with caramel.</p></figcaption></figure>
+      <figure class="pc" data-k="cupcake"><div class="ph"><img src="media/p-cupcake.webp" srcset="media/p-cupcake-s.webp 480w, media/p-cupcake.webp 960w" sizes="(max-width:640px) 70vw, 340px" alt="Cupcakes, rendered in 3D" width="960" height="1200" loading="lazy"></div><figcaption><h3>Cupcakes</h3><p><b>In the case</b> · Ask what flavors are in today.</p></figcaption></figure>
+      <figure class="pc" data-k="mangocake"><div class="ph"><img src="media/p-mangocake.webp" srcset="media/p-mangocake-s.webp 480w, media/p-mangocake.webp 960w" sizes="(max-width:640px) 70vw, 340px" alt="Fruit mousse cakes, rendered in 3D" width="960" height="1200" loading="lazy"></div><figcaption><h3>Fruit mousse cakes</h3><p><b>In the case</b> · Shaped like the fruit, filled with a creamy mousse of that same fruit.</p></figcaption></figure>
+  </div>
+  <div class="rail-nav"><button type="button" id="prev" aria-label="Previous item"><svg aria-hidden="true"><use href="#l"/></svg></button><button type="button" id="next" aria-label="Next item"><svg aria-hidden="true"><use href="#r"/></svg></button></div>
+  <div class="wrap">
     <div class="list">
       <div class="rv"><h3>Matcha</h3><dl><dt>Matcha In Bloom</dt><dd>$11.00</dd><dt>Raspberry Matcha Glow</dt><dd>$7.50</dd><dt>Golden Banana Matcha</dt><dd>$7.50</dd><dt>Matcha</dt><dd>$7.00</dd><dt>Dirty chai</dt><dd>$7.00</dd><dt>Chai latte</dt><dd>$6.00</dd></dl></div>
       <div class="rv d2"><h3>Coffee</h3><dl><dt>Lattes (Caramel Dream, Cookie Butter and more)</dt><dd>$6.50–8</dd><dt>Mocha</dt><dd>$6.95</dd><dt>Americano</dt><dd>$5.00</dd><dt>Espresso</dt><dd>$4.00</dd></dl></div>
@@ -307,7 +306,7 @@ footer a{color:var(--ink);text-decoration:none;font-weight:600}
     <div class="rv">
       <p class="q">"What's inside your fruit cakes?"</p>
       <p>It's the question we get asked all the time. Each one is a creamy mousse cake filled with the flavor of the fruit it looks like: strawberry, mango, peach. Then there are the cupcakes, which reviewers call exceptional and beautiful.</p>
-      <p><a class="link" href="#menu" id="seeMango">See the mango cake in 3D</a></p>
+      <p><a class="link" href="#menu" id="seeMango">See the mango cake up close</a></p>
     </div>
     <div class="fruit rv d2" aria-hidden="true"><span></span><span></span><span></span></div>
   </div>
@@ -366,47 +365,32 @@ document.getElementById('yr').textContent = new Date().getFullYear();
   els.forEach(e => io.observe(e));
 })();
 </script>
-<script type="module">
-const gl = (() => { try { const c = document.createElement('canvas'); return !!(c.getContext('webgl2') || c.getContext('webgl')); } catch { return false; } })();
-const stage = document.getElementById('stage'), stepEl = document.getElementById('step'), prog = document.getElementById('prog');
-const ITEMS = {
-  bloom: ['Matcha In Bloom', '$11.00', 'Creamy matcha topped with piped icing flowers.'],
-  rasp: ['Raspberry Matcha Glow', '$7.50', 'Matcha with raspberry.'],
-  banana: ['Golden Banana Matcha', '$7.50', 'Matcha with banana.'],
-  mango: ['Mango Dragonfruit Refresher', '$6.95', 'A fruity refresher over ice.'],
-  lavender: ['Lavender Breeze Refresher', '$6.95', 'A light lavender refresher over ice.'],
-  caramel: ['Caramel Dream Latte', 'Lattes from $6.50', 'An iced latte with caramel.'],
-  cupcake: ['Cupcakes', 'In the case', 'Ask what flavors are in today.'],
-  mangocake: ['Fruit mousse cakes', 'In the case', 'Shaped like the fruit, filled with a creamy mousse of that same fruit.'],
-};
-if (!gl) { stage.classList.add('no3d'); document.getElementById('table').style.display = 'none'; }
-else {
-  import('./assets/bloom.js').then(m => {
-    // hero: the Matcha In Bloom build
-    m.mountBloom(document.getElementById('bloom'), {
-      assets: 'assets/',
-      onStep: (label, p) => { stepEl.textContent = label; prog.style.width = Math.round(p * 100) + '%'; },
-      onDone: () => { stage.classList.add('done'); stepEl.textContent = 'Matcha In Bloom'; },
-    }).then(api => { document.getElementById('again').onclick = () => { stage.classList.remove('done'); api.replay(); }; })
-      .catch(() => stage.classList.add('no3d'));
-    // menu table: only start it when it's close to the screen
-    const table = document.getElementById('table'), card = document.getElementById('card'), hint = document.getElementById('hint');
-    let lineup = null, pending = null;
-    const show = key => {
-      const [n, p, d] = ITEMS[key]; card.classList.add('swap');
-      setTimeout(() => { document.getElementById('iname').textContent = n; document.getElementById('idesc').innerHTML = `<span class="price">${p}</span> · ${d}`; card.classList.remove('swap'); }, 220);
-    };
-    const start = () => m.mountLineup(document.getElementById('lineup'), { assets: 'assets/', onChange: (i, key) => show(key) }).then(api => {
-      lineup = api; if (pending !== null) api.go(pending);
-      document.getElementById('prev').onclick = () => { api.prev(); hint.classList.add('gone'); };
-      document.getElementById('next').onclick = () => { api.next(); hint.classList.add('gone'); };
-      document.getElementById('lineup').addEventListener('pointerdown', () => hint.classList.add('gone'));
-    }).catch(() => { table.style.display = 'none'; });
-    const io = new IntersectionObserver(es => { if (es[0].isIntersecting) { io.disconnect(); start(); } }, { rootMargin: '600px 0px' });
-    io.observe(table);
-    document.getElementById('seeMango').addEventListener('click', () => { if (lineup) lineup.go(7); else pending = 7; });
-  }).catch(() => { stage.classList.add('no3d'); document.getElementById('table').style.display = 'none'; });
-}
+<script>
+// hero: the path-traced build, with the step pill following the film
+(() => {
+  const stage = document.getElementById('stage'), v = document.getElementById('film'), stepEl = document.getElementById('step'), prog = document.getElementById('prog');
+  const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const FPS = 24, PET0 = 78 / FPS, PEND = 169 / FPS, PETALS = 92;
+  const steps = [[0, 'Modelling the glass'], [.45, 'Shading'], [.85, 'Pouring milk and matcha'], [1.3, 'Adding ice'], [2.25, 'Piping the icing swirl'], [PET0, 'petals'], [PEND + .1, 'Sugar pearls'], [8.2, 'Matcha In Bloom']];
+  const label = t => { let l = steps[0][1]; for (const [s, n] of steps) if (t >= s) l = n; return l === 'petals' ? `Piping petal ${Math.min(PETALS, Math.max(1, Math.round((t - PET0) / (PEND - PET0) * PETALS)))} of ${PETALS}` : l; };
+  const done = () => { stage.classList.add('done'); stepEl.textContent = 'Matcha In Bloom'; };
+  if (RM) { stage.classList.add('nofilm'); return; }
+  const tick = () => { if (!v.duration) return; stepEl.textContent = label(v.currentTime); prog.style.width = (v.currentTime / v.duration * 100) + '%'; };
+  v.addEventListener('timeupdate', tick); v.addEventListener('ended', done);
+  v.addEventListener('error', () => stage.classList.add('nofilm'), true);
+  document.getElementById('again').onclick = () => { stage.classList.remove('done'); v.currentTime = 0; v.play(); };
+  // play when the hero is on screen
+  new IntersectionObserver(es => { if (es[0].isIntersecting && !stage.classList.contains('done')) v.play().catch(() => stage.classList.add('nofilm')); else if (!es[0].isIntersecting) v.pause(); }, { threshold: .25 }).observe(stage);
+})();
+// menu gallery: the card in the middle zooms up
+(() => {
+  const rail = document.getElementById('rail'), cards = [...rail.querySelectorAll('.pc')];
+  const io = new IntersectionObserver(es => es.forEach(e => e.target.classList.toggle('on', e.intersectionRatio > .65)), { root: rail, threshold: [0, .65, 1] });
+  cards.forEach(c => io.observe(c));
+  const step = dir => { const w = cards[0].getBoundingClientRect().width + 18; rail.scrollBy({ left: dir * w, behavior: 'smooth' }); };
+  document.getElementById('prev').onclick = () => step(-1); document.getElementById('next').onclick = () => step(1);
+  document.getElementById('seeMango').addEventListener('click', () => setTimeout(() => { const c = rail.querySelector('[data-k="mangocake"]'); rail.scrollTo({ left: c.offsetLeft - (rail.clientWidth - c.clientWidth) / 2, behavior: 'smooth' }); }, 500));
+})();
 </script>
 </body>
 </html>
