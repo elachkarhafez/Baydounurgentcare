@@ -62,8 +62,8 @@ header.site{position:absolute;top:0;left:0;right:0;z-index:20}
 .kick{font:600 1.25rem/1 var(--display);font-style:italic;color:var(--gold)}
 .hero h1{margin-top:8px;font-size:clamp(2.25rem,1.4rem + 2.5vw,3.5rem)}
 .hero .lead{margin:12px auto 0;max-width:52ch;color:var(--muted)}
-.stage{position:relative;height:clamp(420px,calc(100svh - 300px),660px);margin-top:4px;touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:none}
-.frame{position:absolute;left:50%;top:0;height:100%;transform:translateX(-50%);aspect-ratio:1800/1000;max-width:none}
+.stage{position:relative;height:clamp(420px,calc(100svh - 300px),700px);margin-top:4px;touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:none}
+.frame{position:absolute;left:50%;top:0;height:calc(100% - 64px);transform:translateX(-50%);aspect-ratio:1800/1000;max-width:none}
 .frame::before{content:"";position:absolute;left:30%;right:30%;bottom:-2%;height:16%;border-radius:50%;background:radial-gradient(closest-side,rgba(8,4,2,.75),rgba(8,4,2,0));pointer-events:none}
 .frame img,.frame canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none}
 .sieve{position:absolute;left:0;top:0;width:86px;height:86px;margin:-43px 0 0 -43px;pointer-events:none;opacity:0;transition:opacity .3s;z-index:3}
@@ -73,7 +73,7 @@ header.site{position:absolute;top:0;left:0;right:0;z-index:20}
 .ctrls button[aria-pressed="true"]{background:var(--cream);color:var(--espresso)}
 .ctrls .sep{width:1px;height:20px;background:var(--line)}
 .ctrls .all{color:var(--gold)}
-.hint{position:absolute;left:50%;top:10px;transform:translateX(-50%);font-size:.8125rem;color:var(--muted);transition:opacity .5s;pointer-events:none;white-space:nowrap}
+.hint{position:absolute;left:50%;bottom:70px;z-index:4;transform:translateX(-50%);font-size:.8125rem;color:var(--muted);transition:opacity .5s;pointer-events:none;white-space:nowrap}
 .hint.gone{opacity:0}
 
 /* sections */
@@ -112,7 +112,7 @@ header.site{position:absolute;top:0;left:0;right:0;z-index:20}
 .matcha .ph{border-radius:20px}
 
 .book{text-align:center;max-width:720px;margin:0 auto}
-.book h2{font-size:clamp(2rem,1.3rem + 2vw,3rem)}
+.book h2{font-size:clamp(1.75rem,1.2rem + 1.6vw,2.5rem)}
 .book p{margin:14px auto 0;color:var(--muted);max-width:50ch}
 .book .cta{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:24px}
 footer{padding:26px 0 30px;color:var(--muted);font-size:.875rem;border-top:1px solid var(--line)}
@@ -167,7 +167,7 @@ footer a{color:var(--cream);text-decoration:none;font-weight:700}
   <div class="hero-head">
     <p class="kick">Champagne tower &lt; tiramisu tower</p>
     <h1>A tower of tiramisu, <i>dusted with your name.</i></h1>
-    <p class="lead">Tiramisu served in polished coupes, stacked tall and finished with cocoa or matcha at your event in Los Angeles. Sift the cocoa below.</p>
+    <p class="lead">Tiramisu served in polished coupes, stacked tall and finished with cocoa or matcha at your event in Los Angeles. Drag across the tower below to sift the cocoa.</p>
   </div>
   <div class="stage" id="stage" aria-label="A tower of tiramisu coupes. Drag across it to sift cocoa over the tops and reveal the NUVÉ stencil.">
     <div class="frame" id="frame">
@@ -175,7 +175,7 @@ footer a{color:var(--cream);text-decoration:none;font-weight:700}
       <canvas id="dust"></canvas>
     </div>
     <svg class="sieve" id="sieve" viewBox="0 0 86 86" aria-hidden="true"><circle cx="43" cy="43" r="30" fill="rgba(35,20,12,.25)" stroke="#C9A36A" stroke-width="2"/><circle cx="43" cy="43" r="25" fill="none" stroke="rgba(244,236,223,.55)" stroke-width="1" stroke-dasharray="1.5 2.5"/><path d="M73 43h12" stroke="#C9A36A" stroke-width="3" stroke-linecap="round"/></svg>
-    <span class="hint" id="hint">Drag across the tower to dust it</span>
+    <span class="hint" id="hint" hidden></span>
     <div class="ctrls" role="group" aria-label="Dusting">
       <button type="button" id="cocoa" aria-pressed="true">Cocoa</button>
       <button type="button" id="matchaBtn" aria-pressed="false">Matcha</button>
@@ -270,7 +270,7 @@ document.getElementById('yr').textContent = new Date().getFullYear();
   function dab(x, y, r) {
     // a soft core plus a spray of grains, so the edge looks sifted, not painted
     const g = mctx.createRadialGradient(x, y, 0, x, y, r);
-    g.addColorStop(0, 'rgba(0,0,0,.55)'); g.addColorStop(.6, 'rgba(0,0,0,.25)'); g.addColorStop(1, 'rgba(0,0,0,0)');
+    g.addColorStop(0, 'rgba(0,0,0,.85)'); g.addColorStop(.6, 'rgba(0,0,0,.45)'); g.addColorStop(1, 'rgba(0,0,0,0)');
     mctx.fillStyle = g; mctx.beginPath(); mctx.arc(x, y, r, 0, 6.283); mctx.fill();
     mctx.fillStyle = 'rgba(0,0,0,.9)';
     for (let i = 0; i < 26; i++) { const a = Math.random() * 6.283, d = Math.sqrt(Math.random()) * r * 1.15; mctx.fillRect(x + Math.cos(a) * d, y + Math.sin(a) * d, 1.6, 1.6); }
@@ -301,7 +301,7 @@ document.getElementById('yr').textContent = new Date().getFullYear();
   const toLocal = (cx, cy) => { const r = frame.getBoundingClientRect(), k = cv.width / r.width; return [(cx - r.left) * k, (cy - r.top) * k]; };
   let down = false, px = 0, py = 0;
   function paint(cx, cy) {
-    const [x, y] = toLocal(cx, cy), r = Math.max(26, cv.width * .035);
+    const [x, y] = toLocal(cx, cy), r = Math.max(30, cv.width * .045);
     if (down) { const dx = x - px, dy = y - py, n = Math.max(1, Math.ceil(Math.hypot(dx, dy) / (r * .35))); for (let i = 1; i <= n; i++) dab(px + dx * i / n, py + dy * i / n, r); }
     else dab(x, y, r);
     px = x; py = y;
@@ -318,17 +318,17 @@ document.getElementById('yr').textContent = new Date().getFullYear();
   const setFlavor = f => { flavor = f; document.getElementById('cocoa').setAttribute('aria-pressed', f === 'cocoa'); document.getElementById('matchaBtn').setAttribute('aria-pressed', f === 'matcha'); load(f); dirty = true; kick(); };
   document.getElementById('cocoa').onclick = () => setFlavor('cocoa');
   document.getElementById('matchaBtn').onclick = () => setFlavor('matcha');
-  document.getElementById('all').onclick = () => { stopDemo(); hint.classList.add('gone'); fullTarget = 1; kick(); };
+  document.getElementById('all').onclick = () => { stopDemo(); sieve.classList.remove('on'); hint.classList.add('gone'); fullTarget = 1; kick(); };
   // one sifting pass on load so people see what happens
   let demo = null;
   function stopDemo() { if (demo) { cancelAnimationFrame(demo); demo = null; sieve.classList.remove('on'); } }
   function runDemo() {
     if (RM) { fullTarget = 1; kick(); return; }
-    const t0 = performance.now(), D = 2600, fr = frame.getBoundingClientRect();
+    const t0 = performance.now(), D = 3400, fr = frame.getBoundingClientRect();
     down = false; sieve.classList.add('on');
     const step = now => {
       const t = Math.min(1, (now - t0) / D), r = frame.getBoundingClientRect();
-      const cx = r.left + r.width * (.5 + .16 * Math.sin(t * Math.PI * 3)), cy = r.top + r.height * (.3 + .42 * t);
+      const cx = r.left + r.width * (.5 + (.06 + .13 * t) * Math.sin(t * Math.PI * 5)), cy = r.top + r.height * (.08 + .82 * t);
       moveSieve(cx, cy); paint(cx, cy); down = true;
       if (t < 1) demo = requestAnimationFrame(step); else { demo = null; down = false; sieve.classList.remove('on'); }
     };
