@@ -41,13 +41,22 @@ The user said the sites were getting "repetitive and boring, they aren't evolvin
 - **Log the build** in `novelty.md` after shipping.
 
 
-## Standing rule: professional, clean, animated design (no gimmicks)
+## Standing rule: Apple-style house standard (consistency, no gimmicks, no bland)
 
-The user said (overrides the "signature interaction" / toy approach): "Enough with the gimmicks from now on I just want stuff that are professional, but clean, animated with creative designs, not creative gimmicks."
-- Put the creativity in the design: layout, typography, photography, composition, colour, and smooth, tasteful motion (reveals, parallax, transitions, hover states, page-load choreography).
-- No interactive toys or gimmick mechanics: no load-the-bar, roll-the-logo, press-the-shutter, sift, drag-to-X, mini-games or scroll-scrubbed films as the main idea.
-- Don't pitch three gimmick directions any more. Build a polished, professional site that is easy to navigate. Pitch only if a real design choice needs the user's call, and pitch design directions, not mechanics.
-- Real 3D/renders are still fine as visual design (hero imagery, product stills), but never as a toy.
+The user said: "its either stupid gimmicks or its bland and ai slop, cant you make something with clean apple style animations with blender 3d rendered animations scroll based designs that are professional like apple and top creator websites instead? ... I need consistency". This replaces the older "no gimmicks" rule and the format/three-direction pitching in "keep evolving" below.
+- **Every site uses the same anatomy**, from `.claude/skills/ela-studio/kit/scrollfilm/README.md`:
+  1. thin nav
+  2. a pinned scroll film rendered in Blender (Cycles, through the performance engine) with an opening card and three captions
+  3. a ScrollGrow real photo
+  4. a ScrollWords statement
+  5. a bento mixing film stills and real photos
+  6. steps, a centered CTA, and the footer
+- Inline the player and helpers from `kit/scrollfilm/scrollfilm.js`.
+- Consistency comes from that anatomy and the motion. Variety comes from the film itself (subject, light, story), the brand colour and the photography.
+- Toys stay banned: no mini-games, drag/hold meters, or click-to-play mechanics. The scroll film is the one animated idea, and it must look like a product film, not a demo.
+- The quality bar is a still from the film looking like an ad frame. Preview key frames (`bpe run -m quality`), fix anything muddy, blotchy or fake-looking before the final render, and never ship a render you wouldn't screenshot.
+- Smoothness is part of the standard: decoded frames, nearest-frame drawing, a DPR cap, no backdrop-filter or animated grain over the canvas. Measure about 16.7 ms per frame before shipping.
+- Don't pitch three directions any more. Build to this standard, and ask only when a real content choice needs the user.
 - Formatting standards, copy rules, bot blocking, QA and logging all still apply.
 
 ## Standing rule: formatting standards (mandatory acceptance criteria)
