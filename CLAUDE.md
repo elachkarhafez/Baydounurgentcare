@@ -41,6 +41,15 @@ The user said the sites were getting "repetitive and boring, they aren't evolvin
 - **Log the build** in `novelty.md` after shipping.
 
 
+## Standing rule: professional, clean, animated design (no gimmicks)
+
+The user said (overrides the "signature interaction" / toy approach): "Enough with the gimmicks from now on I just want stuff that are professional, but clean, animated with creative designs, not creative gimmicks."
+- Put the creativity in the design: layout, typography, photography, composition, colour, and smooth, tasteful motion (reveals, parallax, transitions, hover states, page-load choreography).
+- No interactive toys or gimmick mechanics: no load-the-bar, roll-the-logo, press-the-shutter, sift, drag-to-X, mini-games or scroll-scrubbed films as the main idea.
+- Don't pitch three gimmick directions any more. Build a polished, professional site that is easy to navigate. Pitch only if a real design choice needs the user's call, and pitch design directions, not mechanics.
+- Real 3D/renders are still fine as visual design (hero imagery, product stills), but never as a toy.
+- Formatting standards, copy rules, bot blocking, QA and logging all still apply.
+
 ## Standing rule: formatting standards (mandatory acceptance criteria)
 
 Every site, new or edited, follows `.claude/skills/ela-studio/references/formatting.md`. The user called out oversized type, huge heroes and too much scrolling. In short:

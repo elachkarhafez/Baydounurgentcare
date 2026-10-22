@@ -5,6 +5,8 @@ description: Build a standout, animated, single-file marketing website for a loc
 
 # ElaSystems Studio: niche websites that people screenshot
 
+> **Professional, not gimmicky (user feedback, newest, overrides the toy/signature-interaction guidance below).** The user said: "Enough with the gimmicks from now on I just want stuff that are professional, but clean, animated with creative designs, not creative gimmicks." Build polished, easy-to-navigate sites whose creativity is in layout, type, photography and smooth motion. No interactive toys, mini-games or mechanic-led heroes, and stop pitching three gimmick directions.
+
 > **Evolve, don't repeat (user feedback, read first).** The user called the sites "repetitive and boring, they aren't evolving". Every build had become the same page: headline left with a 3D object right, a hold/drag-to-fill meter toy, a four-step pinned story, a calculator, a marquee and a letterbox intro. From now on, every build starts by picking a **format** from `references/formats.md`, passes the cooldown bans checked against `references/novelty.md`, and pitches **three different directions** to the user before building (Phase 3). Novelty is part of the job, not a bonus.
 
 > **Formatting standards (mandatory, user feedback).** Oversized type, huge heroes and extra scrolling are defects. Every build and edit meets `references/formatting.md`: hero headline 40–56px desktop / 30–38px mobile, section padding 48–80px, container 1100–1200px, and the hero fully visible at 1366×768. Before shipping, take screenshots at 1366×768, 1440×900, 1920×1080, 390×844 and 768×1024.
