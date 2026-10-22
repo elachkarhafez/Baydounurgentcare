@@ -49,46 +49,76 @@ section[id]{scroll-margin-top:16px}
 .btn-l{border-color:rgba(255,255,255,.28);color:var(--ink)}
 .btn-l:hover{border-color:var(--ink);background:rgba(255,255,255,.05)}
 
+
+/* intro: the logo sweeps in, then the screen wipes up into the site */
+.intro{display:none}
+.has-intro .intro{display:grid;position:fixed;inset:0;z-index:100;place-items:center;background:radial-gradient(50% 45% at 50% 52%,rgba(242,145,27,.14),transparent 70%),#0b0b0d;animation:introOut .55s var(--ease) 1.3s forwards;cursor:pointer}
+.intro svg{width:min(440px,72vw);overflow:visible;animation:logoUp .55s var(--ease) 1.3s forwards}
+.intro .ib{stroke-dasharray:260;stroke-dashoffset:260;animation:draw .55s cubic-bezier(.6,0,.2,1) .1s forwards}
+.intro .pl{opacity:0;transform-box:fill-box;transform-origin:50% 100%;animation:drop .42s cubic-bezier(.3,1.5,.5,1) forwards}
+.intro .pl.a{animation-delay:.45s}.intro .pl.b{animation-delay:.52s}.intro .pl.c{animation-delay:.45s}.intro .pl.d{animation-delay:.52s}
+.intro .rtb{clip-path:inset(0 100% 0 0);animation:wipe .5s cubic-bezier(.6,0,.2,1) .55s forwards}
+.intro .shine{clip-path:inset(0 100% 0 0);animation:wipe .5s cubic-bezier(.6,0,.2,1) .55s forwards}
+.intro .gym{opacity:0;letter-spacing:30px;animation:gym .6s var(--ease) .8s forwards}
+.intro .skip{position:absolute;right:20px;bottom:18px;border:0;background:none;color:#77746e;font:600 .8125rem/1 var(--cond);letter-spacing:.14em;text-transform:uppercase;cursor:pointer}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes drop{0%{opacity:0;transform:translateY(-34px)}60%{opacity:1}100%{opacity:1;transform:none}}
+@keyframes wipe{to{clip-path:inset(0 0 0 0)}}
+@keyframes gym{to{opacity:1;letter-spacing:10px}}
+@keyframes logoUp{to{transform:translateY(-6vh) scale(.92);opacity:0}}
+@keyframes introOut{to{clip-path:inset(0 0 100% 0);visibility:hidden}}
+.has-intro .intro{clip-path:inset(0 0 0 0)}
+/* hero copy arrives after the intro */
+.js .hero-head>*,.js .rack,.js .load{opacity:0;transform:translateY(16px);transition:opacity .7s var(--ease),transform .8s var(--ease)}
+.js.ready .hero-head>*,.js.ready .rack,.js.ready .load{opacity:1;transform:none}
+.js.ready .hero-head>:nth-child(2){transition-delay:.06s}.js.ready .hero-head>:nth-child(3){transition-delay:.12s}.js.ready .hero-head>:nth-child(4){transition-delay:.18s}
+.js.ready .rack{transition-delay:.22s}.js.ready .load{transition-delay:.3s}
+
 /* header */
-header.site{position:absolute;top:0;left:0;right:0;z-index:20}
-.hdr{display:flex;align-items:center;justify-content:space-between;gap:20px;min-height:78px}
+header.site{position:fixed;top:0;left:0;right:0;z-index:40;transition:background-color .35s,border-color .35s,backdrop-filter .35s;border-bottom:1px solid transparent}
+header.site.solid{background:rgba(14,14,16,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom-color:var(--line)}
+.hdr{display:flex;align-items:center;justify-content:space-between;gap:20px;min-height:76px;transition:min-height .35s var(--ease)}
+header.solid .hdr{min-height:62px}
 .logo{display:flex;align-items:center;text-decoration:none}
-.logo svg{width:150px;height:auto}
+.logo svg{width:138px;height:auto;transition:width .35s var(--ease)}
+header.solid .logo svg{width:116px}
 .hdr nav{display:flex;align-items:center;gap:4px}
 .hdr nav a.txt{padding:8px 12px;text-decoration:none;color:#d9d6cf;font:600 1.0625rem/1 var(--cond);letter-spacing:.08em;text-transform:uppercase;border-radius:4px;transition:color .2s}
 .hdr nav a.txt:hover{color:var(--orange)}
 .hdr .btn{min-height:42px;margin-left:8px}
 
 /* hero */
-.hero{position:relative;overflow:hidden;padding-top:96px;background:radial-gradient(60% 55% at 50% 72%,rgba(242,145,27,.16) 0,rgba(242,145,27,0) 60%),linear-gradient(180deg,#121214,#0E0E10)}
+.hero{position:relative;overflow:hidden;padding-top:88px;background:radial-gradient(60% 55% at 50% 72%,rgba(242,145,27,.16) 0,rgba(242,145,27,0) 60%),linear-gradient(180deg,#121214,#0E0E10)}
 .hero::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(255,255,255,.025) 0 1px,transparent 1px 120px);pointer-events:none}
 .hero-head{position:relative;text-align:center;max-width:960px;margin:0 auto;padding:0 20px}
-.since{display:inline-flex;align-items:center;gap:12px;font:400 .875rem/1 var(--varsity);color:var(--orange);letter-spacing:.06em}
-.since::before,.since::after{content:"";width:34px;height:2px;background:var(--orange)}
-.hero h1{margin-top:14px;font-size:clamp(2.5rem,1.6rem + 2.6vw,3.5rem)}
+.chip{display:inline-flex;align-items:center;gap:9px;padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.04);font:600 .9375rem/1 var(--cond);letter-spacing:.1em;text-transform:uppercase;color:#d9d6cf}
+.chip i{width:8px;height:8px;border-radius:50%;background:#47c26b;box-shadow:0 0 0 0 rgba(71,194,107,.6);animation:ping 1.6s infinite}
+.chip.closed i{background:#e0543a;animation:none}
+.chip b{color:var(--ink);font-weight:800}
+.hero h1{margin-top:18px;font-size:clamp(2.5rem,1.6rem + 2.6vw,3.5rem);text-wrap:balance;max-width:32ch;margin-inline:auto}
 .hero h1 .v{font-family:var(--varsity);font-weight:400;color:var(--orange)}
 .hero .lead{margin:12px auto 0;max-width:56ch;color:var(--muted)}
 .cta-row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:20px}
 
 /* the bar */
-.rack{position:relative;height:clamp(300px,calc(100svh - 470px),470px);margin-top:4px}
+.rack{position:relative;height:clamp(250px,calc(100svh - 470px),440px);margin-top:0}
 .rack .bar{position:absolute;inset:0;display:grid;place-items:center;cursor:pointer}
-.rack img{position:absolute;left:50%;top:50%;width:min(1040px,94vw);max-width:none;transform:translate(-50%,-50%);opacity:0;transition:opacity .28s linear;pointer-events:none}
+.rack img{position:absolute;left:50%;top:50%;width:min(980px,90vw,calc((100svh - 470px) * 2.6));min-width:min(640px,94vw);max-width:none;transform:translate(-50%,-50%);opacity:0;transition:opacity .28s linear;pointer-events:none}
 .rack img.on{opacity:1}
 .rack .bar.thud img.on{animation:thud .42s var(--ease)}
 @keyframes thud{0%{transform:translate(-50%,-50%)}30%{transform:translate(-50%,-48.6%)}60%{transform:translate(-50%,-50.4%)}100%{transform:translate(-50%,-50%)}}
 .stamp{position:absolute;left:50%;top:6%;transform:translateX(-50%) rotate(-6deg) scale(1.6);font:400 clamp(1.5rem,1rem + 2vw,2.5rem)/1 var(--varsity);color:var(--orange);border:3px solid var(--orange);padding:8px 16px 6px;border-radius:6px;opacity:0;pointer-events:none;transition:opacity .2s,transform .35s var(--ease);white-space:nowrap;text-shadow:0 2px 0 #000}
 .stamp.on{opacity:1;transform:translateX(-50%) rotate(-6deg) scale(1)}
-.load{position:relative;display:flex;align-items:center;justify-content:center;gap:14px;margin:0 auto;padding:0 0 26px;flex-wrap:wrap}
-.read{display:flex;align-items:baseline;gap:8px;min-width:190px;justify-content:center}
-.read b{font:800 clamp(2.5rem,2rem + 1.6vw,3.5rem)/1 var(--cond);font-variant-numeric:tabular-nums;letter-spacing:.01em}
+.load{position:relative;display:flex;align-items:center;justify-content:center;gap:6px;width:max-content;max-width:calc(100% - 32px);margin:0 auto 26px;padding:6px;border-radius:12px;border:1px solid var(--line);background:rgba(22,22,26,.85);backdrop-filter:blur(8px)}
+.read{display:flex;align-items:baseline;gap:8px;min-width:170px;justify-content:center}
+.read b{font:800 clamp(2rem,1.7rem + 1vw,2.6rem)/1 var(--cond);font-variant-numeric:tabular-nums;letter-spacing:.01em}
 .read span{font:600 1.125rem/1 var(--cond);letter-spacing:.12em;color:var(--muted)}
-.load button{min-height:48px;padding:0 18px;border-radius:6px;border:2px solid rgba(255,255,255,.22);background:var(--bg-2);color:var(--ink);font:800 1rem/1 var(--cond);letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:border-color .2s,background-color .2s,transform .15s}
+.load button{min-height:46px;padding:0 18px;border-radius:8px;border:1px solid rgba(255,255,255,.16);background:var(--bg-3);color:var(--ink);font:800 1rem/1 var(--cond);letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:border-color .2s,background-color .2s,transform .15s}
 .load button:hover{border-color:var(--orange)}
 .load button:active{transform:scale(.97)}
 .load button.add{background:var(--orange);border-color:var(--orange);color:#120a02}
 .load button:disabled{opacity:.35;cursor:default}
-.plates{display:flex;gap:4px}
+.plates{display:flex;gap:4px;padding:0 10px 0 6px}
 .plates i{width:7px;height:22px;border-radius:2px;background:rgba(255,255,255,.14);transition:background-color .2s}
 .plates i.on{background:var(--orange)}
 
@@ -102,26 +132,33 @@ header.site{position:absolute;top:0;left:0;right:0;z-index:20}
 .stat span{display:block;margin-top:6px;color:var(--muted);font-size:.9375rem}
 
 .sec{padding:clamp(52px,6vw,84px) 0}
-.sec-head{max-width:680px;margin-bottom:30px}
+.sec-head{display:flex;justify-content:space-between;align-items:end;gap:16px 40px;flex-wrap:wrap;margin-bottom:30px}
+.sec-head p{max-width:46ch}
 .sec-head h2,.split h2,.visit h2{font-size:clamp(1.75rem,1.3rem + 1.4vw,2.5rem)}
-.sec-head p{margin-top:10px;color:var(--muted)}
-.kick{font:400 .8125rem/1 var(--varsity);color:var(--orange);letter-spacing:.08em;display:block;margin-bottom:10px}
-.rv{opacity:0;transform:translateY(18px);transition:opacity .8s var(--ease),transform 1s var(--ease)}
-.rv.on{opacity:1;transform:none}
+.sec-head p{color:var(--muted)}
+.js .rv{opacity:0;transform:translateY(22px);transition:opacity .8s var(--ease),transform 1s var(--ease)}
+.js .rv.on{opacity:1;transform:none}
+.js figure.rv,.js .ph.rv{opacity:1;transform:none;clip-path:inset(14% 0 0 0 round 10px);transition:clip-path 1.1s var(--ease)}
+.js figure.rv img,.js .ph.rv img{transform:scale(1.14);transition:transform 1.6s var(--ease),filter .5s}
+.js figure.rv.on,.js .ph.rv.on{clip-path:inset(0 0 0 0 round 10px)}
+.js figure.rv.on img,.js .ph.rv.on img{transform:scale(1)}
 .rv.d2{transition-delay:.1s}.rv.d3{transition-delay:.2s}.rv.d4{transition-delay:.3s}
 
 /* floor gallery */
 .floor{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-auto-rows:160px;gap:12px}
 .floor figure{margin:0;position:relative;border-radius:10px;overflow:hidden;background:var(--bg-3)}
 .floor img{width:100%;height:100%;object-fit:cover;filter:grayscale(.25) contrast(1.05);transition:transform 1.2s var(--ease),filter .5s}
-.floor figure:hover img{transform:scale(1.05);filter:none}
+.floor figure.on:hover img{transform:scale(1.05);filter:none}
 .floor figcaption{position:absolute;left:12px;bottom:10px;font:800 .9375rem/1 var(--cond);letter-spacing:.08em;text-transform:uppercase;background:rgba(14,14,16,.82);padding:7px 10px;border-radius:4px}
 .f1{grid-column:span 4;grid-row:span 2}.f2{grid-column:span 2;grid-row:span 2}.f3{grid-column:span 2;grid-row:span 2}.f4{grid-column:span 2;grid-row:span 2}.f5{grid-column:span 2;grid-row:span 2}
 
 /* code: their sayings on painted signs */
 .code{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
 .sign{position:relative;padding:30px 26px 26px;border-radius:10px;background:var(--bg-2);border:1px solid var(--line);overflow:hidden}
-.sign::before{content:"";position:absolute;inset:0 0 auto;height:6px;background:repeating-linear-gradient(135deg,var(--orange) 0 12px,#111 12px 24px)}
+.sign{transition:border-color .3s,transform .4s var(--ease)}
+.sign:hover{border-color:rgba(242,145,27,.5);transform:translateY(-3px)}
+.sign .n{display:block;font:800 .875rem/1 var(--cond);letter-spacing:.14em;color:var(--orange);margin-bottom:14px}
+.sign::before{content:"";position:absolute;inset:0 0 auto;height:4px;background:repeating-linear-gradient(135deg,var(--orange) 0 12px,#111 12px 24px)}
 .sign h3{font:400 clamp(1.375rem,1.1rem + .8vw,1.75rem)/1.1 var(--varsity);text-transform:uppercase;color:var(--ink)}
 .sign p{margin-top:10px;color:var(--muted)}
 
@@ -171,20 +208,37 @@ footer a{color:var(--ink);text-decoration:none;font-weight:600}
   .load{gap:10px}
   .load .lbl{display:none}
   .hero .cta-row .btn-l,.plates{display:none}
-  .since::before,.since::after{width:16px}
+  .chip{font-size:.8125rem}
+  .load{margin-bottom:22px}
   .read{min-width:150px}
   .mbar{display:grid;grid-template-columns:1fr 1fr;gap:8px;position:fixed;left:0;right:0;bottom:0;z-index:30;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:rgba(14,14,16,.95);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line)}
   .mbar .btn{min-height:46px}
   body{padding-bottom:72px}
 }
-@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}html{scroll-behavior:auto}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.js .rv,.js .hero-head>*,.js .rack,.js .load{opacity:1!important;transform:none!important;clip-path:none!important}.js .rv img{transform:none!important}.intro{display:none!important}html{scroll-behavior:auto}}
 </style>
 </head>
 <body>
+<script>
+/* decide before first paint: JS on, and whether the intro plays (once per visit, never with reduced motion) */
+(function(){var d=document.documentElement;d.classList.add('js');var rm=matchMedia('(prefers-reduced-motion: reduce)').matches,seen=false;try{seen=sessionStorage.getItem('rtbIntro')==='1'}catch(e){}if(!rm&&!seen)d.classList.add('has-intro');else d.classList.add('ready');setTimeout(function(){d.classList.add('ready')},2600)})();
+</script>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="phone" viewBox="0 0 24 24"><path d="M5 3h4l2 5-3 2a12 12 0 0 0 6 6l2-3 5 2v4a2 2 0 0 1-2 2A18 18 0 0 1 3 5a2 2 0 0 1 2-2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
   <symbol id="pin" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="3" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
 </svg>
+
+<div class="intro" id="intro" aria-hidden="true">
+  <svg viewBox="0 0 300 130">
+    <defs><linearGradient id="sh" x1="0" x2="1"><stop offset=".35" stop-color="#F3F1EC" stop-opacity="0"/><stop offset=".5" stop-color="#fff"/><stop offset=".65" stop-color="#F3F1EC" stop-opacity="0"/><animate attributeName="x1" values="-1;1" dur="1.2s" begin=".6s" fill="freeze"/><animate attributeName="x2" values="0;2" dur="1.2s" begin=".6s" fill="freeze"/></linearGradient></defs>
+    <path class="ib" d="M40 46 Q150 6 260 46" fill="none" stroke="#F2911B" stroke-width="7" stroke-linecap="round"/>
+    <g fill="#E9E7E2" stroke="#0E0E10" stroke-width="2"><rect class="pl a" x="8" y="22" width="16" height="50" rx="3" transform="rotate(-14 16 47)"/><rect class="pl b" x="24" y="26" width="14" height="42" rx="3" transform="rotate(-14 31 47)"/><rect class="pl c" x="276" y="22" width="16" height="50" rx="3" transform="rotate(14 284 47)"/><rect class="pl d" x="262" y="26" width="14" height="42" rx="3" transform="rotate(14 269 47)"/></g>
+    <text class="rtb" x="150" y="90" text-anchor="middle" font-family="Graduate, Georgia, serif" font-size="48" fill="#F3F1EC" stroke="#F2911B" stroke-width="1.2" letter-spacing="4">RTB</text>
+    <text class="shine" x="150" y="90" text-anchor="middle" font-family="Graduate, Georgia, serif" font-size="48" fill="url(#sh)" letter-spacing="4">RTB</text>
+    <text class="gym" x="150" y="118" text-anchor="middle" font-family="'Barlow Condensed', Arial Narrow, sans-serif" font-weight="800" font-size="24" fill="#F2911B">GYM</text>
+  </svg>
+  <button class="skip" type="button" tabindex="-1">Skip</button>
+</div>
 
 <header class="site">
   <div class="wrap hdr">
@@ -209,7 +263,7 @@ footer a{color:var(--ink);text-decoration:none;font-weight:600}
 <main id="top">
 <section class="hero">
   <div class="hero-head">
-    <span class="since">Fort St · Lincoln Park · Year six</span>
+    <span class="chip" id="chip"><i></i><span id="chipText">2146 Fort St · Lincoln Park</span></span>
     <h1>An old school, <span class="v">legitimate</span> lifting gym.</h1>
     <p class="lead">Racks, real iron and a room full of people who show up. Bodybuilding and powerlifting, open at 4:30 in the morning.</p>
     <div class="cta-row">
@@ -233,21 +287,21 @@ footer a{color:var(--ink);text-decoration:none;font-weight:600}
 
 <section class="stats" aria-label="RTB at a glance">
   <div class="wrap">
-    <div class="stat rv"><b>4.6<small>★</small></b><span>From 146 reviews</span></div>
+    <div class="stat rv"><b data-to="4.6" data-dec="1">4.6<small>★</small></b><span>From 146 reviews</span></div>
     <div class="stat rv d2"><b>4:30<small>AM</small></b><span>Doors open on weekdays</span></div>
-    <div class="stat rv d3"><b>6<small>YRS</small></b><span>On Fort Street</span></div>
-    <div class="stat rv d4"><b>220<small>LB</small></b><span>Dumbbells, if you're ready</span></div>
+    <div class="stat rv d3"><b data-to="6">6<small>YRS</small></b><span>On Fort Street</span></div>
+    <div class="stat rv d4"><b data-to="220">220<small>LB</small></b><span>Dumbbells, if you're ready</span></div>
   </div>
 </section>
 
 <section class="sec" id="floor">
   <div class="wrap">
-    <div class="sec-head rv"><span class="kick">The floor</span><h2>Built for <span class="o">lifting</span>, not for selfies</h2><p>New equipment and a makeover on the way, and the same old school vibe that isn't going anywhere.</p></div>
+    <div class="sec-head rv"><h2>Built for <span class="o">lifting</span>, not for selfies</h2><p>New equipment and a makeover on the way, and the same old school vibe that isn't going anywhere.</p></div>
     <div class="floor">
       <figure class="f1 rv"><img src="img/family.webp" alt="The RTB Gym family packed onto the gym floor for the six year anniversary" width="1080" height="420" loading="lazy"><figcaption>Six years of the RTB family</figcaption></figure>
       <figure class="f2 rv d2"><img src="img/racks.webp" alt="Rows of squat racks and benches on the RTB floor" width="480" height="640" loading="lazy"><figcaption>Racks on racks</figcaption></figure>
       <figure class="f3 rv"><img src="img/floor.webp" alt="New plate-loaded machines with orange walls behind them" width="900" height="608" loading="lazy"><figcaption>New machines</figcaption></figure>
-      <figure class="f4 rv d2"><img src="img/iron.webp" alt="The lifting floor with plates and racks under the lights" width="900" height="791" loading="lazy"><figcaption>Real iron</figcaption></figure>
+      <figure class="f4 rv d2"><img src="img/iron.webp" alt="Squat racks and bars in front of the mirror wall" width="600" height="515" loading="lazy"><figcaption>Real iron</figcaption></figure>
       <figure class="f5 rv d3"><img src="img/black.webp" alt="The gym wall being repainted black" width="900" height="833" loading="lazy"><figcaption>Coming back in black</figcaption></figure>
     </div>
   </div>
@@ -255,11 +309,11 @@ footer a{color:var(--ink);text-decoration:none;font-weight:600}
 
 <section class="sec" id="code" style="padding-top:0">
   <div class="wrap">
-    <div class="sec-head rv"><span class="kick">The code</span><h2>How we do things <span class="o">here</span></h2></div>
+    <div class="sec-head rv"><h2>How we do things <span class="o">here</span></h2><p>Three things you'll hear on the floor, and the reason people keep coming back.</p></div>
     <div class="code">
-      <article class="sign rv"><h3>Don't be weak.</h3><p>You came here to lift. Load the bar and do the work.</p></article>
-      <article class="sign rv d2"><h3>Be superior.</h3><p>Bodybuilders, powerlifters and people just getting started, all training under the same roof.</p></article>
-      <article class="sign rv d3"><h3>Old school iron mentality.</h3><p>No gimmicks and no shortcuts. A real gym, the way a gym is supposed to feel.</p></article>
+      <article class="sign rv"><span class="n">01</span><h3>Don't be weak.</h3><p>You came here to lift. Load the bar and do the work.</p></article>
+      <article class="sign rv d2"><span class="n">02</span><h3>Be superior.</h3><p>Bodybuilders, powerlifters and people just getting started, all training under the same roof.</p></article>
+      <article class="sign rv d3"><span class="n">03</span><h3>Old school iron mentality.</h3><p>No gimmicks and no shortcuts. A real gym, the way a gym is supposed to feel.</p></article>
     </div>
   </div>
 </section>
@@ -268,7 +322,6 @@ footer a{color:var(--ink);text-decoration:none;font-weight:600}
   <div class="wrap split">
     <div class="ph rv"><img src="img/armday.webp" alt="A member doing Arnold incline bench curls on arm day at RTB" width="720" height="613" loading="lazy"></div>
     <div class="rv d2">
-      <span class="kick">The family</span>
       <h2>Everyone <span class="o">gets after it</span></h2>
       <p>From members working off hundreds of pounds to lifters chasing their next PR, RTB is the kind of place where people notice when you don't come in. When one of our own is out hurt, the whole gym signs the card.</p>
       <p>Come be a part of it.</p>
@@ -313,9 +366,23 @@ footer a{color:var(--ink);text-decoration:none;font-weight:600}
 
 <script>
 document.getElementById('yr').textContent = new Date().getFullYear();
+// intro: let it play once, skip on tap or key, then reveal the hero
+(() => {
+  const root = document.documentElement, intro = document.getElementById('intro');
+  const done = () => { if (root.classList.contains('ready')) return; root.classList.add('ready'); try { sessionStorage.setItem('rtbIntro', '1'); } catch (e) {} setTimeout(() => intro.remove(), 600); };
+  if (!root.classList.contains('has-intro')) { intro.remove(); return; }
+  const skip = () => { intro.style.animation = 'introOut .35s var(--ease) forwards'; done(); };
+  intro.addEventListener('click', skip); addEventListener('keydown', skip, { once: true });
+  setTimeout(done, 1450);
+})();
+// header tightens once you scroll
+(() => { const h = document.querySelector('header.site'), f = () => h.classList.toggle('solid', scrollY > 20); f(); addEventListener('scroll', f, { passive: true }); })();
 (() => {
   const els = document.querySelectorAll('.rv');
-  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -10% 0px' });
+  const count = b => { const to = +b.dataset.to, dec = +(b.dataset.dec || 0), sm = b.querySelector('small'), t0 = performance.now();
+    const f = now => { const k = Math.min(1, (now - t0) / 1100), v = to * (1 - Math.pow(1 - k, 3)); b.firstChild.textContent = v.toFixed(dec); if (k < 1) requestAnimationFrame(f); }; requestAnimationFrame(f); };
+  const RMr = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('on'); const b = e.target.querySelector('b[data-to]'); if (b && !RMr) count(b); io.unobserve(e.target); } }), { rootMargin: '0px 0px -10% 0px' });
   els.forEach(e => io.observe(e));
 })();
 // load the bar: 45 lb bar + 45s a side, the steel bends more as it gets heavy
@@ -351,8 +418,9 @@ document.getElementById('yr').textContent = new Date().getFullYear();
   const now = (+get('hour') % 24) + (+get('minute')) / 60, [o, c] = H[d], open = now >= o && now < c;
   const fmt = h => { const hh = Math.floor(h), m = Math.round((h - hh) * 60), ap = hh >= 12 ? 'PM' : 'AM'; return `${((hh + 11) % 12) + 1}${m ? ':' + String(m).padStart(2, '0') : ''} ${ap}`; };
   const live = document.getElementById('live'), txt = document.getElementById('liveText');
-  if (open) txt.textContent = `Open now · until ${fmt(c)}`;
-  else { live.classList.add('closed'); const nd = now < o ? d : (d + 1) % 7; txt.textContent = `Closed · opens ${nd === d ? 'today' : 'tomorrow'} at ${fmt(H[nd][0])}`; }
+  const chip = document.getElementById('chip'), ctxt = document.getElementById('chipText');
+  if (open) { txt.textContent = `Open now · until ${fmt(c)}`; ctxt.innerHTML = `<b>Open now</b> · until ${fmt(c)}`; }
+  else { live.classList.add('closed'); chip.classList.add('closed'); const nd = now < o ? d : (d + 1) % 7; txt.textContent = `Closed · opens ${nd === d ? 'today' : 'tomorrow'} at ${fmt(H[nd][0])}`; ctxt.innerHTML = `<b>Closed</b> · opens ${nd === d ? 'today' : 'tomorrow'} ${fmt(H[nd][0])}`; }
   const key = d === 0 ? '0' : d === 6 ? '6' : '1-5';
   document.querySelectorAll(`#hrs [data-d="${key}"]`).forEach(el => el.classList.add('today'));
 })();
