@@ -23,3 +23,4 @@ The user's standard (from now on, every site): **clean Apple-style animation, Bl
 - Voronoi-cell tangent fields leave visible cell seams (it looks like hammered metal). For anisotropy, use a smooth noise-driven direction projected onto the surface.
 - Mix two BSDFs by an animated mask for state changes, so the "after" frames stay identical when you retune the "before" look and you only re-render the frames that changed.
 - A black world for camera rays (LightPath "Is Camera Ray"), plus long thin area strips, gives the Apple product-film look on glossy subjects.
+- Check every caption against the frames it sits on (screenshot the page at three scroll points, desktop and phone). If the subject rises into the caption band, shorten that caption to a headline and a CTA, or end it before the camera moves. Don't box it.
