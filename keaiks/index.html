@@ -316,13 +316,13 @@ status(); setInterval(status, 1000);
   function draw(t) {                        // t = film time 0..95
     let j = F.findIndex(f => f >= t); if (j < 0) j = F.length - 1; const i = Math.max(0, j - 1);
     const a = F[i], b = F[j], w = b === a ? 0 : (t - a) / (b - a);
-    let A = imgs[i], B = imgs[j];
-    if (!ok(A)) { for (let k = i; k >= 0; k--) if (ok(imgs[k])) { A = imgs[k]; break; } }
+    let A = w < .5 ? imgs[i] : imgs[j];   // nearest rendered frame: crossfading moving shots ghosts the truck
+    if (!ok(A)) { for (let k = j; k >= 0; k--) if (ok(imgs[k])) { A = imgs[k]; break; } }
     if (!ok(A)) return;
     const W = cv.width, H = cv.height, iw = A.naturalWidth, ih = A.naturalHeight, s = Math.max(W / iw, H / ih), dw = iw * s, dh = ih * s;
     const fx = focusAt(t), dx = Math.min(0, Math.max(W - dw, W / 2 - fx * dw)), dy = (H - dh) / 2;
     ctx.globalAlpha = 1; ctx.drawImage(A, dx, dy, dw, dh);
-    if (ok(B) && w > .02 && B !== A) { ctx.globalAlpha = w; ctx.drawImage(B, dx, dy, dw, dh); ctx.globalAlpha = 1; }
+
   }
   function progress() { const r = film.getBoundingClientRect(), span = film.offsetHeight - innerHeight; return Math.min(1, Math.max(0, -r.top / Math.max(1, span))); }
   function tick() {
