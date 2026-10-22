@@ -1,13 +1,14 @@
 # Lugrow concept: a 22x12 chrome split-spoke truck wheel on a 33" all-terrain tire with chrome spike lugs,
 # path-traced in a dark showroom. Renders a 360 degree turntable (for drag-to-spin) or a single still.
-# usage: blender -b -P wheel.py -- <out_dir> <mode: turntable|still> [frames|frame] [samples] [res]
+# usage: bpe run wheel.py -m final -- <out_dir> <mode: turntable|still> [frames|frame] [samples] [res]
 import bpy, bmesh, math, random, sys, os
 from math import sin, cos, pi
 from mathutils import Vector, Matrix, Euler
 
 argv = sys.argv[sys.argv.index('--') + 1:]
 OUT = argv[0]; MODE = argv[1]; N = int(argv[2]) if len(argv) > 2 else 36; SAMPLES = int(argv[3]) if len(argv) > 3 else 48; RES = int(argv[4]) if len(argv) > 4 else 960
-HDRI = '/tmp/claude-0/-home-user-Baydounurgentcare/d614465f-65b2-511b-9847-8ee0665a973e/scratchpad/blend/hdri/studio_small_09_1k.hdr'
+from bpe_assets import asset  # pinned in blender-perf.json, fetched once into the shared cache (run through bpe)
+HDRI = asset('studio_small_09_1k.hdr')
 random.seed(9)
 def lerp(a, b, t): return a + (b - a) * t
 def hexc(h, a=1.):

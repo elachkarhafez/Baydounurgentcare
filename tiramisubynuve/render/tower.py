@@ -3,7 +3,7 @@
 #   bare   = smooth mascarpone tops
 #   cocoa  = cocoa-dusted tops with NUVÉ stencilled in powdered sugar
 #   matcha = matcha-dusted tops with the same stencil
-# usage: blender -b -P tower.py -- <out_dir> <state> <view: wide|tall> [samples] [scale]
+# usage: bpe run tower.py -m final -- <out_dir> <state> <view: wide|tall> [samples] [scale]
 import bpy, bmesh, math, random, sys, os
 from math import sin, cos, pi
 from mathutils import Vector
@@ -11,8 +11,8 @@ from mathutils import Vector
 argv = sys.argv[sys.argv.index('--') + 1:]
 OUT, STATE, VIEW = argv[0], argv[1], argv[2]
 SAMPLES = int(argv[3]) if len(argv) > 3 else 64; SCALE = float(argv[4]) if len(argv) > 4 else 1.
-T = '/tmp/claude-0/-home-user-Baydounurgentcare/d614465f-65b2-511b-9847-8ee0665a973e/scratchpad/tnr'
-HDRI = '/tmp/claude-0/-home-user-Baydounurgentcare/d614465f-65b2-511b-9847-8ee0665a973e/scratchpad/blend/hdri/studio_small_09_1k.hdr'
+from bpe_assets import asset  # pinned in blender-perf.json, fetched once into the shared cache (run through bpe)
+HDRI = asset('studio_small_09_1k.hdr')
 random.seed(4)
 def hexc(h, a=1.):
     h = h.lstrip('#'); c = [int(h[i:i + 2], 16) / 255 for i in (0, 2, 4)]
@@ -51,7 +51,7 @@ def top_mat():
     # stencil: object XY → image UV
     mp = nt.nodes.new('ShaderNodeMapping'); mp.inputs['Scale'].default_value = (1 / (2 * R_TOP) * .92, 1 / (2 * R_TOP) * .92, 1); mp.inputs['Location'].default_value = (.5, .5, 0)
     nt.links.new(tc.outputs['Object'], mp.inputs['Vector'])
-    im = nt.nodes.new('ShaderNodeTexImage'); im.image = bpy.data.images.load(os.path.join(T, 'nuve.png')); im.extension = 'CLIP'
+    im = nt.nodes.new('ShaderNodeTexImage'); im.image = bpy.data.images.load(asset('nuve.png')); im.extension = 'CLIP'
     nt.links.new(mp.outputs[0], im.inputs['Vector'])
     # soften the stencil edge with a little grain so it reads as sifted sugar
     sharp = nt.nodes.new('ShaderNodeMath'); sharp.operation = 'MULTIPLY_ADD'; sharp.inputs[1].default_value = .3; sharp.inputs[2].default_value = -.15

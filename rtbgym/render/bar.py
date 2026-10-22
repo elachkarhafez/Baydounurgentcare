@@ -1,13 +1,14 @@
 # RTB Gym: an old-school loaded barbell, path-traced in Cycles, rendered at 0..6 plates a side.
 # The bar bends more with every plate (like the bent bar in their logo). Transparent background.
-# usage: blender -b -P bar.py -- <out_dir> <plates 0-6> [samples] [scale]
+# usage: bpe run bar.py -m final -- <out_dir> <plates 0-6> [samples] [scale]
 import bpy, bmesh, math, random, sys, os
 from math import sin, cos, pi
 from mathutils import Vector
 
 argv = sys.argv[sys.argv.index('--') + 1:]
 OUT = argv[0]; NP = int(argv[1]); SAMPLES = int(argv[2]) if len(argv) > 2 else 64; SCALE = float(argv[3]) if len(argv) > 3 else 1.
-HDRI = '/tmp/claude-0/-home-user-Baydounurgentcare/d614465f-65b2-511b-9847-8ee0665a973e/scratchpad/blend/hdri/studio_small_09_1k.hdr'
+from bpe_assets import asset  # pinned in blender-perf.json, fetched once into the shared cache (run through bpe)
+HDRI = asset('studio_small_09_1k.hdr')
 random.seed(2)
 def hexc(h, a=1.):
     h = h.lstrip('#'); c = [int(h[i:i + 2], 16) / 255 for i in (0, 2, 4)]

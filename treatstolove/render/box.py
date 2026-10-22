@@ -2,7 +2,7 @@
 # path-traced in Cycles. Plaques render blank; the page writes the visitor's initials onto them using the
 # plaque corners this script exports (projected to the image), so the names sit in perspective.
 #
-# usage: blender -b -P box.py -- <out_dir> <view: wide|tall> [samples] [scale]
+# usage: bpe run box.py -m final -- <out_dir> <view: wide|tall> [samples] [scale]
 import bpy, bmesh, math, random, sys, os, json
 from math import sin, cos, pi
 from mathutils import Vector, Matrix, Euler
@@ -10,7 +10,8 @@ from bpy_extras.object_utils import world_to_camera_view
 
 argv = sys.argv[sys.argv.index('--') + 1:]
 OUT = argv[0]; VIEW = argv[1] if len(argv) > 1 else 'wide'; SAMPLES = int(argv[2]) if len(argv) > 2 else 64; SCALE = float(argv[3]) if len(argv) > 3 else 1.
-HDRI = '/tmp/claude-0/-home-user-Baydounurgentcare/d614465f-65b2-511b-9847-8ee0665a973e/scratchpad/blend/hdri/studio_small_09_1k.hdr'
+from bpe_assets import asset  # pinned in blender-perf.json, fetched once into the shared cache (run through bpe)
+HDRI = asset('studio_small_09_1k.hdr')
 random.seed(7)
 
 def clamp(v, a=0., b=1.): return max(a, min(b, v))

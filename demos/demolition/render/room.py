@@ -1,13 +1,14 @@
 # Studline Demo & Haul (ElaSystems concept): one bathroom, path-traced in three states (before / demo day / after).
 # The page wipes between them with a jagged break line as you drag.
-# usage: blender -b -P room.py -- <out_dir> <state: before|demo|after> [samples] [scale] [view: wide|tall]
+# usage: bpe run room.py -m final -- <out_dir> <state: before|demo|after> [samples] [scale] [view: wide|tall]
 import bpy, bmesh, math, random, sys, os
 from math import sin, cos, pi
 from mathutils import Vector, Matrix, Euler
 
 argv = sys.argv[sys.argv.index('--') + 1:]
 OUT = argv[0]; STATE = argv[1]; SAMPLES = int(argv[2]) if len(argv) > 2 else 64; SCALE = float(argv[3]) if len(argv) > 3 else 1.; VIEW = argv[4] if len(argv) > 4 else 'wide'
-HDRI = '/tmp/claude-0/-home-user-Baydounurgentcare/d614465f-65b2-511b-9847-8ee0665a973e/scratchpad/blend/hdri/studio_small_09_1k.hdr'
+from bpe_assets import asset  # pinned in blender-perf.json, fetched once into the shared cache (run through bpe)
+HDRI = asset('studio_small_09_1k.hdr')
 random.seed(3)
 def lerp(a, b, t): return a + (b - a) * t
 def hexc(h, a=1.):

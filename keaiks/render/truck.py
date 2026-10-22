@@ -2,7 +2,7 @@
 # drive it in on scroll and spin the wheels as separate layers.
 # States: closed (roll-up shutter down, awning folded) / open (shutter up, red awning out, warm lit window) /
 # wheel (one wheel alone, for the page to rotate). Transparent background with a shadow-catcher floor.
-# usage: blender -b -P truck.py -- <out_dir> <state: open|closed|wheel> [samples] [scale]
+# usage: bpe run truck.py -m final -- <out_dir> <state: open|closed|wheel> [samples] [scale]
 import bpy, bmesh, math, sys, os, json
 from math import pi, sin, cos
 from mathutils import Vector
@@ -12,7 +12,8 @@ argv = sys.argv[sys.argv.index('--') + 1:]
 OUT, STATE = argv[0], argv[1]
 SAMPLES = int(argv[2]) if len(argv) > 2 else 64; SCALE = float(argv[3]) if len(argv) > 3 else 1.
 HERE = os.path.dirname(os.path.abspath(__file__))
-HDRI = '/tmp/claude-0/-home-user-Baydounurgentcare/d614465f-65b2-511b-9847-8ee0665a973e/scratchpad/blend/hdri/studio_small_09_1k.hdr'
+from bpe_assets import asset  # pinned in blender-perf.json, fetched once into the shared cache (run through bpe)
+HDRI = asset('studio_small_09_1k.hdr')
 def hexc(h, a=1.):
     h = h.lstrip('#'); c = [int(h[i:i + 2], 16) / 255 for i in (0, 2, 4)]
     return tuple((x / 12.92 if x <= .04045 else ((x + .055) / 1.055) ** 2.4) for x in c) + (a,)
