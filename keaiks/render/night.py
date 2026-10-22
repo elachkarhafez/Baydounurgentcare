@@ -235,9 +235,9 @@ co = ct.nodes.new('CompositorNodeComposite'); ct.links.new(rl.outputs['Image'], 
 os.makedirs(OUT, exist_ok=True)
 if FR == 'all': frames = range(0, 96)
 elif '-' in FR: a, b = FR.split('-'); frames = range(int(a), int(b) + 1)
-else: frames = [int(x) for x in FR.split(',')]
+else: frames = [float(x) for x in FR.split(',')]   # half steps allowed (e.g. 40.5)
 for f in frames:
-    p = os.path.join(OUT, f'n{f:03d}.png')
+    p = os.path.join(OUT, f'h{round(f * 2):03d}.png')   # file index = film time × 2
     if os.path.exists(p): continue
-    open(p, 'w').close(); scn.frame_set(f); r.filepath = p; bpy.ops.render.render(write_still=True)
+    open(p, 'w').close(); scn.frame_set(int(f), subframe=f - int(f)); r.filepath = p; bpy.ops.render.render(write_still=True)
 print('done')

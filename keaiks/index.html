@@ -36,7 +36,7 @@ h1,h2,h3{font-family:var(--serif);font-weight:900;line-height:1.04;letter-spacin
 h2{font-size:clamp(1.7rem,1.25rem + 1.6vw,2.5rem)}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:50px;padding:0 24px;border-radius:999px;background:var(--red2);color:#fff;text-decoration:none;font:700 .97rem/1 var(--sans);border:1.5px solid var(--red2);transition:background .2s,transform .25s var(--ease),border-color .2s,box-shadow .3s}
 .btn:hover{background:#e0242f;border-color:#e0242f;transform:translateY(-2px);box-shadow:0 10px 30px rgba(255,43,58,.35)}
-.btn.line{background:rgba(8,8,10,.35);border-color:rgba(246,240,231,.32);color:var(--cream);backdrop-filter:blur(6px)}
+.btn.line{background:rgba(8,8,10,.55);border-color:rgba(246,240,231,.32);color:var(--cream)}
 .btn.line:hover{border-color:var(--cream);box-shadow:none}
 .btn svg{width:18px;height:18px;flex:none}
 
@@ -54,17 +54,15 @@ h2{font-size:clamp(1.7rem,1.25rem + 1.6vw,2.5rem)}
 /* ---------- the film */
 .film{position:relative;height:560vh}
 .stage{position:sticky;top:0;height:100svh;overflow:hidden;background:#000}
-.stage canvas{position:absolute;inset:0;width:100%;height:100%}
+.stage canvas{position:absolute;inset:0;width:100%;height:100%;transform:translateZ(0)}
 .stage::after{content:"";position:absolute;inset:0;pointer-events:none;background:
   radial-gradient(120% 90% at 50% 45%,transparent 55%,rgba(0,0,0,.55) 100%),
   linear-gradient(0deg,rgba(8,8,10,.92) 0,rgba(8,8,10,.55) 26%,transparent 50%)}
-.grain{position:absolute;inset:-50%;z-index:2;pointer-events:none;opacity:.06;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:grain 1.2s steps(6) infinite}
-@keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-4%,3%)}40%{transform:translate(3%,-5%)}60%{transform:translate(-2%,4%)}80%{transform:translate(5%,1%)}100%{transform:translate(0,0)}}
 /* opening card over the first shot */
 .open{position:absolute;z-index:3;left:0;right:0;bottom:0;padding:0 var(--pad) clamp(54px,9vh,92px)}
 .open .in{max-width:var(--max);margin:0 auto}
-.open>*{will-change:opacity,transform}
-.chip{display:inline-flex;align-items:center;gap:9px;padding:8px 14px;border-radius:999px;border:1px solid rgba(246,240,231,.16);background:rgba(8,8,10,.45);backdrop-filter:blur(8px);font:700 .76rem/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:#ece4d8}
+.open{will-change:opacity,transform}
+.chip{display:inline-flex;align-items:center;gap:9px;padding:8px 14px;border-radius:999px;border:1px solid rgba(246,240,231,.16);background:rgba(8,8,10,.62);font:700 .76rem/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:#ece4d8}
 .chip i{width:8px;height:8px;border-radius:50%;background:var(--red);box-shadow:0 0 12px var(--red);animation:blink 1.8s infinite}
 .chip.open i{background:#3fdc7a;box-shadow:0 0 12px #3fdc7a}
 @keyframes blink{50%{opacity:.35}}
@@ -74,7 +72,7 @@ h2{font-size:clamp(1.7rem,1.25rem + 1.6vw,2.5rem)}
 .row{display:flex;flex-wrap:wrap;align-items:center;gap:14px 26px;margin-top:22px}
 .clock{display:flex;gap:8px}
 .cell{display:flex;flex-direction:column;align-items:center;gap:6px}
-.cell b{position:relative;display:grid;place-items:center;width:62px;height:64px;border-radius:12px;background:linear-gradient(180deg,rgba(40,38,44,.82) 0 49.5%,rgba(28,27,31,.86) 50.5% 100%);border:1px solid rgba(246,240,231,.1);backdrop-filter:blur(8px);font:900 1.9rem/1 var(--serif);font-variant-numeric:tabular-nums}
+.cell b{position:relative;display:grid;place-items:center;width:62px;height:64px;border-radius:12px;background:linear-gradient(180deg,rgba(40,38,44,.82) 0 49.5%,rgba(28,27,31,.86) 50.5% 100%);border:1px solid rgba(246,240,231,.1);font:900 1.9rem/1 var(--serif);font-variant-numeric:tabular-nums}
 .cell b::after{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:rgba(0,0,0,.5)}
 .cell b.tick{animation:tick .45s var(--ease)}
 @keyframes tick{0%{transform:rotateX(70deg);opacity:.3}100%{transform:none;opacity:1}}
@@ -95,7 +93,7 @@ h2{font-size:clamp(1.7rem,1.25rem + 1.6vw,2.5rem)}
 /* scrubber */
 .scrub{position:absolute;z-index:4;left:var(--pad);right:var(--pad);bottom:22px;display:flex;align-items:center;gap:14px;font:700 .7rem/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:rgba(246,240,231,.6)}
 .scrub .bar{position:relative;flex:1;height:2px;background:rgba(246,240,231,.16);border-radius:2px}
-.scrub .bar i{position:absolute;left:0;top:0;bottom:0;width:var(--p,0%);background:var(--red);box-shadow:0 0 10px var(--red)}
+.scrub .bar i{position:absolute;inset:0;transform-origin:0 50%;transform:scaleX(0);background:var(--red);will-change:transform}
 .scrub .bar b{position:absolute;top:-3px;width:2px;height:8px;background:rgba(246,240,231,.35)}
 .cue{display:flex;align-items:center;gap:8px;transition:opacity .4s}
 .cue i{width:1px;height:16px;background:rgba(246,240,231,.6);animation:cue 1.6s var(--ease) infinite;transform-origin:top}
@@ -190,7 +188,6 @@ footer.foot img{height:40px;width:auto}
 <section class="film" id="film" aria-label="Keaik's at night at its new home">
   <div class="stage" id="stage">
     <canvas id="cv" role="img" aria-label="At night, the white Keaik's food truck parked beside a lit gas-station canopy on wet asphalt, its red neon sign glowing, the awning out and the serving window lit"></canvas>
-    <div class="grain" aria-hidden="true"></div>
 
     <div class="open" id="openCard">
       <div class="in" id="copy">
@@ -212,7 +209,7 @@ footer.foot img{height:40px;width:auto}
     <div class="sub-t" data-in=".68" data-out=".84"><h2 id="dayLine">Monday, Oct 26 · <em>12 to 8 PM</em></h2><p id="dayNote">Grand opening day. The shutter goes up at noon.</p></div>
     <div class="sub-t" data-in=".88" data-out="1.1"><h2>Step up to the <em>window</em>.</h2><div class="ctas"><a class="btn" href="#menu">See the lineup</a><a class="btn line" data-dir href="#visit"><svg aria-hidden="true"><use href="#i-pin"/></svg>Directions</a></div></div>
 
-    <div class="scrub" aria-hidden="true"><span class="cue" id="cue"><i></i><span class="lbl">Scroll</span></span><span class="bar"><i id="bar"></i><b style="left:20%"></b><b style="left:44%"></b><b style="left:68%"></b><b style="left:88%"></b></span><span class="lbl">Van Born Rd · Taylor</span></div>
+    <div class="scrub" aria-hidden="true"><span class="cue" id="cue"><i></i><span class="lbl">Scroll</span></span><span class="bar"><i id="bar"></i></span><span class="lbl">Van Born Rd · Taylor</span></div>
   </div>
 </section>
 
@@ -268,8 +265,9 @@ const CONFIG = {
   instagram: 'https://www.instagram.com/keaiksfoodtruck/',
   opens: Date.UTC(2026, 9, 26, 16, 0, 0),   // Mon Oct 26, 12 PM Detroit (EDT)
   closes: Date.UTC(2026, 9, 27, 0, 0, 0),   // 8 PM
-  // rendered film frames: every frame of the neon flicker, then every second frame of the camera move
-  frames: [...Array(15).keys(), ...Array.from({ length: 40 }, (_, i) => 16 + i * 2), 95],
+  // rendered film times: every frame of the neon flicker (0–14), then half steps for the whole camera move.
+  // file name = time × 2 (h000…h190). Phones skip the half steps to save data.
+  frames: [...Array(15).keys(), ...Array.from({ length: 163 }, (_, i) => 14.5 + i * .5)],
   // where the truck sits across each shot (0..1), so phones crop around it
   focus: [[0, .54], [14, .55], [40, .6], [62, .42], [80, .44], [95, .47]],
 };
@@ -298,59 +296,64 @@ function status() {
 }
 status(); setInterval(status, 1000);
 
-/* ---------- the film: frames scrubbed by scroll, with a short neon flicker-on when the page opens */
+/* ---------- the film: scroll sets a target time, the picture glides to it (no jumps), frames decoded ahead */
 (() => {
-  const cv = $('#cv'), ctx = cv.getContext('2d'), film = $('#film'), bar = $('#bar'), cue = $('#cue'), subs = $$('.sub-t'), card = $('#openCard');
-  const F = CONFIG.frames, imgs = F.map(() => null);
-  let intro = RM ? 14 : 0, introDone = RM, want = 0, drawn = -1;
-  const src = f => `media/film/f${pad(f)}.webp`;
-  function load(i) { if (imgs[i]) return imgs[i]; const im = new Image(); im.decoding = 'async'; im.src = src(F[i]); im.onload = () => { drawn = -1; }; return (imgs[i] = im); }
-  for (let i = 0; i < 15; i++) load(i);
-  const rest = () => F.forEach((_, i) => load(i));
-  if ('requestIdleCallback' in window) requestIdleCallback(rest, { timeout: 900 }); else setTimeout(rest, 600);
-  function size() { const d = Math.min(devicePixelRatio || 1, 2); cv.width = Math.round(cv.clientWidth * d); cv.height = Math.round(cv.clientHeight * d); drawn = -1; }
+  const cv = $('#cv'), ctx = cv.getContext('2d', { alpha: false }), film = $('#film'), bar = $('#bar'), cue = $('#cue'), subs = $$('.sub-t'), card = $('#openCard');
+  const small = matchMedia('(max-width: 760px)').matches;
+  const T = CONFIG.frames.filter(t => !small || t <= 14 || t % 1 === 0);
+  const bmp = T.map(() => null);                 // decoded frames only
+  const src = t => `media/film/h${String(Math.round(t * 2)).padStart(3, '0')}.webp`;
+  function load(i) { if (bmp[i] !== null) return; bmp[i] = false; const im = new Image(); im.src = src(T[i]); im.decode().then(() => { bmp[i] = im; dirty = true; }).catch(() => { bmp[i] = null; }); }
+  // first the flicker, then every 4th, then every 2nd, then the rest: the film is watchable early and fills in
+  const order = [...T.keys()].sort((a, b) => (a < 15 ? -1 : 0) - (b < 15 ? -1 : 0) || ((a % 4 ? 1 : 0) - (b % 4 ? 1 : 0)) || ((a % 2 ? 1 : 0) - (b % 2 ? 1 : 0)) || a - b);
+  let q = 0; const pump = () => { for (let n = 0; n < 6 && q < order.length; n++) load(order[q++]); if (q < order.length) setTimeout(pump, 120); };
+  pump();
+  let dirty = true, shown = -1;
+  function size() { const d = Math.min(devicePixelRatio || 1, 1.5), w = Math.min(cv.clientWidth * d, 1600); cv.width = Math.round(w); cv.height = Math.round(w * cv.clientHeight / cv.clientWidth); dirty = true; }
   addEventListener('resize', size); size();
   const lerp = (a, b, t) => a + (b - a) * t;
   function focusAt(t) { const P = CONFIG.focus; for (let i = 1; i < P.length; i++) if (t <= P[i][0]) return lerp(P[i - 1][1], P[i][1], (t - P[i - 1][0]) / (P[i][0] - P[i - 1][0])); return P[P.length - 1][1]; }
-  function ok(im) { return im && im.complete && im.naturalWidth; }
-  function draw(t) {                        // t = film time 0..95
-    let j = F.findIndex(f => f >= t); if (j < 0) j = F.length - 1; const i = Math.max(0, j - 1);
-    const a = F[i], b = F[j], w = b === a ? 0 : (t - a) / (b - a);
-    let A = w < .5 ? imgs[i] : imgs[j];   // nearest rendered frame: crossfading moving shots ghosts the truck
-    if (!ok(A)) { for (let k = j; k >= 0; k--) if (ok(imgs[k])) { A = imgs[k]; break; } }
-    if (!ok(A)) return;
+  function nearestReady(i, dir) { for (let k = i; k >= 0 && k < T.length; k += dir) if (bmp[k]) return k; return -1; }
+  function draw(t) {
+    let j = T.findIndex(f => f >= t); if (j < 0) j = T.length - 1; const i = Math.max(0, j - 1);
+    let a = nearestReady(i, -1), b = nearestReady(j, 1);
+    if (a < 0 && b < 0) return; if (a < 0) a = b; if (b < 0) b = a;
+    const A = bmp[a], B = bmp[b], w = T[b] === T[a] ? 0 : Math.round(Math.min(1, Math.max(0, (t - T[a]) / (T[b] - T[a]))) * 6) / 6;
+    const key = a * 1000 + b * 7 + w; if (key === shown && !dirty) return; shown = key;   // only repaint when the picture changes
     const W = cv.width, H = cv.height, iw = A.naturalWidth, ih = A.naturalHeight, s = Math.max(W / iw, H / ih), dw = iw * s, dh = ih * s;
-    const fx = focusAt(t), dx = Math.min(0, Math.max(W - dw, W / 2 - fx * dw)), dy = (H - dh) / 2;
+    const dx = Math.min(0, Math.max(W - dw, W / 2 - focusAt(t) * dw)), dy = (H - dh) / 2;
     ctx.globalAlpha = 1; ctx.drawImage(A, dx, dy, dw, dh);
-
+    // blend only neighbours that are close in time (half a step), so motion stays crisp
+    if (B !== A && T[b] - T[a] <= 1.01 && w > .04) { ctx.globalAlpha = w; ctx.drawImage(B, dx, dy, dw, dh); ctx.globalAlpha = 1; }
   }
   function progress() { const r = film.getBoundingClientRect(), span = film.offsetHeight - innerHeight; return Math.min(1, Math.max(0, -r.top / Math.max(1, span))); }
-  function tick() {
-    const p = progress();
-    const t = introDone ? 14 + p * (95 - 14) : intro;
-    if (t !== drawn) { draw(t); drawn = t; }
-    bar.style.setProperty('--p', (p * 100).toFixed(2) + '%');
-    cue.style.opacity = p > .03 ? 0 : 1;
-    // opening card fades as the camera starts to move; subtitles take over
-    const k = Math.min(1, p / .12); card.style.opacity = 1 - k; card.style.transform = `translateY(${-k * 30}px)`; card.style.pointerEvents = k > .6 ? 'none' : '';
-    subs.forEach(s => s.classList.toggle('on', p >= +s.dataset.in && p < +s.dataset.out));
+  let intro = RM ? 14 : 0, introDone = RM || scrollY > 40, cur = introDone ? 14 + progress() * 81 : 0, last = -1, lastK = -1, lastP = -1, prev = performance.now();
+  function tick(now) {
+    const dt = Math.min(.05, (now - prev) / 1000); prev = now;
+    const p = progress(), target = introDone ? 14 + p * 81 : intro;
+    cur = RM || !introDone ? target : cur + (target - cur) * (1 - Math.exp(-dt * 9));
+    if (Math.abs(target - cur) < .002) cur = target;
+    if (dirty || Math.abs(cur - last) > .01) { draw(cur); last = cur; dirty = false; }
+    if (Math.abs(p - lastP) > .0005) {
+      lastP = p; bar.style.transform = `scaleX(${p.toFixed(4)})`; cue.style.opacity = p > .03 ? 0 : 1;
+      const k = Math.min(1, p / .12);
+      if (k !== lastK) { lastK = k; card.style.opacity = 1 - k; card.style.transform = `translate3d(0,${(-k * 30).toFixed(1)}px,0)`; card.style.pointerEvents = k > .6 ? 'none' : ''; }
+      subs.forEach(s => { const on = p >= +s.dataset.in && p < +s.dataset.out; if (on !== s.classList.contains('on')) s.classList.toggle('on', on); });
+    }
     requestAnimationFrame(tick);
   }
-  // intro: hold black a beat, then run frames 0 → 14 (the neon stutters on), then light the copy
+  // intro: a beat of black, the neon stutters on (frames 0–14), then the copy lights up
   function runIntro() {
-    if (RM) { root.classList.add('lit'); return; }
+    if (introDone) { root.classList.add('lit'); return; }
     const t0 = performance.now() + 250, dur = 1500;
     (function step(now) {
       const k = Math.max(0, (now - t0) / dur); intro = Math.min(14, Math.floor(k * 15));
-      if (k < 1) requestAnimationFrame(step); else { introDone = true; root.classList.add('lit'); }
+      if (k < 1) requestAnimationFrame(step); else { introDone = true; cur = 14 + progress() * 81; root.classList.add('lit'); }
     })(performance.now());
   }
-  let started = false;
-  const go = () => { if (started) return; started = true; runIntro(); };
-  const ready = () => imgs.slice(0, 15).every(ok);
-  const wait = setInterval(() => { if (ready()) { clearInterval(wait); go(); } }, 60);
-  setTimeout(() => { clearInterval(wait); introDone = true; go(); root.classList.add('lit'); }, 4000);
-  if (scrollY > 40) { introDone = true; }
+  let started = false; const go = () => { if (!started) { started = true; runIntro(); } };
+  const wait = setInterval(() => { if (bmp.slice(0, 15).every(Boolean)) { clearInterval(wait); go(); } }, 50);
+  setTimeout(() => { clearInterval(wait); if (!started) { introDone = true; go(); } }, 3500);
   requestAnimationFrame(tick);
 })();
 
