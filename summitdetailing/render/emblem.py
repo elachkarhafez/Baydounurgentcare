@@ -1,14 +1,14 @@
 # Summit Mobile Detailing: their chrome diamond-plate emblem rebuilt in 3D and path-traced in Cycles.
 # A long strip light sweeps across it; frames play back as a light-sweep loop on the page. Transparent bg.
-# usage: blender -b -P emblem.py -- <out_dir> <frames|still> [n_or_frame] [samples] [scale]
+# usage: bpe run emblem.py -m final -- <out_dir> <frames|still> [n_or_frame] [samples] [scale]
 import bpy, bmesh, math, sys, os
 from math import sin, cos, pi
 from mathutils import Vector
 
 argv = sys.argv[sys.argv.index('--') + 1:]
 OUT, MODE = argv[0], argv[1]; N = int(argv[2]) if len(argv) > 2 else 24; SAMPLES = int(argv[3]) if len(argv) > 3 else 64; SCALE = float(argv[4]) if len(argv) > 4 else 1.
-T = '/tmp/claude-0/-home-user-Baydounurgentcare/d614465f-65b2-511b-9847-8ee0665a973e/scratchpad/sumr'
-HDRI = '/tmp/claude-0/-home-user-Baydounurgentcare/d614465f-65b2-511b-9847-8ee0665a973e/scratchpad/blend/hdri/studio_small_09_1k.hdr'
+from bpe_assets import asset  # pinned in blender-perf.json, fetched once into the shared cache (run through bpe)
+HDRI = asset('studio_small_09_1k.hdr')
 def hexc(h, a=1.):
     h = h.lstrip('#'); c = [int(h[i:i + 2], 16) / 255 for i in (0, 2, 4)]
     return tuple((x / 12.92 if x <= .04045 else ((x + .055) / 1.055) ** 2.4) for x in c) + (a,)
@@ -82,13 +82,13 @@ ribbon(peak, .085, .14, CHROME, .02)
 slab('snow1', [(-.11, 1.06), (0, 1.18), (.1, 1.07), (.03, 1.09), (0, 1.04), (-.04, 1.08)], .04, WHITE, y=-.13, bevel=.004)
 
 # the word
-word = text('SUMMIT', os.path.join(T, 'kanit-blackitalic.ttf'), 1.08, (0, 0, .02), .14, .018, DP, spacing=1.0)
-outline = text('SUMMIT', os.path.join(T, 'kanit-blackitalic.ttf'), 1.08, (0, .2, .02), .03, .045, NAVY, spacing=1.0)
+word = text('SUMMIT', asset('fonts/kanit-blackitalic.ttf'), 1.08, (0, 0, .02), .14, .018, DP, spacing=1.0)
+outline = text('SUMMIT', asset('fonts/kanit-blackitalic.ttf'), 1.08, (0, .2, .02), .03, .045, NAVY, spacing=1.0)
 # blue glow bar + MOBILE DETAILING plate
 slab('bar', [(-1.75, -.42), (1.75, -.42), (1.62, -.62), (-1.62, -.62)], .08, NAVY, y=-.02)
 slab('barglow', [(-1.7, -.44), (1.7, -.44), (1.68, -.47), (-1.68, -.47)], .02, GLOW, y=-.11, bevel=0)
 slab('barglow2', [(-1.62, -.58), (1.62, -.58), (1.6, -.61), (-1.6, -.61)], .02, GLOW, y=-.11, bevel=0)
-sub = text('MOBILE DETAILING', os.path.join(T, 'kanit-bolditalic.ttf'), .25, (0, -.08, -.52), .02, .004, WHITE, spacing=1.25)
+sub = text('MOBILE DETAILING', asset('fonts/kanit-bolditalic.ttf'), .25, (0, -.08, -.52), .02, .004, WHITE, spacing=1.25)
 for x in (-.12, 0, .12):
     bpy.ops.mesh.primitive_cone_add(vertices=5, radius1=.045, radius2=0, depth=.02, location=(x, -.07, -.74), rotation=(pi / 2, 0, 0)); s = bpy.context.active_object; s.data.materials.append(GLOW)
 

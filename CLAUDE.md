@@ -24,6 +24,13 @@ From now on, build every product/hero design (cups, drinks, food, objects) as a 
 - Animate with a small step sequencer (pour, drop, settle), and keep a drawn fallback if WebGL or the module fails.
 - References: `coffeetalks/src/cup.js` (cappuccino with latte art) and `demos/coffee-trailer/src/cup.js` (iced cup with layered drink, ice, foam, lid, straw; hot paper cup).
 
+## Standing rule: Blender goes through the performance engine
+
+Any Blender work (the `*/render/*.py` Cycles scripts, a `.blend`, a GLB/FBX export) uses the `blender-performance-engine` skill (`.claude/skills/blender-performance-engine/SKILL.md`). Never call `blender -b -P` directly.
+- `bpe probe` first in a new container. If Blender is missing, `bpe fetch-blender` (portable 4.5 LTS into the cache).
+- Use the cheapest mode that answers the question: `inspect` for geometry/data, `-m fast` for a look, `-m quality` before shipping, `-m final` only for the files the site uses.
+- No absolute asset paths in scripts. Use `asset('<name>')` with the source pinned in `blender-perf.json`.
+
 ## Standing rule: keep evolving, don't repeat
 
 The user said the sites were getting "repetitive and boring, they aren't evolving". For every new site:

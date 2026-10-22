@@ -1,0 +1,55 @@
+{
+  "_doc": "Generic defaults. A project overrides any key with a blender-perf.json (searched from the script's folder up to /; closest file wins, objects merge key by key). Relative paths in a blender-perf.json resolve from that file's folder.",
+  "blender": {
+    "path": null,
+    "min_version": "4.2",
+    "fetch_version": "4.5"
+  },
+  "default_mode": "fast",
+  "device": "auto",
+  "fast_primitives": true,
+  "preview_dir": null,
+  "assets": { "dirs": [], "sources": {} },
+  "parallel": {
+    "max_jobs": "auto",
+    "ram_reserve_gb": 2,
+    "default_job_peak_gb": 2.5,
+    "share_process_for": ["ultra"]
+  },
+  "cache": { "enabled": true, "skip_modes": ["ultra"] },
+  "modes": {
+    "ultra": {
+      "_doc": "No path tracing. Runs the script, skips every render call, reports geometry/material/texture/camera stats. Workbench thumbnail only if the probe says headless Workbench works.",
+      "render": false,
+      "thumbnail": true,
+      "max_thumbnails": 1
+    },
+    "fast": {
+      "_doc": "Look-check. Caps never raise a script's own values; thresholds never lower them.",
+      "resolution_scale": 0.33,
+      "persistent_data": true,
+      "animation_frames": 5,
+      "simplify": { "subdivision": 2, "child_particles": 0.25, "volumes": 0.5 },
+      "cycles": {
+        "samples": 16, "adaptive_threshold": 0.08,
+        "max_bounces": 6, "diffuse_bounces": 2, "glossy_bounces": 2, "transmission_bounces": 6,
+        "transparent_max_bounces": 8, "volume_bounces": 0,
+        "caustics": false, "blur_glossy": 1.0, "clamp_indirect": 10,
+        "denoise": true, "denoising_prefilter": "FAST", "denoising_quality": "FAST",
+        "texture_limit_render": "1024"
+      },
+      "eevee": { "taa_render_samples": 16, "use_raytracing": false, "shadow_ray_count": 1, "shadow_step_count": 2, "volumetric_samples": 32 }
+    },
+    "quality": {
+      "_doc": "Near-final look at a fraction of the cost: half resolution, about half the samples, lighting/bounces untouched.",
+      "resolution_scale": 0.5,
+      "persistent_data": true,
+      "animation_frames": 9,
+      "cycles": { "samples": 32, "adaptive_threshold": 0.03, "denoise": true },
+      "eevee": { "taa_render_samples": 32 }
+    },
+    "final": {
+      "_doc": "The deliverable. No quality setting is touched; only the compute device (and its denoiser) is chosen."
+    }
+  }
+}

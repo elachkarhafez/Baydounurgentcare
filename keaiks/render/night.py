@@ -1,7 +1,7 @@
 # Keaik's "midnight at the station": the food truck (geometry from truck.py, open state) parked on wet asphalt
 # beside a glowing gas-station canopy at night, with a red neon KEAIK'S roof sign that flickers on.
 # A 96-frame camera move (establishing shot → orbit → into the serving window) for the page to scrub on scroll.
-# usage: blender -b -P night.py -- <out_dir> [samples] [scale] [frames: all | a-b | n,n,n]
+# usage: bpe run night.py -m final -- <out_dir> [samples] [scale] [frames: all | a-b | n,n,n]
 import bpy, bmesh, math, sys, os, random
 from math import pi, sin, cos
 from mathutils import Vector
@@ -10,9 +10,9 @@ argv = sys.argv[sys.argv.index('--') + 1:]; ARGV = list(argv)
 OUT = argv[0]; SAMPLES = int(argv[1]) if len(argv) > 1 else 32; SCALE = float(argv[2]) if len(argv) > 2 else 1.
 FR = argv[3] if len(argv) > 3 else 'all'
 HERE = os.path.dirname(os.path.abspath(__file__))
-S = '/tmp/claude-0/-home-user-Baydounurgentcare/d614465f-65b2-511b-9847-8ee0665a973e/scratchpad'
-HDRI_NIGHT = S + '/night/street_lamp_2k.hdr'; ASPH = S + '/night/asphalt/asphalt_02/'
-FONT_SCRIPT = S + '/fonts/Yellowtail.ttf'; FONT_SANS = S + '/fonts/BebasNeue.ttf'
+from bpe_assets import asset  # pinned in blender-perf.json, fetched once into the shared cache (run through bpe)
+HDRI_NIGHT = asset('street_lamp_2k.hdr')
+FONT_SCRIPT = asset('fonts/Yellowtail.ttf'); FONT_SANS = asset('fonts/BebasNeue.ttf')
 random.seed(3)
 
 # ---------------------------------------------------------------- the truck, built by truck.py (open state)
@@ -153,7 +153,7 @@ def asphalt():
     tc = nt.nodes.new('ShaderNodeTexCoord'); mp = nt.nodes.new('ShaderNodeMapping'); mp.inputs['Scale'].default_value = (11, 11, 11)
     nt.links.new(tc.outputs['UV'], mp.inputs['Vector'])
     def img(f, non=False):
-        t = nt.nodes.new('ShaderNodeTexImage'); t.image = bpy.data.images.load(ASPH + f)
+        t = nt.nodes.new('ShaderNodeTexImage'); t.image = bpy.data.images.load(asset('asphalt_02/' + f))
         if non: t.image.colorspace_settings.name = 'Non-Color'
         nt.links.new(mp.outputs[0], t.inputs['Vector']); return t
     col_t, rgh, nrm = img('color.jpg'), img('rough.jpg', True), img('normal.jpg', True)

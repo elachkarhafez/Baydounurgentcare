@@ -1,5 +1,5 @@
 # Petals & Poetry menu stills, path-traced with the same glass, studio and cyclorama as the hero.
-# usage: blender -b -P products.py -- <outdir> [samples] [only_key]
+# usage: bpe run products.py -m final -- <outdir> [samples] [only_key]
 import bpy, bmesh, math, random, sys, os
 from math import sin, cos, pi
 from mathutils import Vector, Matrix

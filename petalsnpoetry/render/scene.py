@@ -4,7 +4,7 @@
 # start as orange wireframe and fill in one by one while a piping bag follows them, sugar pearls,
 # studio softboxes and a dusty-blue cyclorama. Camera moves and depth of field are keyframed.
 #
-# usage: blender -b -P scene.py -- <mode> [args]
+# usage: bpe run scene.py -m final -- <mode> [args]
 #   still <frame> <out.png> [samples] [res]     one frame
 #   save <out.blend>                            save the scene for an animation render
 import bpy, bmesh, math, random, sys
@@ -13,7 +13,9 @@ from mathutils import Vector, Matrix, Quaternion, noise
 
 argv = sys.argv[sys.argv.index('--') + 1:] if '--' in sys.argv else []
 MODE = argv[0] if argv else 'still'
-HDRI = '/tmp/claude-0/-home-user-Baydounurgentcare/d614465f-65b2-511b-9847-8ee0665a973e/scratchpad/blend/hdri/studio_small_09_1k.hdr'
+from bpe_assets import asset  # pinned in blender-perf.json, fetched once into the shared cache (run through bpe)
+try: HDRI = asset('studio_small_09_1k.hdr')
+except FileNotFoundError: HDRI = ''  # the world load below already tolerates a missing HDRI
 random.seed(11)
 
 def clamp(v, a=0., b=1.): return max(a, min(b, v))
@@ -198,16 +200,20 @@ cage.data.materials.append(cm); cage['wire'] = 1.0
 
 # condensation: one mesh of flattened droplets on the outer wall
 def droplets(n=1600):
-    bm = bmesh.new()
+    # each drop is built in its own small bmesh: create_icosphere into one shared bmesh rescans the whole growing
+    # mesh on every call (O(n^2), ~90 s for 1600 drops). Same ops, same random sequence, same vertex/face order.
+    co, faces = [], []
     for i in range(n):
         z = lerp(.016, .118, random.random() ** .8); a = random.random() * 2 * pi
         r0 = ri(z) + WALL
         s = random.choice([random.uniform(.0002, .0006)] * 5 + [random.uniform(.0007, .0016)])
-        ret = bmesh.ops.create_icosphere(bm, subdivisions=2, radius=1.)
+        bm = bmesh.new(); ret = bmesh.ops.create_icosphere(bm, subdivisions=2, radius=1.)
         n_ = Vector((cos(a), sin(a), 0))
         M = Matrix.Translation(n_ * (r0 + s * .15) + Vector((0, 0, z))) @ Matrix.Rotation(a, 4, 'Z') @ Matrix.Diagonal((s * .45, s, s * (1.25 if s > .0007 else 1), 1))
         bmesh.ops.transform(bm, matrix=M, verts=ret['verts'])
-    me = bpy.data.meshes.new('drops'); bm.to_mesh(me); bm.free()
+        bm.verts.index_update(); off = len(co)
+        co += [v.co.copy() for v in bm.verts]; faces += [tuple(off + v.index for v in f.verts) for f in bm.faces]; bm.free()
+    me = bpy.data.meshes.new('drops'); me.from_pydata(co, [], faces)
     for p in me.polygons: p.use_smooth = True
     o = link(bpy.data.objects.new('drops', me)); o.data.materials.append(water_mat()); return o
 drops = droplets()
