@@ -145,9 +145,12 @@ def bun_mat(name, cut_sign, hmax, stops):
     crust = s.ramp(hj, stops)
     # toasted crumb on the cut face: pale with golden toast patches and pores
     tz = s.noise(5, 5)
-    crumb = s.ramp(tz.outputs['Fac'], [(.3, '#efcf92'), (.5, '#d9a457'), (.68, '#b06a2a'), (.8, '#8a4a1a')])
-    cut = s.n('ShaderNodeMapRange'); cut.clamp = True; cut.inputs['From Min'].default_value = .55; cut.inputs['From Max'].default_value = .85
-    s.L(s.math('MULTIPLY', nsep.outputs['Z'], cut_sign), cut.inputs['Value'])
+    crumb = s.ramp(tz.outputs['Fac'], [(.3, '#f4de9e'), (.5, '#e9c56c'), (.68, '#c48a32'), (.8, '#93591a')])
+    # cut face = the flat end of the bun, found from the undeformed (generated) height so the lumps don't break it
+    gsep = s.n('ShaderNodeSeparateXYZ'); s.L(o['Generated'], gsep.inputs[0])
+    gz = gsep.outputs['Z'] if cut_sign > 0 else s.math('SUBTRACT', 1., gsep.outputs['Z'])
+    cut = s.n('ShaderNodeMapRange'); cut.clamp = True; cut.inputs['From Min'].default_value = .955; cut.inputs['From Max'].default_value = .985
+    s.L(gz, cut.inputs['Value'])
     base = s.mixc(cut.outputs[0], crust.outputs[0], crumb.outputs[0])
     pores = s.n('ShaderNodeTexVoronoi'); pores.inputs['Scale'].default_value = 70; s.L(o['Object'], pores.inputs['Vector'])
     fine = s.noise(40, 6)
@@ -156,13 +159,13 @@ def bun_mat(name, cut_sign, hmax, stops):
     rough = s.n('ShaderNodeMapRange'); rough.inputs['To Min'].default_value = .45; rough.inputs['To Max'].default_value = .85; s.L(cut.outputs[0], rough.inputs['Value'])
     coat = s.n('ShaderNodeMapRange'); coat.inputs['To Min'].default_value = .55; coat.inputs['To Max'].default_value = 0.; s.L(cut.outputs[0], coat.inputs['Value'])
     b = s.bsdf(**{'Base Color': base, 'Roughness': rough.outputs[0], 'Coat Weight': coat.outputs[0], 'Coat Roughness': .24,
-                  'Subsurface Weight': .04, 'Subsurface Radius': (.3, .18, .08), 'Subsurface Scale': .05, 'Normal': s.bump(h, .35, .004), 'Coat Normal': s.bump(wr.outputs['Fac'], .5, .01)})
+                  'Subsurface Weight': 0., 'Subsurface Radius': (.3, .18, .08), 'Subsurface Scale': .05, 'Normal': s.bump(h, .35, .004), 'Coat Normal': s.bump(wr.outputs['Fac'], .5, .01)})
     s.L(b.outputs[0], s.out.inputs[0]); return s.m
 
 def chicken_mat():
     s = NT('chicken'); o = s.tc.outputs
     mot = s.noise(4.5, 6, .6)
-    base = s.ramp(mot.outputs['Fac'], [(.28, '#d9a95c'), (.45, '#b37a36'), (.6, '#8a5424'), (.78, '#553012')])
+    base = s.ramp(mot.outputs['Fac'], [(.28, '#d4ae5e'), (.45, '#ad8638'), (.6, '#805c22'), (.78, '#4f3510')])
     # grill marks across the top: rotated bands, sharp, broken by noise
     mp = s.n('ShaderNodeMapping'); mp.inputs['Rotation'].default_value = (0, 0, .55); s.L(o['Object'], mp.inputs['Vector'])
     wv = s.n('ShaderNodeTexWave'); wv.inputs['Scale'].default_value = 1.7; wv.inputs['Distortion'].default_value = 1.6; wv.inputs['Detail'].default_value = 2; s.L(mp.outputs[0], wv.inputs['Vector'])
@@ -216,8 +219,8 @@ def pickle_mat():
 
 def sauce_mat():
     s = NT('chipotle'); nz = s.noise(5, 2)
-    col = s.ramp(nz.outputs['Fac'], [(.35, '#f2b07a'), (.65, '#e6915a')])
-    b = s.bsdf(**{'Base Color': col.outputs[0], 'Roughness': .16, 'Subsurface Weight': .35, 'Subsurface Radius': (1, .5, .3), 'Subsurface Scale': .03,
+    col = s.ramp(nz.outputs['Fac'], [(.35, '#eaa266'), (.65, '#d9803f')])
+    b = s.bsdf(**{'Base Color': col.outputs[0], 'Roughness': .16, 'Subsurface Weight': .2, 'Subsurface Radius': (1, .6, .3), 'Subsurface Scale': .02,
                   'Normal': s.bump(nz.outputs['Fac'], .1, .01)})
     s.L(b.outputs[0], s.out.inputs[0]); return s.m
 
@@ -246,7 +249,7 @@ BOT_H = .272
 top_bun = link(bpy.data.objects.new('top_bun', lathe('top_bun', smooth_prof(top_prof, 3), 112, wob_bun)), stack)
 bot_bun = link(bpy.data.objects.new('bot_bun', lathe('bot_bun', smooth_prof(bot_prof, 3), 112, wob_bun)), stack)
 top_bun.data.materials.append(bun_mat('bun_top', -1, TOP_H, [(0, '#e9bf7e'), (.14, '#cf8a3a'), (.32, '#a24f16'), (.55, '#77320c'), (1, '#4a1b05')]))
-bot_bun.data.materials.append(bun_mat('bun_bot', 1, BOT_H, [(0, '#b77a3a'), (.3, '#dcae6a'), (.7, '#ecca8e'), (1, '#f1d6a0')]))
+bot_bun.data.materials.append(bun_mat('bun_bot', 1, BOT_H, [(0, '#9a5a22'), (.3, '#c4843a'), (.7, '#d9a258'), (1, '#e6b878')]))
 
 def chick_R(t): return 1.1 * (1 + .07 * sin(2 * t + .5) + .045 * sin(3 * t + 1.3) + .025 * sin(5 * t + 2.2) + .012 * sin(9 * t))
 def chick_q(x, y):
@@ -358,11 +361,11 @@ def area(name, loc, size, power, color, sy=None):
     l = bpy.data.lights.new(name, 'AREA'); l.shape = 'RECTANGLE'; l.size = size; l.size_y = sy or size; l.energy = power; l.color = color
     o = link(bpy.data.objects.new(name, l)); o.location = loc; o.visible_camera = False
     d = Vector((0, 0, 1.1)) - Vector(loc); o.rotation_euler = d.to_track_quat('-Z', 'Y').to_euler(); return o
-area('key', (-3.8, .8, 3.6), 2.4, 1300, (1, .84, .66))
-area('rim', (2.8, 3.6, 2.8), .5, 1100, (1, .78, .55), 4)
+area('key', (-3.8, .8, 3.6), 2.4, 1300, (1, .93, .84))
+area('rim', (2.8, 3.6, 2.8), .5, 1100, (1, .88, .72), 4)
 area('rim2', (-3.2, 3.2, 2.0), .4, 650, (1, .9, .8), 3)
 area('fill', (2.5, -5, 1.6), 3, 160, (1, .95, .9))
-area('front', (-1.5, -4.5, 3.2), 1.6, 380, (1, .9, .78))
+area('front', (-1.5, -4.5, 3.2), 1.6, 380, (1, .96, .9))
 area('top', (0, 0, 6), 2, 260, (1, .95, .88))
 
 # ---------------------------------------------------------------- camera
@@ -375,10 +378,10 @@ tc_ = cam.constraints.new('TRACK_TO'); tc_.target = tgt; tc_.track_axis = 'TRACK
 KEYS = [
     (0, 0, 11, 55, 5.6, (.1, .52)),
     (16, 4, 11, 55, 5.6, (.1, .52)),
-    (36, 8, 12, 52, 7., (.08, .6)),
-    (56, 12, 13, 50, 8., (.07, .64)),
-    (100, -8, 13, 50, 8., (.07, .64)),
-    (118, -5, 12, 52, 7., (.08, .6)),
+    (36, 8, 12, 52, 7., (.07, .64)),
+    (56, 12, 13, 50, 8., (.06, .69)),
+    (100, -8, 13, 50, 8., (.06, .69)),
+    (118, -5, 12, 52, 7., (.07, .64)),
     (132, -2, 11, 55, 5.6, (.1, .54)),
     (143, 0, 9, 60, 4., (.06, .6)),
 ]
