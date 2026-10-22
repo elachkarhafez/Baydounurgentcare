@@ -385,7 +385,15 @@
     .nx-flyer span { position: absolute; left: 0; right: 0; bottom: 0; padding: 4px 0; background: var(--juice); color: var(--ink); font: 700 10px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; }
     @media (hover: hover) { .nx-flyer:hover { transform: rotate(-2deg) scale(1.06); } }
     .cd-msg { margin: 14px 0 0 !important; padding: 14px; border-radius: 14px; background: rgba(255,248,231,.08); color: var(--cream) !important; font: 400 26px/1.1 var(--display) !important; text-transform: uppercase; }
-    .nx-dir { margin-top: 14px; height: 46px; padding: 0 20px; font-size: 12.5px; }
+    .nx-dir { height: 46px; padding: 0 20px; font-size: 12.5px; }
+    .nx-acts { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+    .nx-acts [hidden] { display: none !important; }
+    .nx-cal { position: relative; }
+    .nx-calbtn { background: var(--cream); }
+    .nx-calbtn svg { width: 16px; height: 16px; }
+    .nx-calmenu { position: absolute; left: 0; bottom: calc(100% + 8px); z-index: 5; display: grid; min-width: 210px; padding: 6px; border-radius: 16px; background: var(--cream); border: 2.5px solid var(--ink); box-shadow: 0 14px 30px rgba(0,0,0,.35); }
+    .nx-calmenu a { padding: 12px 14px; border-radius: 10px; color: var(--ink); font: 800 13px/1 var(--sans); }
+    .nx-calmenu a:hover, .nx-calmenu a:focus-visible { background: var(--juice); }
     .po-group { margin: 16px 0 8px; font: 700 11.5px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ink); display: flex; align-items: center; gap: 8px; }
     .po-group:first-child { margin-top: 0; }
     .po-group::after { content: ""; flex: 1; height: 2px; background: var(--line); }
@@ -835,7 +843,9 @@
               <p data-nextmeta></p></div><button type="button" class="nx-flyer" data-nxflyer aria-label="See the flyer"><img alt="" width="640" height="851" data-nxflyerimg><span>Flyer</span></button></div>
               <div class="cd" data-cd><div><b data-cdd>00</b><span>Days</span></div><div><b data-cdh>00</b><span>Hrs</span></div><div><b data-cdm>00</b><span>Min</span></div><div><b data-cds>00</b><span>Sec</span></div></div>
               <p class="cd-msg" data-cdmsg hidden></p>
-              <a class="btn juice nx-dir" data-nxdir href="#" target="_blank" rel="noopener">Directions</a>
+              <div class="nx-acts"><a class="btn juice nx-dir" data-nxdir href="#" target="_blank" rel="noopener">Directions</a>
+              <div class="nx-cal" data-nxcal><button type="button" class="btn nx-dir nx-calbtn" data-nxcalbtn aria-expanded="false" aria-haspopup="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4M12 13v5M9.5 15.5h5"/></svg>Add to calendar</button>
+                <div class="nx-calmenu" data-nxcalmenu hidden><a data-gcal href="#" target="_blank" rel="noopener">Google Calendar</a><a data-ics href="#" download="elevated-shots.ics">Apple / Outlook</a></div></div></div>
             </div>
           </div>
         </div>
@@ -1512,7 +1522,20 @@
     $('[data-nexttag]').textContent = isUp(p) ? (i === firstUp ? 'Next sip' : 'Coming up') : 'Past sip';
     const fb = $('[data-nxflyer]'); fb.hidden = !p.flyer; if (p.flyer) $('[data-nxflyerimg]').src = p.flyer;
     const dir = $('[data-nxdir]'); dir.hidden = !p.addr || !isUp(p); if (p.addr) dir.href = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(p.addr);
+    // add to calendar: Google link, plus an .ics file that Apple Calendar and Outlook open
+    const cal = $('[data-nxcal]'), canCal = isUp(p) && !!p.at; cal.hidden = !canCal; closeCal();
+    if (canCal) { const fmt = d => new Date(d).toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, ''), title = `Elevated Shots at ${p.n}`, where = p.addr || p.city, info = `Come grab a cold-pressed shot. ${p.meta || ''}\nhttps://elevated-shots.vercel.app/#sips`;
+      $('[data-gcal]').href = 'https://calendar.google.com/calendar/render?action=TEMPLATE&text=' + encodeURIComponent(title) + '&dates=' + fmt(p.at) + '/' + fmt(p.end) + '&details=' + encodeURIComponent(info) + '&location=' + encodeURIComponent(where);
+      const icsEsc = t => String(t).replace(/[\\;,]/g, m => '\\' + m).replace(/\n/g, '\\n');
+      const ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Elevated Shots//Sips//EN', 'BEGIN:VEVENT', `UID:${fmt(p.at)}-${p.n.replace(/\W+/g, '').toLowerCase()}@elevatedshots`, `DTSTAMP:${fmt(Date.now())}`, `DTSTART:${fmt(p.at)}`, `DTEND:${fmt(p.end)}`, `SUMMARY:${icsEsc(title)}`, `LOCATION:${icsEsc(where)}`, `DESCRIPTION:${icsEsc(info)}`, 'URL:https://elevated-shots.vercel.app/#sips', 'BEGIN:VALARM', 'TRIGGER:-PT2H', 'ACTION:DISPLAY', `DESCRIPTION:${icsEsc(title)}`, 'END:VALARM', 'END:VEVENT', 'END:VCALENDAR'].join('\r\n');
+      const a = $('[data-ics]'); a.href = 'data:text/calendar;charset=utf-8,' + encodeURIComponent(ics); a.download = p.n.replace(/[^\w]+/g, '-').toLowerCase() + '.ics'; }
     tickCd(); if (ANIM) gsap.fromTo('[data-next]', { scale: .97, rotation: -1 }, { scale: 1, rotation: 0, duration: .5, ease: 'back.out(2.4)' }); };
+  const calBtn = $('[data-nxcalbtn]'), calMenu = $('[data-nxcalmenu]');
+  function closeCal() { calMenu.hidden = true; calBtn.setAttribute('aria-expanded', 'false'); }
+  calBtn.addEventListener('click', e => { e.stopPropagation(); const open = calMenu.hidden; calMenu.hidden = !open; calBtn.setAttribute('aria-expanded', open); if (open && ANIM) gsap.fromTo(calMenu, { y: 8, opacity: 0 }, { y: 0, opacity: 1, duration: .25, ease: 'back.out(2)' }); });
+  calMenu.addEventListener('click', () => setTimeout(closeCal, 50));
+  document.addEventListener('click', e => { if (!e.target.closest('[data-nxcal]')) closeCal(); });
+  addEventListener('keydown', e => { if (e.key === 'Escape') closeCal(); });
   const tickCd = () => { const p = PU[evSel], at = p.at ? Date.parse(p.at) : 0, end = p.end ? Date.parse(p.end) : 0, now = Date.now(), cd = $('[data-cd]'), msg = $('[data-cdmsg]');
     const say = t => { cd.hidden = true; msg.hidden = false; msg.textContent = t; };
     if (!at || now >= end) { say(isUp(p) ? 'That one just wrapped. Thanks for coming!' : 'Thanks to everyone who came out.'); return; }
