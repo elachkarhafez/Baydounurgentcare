@@ -22,8 +22,11 @@ function ScrollFilm(o) {
   function nearest(i) { if (img[i]) return i; for (let d = 1; d < N; d++) { if (img[i - d]) return i - d; if (img[i + d]) return i + d; } return -1; }
   function draw(t) {               // t = 0..1 film position
     const k = nearest(Math.round(t * (N - 1))); if (k < 0) return; if (k === shown && !dirty) return; shown = k; dirty = false;
-    const A = img[k], W = cv.width, H = cv.height, s = Math.max(W / A.naturalWidth, H / A.naturalHeight), dw = A.naturalWidth * s, dh = A.naturalHeight * s;
-    ctx.drawImage(A, Math.min(0, Math.max(W - dw, W / 2 - focusAt(t) * dw)), (H - dh) / 2, dw, dh);
+    const A = img[k], W = cv.width, H = cv.height, fill = small ? (o.phoneFill || 1) : 1;
+    // phones: the film fills the lower part of a tall screen (frames are black-backed), so more of the subject shows and captions sit on black
+    const s = Math.max(W / A.naturalWidth, H * fill / A.naturalHeight), dw = A.naturalWidth * s, dh = A.naturalHeight * s;
+    if (fill < 1) { ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H); }
+    ctx.drawImage(A, Math.min(0, Math.max(W - dw, W / 2 - focusAt(t) * dw)), fill < 1 ? H - dh : (H - dh) / 2, dw, dh);
   }
   const progress = () => { const r = sec.getBoundingClientRect(), span = sec.offsetHeight - innerHeight; return Math.min(1, Math.max(0, -r.top / Math.max(1, span))); };
   let cur = progress(), prev = performance.now(), lastP = -1;

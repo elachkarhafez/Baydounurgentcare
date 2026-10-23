@@ -120,6 +120,7 @@ while len(beads) < 380 and tries < 8000:
     r = random.choice((.012, .016, .02, .025, .03, .038)) * random.uniform(.85, 1.15)
     if any((x - px) ** 2 + (y - py) ** 2 < (r + pr + .012) ** 2 for px, py, pr in placed): continue
     placed.append((x, y, r))
+    if (x - .6) ** 2 + ((y + 1.15) / 1.4) ** 2 < .62 ** 2: continue   # nothing right under the final lens: it only renders as blur
     n = normal(x, y); p = Vector((x, y, surf(x, y))) + n * r * .28
     o = link(bpy.data.objects.new('bead', bm)); o.location = p
     o.rotation_euler = n.to_track_quat('Z', 'Y').to_euler(); o.scale = (r, r, r * .52)
@@ -168,7 +169,7 @@ KEYS = [
     (40, (-3.6, -3.4, 1.15), (.4, .1, .12), 34, 8.),
     (66, (-1.2, -3.3, 1.2), (.6, 0, .15), 36, 8.),
     (92, (1.9, -3.0, 1.0), (1.0, 0, .18), 40, 6.3),
-    (143, (.55, -1.12, .42), (.85, .05, .23), 62, 2.8),
+    (143, (.55, -1.12, .42), (.85, .05, .23), 62, 4.5),
 ]
 for f, c, t, lens, fs in KEYS:
     cam.location = c; cam.keyframe_insert('location', frame=f); tgt.location = t; tgt.keyframe_insert('location', frame=f)
