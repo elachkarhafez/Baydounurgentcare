@@ -11,7 +11,8 @@ the biggest win is not rendering when the question doesn't need pixels, and rend
 Everything goes through one launcher (Python 3 stdlib, works on Linux/macOS/Windows):
 
 ```
-B=.claude/skills/blender-performance-engine/bpe      # or: python3 <skill>/scripts/bpe.py
+B=<this skill's folder>/bpe       # or: python3 <this skill's folder>/scripts/bpe.py
+                                  # in the sites repo: .claude/skills/blender-performance-engine/bpe
 $B probe                                  # once per machine: hardware, Blender, Cycles backends, device decision (cached)
 $B inspect SCRIPT -- ARGS                 # ultra: run the script, skip every render, report the scene
 $B run SCRIPT -m fast -- ARGS             # quick look (previews go to the preview dir, never over deliverables)
