@@ -1,5 +1,7 @@
 # ELA Systems: website formatting standards (mandatory)
 
+> **Mobile first (user feedback, newest; overrides "design for real laptops first" below).** Build and judge every site at 390×844 first. Phone type: H1 26–30px, H2 20–24px, body 14–15px. No photo taller than about 55% of the phone screen, so nothing gets sliced by the fold. Card rows scroll sideways with snap and a peek. Phone section padding 28–40px. Sticky bottom action bar. See CLAUDE.md "mobile first".
+
 Every site must be cinematic and visually impressive, and also compact, in proportion, readable and easy to get around. Oversized type, huge heroes and padding that forces needless scrolling are defects. These are acceptance criteria for every build and every edit.
 
 ## 1. Type sizes

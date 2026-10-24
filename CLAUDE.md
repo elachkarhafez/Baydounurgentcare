@@ -59,6 +59,17 @@ The user said: "its either stupid gimmicks or its bland and ai slop, cant you ma
 - Don't pitch three directions any more. Build to this standard, and ask only when a real content choice needs the user.
 - Formatting standards, copy rules, bot blocking, QA and logging all still apply.
 
+## Standing rule: mobile first (newest, overrides desktop-first sizing)
+
+The user said: "These are supposed to be mainly for mobile, meaning the formatting, everything. Like, a picture doesn't have to be cut between a scroll. Everything needs to be accessible easily through the scrolls... Everything is way too big." Design at 390×844 first; desktop is the add-on.
+- **Write the CSS mobile first.** Base styles are the phone; use `min-width` media queries for tablet and desktop.
+- **Phone type:** H1 26–30px, H2 20–24px, card titles 16–18px, body 14–15px, buttons 14px. Nav 56px with a 32px logo.
+- **No image taller than about 55% of the phone screen.** Each photo and its caption fit in one view, and nothing gets sliced by the fold. Use 4:3, 1:1 or 3:4 crops; never full-width 4:5 or 9:16 photos.
+- **Rows of cards scroll sideways on phones** (scroll-snap, one card plus a peek of the next, with dots), instead of stacking into a long scroll. Lists become compact rows, not big cards.
+- **Short sections:** phone section padding 28–40px. Aim for the hero headline, CTA and first visual all on the first phone screen.
+- **A sticky bottom action bar on phones** that hides when the closing CTA is on screen. Button labels fit one line (`white-space:nowrap`).
+- **QA at 390×844 and 360×740 first**, measuring type sizes, image heights against the viewport, page height and overflow. Then desktop.
+
 ## Standing rule: formatting standards (mandatory acceptance criteria)
 
 Every site, new or edited, follows `.claude/skills/ela-studio/references/formatting.md`. The user called out oversized type, huge heroes and too much scrolling. In short:
