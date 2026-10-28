@@ -5,7 +5,7 @@ const { chromium } = require('playwright'); const { spawn } = require('child_pro
   const tv = process.argv[2], out = process.argv[3], LOOP = 40, FPS = 30, N = LOOP * FPS;
   const b = await chromium.launch(); const p = await b.newPage({ viewport:{ width:1080, height:1920 } });
   await p.goto(`http://localhost:8766/barbar-tv/?tv=${tv}&cap=1`);
-  await p.waitForFunction(() => window.__ready && window.__artReady);
+  await p.waitForFunction(() => window.__ready);
   const ff = spawn('ffmpeg', ['-y','-loglevel','error','-f','image2pipe','-framerate',String(FPS),'-c:v','mjpeg','-i','-','-c:v','libx264','-preset','slow','-crf','18','-pix_fmt','yuv420p','-profile:v','high','-level','4.1','-g',String(FPS*2),'-movflags','+faststart', out]);
   ff.stderr.on('data', d => process.stderr.write(d));
   for (let f = 0; f < N; f++) {

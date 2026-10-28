@@ -7,34 +7,51 @@
 <title>Barbar Subs · TV menu</title>
 <style>
 /* Barbar Subs TV menu: four portrait screens (1080 x 1920), one per TV, rendered to looping MP4s for a USB stick.
-   ?tv=1..4 picks the screen. Every moving part is a function of t (0..LOOP) in render(), so the capture script
-   can step frames exactly and the end of the loop lands back on frame 0 with no jump.
-   Motion: a red highlight walks down the menu one item at a time, their menu's line art draws itself in the header,
-   a sticker stamps on, the checkered edges roll and a ticker runs the hours. Prices are word for word from barbarsub.com/menu. */
+   ?tv=1..4 picks the screen. Everything that moves is a function of t (0..LOOP) in render(), so render.js can step
+   frames exactly and the last frame flows back into the first.
+   The star is their chef mascot, cut from their own badge into a puppet rig (torso, arm, hand, head, mustache, hat,
+   eyelids) with pivots at the elbow, wrist, neck and hat brim. Each loop he pops up from behind the counter bar,
+   waves, flips his hat, shows off the screen's food on his palm, tosses it, winks, says their tagline, dances,
+   ducks out and pops up big at the bottom of the screen, comes back, tips his hat and ducks away.
+   Meanwhile a red highlight walks the menu one item at a time. Prices are word for word from barbarsub.com/menu. */
 @font-face{font-family:'Rubik';src:url(media/rubik.woff2) format('woff2');font-weight:300 900;font-display:block}
-:root{--paper:#fbf1e1;--paper2:#f3e3c7;--ink:#231f20;--muted:#6c5f55;--red:#e31e26;--red2:#b8141b;--yel:#ffcf24;--s:1}
+:root{--paper:#fbf1e1;--paper2:#f3e3c7;--ink:#231f20;--muted:#6c5f55;--red:#e31e26;--red2:#b8141b;--yel:#ffcf24}
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{background:#111;height:100%;overflow:hidden}
 .stage{position:absolute;left:50%;top:50%;width:1080px;height:1920px;transform-origin:50% 50%;background:var(--paper);color:var(--ink);font-family:'Rubik',sans-serif;overflow:hidden}
 body.cap .stage{left:0;top:0;transform:none!important}
 
-.ck{position:absolute;left:0;right:0;height:30px;background:repeating-conic-gradient(var(--red) 0 25%,var(--paper) 0 50%) 0 0/60px 60px}
+.ck{position:absolute;left:0;right:0;height:30px;background:repeating-conic-gradient(var(--red) 0 25%,var(--paper) 0 50%) 0 0/60px 60px;z-index:2}
 .ck.t{top:0}.ck.b{bottom:0}
 
 /* header */
-.hd{position:absolute;left:0;right:0;top:30px;height:350px}
-.hd .bd{position:absolute;left:56px;top:30px;width:84px}
-.hd .kick{position:absolute;left:160px;top:62px;font:800 30px/1 'Rubik';letter-spacing:.14em;text-transform:uppercase;color:var(--ink)}
+.hd .bd{position:absolute;left:56px;top:46px;width:70px;z-index:3}
+.hd .kick{position:absolute;left:142px;top:72px;font:800 30px/1 'Rubik';letter-spacing:.14em;text-transform:uppercase;z-index:3}
 .hd .kick b{color:var(--red)}
-.hd h1{position:absolute;left:52px;top:150px;font:900 108px/.86 'Rubik';letter-spacing:-.03em;text-transform:uppercase;color:var(--red);white-space:nowrap}
-.art{position:absolute;overflow:visible}
-.art path{fill:var(--ink);stroke:var(--ink);stroke-width:6;fill-opacity:0}
-.stk{position:absolute}
+.hd h1{position:absolute;left:52px;top:150px;font:900 104px/.86 'Rubik';letter-spacing:-.03em;text-transform:uppercase;color:var(--red);white-space:nowrap;z-index:3}
+.counter{position:absolute;left:0;right:0;top:420px;height:40px;background:var(--red);box-shadow:0 8px 0 var(--red2);z-index:6}
+
+/* the chef rig: a 1000 x 800 unit box (the badge's own coordinates), scaled into place */
+.cwrap{position:absolute;left:0;top:0;width:1080px;pointer-events:none}
+.cwrap.top{height:420px;z-index:5;clip-path:inset(-300px -300px 0 -300px)}
+.cwrap.big{height:1802px;z-index:7;clip-path:inset(0 0 0 0)}
+.chef{position:absolute;left:0;top:0;width:1000px;height:800px;transform-origin:0 0}
+.cg{position:absolute;left:0;top:0;width:1000px;height:800px}
+.cg img{position:absolute;display:block}
+.chef .item{position:absolute;left:0;top:0;width:1000px;height:800px}
+.chef .item img{position:absolute;display:block}
+.spark{position:absolute;width:60px;height:60px;margin:-30px 0 0 -30px}
+.lids{position:absolute;left:0;top:0;width:1000px;height:800px;overflow:visible}
+.shadow{filter:drop-shadow(0 18px 0 rgba(35,31,32,.12))}
+
+/* speech bubble */
+.bub{position:absolute;z-index:8;padding:16px 24px;border-radius:30px;background:#fff;border:6px solid var(--ink);font:900 36px/1 'Rubik';white-space:nowrap;text-transform:uppercase;letter-spacing:-.01em;color:var(--red);text-align:center;transform-origin:85% 100%;box-shadow:0 8px 0 rgba(35,31,32,.15)}
+.bub::after{content:"";position:absolute;right:46px;bottom:-34px;width:40px;height:40px;background:#fff;border-right:6px solid var(--ink);border-bottom:6px solid var(--ink);transform:skewX(-28deg) rotate(45deg) scale(.8,1.1);transform-origin:50% 50%}
 
 /* menu body */
-.body{position:absolute;left:56px;right:56px;top:392px;bottom:118px}
+.body{position:absolute;left:56px;right:56px;top:484px;bottom:118px}
 .fit{position:relative;transform-origin:0 0}
-.hl{position:absolute;left:-22px;right:-22px;top:0;height:10px;border-radius:22px;background:var(--red);box-shadow:0 10px 0 var(--red2);z-index:0;opacity:0}
+.hl{position:absolute;left:0;top:0;width:10px;height:10px;border-radius:22px;background:var(--red);box-shadow:0 10px 0 var(--red2);z-index:0;opacity:0}
 .grp{position:relative;z-index:1;margin-top:26px}
 .grp:first-child{margin-top:4px}
 .gh{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;padding-bottom:12px;border-bottom:4px solid var(--ink);margin-bottom:6px}
@@ -43,14 +60,18 @@ body.cap .stage{left:0;top:0;transform:none!important}
 .tagp{display:flex;gap:10px;flex:none}
 .tagp span{display:flex;align-items:baseline;gap:8px;padding:10px 18px;border-radius:999px;background:var(--ink);color:var(--paper);font:800 36px/1 'Rubik';white-space:nowrap}
 .tagp small{font:600 20px/1 'Rubik';text-transform:uppercase;letter-spacing:.06em;color:var(--yel)}
-.cols{display:flex;gap:0;flex:none}
+.cols{display:flex;flex:none}
 .cols span{width:150px;text-align:right;font:700 22px/1 'Rubik';text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
-.row{position:relative;display:flex;align-items:center;gap:20px;padding:12px 0;min-height:76px;transition:none}
+.row{position:relative;display:flex;align-items:center;gap:20px;padding:12px 0;min-height:76px}
 .row .nm{flex:1;min-width:0}
 .row b{display:flex;align-items:center;gap:12px;font:700 40px/1.05 'Rubik';letter-spacing:-.01em}
 .row p{font:400 23px/1.25 'Rubik';color:var(--muted);margin-top:4px}
 .row .pr{display:flex;flex:none}
 .row .pr span{width:150px;text-align:right;font:800 40px/1 'Rubik';color:var(--red)}
+.pair{display:flex;gap:56px;position:relative;z-index:1}
+.pair > .grp{flex:1;min-width:0}
+.pair .row{padding-left:14px;padding-right:14px;margin:0 -14px}
+.pair .row .pr span{width:130px}
 .chili{width:34px;height:34px;color:var(--red);flex:none}
 .row.on b,.row.on p,.row.on .pr span{color:#fff}
 .row.on .chili{color:var(--yel)}
@@ -63,31 +84,34 @@ body.cap .stage{left:0;top:0;transform:none!important}
 .blk.on .gh{border-color:#fff}
 .blk.on .tagp span{background:#fff;color:var(--red)}
 .blk.on .tagp small{color:var(--red2)}
-.blk.on{color:#fff}
 .blk .gh{padding-top:4px}
 
 /* ticker */
-.tk{position:absolute;left:0;right:0;bottom:30px;height:88px;background:var(--ink);color:var(--paper);overflow:hidden}
+.tk{position:absolute;left:0;right:0;bottom:30px;height:88px;background:var(--ink);color:var(--paper);overflow:hidden;z-index:9}
 .tk .tr{position:absolute;left:0;top:0;height:88px;display:flex;white-space:nowrap}
 .tk .tr div{display:flex;align-items:center;font:700 36px/88px 'Rubik';text-transform:uppercase;letter-spacing:.02em}
-.tk i{display:inline-block;width:16px;height:16px;border-radius:50%;background:var(--red);margin:0 30px;font-style:normal}
+.tk i{display:inline-block;width:16px;height:16px;border-radius:50%;background:var(--red);margin:0 30px}
 .tk em{font-style:normal;color:var(--yel)}
+.ck.b{z-index:9}
 </style>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-chili" viewBox="0 0 24 24"><path fill="currentColor" d="M14.6 6.2c1.6-.2 3.2.4 4.2 1.7 1.9 2.5.9 7.4-4.3 10.8-3.5 2.3-8 3.3-11.1 2.6-.8-.2-.8-1.3 0-1.5 3.6-.8 6.6-3.2 8.4-6.4.9-1.7 1.4-3.4 1.6-4.9.1-1.2.1-2.2 1.2-2.3Z"/><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M15.5 6.4c.2-1.6 1.1-3 2.6-3.6"/></symbol>
+  <symbol id="i-star" viewBox="0 0 60 60"><path d="M30 2c3 16 12 25 28 28-16 3-25 12-28 28-3-16-12-25-28-28C18 27 27 18 30 2Z"/></symbol>
 </svg>
 <div class="stage" id="stage">
   <div class="ck t" id="ckt"></div>
   <header class="hd">
-    <img class="bd" id="bd" src="media/badge.webp" alt="">
+    <img class="bd" src="media/badge-sm.webp" alt="">
     <div class="kick" id="kick"></div>
     <h1 id="h1"></h1>
-    <div class="art" id="art"></div>
-    <img class="stk" id="stk" alt="">
   </header>
+  <div class="cwrap top" id="wrapTop"></div>
+  <div class="counter"></div>
+  <div class="bub" id="bub"></div>
   <main class="body"><div class="fit" id="fit"><div class="hl" id="hl"></div><div id="menu"></div></div></main>
+  <div class="cwrap big" id="wrapBig"></div>
   <div class="tk"><div class="tr" id="tr"></div></div>
   <div class="ck b" id="ckb"></div>
 </div>
@@ -95,7 +119,7 @@ body.cap .stage{left:0;top:0;transform:none!important}
 /* menu word for word from barbarsub.com/menu (same data as their site). 1 = chili icon on their printed menu */
 const H = (a, b) => [['Half', a], ['Whole', b]], SL = (a, b) => [['Small', a], ['Large', b]];
 const SCREENS = {
-  1: { kick: 'Subs', title: 'Chicken<br>subs', art: 'art-sub.svg', artBox: [520, 110, 470, 240], stk: 'sauce-me-up-red.svg', stkBox: [850, 30, 180],
+  1: { kick: 'Subs', title: 'Chicken<br>subs', item: 'art-sub.svg', itemW: 430, say: 'Sauce<br>me up!',
     blocks: [
       { t: 'group', title: 'Grilled chicken', price: H(12.99, 15.99), items: [
         ['Original', 'Chicken, mayo, tomato, pickles, lettuce'], ['Fajita', 'Chicken, mayo, avocado, onions, bell peppers, corn, mushrooms, mixed cheese'],
@@ -107,7 +131,7 @@ const SCREENS = {
         ['Spicy Crispy', 'Crispy chicken, mayo, coleslaw, pickles, spicy sauce', 1], ['BBQ Crispy', 'Crispy chicken, mayo, BBQ sauce, honey mustard, pickles, lettuce, cheddar'],
         ['Buffalo Crispy', 'Crispy chicken, mayo, buffalo sauce, honey mustard, pickles, coleslaw, cheddar'], ['Honey BBQ Crispy', 'Crispy chicken, mayo, honey BBQ sauce, pickles, lettuce']] },
     ] },
-  2: { kick: 'Subs & wraps', title: 'Steak<br>&amp; more', art: 'art-wrap.svg', artBox: [560, 100, 360, 250], stk: 'stay-crispy-red.svg', stkBox: [870, 40, 160],
+  2: { kick: 'Subs & wraps', title: 'Steak<br>&amp; more', item: 'art-wrap.svg', itemW: 360, say: 'Stay<br>crispy!',
     blocks: [
       { t: 'group', title: 'Steak subs', price: H(13.99, 16.99), items: [
         ['Classic', 'Steak, mayo, onions, mushrooms, lettuce, tomato, pickles, cheese'], ['Steak Fajita', 'Steak, mayo, avocado, onion, bell peppers, corn, mushrooms, mixed cheese'],
@@ -123,7 +147,7 @@ const SCREENS = {
       { t: 'group', title: 'Special wraps', price: [['', 16.99]], items: [
         ['Special Filet Mignon Wrap', 'Filet mignon steak tips, mushrooms, red onions, iceberg lettuce, cheddar, pepper jack cheese, mayo, special sauce'], ['Shrimp Wrap', 'Fried shrimp, tartar sauce, pickles, lettuce']] },
     ] },
-  3: { kick: 'Burgers', title: 'Burgers<br>&amp; sandos', art: null, badgeBig: true, stk: 'sauce-me-up-red.svg', stkBox: [610, 40, 190],
+  3: { kick: 'Burgers', title: 'Burgers<br>&amp; sandos', item: 'sauce-me-up-red.svg', itemW: 330, say: 'Good food<br>hits different!',
     blocks: [
       { t: 'group', title: 'Grilled chicken breast', price: [['', 12.99]], items: [
         ['Classic', 'Grilled chicken breast, mayo, lettuce, pickles, tomato, burger sauce'], ['Spicy', 'Spicy grilled chicken breast, spicy mayo, pickles, coleslaw, cheese, burger sauce', 1],
@@ -137,19 +161,22 @@ const SCREENS = {
         ['Mushroom Swiss', 'Beef patty, mayo, mushroom sauce, cheese, caramelized onions'], ['Jalapeño', 'Beef patty, mayo, jalapeños, avocado, nachos, lettuce, tomato, cheese, burger sauce'],
         ['Onion', 'Beef patty, mayo, onion petals, ranch, lettuce, pickles, burger sauce'], ['Spicy', 'Beef patty, spicy sauce, mayo, pickles, tomato, lettuce, caramelized onions, cheese, jalapeños', 1]] },
     ] },
-  4: { kick: 'Bowls & more', title: 'Bowls<br>&amp; sides', art: 'art-fries.svg', artBox: [680, 50, 300, 300], stk: 'stay-crispy-red.svg', stkBox: [880, 200, 150],
+  4: { kick: 'Bowls & more', title: 'Bowls<br>&amp; sides', item: 'art-fries.svg', itemW: 270, say: 'Open till<br>1 AM!',
     blocks: [
       { t: 'chips', title: 'Crispy chicken bowls', note: 'Yellow rice, fries or lettuce as your base', price: SL(10.99, 14.99), items: ['Classic', 'Lebanese', ['Spicy Crispy', 1], 'BBQ Crispy', 'Buffalo Crispy', 'Honey BBQ Crispy'] },
       { t: 'chips', title: 'Grilled chicken bowls', price: SL(10.99, 14.99), items: ['Classic', 'Fajita', 'Francisco', ['Louisiana', 1], ['Chinese', 1], 'Tawook', 'Chicken Shawarma', 'Chicken Bacon Ranch'] },
       { t: 'chips', title: 'Steak bowls', price: SL(13.99, 16.99), items: ['Classic', 'Steak Fajita', 'Philadelphia', 'Steak BBQ', 'Beef Shawarma', 'Sojok', 'Veggie Bowl (S $9.99 / L $11.99)'] },
       { t: 'rows', title: 'Chicken strips', items: [
         ['Combo 1', '3 strips, fries, coleslaw (4oz) + 1 sauce, pickles (4oz)', 0, [7.99]], ['Combo 2', '5 strips, fries, coleslaw (4oz), pickles (4oz) + 2 sauces', 0, [9.99]], ['Combo 3', '10 strips, fries, coleslaw (8oz), pickles (8oz) + 2 sauces', 0, [15.99]]] },
-      { t: 'rows', title: 'Wing dings', note: 'Boneless or bone-in', compact: 1, items: [['6 Wing Dings', '', 0, [7.99]], ['12 Wing Dings', '', 0, [14.99]], ['24 Wing Dings', '', 0, [25.99]]] },
       { t: 'rows', title: 'Fries', cols: ['S', 'M', 'L'], compact: 1, items: [['Regular Fries', '', 0, [5.99, 7.99, 9.99]], ['Curly Fries', '', 0, [6.99, 8.99, 10.99]]] },
       { t: 'chips', title: 'More sides', price: [['Each', 5.99]], items: ['Jalapeño Poppers', 'Mac & Cheese Bites', 'Onion Petals', 'Cheese Sticks', 'Onion Rings', 'Chicken Nuggets (8 pcs)'] },
-      { t: 'rows', title: 'Drinks', compact: 1, items: [['Beverages', '', 0, [2.00]], ['Water', '', 0, [1.00]]] },
+      { t: 'pair', blocks: [
+  { t: 'rows', title: 'Wing dings', note: 'Boneless or bone-in', compact: 1, items: [['6 Wing Dings', '', 0, [7.99]], ['12 Wing Dings', '', 0, [14.99]], ['24 Wing Dings', '', 0, [25.99]]] },
+        { t: 'rows', title: 'Drinks', compact: 1, items: [['Beverages', '', 0, [2.00]], ['Water', '', 0, [1.00]]] } ] },
     ] },
 };
+/* rig parts: [x, y, w, h] in badge units, cut from their badge by the scratch cut script */
+const META = {"torso": [138.5, 262.5, 690.0, 516.5], "arm": [102.0, 453.0, 243.5, 326.0], "hand": [14.0, 321.0, 253.5, 149.5], "head": [298.0, 196.5, 471.0, 424.0], "mst": [345.0, 405.0, 225.5, 100.5], "hat": [380.0, 61.5, 395.0, 317.0]};
 const LOOP = 40, FPS = 30;
 const qs = new URLSearchParams(location.search), TV = +(qs.get('tv') || 1), S = SCREENS[TV] || SCREENS[1];
 const $ = s => document.getElementById(s);
@@ -157,99 +184,228 @@ const money = n => '$' + n.toFixed(2);
 const chili = '<svg class="chili"><use href="#i-chili"/></svg>';
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
+/* ---------- menu */
 $('kick').innerHTML = '<b>Barbar</b> · ' + esc(S.kick);
 $('h1').innerHTML = S.title;
-$('menu').innerHTML = S.blocks.map(b => {
+const block = b => {
+  if (b.t === 'pair') return `<div class="pair">${b.blocks.map(block).join('')}</div>`;
   const tag = b.price ? `<div class="tagp">${b.price.map(([l, p]) => `<span>${l ? `<small>${l}</small>` : ''}${money(p)}</span>`).join('')}</div>` : '';
   const cols = b.cols ? `<div class="cols">${b.cols.map(c => `<span>${c}</span>`).join('')}</div>` : '';
   const gh = `<div class="gh"><h2>${esc(b.title)}${b.note ? `<span class="nt">${esc(b.note)}</span>` : ''}</h2>${tag}${cols}</div>`;
   if (b.t === 'chips') return `<section class="grp blk u">${gh}<div class="chips">${b.items.map(x => { const [n, h] = Array.isArray(x) ? x : [x, 0]; return `<span>${esc(n)}${h ? chili : ''}</span>`; }).join('')}</div></section>`;
-  const rows = b.items.map(([n, d, h, pr]) => `<div class="row u${b.compact ? ' cp' : ''}"><div class="nm"><b>${esc(n)}${h ? chili : ''}</b>${d ? `<p>${esc(d)}</p>` : ''}</div>${pr ? `<div class="pr">${pr.map(p => `<span>${p == null ? '' : money(p)}</span>`).join('')}</div>` : ''}</div>`).join('');
+  const rows = b.items.map(([n, d, h, pr]) => `<div class="row u"><div class="nm"><b>${esc(n)}${h ? chili : ''}</b>${d ? `<p>${esc(d)}</p>` : ''}</div>${pr ? `<div class="pr">${pr.map(p => `<span>${p == null ? '' : money(p)}</span>`).join('')}</div>` : ''}</div>`).join('');
   return `<section class="grp">${gh}${rows}</section>`;
-}).join('');
+};
+$('menu').innerHTML = S.blocks.map(block).join('');
 
-/* header art: their line drawing, stroked then filled */
-let paths = [];
-if (S.art) {
-  fetch('media/' + S.art).then(r => r.text()).then(svg => {
-    const a = $('art'); a.innerHTML = svg; const el = a.querySelector('svg');
-    el.removeAttribute('fill'); el.style.width = '100%'; el.style.height = '100%'; el.setAttribute('preserveAspectRatio', 'xMidYMid meet');
-    Object.assign(a.style, { left: S.artBox[0] + 'px', top: S.artBox[1] + 'px', width: S.artBox[2] + 'px', height: S.artBox[3] + 'px' });
-    paths = [...el.querySelectorAll('path')]; paths.forEach(p => { p.removeAttribute('fill'); p.setAttribute('pathLength', '1'); p.style.strokeDasharray = '1'; });
-    window.__artReady = true;
-  });
-} else window.__artReady = true;
-if (S.badgeBig) { const big = $('bd').cloneNode(); big.id = 'bd2'; Object.assign(big.style, { left: 'auto', right: '56px', top: '40px', width: '230px' }); $('bd').after(big); }
-if (S.stk) { const k = $('stk'); k.src = 'media/' + S.stk; Object.assign(k.style, { left: S.stkBox[0] + 'px', top: S.stkBox[1] + 'px', width: S.stkBox[2] + 'px' }); }
-else $('stk').remove();
-
-/* ticker: two copies, so shifting by exactly one copy width is seamless */
+/* ticker: three copies; shifting by exactly one copy width per loop is seamless */
 const tick = '<div>Open till 1 AM<i></i>Saturday &amp; Sunday till 2 AM<i></i><em>Call ahead (313) 406-4895</em><i></i>Good food hits different<i></i>Now hiring, call (313) 999-9994<i></i>Stay crispy<i></i>Sauce me up<i></i></div>';
 $('tr').innerHTML = tick + tick + tick;
 
-/* fit the menu into its box (scale down only) */
-let units = [], tops = [];
+/* ---------- chef rig */
+function makeChef(wrap, item) {
+  const im = n => `<img src="media/chef/${n}.png" alt="" style="left:${META[n][0]}px;top:${META[n][1]}px;width:${META[n][2]}px;height:${META[n][3]}px">`;
+  const star = (c) => `<svg class="spark" viewBox="0 0 60 60" style="fill:${c}"><use href="#i-star"/></svg>`;
+  const el = document.createElement('div'); el.className = 'chef';
+  el.innerHTML = `<div class="cg cbody shadow">
+      ${im('torso')}
+      <div class="cg arm" style="transform-origin:200px 730px">${im('arm')}
+        <div class="cg hand" style="transform-origin:195px 455px">${im('hand')}
+          <div class="item">${item ? `<img src="media/${item}" alt="">` : ''}${item ? [0, 1, 2, 3, 4, 5].map(i => star(i % 2 ? '#ffcf24' : '#e31e26')).join('') : ''}</div>
+        </div>
+      </div>
+      <div class="cg head" style="transform-origin:480px 610px">${im('head')}
+        <div class="cg mst" style="transform-origin:455px 452px">${im('mst')}</div>
+        <svg class="lids" viewBox="0 0 1000 800">
+          <g class="lidL" opacity="0"><ellipse cx="421" cy="371" rx="26" ry="18" fill="#fff"/><path d="M396 382 Q421 395 447 381" fill="none" stroke="#231f20" stroke-width="8" stroke-linecap="round"/></g>
+          <g class="lidR" opacity="0"><ellipse cx="508" cy="392" rx="28" ry="16" fill="#fff"/><path d="M479 402 Q506 416 535 406" fill="none" stroke="#231f20" stroke-width="8" stroke-linecap="round"/></g>
+        </svg>
+        ${star('#ffcf24').replace('class="spark"', 'class="spark wink"')}
+        <div class="cg hat" style="transform-origin:580px 300px">${im('hat')}</div>
+      </div>
+    </div>`;
+  wrap.appendChild(el);
+  const q = s => el.querySelector(s);
+  const c = { el, body: q('.cbody'), arm: q('.arm'), hand: q('.hand'), head: q('.head'), mst: q('.mst'), hat: q('.hat'), lidL: q('.lidL'), lidR: q('.lidR'),
+    item: q('.item img'), sparks: [...el.querySelectorAll('.item .spark')], wink: q('.spark.wink') };
+  if (c.item) { c.itemW = S.itemW; }
+  return c;
+}
+/* the palm sits around (110, 345) in badge units; the item rests just above it */
+const PALM = [140, 352];
+function pose(c, p) {
+  const o = p.origin || [430, 766];
+  c.el.style.transform = `translate(${p.x}px,${p.y}px) scale(${p.s})`;
+  c.body.style.transformOrigin = `${o[0]}px ${o[1]}px`;
+  c.body.style.transform = `translateY(${p.dy || 0}px) rotate(${p.lean || 0}deg) scale(${p.sx || 1},${p.sy || 1})`;
+  c.arm.style.transform = `rotate(${p.arm || 0}deg)`;
+  c.hand.style.transform = `rotate(${p.hand || 0}deg)`;
+  c.head.style.transform = `translateY(${p.headY || 0}px) rotate(${p.head || 0}deg)`;
+  c.mst.style.transform = `rotate(${p.mstR || 0}deg) scale(${p.mstX || 1},${p.mstY || 1})`;
+  c.hat.style.transform = `translate(${p.hatX || 0}px,${p.hatY || 0}px) rotate(${p.hatR || 0}deg)`;
+  c.lidL.setAttribute('opacity', p.blinkL ? 1 : 0); c.lidR.setAttribute('opacity', p.blinkR ? 1 : 0);
+  if (c.item) {
+    const w = c.itemW, k = p.itemS || 0, r = c.item.naturalHeight / c.item.naturalWidth || .7, h = w * r;
+    Object.assign(c.item.style, { width: w + 'px', left: (PALM[0] - w / 2 + (p.itemX || 0)) + 'px', top: (PALM[1] - h + 12 + (p.itemY || 0)) + 'px',
+      transformOrigin: '50% 100%', transform: `rotate(${p.itemR || 0}deg) scale(${k})`, opacity: k > .01 ? (p.itemO ?? 1) : 0 });
+    c.sparks.forEach((s, i) => {
+      const a = i / 6 * Math.PI * 2 + .4, b = p.burst || 0, d = 60 + b * 190, on = b > 0 && b < 1;
+      Object.assign(s.style, { left: (PALM[0] + Math.cos(a) * d) + 'px', top: (PALM[1] - h / 2 + Math.sin(a) * d * .8) + 'px',
+        transform: `rotate(${b * 180}deg) scale(${on ? Math.sin(b * Math.PI) * 1.4 : 0})` });
+    });
+  }
+  const w = p.winkStar || 0;
+  Object.assign(c.wink.style, { left: '560px', top: '360px', transform: `rotate(${w * 120}deg) scale(${w > 0 && w < 1 ? Math.sin(w * Math.PI) * 1.3 : 0})` });
+}
+
+/* ---------- timing helpers */
+const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const lerp = (a, b, k) => a + (b - a) * k;
+const E = {
+  lin: x => x, io: x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2,
+  out: x => 1 - Math.pow(1 - x, 3), in: x => x * x * x,
+  back: x => { const c1 = 1.9, c3 = c1 + 1; return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); },
+};
+/* keyframes: [[time, value, easeIntoNext], ...] */
+function kf(t, keys) {
+  if (t <= keys[0][0]) return keys[0][1];
+  for (let i = 0; i < keys.length - 1; i++) {
+    const [t0, v0, e] = keys[i], [t1, v1] = keys[i + 1];
+    if (t < t1) return lerp(v0, v1, (E[e] || E.io)((t - t0) / (t1 - t0)));
+  }
+  return keys[keys.length - 1][1];
+}
+/* smooth on/off window */
+const win = (t, a, b, f = .3) => clamp((t - a) / f) * clamp((b - t) / f);
+/* a damped wobble after an impact at ti */
+const hit = (t, ti, amp, fr = 24, dec = 7) => t < ti ? 0 : amp * Math.exp(-(t - ti) * dec) * Math.cos((t - ti) * fr);
+const blink = (t, times, d = .13) => times.some(b => t >= b && t < b + d);
+const TAU = Math.PI * 2;
+
+/* ---------- the header chef's 40 s routine */
+function routineTop(t) {
+  const p = { x: 608, y: 22, s: .52 };
+  /* up from behind the counter, ducks out for the cameo, back up, ducks out at the end */
+  const up = [[0, 760], [.15, 760, 'back'], [1.0, 0], [22.4, 0, 'out'], [22.62, -28, 'in'], [23.1, 760], [27.5, 760, 'back'], [28.4, 0], [38.1, 0, 'out'], [38.35, -28, 'in'], [38.95, 760], [40, 760]];
+  let dy = kf(t, up) + Math.sin(t / 2.5 * TAU) * 4;
+  const v = (kf(t + .02, up) - kf(t - .02, up)) / .04;
+  let st = clamp(-v / 9000, 0, .1) - clamp(v / 9000, 0, .06);
+  const sq = hit(t, 1.0, .07) + hit(t, 28.4, .07) + hit(t, 6.75, .045) + hit(t, 12.1, .025);
+  p.sy = 1 + st - sq; p.sx = 1 - st * .5 + sq * .6;
+  /* dance 20.3-22.3: bouncing beat with a side to side lean */
+  const dz = win(t, 20.3, 22.3, .2);
+  dy -= Math.abs(Math.sin((t - 20.3) / .5 * Math.PI)) * 26 * dz;
+  p.lean = Math.sin((t - 20.3) / 1 * TAU) * 5 * dz + kf(t, [[31.8, 0], [32.5, -4], [35.6, -4], [36.3, 0]]);
+  p.dy = dy;
+  /* wave 1.0-3.8, quick wave again after the cameo */
+  const wv = win(t, 1.0, 3.8, .35) + win(t, 28.5, 29.0, .2) * 0;
+  p.arm = Math.sin((t - 1) / .7 * TAU) * 9 * wv + kf(t, [[9, 0], [9.35, -5], [14.2, -5], [14.6, 0]]) + Math.sin((t - 20.3) / .5 * TAU) * 4 * dz;
+  p.hand = -Math.sin((t - 1) / .7 * TAU + .7) * 16 * wv
+    + kf(t, [[11.3, 0, 'out'], [11.45, 9, 'io'], [11.75, -6], [12.1, 0, 'out'], [12.22, 8], [12.5, 0]])
+    + kf(t, [[13.65, 0, 'out'], [13.8, 12, 'out'], [14.0, -14], [14.4, 0]]);
+  p.head = Math.sin((t - 1) / 1.4 * TAU) * 2.5 * wv
+    + Math.sin((t - 15) / .34 * TAU) * 1.3 * win(t, 15.1, 18.2, .2)
+    + Math.sin((t - 20.3) / .5 * TAU) * 4 * dz
+    + kf(t, [[29, 0], [29.35, 4], [30.1, 4], [30.45, 0]])
+    + kf(t, [[31.8, 0], [32.5, -3], [35.6, -3], [36.3, 0]]);
+  p.headY = -hit(t, 6.75, 10, 20, 8);
+  /* hat: flip at 5.6, wobble in the dance, tip at 29 */
+  p.hatY = kf(t, [[5.5, 0, 'out'], [5.68, 10, 'out'], [6.15, -150, 'in'], [6.75, 0]]) + kf(t, [[29, 0, 'out'], [29.3, -55], [30.05, -55, 'in'], [30.45, 0]]) + hit(t, 6.75, 8, 30, 9);
+  p.hatR = kf(t, [[5.68, 0, 'io'], [6.7, 360]]) % 360 + Math.sin((t - 20.3) / .25 * TAU) * 6 * dz + kf(t, [[29, 0, 'out'], [29.3, -16], [30.05, -16, 'in'], [30.45, 0]]);
+  p.hatX = kf(t, [[29, 0, 'out'], [29.3, 30], [30.05, 30, 'in'], [30.45, 0]]);
+  /* mustache: twitches, talks while the bubble is up, wiggles in the dance */
+  const talk = win(t, 15.1, 18.2, .15);
+  p.mstY = 1 + Math.abs(Math.sin((t - 15.1) / .3 * Math.PI)) * .12 * talk;
+  p.mstR = Math.sin((t - 4.6) * 50) * 5 * win(t, 4.6, 5.0, .05) + Math.sin((t - 30.5) * 50) * 5 * win(t, 30.5, 30.9, .05) + Math.sin((t - 20.3) / .25 * TAU) * 3 * dz;
+  p.mstX = 1 + Math.sin((t - 15.1) / .6 * TAU) * .04 * talk;
+  /* eyes */
+  p.blinkL = blink(t, [4.1, 8.2, 31.0, 36.6]) || (t >= 12.65 && t < 12.7);
+  p.blinkR = blink(t, [4.1, 8.2, 31.0, 36.6]) || (t >= 12.6 && t < 13.2);
+  p.winkStar = clamp((t - 12.6) / .7);
+  /* the food: pops on the palm at 9.2, gets a toss at 11.4, flies off at 13.8 */
+  p.itemS = kf(t, [[9.15, 0, 'back'], [9.6, 1], [13.8, 1, 'in'], [14.55, .5]]);
+  p.itemY = kf(t, [[11.4, 0, 'out'], [11.75, -170, 'in'], [12.1, 0]]) + kf(t, [[13.8, 0, 'in'], [14.55, -1100]]) - Math.abs(Math.sin(t / 1.25 * Math.PI)) * 8;
+  p.itemX = kf(t, [[13.8, 0, 'in'], [14.55, -500]]);
+  p.itemR = kf(t, [[11.4, 0, 'io'], [12.1, 360]]) % 360 + kf(t, [[13.8, 0, 'in'], [14.55, -540]]) + Math.sin(t / 2.5 * TAU) * 4;
+  p.itemO = 1 - clamp((t - 14.3) / .25);
+  p.burst = t >= 9.15 && t < 10.0 ? (t - 9.15) / .85 : t >= 12.1 && t < 12.7 ? (t - 12.1) / .6 : 0;
+  return p;
+}
+/* ---------- the big cameo from the bottom of the screen, 23.3-27.3 s */
+function routineBig(t) {
+  const p = { x: 400, y: 1130, s: 1.0, origin: [430, 766] };
+  p.dy = kf(t, [[23.3, 800, 'back'], [24.1, 0], [26.65, 0, 'out'], [26.8, -24, 'in'], [27.3, 800]]);
+  p.lean = -10 + Math.sin(t / 2.5 * TAU) * 1.5;
+  const wv = win(t, 24.1, 26.5, .3);
+  p.arm = Math.sin((t - 24.1) / .55 * TAU) * 11 * wv;
+  p.hand = -Math.sin((t - 24.1) / .55 * TAU + .7) * 18 * wv;
+  p.head = Math.sin((t - 24.1) / 1.1 * TAU) * 3 * wv;
+  p.sq = 0; const sq = hit(t, 24.1, .06); p.sy = 1 - sq; p.sx = 1 + sq * .6;
+  p.blinkR = t >= 25.0 && t < 25.5; p.blinkL = t >= 25.0 && t < 25.06;
+  p.winkStar = clamp((t - 25.0) / .7);
+  p.hatY = kf(t, [[25.6, 0, 'out'], [25.85, -70], [26.2, -70, 'in'], [26.45, 0]]);
+  p.hatR = kf(t, [[25.6, 0, 'out'], [25.85, -14], [26.2, -14, 'in'], [26.45, 0]]);
+  p.mstR = Math.sin((t - 24.4) * 50) * 5 * win(t, 24.4, 24.8, .05);
+  return p;
+}
+
+/* ---------- fit the menu into its box, find the highlight stops */
+let units = [], boxes = [];
 function layout() {
   const fit = $('fit'), box = fit.parentElement;
   fit.style.transform = ''; fit.style.width = box.clientWidth + 'px';
   const sc = Math.min(1, box.clientHeight / fit.scrollHeight);
   fit.style.transform = `scale(${sc})`; fit.style.width = (box.clientWidth / sc) + 'px';
   units = [...document.querySelectorAll('.u')];
-  tops = units.map(u => { let y = 0, e = u; while (e && e !== fit) { y += e.offsetTop; e = e.offsetParent; } return [y, u.offsetHeight]; });
+  const full = fit.offsetWidth;
+  boxes = units.map(u => {
+    let y = 0, x = 0, e = u; while (e && e !== fit) { y += e.offsetTop; x += e.offsetLeft; e = e.offsetParent; }
+    const inPair = !!u.closest('.pair');
+    return inPair ? [x - 14, y, u.offsetWidth + 28, u.offsetHeight] : [-22, y, full + 44, u.offsetHeight];
+  });
   window.__scale = sc;
 }
 
-const ease = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
-const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
-const lerp = (a, b, k) => a + (b - a) * k;
-let trW = 0;
+let trW = 0, chefTop, chefBig;
 function render(t) {
   t = ((t % LOOP) + LOOP) % LOOP;
-  /* checkered edges roll: 60px pattern, 30 tiles per loop */
   const ck = (t / LOOP * 60 * 30) % 60;
   $('ckt').style.backgroundPosition = `${ck}px 0`; $('ckb').style.backgroundPosition = `${-ck}px 0`;
-  /* ticker: one copy per loop */
   if (!trW) trW = $('tr').firstElementChild.offsetWidth;
   $('tr').style.transform = `translateX(${-(t / LOOP) * trW * 2 % trW}px)`;
-  /* badge breathes on a 5 s period */
-  const bob = `translateY(${Math.sin(t / 5 * Math.PI * 2) * 5}px) rotate(${Math.sin(t / 10 * Math.PI * 2) * 2.5}deg)`;
-  $('bd').style.transform = bob; if ($('bd2')) $('bd2').style.transform = bob;
-  /* line art: draw 0.3-3.3 s, fill 3-4.2 s, hold, fade 37-39 s */
-  if (paths.length) {
-    const d = ease(clamp((t - .3) / 3)), f = clamp((t - 3) / 1.2), out = 1 - clamp((t - 37) / 2);
-    paths.forEach((p, i) => { const k = clamp(d * 1.25 - (i / paths.length) * .25); p.style.strokeDashoffset = 1 - k; p.style.fillOpacity = f; p.style.strokeOpacity = 1 - f * .9; });
-    $('art').style.opacity = out;
-    $('art').style.transform = `translateY(${Math.sin(t / 8 * Math.PI * 2) * 6}px) rotate(${-3 + Math.sin(t / 8 * Math.PI * 2) * 1.2}deg)`;
-  }
-  /* sticker stamps on at 4.2 s, wobbles, leaves at 36.5 s */
-  const k = $('stk');
-  if (k) {
-    const a = clamp((t - 4.2) / .5), sp = a < 1 ? lerp(1.9, 1, ease(a)) : 1 + Math.sin((t - 4.7) * 9) * .06 * Math.exp(-(t - 4.7) * 3);
-    const o = clamp((t - 4.2) / .25) * (1 - clamp((t - 36.5) / 1.5));
-    k.style.opacity = o; k.style.transform = `scale(${sp}) rotate(${-10 + Math.sin(t / 4 * Math.PI * 2) * 3}deg)`;
-  }
-  /* highlight walks the menu: in at 1 s, one step per item, out by 38.5 s */
-  const n = units.length, start = 1, span = 37 - start, step = span / n, hl = $('hl');
+  pose(chefTop, routineTop(t));
+  pose(chefBig, routineBig(t));
+  /* speech bubble 15-18.6 */
+  const b = $('bub'), bs = kf(t, [[15.0, 0, 'back'], [15.4, 1], [18.3, 1, 'in'], [18.6, 0]]);
+  b.style.transform = `scale(${bs}) rotate(${-3 + Math.sin(t / 1.25 * TAU) * 1.5}deg)`; b.style.opacity = bs > .01 ? 1 : 0;
+  /* highlight walks the menu: in at 1 s, one stop per item, out by 38.5 s */
+  const n = units.length, start = 1, step = (37 - start) / n, hl = $('hl');
   if (n) {
-    const p = clamp((t - start) / step, 0, n - 1e-6), i = Math.floor(p), fr = p - i;
-    const g = i < n - 1 ? ease(clamp((fr - .78) / .22)) : 0;
-    const j = Math.min(i + 1, n - 1), y = lerp(tops[i][0], tops[j][0], g), h = lerp(tops[i][1], tops[j][1], g);
+    const q = clamp((t - start) / step, 0, n - 1e-6), i = Math.floor(q), fr = q - i;
+    const g = i < n - 1 ? E.io(clamp((fr - .78) / .22)) : 0, j = Math.min(i + 1, n - 1);
+    const B = [0, 1, 2, 3].map(k => lerp(boxes[i][k], boxes[j][k], g));
     const op = clamp((t - start) / .5) * (1 - clamp((t - 37.5) / 1));
-    hl.style.transform = `translateY(${y - 4}px)`; hl.style.height = (h + 8) + 'px'; hl.style.opacity = op;
+    Object.assign(hl.style, { transform: `translate(${B[0]}px,${B[1] - 4}px)`, width: B[2] + 'px', height: (B[3] + 8) + 'px', opacity: op });
     const cur = op > .5 ? (g > .5 ? j : i) : -1;
     units.forEach((u, idx) => u.classList.toggle('on', idx === cur));
-    /* the highlighted item's prices nudge up, chilis wiggle */
-    document.querySelectorAll('.chili').forEach(c => c.style.transform = `rotate(${Math.sin(t / 2 * Math.PI * 2) * 10}deg)`);
+    document.querySelectorAll('.chili').forEach(c => c.style.transform = `rotate(${Math.sin(t / 2 * TAU) * 10}deg)`);
   }
 }
+
+chefTop = makeChef($('wrapTop'), S.item);
+chefBig = makeChef($('wrapBig'), null);
+/* bubble sits up and left of the header chef's face */
+$('bub').innerHTML = S.say;
+Object.assign($('bub').style, { right: (1080 - 806) + 'px', top: '38px' });
 window.renderAt = render;
-const ready = () => { layout(); window.__ready = true; };
-document.fonts.ready.then(() => { const imgs = [...document.images].map(i => i.complete ? 0 : new Promise(r => { i.onload = i.onerror = r; })); Promise.all(imgs).then(ready); });
+const ready = () => { layout(); render(0); window.__ready = window.__artReady = true; };
+document.fonts.ready.then(() => Promise.all([...document.images].map(i => i.complete ? 0 : new Promise(r => { i.onload = i.onerror = r; })))).then(ready);
 if (qs.has('cap')) document.body.classList.add('cap');
 else {
   const fitStage = () => { const sc = Math.min(innerWidth / 1080, innerHeight / 1920); $('stage').style.transform = `translate(-50%,-50%) scale(${sc})`; };
   fitStage(); addEventListener('resize', fitStage);
-  const t0 = performance.now(); const loop = now => { if (window.__ready) render((now - t0) / 1000); requestAnimationFrame(loop); }; requestAnimationFrame(loop);
+  const t0 = performance.now() - (+(qs.get('t')) || 0) * 1000;
+  const loop = now => { if (window.__ready) render((now - t0) / 1000); requestAnimationFrame(loop); }; requestAnimationFrame(loop);
 }
 </script>
 </body>
