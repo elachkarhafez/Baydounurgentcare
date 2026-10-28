@@ -1,0 +1,703 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noai, noimageai">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Petalfall Cafe | Brunch cafe under the blossoms (concept)</title>
+<meta name="description" content="Petalfall Cafe is a fictional brunch cafe. A concept site by ElaSystems: blossom petals that drift over the page, a searchable sample menu, a swipeable 3D shake bar and a room drawn in code.">
+<meta property="og:title" content="Petalfall Cafe | Concept site by ElaSystems">
+<meta property="og:description" content="A concept site for a brunch cafe with a blossom ceiling and a shake bar. Built by ElaSystems.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#fbf6f4">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cg fill='%23d9668a'%3E%3Ccircle cx='20' cy='11' r='7'/%3E%3Ccircle cx='29' cy='18' r='7'/%3E%3Ccircle cx='25' cy='29' r='7'/%3E%3Ccircle cx='15' cy='29' r='7'/%3E%3Ccircle cx='11' cy='18' r='7'/%3E%3C/g%3E%3Ccircle cx='20' cy='21' r='5' fill='%23f6cf73'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* Petalfall Cafe (fictional concept by ElaSystems) · MOBILE FIRST (base = 390px phone; min-width queries add the desktop).
+   A blossom mark grows and sheds petals; petals drift over the hero; a smart menu (sticky chips + search),
+   a 3D coverflow shake bar, a swipeable rail of the room. Every picture on this page is drawn in code (SVG or canvas).
+   Palette: cream walls, cherry-blossom pink, deep pine, sage, butter yellow. */
+:root{
+  --bg:#fbf6f4; --paper:#fff; --ink:#221a1d; --muted:#6e6266; --line:rgba(34,26,29,.1);
+  --acc:#b83f66; --acc2:#e48aa7; --tint:#fbe3eb; --deep:#1f3b35; --sage:#6f8f72; --butter:#f6cf73;
+  --serif:'Cormorant Garamond', Georgia, serif; --f:'Manrope', system-ui, -apple-system, sans-serif;
+  --pad:16px; --sec:36px; --r:18px; --nav:56px;
+  --ease:cubic-bezier(.22,.61,.36,1); --out:cubic-bezier(.16,1,.3,1);
+}
+*{box-sizing:border-box;margin:0}
+html{-webkit-text-size-adjust:100%;overflow-x:clip;background:var(--bg);scroll-padding-top:calc(var(--nav) + 56px)}
+body{background:var(--bg);color:var(--ink);font:400 .9375rem/1.6 var(--f);overflow-x:clip;-webkit-font-smoothing:antialiased}
+img,svg{display:block;max-width:100%}
+a{color:inherit}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--acc);outline-offset:3px;border-radius:8px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 var(--pad)}
+h1,h2,h3{font-family:var(--serif);font-weight:700;letter-spacing:-.005em;line-height:1.05;color:var(--ink)}
+h1 em,h2 em{font-style:italic;font-weight:600;color:var(--acc)}
+h2{font-size:1.5rem}
+.sub{color:var(--muted);font-size:.9375rem}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 18px;border-radius:999px;background:var(--acc);color:#fff;text-decoration:none;font:700 .875rem/1 var(--f);border:1px solid transparent;white-space:nowrap;transition:background .2s,transform .15s}
+.btn:active{transform:scale(.97)}
+.btn.line{background:var(--paper);color:var(--ink);border-color:var(--line)}
+.btn svg{width:16px;height:16px;flex:0 0 auto}
+
+/* concept ribbon + badge */
+.ribbon{display:block;padding:6px 10px;background:#160f12;color:#fbf6f4;font:600 11px/1.35 var(--f);text-align:center;text-decoration:none;position:relative;z-index:60}
+.ribbon b{color:var(--acc2)}.ribbon u{text-underline-offset:3px}
+.elab{position:fixed;left:14px;bottom:14px;z-index:80;display:none;align-items:center;gap:8px;padding:8px 12px 8px 8px;border-radius:99px;background:#1a1416;color:#fffaf6;font:600 12px/1 var(--f);text-decoration:none;box-shadow:0 10px 24px -12px #0008;border:1px solid rgba(255,255,255,.12)}
+.elab i{width:22px;height:22px;border-radius:50%;background:#fffaf6;color:#1a1416;display:grid;place-items:center;font:800 11px/1 var(--f);font-style:normal}
+footer .elab{display:flex;position:static;width:max-content;margin:14px auto 0}
+
+/* brand mark */
+.mark{display:block;width:32px;height:32px;flex:0 0 auto}
+.brand{display:flex;align-items:center;gap:8px;text-decoration:none}
+.wm{font:700 1.375rem/1 var(--serif);letter-spacing:.005em;color:var(--ink)}
+.wm small{display:block;margin-top:2px;font:700 .5625rem/1 var(--f);letter-spacing:.16em;text-transform:uppercase;color:var(--acc)}
+
+/* ---------- intro: the blossom grows, petals fall, the name writes in */
+.intro{position:fixed;inset:0;z-index:100;display:grid;place-items:center;background:var(--bg);transition:opacity .5s var(--ease),visibility .5s}
+.intro.done{opacity:0;visibility:hidden;pointer-events:none}
+.intro canvas{position:absolute;inset:0;width:100%;height:100%;z-index:1}
+.intro .lockup{position:relative;z-index:2;display:grid;justify-items:center;gap:10px}
+.intro .mark{width:min(34vw,150px);height:auto;aspect-ratio:1}
+.intro .wm{font-size:clamp(2.25rem,9vw,3.5rem);text-align:center}
+.intro .wm small{font-size:.75rem;margin-top:8px}
+.intro .trunk{clip-path:inset(100% 0 0 0)}
+.intro .crown use{transform-box:fill-box;transform-origin:center;transform:scale(0)}
+.intro .wm{clip-path:inset(0 100% 0 0);opacity:.2}
+.intro.go .trunk{animation:grow .8s var(--out) .05s forwards}
+.intro.go .crown use{animation:pop .55s var(--out) forwards;animation-delay:calc(.45s + var(--d,0) * 60ms)}
+.intro.go .wm{animation:write .8s var(--ease) .8s forwards}
+@keyframes grow{to{clip-path:inset(0 0 0 0)}}
+@keyframes pop{to{transform:scale(1)}}
+@keyframes write{to{clip-path:inset(0 0 0 0);opacity:1}}
+
+/* ---------- nav */
+.nav{position:sticky;top:0;z-index:40;height:var(--nav);background:var(--bg);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:100%;gap:10px}
+.nav .links{display:none}
+.nav .btn{min-height:36px;padding:0 14px;font-size:.8125rem}
+.nav .btn .lg{display:none}
+
+/* ---------- hero */
+.hero{position:relative;padding:18px 0 6px;overflow:hidden}
+.hero canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+.hero .wrap{position:relative;z-index:1}
+.status{display:inline-flex;align-items:center;gap:7px;padding:5px 11px;border-radius:999px;background:var(--paper);border:1px solid var(--line);font:700 .75rem/1 var(--f);color:var(--ink)}
+.status i{width:7px;height:7px;border-radius:50%;background:#2fb36d;box-shadow:0 0 0 3px rgba(47,179,109,.15)}
+.status.closed i{background:#d04a4a;box-shadow:0 0 0 3px rgba(208,74,74,.15)}
+.hero h1{margin-top:12px;font-size:1.875rem}
+.hero .sub{margin-top:8px;max-width:40ch}
+.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:16px}
+.quick a{display:grid;justify-items:center;gap:6px;padding:11px 4px 9px;border-radius:14px;background:var(--paper);border:1px solid var(--line);text-decoration:none;font:700 .8125rem/1 var(--f);color:var(--ink);white-space:nowrap;transition:transform .15s,border-color .2s}
+.quick a:active{transform:scale(.96)}
+.quick a:first-child{background:var(--acc);color:#fff;border-color:var(--acc)}
+.quick svg{width:20px;height:20px}
+.shot{margin-top:16px;border-radius:20px;overflow:hidden;aspect-ratio:4/3;box-shadow:0 18px 40px rgba(31,59,53,.18);position:relative;background:#f3e3e3}
+.shot .art{width:100%;height:100%;transform:scale(var(--z,1.12));transform-origin:50% 40%;will-change:transform}
+.shot figcaption{position:absolute;left:10px;bottom:10px;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.9);font:700 .75rem/1 var(--f)}
+.js .hero .t{opacity:0;transform:translateY(12px)}
+.ready .hero .t{opacity:1;transform:none;transition:opacity .7s var(--ease),transform .8s var(--out)}
+.ready .hero .t:nth-child(2){transition-delay:.06s}.ready .hero .t:nth-child(3){transition-delay:.12s}.ready .hero .t:nth-child(4){transition-delay:.18s}.ready .hero .t:nth-child(5){transition-delay:.24s}
+.art svg{width:100%;height:100%}
+
+/* ---------- sections */
+.sec{padding:var(--sec) 0}
+.head{margin-bottom:14px}
+.head .sub{margin-top:4px}
+
+/* smart menu: sticky chips + search */
+.chips{position:sticky;top:var(--nav);z-index:30;background:var(--bg);border-bottom:1px solid var(--line);padding:8px 0}
+.chips .in{display:flex;gap:8px;overflow-x:auto;padding:0 var(--pad);scrollbar-width:none;max-width:1120px;margin:0 auto}
+.chips .in::-webkit-scrollbar{display:none}
+.chips button{flex:0 0 auto;min-height:34px;padding:0 13px;border-radius:999px;border:1px solid var(--line);background:var(--paper);font:700 .8125rem/1 var(--f);cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.chips button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.search{position:relative;display:block;margin:14px 0 6px}
+.search input{width:100%;min-height:44px;padding:0 14px 0 40px;border-radius:12px;border:1px solid var(--line);background:var(--paper);font-size:.9375rem}
+.search svg{position:absolute;left:13px;top:22px;width:17px;height:17px;transform:translateY(-50%);color:var(--muted)}
+.search small{display:block;margin-top:6px;color:var(--muted);font-size:.75rem}
+.cat{padding-top:14px;display:none}
+.cat.active{display:block}
+.searching .cat{display:block}.searching .cat[hidden]{display:none}
+.item.more{display:none}.cat.open .item.more,.searching .item.more{display:grid}
+.item[hidden]{display:none!important}
+.showall{margin-top:10px;width:100%}
+.searching .showall,.cat.open .showall{display:none}
+.cat .ch{display:flex;align-items:end;justify-content:space-between;gap:12px;margin-bottom:8px}
+.cat h3{font-size:1.25rem}
+.cat .ch span{font:600 .75rem/1 var(--f);color:var(--muted)}
+.items{list-style:none;padding:0;display:grid;gap:8px}
+.item{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;padding:11px 12px;border-radius:14px;background:var(--paper);border:1px solid var(--line)}
+.item b{font-size:.9375rem;font-weight:700}
+.item .tag{display:inline-block;margin-left:6px;padding:2px 7px;border-radius:999px;background:var(--tint);color:var(--acc);font:800 .625rem/1.4 var(--f);letter-spacing:.04em;vertical-align:2px}
+.item p{margin-top:2px;color:var(--muted);font-size:.8125rem;line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.item .pr{font:700 .875rem/1 var(--f);color:var(--acc);white-space:nowrap}
+.items.compact{grid-template-columns:1fr 1fr}
+.items.compact .item{padding:10px 12px;gap:8px}
+.items.compact .item b{font-size:.875rem}
+.empty{display:none;padding:18px;text-align:center;color:var(--muted)}
+.menu-note{margin-top:14px;font-size:.8125rem;color:var(--muted)}
+
+/* shake bar: 3D coverflow of drawn jars */
+.bar-sec{background:var(--deep);color:#fff;padding:var(--sec) 0 calc(var(--sec) - 6px);overflow:hidden}
+.bar-sec h2{color:#fff}.bar-sec h2 em{color:#f3b3c7}
+.bar-sec .sub{color:#c6d3cd}
+.flow{display:flex;gap:0;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:10px 0 4px;perspective:900px}
+.flow::-webkit-scrollbar{display:none}
+.flow .pad{flex:0 0 calc(50% - 105px)}
+.flow figure{flex:0 0 210px;scroll-snap-align:center;transform-style:preserve-3d;will-change:transform;cursor:pointer;margin:0}
+.flow svg{width:210px;height:280px;border-radius:18px;box-shadow:0 20px 40px rgba(0,0,0,.4)}
+.flowcap{text-align:center;min-height:86px;padding:12px var(--pad) 0;max-width:520px;margin:0 auto}
+.flowcap b{font:700 1.375rem/1.1 var(--serif)}
+.flowcap b span{font:700 .875rem/1 var(--f);color:#f3b3c7;margin-left:6px}
+.flowcap p{margin-top:4px;color:#c6d3cd;font-size:.8125rem;line-height:1.45}
+.flowdots{display:flex;justify-content:center;gap:6px;margin-top:8px}
+.flowdots i{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.25);transition:width .3s,background .3s}
+.flowdots i.on{width:16px;border-radius:3px;background:#f3b3c7}
+
+/* spaces: swipe rail */
+.rail{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px var(--pad) 8px;margin:0 calc(var(--pad) * -1);scrollbar-width:none}
+.rail::-webkit-scrollbar{display:none}
+.space{flex:0 0 80%;scroll-snap-align:start;border-radius:var(--r);overflow:hidden;background:var(--paper);border:1px solid var(--line)}
+.space .art{aspect-ratio:4/3;background:#f3e3e3}
+.space .tx{padding:11px 14px 13px}
+.space h3{font-size:1.125rem}
+.space p{margin-top:2px;color:var(--muted);font-size:.8125rem;line-height:1.45}
+.dots{display:flex;justify-content:center;gap:6px;margin-top:4px}
+.dots i{width:6px;height:6px;border-radius:50%;background:rgba(34,26,29,.2);transition:width .3s,background .3s}
+.dots i.on{width:16px;border-radius:3px;background:var(--acc)}
+
+/* events */
+.events{border-radius:22px;overflow:hidden;background:linear-gradient(160deg,#3a1f2b,#1f3b35);color:#fff}
+.events .evph{aspect-ratio:16/9;background:#3a1f2b}
+.events .tx{padding:18px}
+.events h2{color:#fff}.events h2 em{color:#f6c3d3}
+.events p{margin-top:6px;color:#e2d6da;font-size:.875rem}
+.events ul{list-style:none;padding:0;margin-top:12px;display:grid;gap:8px}
+.events li{padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);font-size:.8125rem;color:#ece4e7}
+.events li b{display:block;font-size:.9375rem;color:#fff}
+.events .row{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.events .row .btn{flex:1}
+.events .btn.line{background:transparent;color:#fff;border-color:rgba(255,255,255,.3)}
+
+/* story */
+.story{display:grid;gap:14px}
+.story figure{border-radius:var(--r);overflow:hidden;aspect-ratio:4/3;background:#f3e3e3;margin:0}
+.story blockquote{padding:12px 14px;border-left:3px solid var(--acc);background:var(--paper);border-radius:0 12px 12px 0;font:600 italic 1.125rem/1.35 var(--serif)}
+
+/* visit */
+.visit{display:grid;gap:12px}
+.card{border-radius:var(--r);background:var(--paper);border:1px solid var(--line);padding:16px}
+.card h3{font-size:1.25rem}
+.card h3 small{margin-left:8px;padding:3px 8px;border-radius:999px;background:var(--tint);color:var(--acc);font:800 .625rem/1 var(--f);letter-spacing:.06em;text-transform:uppercase;vertical-align:4px}
+.card .addr{margin-top:6px;font-weight:700}
+.card .addr small{display:block;font-weight:500;color:var(--muted);font-size:.8125rem}
+.card dl{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin-top:10px;font-size:.875rem}
+.card dt{color:var(--muted);font-weight:600}.card dd{margin:0;font-weight:600}
+.card .row{display:grid;grid-template-columns:1fr;gap:8px;margin-top:14px}
+@media (min-width:380px){.card .row{grid-template-columns:1fr 1fr}}
+.map{border-radius:var(--r);overflow:hidden;aspect-ratio:4/3;background:#ece6e2;border:1px solid var(--line)}
+.close{text-align:center;padding:4px 0 0}
+.close h2{max-width:22ch;margin:0 auto}
+.close .sub{max-width:44ch;margin:8px auto 0}
+.close .btn{margin-top:14px}
+
+footer.foot{padding:20px 0 92px;border-top:1px solid var(--line);color:var(--muted);font-size:.8125rem;text-align:center}
+footer.foot .brand{justify-content:center;margin-bottom:8px}
+footer.foot a{text-decoration:none}
+footer.foot p+p{margin-top:4px}
+.rv{opacity:0;transform:translateY(14px);transition:opacity .7s var(--ease),transform .8s var(--out)}
+.rv.on{opacity:1;transform:none}
+.dock{position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom));z-index:45;display:grid;grid-template-columns:1.6fr 1fr;gap:6px;padding:6px;border-radius:18px;background:rgba(255,255,255,.97);box-shadow:0 12px 30px rgba(31,59,53,.18);border:1px solid var(--line);transform:translateY(160%);transition:transform .35s var(--out)}
+.dock.on{transform:none}
+.dock .btn{min-height:42px;padding:0 10px;font-size:.8125rem}
+
+/* ---------- tablet + desktop add-on */
+@media (min-width:560px){ .ribbon{font-size:12.5px;padding:8px 16px} .nav .btn .lg{display:inline} }
+@media (min-width:760px){
+  :root{--pad:32px;--sec:60px;--nav:66px}
+  body{font-size:1rem}
+  h2{font-size:2.25rem}
+  .mark{width:38px;height:38px}
+  .wm{font-size:1.625rem}
+  .nav .links{display:flex;gap:24px;font:600 .875rem/1 var(--f);color:var(--muted)}
+  .nav .links a{text-decoration:none}.nav .links a:hover{color:var(--ink)}
+  .hero{padding:40px 0 52px}
+  .hero .wrap{display:grid;grid-template-columns:1fr 1.05fr;gap:44px;align-items:center}
+  .hero h1{font-size:3.25rem}
+  .quick{max-width:460px}
+  .shot{margin:0;aspect-ratio:5/4}
+  .items{grid-template-columns:1fr 1fr}
+  .items.compact{grid-template-columns:repeat(3,1fr)}
+  .cat h3{font-size:1.5rem}
+  .flow .pad{flex-basis:calc(50% - 130px)}
+  .flow figure{flex-basis:260px}
+  .flow svg{width:260px;height:347px}
+  .rail{display:grid;grid-template-columns:repeat(4,1fr);overflow:visible;margin:0;padding:0}
+  .space{flex:none}
+  .dots{display:none}
+  .events{display:grid;grid-template-columns:1.1fr 1fr}
+  .events .evph{aspect-ratio:auto;min-height:340px}
+  .events .tx{padding:32px}
+  .events .row .btn{flex:0 0 auto}
+  .story{grid-template-columns:1fr 1fr;align-items:center;gap:36px}
+  .visit{grid-template-columns:1fr 1.2fr;align-items:stretch}
+  .map{aspect-ratio:auto;min-height:320px}
+  .dock{display:none}
+  footer.foot{padding-bottom:28px}
+  body>.elab{display:flex}
+  footer .elab{display:none}
+}
+@media (min-width:1100px){ .hero h1{font-size:3.5rem} }
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .intro,.hero canvas{display:none}
+  .rv,.js .hero .t{opacity:1!important;transform:none!important}
+  .shot .art{transform:none}
+}
+</style>
+</head>
+<body>
+<script>document.documentElement.classList.add('js')</script>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="g-wall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fbeee9"/><stop offset="1" stop-color="#f2dcd6"/></linearGradient>
+    <linearGradient id="g-floor" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c99a76"/><stop offset="1" stop-color="#a87a58"/></linearGradient>
+    <linearGradient id="g-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#cfe6ef"/><stop offset="1" stop-color="#fbe6dc"/></linearGradient>
+    <linearGradient id="g-green" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2f4d3c"/><stop offset="1" stop-color="#243b2f"/></linearGradient>
+    <linearGradient id="g-night" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a2636"/><stop offset="1" stop-color="#2a1f28"/></linearGradient>
+    <filter id="f-glow" x="-30%" y="-60%" width="160%" height="220%"><feGaussianBlur stdDeviation="2.4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="f-soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="6"/></filter>
+  </defs>
+  <symbol id="fl" viewBox="-10 -10 20 20"><g><ellipse cx="0" cy="-5" rx="3.7" ry="5"/><ellipse cx="0" cy="-5" rx="3.7" ry="5" transform="rotate(72)"/><ellipse cx="0" cy="-5" rx="3.7" ry="5" transform="rotate(144)"/><ellipse cx="0" cy="-5" rx="3.7" ry="5" transform="rotate(216)"/><ellipse cx="0" cy="-5" rx="3.7" ry="5" transform="rotate(288)"/></g><circle r="2.3" fill="#f6cf73"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 4h14v16H5z"/><path d="M9 9h6M9 13h6M9 17h4"/></g></symbol>
+  <symbol id="i-cup" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M7 8h10l-1.3 13H8.3z"/><path d="M6 8h12M14 8l2-6"/></g></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M4 5h16v11H9l-5 4z"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M12 3l2.2 6.3L20.5 12l-6.3 2.2L12 21l-2.2-6.8L3.5 12l6.3-2.7z"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></g></symbol>
+  <symbol id="mk" viewBox="0 0 64 64">
+    <g class="trunk"><path d="M32 61C31 52 33.5 46 31 38M31 41C26 37 21 35 15.5 31M31.5 39C37 34 42 32 48 28" fill="none" stroke="#6b4636" stroke-width="3.4" stroke-linecap="round"/></g>
+    <g class="crown">
+      <use href="#fl" x="8" y="20" width="15" height="15" fill="#f0a7bd" style="--d:0"/>
+      <use href="#fl" x="15" y="7" width="17" height="17" fill="#e07597" style="--d:1"/>
+      <use href="#fl" x="25" y="1" width="18" height="18" fill="#f0a7bd" style="--d:2"/>
+      <use href="#fl" x="35" y="8" width="17" height="17" fill="#d4567f" style="--d:3"/>
+      <use href="#fl" x="42" y="20" width="15" height="15" fill="#f0a7bd" style="--d:4"/>
+      <use href="#fl" x="24" y="16" width="16" height="16" fill="#d4567f" style="--d:5"/>
+    </g>
+  </symbol>
+</svg>
+
+<a class="ribbon" href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener">Concept site by <b>ElaSystems</b> · Petalfall Cafe is a fictional cafe · <u>Get one for your business →</u></a>
+<a class="elab" href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener" aria-label="Made by ElaSystems"><i>E</i>Made by ElaSystems</a>
+
+<div class="intro" id="intro" aria-hidden="true"><canvas id="introPetals"></canvas>
+  <div class="lockup">
+    <svg class="mark" viewBox="0 0 64 64"><g class="trunk"><path d="M32 61C31 52 33.5 46 31 38M31 41C26 37 21 35 15.5 31M31.5 39C37 34 42 32 48 28" fill="none" stroke="#6b4636" stroke-width="3.4" stroke-linecap="round"/></g><g class="crown"><use href="#fl" x="8" y="20" width="15" height="15" fill="#f0a7bd" style="--d:0"/><use href="#fl" x="15" y="7" width="17" height="17" fill="#e07597" style="--d:1"/><use href="#fl" x="25" y="1" width="18" height="18" fill="#f0a7bd" style="--d:2"/><use href="#fl" x="35" y="8" width="17" height="17" fill="#d4567f" style="--d:3"/><use href="#fl" x="42" y="20" width="15" height="15" fill="#f0a7bd" style="--d:4"/><use href="#fl" x="24" y="16" width="16" height="16" fill="#d4567f" style="--d:5"/></g></svg>
+    <span class="wm">Petalfall<small>cafe · brunch · shakes</small></span>
+  </div>
+</div>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Petalfall Cafe, back to top"><svg class="mark" aria-hidden="true"><use href="#mk"/></svg><span class="wm">Petalfall<small>cafe · brunch</small></span></a>
+    <nav class="links" aria-label="Sections"><a href="#menu">Menu</a><a href="#shakes">Shakes</a><a href="#spaces">The room</a><a href="#events">Parties</a><a href="#visit">Visit</a></nav>
+    <a class="btn" data-studio href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener"><span class="lg">Want a site like this? </span>DM @ela.systems</a>
+  </div>
+</header>
+
+<main id="top">
+<section class="hero" aria-labelledby="h1">
+  <canvas id="petals" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <div>
+      <span class="status t" id="status"><i></i><span id="statusText">Open 8am to 3pm</span></span>
+      <h1 id="h1" class="t">Brunch under <em>the blossoms.</em></h1>
+      <p class="sub t">Big plates and tall milkshakes in a room with flowers hanging over every table. Pull up a chair and stay a while.</p>
+      <nav class="quick t" aria-label="Quick actions">
+        <a href="#menu"><svg aria-hidden="true"><use href="#i-menu"/></svg>Menu</a>
+        <a href="#shakes"><svg aria-hidden="true"><use href="#i-cup"/></svg>Shakes</a>
+        <a href="#events"><svg aria-hidden="true"><use href="#i-spark"/></svg>Parties</a>
+        <a data-studio href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-chat"/></svg>DM us</a>
+      </nav>
+    </div>
+    <figure class="shot t" id="shot"><div class="art" data-scene="canopy" role="img" aria-label="Drawing of a cafe dining room under a ceiling of pink blossom branches"></div><figcaption>Brunch under the blossoms</figcaption></figure>
+  </div>
+</section>
+
+<section class="sec" id="menu" aria-labelledby="h-menu" style="padding-bottom:20px">
+  <div class="wrap"><div class="head rv"><h2 id="h-menu">The <em>menu</em></h2><p class="sub">Breakfast all day, brunch plates from 10, coffee the whole time. This is a sample menu with sample prices.</p></div></div>
+  <div class="chips" id="chips"><div class="in" role="tablist" aria-label="Menu categories"></div></div>
+  <div class="wrap">
+    <label class="search"><svg aria-hidden="true"><use href="#i-search"/></svg><input id="q" type="search" placeholder="Search the menu: waffle, vegan, matcha…" aria-label="Search the menu"><small id="qcount"></small></label>
+    <div id="menuBody"></div>
+    <p class="empty" id="empty">Nothing matches that yet. Try "chicken" or "latte".</p>
+    <p class="menu-note">Want your real menu online like this, searchable and easy to update? <a data-studio href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener">DM @ela.systems</a>.</p>
+  </div>
+</section>
+
+<section class="bar-sec" id="shakes" aria-labelledby="h-shakes">
+  <div class="wrap"><div class="head rv"><h2 id="h-shakes">The <em>shake bar</em></h2><p class="sub">Swipe through the jars. Every one comes topped all the way up.</p></div></div>
+  <div class="flow" id="flow" aria-roledescription="carousel" aria-label="Milkshakes"></div>
+  <div class="flowcap" aria-live="polite"><b id="fname"></b><p id="fdesc"></p></div>
+  <div class="flowdots" id="fdots" aria-hidden="true"></div>
+</section>
+
+<section class="sec" id="spaces" aria-labelledby="h-spaces">
+  <div class="wrap">
+    <div class="head rv"><h2 id="h-spaces">Under the <em>blossoms</em></h2><p class="sub">A bright room made for long brunches with your people. Swipe through the corners.</p></div>
+    <div class="rail" id="rail">
+      <article class="space"><div class="art" data-scene="canopy2" role="img" aria-label="Drawing of tables under blossom branches"></div><div class="tx"><h3>The blossom room</h3><p>Branches cover the whole ceiling. Grab any table under them.</p></div></article>
+      <article class="space"><div class="art" data-scene="green" role="img" aria-label="Drawing of a leafy green wall with a pink neon sign"></div><div class="tx"><h3>The green wall</h3><p>Leaves floor to ceiling, a pink neon sign and striped chairs.</p></div></article>
+      <article class="space"><div class="art" data-scene="booth" role="img" aria-label="Drawing of a booth framed by an arch of flowers"></div><div class="tx"><h3>The flower booth</h3><p>A booth inside an arch of flowers. People book it for birthdays.</p></div></article>
+      <article class="space"><div class="art" data-scene="window" role="img" aria-label="Drawing of a window counter with stools and plants"></div><div class="tx"><h3>The window bar</h3><p>Stools by the big window for a quick coffee on your own.</p></div></article>
+    </div>
+    <div class="dots" id="rdots" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i></div>
+  </div>
+</section>
+
+<section class="sec" id="events" aria-labelledby="h-events" style="padding-top:0">
+  <div class="wrap">
+    <div class="events rv">
+      <div class="evph art" data-scene="party" role="img" aria-label="Drawing of a party table with balloons and a flower garland"></div>
+      <div class="tx"><h2 id="h-events">Throw your party <em>here.</em></h2><p>Birthdays, showers and private brunches. Book the flower booth for a small group or take over the whole room.</p>
+        <ul><li><b>Flower booth</b>Up to 12 guests, sample package</li><li><b>Whole room</b>Up to 60 guests, sample package</li></ul>
+        <div class="row"><a class="btn" data-studio href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener">Want a site like this?</a><a class="btn line" data-studio href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-chat"/></svg>DM @ela.systems</a></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" aria-labelledby="h-story" style="padding-top:0">
+  <div class="wrap story">
+    <figure class="rv art" data-scene="front" role="img" aria-label="Drawing of a cafe storefront with a striped awning and blossoms in the window"></figure>
+    <div class="rv"><h2 id="h-story">About <em>Petalfall</em></h2><p class="sub" style="margin-top:8px">Petalfall is a made-up brunch spot. We built it to show what a cafe's site can look like when the room itself is the main event. Your real menu, your real room and your hours would go in its place.</p>
+      <blockquote style="margin-top:14px">"Come for the waffles, stay because you can't stop looking up."</blockquote></div>
+  </div>
+</section>
+
+<section class="sec" id="visit" aria-labelledby="h-visit" style="padding-top:0">
+  <div class="wrap">
+    <div class="head rv"><h2 id="h-visit">Come <em>see us</em></h2></div>
+    <div class="visit">
+      <div class="card rv"><h3>Petalfall Cafe<small>Fictional</small></h3><p class="addr">Your address here<small>Petalfall is a concept, so there's no real location.</small></p>
+        <dl><dt>Hours</dt><dd>8am to 3pm daily (sample)</dd><dt>Today</dt><dd id="today">Open 8am to 3pm</dd><dt>Seating</dt><dd>Counter service, dine in or take out</dd></dl>
+        <div class="row"><a class="btn" data-studio href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener">Get a site like this</a><a class="btn line" data-studio href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener">DM @ela.systems</a></div></div>
+      <div class="map rv art" data-scene="map" role="img" aria-label="Drawn neighborhood map with a pin on a sample block"></div>
+    </div>
+    <div class="close rv" id="close" style="margin-top:32px">
+      <h2>Want a site like this for <em>your cafe?</em></h2>
+      <p class="sub">Send us a DM with your menu and a few photos of your room, and we'll show you what yours could look like.</p>
+      <a class="btn" data-studio href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener">Want a site like this? DM @ela.systems</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="foot"><div class="wrap">
+  <a class="brand" href="#top" aria-label="Petalfall Cafe, back to top"><svg class="mark" aria-hidden="true"><use href="#mk"/></svg><span class="wm">Petalfall<small>cafe · brunch</small></span></a>
+  <p>Petalfall Cafe is a fictional business. Concept site by ElaSystems; sample content only.</p>
+  <p>&copy; <span id="yr">2026</span> · <a href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener">Site by ElaSystems</a></p>
+</div></footer>
+<div class="dock" id="dock"><a class="btn" data-studio href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener">Get a site like this</a><a class="btn line" href="#menu"><svg aria-hidden="true"><use href="#i-menu"/></svg>Menu</a></div>
+
+<script>
+/* ================= CONFIG (all sample content: Petalfall Cafe is fictional) ================= */
+const STUDIO_URL = 'https://www.instagram.com/ela.systems/';
+const CONFIG = {
+  name: 'Petalfall Cafe', open: 8, close: 15,
+  menu: [
+    { id: 'breakfast', title: 'Breakfast', items: [
+      ['Buttermilk Stack', 'Three fluffy pancakes, whipped butter, warm maple and fresh strawberries.', '$12'],
+      ['Two-Egg Plate', 'Eggs any style, crispy potatoes, bacon or turkey sausage and toast.', '$13'],
+      ['Smashed Avocado Toast', 'Thick sourdough, lemony avocado, chili flakes, a soft egg and greens.', '$14'],
+      ['Creme Brulee French Toast', 'Brioche soaked overnight, torched on top, served with berries.', '$15', 'NEW'],
+      ['Bacon, Egg and Cheese', 'On a toasted brioche roll with a little hot honey if you want it.', '$9'],
+      ['Lemon Ricotta Waffle', 'Light waffle with whipped ricotta, lemon curd and blueberries.', '$14'],
+      ['Strawberry Crepe', 'Filled with hazelnut spread and strawberries, finished with cream.', '$13'],
+      ['Little Stack', 'For the kids: two small pancakes, one egg and fruit.', '$8'],
+    ] },
+    { id: 'brunch', title: 'Brunch', items: [
+      ['Hot Honey Chicken and Waffle', 'Buttermilk fried chicken on a Belgian waffle with hot honey and pickles.', '$18', 'NEW'],
+      ['Crispy Garlic Wings', 'Tossed in garlic butter and parmesan, with a side of ranch.', '$15'],
+      ['Double Smash Burger', 'Two thin patties, American cheese, onions, pickles and house sauce.', '$17'],
+      ['Skillet Mac', 'Three-cheese mac baked in cast iron with a crunchy top.', '$13'],
+      ['Shrimp and Grits', 'Cheddar grits, garlicky shrimp and a little Cajun butter.', '$19'],
+      ['Pitaya Bowl', 'Pink dragon fruit blend with granola, banana and coconut.', '$13', 'V'],
+      ['Turkey Pesto Melt', 'Roast turkey, mozzarella and basil pesto on pressed ciabatta.', '$15'],
+      ['Garden Grain Bowl', 'Quinoa, roasted veggies, chickpeas and tahini dressing.', '$14', 'V'],
+      ['Truffle Fries', 'Shoestring fries with parmesan and a truffle aioli for dipping.', '$8'],
+    ] },
+    { id: 'coffee', title: 'Coffee', compact: true, items: [['Espresso', '', '$3.50'], ['Cortado', '', '$4.50'], ['Flat White', '', '$5'], ['Latte', '', '$5.50'], ['Cappuccino', '', '$5'], ['Mocha', '', '$6'], ['Cold Brew', '', '$5'], ['Matcha Latte', '', '$6'], ['Chai Latte', '', '$5.50'], ['Rose Latte', 'Rose syrup and a pinch of cardamom.', '$6.50'], ['Honey Lavender Latte', '', '$6.50'], ['Hot Chocolate', '', '$4.50']] },
+    { id: 'tea', title: 'Tea', compact: true, items: [['English Breakfast', '', '$3.50'], ['Earl Grey', '', '$3.50'], ['Jasmine Green', '', '$3.50'], ['Peppermint', '', '$3.50'], ['Chamomile', '', '$3.50'], ['Iced Hibiscus', '', '$4']] },
+    { id: 'drinks', title: 'Refreshers', compact: true, items: [['Pink Lemonade Fizz', 'Lemonade, raspberry and sparkling water.', '$5.50'], ['Mango Spritz', 'Mango, lime and soda.', '$5.50'], ['Peach Iced Tea', '', '$4.50'], ['Berry Cooler', 'Mixed berries, mint and soda.', '$5.50']] },
+    { id: 'pastries', title: 'Pastries', compact: true, items: [['Butter Croissant', '', '$4'], ['Almond Croissant', '', '$5'], ['Pain au Chocolat', '', '$4.50'], ['Cinnamon Roll', '', '$5'], ['Blueberry Muffin', '', '$4'], ['Lemon Loaf', '', '$4']] },
+  ],
+  // [name, description, price, look]
+  shakes: [
+    ['Confetti Cake', 'Vanilla ice cream blended with yellow cake, piled with whipped cream and rainbow sprinkles.', '$11', { bg: '#fde3ec', d1: '#fff3df', d2: '#f8d9c4', sauce: '#f4a6c0', tops: ['sprinkles', 'cherry'] }],
+    ['Strawberry Shortcake', 'Fresh strawberries and vanilla bean with shortcake crumbs and a cherry on top.', '$11', { bg: '#ffe0e4', d1: '#ffc2cf', d2: '#f28aa3', sauce: '#d94c70', tops: ['crumbs', 'cherry', 'drizzle'] }],
+    ['Campfire', 'Chocolate ice cream and graham crackers under a cap of torched marshmallows.', '$12', { bg: '#f6e3d3', d1: '#a7735a', d2: '#6f4632', sauce: '#4a2c20', tops: ['mallows', 'drizzle'] }],
+    ['Mint Chip', 'Fresh mint ice cream with dark chocolate chips and a chocolate cookie.', '$11', { bg: '#e0f1e6', d1: '#c9ecd6', d2: '#95d3ae', sauce: '#3b2a24', tops: ['chips', 'cookie'] }],
+    ['Peanut Butter Cup', 'Peanut butter and chocolate swirled together, topped with mini cups and fudge.', '$12', { bg: '#f8e7cf', d1: '#e8bf8a', d2: '#c58c55', sauce: '#4a2c20', tops: ['cups', 'drizzle'] }],
+    ['Blueberry Cheesecake', 'Cheesecake ice cream, blueberry swirl and buttery graham crumble.', '$12', { bg: '#e8e3f6', d1: '#c9b9ea', d2: '#8f78c9', sauce: '#5a3f9a', tops: ['berries', 'crumbs'] }],
+    ['Mocha Crunch', 'Cold brew and chocolate ice cream with a glazed donut and toffee bits.', '$12', { bg: '#efe1d6', d1: '#c79f80', d2: '#8a5d42', sauce: '#3b2a24', tops: ['donut', 'chips'] }],
+  ],
+};
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches, root = document.documentElement;
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+$$('[data-studio]').forEach(a => { a.href = STUDIO_URL; a.target = '_blank'; a.rel = 'noopener'; });
+$('#yr').textContent = new Date().getFullYear();
+
+/* open now? (sample hours, read from the visitor's clock) */
+(() => {
+  const h = new Date().getHours(), open = h >= CONFIG.open && h < CONFIG.close;
+  $('#status').classList.toggle('closed', !open);
+  $('#statusText').textContent = open ? 'Open now · 8am to 3pm (sample)' : 'Closed now · opens 8am (sample)';
+  $('#today').textContent = open ? 'Open now, until 3pm' : 'Closed now, opens at 8am';
+})();
+
+/* ================= drawn art: every scene is SVG made here ================= */
+const rng = seed => () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+const PINKS = ['#f6c1d0', '#f0a7bd', '#e889a6', '#d9668a', '#fbd9e3', '#e07597'];
+const fl = (x, y, s, c, o = 1) => `<use href="#fl" x="${(x - s / 2).toFixed(1)}" y="${(y - s / 2).toFixed(1)}" width="${s.toFixed(1)}" height="${s.toFixed(1)}" fill="${c}"${o < 1 ? ` opacity="${o}"` : ''}/>`;
+function cluster(x, y, r, n, R) {
+  let s = `<circle cx="${x}" cy="${y}" r="${r * .85}" fill="#f6c9d5" opacity=".55"/>`;
+  for (let i = 0; i < n; i++) { const a = R() * 6.283, d = Math.sqrt(R()) * r; s += fl(x + Math.cos(a) * d, y + Math.sin(a) * d * .8, 7 + R() * 7, PINKS[R() * PINKS.length | 0]); }
+  return s;
+}
+function branches(W, R, top = 0, k = 1) {
+  let s = '<g fill="none" stroke="#7a4c3c" stroke-linecap="round">';
+  const pts = [];
+  const lines = [[-10, 30 + top, W * .45, 18 + top, W * .62, 60 + top], [W + 10, 26 + top, W * .62, 12 + top, W * .4, 70 + top], [W * .2, -5 + top, W * .28, 40 + top, W * .18, 82 + top], [W * .8, -5 + top, W * .74, 44 + top, W * .84, 86 + top]];
+  lines.forEach(([x0, y0, cx, cy, x1, y1], j) => {
+    s += `<path d="M${x0} ${y0}Q${cx} ${cy} ${x1} ${y1}" stroke-width="${(5 - j * .6) * k}"/>`;
+    for (let t = .12; t <= 1; t += .16) { const u = 1 - t; pts.push([u * u * x0 + 2 * u * t * cx + t * t * x1, u * u * y0 + 2 * u * t * cy + t * t * y1]); }
+  });
+  s += '</g>';
+  pts.forEach(([x, y]) => s += cluster(x + (R() - .5) * 14, y + (R() - .5) * 10, 16 * k + R() * 10 * k, 9, R));
+  return s;
+}
+const fallen = (W, H, n, R) => { let s = ''; for (let i = 0; i < n; i++) { const x = (R() * W).toFixed(0), y = (90 + R() * (H - 100)).toFixed(0); s += `<ellipse cx="${x}" cy="${y}" rx="2.6" ry="1.6" fill="${PINKS[i % 6]}" transform="rotate(${(R() * 180).toFixed(0)} ${x} ${y})" opacity=".8"/>`; } return s; };
+const table = (x, y, s = 1, cup = '#fff') => `<g transform="translate(${x} ${y}) scale(${s})"><path d="M-3 0v34M-14 36h28" stroke="#3b2a24" stroke-width="3" stroke-linecap="round"/><ellipse cx="0" cy="0" rx="26" ry="7" fill="#fff" stroke="#e6d7d2"/><path d="M-10-9h9l-1 8h-7z" fill="${cup}" stroke="#d9c6bf"/><ellipse cx="9" cy="-2" rx="7" ry="2" fill="#efe3df"/></g>`;
+const chair = (x, y, s = 1, c = '#3b2a24') => `<g transform="translate(${x} ${y}) scale(${s})" fill="none" stroke="${c}" stroke-width="2.6" stroke-linecap="round"><path d="M0 0v-26q0-8 8-8t8 8v26M0 0h16M2 0v14M14 0v14M0-6h16"/></g>`;
+const floor = (W, y, H) => { let s = `<rect y="${y}" width="${W}" height="${H - y}" fill="url(#g-floor)"/>`; for (let i = 0; i < 9; i++) s += `<path d="M${W / 2 + (i - 4) * 18} ${y}L${W / 2 + (i - 4) * 90} ${H}" stroke="#9a6d4d" stroke-width="1" opacity=".5"/>`; return s; };
+const archWin = (x, y, w, h) => `<path d="M${x} ${y + h}V${y + w / 2}a${w / 2} ${w / 2} 0 0 1 ${w} 0V${y + h}z" fill="url(#g-sky)" stroke="#fff" stroke-width="4"/><path d="M${x + w / 2} ${y}v${h}M${x} ${y + h * .55}h${w}" stroke="#fff" stroke-width="2"/>`;
+
+const SCENES = {
+  canopy(seed = 7) {
+    const W = 400, H = 300, R = rng(seed);
+    return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice"><rect width="${W}" height="${H}" fill="url(#g-wall)"/>${archWin(60, 92, 70, 110)}${archWin(270, 92, 70, 110)}
+      <rect x="0" y="198" width="${W}" height="10" fill="#f6e9e4"/>${floor(W, 208, H)}
+      ${chair(70, 252, 1.1)}${table(118, 232, 1.1, '#f6c1d0')}${chair(150, 252, 1.1)}${chair(240, 262, 1.2)}${table(292, 238, 1.25)}${chair(326, 262, 1.2)}
+      ${branches(W, R)}${fallen(W, H, 26, R)}</svg>`;
+  },
+  canopy2() { return SCENES.canopy(31); },
+  green() {
+    const W = 400, H = 300, R = rng(11); let leaves = '';
+    for (let i = 0; i < 420; i++) { const x = R() * W, y = R() * 220, g = ['#3f6b4d', '#4f7d58', '#2f5940', '#5c8c62', '#365e45'][i % 5]; leaves += `<ellipse cx="${x.toFixed(0)}" cy="${y.toFixed(0)}" rx="${(5 + R() * 6).toFixed(1)}" ry="${(3 + R() * 3).toFixed(1)}" fill="${g}" transform="rotate(${(R() * 180).toFixed(0)} ${x.toFixed(0)} ${y.toFixed(0)})"/>`; }
+    const stripe = (x, y) => `<g transform="translate(${x} ${y})"><rect x="0" y="-40" width="34" height="40" rx="6" fill="#fff"/><path d="M6-40v40M14-40v40M22-40v40M30-40v40" stroke="#e48aa7" stroke-width="3"/><path d="M3 0v26M31 0v26" stroke="#3b2a24" stroke-width="3"/><rect x="-2" y="-4" width="38" height="8" rx="3" fill="#f3d6de"/></g>`;
+    return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice"><rect width="${W}" height="${H}" fill="url(#g-green)"/>${leaves}
+      <text x="200" y="96" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-style="italic" font-weight="700" font-size="46" fill="#ffd3e1" stroke="#ff7fa8" stroke-width="1.2" filter="url(#f-glow)">meet me here</text>
+      ${floor(W, 220, H)}${stripe(96, 262)}${table(200, 236, 1.2, '#f6c1d0')}${stripe(270, 262)}</svg>`;
+  },
+  booth() {
+    const W = 400, H = 300, R = rng(23); let arch = '';
+    for (let a = Math.PI; a <= Math.PI * 2.001; a += .07) { for (let k = 0; k < 3; k++) { const rr = 130 + k * 14 + (R() - .5) * 8; arch += fl(200 + Math.cos(a) * rr, 210 + Math.sin(a) * rr * 1.05, 12 + R() * 9, PINKS[R() * 6 | 0]); } }
+    for (let y = 210; y < 228; y += 12) for (const x of [70, 58, 330, 342]) arch += fl(x, y, 16, PINKS[R() * 6 | 0]);
+    return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice"><rect width="${W}" height="${H}" fill="#f8e6e2"/>
+      <path d="M78 228V200a122 122 0 0 1 244 0V228z" fill="#fbeff0"/>${arch}
+      ${floor(W, 228, H)}<rect x="96" y="166" width="208" height="48" rx="16" fill="#1f3b35"/><rect x="88" y="206" width="224" height="26" rx="10" fill="#2c5048"/><rect x="96" y="232" width="208" height="20" fill="#18302b"/>
+      ${table(200, 236, 1.3, '#f0a7bd')}<g transform="translate(232 214)"><path d="M-7-18h14l-2 18h-10z" fill="#ffc2cf" stroke="#fff"/><circle cx="0" cy="-22" r="7" fill="#fff"/><circle cx="2" cy="-30" r="3" fill="#d94c70"/></g></svg>`;
+  },
+  window() {
+    const W = 400, H = 300, R = rng(5); let sky = '';
+    for (let i = 0; i < 5; i++) sky += `<ellipse cx="${60 + i * 70}" cy="${70 + (i % 2) * 18}" rx="34" ry="10" fill="#fff" opacity=".7"/>`;
+    const stool = x => `<g transform="translate(${x} 214)"><ellipse cx="0" cy="0" rx="16" ry="5" fill="#e48aa7"/><path d="M-9 2l-5 52M9 2l5 52M-12 32h24" stroke="#3b2a24" stroke-width="3" stroke-linecap="round" fill="none"/></g>`;
+    const plant = (x, y) => `<g transform="translate(${x} ${y})"><path d="M-12 0h24l-4 24h-16z" fill="#f3d6de"/>${[...Array(7)].map((_, i) => `<ellipse cx="${(i - 3) * 5}" cy="${-10 - (i % 3) * 7}" rx="5" ry="11" fill="${i % 2 ? '#4f7d58' : '#6f8f72'}" transform="rotate(${(i - 3) * 16} ${(i - 3) * 5} 0)"/>`).join('')}</g>`;
+    return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice"><rect width="${W}" height="${H}" fill="url(#g-wall)"/>
+      <rect x="30" y="30" width="340" height="150" rx="6" fill="url(#g-sky)" stroke="#fff" stroke-width="6"/>${sky}<path d="M30 150h340" stroke="#fff" stroke-width="3"/><path d="M143 30v150M257 30v150" stroke="#fff" stroke-width="5"/>
+      ${cluster(80, 120, 24, 10, R)}${cluster(320, 112, 22, 10, R)}
+      <rect x="20" y="180" width="360" height="12" rx="3" fill="#fff"/><rect x="20" y="192" width="360" height="6" fill="#e6d7d2"/>
+      ${floor(W, 198, H)}<path d="M120 176h12l-1-12h-10z" fill="#fff" stroke="#d9c6bf"/><path d="M262 176h12l-1-12h-10z" fill="#f6c1d0" stroke="#d9c6bf"/>
+      ${stool(110)}${stool(200)}${stool(290)}${plant(40, 156)}${plant(360, 156)}</svg>`;
+  },
+  party() {
+    const W = 480, H = 300, R = rng(41); let balloons = '', garland = '';
+    [[70, 70, '#f0a7bd'], [110, 50, '#fbd9e3'], [96, 104, '#d9668a'], [380, 60, '#f6cf73'], [414, 92, '#f0a7bd'], [360, 104, '#fff']].forEach(([x, y, c]) => balloons += `<path d="M${x} ${y + 26}q6 30 -4 60" stroke="#ffffff66" fill="none"/><ellipse cx="${x}" cy="${y}" rx="22" ry="26" fill="${c}"/><ellipse cx="${x - 7}" cy="${y - 9}" rx="5" ry="8" fill="#fff" opacity=".45"/>`);
+    for (let x = 30; x <= 450; x += 16) { const y = 40 + Math.sin((x - 30) / 420 * Math.PI) * 36; garland += fl(x, y, 14 + R() * 6, PINKS[R() * 6 | 0]); }
+    return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice"><rect width="${W}" height="${H}" fill="url(#g-night)"/><circle cx="240" cy="150" r="140" fill="#ff9fbf" opacity=".12" filter="url(#f-soft)"/>
+      ${balloons}${garland}
+      <rect x="60" y="206" width="360" height="16" rx="4" fill="#fff"/><path d="M60 222h360l-10 78H70z" fill="#f6e1e7"/><path d="M90 222l-6 78M390 222l6 78" stroke="#e7c9d2"/>
+      <g transform="translate(240 206)"><rect x="-40" y="-44" width="80" height="44" rx="6" fill="#fde3ec"/><rect x="-40" y="-44" width="80" height="12" rx="6" fill="#fff"/><path d="M-40-32q10 8 20 0t20 0 20 0 20 0" fill="#fff"/><rect x="-26" y="-76" width="52" height="32" rx="5" fill="#f0a7bd"/><path d="M-12-76v-12M12-76v-12" stroke="#fff" stroke-width="3"/><circle cx="-12" cy="-91" r="3" fill="#f6cf73"/><circle cx="12" cy="-91" r="3" fill="#f6cf73"/>${fl(0, -80, 14, '#fff')}</g>
+      <g transform="translate(140 196)"><path d="M-8-22h16l-2 22h-12z" fill="#ffc2cf" stroke="#fff"/><circle r="8" cy="-26" fill="#fff"/></g><g transform="translate(340 196)"><path d="M-8-22h16l-2 22h-12z" fill="#c9ecd6" stroke="#fff"/><circle r="8" cy="-26" fill="#fff"/></g>
+      ${fallen(W, H, 18, R)}</svg>`;
+  },
+  front() {
+    const W = 400, H = 300, R = rng(17); let aw = '';
+    for (let i = 0; i < 10; i++) aw += `<path d="M${60 + i * 28} 92h28l-2 34q-12 10-24 0z" fill="${i % 2 ? '#fff' : '#e48aa7'}"/>`;
+    return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice"><rect width="${W}" height="${H}" fill="url(#g-sky)"/>
+      <rect x="40" y="40" width="320" height="230" fill="#f4ece6"/><rect x="40" y="40" width="320" height="10" fill="#e6d7d2"/>
+      <rect x="110" y="56" width="180" height="30" rx="4" fill="#1f3b35"/><text x="200" y="78" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-weight="700" font-size="22" fill="#fbe3eb">Petalfall</text>
+      ${aw}<rect x="72" y="134" width="150" height="112" fill="#33463f"/><rect x="78" y="140" width="138" height="100" fill="#fbe6dc" opacity=".9"/>
+      <g>${cluster(110, 160, 22, 12, R)}${cluster(180, 156, 24, 12, R)}${table(146, 214, .9, '#f6c1d0')}</g>
+      <rect x="250" y="134" width="70" height="136" fill="#1f3b35"/><rect x="258" y="144" width="54" height="70" fill="#fbe6dc" opacity=".85"/><circle cx="304" cy="232" r="3" fill="#f6cf73"/>
+      <rect x="0" y="270" width="${W}" height="30" fill="#d8ccc6"/><g transform="translate(350 270)"><path d="M-14 0h28l-4-26h-20z" fill="#f3d6de"/>${cluster(0, -40, 16, 8, R)}</g></svg>`;
+  },
+  map() {
+    const W = 400, H = 300; let s = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice"><rect width="${W}" height="${H}" fill="#ece6e2"/>`;
+    for (let x = -20; x < W; x += 92) for (let y = -10; y < H; y += 74) s += `<rect x="${x + 12}" y="${y + 12}" width="70" height="52" rx="6" fill="#f8f4f1"/>`;
+    s += `<rect x="196" y="160" width="70" height="52" rx="6" fill="#cfe2cf"/>${fl(214, 178, 12, '#f0a7bd')}${fl(244, 194, 12, '#e889a6')}${fl(230, 172, 10, '#fbd9e3')}`;
+    s += `<path d="M0 138h${W}" stroke="#fff" stroke-width="10"/><path d="M164 0v${H}" stroke="#fff" stroke-width="10"/><path d="M0 285L400 205" stroke="#f7e3b0" stroke-width="12"/>`;
+    s += `<g transform="translate(134 128)"><path d="M0 0c-14-18-18-24-18-32a18 18 0 0 1 36 0c0 8-4 14-18 32z" fill="#b83f66"/><circle cy="-32" r="7" fill="#fff"/></g>`;
+    s += `<g font-family="Manrope, system-ui, sans-serif" font-weight="700"><rect x="52" y="64" width="152" height="26" rx="13" fill="#fff" stroke="#e6d7d2"/><text x="128" y="81" text-anchor="middle" font-size="12" fill="#221a1d">Your block here</text><text x="231" y="226" text-anchor="middle" font-size="10" fill="#6f8f72">Park</text></g>`;
+    return s + '</svg>';
+  },
+};
+$$('[data-scene]').forEach(el => { try { el.innerHTML = SCENES[el.dataset.scene](); } catch (e) { console.warn(e); } });
+
+/* milkshake jar, drawn per flavor */
+function shakeSVG(look, i) {
+  const R = rng(101 + i * 13), id = 'sk' + i;
+  const glass = 'M52 118h106l-12 140q-1 8-9 8H73q-8 0-9-8z';
+  let tops = '';
+  const cream = [[105, 104, 50, 20], [82, 96, 22, 16], [128, 96, 22, 16], [105, 86, 34, 18], [94, 72, 20, 14], [116, 72, 20, 14], [105, 62, 16, 13]].map(([x, y, rx, ry]) => `<ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" fill="#fffdf9" stroke="#efe6df" stroke-width="1"/>`).join('') + '<path d="M101 50q4-8 8 0" stroke="#fffdf9" stroke-width="5" stroke-linecap="round" fill="none"/>';
+  const sprinkleCols = ['#ff6b8b', '#ffd25e', '#6ec6ff', '#8ee08a', '#c58cff', '#fff'];
+  for (const t of look.tops) {
+    if (t === 'sprinkles') for (let k = 0; k < 34; k++) { const x = 62 + R() * 86, y = 58 + R() * 52; tops += `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="6" height="2" rx="1" fill="${sprinkleCols[k % 6]}" transform="rotate(${(R() * 180).toFixed(0)} ${x.toFixed(1)} ${y.toFixed(1)})"/>`; }
+    if (t === 'chips') for (let k = 0; k < 14; k++) { const x = 66 + R() * 78, y = 66 + R() * 42; tops += `<path d="M${x.toFixed(1)} ${y.toFixed(1)}l3-5 3 5z" fill="#3b2a24"/>`; }
+    if (t === 'crumbs') for (let k = 0; k < 22; k++) { const x = 64 + R() * 82, y = 70 + R() * 40; tops += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(1.5 + R() * 2).toFixed(1)}" fill="#d6a46a"/>`; }
+    if (t === 'drizzle') tops += `<path d="M66 92q8 10 14-2t14 4 14-6 14 4 14-2 12 6" stroke="${look.sauce}" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M78 78q10 8 18-2t16 2 16-4" stroke="${look.sauce}" stroke-width="3.5" fill="none" stroke-linecap="round"/>`;
+    if (t === 'cherry') tops += `<path d="M108 46q4-16 14-22" stroke="#4f7d58" stroke-width="2.5" fill="none" stroke-linecap="round"/><circle cx="106" cy="48" r="10" fill="#d9284f"/><ellipse cx="102" cy="44" rx="3" ry="4" fill="#fff" opacity=".5"/>`;
+    if (t === 'mallows') [[78, 70], [100, 58], [124, 66], [90, 84], [116, 84]].forEach(([x, y], k) => tops += `<rect x="${x - 11}" y="${y - 9}" width="22" height="18" rx="6" fill="#fff2e2"/><rect x="${x - 11}" y="${y - 9}" width="22" height="7" rx="5" fill="${k % 2 ? '#c98a52' : '#a86b3a'}" opacity=".85"/>`);
+    if (t === 'cookie') tops += `<g transform="rotate(-18 140 64)"><ellipse cx="140" cy="64" rx="22" ry="20" fill="#3b2a24"/><ellipse cx="140" cy="64" rx="17" ry="15" fill="none" stroke="#5a4136" stroke-dasharray="3 4"/></g>`;
+    if (t === 'cups') [[80, 72], [128, 70], [104, 60]].forEach(([x, y]) => tops += `<path d="M${x - 10} ${y - 6}h20l-3 12h-14z" fill="#c58c55"/><ellipse cx="${x}" cy="${y - 6}" rx="10" ry="3" fill="#4a2c20"/>`);
+    if (t === 'berries') for (let k = 0; k < 9; k++) { const x = 70 + R() * 70, y = 60 + R() * 40; tops += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="5" fill="#4b3c96"/><circle cx="${(x - 1.5).toFixed(1)}" cy="${(y - 1.5).toFixed(1)}" r="1.4" fill="#9c8fe0"/>`; }
+    if (t === 'donut') tops += `<g transform="rotate(14 136 60)"><ellipse cx="136" cy="60" rx="26" ry="22" fill="#e2a86a"/><ellipse cx="136" cy="58" rx="24" ry="19" fill="#f6c1d0"/><ellipse cx="136" cy="60" rx="8" ry="7" fill="${look.bg}"/>${[0, 1, 2, 3, 4, 5].map(k => `<rect x="${124 + k * 4}" y="${48 + (k % 3) * 9}" width="5" height="2" rx="1" fill="${sprinkleCols[k]}"/>`).join('')}</g>`;
+  }
+  const drips = `<path d="M52 118h106v8q-4 14-8 0q-6 22-12 0q-5 12-10 0q-6 26-12 0q-5 10-10 0q-6 18-12 0q-5 12-10 0q-6 20-12 0q-5 10-10 0q-4 14-8 0z" fill="${look.sauce}"/>`;
+  return `<svg viewBox="0 0 210 280" role="img" aria-label="Drawing of a milkshake jar"><defs><linearGradient id="${id}b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="${look.bg}"/></linearGradient><linearGradient id="${id}d" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${look.d1}"/><stop offset="1" stop-color="${look.d2}"/></linearGradient><clipPath id="${id}c"><path d="${glass}"/></clipPath></defs>
+    <rect width="210" height="280" fill="url(#${id}b)"/><circle cx="105" cy="120" r="90" fill="${look.bg}" opacity=".8"/><ellipse cx="105" cy="268" rx="62" ry="7" fill="#000" opacity=".12"/>
+    <g transform="rotate(14 150 40)"><rect x="140" y="8" width="11" height="120" rx="5" fill="#fff"/><path d="M140 20h11M140 40h11M140 60h11M140 80h11" stroke="${look.sauce}" stroke-width="7" opacity=".85"/></g>
+    <path d="M158 150q30 4 26 40t-34 36" fill="none" stroke="#ffffffcc" stroke-width="9" stroke-linecap="round"/><path d="M158 150q30 4 26 40t-34 36" fill="none" stroke="#00000014" stroke-width="2"/>
+    <g clip-path="url(#${id}c)"><rect x="40" y="110" width="130" height="170" fill="url(#${id}d)"/><path d="M40 200q30-10 65 0t65 0v80H40z" fill="${look.d2}" opacity=".5"/><path d="M60 128q30 20 50 0t50 6" stroke="${look.sauce}" stroke-width="5" fill="none" opacity=".55"/></g>
+    <path d="${glass}" fill="none" stroke="#ffffffb3" stroke-width="4"/><path d="M64 132l9 118" stroke="#fff" stroke-width="6" stroke-linecap="round" opacity=".55"/><path d="M78 132l3 40" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".4"/>
+    ${[150, 190, 230].map(y => `<path d="M${58 + (y - 118) * .086} ${y}h${100 - (y - 118) * .17}" stroke="#ffffff55" stroke-width="2"/>`).join('')}
+    ${cream}${drips}${tops}<rect x="48" y="112" width="114" height="10" rx="5" fill="#ffffffd9"/></svg>`;
+}
+
+/* ---------- petals: one small 2D painter shared by the intro burst and the hero drift */
+const PETAL_COLORS = ['#f6c1d0', '#f0a7bd', '#fbd9e3', '#e889a6', '#ffe4ec', '#d9668a'];
+function Petals(canvas, { count = 28, burst = null } = {}) {
+  const ctx = canvas.getContext('2d'); let W = 0, H = 0, d = 1, run = true, raf = 0; const P = [];
+  const size = () => { d = Math.min(devicePixelRatio || 1, 2); W = canvas.clientWidth; H = canvas.clientHeight; canvas.width = W * d; canvas.height = H * d; ctx.setTransform(d, 0, 0, d, 0, 0); };
+  size(); addEventListener('resize', size);
+  const make = (b) => {
+    const p = { s: 5 + Math.random() * 7, r: Math.random() * 6.28, vr: (Math.random() - .5) * .04, c: PETAL_COLORS[Math.random() * PETAL_COLORS.length | 0], ph: Math.random() * 6.28, a: .55 + Math.random() * .4 };
+    if (b) { const ang = Math.random() * 6.28, sp = 1.5 + Math.random() * 3.5; Object.assign(p, { x: b.x * W, y: b.y * H, vx: Math.cos(ang) * sp, vy: Math.sin(ang) * sp - 1.5 }); }
+    else Object.assign(p, { x: Math.random() * W, y: Math.random() * H - H, vx: 0, vy: .35 + Math.random() * .55 });
+    return p;
+  };
+  for (let i = 0; i < count; i++) P.push(make(burst));
+  function frame(t) {
+    ctx.clearRect(0, 0, W, H);
+    for (const p of P) {
+      if (burst) { p.vx *= .97; p.vy = p.vy * .97 + .06; } p.x += p.vx + Math.sin(t / 900 + p.ph) * .35; p.y += p.vy; p.r += p.vr;
+      if (!burst && p.y > H + 20) { Object.assign(p, make(null), { y: -20 }); }
+      ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r); ctx.globalAlpha = p.a; ctx.fillStyle = p.c;
+      ctx.beginPath(); ctx.moveTo(0, -p.s); ctx.bezierCurveTo(p.s * .9, -p.s * .4, p.s * .6, p.s * .8, 0, p.s); ctx.bezierCurveTo(-p.s * .6, p.s * .8, -p.s * .9, -p.s * .4, 0, -p.s); ctx.fill(); ctx.restore();
+    }
+    if (run) raf = requestAnimationFrame(frame);
+  }
+  return { start() { if (!run) { run = true; raf = requestAnimationFrame(frame); } }, stop() { run = false; cancelAnimationFrame(raf); }, go() { raf = requestAnimationFrame(frame); } };
+}
+
+/* ---------- intro: the blossom grows, petals burst from the crown, the name writes in. Once per visit, skippable. */
+(() => {
+  const intro = $('#intro'), reveal = () => root.classList.add('ready');
+  let seen = false; try { seen = sessionStorage.getItem('pf-intro') === '1'; } catch (e) {}
+  if (RM || seen) { intro.classList.add('done'); requestAnimationFrame(reveal); return; }
+  try { sessionStorage.setItem('pf-intro', '1'); } catch (e) {}
+  const lg = intro.querySelector('.mark').getBoundingClientRect();
+  const crown = { x: (lg.left + lg.width * .5) / innerWidth, y: (lg.top + lg.height * .25) / innerHeight };
+  let fx = null; let ended = false;
+  const finish = () => { if (ended) return; ended = true; intro.classList.add('done'); reveal(); setTimeout(() => fx && fx.stop(), 600); };
+  requestAnimationFrame(() => intro.classList.add('go'));
+  setTimeout(() => { fx = Petals($('#introPetals'), { count: 34, burst: crown }); fx.go(); }, 750);
+  setTimeout(finish, 1950);
+  ['wheel', 'touchstart', 'keydown', 'pointerdown'].forEach(ev => addEventListener(ev, finish, { once: true, passive: true }));
+})();
+
+/* hero petals drift, only while the hero is on screen */
+if (!RM) {
+  const hp = Petals($('#petals'), { count: innerWidth < 760 ? 18 : 30 }); hp.go();
+  new IntersectionObserver(es => es[0].isIntersecting && !document.hidden ? hp.start() : hp.stop()).observe($('.hero'));
+  document.addEventListener('visibilitychange', () => document.hidden ? hp.stop() : hp.start());
+}
+
+/* hero drawing eases out of a zoom as you scroll */
+const shotArt = $('#shot .art');
+const zoom = () => { const r = $('#shot').getBoundingClientRect(); const k = Math.min(1, Math.max(0, 1 - r.top / innerHeight)); shotArt.style.setProperty('--z', (1.14 - .14 * k).toFixed(3)); };
+if (!RM) { addEventListener('scroll', () => requestAnimationFrame(zoom), { passive: true }); zoom(); }
+
+/* ---------- smart menu */
+(() => {
+  const body = $('#menuBody'), chips = $('#chips .in');
+  const SHOW = 6;
+  body.innerHTML = CONFIG.menu.map(c => `<section class="cat" id="m-${c.id}" role="tabpanel" aria-labelledby="t-${c.id}"><div class="ch"><h3 id="t-${c.id}">${esc(c.title)}</h3><span>${c.items.length} items · sample</span></div><ul class="items${c.compact ? ' compact' : ''}">${c.items.map(([n, d, pr, tag], i) => `<li class="item${!c.compact && i >= SHOW ? ' more' : ''}" data-k="${esc((n + ' ' + (d || '') + ' ' + c.title + (tag === 'V' ? ' vegan' : '')).toLowerCase())}"><div><b>${esc(n)}</b>${tag ? `<span class="tag">${esc(tag)}</span>` : ''}${d ? `<p>${esc(d)}</p>` : ''}</div><span class="pr">${esc(pr)}</span></li>`).join('')}</ul>${!c.compact && c.items.length > SHOW ? `<button class="btn line showall" type="button">Show all ${c.items.length}</button>` : ''}</section>`).join('');
+  const all = [...CONFIG.menu, { id: 'shakes', title: 'Shakes' }];
+  chips.innerHTML = all.map(c => `<button role="tab" data-id="${c.id}" aria-controls="${c.id === 'shakes' ? 'shakes' : 'm-' + c.id}">${esc(c.title)}</button>`).join('');
+  const menuSec = $('#menu');
+  function setTab(id, scroll) {
+    $$('.cat').forEach(c => c.classList.toggle('active', c.id === 'm-' + id));
+    chips.querySelectorAll('button').forEach(b => { const on = b.dataset.id === id; b.classList.toggle('on', on); b.setAttribute('aria-selected', on); });
+    const on = chips.querySelector('.on'); on && chips.scrollTo({ left: on.offsetLeft - 18, behavior: RM ? 'auto' : 'smooth' });
+    if (scroll) { const top = $('#chips').getBoundingClientRect().top; if (top < 0 || top > innerHeight * .5) $('#menuBody').scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'start' }); }
+  }
+  setTab('breakfast');
+  const q = $('#q'), cnt = $('#qcount'), empty = $('#empty');
+  chips.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; if (b.dataset.id === 'shakes') { $('#shakes').scrollIntoView({ behavior: RM ? 'auto' : 'smooth' }); return; } q.value = ''; q.dispatchEvent(new Event('input')); setTab(b.dataset.id, true); });
+  body.addEventListener('click', e => { const b = e.target.closest('.showall'); if (b) b.closest('.cat').classList.add('open'); });
+  q.addEventListener('input', () => {
+    const v = q.value.trim().toLowerCase(); let n = 0;
+    menuSec.classList.toggle('searching', !!v);
+    $$('.cat').forEach(c => { let any = 0; c.querySelectorAll('.item').forEach(it => { const hit = !v || it.dataset.k.includes(v); it.hidden = !hit; if (hit) { any++; n++; } }); c.hidden = !!v && !any; });
+    cnt.textContent = v ? `${n} match${n === 1 ? '' : 'es'} across the menu` : ''; empty.style.display = v && !n ? 'block' : 'none';
+  });
+})();
+
+/* ---------- shake bar coverflow */
+(() => {
+  const flow = $('#flow'), name = $('#fname'), desc = $('#fdesc'), dots = $('#fdots');
+  flow.innerHTML = '<div class="pad"></div>' + CONFIG.shakes.map(([n, , , look], i) => `<figure aria-label="${esc(n)} milkshake">${shakeSVG(look, i)}</figure>`).join('') + '<div class="pad"></div>';
+  dots.innerHTML = CONFIG.shakes.map(() => '<i></i>').join('');
+  const figs = [...flow.querySelectorAll('figure')]; let cur = -1;
+  function paint() {
+    const fr = flow.getBoundingClientRect(), mid = fr.left + fr.width / 2; let best = 0, bd = 1e9;
+    figs.forEach((f, i) => {
+      const r = f.getBoundingClientRect(), dx = (r.left + r.width / 2 - mid) / r.width, a = Math.max(-1.6, Math.min(1.6, dx));
+      if (Math.abs(dx) < bd) { bd = Math.abs(dx); best = i; }
+      if (!RM) { f.style.transform = `rotateY(${(-a * 38).toFixed(1)}deg) translateZ(${(-Math.abs(a) * 70).toFixed(0)}px) scale(${(1 - Math.min(1, Math.abs(a)) * .12).toFixed(3)})`; f.style.opacity = (1 - Math.min(1, Math.abs(a)) * .45).toFixed(2); f.style.zIndex = 10 - Math.round(Math.abs(a) * 3); }
+    });
+    if (best !== cur) { cur = best; const s = CONFIG.shakes[best]; name.innerHTML = `${esc(s[0])}<span>${esc(s[2])} sample</span>`; desc.textContent = s[1]; [...dots.children].forEach((d, i) => d.classList.toggle('on', i === best)); }
+  }
+  flow.addEventListener('scroll', () => requestAnimationFrame(paint), { passive: true }); addEventListener('resize', paint);
+  figs.forEach(f => f.addEventListener('click', () => f.scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'nearest', inline: 'center' })));
+  requestAnimationFrame(() => { flow.scrollLeft = 0; paint(); });
+})();
+
+/* spaces rail dots */
+const rail = $('#rail'), rd = $$('#rdots i');
+rail.addEventListener('scroll', () => { const w = rail.firstElementChild.getBoundingClientRect().width + 12; const k = Math.round(rail.scrollLeft / w); rd.forEach((d, i) => d.classList.toggle('on', i === k)); }, { passive: true });
+
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -10% 0px' });
+$$('.rv').forEach(el => io.observe(el));
+/* sticky action bar on phones, hidden once the closing call to action is on screen */
+const dock = $('#dock'); let atEnd = false;
+const syncDock = () => dock.classList.toggle('on', scrollY > 380 && !atEnd);
+new IntersectionObserver(es => { atEnd = es[0].isIntersecting; syncDock(); }).observe($('#close'));
+addEventListener('scroll', syncDock, { passive: true });
+</script>
+</body>
+</html>
