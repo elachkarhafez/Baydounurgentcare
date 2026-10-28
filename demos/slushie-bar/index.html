@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="robots" content="noai, noimageai">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Churnwell Slush Bar | Slushie shop (concept)</title>
+  <meta name="description" content="Churnwell Slush Bar is a fictional slushie shop. A concept site by ElaSystems: scroll down a 3D counter of 18 slush machines, tap to pour your own layered cup, then see a sample menu.">
+  <meta property="og:title" content="Churnwell Slush Bar | Concept site by ElaSystems">
+  <meta property="og:description" content="A concept site for a slushie and juice shop. Built by ElaSystems.">
+  <meta property="og:type" content="website">
+    <meta name="theme-color" content="#fff4e2">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath d='M9 16a11 9 0 0 1 22 0z' fill='%23fff' stroke='%232b1a10' stroke-width='2.4'/%3E%3Cpath d='M10 16h20l-2.6 18.5a2 2 0 0 1-2 1.7h-10.8a2 2 0 0 1-2-1.7z' fill='%23d9336a' stroke='%232b1a10' stroke-width='2.4' stroke-linejoin='round'/%3E%3Cpath d='M23 9l4-6' stroke='%232b1a10' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="preload" href="fonts/fredoka.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="modulepreload" href="assets/wall.js">
+  <style>
+    @font-face { font-family: "Fredoka"; font-weight: 400 700; font-display: swap; src: url(fonts/fredoka.woff2) format("woff2"); }
+    @font-face { font-family: "Manrope"; font-weight: 400 700; font-display: swap; src: url(fonts/manrope.woff2) format("woff2"); }
+
+    /* Churnwell Slush Bar (fictional concept by ElaSystems). Clay / toy: soft cream, chunky blocks in
+       orange, yellow and green, thick dark outlines with offset shadows, a raspberry brand colour. */
+    :root {
+      --cream: #fff4e2; --cream-2: #ffeccc; --ink: #2b1a10; --ink-2: #5a4636; --muted: #7d6a5a;
+      --orange: #f47b20; --yellow: #fcc53a; --green: #86a865; --red: #d9336a; --leaf: #3f7a3a; --card: #fffaf1;
+      --display: "Fredoka", "Arial Rounded MT Bold", "Trebuchet MS", sans-serif;
+      --sans: "Manrope", "Segoe UI", Arial, sans-serif;
+      --max: 1180px; --pad: clamp(16px, 3.6vw, 40px);
+      --ease: cubic-bezier(.2,.7,.2,1); --pop: cubic-bezier(.34,1.56,.64,1);
+      --bd: 2px solid var(--ink); --sh: 4px 4px 0 var(--ink);
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; overflow-x: clip; background: var(--cream); }
+    body { margin: 0; background: var(--cream); color: var(--ink); font: 400 1rem/1.55 var(--sans); overflow-x: clip; -webkit-font-smoothing: antialiased; }
+    img, svg, canvas { display: block; max-width: 100%; }
+    img { height: auto; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+    :focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
+    ::selection { background: var(--orange); color: #fff; }
+    h1, h2, h3 { margin: 0; font-family: var(--display); font-weight: 600; letter-spacing: -.01em; line-height: 1.05; }
+    h2 { font-size: clamp(1.75rem, 1.25rem + 1.5vw, 2.5rem); }
+    h3 { font-size: 1.25rem; }
+    p { margin: 0; }
+    .wrap { max-width: var(--max); margin: 0 auto; padding: 0 var(--pad); }
+    .lead { color: var(--ink-2); font-size: clamp(.9375rem, .9rem + .2vw, 1.0625rem); max-width: 40em; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 9px; min-height: 48px; padding: 0 20px; border: var(--bd); border-radius: 14px; background: var(--card); font: 600 1rem/1 var(--display); box-shadow: var(--sh); transition: transform .2s var(--ease), box-shadow .2s var(--ease); white-space: nowrap; }
+    .btn svg { width: 19px; height: 19px; flex: none; }
+    .btn.go { background: var(--orange); color: #fff; }
+    .btn.y { background: var(--yellow); }
+    @media (hover: hover) { .btn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ink); } }
+    .btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--ink); }
+
+    /* ---------- header ---------- */
+    header { position: sticky; top: 0; z-index: 40; background: rgba(255,244,226,.95); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: var(--bd); }
+    .bar { display: flex; align-items: center; justify-content: space-between; gap: 14px; height: 64px; }
+    .bar .logo { display: inline-flex; align-items: center; gap: 8px; font: 600 1.375rem/1 var(--display); letter-spacing: -.01em; }
+    .bar .logo svg { width: 34px; height: 34px; flex: none; }
+    .bar .logo b { font-weight: 600; } .bar .logo span { color: var(--red); }
+    .bar nav { display: flex; align-items: center; gap: 22px; font: 600 1rem/1 var(--display); }
+    @media (hover: hover) { .bar nav > a:not(.btn):hover { color: var(--red); } }
+    .bar .btn { min-height: 42px; padding: 0 16px; box-shadow: 3px 3px 0 var(--ink); }
+    @media (max-width: 900px) { .bar nav > a:not(.btn) { display: none; } }
+
+    /* ---------- the slushie wall (horizontal counter) ---------- */
+    .wall { position: relative; height: 380vh; }
+    .stage { position: sticky; top: 64px; height: calc(100svh - 64px); max-height: 860px; overflow: hidden; border-bottom: var(--bd);
+      background:
+        radial-gradient(60% 70% at 50% 30%, rgba(255,255,255,.75), transparent 70%),
+        linear-gradient(180deg, #ffe7c2 0%, #fff1dc 58%, #f8dcb5 100%); }
+    .stage .leaves { position: absolute; inset: 0 0 auto 0; height: 34%; pointer-events: none; opacity: .9; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='120' viewBox='0 0 220 120'%3E%3Cg fill='%233f7a3a' opacity='.55'%3E%3Cellipse cx='30' cy='18' rx='22' ry='9' transform='rotate(-24 30 18)'/%3E%3Cellipse cx='70' cy='34' rx='20' ry='8' transform='rotate(18 70 34)'/%3E%3Cellipse cx='150' cy='14' rx='24' ry='9' transform='rotate(-12 150 14)'/%3E%3Cellipse cx='190' cy='40' rx='18' ry='7' transform='rotate(30 190 40)'/%3E%3C/g%3E%3Cg fill='%23f47b20'%3E%3Ccircle cx='52' cy='30' r='9'/%3E%3Ccircle cx='172' cy='28' r='8'/%3E%3C/g%3E%3Cg fill='%23fcc53a'%3E%3Ccircle cx='112' cy='22' r='7'/%3E%3C/g%3E%3C/svg%3E") repeat-x 0 0 / 220px 120px; }
+    #wallCv { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: pan-y; }
+    .fallback { position: absolute; inset: 0; display: none; place-items: center; }
+    .fallback svg { width: min(92%, 760px); height: auto; }
+    .stage.nogl .fallback { display: grid; } .stage.nogl #wallCv, .stage.nogl .hud, .stage.nogl .ruler { display: none; }
+    .intro { position: absolute; z-index: 3; left: var(--pad); top: clamp(16px, 3vh, 34px); max-width: min(520px, 46%); pointer-events: none; }
+    .intro > * { pointer-events: auto; }
+    .award { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px 6px 8px; border: var(--bd); border-radius: 99px; background: var(--yellow); font: 600 .875rem/1 var(--display); box-shadow: 3px 3px 0 var(--ink); }
+    .award b { display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--ink); color: var(--yellow); font-size: .8125rem; }
+    .intro h1 { margin-top: 14px; font-size: clamp(1.875rem, 1.2rem + 1.9vw, 3.25rem); line-height: 1.02; }
+    .intro h1 span { color: var(--red); }
+    .intro p { margin-top: 10px; color: var(--ink-2); font-size: clamp(.9375rem, .9rem + .2vw, 1.0625rem); max-width: 30em; }
+    .intro .ctas { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+    .hud { position: absolute; z-index: 3; left: 50%; bottom: 70px; transform: translateX(-50%); display: flex; align-items: center; gap: 10px; padding: 8px 10px 8px 14px; border: var(--bd); border-radius: 99px; background: var(--card); box-shadow: var(--sh); font: 600 .9375rem/1 var(--display); white-space: nowrap; max-width: calc(100% - 24px); }
+    .hud .cupdots { display: flex; gap: 5px; }
+    .hud .cupdots i { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--ink); background: transparent; transition: background .3s, transform .3s var(--pop); }
+    .hud .cupdots i.on { transform: scale(1.12); }
+    .hud .say { overflow: hidden; text-overflow: ellipsis; }
+    .hud button { padding: 7px 10px; border-radius: 99px; border: 2px solid var(--ink); font: 600 .8125rem/1 var(--display); background: var(--cream-2); }
+    .ruler { position: absolute; z-index: 3; left: var(--pad); right: var(--pad); bottom: 22px; height: 26px; }
+    .ruler .track { position: absolute; left: 0; right: 0; top: 11px; height: 4px; border-radius: 4px; background: rgba(43,26,16,.18); }
+    .ruler .fill { position: absolute; left: 0; top: 11px; height: 4px; border-radius: 4px; background: var(--ink); width: 0; }
+    .ruler i { position: absolute; top: 6px; width: 14px; height: 14px; margin-left: -7px; border-radius: 50%; border: 2px solid var(--ink); }
+    .ruler .end { position: absolute; right: -4px; top: -2px; font: 600 .8125rem/1 var(--display); transform: translateY(-100%); }
+    .receipt { position: absolute; z-index: 4; right: var(--pad); top: 50%; width: min(360px, 90%); transform: translate(30px, -50%); opacity: 0; pointer-events: none; transition: opacity .4s, transform .5s var(--pop); padding: 18px 18px 16px; border: var(--bd); border-radius: 18px; background: var(--card); box-shadow: 6px 6px 0 var(--ink); }
+    .receipt.on { opacity: 1; transform: translate(0, -50%); pointer-events: auto; }
+    .receipt h2 { font-size: 1.5rem; }
+    .receipt .mix { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 6px; }
+    .receipt .mix span { display: inline-flex; align-items: center; gap: 6px; padding: 5px 9px; border: 2px solid var(--ink); border-radius: 99px; font: 600 .8125rem/1 var(--display); }
+    .receipt .mix span i { width: 12px; height: 12px; border-radius: 50%; }
+    .sizes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 14px; }
+    .sizes button { padding: 9px 4px 8px; border: 2px solid var(--ink); border-radius: 12px; background: var(--cream); text-align: center; font: 600 .8125rem/1.1 var(--display); transition: background .2s, transform .2s var(--pop); }
+    .sizes button b { display: block; margin-top: 3px; font-size: 1.0625rem; }
+    .sizes button[aria-pressed="true"] { background: var(--yellow); transform: translateY(-2px); }
+    .receipt .ctas { display: grid; gap: 8px; margin-top: 14px; }
+    .receipt .ctas .btn { width: 100%; }
+    .receipt small { display: block; margin-top: 10px; color: var(--muted); font-size: .8125rem; line-height: 1.4; }
+    .skip { position: absolute; z-index: 3; right: var(--pad); top: clamp(16px, 3vh, 34px); font: 600 .875rem/1 var(--display); padding: 8px 12px; border: 2px solid var(--ink); border-radius: 99px; background: var(--card); }
+
+    /* ---------- below the counter ---------- */
+    .sec { padding: clamp(52px, 6.5vw, 80px) 0; }
+    .rank { background: var(--ink); color: var(--cream); padding: 22px 0; }
+    .rank .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 30px; }
+    .rank b { font: 600 clamp(1.25rem, 1.05rem + .6vw, 1.625rem)/1.15 var(--display); }
+    .rank b span { color: var(--yellow); }
+    .rank p { color: #e6d6c2; font-size: .9375rem; }
+
+    .menu .top { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 14px 30px; }
+    .tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 26px; }
+    .tabs button { padding: 9px 14px; border: 2px solid var(--ink); border-radius: 99px; background: var(--card); font: 600 .9375rem/1 var(--display); transition: background .2s, transform .2s var(--pop); }
+    .tabs button[aria-selected="true"] { background: var(--tab, var(--orange)); color: var(--tabink, #fff); transform: translateY(-2px); box-shadow: 3px 3px 0 var(--ink); }
+    .board { margin-top: 18px; border: var(--bd); border-radius: 22px; background: var(--tab, var(--orange)); color: var(--tabink, #fff); box-shadow: 6px 6px 0 var(--ink); padding: clamp(18px, 3vw, 30px); transition: background .3s; }
+    .board h3 { font-size: clamp(1.625rem, 1.3rem + 1vw, 2.25rem); }
+    .board .note { margin-top: 4px; font-style: italic; opacity: .92; font-size: .9375rem; }
+    .rows { margin-top: 14px; display: grid; gap: 0; }
+    .row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 18px; align-items: baseline; padding: 11px 0; border-top: 2px dashed currentColor; border-color: rgba(43,26,16,.25); }
+    .board.light .row { border-color: rgba(255,255,255,.35); }
+    .row:first-child { border-top: 0; }
+    .row b { font: 600 1.125rem/1.2 var(--display); }
+    .row small { display: block; margin-top: 2px; font-size: .875rem; opacity: .9; line-height: 1.4; }
+    .row .p { display: grid; grid-auto-flow: column; gap: 6px; text-align: center; font: 600 1rem/1 var(--display); font-variant-numeric: tabular-nums; }
+    .row .p span { min-width: 52px; }
+    .heads { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 18px; margin-top: 12px; font: 600 .75rem/1.1 var(--display); text-transform: uppercase; letter-spacing: .06em; opacity: .9; }
+    .heads .p { display: grid; grid-auto-flow: column; gap: 6px; text-align: center; }
+    .heads .p span { min-width: 52px; }
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+    .chips span { padding: 5px 10px; border-radius: 99px; background: rgba(255,255,255,.28); border: 1.5px solid rgba(43,26,16,.35); font: 500 .875rem/1 var(--display); }
+    .order { margin-top: 18px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .order p { color: var(--ink-2); font-size: .9375rem; }
+
+    .sig .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin-top: 28px; }
+    .tile { margin: 0; border: var(--bd); border-radius: 20px; overflow: hidden; background: var(--card); box-shadow: var(--sh); transition: transform .35s var(--pop); }
+    .tile figcaption { padding: 12px 14px 14px; }
+    .tile b { display: flex; justify-content: space-between; gap: 10px; font: 600 1.125rem/1.2 var(--display); }
+    .tile b span { color: var(--red); white-space: nowrap; }
+    .tile small { display: block; margin-top: 3px; color: var(--muted); font-size: .875rem; line-height: 1.4; }
+    @media (hover: hover) { .tile:hover { transform: rotate(-1.2deg) translateY(-4px); } .tile:nth-child(even):hover { transform: rotate(1.2deg) translateY(-4px); } }
+
+    .cater { background: var(--green); border-top: var(--bd); border-bottom: var(--bd); }
+    .cater .grid { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: clamp(24px, 4vw, 56px); align-items: center; }
+    .cater .lead { color: #23331a; }
+    .trays { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 22px; }
+    .trays div { padding: 14px; border: var(--bd); border-radius: 16px; background: var(--card); box-shadow: 3px 3px 0 var(--ink); }
+    .trays small { display: block; font: 600 .8125rem/1.1 var(--display); color: var(--muted); }
+    .trays b { display: block; margin-top: 6px; font: 600 1.5rem/1 var(--display); }
+    .trays span { display: block; margin-top: 4px; font-size: .875rem; color: var(--ink-2); }
+    .cater .ctas { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+    .cater figure { margin: 0; border: var(--bd); border-radius: 22px; overflow: hidden; box-shadow: 6px 6px 0 var(--ink); transform: rotate(1.5deg); background: var(--card); }
+
+    .visit { background: var(--yellow); border-top: var(--bd); }
+    .visit .grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(24px, 4vw, 56px); align-items: start; }
+    .visit .addr { margin-top: 14px; font: 600 1.375rem/1.3 var(--display); }
+    .visit .lines { margin-top: 14px; display: grid; gap: 6px; font-size: 1rem; }
+    .visit .lines a { border-bottom: 2px solid var(--ink); font-weight: 600; }
+    .visit .ctas { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+    .hours { width: 100%; border-collapse: separate; border-spacing: 0; background: var(--card); border: var(--bd); border-radius: 18px; overflow: hidden; box-shadow: 6px 6px 0 var(--ink); font-size: 1rem; }
+    .hours td { padding: 12px 18px; border-top: 2px dashed rgba(43,26,16,.2); }
+    .hours tr:first-child td { border-top: 0; }
+    .hours td:last-child { text-align: right; font-variant-numeric: tabular-nums; }
+    .hours tr.today td { background: var(--cream-2); font-weight: 700; }
+    .hours tr.today td:first-child::after { content: "Today"; margin-left: 8px; padding: 3px 8px; border-radius: 99px; background: var(--orange); color: #fff; font: 600 .6875rem/1 var(--display); vertical-align: 2px; }
+    .status { display: inline-flex; align-items: center; gap: 8px; margin-top: 12px; font: 600 1rem/1 var(--display); }
+    .status i { width: 10px; height: 10px; border-radius: 50%; background: #9b8c7d; border: 2px solid var(--ink); }
+    .status.open i { background: #3ccf7a; }
+
+    footer { background: var(--ink); color: #d8c6b2; padding: 20px 0 24px; font-size: .875rem; }
+    footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; }
+    footer a { color: #fff; font-weight: 600; }
+    .mbar { position: fixed; z-index: 45; left: 10px; right: 10px; bottom: calc(10px + env(safe-area-inset-bottom)); display: none; gap: 8px; }
+    .mbar .btn { flex: 1; }
+    .rv { opacity: 0; transform: translateY(18px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
+    .rv.in { opacity: 1; transform: none; }
+
+    @media (max-width: 900px) {
+      .wall { height: 340vh; }
+      .intro { max-width: none; right: var(--pad); }
+      .intro p { display: none; }
+      .receipt { left: 12px; right: 12px; top: 12px; bottom: auto; width: auto; transform: translateY(-20px); padding: 14px; }
+      .receipt.on { transform: none; }
+      .receipt small { display: none; }
+      .stage.done .hud, .stage.done .intro { opacity: 0 !important; visibility: hidden; }
+      .sig .grid { grid-template-columns: 1fr 1fr; }
+      .cater .grid, .visit .grid { grid-template-columns: 1fr; }
+      .skip { display: none; }
+    }
+    @media (max-width: 640px) {
+      .bar { height: 58px; } .stage { top: 58px; height: calc(100svh - 58px); }
+      .bar .logo { font-size: 1.25rem; } .bar .logo svg { width: 30px; height: 30px; }
+      .bar .btn { display: none; }
+      .intro h1 { font-size: 1.875rem; }
+      .intro .ctas { display: none; }
+      .hud { bottom: 84px; font-size: .8125rem; gap: 7px; padding: 6px 8px 6px 10px; }
+      .hud .cupdots i { width: 16px; height: 16px; }
+      .ruler { bottom: 66px; }
+      .heads .p span, .row .p span { min-width: 40px; }
+      .row { grid-template-columns: 1fr; }
+      .row .p, .heads .p { justify-content: start; }
+      .heads { grid-template-columns: 1fr; }
+      .heads > span:first-child { display: none; }
+      .sig .grid { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-left: var(--pad); margin: 22px calc(-1 * var(--pad)) 0; padding: 4px var(--pad) 10px; scrollbar-width: none; }
+      .sig .grid::-webkit-scrollbar { display: none; }
+      .sig .tile { flex: 0 0 74%; scroll-snap-align: start; }
+      .sdots { display: flex; }
+      .cater figure { max-width: 300px; margin: 0 auto; }
+      .trays { grid-template-columns: repeat(3, 1fr); gap: 8px; } .trays div { padding: 10px; } .trays small { font-size: .6875rem; } .trays b { font-size: 1.25rem; } .trays span { font-size: .75rem; }
+      .hours td { padding: 9px 14px; }
+      .tile b { flex-direction: column; gap: 2px; } .tile figcaption { padding: 10px 11px 12px; }
+      .mbar { display: flex; }
+      footer { padding-bottom: 90px; }
+      .sec { padding: 36px 0; }
+    }
+    @media (prefers-reduced-motion: reduce) { .rv { opacity: 1; transform: none; transition: none; } .receipt, .tile { transition: none; } }
+
+    /* concept ribbon + badge */
+    .ribbon { display: block; padding: 7px 16px; background: var(--ink); color: var(--cream); font: 600 12.5px/1.35 var(--sans); text-align: center; position: relative; z-index: 60; }
+    .ribbon b { color: var(--yellow); } .ribbon u { text-underline-offset: 3px; }
+    .elab { position: fixed; left: 14px; bottom: 14px; z-index: 80; display: flex; align-items: center; gap: 8px; padding: 8px 12px 8px 8px; border-radius: 99px; background: #1a1414; color: #fffaf2; font: 600 12px/1 var(--sans); box-shadow: 0 10px 24px -12px #0008; border: 1px solid rgba(255,255,255,.12); }
+    .elab i { width: 22px; height: 22px; border-radius: 50%; background: #fffaf2; color: #1a1414; display: grid; place-items: center; font: 800 11px/1 var(--sans); font-style: normal; }
+    @media (max-width: 560px) { .ribbon { font-size: 11px; padding: 6px 10px; } }
+    @media (max-width: 760px) { body > .elab { display: none; } footer .elab { position: static; width: max-content; margin: 14px 0 0; } }
+    .art { display: block; width: 100%; aspect-ratio: 1 / 1; border-bottom: var(--bd); }
+    .tile .art { aspect-ratio: 6 / 5; }
+    .cater figure .art, .visit .map .art { border-bottom: 0; }
+    .visit .map { margin-top: 18px; border: var(--bd); border-radius: 18px; overflow: hidden; box-shadow: 6px 6px 0 var(--ink); background: var(--card); }
+    .visit .map .art { aspect-ratio: 16 / 9; }
+    .visit .map small { display: block; padding: 8px 14px; border-top: var(--bd); font-size: .8125rem; color: var(--muted); }
+    .sdots { display: none; justify-content: center; gap: 6px; margin-top: 12px; }
+    .sdots i { width: 8px; height: 8px; border-radius: 50%; background: rgba(43,26,16,.25); transition: background .2s, transform .2s; }
+    .sdots i.on { background: var(--ink); transform: scale(1.2); }
+    .mbar { transition: transform .3s var(--ease), opacity .3s; }
+    .mbar.hide { transform: translateY(140%); opacity: 0; pointer-events: none; }
+    .mbar .btn { font-size: .875rem; }
+  </style>
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+    <symbol id="i-dm" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4V5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+    <symbol id="mark" viewBox="0 0 40 40"><path d="M9 16a11 9 0 0 1 22 0z" fill="#fff" stroke="#2b1a10" stroke-width="2.4" stroke-linejoin="round"/><path d="M10 16h20l-2.6 18.5a2 2 0 0 1-2 1.7h-10.8a2 2 0 0 1-2-1.7z" fill="#d9336a" stroke="#2b1a10" stroke-width="2.4" stroke-linejoin="round"/><path d="M11.2 24.5h17.6" stroke="#2b1a10" stroke-width="2"/><path d="M11.2 24.5h17.6l-1.3 9.8a1.6 1.6 0 0 1-1.6 1.4h-11.8a1.6 1.6 0 0 1-1.6-1.4z" fill="#fcc53a"/><path d="M23 9.5l4-6.5" stroke="#2b1a10" stroke-width="2.6" stroke-linecap="round"/></symbol>
+  </defs></svg>
+
+  <a class="ribbon" href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener">Concept site by <b>ElaSystems</b> · Churnwell is a fictional slush bar · <u>Get one for your business →</u></a>
+  <a class="elab" href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener" aria-label="Made by ElaSystems"><i>E</i>Made by ElaSystems</a>
+
+  <header>
+    <div class="wrap bar">
+      <a class="logo" href="#top" aria-label="Churnwell Slush Bar, home"><svg aria-hidden="true"><use href="#mark"/></svg><b>Churn<span>well</span></b></a>
+      <nav aria-label="Main"><a href="#menu">Menu</a><a href="#parties">Parties</a><a href="#visit">Visit</a><a class="btn go" href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener"><svg><use href="#i-dm"/></svg>DM @ela.systems</a></nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- THE SLUSHIE WALL -->
+    <section class="wall" id="wall" aria-labelledby="h1">
+      <div class="stage" id="stage">
+        <div class="leaves" aria-hidden="true"></div>
+        <canvas id="wallCv" aria-label="A counter of slush machines. Tap a machine to pour a layer into your cup."></canvas>
+        <div class="fallback" aria-hidden="true"><svg id="fbArt" viewBox="0 0 760 420"></svg></div>
+        <div class="intro">
+          <span class="award"><b>18</b>flavors on the counter</span>
+          <h1 id="h1">Slide down the counter and pour your <span>own slushie</span>.</h1>
+          <p>Tap a machine to add a layer, up to four. At the end of the counter your cup gets its lid and straw, and you pick a size.</p>
+          <div class="ctas"><a class="btn go" href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener"><svg><use href="#i-dm"/></svg>Want a site like this?</a><a class="btn" href="#menu">See the menu</a></div>
+        </div>
+        <a class="skip" href="#menu">Skip to menu ↓</a>
+        <div class="hud" id="hud" aria-live="polite"><span class="cupdots" id="dots"><i></i><i></i><i></i><i></i></span><span class="say" id="say">Tap any machine to pour</span><button type="button" id="again" hidden>Start over</button></div>
+        <div class="ruler" aria-hidden="true"><span class="track"></span><span class="fill" id="rfill"></span><span id="ticks"></span><span class="end">Register</span></div>
+        <div class="receipt" id="receipt" role="dialog" aria-labelledby="rcH">
+          <h2 id="rcH">Your Churnwell cup</h2>
+          <div class="mix" id="mix"></div>
+          <div class="sizes" id="sizes" role="group" aria-label="Size"></div>
+          <div class="ctas"><a class="btn go" href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener"><svg><use href="#i-dm"/></svg>Want a site like this? DM us</a></div>
+          <small>Sample prices. Churnwell is a made-up shop, so there's nothing to order. On your site this button goes to your online ordering.</small>
+        </div>
+      </div>
+    </section>
+
+    <div class="rank">
+      <div class="wrap">
+        <b>Your shop, <span>pouring on your own site</span></b>
+        <p>This counter, menu and party page are a concept. ElaSystems builds them for real shops.</p>
+      </div>
+    </div>
+
+    <!-- MENU -->
+    <section class="sec menu" id="menu" aria-labelledby="mnH">
+      <div class="wrap">
+        <div class="top rv">
+          <div><h2 id="mnH">The menu</h2><p class="lead" style="margin-top:10px">Slushes, fruit cups, smoothies and fresh juice. This is a sample menu with made-up prices.</p></div>
+        </div>
+        <div class="tabs" role="tablist" aria-label="Menu sections" id="tabs"></div>
+        <div class="board" id="board" role="tabpanel"></div>
+        <div class="order"><a class="btn go" href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener"><svg><use href="#i-dm"/></svg>Want a site like this? DM @ela.systems</a></div>
+      </div>
+    </section>
+
+    <!-- SIGNATURES -->
+    <section class="sec sig" aria-labelledby="sgH" style="padding-top:0">
+      <div class="wrap">
+        <h2 id="sgH" class="rv">Cups people would come back for</h2>
+        <div class="grid" id="sigGrid"></div>
+        <div class="sdots" id="sdots" aria-hidden="true"></div>
+      </div>
+    </section>
+
+    <!-- PARTIES -->
+    <section class="sec cater" id="parties" aria-labelledby="ctH">
+      <div class="wrap grid">
+        <div class="rv">
+          <h2 id="ctH">Slush jugs and fruit trays for parties</h2>
+          <p class="lead" style="margin-top:12px">Pick up a jug of any flavor for a birthday or a team practice, or a fruit tray for the table. Sample prices below.</p>
+          <div class="trays">
+            <div><small>Slush jug · half gallon</small><b>$14</b><span>About 6 cups</span></div>
+            <div><small>Slush jug · gallon</small><b>$24</b><span>About 12 cups</span></div>
+            <div><small>Fruit tray</small><b>$45</b><span>Feeds 10</span></div>
+          </div>
+          <div class="ctas"><a class="btn y" href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener"><svg><use href="#i-dm"/></svg>Want a site like this? DM @ela.systems</a></div>
+        </div>
+        <figure class="rv" id="trayArt"></figure>
+      </div>
+    </section>
+
+    <!-- VISIT -->
+    <section class="sec visit" id="visit" aria-labelledby="viH">
+      <div class="wrap grid">
+        <div class="rv">
+          <h2 id="viH">Where you'd find us</h2>
+          <p class="lead" style="margin-top:12px">Churnwell is a fictional shop, so there's no address. On a real site this is where your hours, map and directions go, and the open sign updates on its own.</p>
+          <span class="status" id="status"><i></i><span>Checking hours</span></span>
+          <div class="ctas"><a class="btn go" id="closeCta" href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener"><svg><use href="#i-dm"/></svg>Want a site like this? DM @ela.systems</a></div>
+          <div class="map"><svg class="art" id="mapArt" viewBox="0 0 320 180" role="img" aria-label="A drawn neighborhood map with a pin on a corner shop"></svg><small>Drawn map, not a real place</small></div>
+        </div>
+        <div class="rv"><table class="hours" aria-label="Sample opening hours"><tbody id="hours"></tbody></table></div>
+      </div>
+    </section>
+  </main>
+
+  <footer><div class="wrap"><span>Churnwell Slush Bar is a fictional business. Concept site by ElaSystems; sample content only. © <span id="yr"></span></span><span><a href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener">Site by ElaSystems</a></span></div></footer>
+  <div class="mbar" id="mbar"><a class="btn go" href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener"><svg><use href="#i-dm"/></svg>Want a site like this? DM @ela.systems</a></div>
+
+  <script>
+  (function () {
+    var CONFIG = {
+      // all sample content: Churnwell Slush Bar is fictional
+      brand: 'Churnwell',
+      // Sun..Sat, 24h (24 = midnight), sample
+      hours: [[13, 21], [12, 22], [12, 22], [12, 22], [12, 22], [12, 24], [12, 24]],
+      slushy: [['Small', 4.50], ['Medium', 5.50], ['Large', 6.75], ['Jumbo', 8.50]],
+      flavors: [
+        { n: 'Sour Lime', c: '#7fd43a', ink: '#3f9a1f' }, { n: 'Blood Orange', c: '#f2562a' }, { n: 'Blue Lagoon', c: '#1f8ef0' }, { n: 'Pink Guava', c: '#ff6f8f', ink: '#e0406a' },
+        { n: 'Yuzu', c: '#ffd93f', ink: '#c99a00' }, { n: 'Tart Cherry', c: '#c2183a' }, { n: 'Blackberry', c: '#5b2a8f' }, { n: 'Honeydew', c: '#b6e07a', ink: '#6a9a2a' },
+        { n: 'Cola', c: '#6b3a1f' }, { n: 'Lychee', c: '#f6d6dc', ink: '#c9708a' },
+        { n: 'Tamarind', c: '#a8642a' }, { n: 'Coconut', c: '#f2efe6', ink: '#8a7b6b' }, { n: 'Raspberry', c: '#e01f5a' }, { n: 'Grapefruit', c: '#ff8a6a', ink: '#e0583a' },
+        { n: 'Cucumber Mint', c: '#5fc49a', ink: '#2a8a62' }, { n: 'Butterscotch', c: '#e8a23a', ink: '#b8721a' }, { n: 'Root Beer', c: '#7a3e22' }, { n: 'Sour Apple', c: '#9ae03a', ink: '#5a9a1a' }
+      ],
+      menu: [
+        { t: 'Slushes', bg: '#fcc53a', ink: '#2b1a10', note: 'Sample prices · any flavor from the counter', cols: ['Small', 'Medium', 'Large', 'Jumbo'], rows: [
+          ['Single flavor', 'One machine, all the way up.', [4.50, 5.50, 6.75, 8.50]],
+          ['Layered', 'Up to four flavors stacked.', [5.00, 6.00, 7.25, 9.00]],
+          ['Slush float', 'Any slush with a scoop of vanilla on top.', [6.25, 7.25, 8.50, null]] ] },
+        { t: 'Fruit cups', bg: '#86a865', ink: '#fff', note: 'Sample prices · cut every morning', cols: ['Small', 'Medium', 'Large'], rows: [
+          ['Mango chili', 'Mango with lime and chili salt.', [5.50, 6.50, 7.50]],
+          ['Watermelon mint', 'Watermelon, mint and a squeeze of lime.', [5.00, 6.00, 7.00]],
+          ['Tropical', 'Pineapple, kiwi and papaya.', [5.50, 6.50, 7.50]],
+          ['Berry bowl', 'Strawberry, blueberry and blackberry.', [6.00, 7.00, 8.00]] ] },
+        { t: 'Smoothies', bg: '#ffffff', ink: '#2b1a10', note: 'Sample prices', cols: ['16 oz', '24 oz'], rows: [
+          ['Green', 'Spinach, pineapple and apple.', [6.50, 7.75]], ['Berry beet', 'Strawberry, beet and banana.', [6.50, 7.75]],
+          ['PB banana', 'Peanut butter, banana and oat milk.', [6.75, 8.00]], ['Coconut mango', 'Mango and coconut milk.', [6.50, 7.75]] ] },
+        { t: 'Fresh juice', bg: '#f47b20', ink: '#fff', note: 'Sample prices · pressed to order', cols: ['16 oz', '24 oz'], rows: [
+          ['Orange', '', [5.50, 6.75]], ['Carrot ginger', '', [6.00, 7.25]], ['Watermelon', '', [5.50, 6.75]], ['Lemon mint', '', [5.00, 6.25]] ] },
+        { t: 'Add-ons', bg: '#ffffff', ink: '#2b1a10', note: 'Sample prices', cols: ['Price'], rows: [
+          ['Popping boba', '', [1.00]], ['Gummy bears', '', [0.75]], ['Extra flavor', '', [0.50]], ['Whipped cream', '', [0.75]] ] }
+      ],
+      sig: [
+        { n: 'The four-layer', p: '$7.25', d: 'Lime, guava, yuzu and blue, stacked.', bg: '#fff1dc', layers: ['#1f8ef0', '#ffd93f', '#ff6f8f', '#7fd43a'], top: 'dome' },
+        { n: 'Tart cherry float', p: '$7.25', d: 'Cherry slush with vanilla on top.', bg: '#ffe2e6', layers: ['#c2183a', '#c2183a', '#e0405a'], top: 'scoop' },
+        { n: 'Mango chili cup', p: '$6.50', d: 'Mango, lime and chili salt.', bg: '#fff4c2', layers: ['#ffa21a', '#ffb83a'], top: 'fruit', fruit: ['#ffa21a', '#ffc24a', '#7fd43a'] },
+        { n: 'Cola and cream', p: '$6.75', d: 'Cola slush with whipped cream.', bg: '#f3e2d2', layers: ['#6b3a1f', '#7a4a2a', '#8a5a3a'], top: 'cream' },
+        { n: 'Watermelon mint', p: '$6.00', d: 'Cut fruit, fresh mint, lime.', bg: '#e6f6dc', layers: ['#ff5470', '#ff7088'], top: 'fruit', fruit: ['#ff5470', '#3f9a1f', '#ff8098'] },
+        { n: 'Berry beet', p: '$6.50', d: 'A smoothie that tastes like a slush.', bg: '#efe2f6', layers: ['#9a1f5a', '#b02a6a'], top: 'dome' }
+      ]
+    };
+    var STUDIO = 'https://www.instagram.com/ela.systems/';
+    var $ = function (s, c) { return (c || document).querySelector(s); };
+    var $$ = function (s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); };
+    var esc = function (s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
+    var money = function (v) { return v == null ? '–' : (typeof v === 'number' ? v.toFixed(2) : v); };
+    var RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    $('#yr').textContent = new Date().getFullYear();
+    if (matchMedia('(max-width: 760px)').matches) $('footer .wrap').appendChild($('.elab'));
+
+    /* ---------- drawn art ---------- */
+    var INK = '#2b1a10';
+    // a clear cup with stacked layers and a topping, drawn in SVG
+    function cupSVG(o, w, h, cx, base, scale) {
+      var s = scale || 1, top = base - 150 * s, r0 = 38 * s, r1 = 54 * s, n = o.layers.length, out = '';
+      var rx = function (y) { return r0 + (r1 - r0) * (base - y) / (base - top); };
+      var fillTop = top + 16 * s, lh = (base - fillTop) / n;
+      for (var k = 0; k < n; k++) {
+        var y0 = base - k * lh, y1 = base - (k + 1) * lh;
+        out += '<path d="M' + (cx - rx(y0) + 3) + ' ' + y0 + 'L' + (cx - rx(y1) + 3) + ' ' + y1 + 'L' + (cx + rx(y1) - 3) + ' ' + y1 + 'L' + (cx + rx(y0) - 3) + ' ' + y0 + 'Z" fill="' + o.layers[k] + '"/>';
+        out += '<path d="M' + (cx - rx(y1) + 6) + ' ' + (y1 + 6 * s) + 'q' + (rx(y1) * .5) + ' ' + (-5 * s) + ' ' + rx(y1) + ' 0" stroke="#fff" stroke-opacity=".35" stroke-width="' + (3 * s) + '" fill="none" stroke-linecap="round"/>';
+      }
+      if (o.top === 'dome') out += '<path d="M' + (cx - r1 - 3) + ' ' + top + 'a' + (r1 + 3) + ' ' + (40 * s) + ' 0 0 1 ' + (2 * r1 + 6) + ' 0z" fill="#fff" fill-opacity=".55" stroke="' + INK + '" stroke-width="3"/><path d="M' + (cx + 8 * s) + ' ' + (top - 30 * s) + 'l' + (18 * s) + ' ' + (-62 * s) + '" stroke="#d9336a" stroke-width="' + (9 * s) + '" stroke-linecap="round"/>';
+      if (o.top === 'scoop') out += '<circle cx="' + cx + '" cy="' + (top - 6 * s) + '" r="' + (34 * s) + '" fill="#fff8ec" stroke="' + INK + '" stroke-width="3"/><circle cx="' + (cx + 6 * s) + '" cy="' + (top - 44 * s) + '" r="' + (8 * s) + '" fill="#c2183a" stroke="' + INK + '" stroke-width="2.5"/>';
+      if (o.top === 'cream') out += '<path d="M' + (cx - r1 + 4) + ' ' + top + 'q' + (r1 * .2) + ' ' + (-30 * s) + ' ' + (r1 * .7) + ' ' + (-26 * s) + 'q' + (r1 * .1) + ' ' + (-34 * s) + ' ' + (r1 * .6) + ' ' + (-26 * s) + 'q' + (r1 * .5) + ' ' + (-6 * s) + ' ' + (r1 * .5) + ' ' + (26 * s) + 'q' + (r1 * .2) + ' 0 ' + (r1 * .2) + ' ' + (26 * s) + 'z" fill="#fffaf1" stroke="' + INK + '" stroke-width="3" stroke-linejoin="round"/>';
+      if (o.top === 'fruit') { for (var i = 0; i < 7; i++) { var fx = cx - r1 * .7 + (i % 4) * r1 * .46 + (i > 3 ? r1 * .22 : 0), fy = top - (i > 3 ? 22 : 6) * s; out += '<rect x="' + (fx - 11 * s) + '" y="' + (fy - 11 * s) + '" width="' + (22 * s) + '" height="' + (22 * s) + '" rx="' + (5 * s) + '" transform="rotate(' + (i * 23 - 30) + ' ' + fx + ' ' + fy + ')" fill="' + o.fruit[i % o.fruit.length] + '" stroke="' + INK + '" stroke-width="2.5"/>'; } }
+      out += '<path d="M' + (cx - r1) + ' ' + top + 'L' + (cx - r0) + ' ' + base + 'Q' + cx + ' ' + (base + 8 * s) + ' ' + (cx + r0) + ' ' + base + 'L' + (cx + r1) + ' ' + top + '" fill="#fff" fill-opacity=".18" stroke="' + INK + '" stroke-width="3.5" stroke-linejoin="round"/>';
+      out += '<path d="M' + (cx - r1 + 10) + ' ' + (top + 20 * s) + 'L' + (cx - r0 + 8) + ' ' + (base - 16 * s) + '" stroke="#fff" stroke-opacity=".7" stroke-width="' + (5 * s) + '" stroke-linecap="round"/>';
+      return out;
+    }
+    function tileSVG(o, i) {
+      var dots = ''; for (var k = 0; k < 14; k++) dots += '<circle cx="' + ((k * 53 + i * 31) % 300 + 10) + '" cy="' + ((k * 37 + i * 17) % 120 + 14) + '" r="' + (3 + k % 3) + '" fill="' + INK + '" opacity=".07"/>';
+      return '<svg class="art tart" viewBox="-20 -14 360 300" role="img" aria-label="Drawing of a ' + esc(o.n) + '"><rect x="-20" y="-14" width="360" height="300" fill="' + o.bg + '"/>' + dots +
+        '<ellipse cx="160" cy="276" rx="80" ry="12" fill="' + INK + '" opacity=".14"/>' + cupSVG(o, 320, 320, 160, 270, 1.15) + '</svg>';
+    }
+    $('#sigGrid').innerHTML = CONFIG.sig.map(function (o, i) { return '<figure class="tile rv">' + tileSVG(o, i) + '<figcaption><b>' + esc(o.n) + ' <span>' + o.p + '</span></b><small>' + esc(o.d) + ' Sample item.</small></figcaption></figure>'; }).join('');
+    // tray + jug for parties
+    (function () {
+      var t = '<svg class="art" viewBox="0 0 320 320" role="img" aria-label="Drawing of a fruit tray and a slush jug"><rect width="320" height="320" fill="#fff1dc"/>';
+      t += '<ellipse cx="140" cy="250" rx="118" ry="40" fill="' + INK + '" opacity=".14"/><ellipse cx="136" cy="236" rx="116" ry="40" fill="#fffaf1" stroke="' + INK + '" stroke-width="3.5"/>';
+      var cols = ['#ff5470', '#ffa21a', '#7fd43a', '#5b2a8f', '#ffd93f', '#e01f5a', '#86a865'];
+      for (var k = 0; k < 22; k++) { var a = k * 2.4, rr = 18 + (k * 37 % 70), x = 136 + Math.cos(a) * rr * 1.2, y = 234 + Math.sin(a) * rr * .38; t += '<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="' + (9 + k % 4) + '" fill="' + cols[k % cols.length] + '" stroke="' + INK + '" stroke-width="2.5"/>'; }
+      t += '<rect x="214" y="70" width="80" height="140" rx="18" fill="#1f8ef0" stroke="' + INK + '" stroke-width="3.5"/><rect x="228" y="52" width="40" height="24" rx="6" fill="#fffaf1" stroke="' + INK + '" stroke-width="3.5"/><path d="M294 100h10a12 12 0 0 1 12 12v40a12 12 0 0 1-12 12h-10" fill="none" stroke="' + INK + '" stroke-width="3.5"/><rect x="226" y="120" width="56" height="34" rx="8" fill="#fffaf1" stroke="' + INK + '" stroke-width="2.5"/><text x="254" y="143" text-anchor="middle" font-family="Fredoka, Arial" font-weight="600" font-size="15" fill="' + INK + '">1 gal</text><path d="M226 90q12 8 28 0t28 0" stroke="#fff" stroke-opacity=".5" stroke-width="5" fill="none" stroke-linecap="round"/></svg>';
+      $('#trayArt').innerHTML = t;
+    })();
+    // drawn neighborhood with no real place
+    (function () {
+      var m = '<rect width="320" height="180" fill="#f6ecd8"/>';
+      [[0, 60, 320, 18], [0, 128, 320, 14], [92, 0, 16, 180], [214, 0, 18, 180]].forEach(function (r) { m += '<rect x="' + r[0] + '" y="' + r[1] + '" width="' + r[2] + '" height="' + r[3] + '" fill="#fffaf1"/>'; });
+      m += '<path d="M0 69h320M100 0v180" stroke="#e6d4b8" stroke-width="2" stroke-dasharray="8 8"/>';
+      [[14, 12, 64, 36, '#e6f0d8'], [120, 10, 80, 38, '#ffe2c2'], [244, 14, 64, 34, '#e6f0d8'], [14, 88, 66, 30, '#ffe2c2'], [244, 90, 62, 28, '#ffe2c2'], [14, 152, 70, 22, '#e6f0d8'], [120, 150, 80, 24, '#e6f0d8'], [244, 152, 64, 22, '#ffe2c2']].forEach(function (b) { m += '<rect x="' + b[0] + '" y="' + b[1] + '" width="' + b[2] + '" height="' + b[3] + '" rx="6" fill="' + b[4] + '" stroke="#d8c3a2" stroke-width="1.5"/>'; });
+      m += '<rect x="120" y="86" width="80" height="34" rx="6" fill="#fcc53a" stroke="' + INK + '" stroke-width="2.5"/><g transform="translate(160 92)"><path d="M0 18s-14-12-14-22a14 14 0 0 1 28 0c0 10-14 22-14 22z" fill="#d9336a" stroke="' + INK + '" stroke-width="2.5"/><circle cy="-5" r="5" fill="#fff"/></g>';
+      $('#mapArt').innerHTML = m;
+    })();
+    // no-WebGL fallback: a row of drawn machines
+    (function () {
+      var f = '', fl = CONFIG.flavors.slice(0, 6);
+      f += '<rect x="10" y="330" width="740" height="26" rx="10" fill="#2b2622"/>';
+      fl.forEach(function (x, i) { var X = 40 + i * 118; f += '<rect x="' + X + '" y="280" width="96" height="50" rx="10" fill="#f6f4f0" stroke="' + INK + '" stroke-width="3"/><rect x="' + (X + 6) + '" y="120" width="84" height="160" rx="18" fill="' + x.c + '" stroke="' + INK + '" stroke-width="3"/><rect x="' + (X + 6) + '" y="120" width="84" height="40" rx="14" fill="#fff" fill-opacity=".35"/><rect x="' + X + '" y="106" width="96" height="18" rx="7" fill="#f6f4f0" stroke="' + INK + '" stroke-width="3"/><rect x="' + (X + 8) + '" y="44" width="80" height="54" rx="10" fill="#fffdf8" stroke="#d9336a" stroke-width="3"/><text x="' + (X + 48) + '" y="78" text-anchor="middle" font-family="Fredoka, Arial" font-weight="600" font-size="14" fill="' + (x.ink || x.c) + '">' + esc(x.n) + '</text>'; });
+      $('#fbArt').innerHTML = f;
+    })();
+
+    /* ---------- hours (sample) ---------- */
+    var DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    function fmt(h) { var hh = h % 24; return hh === 0 ? 'Midnight' : (hh % 12 || 12) + (hh < 12 ? ' AM' : ' PM'); }
+    function now() { var n = new Date(); return { d: n.getDay(), h: n.getHours() + n.getMinutes() / 60 }; }
+    function paint() {
+      var n = now(), t = CONFIG.hours[n.d], open = n.h >= t[0] && n.h < t[1], el = $('#status'), txt;
+      txt = open ? 'Open now until ' + fmt(t[1]) : n.h < t[0] ? 'Opens today at ' + fmt(t[0]) : 'Closed, opens tomorrow at ' + fmt(CONFIG.hours[(n.d + 1) % 7][0]);
+      el.classList.toggle('open', open); $('span', el).textContent = txt + ' (sample hours)';
+      $('#hours').innerHTML = [1, 2, 3, 4, 5, 6, 0].map(function (i) { var h = CONFIG.hours[i]; return '<tr' + (i === n.d ? ' class="today"' : '') + '><td>' + DAYS[i] + '</td><td>' + fmt(h[0]) + ' – ' + fmt(h[1]) + '</td></tr>'; }).join('');
+    }
+    paint(); setInterval(paint, 60000);
+
+    /* ---------- menu ---------- */
+    var tabs = $('#tabs'), board = $('#board'), cur = 0;
+    tabs.innerHTML = CONFIG.menu.map(function (m, i) { return '<button type="button" role="tab" aria-selected="' + (i === 0) + '" id="mt' + i + '" style="--tab:' + m.bg + ';--tabink:' + m.ink + '">' + esc(m.t) + '</button>'; }).join('');
+    function show(i) {
+      cur = i; var m = CONFIG.menu[i];
+      $$('button', tabs).forEach(function (b, k) { b.setAttribute('aria-selected', k === i ? 'true' : 'false'); b.tabIndex = k === i ? 0 : -1; });
+      board.style.setProperty('--tab', m.bg); board.style.setProperty('--tabink', m.ink); board.classList.toggle('light', m.ink === '#fff'); board.setAttribute('aria-labelledby', 'mt' + i);
+      var heads = '<div class="heads"><span></span><span class="p">' + m.cols.map(function (c) { return '<span>' + esc(c) + '</span>'; }).join('') + '</span></div>';
+      board.innerHTML = '<h3>' + esc(m.t) + '</h3>' + (m.note ? '<p class="note">' + esc(m.note) + '</p>' : '') + heads + '<div class="rows">' + m.rows.map(function (r) {
+        return '<div class="row"><div><b>' + esc(r[0]) + '</b>' + (r[1] ? '<small>' + esc(r[1]) + '</small>' : '') + '</div><div class="p">' + r[2].map(function (v, k) { return '<span title="' + esc(m.cols[k] || '') + '">' + money(v) + '</span>'; }).join('') + '</div></div>';
+      }).join('') + '</div>';
+    }
+    tabs.addEventListener('click', function (e) { var b = e.target.closest('button'); if (b) show($$('button', tabs).indexOf(b)); });
+    tabs.addEventListener('keydown', function (e) { if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return; e.preventDefault(); var n = (cur + (e.key === 'ArrowRight' ? 1 : -1) + CONFIG.menu.length) % CONFIG.menu.length; show(n); $$('button', tabs)[n].focus(); });
+    show(0);
+
+    /* ---------- sideways cards: dots ---------- */
+    var sg = $('#sigGrid'), sd = $('#sdots');
+    sd.innerHTML = CONFIG.sig.map(function (_, i) { return '<i' + (i ? '' : ' class="on"') + '></i>'; }).join('');
+    sg.addEventListener('scroll', function () { var t = sg.children[0], w = t ? t.offsetWidth + 12 : 1, k = Math.round(sg.scrollLeft / w); $$('i', sd).forEach(function (d, j) { d.classList.toggle('on', j === k); }); }, { passive: true });
+
+    /* ---------- sticky bar hides at the closing CTA ---------- */
+    var mbar = $('#mbar');
+    new IntersectionObserver(function (es) { mbar.classList.toggle('hide', es[0].isIntersecting); }).observe($('#visit'));
+
+    /* ---------- the slushie wall ---------- */
+    var stage = $('#stage'), wall = $('#wall'), api = null, size = 1;
+    $('#sizes').innerHTML = CONFIG.slushy.map(function (s, i) { return '<button type="button" aria-pressed="' + (i === size) + '">' + s[0] + '<b>$' + s[1].toFixed(2) + '</b></button>'; }).join('');
+    $('#sizes').addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b) return; size = $$('#sizes button').indexOf(b); $$('#sizes button').forEach(function (x, k) { x.setAttribute('aria-pressed', k === size ? 'true' : 'false'); }); });
+    var say = $('#say'), dots = $$('#dots i'), again = $('#again');
+    function drawCup(layers) {
+      dots.forEach(function (d, k) { var f = layers[k]; d.style.background = f ? f.c : 'transparent'; d.classList.toggle('on', !!f); });
+      again.hidden = !layers.length;
+      $('#mix').innerHTML = layers.length ? layers.map(function (f) { return '<span><i style="background:' + f.c + '"></i>' + esc(f.n) + '</span>'; }).join('') : '<span>Pour a layer first</span>';
+    }
+    function onChange(ev) {
+      if (ev.type === 'pour') { var f = ev.layers[ev.layers.length - 1]; say.textContent = ev.layers.length < 4 ? f.n + ' in. Keep sliding →' : 'Cup\'s full. Slide to the register →'; }
+      if (ev.type === 'full') say.textContent = 'Cup\'s full. Slide to the register →';
+      if (ev.type === 'reset') say.textContent = 'Tap any machine to pour';
+      if (ev.type === 'done') say.textContent = 'Lid on. Pick a size →';
+      drawCup(ev.layers || []);
+    }
+    again.addEventListener('click', function () { api && api.reset(); });
+    var bx = function (i) { var BW = .92, GAP = .16, PAIR = .42, u = Math.floor(i / 2); return u * (2 * (BW + GAP) + PAIR) + (i % 2) * (BW + GAP); };
+    var lastX = bx(CONFIG.flavors.length - 1) + 3.4;
+    $('#ticks').innerHTML = CONFIG.flavors.map(function (f, i) { return '<i style="left:' + (bx(i) / lastX * 100).toFixed(2) + '%;background:' + f.c + '"></i>'; }).join('');
+    function progress() { var r = wall.getBoundingClientRect(), len = wall.offsetHeight - stage.offsetHeight; return Math.max(0, Math.min(1, -r.top / Math.max(1, len))); }
+    var receipt = $('#receipt'), intro = $('.intro');
+    function onScroll() {
+      var p = progress(); $('#rfill').style.width = (p * 100).toFixed(2) + '%';
+      if (api) api.setProgress(p);
+      receipt.classList.toggle('on', p > .93); stage.classList.toggle('done', p > .93);
+      var io2 = Math.max(0, Math.min(1, (p - .015) / .05)); intro.style.opacity = (1 - io2).toFixed(3); intro.style.transform = 'translateY(' + (-io2 * 24).toFixed(1) + 'px)'; intro.style.visibility = io2 >= 1 ? 'hidden' : '';
+    }
+    addEventListener('scroll', onScroll, { passive: true }); addEventListener('resize', onScroll);
+    function gl() { try { var c = document.createElement('canvas'); return !!(c.getContext('webgl2') || c.getContext('webgl')); } catch (e) { return false; } }
+    if (!gl()) stage.classList.add('nogl');
+    else {
+      var ready = document.fonts && document.fonts.load ? Promise.all([document.fonts.load('600 40px Fredoka')]).catch(function () {}) : Promise.resolve();
+      ready.then(function () { return import('./assets/wall.js'); }).then(function (mod) {
+        return mod.mountWall($('#wallCv'), { assets: 'assets/', brand: CONFIG.brand, flavors: CONFIG.flavors, onChange: onChange });
+      }).then(function (a) {
+        api = a; window.__wall = a; onScroll(); drawCup([]);
+        // the counter teaches itself: the first machine pours a layer on its own
+        if (!RM) setTimeout(function () { if (!api.layers.length) { api.pour(0); say.textContent = CONFIG.flavors[0].n + ' in. Tap another machine'; } }, 900);
+      }).catch(function () { stage.classList.add('nogl'); });
+    }
+    drawCup([]);
+
+    /* ---------- reveals ---------- */
+    var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }); }, { threshold: .12 });
+    $$('.rv').forEach(function (e) { io.observe(e); });
+    addEventListener('scroll', function () { $$('.rv:not(.in)').forEach(function (e) { if (e.getBoundingClientRect().top < innerHeight * .95) e.classList.add('in'); }); }, { passive: true });
+    setTimeout(function () { $$('.rv').forEach(function (e) { if (e.getBoundingClientRect().top < innerHeight) e.classList.add('in'); }); }, 1500);
+  })();
+  </script>
+</body>
+</html>
