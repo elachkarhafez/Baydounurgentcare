@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow, noai, noimageai">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Barbar Subs · TV menu</title>
+<style>
+/* Barbar Subs TV menu: four portrait screens (1080 x 1920), one per TV, rendered to looping MP4s for a USB stick.
+   ?tv=1..4 picks the screen. Every moving part is a function of t (0..LOOP) in render(), so the capture script
+   can step frames exactly and the end of the loop lands back on frame 0 with no jump.
+   Motion: a red highlight walks down the menu one item at a time, their menu's line art draws itself in the header,
+   a sticker stamps on, the checkered edges roll and a ticker runs the hours. Prices are word for word from barbarsub.com/menu. */
+@font-face{font-family:'Rubik';src:url(media/rubik.woff2) format('woff2');font-weight:300 900;font-display:block}
+:root{--paper:#fbf1e1;--paper2:#f3e3c7;--ink:#231f20;--muted:#6c5f55;--red:#e31e26;--red2:#b8141b;--yel:#ffcf24;--s:1}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#111;height:100%;overflow:hidden}
+.stage{position:absolute;left:50%;top:50%;width:1080px;height:1920px;transform-origin:50% 50%;background:var(--paper);color:var(--ink);font-family:'Rubik',sans-serif;overflow:hidden}
+body.cap .stage{left:0;top:0;transform:none!important}
+
+.ck{position:absolute;left:0;right:0;height:30px;background:repeating-conic-gradient(var(--red) 0 25%,var(--paper) 0 50%) 0 0/60px 60px}
+.ck.t{top:0}.ck.b{bottom:0}
+
+/* header */
+.hd{position:absolute;left:0;right:0;top:30px;height:350px}
+.hd .bd{position:absolute;left:56px;top:30px;width:84px}
+.hd .kick{position:absolute;left:160px;top:62px;font:800 30px/1 'Rubik';letter-spacing:.14em;text-transform:uppercase;color:var(--ink)}
+.hd .kick b{color:var(--red)}
+.hd h1{position:absolute;left:52px;top:150px;font:900 108px/.86 'Rubik';letter-spacing:-.03em;text-transform:uppercase;color:var(--red);white-space:nowrap}
+.art{position:absolute;overflow:visible}
+.art path{fill:var(--ink);stroke:var(--ink);stroke-width:6;fill-opacity:0}
+.stk{position:absolute}
+
+/* menu body */
+.body{position:absolute;left:56px;right:56px;top:392px;bottom:118px}
+.fit{position:relative;transform-origin:0 0}
+.hl{position:absolute;left:-22px;right:-22px;top:0;height:10px;border-radius:22px;background:var(--red);box-shadow:0 10px 0 var(--red2);z-index:0;opacity:0}
+.grp{position:relative;z-index:1;margin-top:26px}
+.grp:first-child{margin-top:4px}
+.gh{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;padding-bottom:12px;border-bottom:4px solid var(--ink);margin-bottom:6px}
+.gh h2{font:800 46px/1 'Rubik';letter-spacing:-.01em;text-transform:uppercase}
+.gh .nt{display:block;font:500 24px/1.2 'Rubik';color:var(--muted);text-transform:none;letter-spacing:0;margin-top:6px}
+.tagp{display:flex;gap:10px;flex:none}
+.tagp span{display:flex;align-items:baseline;gap:8px;padding:10px 18px;border-radius:999px;background:var(--ink);color:var(--paper);font:800 36px/1 'Rubik';white-space:nowrap}
+.tagp small{font:600 20px/1 'Rubik';text-transform:uppercase;letter-spacing:.06em;color:var(--yel)}
+.cols{display:flex;gap:0;flex:none}
+.cols span{width:150px;text-align:right;font:700 22px/1 'Rubik';text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.row{position:relative;display:flex;align-items:center;gap:20px;padding:12px 0;min-height:76px;transition:none}
+.row .nm{flex:1;min-width:0}
+.row b{display:flex;align-items:center;gap:12px;font:700 40px/1.05 'Rubik';letter-spacing:-.01em}
+.row p{font:400 23px/1.25 'Rubik';color:var(--muted);margin-top:4px}
+.row .pr{display:flex;flex:none}
+.row .pr span{width:150px;text-align:right;font:800 40px/1 'Rubik';color:var(--red)}
+.chili{width:34px;height:34px;color:var(--red);flex:none}
+.row.on b,.row.on p,.row.on .pr span{color:#fff}
+.row.on .chili{color:var(--yel)}
+.chips{display:flex;flex-wrap:wrap;gap:10px 12px;padding:14px 0 6px}
+.chips span{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:999px;background:var(--paper2);font:700 30px/1 'Rubik'}
+.chips .chili{width:26px;height:26px}
+.blk{position:relative;border-radius:18px}
+.blk.on .chips span{background:#fff;color:var(--ink)}
+.blk.on .gh h2,.blk.on .gh .nt{color:#fff}
+.blk.on .gh{border-color:#fff}
+.blk.on .tagp span{background:#fff;color:var(--red)}
+.blk.on .tagp small{color:var(--red2)}
+.blk.on{color:#fff}
+.blk .gh{padding-top:4px}
+
+/* ticker */
+.tk{position:absolute;left:0;right:0;bottom:30px;height:88px;background:var(--ink);color:var(--paper);overflow:hidden}
+.tk .tr{position:absolute;left:0;top:0;height:88px;display:flex;white-space:nowrap}
+.tk .tr div{display:flex;align-items:center;font:700 36px/88px 'Rubik';text-transform:uppercase;letter-spacing:.02em}
+.tk i{display:inline-block;width:16px;height:16px;border-radius:50%;background:var(--red);margin:0 30px;font-style:normal}
+.tk em{font-style:normal;color:var(--yel)}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-chili" viewBox="0 0 24 24"><path fill="currentColor" d="M14.6 6.2c1.6-.2 3.2.4 4.2 1.7 1.9 2.5.9 7.4-4.3 10.8-3.5 2.3-8 3.3-11.1 2.6-.8-.2-.8-1.3 0-1.5 3.6-.8 6.6-3.2 8.4-6.4.9-1.7 1.4-3.4 1.6-4.9.1-1.2.1-2.2 1.2-2.3Z"/><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M15.5 6.4c.2-1.6 1.1-3 2.6-3.6"/></symbol>
+</svg>
+<div class="stage" id="stage">
+  <div class="ck t" id="ckt"></div>
+  <header class="hd">
+    <img class="bd" id="bd" src="media/badge.webp" alt="">
+    <div class="kick" id="kick"></div>
+    <h1 id="h1"></h1>
+    <div class="art" id="art"></div>
+    <img class="stk" id="stk" alt="">
+  </header>
+  <main class="body"><div class="fit" id="fit"><div class="hl" id="hl"></div><div id="menu"></div></div></main>
+  <div class="tk"><div class="tr" id="tr"></div></div>
+  <div class="ck b" id="ckb"></div>
+</div>
+<script>
+/* menu word for word from barbarsub.com/menu (same data as their site). 1 = chili icon on their printed menu */
+const H = (a, b) => [['Half', a], ['Whole', b]], SL = (a, b) => [['Small', a], ['Large', b]];
+const SCREENS = {
+  1: { kick: 'Subs', title: 'Chicken<br>subs', art: 'art-sub.svg', artBox: [520, 110, 470, 240], stk: 'sauce-me-up-red.svg', stkBox: [850, 30, 180],
+    blocks: [
+      { t: 'group', title: 'Grilled chicken', price: H(12.99, 15.99), items: [
+        ['Original', 'Chicken, mayo, tomato, pickles, lettuce'], ['Fajita', 'Chicken, mayo, avocado, onions, bell peppers, corn, mushrooms, mixed cheese'],
+        ['Francisco', 'Chicken, mayo, corn, pickles, lettuce, cheese'], ['Louisiana', 'Chicken, mayo, onions, mushroom, cheese, lettuce', 1],
+        ['Chinese', 'Chicken, mayo, cabbage, carrots, bell peppers, mushroom, cheese, soy sauce, special sauce', 1], ['Chicken Sub', 'Chicken, garlic mayo, soy, corn, cheese, pickles, lettuce'],
+        ['Tawook', 'Chicken, garlic, pickles, fries'], ['Chicken Shawarma', 'Chicken, garlic, pickles, fries'], ['Chicken Bacon Ranch', 'Chicken, bacon (beef / turkey bacon), mayo, pickles, ranch, lettuce']] },
+      { t: 'group', title: 'Crispy chicken', price: H(12.99, 15.99), items: [
+        ['Classic', 'Crispy chicken, mayo, tomato, lettuce, pickles'], ['Lebanese', 'Crispy chicken, garlic, fries, ketchup, pickles, coleslaw'],
+        ['Spicy Crispy', 'Crispy chicken, mayo, coleslaw, pickles, spicy sauce', 1], ['BBQ Crispy', 'Crispy chicken, mayo, BBQ sauce, honey mustard, pickles, lettuce, cheddar'],
+        ['Buffalo Crispy', 'Crispy chicken, mayo, buffalo sauce, honey mustard, pickles, coleslaw, cheddar'], ['Honey BBQ Crispy', 'Crispy chicken, mayo, honey BBQ sauce, pickles, lettuce']] },
+    ] },
+  2: { kick: 'Subs & wraps', title: 'Steak<br>&amp; more', art: 'art-wrap.svg', artBox: [560, 100, 360, 250], stk: 'stay-crispy-red.svg', stkBox: [870, 40, 160],
+    blocks: [
+      { t: 'group', title: 'Steak subs', price: H(13.99, 16.99), items: [
+        ['Classic', 'Steak, mayo, onions, mushrooms, lettuce, tomato, pickles, cheese'], ['Steak Fajita', 'Steak, mayo, avocado, onion, bell peppers, corn, mushrooms, mixed cheese'],
+        ['Philadelphia', 'Steak, mayo, onion, bell peppers, mushrooms, corn, cheese, pickles, lettuce'], ['Steak BBQ', 'Steak, mayo, onions, BBQ sauce, pickles, jalapeños, coleslaw'],
+        ['Beef Shawarma', 'Beef, tomato, onions, tahini, pickles, parsley'], ['Sojok', 'Steak, mayo, special sauce, tomato, pickles']] },
+      { t: 'rows', title: 'More subs', cols: ['Half', 'Whole'], items: [
+        ['Veggie Sub', 'Raw or grilled. Mayo, honey mustard, bell peppers, onions, corn, banana peppers, black olives, lettuce, pickles, tomatoes', 0, [9.99, 11.99]],
+        ['Fries Sub', 'Fresh fries, garlic, ketchup, pickles, coleslaw', 0, [9.99, 11.99]],
+        ['Smoked Turkey Sub', 'Smoked turkey, mayo, corn, tomato, pickles, lettuce, cheese', 0, [13.99, 16.99]]] },
+      { t: 'group', title: 'Chicken wraps', note: 'Crispy or grilled', price: [['', 14.99]], items: [
+        ['Classic Wrap', 'Crispy chicken, mayo, lettuce, pickles, cheddar, potato sticks'], ['BBQ Wrap', 'Crispy chicken, mayo, honey mustard, lettuce, cheddar, special sauce, potato sticks'],
+        ['Buffalo Wrap', 'Crispy chicken, mayo, honey mustard, lettuce, cheddar, special sauce, potato sticks'], ['Ranch Bacon Wrap', 'Crispy chicken, bacon (beef / turkey bacon), mayo, pickles, ranch, lettuce']] },
+      { t: 'group', title: 'Special wraps', price: [['', 16.99]], items: [
+        ['Special Filet Mignon Wrap', 'Filet mignon steak tips, mushrooms, red onions, iceberg lettuce, cheddar, pepper jack cheese, mayo, special sauce'], ['Shrimp Wrap', 'Fried shrimp, tartar sauce, pickles, lettuce']] },
+    ] },
+  3: { kick: 'Burgers', title: 'Burgers<br>&amp; sandos', art: null, badgeBig: true, stk: 'sauce-me-up-red.svg', stkBox: [610, 40, 190],
+    blocks: [
+      { t: 'group', title: 'Grilled chicken breast', price: [['', 12.99]], items: [
+        ['Classic', 'Grilled chicken breast, mayo, lettuce, pickles, tomato, burger sauce'], ['Spicy', 'Spicy grilled chicken breast, spicy mayo, pickles, coleslaw, cheese, burger sauce', 1],
+        ['Supreme', 'Grilled chicken breast, mayo, smoked turkey, cheese, pickles, lettuce, burger sauce'], ['Jalapeño Chicken Sando', 'Grilled chicken breast, mayo, avocado, jalapeños, nachos, lettuce, tomato, cheese, burger sauce']] },
+      { t: 'group', title: 'Fried chicken breast', price: [['', 12.99]], items: [
+        ['Chicken Sando', 'Fried chicken breast, mayo, cheese, pickles, lettuce, burger sauce'], ['Supreme Chicken Sando', 'Fried chicken breast, mayo, cheese, smoked turkey, pickles, lettuce, jalapeños, burger sauce'],
+        ['BBQ Chicken Sando', 'BBQ fried chicken breast, mayo, pickles, lettuce, cheddar, potato sticks, burger sauce'], ['Buffalo Chicken Sando', 'Buffalo fried chicken breast, mayo, pickles, coleslaw, cheddar, potato sticks, buffalo, burger sauce'],
+        ['Hot Honey Chicken Sando', 'Fried chicken breast, mayo, pickles, coleslaw, hot honey, burger sauce']] },
+      { t: 'group', title: 'Beef', price: [['', 10.99]], items: [
+        ['Classic', 'Beef patty, mayo, tomato, pickles, lettuce, cheese, burger sauce'], ['Lebanese', 'Beef patty, mayo, ketchup, fries, coleslaw, burger sauce'],
+        ['Mushroom Swiss', 'Beef patty, mayo, mushroom sauce, cheese, caramelized onions'], ['Jalapeño', 'Beef patty, mayo, jalapeños, avocado, nachos, lettuce, tomato, cheese, burger sauce'],
+        ['Onion', 'Beef patty, mayo, onion petals, ranch, lettuce, pickles, burger sauce'], ['Spicy', 'Beef patty, spicy sauce, mayo, pickles, tomato, lettuce, caramelized onions, cheese, jalapeños', 1]] },
+    ] },
+  4: { kick: 'Bowls & more', title: 'Bowls<br>&amp; sides', art: 'art-fries.svg', artBox: [680, 50, 300, 300], stk: 'stay-crispy-red.svg', stkBox: [880, 200, 150],
+    blocks: [
+      { t: 'chips', title: 'Crispy chicken bowls', note: 'Yellow rice, fries or lettuce as your base', price: SL(10.99, 14.99), items: ['Classic', 'Lebanese', ['Spicy Crispy', 1], 'BBQ Crispy', 'Buffalo Crispy', 'Honey BBQ Crispy'] },
+      { t: 'chips', title: 'Grilled chicken bowls', price: SL(10.99, 14.99), items: ['Classic', 'Fajita', 'Francisco', ['Louisiana', 1], ['Chinese', 1], 'Tawook', 'Chicken Shawarma', 'Chicken Bacon Ranch'] },
+      { t: 'chips', title: 'Steak bowls', price: SL(13.99, 16.99), items: ['Classic', 'Steak Fajita', 'Philadelphia', 'Steak BBQ', 'Beef Shawarma', 'Sojok', 'Veggie Bowl (S $9.99 / L $11.99)'] },
+      { t: 'rows', title: 'Chicken strips', items: [
+        ['Combo 1', '3 strips, fries, coleslaw (4oz) + 1 sauce, pickles (4oz)', 0, [7.99]], ['Combo 2', '5 strips, fries, coleslaw (4oz), pickles (4oz) + 2 sauces', 0, [9.99]], ['Combo 3', '10 strips, fries, coleslaw (8oz), pickles (8oz) + 2 sauces', 0, [15.99]]] },
+      { t: 'rows', title: 'Wing dings', note: 'Boneless or bone-in', compact: 1, items: [['6 Wing Dings', '', 0, [7.99]], ['12 Wing Dings', '', 0, [14.99]], ['24 Wing Dings', '', 0, [25.99]]] },
+      { t: 'rows', title: 'Fries', cols: ['S', 'M', 'L'], compact: 1, items: [['Regular Fries', '', 0, [5.99, 7.99, 9.99]], ['Curly Fries', '', 0, [6.99, 8.99, 10.99]]] },
+      { t: 'chips', title: 'More sides', price: [['Each', 5.99]], items: ['Jalapeño Poppers', 'Mac & Cheese Bites', 'Onion Petals', 'Cheese Sticks', 'Onion Rings', 'Chicken Nuggets (8 pcs)'] },
+      { t: 'rows', title: 'Drinks', compact: 1, items: [['Beverages', '', 0, [2.00]], ['Water', '', 0, [1.00]]] },
+    ] },
+};
+const LOOP = 40, FPS = 30;
+const qs = new URLSearchParams(location.search), TV = +(qs.get('tv') || 1), S = SCREENS[TV] || SCREENS[1];
+const $ = s => document.getElementById(s);
+const money = n => '$' + n.toFixed(2);
+const chili = '<svg class="chili"><use href="#i-chili"/></svg>';
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+$('kick').innerHTML = '<b>Barbar</b> · ' + esc(S.kick);
+$('h1').innerHTML = S.title;
+$('menu').innerHTML = S.blocks.map(b => {
+  const tag = b.price ? `<div class="tagp">${b.price.map(([l, p]) => `<span>${l ? `<small>${l}</small>` : ''}${money(p)}</span>`).join('')}</div>` : '';
+  const cols = b.cols ? `<div class="cols">${b.cols.map(c => `<span>${c}</span>`).join('')}</div>` : '';
+  const gh = `<div class="gh"><h2>${esc(b.title)}${b.note ? `<span class="nt">${esc(b.note)}</span>` : ''}</h2>${tag}${cols}</div>`;
+  if (b.t === 'chips') return `<section class="grp blk u">${gh}<div class="chips">${b.items.map(x => { const [n, h] = Array.isArray(x) ? x : [x, 0]; return `<span>${esc(n)}${h ? chili : ''}</span>`; }).join('')}</div></section>`;
+  const rows = b.items.map(([n, d, h, pr]) => `<div class="row u${b.compact ? ' cp' : ''}"><div class="nm"><b>${esc(n)}${h ? chili : ''}</b>${d ? `<p>${esc(d)}</p>` : ''}</div>${pr ? `<div class="pr">${pr.map(p => `<span>${p == null ? '' : money(p)}</span>`).join('')}</div>` : ''}</div>`).join('');
+  return `<section class="grp">${gh}${rows}</section>`;
+}).join('');
+
+/* header art: their line drawing, stroked then filled */
+let paths = [];
+if (S.art) {
+  fetch('media/' + S.art).then(r => r.text()).then(svg => {
+    const a = $('art'); a.innerHTML = svg; const el = a.querySelector('svg');
+    el.removeAttribute('fill'); el.style.width = '100%'; el.style.height = '100%'; el.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+    Object.assign(a.style, { left: S.artBox[0] + 'px', top: S.artBox[1] + 'px', width: S.artBox[2] + 'px', height: S.artBox[3] + 'px' });
+    paths = [...el.querySelectorAll('path')]; paths.forEach(p => { p.removeAttribute('fill'); p.setAttribute('pathLength', '1'); p.style.strokeDasharray = '1'; });
+    window.__artReady = true;
+  });
+} else window.__artReady = true;
+if (S.badgeBig) { const big = $('bd').cloneNode(); big.id = 'bd2'; Object.assign(big.style, { left: 'auto', right: '56px', top: '40px', width: '230px' }); $('bd').after(big); }
+if (S.stk) { const k = $('stk'); k.src = 'media/' + S.stk; Object.assign(k.style, { left: S.stkBox[0] + 'px', top: S.stkBox[1] + 'px', width: S.stkBox[2] + 'px' }); }
+else $('stk').remove();
+
+/* ticker: two copies, so shifting by exactly one copy width is seamless */
+const tick = '<div>Open till 1 AM<i></i>Saturday &amp; Sunday till 2 AM<i></i><em>Call ahead (313) 406-4895</em><i></i>Good food hits different<i></i>Now hiring, call (313) 999-9994<i></i>Stay crispy<i></i>Sauce me up<i></i></div>';
+$('tr').innerHTML = tick + tick + tick;
+
+/* fit the menu into its box (scale down only) */
+let units = [], tops = [];
+function layout() {
+  const fit = $('fit'), box = fit.parentElement;
+  fit.style.transform = ''; fit.style.width = box.clientWidth + 'px';
+  const sc = Math.min(1, box.clientHeight / fit.scrollHeight);
+  fit.style.transform = `scale(${sc})`; fit.style.width = (box.clientWidth / sc) + 'px';
+  units = [...document.querySelectorAll('.u')];
+  tops = units.map(u => { let y = 0, e = u; while (e && e !== fit) { y += e.offsetTop; e = e.offsetParent; } return [y, u.offsetHeight]; });
+  window.__scale = sc;
+}
+
+const ease = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const lerp = (a, b, k) => a + (b - a) * k;
+let trW = 0;
+function render(t) {
+  t = ((t % LOOP) + LOOP) % LOOP;
+  /* checkered edges roll: 60px pattern, 30 tiles per loop */
+  const ck = (t / LOOP * 60 * 30) % 60;
+  $('ckt').style.backgroundPosition = `${ck}px 0`; $('ckb').style.backgroundPosition = `${-ck}px 0`;
+  /* ticker: one copy per loop */
+  if (!trW) trW = $('tr').firstElementChild.offsetWidth;
+  $('tr').style.transform = `translateX(${-(t / LOOP) * trW * 2 % trW}px)`;
+  /* badge breathes on a 5 s period */
+  const bob = `translateY(${Math.sin(t / 5 * Math.PI * 2) * 5}px) rotate(${Math.sin(t / 10 * Math.PI * 2) * 2.5}deg)`;
+  $('bd').style.transform = bob; if ($('bd2')) $('bd2').style.transform = bob;
+  /* line art: draw 0.3-3.3 s, fill 3-4.2 s, hold, fade 37-39 s */
+  if (paths.length) {
+    const d = ease(clamp((t - .3) / 3)), f = clamp((t - 3) / 1.2), out = 1 - clamp((t - 37) / 2);
+    paths.forEach((p, i) => { const k = clamp(d * 1.25 - (i / paths.length) * .25); p.style.strokeDashoffset = 1 - k; p.style.fillOpacity = f; p.style.strokeOpacity = 1 - f * .9; });
+    $('art').style.opacity = out;
+    $('art').style.transform = `translateY(${Math.sin(t / 8 * Math.PI * 2) * 6}px) rotate(${-3 + Math.sin(t / 8 * Math.PI * 2) * 1.2}deg)`;
+  }
+  /* sticker stamps on at 4.2 s, wobbles, leaves at 36.5 s */
+  const k = $('stk');
+  if (k) {
+    const a = clamp((t - 4.2) / .5), sp = a < 1 ? lerp(1.9, 1, ease(a)) : 1 + Math.sin((t - 4.7) * 9) * .06 * Math.exp(-(t - 4.7) * 3);
+    const o = clamp((t - 4.2) / .25) * (1 - clamp((t - 36.5) / 1.5));
+    k.style.opacity = o; k.style.transform = `scale(${sp}) rotate(${-10 + Math.sin(t / 4 * Math.PI * 2) * 3}deg)`;
+  }
+  /* highlight walks the menu: in at 1 s, one step per item, out by 38.5 s */
+  const n = units.length, start = 1, span = 37 - start, step = span / n, hl = $('hl');
+  if (n) {
+    const p = clamp((t - start) / step, 0, n - 1e-6), i = Math.floor(p), fr = p - i;
+    const g = i < n - 1 ? ease(clamp((fr - .78) / .22)) : 0;
+    const j = Math.min(i + 1, n - 1), y = lerp(tops[i][0], tops[j][0], g), h = lerp(tops[i][1], tops[j][1], g);
+    const op = clamp((t - start) / .5) * (1 - clamp((t - 37.5) / 1));
+    hl.style.transform = `translateY(${y - 4}px)`; hl.style.height = (h + 8) + 'px'; hl.style.opacity = op;
+    const cur = op > .5 ? (g > .5 ? j : i) : -1;
+    units.forEach((u, idx) => u.classList.toggle('on', idx === cur));
+    /* the highlighted item's prices nudge up, chilis wiggle */
+    document.querySelectorAll('.chili').forEach(c => c.style.transform = `rotate(${Math.sin(t / 2 * Math.PI * 2) * 10}deg)`);
+  }
+}
+window.renderAt = render;
+const ready = () => { layout(); window.__ready = true; };
+document.fonts.ready.then(() => { const imgs = [...document.images].map(i => i.complete ? 0 : new Promise(r => { i.onload = i.onerror = r; })); Promise.all(imgs).then(ready); });
+if (qs.has('cap')) document.body.classList.add('cap');
+else {
+  const fitStage = () => { const sc = Math.min(innerWidth / 1080, innerHeight / 1920); $('stage').style.transform = `translate(-50%,-50%) scale(${sc})`; };
+  fitStage(); addEventListener('resize', fitStage);
+  const t0 = performance.now(); const loop = now => { if (window.__ready) render((now - t0) / 1000); requestAnimationFrame(loop); }; requestAnimationFrame(loop);
+}
+</script>
+</body>
+</html>
