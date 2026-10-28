@@ -4,17 +4,13 @@ Each folder is a single-file client website built with the `ela-studio` skill (`
 
 ## Standing rule: when a business doesn't want their site
 
-Whenever the user says a business doesn't want its site (or "said no", "passed", "not interested"), follow `.claude/skills/ela-studio/references/declined.md` straight away. The user has pre-approved every step, so don't ask first:
+Newest instruction from the user: "from now on if someone says no just pause deployment". When the user says a business doesn't want its site (or "said no", "passed", "not interested"), do this straight away, without asking:
+1. Find the business's Vercel project (`list_projects` with `search`) and pause it with `pause_project` (team `team_AYB0SFZ1qQkp6TebSji5xEKA`).
+2. Confirm the old link is down (curl returns 503).
+3. Mark the business as declined (paused) in `.claude/skills/ela-studio/references/signatures.md`.
+4. Report which links are paused.
 
-1. Rebuild the site as a generic ElaSystems concept in `demos/<niche>/`:
-   - a new fictional brand
-   - none of their photos, names or contact details
-   - every CTA pointing to @ela.systems
-2. Deploy it under a new neutral Vercel name.
-3. Take the old business-name link offline by pausing its Vercel project. Offer the delete link too.
-4. `git rm` the original folder.
-5. Mark the business as declined in `signatures.md`.
-6. Report the new link.
+Do NOT build a generic concept, deploy anything new, or `git rm` the folder any more. The older process in `references/declined.md` (concept rebuild) is retired unless the user asks for it.
 
 ## Standing rule: 3D method for designs
 

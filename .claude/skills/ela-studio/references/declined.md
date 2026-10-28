@@ -1,3 +1,5 @@
+> **RETIRED (user, Oct 2026): "from now on if someone says no just pause deployment".** When a business declines, pause its Vercel project, confirm the link is down, mark it declined in signatures.md, and report. Only use the concept-rebuild process below if the user asks for it.
+
 # When a business says no: retire the link, keep the work
 
 Use this whenever the user says a business "doesn't want it", "said no", "passed" or anything similar. The user has given standing permission for every step here, so don't ask first: just do it and report back.
