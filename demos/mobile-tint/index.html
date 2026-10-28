@@ -1,0 +1,628 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noai, noimageai">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Curbline Tint | Mobile window tint concept by ElaSystems</title>
+<meta name="description" content="Curbline Tint is a fictional mobile ceramic window tint service. A concept site by ElaSystems: a quote builder that writes the text for you, a live shade preview, drawn sample jobs and late-night booking.">
+<meta property="og:title" content="Curbline Tint | Concept site by ElaSystems">
+<meta property="og:description" content="A concept site for a mobile window tint business. Built by ElaSystems.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#0b0b0c">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 40'%3E%3Cpath d='M6 32 L17 9 Q19 5 24 5 L39 5 Q43 5 43 9 L43 32 Z' fill='%23141416' stroke='%23f4f1ea' stroke-width='3' stroke-linejoin='round'/%3E%3Cpath d='M26 5 L39 5 Q43 5 43 9 L43 32 L18 32 Z' fill='%23d6b47a'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* Curbline Tint (fictional concept by ElaSystems) · MOBILE FIRST (base = 390px phone; min-width queries add the desktop).
+   Intro: the window mark draws itself, the film slides in, a squeegee wipes the dark film off the screen to show the site.
+   Signature: a quote builder that writes the text message for you (live phone bubble + shade preview over a drawn street).
+   All art is drawn in code. Palette: black film, ivory, a little champagne gold. */
+:root{
+  --bg:#0b0b0c; --panel:#141416; --panel2:#1b1b1e; --ink:#f4f1ea; --muted:#a7a299; --line:rgba(244,241,234,.12);
+  --gold:#d6b47a; --gold2:#a8864e; --blue:#2f7cf6;
+  --serif:'Marcellus', Georgia, serif; --f:'Figtree', system-ui, -apple-system, sans-serif;
+  --pad:18px; --sec:36px; --r:18px; --nav:56px;
+  --ease:cubic-bezier(.22,.61,.36,1); --out:cubic-bezier(.16,1,.3,1);
+}
+*{box-sizing:border-box;margin:0}
+html{-webkit-text-size-adjust:100%;overflow-x:clip;background:var(--bg);scroll-padding-top:calc(var(--nav) + 12px)}
+body{background:var(--bg);color:var(--ink);font:400 .9375rem/1.6 var(--f);overflow-x:clip;-webkit-font-smoothing:antialiased}
+img,video,svg{display:block;max-width:100%}
+a{color:inherit}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:8px}
+.wrap{max-width:1140px;margin:0 auto;padding:0 var(--pad)}
+h1,h2,h3{font-family:var(--serif);font-weight:400;letter-spacing:.005em;line-height:1.1;color:var(--ink)}
+h1 em,h2 em{font-style:normal;color:var(--gold)}
+h2{font-size:1.5rem}
+.sub{color:var(--muted);font-size:.9375rem}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 18px;border-radius:999px;background:var(--ink);color:#0b0b0c;text-decoration:none;font:700 .875rem/1 var(--f);border:1px solid transparent;white-space:nowrap;cursor:pointer;transition:background .2s,transform .15s,border-color .2s}
+.btn:active{transform:scale(.97)}
+.btn.line{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn.gold{background:var(--gold);color:#16120a}
+.btn svg{width:16px;height:16px;flex:0 0 auto}
+
+/* concept ribbon + badge */
+.ribbon{display:block;padding:7px 12px;background:#000;color:var(--ink);font:600 11.5px/1.35 var(--f);text-align:center;text-decoration:none;border-bottom:1px solid var(--line)}
+.ribbon .rf{display:none}
+.ribbon b{color:var(--gold)}.ribbon u{text-underline-offset:3px}
+.elab{position:fixed;left:14px;bottom:14px;z-index:80;display:flex;align-items:center;gap:8px;padding:8px 12px 8px 8px;border-radius:99px;background:#1a1a1d;color:#fffaf2;font:600 12px/1 var(--f);text-decoration:none;box-shadow:0 10px 24px -12px #000a;border:1px solid rgba(255,255,255,.12)}
+.elab i{width:22px;height:22px;border-radius:50%;background:#fffaf2;color:#1a1414;display:grid;place-items:center;font:800 11px/1 var(--f);font-style:normal}
+@media (max-width:767px){body>.elab{display:none}footer .elab{position:static;width:max-content;margin:12px auto 0}}
+
+/* mark */
+.mk .win{fill:#141416;stroke:var(--ink);stroke-width:3;stroke-linejoin:round}
+.mk .film{fill:var(--gold)}
+.mk .sq{fill:none;stroke:var(--ink);stroke-width:3;stroke-linecap:round}
+
+/* ---------- intro: window draws, film slides in, wordmark rises, then a squeegee wipes the film away */
+.intro{position:fixed;inset:0;z-index:100;display:grid;place-items:center;background:radial-gradient(120% 80% at 50% 45%,#16161a 0%,#0b0b0c 60%);clip-path:inset(0 0 0 0)}
+.intro .mark{width:min(78vw,420px);height:auto}
+.intro .wr{fill:rgba(20,20,22,0);stroke:var(--ink);stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1}
+.intro.go .wr{animation:draw .7s var(--ease) .1s forwards}
+.intro.go .wr.b{animation-delay:.75s}
+@keyframes draw{to{stroke-dashoffset:0}}
+.intro .cr,.intro .tx,.intro .tx2{opacity:0;transform-box:fill-box;transform-origin:50% 50%}
+.intro.go .cr{animation:slide .6s var(--out) .55s forwards}
+.intro.go .tx{animation:rise .6s var(--out) .8s forwards}
+.intro.go .tx2{animation:rise .6s var(--out) .95s forwards}
+@keyframes slide{from{opacity:0;transform:translateX(-40px)}to{opacity:1;transform:none}}
+@keyframes rise{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
+.intro.peel{clip-path:inset(0 0 0 100%);transition:clip-path .7s cubic-bezier(.7,0,.25,1)}
+.intro.done{display:none}
+.blade{position:fixed;top:0;bottom:0;left:0;width:3px;z-index:101;pointer-events:none;opacity:0;background:linear-gradient(transparent,rgba(255,255,255,.95) 15%,rgba(255,255,255,.95) 85%,transparent);box-shadow:0 0 22px 5px rgba(214,180,122,.45)}
+.blade.go{opacity:1;transform:translateX(100vw);transition:transform .7s cubic-bezier(.7,0,.25,1)}
+.blade.done{display:none}
+
+/* ---------- nav */
+.nav{position:sticky;top:0;z-index:40;height:var(--nav);background:rgba(11,11,12,.92);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:100%;gap:10px}
+.brand{display:flex;align-items:center;gap:9px;text-decoration:none}
+.brand svg{height:32px;width:38px}
+.brand span{font:400 1.0625rem/1 var(--serif);letter-spacing:.08em;white-space:nowrap}
+.nav .links{display:none}
+.nav .btn{min-height:36px;padding:0 13px;font-size:.8125rem}
+
+/* ---------- hero */
+.hero{padding:18px 0 8px}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:6px 11px;border-radius:999px;background:var(--panel);border:1px solid var(--line);font:700 .75rem/1 var(--f)}
+.chip i{width:7px;height:7px;border-radius:50%;background:#3ccf7e;box-shadow:0 0 0 3px rgba(60,207,126,.16)}
+.chip.late i{background:var(--gold);box-shadow:0 0 0 3px rgba(214,180,122,.18)}
+.hero h1{margin-top:12px;font-size:1.875rem}
+.hero .sub{margin-top:8px;max-width:42ch}
+.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:16px}
+.quick a{display:grid;justify-items:center;gap:6px;padding:11px 4px 9px;border-radius:14px;background:var(--panel);border:1px solid var(--line);text-decoration:none;font:700 .8125rem/1 var(--f);transition:transform .15s,border-color .2s}
+.quick a:active{transform:scale(.96)}
+.quick a:first-child{background:var(--ink);color:#0b0b0c;border-color:var(--ink)}
+.quick svg{width:20px;height:20px}
+.shot{position:relative;margin:16px auto 0;width:min(100%,50vh);aspect-ratio:1/1;border-radius:20px;overflow:hidden;background:#111;box-shadow:0 24px 50px rgba(0,0,0,.55)}
+.shot>svg{width:100%;height:100%;transform:scale(var(--z,1.1));will-change:transform}
+.shot figcaption{position:absolute;left:10px;bottom:10px;padding:6px 10px;border-radius:999px;background:rgba(11,11,12,.78);font:700 .75rem/1 var(--f)}
+.hfilm{animation:hwipe 7s var(--ease) infinite}
+@keyframes hwipe{0%{transform:translateX(-320px);opacity:1}36%{transform:none}84%{transform:none;opacity:1}92%{transform:none;opacity:0}93%{transform:translateX(-320px);opacity:0}100%{transform:translateX(-320px);opacity:1}}
+.js .hero .t{opacity:0;transform:translateY(12px)}
+.ready .hero .t{opacity:1;transform:none;transition:opacity .7s var(--ease),transform .8s var(--out)}
+.ready .hero .t:nth-child(2){transition-delay:.06s}.ready .hero .t:nth-child(3){transition-delay:.12s}.ready .hero .t:nth-child(4){transition-delay:.18s}.ready .hero .t:nth-child(5){transition-delay:.24s}
+
+/* ---------- sections */
+.sec{padding:var(--sec) 0}
+.head{margin-bottom:14px}
+.head .sub{margin-top:4px}
+.line-top{border-top:1px solid var(--line)}
+
+/* quote builder */
+.qb{border-radius:22px;background:var(--panel);border:1px solid var(--line);padding:14px}
+.field+.field{margin-top:12px}
+.field>b{display:block;font:700 .8125rem/1 var(--f);color:var(--muted);margin-bottom:7px}
+.opts{display:flex;flex-wrap:wrap;gap:6px}
+.opts button{flex:0 0 auto;min-height:36px;padding:0 13px;border-radius:999px;border:1px solid var(--line);background:var(--panel2);font:600 .8125rem/1 var(--f);cursor:pointer;white-space:nowrap;transition:background .2s,color .2s,border-color .2s}
+[data-k=shade] button{padding:0 10px}
+.opts button[aria-pressed=true]{background:var(--ink);color:#0b0b0c;border-color:var(--ink)}
+.txt{width:100%;min-height:42px;padding:0 13px;border-radius:12px;border:1px solid var(--line);background:var(--panel2);font-size:.9375rem}
+.txt::placeholder{color:#77736c}
+.duo{display:grid;grid-template-columns:1fr;gap:8px}
+.shade{display:grid;grid-template-columns:116px 1fr;gap:12px;align-items:center;margin-top:8px}
+.pv{position:relative;border-radius:12px;overflow:hidden;aspect-ratio:4/3;background:#222}
+.pv svg{position:absolute;inset:0;width:100%;height:100%}
+.pv .glass{fill:#060708;transition:fill-opacity .45s var(--ease)}
+.pv .frame{fill:none;stroke:#0b0b0c;stroke-width:3.5}
+.pv .sheen{fill:url(#sheen)}
+.shade p{font-size:.8125rem;color:var(--muted);line-height:1.45}
+.shade p b{display:block;color:var(--ink);font-size:.9375rem}
+.thread{position:sticky;bottom:calc(10px + env(safe-area-inset-bottom));z-index:5;margin-top:14px;border-radius:18px;background:#000;border:1px solid var(--line);padding:10px 12px 12px;box-shadow:0 -10px 30px rgba(0,0,0,.55)}
+.thread .to{display:flex;align-items:center;gap:8px;padding-bottom:8px;border-bottom:1px solid var(--line);font-size:.75rem;color:var(--muted)}
+.thread .to .av{width:26px;height:26px;border-radius:50%;background:#141416;display:grid;place-items:center;flex:none}
+.thread .to .av svg{width:18px;height:15px}
+.thread .to b{color:var(--ink);font-size:.8125rem}
+.bubble{margin:12px 0 0 auto;max-width:88%;padding:9px 13px;border-radius:18px 18px 4px 18px;background:var(--blue);color:#fff;font-size:.875rem;line-height:1.45;white-space:pre-wrap;transition:transform .25s var(--out)}
+.bubble.bump{transform:scale(1.02)}
+.thread .meta{margin-top:4px;text-align:right;font-size:.75rem;color:#77736c}
+.send{display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:12px}
+.send .btn.line{padding:0 14px}
+.copied{display:block;min-height:1.2em;margin-top:6px;text-align:center;font-size:.75rem;color:var(--gold)}
+
+/* why ceramic */
+.why{display:grid;gap:12px}
+.why figure{border-radius:var(--r);overflow:hidden;position:relative;background:#151619}
+.why figure svg{width:100%;height:auto;aspect-ratio:4/3}
+.why figcaption{position:absolute;left:10px;bottom:10px;padding:6px 10px;border-radius:999px;background:rgba(11,11,12,.78);font:700 .75rem/1 var(--f)}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tile{padding:12px;border-radius:14px;background:var(--panel);border:1px solid var(--line)}
+.tile svg{width:20px;height:20px;color:var(--gold)}
+.tile h3{margin-top:8px;font:700 .9375rem/1.2 var(--f)}
+.tile p{margin-top:3px;color:var(--muted);font-size:.8125rem;line-height:1.45}
+
+/* sample job cards rail */
+.rail{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding:2px var(--pad) 8px;margin:0 calc(var(--pad) * -1);scrollbar-width:none;scroll-padding:0 var(--pad)}
+.rail::-webkit-scrollbar{display:none}
+.job{flex:0 0 74%;scroll-snap-align:start;border-radius:16px;overflow:hidden;background:var(--panel);border:1px solid var(--line)}
+.job .art{aspect-ratio:4/3;position:relative}
+.job .art svg{width:100%;height:100%}
+.job .lv{position:absolute;right:8px;top:8px;padding:5px 9px;border-radius:999px;background:rgba(0,0,0,.6);font:700 .75rem/1 var(--f);color:var(--gold)}
+.job .jt{padding:10px 12px 12px}
+.job .jt b{display:block;font-size:.9375rem;line-height:1.3}
+.job .jt span{display:block;margin-top:2px;color:var(--muted);font-size:.8125rem}
+.dots{display:flex;justify-content:center;gap:6px;margin-top:4px}
+.dots i{width:6px;height:6px;border-radius:50%;background:rgba(244,241,234,.22);transition:width .3s,background .3s}
+.dots i.on{width:16px;border-radius:3px;background:var(--gold)}
+.more{display:flex;justify-content:center;margin-top:12px}
+
+/* late night */
+.night{border-radius:22px;overflow:hidden;background:linear-gradient(165deg,#15161d,#0d0d10);border:1px solid var(--line)}
+.night .ph{position:relative}
+.night .ph svg{width:100%;height:auto;aspect-ratio:4/3}
+.night .ph::after{content:"";position:absolute;inset:auto 0 0 0;height:30%;background:linear-gradient(transparent,#121318)}
+.night .tx{padding:4px 16px 18px}
+.night .tx p{margin-top:6px;color:var(--muted);font-size:.875rem}
+.night .row{display:flex;gap:8px;margin-top:14px}
+.night .row .btn{flex:1}
+
+/* steps */
+.steps{list-style:none;padding:0;display:grid;gap:8px;counter-reset:s}
+.steps li{display:grid;grid-template-columns:34px 1fr;gap:12px;align-items:start;padding:12px;border-radius:14px;background:var(--panel);border:1px solid var(--line);counter-increment:s}
+.steps li::before{content:counter(s);display:grid;place-items:center;width:34px;height:34px;border-radius:50%;border:1px solid var(--gold2);color:var(--gold);font:400 1rem/1 var(--serif)}
+.steps b{font-size:.9375rem}
+.steps p{margin-top:2px;color:var(--muted);font-size:.8125rem;line-height:1.45}
+
+/* service area */
+.area{display:grid;gap:10px;margin-top:22px;padding:16px;border-radius:var(--r);background:var(--panel);border:1px solid var(--line)}
+.area h3{font-size:1.25rem}
+.area p{color:var(--muted);font-size:.875rem}
+.zones{display:flex;flex-wrap:wrap;gap:6px}
+.zones span{padding:7px 12px;border-radius:999px;border:1px solid var(--gold2);color:var(--gold);font:700 .8125rem/1 var(--f)}
+
+/* closing */
+.book{text-align:center;padding:44px 0 40px;background:radial-gradient(90% 70% at 50% 0%,#1b1913,transparent 70%)}
+.book .bigmk{width:84px;height:70px;margin:0 auto}
+.book h2{margin-top:12px;font-size:1.625rem}
+.book p{margin:6px auto 0;max-width:36ch;color:var(--muted);font-size:.9375rem}
+.book .deal{display:inline-flex;margin-top:12px;padding:6px 12px;border-radius:999px;background:rgba(214,180,122,.12);color:var(--gold);font:700 .75rem/1 var(--f)}
+.book .row{display:grid;grid-template-columns:1fr;gap:8px;max-width:420px;margin:18px auto 0}
+
+footer.foot{padding:20px 0 92px;border-top:1px solid var(--line);color:var(--muted);font-size:.8125rem;text-align:center}
+footer.foot a{text-decoration:none}
+footer.foot p+p{margin-top:4px}
+.rv{opacity:0;transform:translateY(14px);transition:opacity .7s var(--ease),transform .8s var(--out)}
+.rv.on{opacity:1;transform:none}
+.dock{position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom));z-index:45;display:grid;grid-template-columns:1.5fr 1fr;gap:6px;padding:6px;border-radius:18px;background:rgba(20,20,22,.96);box-shadow:0 12px 30px rgba(0,0,0,.5);border:1px solid var(--line);transform:translateY(140%);transition:transform .35s var(--out)}
+.dock.on{transform:none}
+.dock .btn{min-height:42px;padding:0 10px;font-size:.8125rem}
+
+/* ---------- tablet + desktop add-on */
+@media (min-width:768px){
+  :root{--pad:32px;--sec:64px;--nav:66px}
+  body{font-size:1rem}
+  .sub{font-size:1rem}
+  h2{font-size:2.25rem}
+  .ribbon{font-size:12.5px;padding:8px 16px}
+  .ribbon .rf{display:inline}
+  .swp{display:none}
+  .brand svg{height:38px;width:45px}
+  .nav .links{display:flex;gap:24px;font:600 .875rem/1 var(--f);color:var(--muted)}
+  .nav .links a{text-decoration:none}.nav .links a:hover{color:var(--ink)}
+  .hero{padding:44px 0 56px}
+  .hero .wrap{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+  .hero h1{font-size:3.1rem}
+  .quick{max-width:460px}
+  .shot{margin:0;width:min(100%,58vh,520px);justify-self:end}
+  .qwrap{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
+  .qwrap .head{position:sticky;top:calc(var(--nav) + 24px)}
+  .duo{grid-template-columns:1fr 1fr}
+  .qb{padding:20px}
+  .shade{grid-template-columns:160px 1fr}
+  .why{grid-template-columns:1fr 1fr;align-items:center;gap:36px}
+  .rail{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;overflow:visible;margin:0;padding:0}
+  .job{flex:none}
+  .dots{display:none}
+  .night{display:grid;grid-template-columns:1.1fr 1fr;align-items:center}
+  .night .ph{align-self:stretch;min-height:380px}
+  .night .ph svg{position:absolute;inset:0;width:100%;height:100%;aspect-ratio:auto}
+  .night .ph::after{inset:0 0 0 auto;width:30%;height:auto;background:linear-gradient(90deg,transparent,#121318)}
+  .night .tx{padding:36px}
+  .night .row .btn{flex:0 0 auto}
+  .hw{display:grid;grid-template-columns:1.2fr 1fr;gap:28px;align-items:start}
+  .area{margin-top:0}
+  .book{padding:72px 0 64px}
+  .book .bigmk{width:110px;height:92px}
+  .book h2{font-size:2.5rem}
+  .book .row{grid-template-columns:auto auto;justify-content:center;max-width:none}
+  .dock{display:none}
+  footer.foot{padding-bottom:28px}
+}
+@media (min-width:1100px){ .hero h1{font-size:3.4rem} }
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .intro,.blade{display:none}
+  .rv,.js .hero .t{opacity:1!important;transform:none!important}
+  .shot>svg{transform:none}
+}
+</style>
+</head>
+<body>
+<script>document.documentElement.classList.add('js')</script>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="mk" viewBox="0 0 48 40"><g class="mk"><path class="win" d="M6 32 L17 9 Q19 5 24 5 L39 5 Q43 5 43 9 L43 32 Z"/><path class="film" d="M27 6.5 L39 6.5 Q41.5 6.5 41.5 9 L41.5 30.5 L20 30.5 Z"/><path class="sq" d="M29 2 L18 36"/></g></symbol>
+  <symbol id="i-msg" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M21 12a8 8 0 0 1-11.8 7L4 20l1.2-4.6A8 8 0 1 1 21 12Z"/></symbol>
+  <symbol id="i-ig" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6" fill="currentColor"/></g></symbol>
+  <symbol id="i-sliders" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><g fill="currentColor"><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></g></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></g></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.9 17.9A10 10 0 0 1 12 20c-7 0-10-8-10-8a18 18 0 0 1 4.1-5.9M9.9 4.2A9 9 0 0 1 12 4c7 0 10 8 10 8a18 18 0 0 1-2.2 3.2M14.1 14.1a3 3 0 1 1-4.2-4.2M2 2l20 20"/></g></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M12 3l1.9 5.6L19.5 10l-5.6 1.9L12 17.5l-1.9-5.6L4.5 10l5.6-1.4L12 3ZM19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8L19 16Z"/></symbol>
+  <symbol id="i-van" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17V7a1 1 0 0 1 1-1h10v11M14 9h4l3 4v4h-2"/><circle cx="7" cy="17.5" r="2"/><circle cx="17" cy="17.5" r="2"/><path d="M9 17h6"/></g></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></g></symbol>
+  <symbol id="i-car" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16v-3l2-5h11l3 4h2v4h-2M7 16h8"/><circle cx="6" cy="16.5" r="1.8"/><circle cx="17" cy="16.5" r="1.8"/></g></symbol>
+</svg>
+
+<div class="intro" id="intro" aria-hidden="true"><svg class="mark" viewBox="0 0 600 440" aria-hidden="true">
+  <g transform="translate(196 6) scale(4.4)">
+    <path class="cr" fill="#d6b47a" d="M27 6.5 L39 6.5 Q41.5 6.5 41.5 9 L41.5 30.5 L20 30.5 Z"/>
+    <path class="wr" pathLength="1" d="M6 32 L17 9 Q19 5 24 5 L39 5 Q43 5 43 9 L43 32 Z"/>
+    <path class="wr b" pathLength="1" d="M29 2 L18 36"/>
+  </g>
+  <text class="tx" x="300" y="300" text-anchor="middle" fill="#f4f1ea" font-family="Marcellus, Georgia, serif" font-size="78" letter-spacing="10">CURBLINE</text>
+  <text class="tx2" x="300" y="356" text-anchor="middle" fill="#d6b47a" font-family="Figtree, sans-serif" font-weight="700" font-size="24" letter-spacing="9">MOBILE CERAMIC TINT</text>
+</svg></div>
+
+<div class="blade" id="blade" aria-hidden="true"></div>
+
+<a class="ribbon" href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener">Concept site by <b>ElaSystems</b> <span class="rf">· Curbline Tint is fictional </span>· <u>Get one for your business →</u></a>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Curbline Tint home"><svg aria-hidden="true"><use href="#mk"/></svg><span>CURBLINE</span></a>
+    <nav class="links" aria-label="Sections"><a href="#quote">Get a quote</a><a href="#why">Ceramic</a><a href="#work">Sample jobs</a><a href="#night">Late night</a><a href="#how">How it works</a></nav>
+    <a class="btn" data-studio href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener" aria-label="Want a site like this? DM @ela.systems"><svg aria-hidden="true"><use href="#i-ig"/></svg>DM @ela.systems</a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <span class="chip t" id="chip"><i></i><span id="chipText">Mobile tint · we come to you</span></span>
+        <h1 class="t">Ceramic tint, done in <em>your driveway.</em></h1>
+        <p class="sub t">We bring the film and the tools to your home or work, so the car never leaves your sight. Late slots are open most nights.</p>
+        <div class="quick t">
+          <a data-studio href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener" aria-label="Want a site like this? DM @ela.systems"><svg aria-hidden="true"><use href="#i-ig"/></svg>DM</a>
+          <a href="#quote"><svg aria-hidden="true"><use href="#i-sliders"/></svg>Quote</a>
+          <a href="#work"><svg aria-hidden="true"><use href="#i-car"/></svg>Jobs</a>
+          <a href="#night"><svg aria-hidden="true"><use href="#i-moon"/></svg>Late</a>
+        </div>
+      </div>
+      <figure class="shot t" id="shot">
+        <svg viewBox="0 0 400 400" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Drawing of dark ceramic film being squeegeed onto a car side window">
+          <defs>
+            <linearGradient id="hsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8fbfe6"/><stop offset=".55" stop-color="#cfe2ef"/><stop offset="1" stop-color="#f2dcb8"/></linearGradient>
+            <linearGradient id="hbody" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#121316"/><stop offset=".55" stop-color="#3a3d45"/><stop offset=".7" stop-color="#22242a"/><stop offset="1" stop-color="#0c0d10"/></linearGradient>
+            <linearGradient id="hfilmg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#050607" stop-opacity=".82"/><stop offset="1" stop-color="#0d0f13" stop-opacity=".7"/></linearGradient>
+            <linearGradient id="hsheen" x1="0" y1="0" x2="1" y2="1"><stop offset=".35" stop-color="#fff" stop-opacity="0"/><stop offset=".48" stop-color="#fff" stop-opacity=".16"/><stop offset=".56" stop-color="#fff" stop-opacity="0"/></linearGradient>
+            <clipPath id="hwin"><path d="M52 228 L128 92 Q138 74 160 74 L332 74 Q350 74 350 92 L350 228 Z"/></clipPath>
+          </defs>
+          <rect width="400" height="400" fill="url(#hbody)"/>
+          <g clip-path="url(#hwin)">
+            <rect width="400" height="240" fill="url(#hsky)"/>
+            <circle cx="292" cy="112" r="20" fill="#fff6dc"/><circle cx="292" cy="112" r="34" fill="#fff6dc" opacity=".25"/>
+            <rect x="40" y="150" width="58" height="80" fill="#b5c0ca"/><rect x="92" y="126" width="46" height="104" fill="#a3afbb"/><rect x="190" y="140" width="64" height="90" fill="#c3cbd2"/><rect x="250" y="160" width="40" height="70" fill="#aab4be"/><rect x="300" y="132" width="60" height="98" fill="#b9c2ca"/>
+            <g fill="#8e9aa6"><rect x="102" y="138" width="8" height="10"/><rect x="118" y="138" width="8" height="10"/><rect x="102" y="158" width="8" height="10"/><rect x="118" y="158" width="8" height="10"/><rect x="200" y="152" width="10" height="10"/><rect x="220" y="152" width="10" height="10"/><rect x="310" y="146" width="9" height="11"/><rect x="330" y="146" width="9" height="11"/><rect x="310" y="168" width="9" height="11"/><rect x="330" y="168" width="9" height="11"/></g>
+            <g fill="#6f8b6a"><circle cx="160" cy="188" r="24"/><circle cx="178" cy="196" r="18"/><circle cx="276" cy="196" r="16"/></g>
+            <rect x="0" y="206" width="400" height="30" fill="#9ca3a9"/>
+            <g class="hfilm">
+              <rect x="-20" y="60" width="380" height="180" fill="url(#hfilmg)"/>
+              <rect x="356" y="66" width="7" height="168" rx="3" fill="#f4f1ea"/>
+              <rect x="363" y="120" width="34" height="40" rx="6" fill="#d6b47a"/>
+            </g>
+            <path d="M52 228 L128 92 Q138 74 160 74 L332 74 Q350 74 350 92 L350 228 Z" fill="url(#hsheen)"/>
+          </g>
+          <path d="M52 228 L128 92 Q138 74 160 74 L332 74 Q350 74 350 92 L350 228 Z" fill="none" stroke="#08090b" stroke-width="10" stroke-linejoin="round"/>
+          <rect x="0" y="234" width="400" height="5" fill="#a8aeb6" opacity=".55"/>
+          <path d="M0 300 H400" stroke="#fff" stroke-opacity=".06" stroke-width="22"/>
+          <rect x="238" y="272" width="78" height="16" rx="8" fill="#2a2c32" stroke="#4d5059" stroke-width="2"/>
+          <path d="M372 240 V400" stroke="#08090b" stroke-width="3"/>
+        </svg>
+        <figcaption>Ceramic film going on</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="sec" id="quote">
+    <div class="wrap qwrap">
+      <div class="head rv">
+        <h2>Tap what you need. <em>We'll write the text.</em></h2>
+        <p class="sub">Pick your car, windows and shade. The message builds itself below. On a real shop's site it sends straight to their phone.</p>
+      </div>
+      <form class="qb rv" id="qb" onsubmit="return false">
+        <div class="field"><b>Vehicle</b><div class="opts" data-k="type"><button type="button" data-v="car">Car</button><button type="button" data-v="SUV">SUV</button><button type="button" data-v="truck">Truck</button><button type="button" data-v="van">Van</button></div></div>
+        <div class="field"><b>Year, make + model</b><input class="txt" id="ymm" type="text" placeholder="e.g. 2022 Honda Civic" autocomplete="off" maxlength="60"></div>
+        <div class="field"><b>Windows</b><div class="opts" data-k="win"><button type="button" data-v="all">Sides + back</button><button type="button" data-v="front">Front two</button><button type="button" data-v="strip">Windshield strip</button><button type="button" data-v="help">Not sure yet</button></div></div>
+        <div class="field"><b>Shade</b><div class="opts" data-k="shade"><button type="button" data-v="5">5%</button><button type="button" data-v="15">15%</button><button type="button" data-v="20">20%</button><button type="button" data-v="35">35%</button><button type="button" data-v="50">50%</button><button type="button" data-v="70">70%</button></div>
+          <div class="shade">
+            <div class="pv">
+              <svg viewBox="0 0 120 90" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="sheen" x1="0" y1="0" x2="1" y2="1"><stop offset=".3" stop-color="#fff" stop-opacity="0"/><stop offset=".45" stop-color="#fff" stop-opacity=".16"/><stop offset=".55" stop-color="#fff" stop-opacity="0"/></linearGradient><linearGradient id="pvsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8fbfe6"/><stop offset="1" stop-color="#f0dcbc"/></linearGradient></defs>
+                <rect width="120" height="90" fill="url(#pvsky)"/>
+                <circle cx="88" cy="30" r="7" fill="#fff6dc"/>
+                <rect x="16" y="40" width="20" height="40" fill="#b5c0ca"/><rect x="34" y="30" width="16" height="50" fill="#a3afbb"/><rect x="62" y="38" width="22" height="42" fill="#c3cbd2"/><rect x="88" y="34" width="22" height="46" fill="#aab4be"/>
+                <circle cx="55" cy="58" r="9" fill="#6f8b6a"/><circle cx="62" cy="62" r="7" fill="#6f8b6a"/>
+                <rect y="66" width="120" height="14" fill="#9ca3a9"/>
+                <path class="glass" id="glass" fill-opacity=".72" d="M10 76 L34 20 Q36 15 42 15 L104 13 Q110 13 111 19 L114 76 Z"/><path class="sheen" d="M10 76 L34 20 Q36 15 42 15 L104 13 Q110 13 111 19 L114 76 Z"/>
+                <path fill="#1d1f24" fill-rule="evenodd" d="M0 0H120V90H0Z M10 76 L34 20 Q36 15 42 15 L104 13 Q110 13 111 19 L114 76 Z"/>
+                <path class="frame" d="M10 76 L34 20 Q36 15 42 15 L104 13 Q110 13 111 19 L114 76 Z"/>
+              </svg></div>
+            <p id="shadeTxt"><b>Pick a shade</b>Lower is darker. 5% is limo dark, 70% is barely there.</p>
+          </div>
+        </div>
+        <div class="field"><b>Where should we pull up? <span style="font-weight:500">(sample zones)</span></b><div class="opts" data-k="area"><button type="button" data-v="the north side">North side</button><button type="button" data-v="downtown">Downtown</button><button type="button" data-v="the south side">South side</button></div>
+          <input class="txt" id="city" type="text" placeholder="Neighborhood (optional)" autocomplete="off" maxlength="40" style="margin-top:8px"></div>
+        <div class="field"><b>When works best?</b><div class="opts" data-k="time"><button type="button" data-v="day"><svg aria-hidden="true" width="14" height="14" style="display:inline-block;vertical-align:-2px;margin-right:5px"><use href="#i-sun"/></svg>Daytime</button><button type="button" data-v="night"><svg aria-hidden="true" width="14" height="14" style="display:inline-block;vertical-align:-2px;margin-right:5px"><use href="#i-moon"/></svg>Late night</button><button type="button" data-v="any">Either</button></div></div>
+
+        <div class="thread" aria-live="polite">
+          <div class="to"><span class="av"><svg aria-hidden="true"><use href="#mk"/></svg></span><div><b>Curbline Tint</b><br><span>Sample thread</span></div></div>
+          <p class="bubble" id="msg"></p>
+          <p class="meta">Your text, ready to send</p>
+        </div>
+        <div class="send">
+          <a class="btn" data-studio href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener" aria-label="Want a site like this? DM @ela.systems"><svg aria-hidden="true"><use href="#i-ig"/></svg>Want this? DM @ela.systems</a>
+          <button class="btn line" type="button" id="copy" aria-label="Copy the message"><svg aria-hidden="true"><use href="#i-copy"/></svg></button>
+        </div>
+        <span class="copied" id="copied" role="status"></span>
+      </form>
+    </div>
+  </section>
+
+  <section class="sec line-top" id="why">
+    <div class="wrap why">
+      <figure class="rv">
+        <svg viewBox="0 0 400 300" role="img" aria-label="Drawing of a sheet of tint film being trimmed and squeegeed onto a car window">
+          <defs>
+            <linearGradient id="wwall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#202126"/><stop offset="1" stop-color="#121316"/></linearGradient>
+            <linearGradient id="wglass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9fb4c6"/><stop offset="1" stop-color="#dfe6ea"/></linearGradient>
+            <linearGradient id="wbody" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a4e57"/><stop offset=".4" stop-color="#2c2f36"/><stop offset="1" stop-color="#15161a"/></linearGradient>
+            <linearGradient id="wpeel" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3b3f47"/><stop offset="1" stop-color="#8b929c"/></linearGradient>
+          </defs>
+          <rect width="400" height="300" fill="url(#wwall)"/>
+          <rect y="176" width="400" height="124" fill="url(#wbody)"/>
+          <path d="M40 176 L106 58 Q114 44 132 44 L338 44 Q358 44 358 64 L358 176 Z" fill="url(#wglass)" stroke="#08090b" stroke-width="8" stroke-linejoin="round"/>
+          <path d="M34 182 L102 52 L262 40 L300 96 L306 184 Z" fill="#0b0d10" fill-opacity=".62"/>
+          <path d="M262 40 L300 96 L326 30 Z" fill="url(#wpeel)"/>
+          <path d="M40 176 L106 58 Q114 44 132 44 L338 44 Q358 44 358 64 L358 176 Z" fill="none" stroke="#f4f1ea" stroke-opacity=".5" stroke-width="1.6" stroke-dasharray="6 6"/>
+          <g transform="rotate(-18 200 120)"><rect x="150" y="110" width="96" height="9" rx="3" fill="#f4f1ea"/><rect x="176" y="119" width="44" height="30" rx="7" fill="#d6b47a"/></g>
+          <g fill="#fff" fill-opacity=".55"><circle cx="128" cy="120" r="3"/><circle cx="146" cy="142" r="2"/><circle cx="96" cy="150" r="2.5"/><circle cx="252" cy="136" r="2"/><circle cx="276" cy="150" r="3"/><circle cx="118" cy="96" r="2"/></g>
+          <rect y="182" width="400" height="4" fill="#a8aeb6" opacity=".5"/>
+        </svg>
+        <figcaption>Cut and fit on site</figcaption></figure>
+      <div>
+        <div class="head rv"><h2>Why we run <em>ceramic</em></h2><p class="sub">Ceramic film blocks a lot of heat without that mirror look, and it won't mess with your phone or GPS signal.</p></div>
+        <div class="tiles rv">
+          <div class="tile"><svg aria-hidden="true"><use href="#i-sun"/></svg><h3>Cooler cabin</h3><p>Seats and the wheel stay touchable after the car sits in the sun.</p></div>
+          <div class="tile"><svg aria-hidden="true"><use href="#i-eye"/></svg><h3>Privacy</h3><p>People at the light can't see what's on your back seat.</p></div>
+          <div class="tile"><svg aria-hidden="true"><use href="#i-spark"/></svg><h3>Clean edges</h3><p>Film is trimmed tight to the glass, with no gaps at the top.</p></div>
+          <div class="tile"><svg aria-hidden="true"><use href="#i-van"/></svg><h3>We come to you</h3><p>Home, work or wherever you park. We pull up.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec line-top" id="work">
+    <div class="wrap">
+      <div class="head rv"><h2>Sample jobs <em>from the week</em></h2><p class="sub">Drawn examples. On a real shop's site these would be their own clips.<span class="swp"> Swipe through.</span></p></div>
+      <div class="rail" id="rail"></div>
+      <div class="dots" id="rdots"></div>
+      <div class="more"><a class="btn line" data-studio href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-ig"/></svg>Want your work here? DM @ela.systems</a></div>
+    </div>
+  </section>
+
+  <section class="sec" id="night">
+    <div class="wrap">
+      <div class="night rv">
+        <div class="ph">
+          <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Drawing of an SUV getting tinted in a driveway at night under a work light">
+            <defs>
+              <linearGradient id="nsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0b0e1c"/><stop offset="1" stop-color="#232a44"/></linearGradient>
+              <radialGradient id="nlamp" cx=".5" cy="0" r="1"><stop offset="0" stop-color="#ffe2a6" stop-opacity=".55"/><stop offset="1" stop-color="#ffe2a6" stop-opacity="0"/></radialGradient>
+              <radialGradient id="nwork" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff4d8" stop-opacity=".5"/><stop offset="1" stop-color="#fff4d8" stop-opacity="0"/></radialGradient>
+            </defs>
+            <rect width="400" height="300" fill="url(#nsky)"/>
+            <g fill="#fff"><circle cx="40" cy="30" r="1.2"/><circle cx="96" cy="58" r="1"/><circle cx="150" cy="22" r="1.4"/><circle cx="210" cy="48" r="1"/><circle cx="250" cy="18" r="1.2"/><circle cx="330" cy="36" r="1"/><circle cx="370" cy="70" r="1.3"/><circle cx="180" cy="80" r=".9"/></g>
+            <circle cx="312" cy="58" r="18" fill="#f3ead2"/><circle cx="321" cy="52" r="16" fill="#141a2e"/>
+            <path d="M250 200 V128 L310 96 L380 128 V200 Z" fill="#2a3150"/><rect x="292" y="150" width="20" height="18" fill="#f2c97a" opacity=".8"/><rect x="330" y="150" width="20" height="18" fill="#f2c97a" opacity=".5"/>
+            <rect x="0" y="200" width="400" height="100" fill="#15171e"/>
+            <path d="M120 300 L170 200 H300 L360 300 Z" fill="#1f222b"/>
+            <rect x="38" y="70" width="4" height="132" fill="#2b2f3a"/><path d="M40 70 h22" stroke="#2b2f3a" stroke-width="4"/><circle cx="64" cy="72" r="5" fill="#ffe7b0"/>
+            <path d="M64 72 L14 210 H124 Z" fill="url(#nlamp)"/>
+            <ellipse cx="190" cy="168" rx="120" ry="90" fill="url(#nwork)"/>
+            <g transform="translate(78 92) scale(1.12)">
+              <ellipse cx="103" cy="106" rx="96" ry="6" fill="#000" opacity=".5"/>
+              <path d="M16 100 L16 80 Q16 74 24 72 L40 70 L56 46 Q60 40 68 40 L170 40 Q178 40 180 48 L186 72 Q190 74 190 82 L190 100 Q190 104 186 104 L16 104 Z" fill="#7a1f24"/>
+              <path d="M16 86 H190" stroke="#fff" stroke-opacity=".12" stroke-width="2"/>
+              <g fill="#06070a" fill-opacity=".92"><path d="M60 50 L46 70 L100 70 L100 48 L66 48 Z"/><path d="M104 48 L104 70 L140 70 L140 48 Z"/><path d="M144 48 L144 70 L182 70 L177 51 Q176 48 172 48 Z"/></g>
+              <g><circle cx="52" cy="104" r="14" fill="#0b0b0c"/><circle cx="52" cy="104" r="6" fill="#80838c"/><circle cx="154" cy="104" r="14" fill="#0b0b0c"/><circle cx="154" cy="104" r="6" fill="#80838c"/></g>
+            </g>
+            <rect x="340" y="206" width="3" height="56" fill="#3a3e48"/><rect x="330" y="196" width="24" height="14" rx="2" fill="#fff4d8"/>
+          </svg>
+        </div>
+        <div class="tx">
+          <h2>Busy all day? <em>We tint after dark.</em></h2>
+          <p>Late appointments are open most nights. Tell us when you're free and we'll set up our lights right in your driveway.</p>
+          <div class="row"><a class="btn gold" data-studio href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener" aria-label="Want a site like this? DM @ela.systems"><svg aria-hidden="true"><use href="#i-ig"/></svg>Get a site like this</a><a class="btn line" href="#quote">Build a quote</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec line-top" id="how">
+    <div class="wrap hw">
+      <div>
+        <div class="head rv"><h2>How booking <em>works</em></h2></div>
+        <ol class="steps rv">
+          <li><div><b>Send us your car</b><p>Text or DM the year, make and model and which windows you want. The quote builder above writes it for you.</p></div></li>
+          <li><div><b>Get your price</b><p>We text back a quote, usually within the hour while we're open.</p></div></li>
+          <li><div><b>We pull up</b><p>Pick a time, day or late night, and we tint it right where the car is parked.</p></div></li>
+        </ol>
+      </div>
+      <div class="area rv">
+        <h3>Where we pull up</h3>
+        <div class="zones"><span>North side</span><span>Downtown</span><span>South side</span></div>
+        <p>Sample zones for this concept. A real shop would list its own towns here.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="book" id="book">
+    <div class="wrap">
+      <svg class="bigmk" aria-hidden="true"><use href="#mk"/></svg>
+      <h2>Ready for some shade?</h2>
+      <p>This is a concept site. Want one like it for your tint shop? DM @ela.systems and we'll build yours.</p>
+      <span class="deal">Sample promo · free windshield strip with a full car</span>
+      <div class="row">
+        <a class="btn" data-studio href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-ig"/></svg>Want a site like this? DM @ela.systems</a>
+        <a class="btn line" href="#quote"><svg aria-hidden="true"><use href="#i-sliders"/></svg>Try the quote builder</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <p>Curbline Tint is a fictional business. Concept site by ElaSystems; sample content only. © <span id="yr"></span></p>
+    <p><a href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener">Site by ElaSystems</a></p>
+  </div>
+</footer>
+
+<div class="dock" id="dock"><a class="btn" data-studio href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener" aria-label="Want a site like this? DM @ela.systems"><svg aria-hidden="true"><use href="#i-ig"/></svg>DM @ela.systems</a><a class="btn line" href="#quote"><svg aria-hidden="true"><use href="#i-sliders"/></svg>Quote</a></div>
+
+<a class="elab" href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener" aria-label="Made by ElaSystems"><i>E</i>Made by ElaSystems</a>
+
+<script>
+/* ================= CONFIG (all sample content: Curbline Tint is fictional) ================= */
+const CONFIG = { name: 'Curbline Tint', studio: 'https://www.instagram.com/ela.systems/' };
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches, root = document.documentElement;
+$('#yr').textContent = new Date().getFullYear();
+if (matchMedia('(max-width: 767px)').matches) $('footer .wrap').appendChild($('.elab'));
+
+/* chip: after dark (visitor's local time) it says so */
+(() => {
+  const h = new Date().getHours();
+  if (h >= 19 || h < 5) { $('#chip').classList.add('late'); $('#chipText').textContent = 'Late-night appointments open'; }
+})();
+
+/* ---------- intro: window draws, film slides in, then the squeegee wipes the film off. Once per visit, skippable. */
+(() => {
+  const intro = $('#intro'), blade = $('#blade'), reveal = () => root.classList.add('ready');
+  let seen = false; try { seen = sessionStorage.getItem('curb-intro') === '1'; } catch (e) {}
+  if (RM || seen) { intro.classList.add('done'); blade.classList.add('done'); requestAnimationFrame(reveal); return; }
+  try { sessionStorage.setItem('curb-intro', '1'); } catch (e) {}
+  root.style.overflow = 'hidden';
+  let ended = false, t1, t2;
+  const end = () => { intro.classList.add('done'); blade.classList.add('done'); root.style.overflow = ''; };
+  const peel = () => { if (ended) return; ended = true; clearTimeout(t1); reveal(); root.style.overflow = ''; intro.classList.add('peel'); blade.classList.add('go'); t2 = setTimeout(end, 780); };
+  const skip = () => { if (!ended) { ended = true; clearTimeout(t1); reveal(); end(); } };
+  requestAnimationFrame(() => requestAnimationFrame(() => intro.classList.add('go')));
+  t1 = setTimeout(peel, 1750);
+  ['wheel', 'touchstart', 'keydown', 'pointerdown'].forEach(ev => addEventListener(ev, skip, { once: true, passive: true }));
+})();
+
+/* hero art eases out of a zoom as you scroll; the film loop pauses off screen */
+const hs = $('#shot svg');
+const zoom = () => { const r = $('#shot').getBoundingClientRect(); const k = Math.min(1, Math.max(0, 1 - r.top / innerHeight)); hs.style.setProperty('--z', (1.1 - .1 * k).toFixed(3)); };
+if (!RM) { addEventListener('scroll', () => requestAnimationFrame(zoom), { passive: true }); zoom(); }
+new IntersectionObserver(es => { $('.hfilm').style.animationPlayState = es[0].isIntersecting ? 'running' : 'paused'; }).observe(hs);
+
+/* ---------- quote builder: every tap rewrites the text message */
+(() => {
+  const S = { type: '', win: '', shade: '', area: '', time: '' };
+  const ymm = $('#ymm'), city = $('#city'), msg = $('#msg'), glass = $('#glass'), shadeTxt = $('#shadeTxt');
+  const WIN = { all: 'all the sides and the back', front: 'the front two windows', strip: 'a windshield strip', help: '' };
+  const SHADE = { 5: [.93, 'Limo dark. Hard to see in at all.'], 15: [.84, 'Very dark, a lot of privacy.'], 20: [.78, 'Dark and clean. A popular look.'], 35: [.6, 'Medium. Privacy without going dark.'], 50: [.44, 'Light, mostly for heat.'], 70: [.24, 'Barely there, all about the heat.'] };
+  function write() {
+    const car = ymm.value.trim() || (S.type ? 'my ' + S.type : 'my car');
+    const vehicle = ymm.value.trim() ? 'my ' + ymm.value.trim() + (S.type ? ' (' + S.type + ')' : '') : car;
+    const p = ['Hey Curbline! Looking for a quote on ceramic tint for ' + vehicle + '.'];
+    if (S.win === 'help') p.push('Not sure which windows yet, can you help me pick?');
+    else if (S.win) p.push('I want ' + WIN[S.win] + ' done' + (S.shade ? ' at ' + S.shade + '%.' : '.'));
+    else if (S.shade) p.push('Thinking ' + S.shade + '%.');
+    if (S.win === 'help' && S.shade) p.push('Thinking ' + S.shade + '%.');
+    const c = city.value.trim();
+    if (S.area || c) p.push("I'm in " + (c ? c + (S.area ? ' (' + S.area + ')' : '') : S.area) + '.');
+    if (S.time === 'night') p.push('Late night works best for me.');
+    else if (S.time === 'day') p.push('Daytime works best for me.');
+    else if (S.time === 'any') p.push('Day or night works.');
+    const text = p.join(' ');
+    msg.textContent = text;
+    if (!RM) { msg.classList.remove('bump'); void msg.offsetWidth; msg.classList.add('bump'); setTimeout(() => msg.classList.remove('bump'), 220); }
+    return text;
+  }
+  $$('#qb .opts').forEach(g => g.addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    const k = g.dataset.k, on = b.getAttribute('aria-pressed') !== 'true';
+    g.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', 'false'));
+    b.setAttribute('aria-pressed', on); S[k] = on ? b.dataset.v : '';
+    if (k === 'shade') {
+      const s = SHADE[S[k]];
+      glass.setAttribute('fill-opacity', s ? s[0] : .72);
+      shadeTxt.innerHTML = s ? `<b>${S[k]}% shade</b>${s[1]}` : '<b>Pick a shade</b>Lower is darker. 5% is limo dark, 70% is barely there.';
+    }
+    write();
+  }));
+  $$('#qb .opts button').forEach(b => b.setAttribute('aria-pressed', 'false'));
+  ymm.addEventListener('input', write); city.addEventListener('input', write);
+  const note = t => { $('#copied').textContent = t; setTimeout(() => $('#copied').textContent = '', 2600); };
+  $('#copy').addEventListener('click', async () => { const t = write(); let ok = false; try { await navigator.clipboard.writeText(t); ok = true; } catch (e) {} note(ok ? 'Copied the message.' : 'Long-press the message to copy it.'); });
+  write();
+})();
+
+/* ---------- sample job cards: drawn vehicles with their tint level (sample data) */
+(() => {
+  const CARS = {
+    sedan: { body: 'M18 100 Q16 88 28 84 L62 78 L86 58 Q92 53 102 53 L134 53 Q144 53 152 60 L170 76 L184 80 Q192 82 192 92 L192 100 Q192 104 188 104 L18 104 Z', win: ['M92 60 L70 78 L118 78 L118 60 Z', 'M122 60 L122 78 L164 78 L148 63 Q144 60 138 60 Z'], wh: [52, 160] },
+    suv: { body: 'M16 100 L16 80 Q16 74 24 72 L40 70 L56 46 Q60 40 68 40 L170 40 Q178 40 180 48 L186 72 Q190 74 190 82 L190 100 Q190 104 186 104 L16 104 Z', win: ['M60 50 L46 70 L100 70 L100 48 L66 48 Z', 'M104 48 L104 70 L140 70 L140 48 Z', 'M144 48 L144 70 L182 70 L177 51 Q176 48 172 48 Z'], wh: [52, 154] },
+    truck: { body: 'M14 100 L14 72 L102 72 L102 50 Q102 44 108 44 L146 44 Q154 44 158 52 L170 72 L184 75 Q192 77 192 86 L192 100 Q192 104 188 104 L14 104 Z', win: ['M110 52 L110 70 L130 70 L130 52 Z', 'M134 52 L134 70 L163 70 L153 54 Q151 52 147 52 Z'], wh: [46, 160] },
+  };
+  const JOBS = [
+    ['sedan', '#c9ccd2', '#2a3240', .78, '20%', 'Sedan · 20% all around', 'Sample job · daytime, driveway'],
+    ['suv', '#1f2329', '#3b2a22', .93, '5%', 'SUV · 5% on the back half', 'Sample job · late night'],
+    ['truck', '#8a2a25', '#25323a', .84, '15%', 'Pickup · 15% sides and back', 'Sample job · at work'],
+    ['sedan', '#25416b', '#3a2f2a', .6, '35%', 'Sedan · 35% front two', 'Sample job · matched the factory rear'],
+    ['suv', '#e7e4dd', '#2b3a3a', .44, '50%', 'SUV · 50% for heat only', 'Sample job · windshield strip too'],
+    ['truck', '#121316', '#3a2c3c', .93, '5%', 'Pickup · 5% limo back glass', 'Sample job · late night'],
+  ];
+  const svg = ([k, col, bg, op], n) => { const c = CARS[k]; return `<svg viewBox="0 0 200 150" aria-hidden="true"><defs><linearGradient id="jg${n}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${bg}"/><stop offset="1" stop-color="#0d0e11"/></linearGradient></defs><rect width="200" height="150" fill="url(#jg${n})"/><rect y="112" width="200" height="38" fill="#000" opacity=".25"/><g transform="translate(0 6)"><ellipse cx="103" cy="106" rx="94" ry="6" fill="#000" opacity=".45"/><path d="${c.body}" fill="${col}"/><path d="${c.body}" fill="#fff" opacity=".08" transform="translate(0 -1) scale(1 .98)"/>${c.win.map(w => `<path d="${w}" fill="#b9cfe0"/><path d="${w}" fill="#050607" fill-opacity="${op}"/>`).join('')}${c.wh.map(x => `<circle cx="${x}" cy="104" r="14" fill="#0b0b0c"/><circle cx="${x}" cy="104" r="6" fill="#80838c"/>`).join('')}</g></svg>`; };
+  const rail = $('#rail'), dots = $('#rdots');
+  rail.innerHTML = JOBS.map((j, n) => `<article class="job"><div class="art">${svg(j, n)}<span class="lv">${j[4]}</span></div><div class="jt"><b>${j[5]}</b><span>${j[6]}</span></div></article>`).join('');
+  dots.innerHTML = JOBS.map(() => '<i></i>').join('');
+  const paint = () => { const w = rail.firstElementChild.getBoundingClientRect().width + 10; const k = Math.min(JOBS.length - 1, Math.round(rail.scrollLeft / w)); [...dots.children].forEach((d, i) => d.classList.toggle('on', i === k)); };
+  rail.addEventListener('scroll', () => requestAnimationFrame(paint), { passive: true }); paint();
+})();
+
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -10% 0px' });
+$$('.rv').forEach(el => io.observe(el));
+/* sticky bar on phones, out of the way while the quote builder (with its own pinned message) is on screen and at the closing card */
+const dock = $('#dock'); let atBook = false, atQuote = false;
+const syncDock = () => dock.classList.toggle('on', scrollY > 420 && !atBook && !atQuote);
+new IntersectionObserver(es => { atQuote = es[0].isIntersecting; syncDock(); }, { rootMargin: '0px 0px -30% 0px' }).observe($('#qb'));
+new IntersectionObserver(es => { atBook = es[0].isIntersecting; syncDock(); }).observe($('#book'));
+addEventListener('scroll', syncDock, { passive: true });
+</script>
+</body>
+</html>
