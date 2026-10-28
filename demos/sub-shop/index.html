@@ -1,0 +1,677 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noai, noimageai">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Owlwick Subs | Late-night sub shop (concept)</title>
+<meta name="description" content="Owlwick Subs is a fictional late-night sub shop. A concept site by ElaSystems with a sample menu where every price adds to an order list, craving filters and a live open-late status.">
+<meta property="og:title" content="Owlwick Subs | Concept site by ElaSystems">
+<meta property="og:description" content="A concept site for a late-night sub shop. Tap a price to build your order. Built by ElaSystems.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#fbf1e1">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='32' fill='%23e31e26'/%3E%3Ccircle cx='38' cy='22' r='11' fill='%23fbf1e1'/%3E%3Ccircle cx='43' cy='18' r='9' fill='%23e31e26'/%3E%3Crect x='12' y='34' width='40' height='14' rx='7' fill='%23fbf1e1'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* Owlwick Subs (fictional concept by ElaSystems) · MOBILE FIRST (base = 390px phone; min-width queries add the desktop).
+   Intro: the badge builds itself, then the cream sheet lifts on a checkered edge. Signature: tap any price on the
+   sample menu to build an order list with a running total. Live open/closed status from sample late hours. */
+:root{
+  --paper:#fbf1e1; --paper2:#f3e3c7; --card:#fffaf1; --ink:#231f20; --muted:#6c5f55; --line:rgba(35,31,32,.12);
+  --red:#e31e26; --red2:#b8141b; --green:#1f9d55;
+  --f:'Rubik', system-ui, -apple-system, sans-serif;
+  --pad:18px; --sec:36px; --r:18px; --nav:56px;
+  --ease:cubic-bezier(.22,.61,.36,1); --out:cubic-bezier(.16,1,.3,1); --spring:cubic-bezier(.34,1.56,.64,1);
+  --check:repeating-conic-gradient(var(--red) 0 25%, var(--paper) 0 50%) 0 0/20px 20px;
+}
+*{box-sizing:border-box;margin:0}
+html{-webkit-text-size-adjust:100%;overflow-x:clip;background:var(--paper);scroll-padding-top:calc(var(--nav) + 60px)}
+body{background:var(--paper);color:var(--ink);font:400 .9375rem/1.55 var(--f);overflow-x:clip;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%;height:auto}
+a{color:inherit}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--red);outline-offset:3px;border-radius:8px}
+.wrap{max-width:1140px;margin:0 auto;padding:0 var(--pad)}
+h1,h2,h3{font-weight:800;letter-spacing:-.01em;line-height:1.08}
+h1 em,h2 em{font-style:normal;color:var(--red)}
+h2{font-size:1.5rem}
+.sub{color:var(--muted);font-size:.9375rem}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 18px;border-radius:999px;background:var(--red);color:#fff;text-decoration:none;font:700 .875rem/1 var(--f);border:2px solid var(--red);white-space:nowrap;transition:background .2s,transform .15s}
+.btn:active{transform:scale(.97)}
+.btn.line{background:transparent;color:var(--ink);border-color:var(--ink)}
+.btn.dark{background:var(--ink);border-color:var(--ink)}
+.btn svg{width:16px;height:16px;flex:0 0 auto}
+.check{height:14px;background:var(--check);background-size:14px 14px}
+
+/* ---------- intro: plate pops, ring draws, the moon and sub stamp on, OWLWICK drops in, then the sheet lifts on a checkered edge */
+.intro{position:fixed;inset:0;z-index:100;display:grid;place-items:center;background:var(--paper)}
+.intro::after{content:"";position:absolute;left:0;right:0;bottom:-18px;height:18px;background:var(--check);background-size:18px 18px}
+.intro .badge{width:min(60vw,290px);height:auto;overflow:visible}
+.badge .b-sil{fill:#fff}.badge .b-ring,.badge .b-word text{fill:var(--red)}.badge .b-plate,.badge .b-ink{fill:var(--ink)}.badge .b-word text{font-family:var(--f);font-weight:900}.badge .b-sub{fill:var(--paper);font:800 15px/1 var(--f);letter-spacing:.14em}
+.intro .badge{filter:drop-shadow(0 18px 30px rgba(120,60,20,.18))}
+.intro .b-sil,.intro .b-ink,.intro .b-plate,.intro .b-sub,.intro .b-word text{transform-box:fill-box;transform-origin:50% 50%;opacity:0}
+.intro .b-ring{fill-opacity:0;stroke:var(--red);stroke-width:5;stroke-dasharray:1;stroke-dashoffset:1}
+.intro.go .b-sil{animation:pop .55s var(--spring) .05s forwards}
+.intro.go .b-ring{animation:draw .6s var(--ease) .25s forwards,fillr .3s ease .7s forwards}
+.intro.go .b-ink{animation:stamp .4s var(--out) .55s forwards}
+.intro.go .b-word text{animation:dropin .5s var(--spring) calc(.85s + var(--i) * 70ms) forwards}
+.intro.go .b-plate{transform-origin:50% 50%;animation:wipe .4s var(--out) 1.25s forwards}
+.intro.go .b-sub{animation:fade .4s ease 1.35s forwards}
+@keyframes pop{from{opacity:0;transform:scale(.2)}to{opacity:1;transform:none}}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes fillr{to{fill-opacity:1;stroke-opacity:0}}
+@keyframes stamp{0%{opacity:0;transform:scale(1.35) rotate(-6deg)}60%{opacity:1}100%{opacity:1;transform:none}}
+@keyframes dropin{0%{opacity:0;transform:translateY(-260px) rotate(-12deg)}40%{opacity:1}100%{opacity:1;transform:none}}
+@keyframes wipe{from{opacity:1;transform:scaleX(0)}to{opacity:1;transform:none}}
+@keyframes fade{to{opacity:1}}
+.intro.lift{transform:translateY(calc(-100% - 20px));transition:transform .65s cubic-bezier(.7,0,.25,1)}
+.intro.done{display:none}
+
+/* ---------- nav */
+.nav{position:sticky;top:0;z-index:40;height:var(--nav);background:rgba(251,241,225,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:100%}
+.brand{display:flex;align-items:center;gap:9px;text-decoration:none}
+.brand svg{height:32px;width:32px;flex:0 0 auto}
+.brand b{font:900 1.125rem/1 var(--f);letter-spacing:.02em;color:var(--red)}
+.brand small{display:block;font:600 .625rem/1.2 var(--f);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.nav .links{display:none}
+.nav .btn{min-height:38px;padding:0 14px;font-size:.8125rem}
+.nav .btn .lg{display:none}
+
+/* concept ribbon + badge */
+.ribbon{display:block;padding:6px 12px;background:var(--ink);color:var(--paper);font:600 11px/1.35 var(--f);text-align:center;text-decoration:none;position:relative;z-index:41}
+.ribbon b{color:#ff5b61}.ribbon .rm{display:none}.ribbon u{text-underline-offset:3px}
+.elab{position:fixed;left:14px;bottom:14px;z-index:44;display:flex;align-items:center;gap:8px;padding:8px 12px 8px 8px;border-radius:99px;background:#231f20;color:#fffaf1;font:600 12px/1 var(--f);text-decoration:none;box-shadow:0 10px 24px -12px #0008;border:1px solid rgba(255,255,255,.12)}
+.elab i{width:22px;height:22px;border-radius:50%;background:#fffaf1;color:#231f20;display:grid;place-items:center;font:800 11px/1 var(--f);font-style:normal}
+@media (max-width:759px){body>.elab{display:none}footer .elab{position:static;width:max-content;margin:12px auto 0}}
+
+/* ---------- hero */
+.hero{padding:16px 0 8px}
+.status{display:inline-flex;align-items:center;gap:7px;padding:6px 11px;border-radius:999px;background:var(--card);border:1px solid var(--line);font:700 .75rem/1 var(--f)}
+.status i{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px rgba(31,157,85,.16)}
+.status.closed i{background:var(--red);box-shadow:0 0 0 3px rgba(227,30,38,.15)}
+.status.soon i{background:#e69a12;box-shadow:0 0 0 3px rgba(230,154,18,.18)}
+.hero h1{margin-top:12px;font-size:1.875rem;text-wrap:balance}
+.hero .sub{margin-top:8px;max-width:42ch}
+.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:16px}
+.quick a{display:grid;justify-items:center;gap:6px;padding:11px 4px 9px;border-radius:14px;background:var(--card);border:1px solid var(--line);text-decoration:none;font:700 .8125rem/1 var(--f);transition:transform .15s}
+.quick a:active{transform:scale(.96)}
+.quick a:first-child{background:var(--red);color:#fff;border-color:var(--red)}
+.quick svg{width:20px;height:20px}
+.shot{position:relative;margin-top:16px}
+.shot .ph{border-radius:20px;overflow:hidden;aspect-ratio:4/3;box-shadow:0 18px 36px rgba(120,60,20,.18);background:var(--paper2)}
+.shot .ph>svg{display:block;width:100%;height:100%;transform:scale(var(--z,1.1));transform-origin:50% 30%;will-change:transform}
+.shot .tag{position:absolute;left:10px;bottom:10px;padding:6px 11px;border-radius:999px;background:var(--red);color:#fff;font:800 .75rem/1 var(--f);letter-spacing:.03em}
+.shot .sticker{position:absolute;right:-6px;top:-18px;width:96px;height:auto;transform:rotate(8deg);filter:drop-shadow(0 6px 8px rgba(0,0,0,.18))}
+.js .hero .t{opacity:0;transform:translateY(12px)}
+.ready .hero .t{opacity:1;transform:none;transition:opacity .7s var(--ease),transform .8s var(--out)}
+.ready .hero .t:nth-child(2){transition-delay:.06s}.ready .hero .t:nth-child(3){transition-delay:.12s}.ready .hero .t:nth-child(4){transition-delay:.18s}.ready .hero .t:nth-child(5){transition-delay:.24s}
+
+/* ---------- ticker */
+.tick{margin-top:22px;background:var(--ink);color:var(--paper);overflow:hidden;white-space:nowrap;padding:10px 0}
+.tick div{display:inline-block;font:800 .875rem/1 var(--f);letter-spacing:.06em;text-transform:uppercase;animation:tick 26s linear infinite}
+.tick span{margin:0 14px}.tick i{color:var(--red);font-style:normal}
+@keyframes tick{to{transform:translateX(-50%)}}
+
+/* ---------- sections */
+.sec{padding:var(--sec) 0}
+.head{margin-bottom:12px}
+.head .sub{margin-top:4px}
+
+/* menu */
+.mhead{display:grid;grid-template-columns:1fr 112px;gap:10px;align-items:center}
+.art{width:100%;height:auto;overflow:visible}
+.art path{fill:none;stroke:var(--ink);stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+.js .art.draw path{stroke-dasharray:1;stroke-dashoffset:1}
+.js .art.draw.on path{animation:draw 1.6s var(--ease) forwards}
+@keyframes fillk{to{fill-opacity:1;stroke-opacity:0}}
+.tabs{position:sticky;top:var(--nav);z-index:30;background:rgba(251,241,225,.96);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:8px 0}
+.tabs .in{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:0 var(--pad);max-width:1140px;margin:0 auto}
+.tabs .in::-webkit-scrollbar{display:none}
+.tabs button{flex:0 0 auto;min-height:36px;padding:0 13px;border-radius:999px;border:1.5px solid var(--ink);background:transparent;font:700 .8125rem/1 var(--f);white-space:nowrap}
+.tabs button.on{background:var(--ink);color:var(--paper)}
+.crave{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.crave b{width:100%;font:700 .75rem/1 var(--f);color:var(--muted);margin-bottom:2px}
+.crave button{min-height:34px;padding:0 12px;border-radius:999px;border:1px dashed rgba(35,31,32,.35);background:var(--card);font:600 .8125rem/1 var(--f)}
+.crave button[aria-pressed=true]{background:var(--red);border:1px solid var(--red);color:#fff}
+.found{min-height:1.3em;margin-top:8px;font-size:.8125rem;color:var(--muted)}
+.found button{border:0;background:none;padding:0;font-weight:700;color:var(--red);text-decoration:underline}
+.sect{display:none;padding-top:6px}
+.sect.on,.filtering .sect.hit{display:block}
+.sect>h3{display:none;font-size:1.25rem;margin:16px 0 4px}
+.filtering .sect>h3{display:block}
+.grp{margin-top:14px}
+.grp .gh{display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding-bottom:6px;border-bottom:2px solid var(--red)}
+.grp .gh h4{font:800 1.0625rem/1.1 var(--f);text-transform:uppercase;letter-spacing:.02em;color:var(--red)}
+.grp .gh span{font:600 .75rem/1.2 var(--f);color:var(--muted);text-align:right}
+.grp .gn{margin-top:6px;font-size:.8125rem;color:var(--muted)}
+.items{list-style:none;padding:0}
+.item{display:grid;grid-template-columns:1fr auto;gap:4px 12px;align-items:start;padding:10px 0;border-bottom:1px solid var(--line)}
+.item>div:first-child{min-width:0}
+.item[hidden]{display:none}
+.item.more{display:none}.grp.open .item.more,.filtering .item.more{display:grid}.filtering .item.more[hidden]{display:none}
+.item .nm{display:flex;align-items:center;gap:6px;font:700 .9375rem/1.25 var(--f)}
+.item .nm svg{width:14px;height:14px;color:var(--red);flex:0 0 auto}
+.item p{margin-top:2px;color:var(--muted);font-size:.8125rem;line-height:1.4;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.px{display:flex;flex-direction:column;align-items:stretch;gap:5px}
+.px button{display:flex;align-items:center;justify-content:space-between;gap:6px;min-height:34px;min-width:116px;padding:0 5px 0 10px;border-radius:999px;border:1.5px solid var(--ink);background:var(--card);font:700 .8125rem/1 var(--f);transition:background .2s,color .2s,transform .15s}
+.px button small{font-weight:500;color:var(--muted)}
+.px button i{display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--ink);color:var(--paper);font-style:normal;font-size:.9rem;line-height:1}
+.px button.got{background:var(--ink);color:var(--paper)}.px button.got small{color:#d8cbb8}.px button.got i{background:var(--red)}
+.px button:active{transform:scale(.95)}
+.showall{margin-top:10px;width:100%}
+.grp.open .showall,.filtering .showall{display:none}
+.mnote{margin-top:14px;font-size:.75rem;color:var(--muted)}
+
+/* line-art band */
+.band{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:center;padding:20px 0 4px}
+.band svg{width:100%;height:auto;max-height:170px}
+
+/* late night */
+.late{border-radius:22px;overflow:hidden;background:var(--ink);color:var(--paper)}
+.late .ph{position:relative;aspect-ratio:16/10}
+.late .ph svg{display:block;width:100%;height:100%}
+.late .tx{padding:16px 16px 18px}
+.late h2{color:#fff}.late h2 em{color:#ff5b61}
+.late .tx>p{margin-top:6px;color:#d8cbb8;font-size:.875rem}
+.hours{list-style:none;padding:0;margin-top:12px;display:grid;gap:4px}
+.hours li{display:flex;justify-content:space-between;padding:8px 12px;border-radius:10px;background:rgba(251,241,225,.06);font-size:.875rem}
+.hours li span{white-space:nowrap}.hours li.today{background:var(--red);color:#fff;font-weight:700}
+.hours li b{font-weight:600}
+
+/* hiring */
+.hire{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;padding:16px;border-radius:var(--r);background:var(--red);color:#fff}
+.hire svg{width:56px;height:56px;border-radius:50%;background:var(--paper);padding:3px}
+.hire h3{font-size:1.25rem}
+.hire p{margin-top:2px;font-size:.875rem;color:#ffe3e3}
+.hire a{color:#fff;font-weight:700}
+
+/* visit */
+.visit{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
+.card{border-radius:var(--r);background:var(--card);border:1px solid var(--line);padding:16px}
+.card h3{font-size:1.25rem}
+.card .addr{margin-top:6px;font-weight:700}
+.card dl{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin-top:10px;font-size:.875rem}
+.card dt{color:var(--muted);font-weight:500}.card dd{margin:0;font-weight:600}
+.card .row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.map{border-radius:var(--r);overflow:hidden;aspect-ratio:4/3;background:var(--paper2);border:1px solid var(--line)}
+.map svg{display:block;width:100%;height:100%}
+
+/* closing */
+.close{text-align:center;padding:36px 0 40px}
+.close .sm{display:block;width:min(44vw,180px);height:auto;margin:0 auto}
+.close h2{margin-top:10px;font-size:1.5rem}
+.close p{margin:6px auto 0;max-width:34ch;color:var(--muted)}
+.close .row{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:420px;margin:16px auto 0}
+
+footer.foot{padding:18px 0 96px;background:var(--ink);color:#d8cbb8;font-size:.8125rem;text-align:center}
+footer.foot b{color:#fff}
+footer.foot a{text-decoration:none}
+footer.foot p+p{margin-top:4px}
+.rv{opacity:0;transform:translateY(14px);transition:opacity .7s var(--ease),transform .8s var(--out)}
+.rv.on{opacity:1;transform:none}
+
+/* phone dock + order bar */
+.dock{position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom));z-index:45;display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:6px;padding:6px;border-radius:18px;background:rgba(255,250,241,.96);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 12px 30px rgba(80,40,10,.2);border:1px solid var(--line);transform:translateY(150%);transition:transform .35s var(--out)}
+.dock.on{transform:none}
+.dock .btn{min-height:42px;padding:0 10px;font-size:.8125rem}
+.obar{position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom));z-index:46;display:flex;align-items:center;gap:10px;min-height:56px;padding:6px 6px 6px 14px;border-radius:18px;background:var(--ink);color:#fff;box-shadow:0 14px 34px rgba(0,0,0,.3);border:0;font:600 .875rem/1.2 var(--f);text-align:left;transform:translateY(160%);transition:transform .35s var(--spring)}
+.obar.on{transform:none}
+.obar .cnt{display:grid;place-items:center;min-width:28px;height:28px;padding:0 6px;border-radius:999px;background:var(--red);font-weight:800}
+.obar .sum{flex:1}.obar .sum small{display:block;color:#bfb3a3;font-weight:500;font-size:.75rem}
+.obar .go{padding:0 14px;min-height:44px;display:grid;place-items:center;border-radius:12px;background:var(--paper);color:var(--ink);font-weight:800;white-space:nowrap}
+.obar.bump{animation:bump .35s var(--spring)}
+@keyframes bump{40%{transform:scale(1.04)}}
+.sheet{position:fixed;inset:0;z-index:90;display:none}
+.sheet.open{display:block}
+.sheet .bg{position:absolute;inset:0;background:rgba(35,31,32,.45);opacity:0;transition:opacity .25s}
+.sheet.show .bg{opacity:1}
+.sheet .panel{position:absolute;left:0;right:0;bottom:0;max-height:86vh;overflow:auto;border-radius:22px 22px 0 0;background:var(--paper);padding:0 var(--pad) calc(16px + env(safe-area-inset-bottom));transform:translateY(100%);transition:transform .35s var(--out)}
+.sheet.show .panel{transform:none}
+.sheet .top{position:sticky;top:0;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 0 10px;background:var(--paper)}
+.sheet .top h3{font-size:1.25rem}
+.sheet .x{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--card);font-size:1.25rem;line-height:1}
+.ol{list-style:none;padding:0;border-top:2px solid var(--ink)}
+.ol li{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;padding:10px 0;border-bottom:1px dashed rgba(35,31,32,.25)}
+.ol b{font-size:.9375rem}.ol small{display:block;color:var(--muted);font-size:.75rem}
+.qty{display:flex;align-items:center;gap:6px}
+.qty button{width:32px;height:32px;border-radius:50%;border:1.5px solid var(--ink);background:var(--card);font-weight:800;line-height:1}
+.qty span{min-width:18px;text-align:center;font-weight:700}
+.ol .lp{min-width:58px;text-align:right;font-weight:700}
+.tot{display:flex;justify-content:space-between;align-items:baseline;padding:12px 0 2px;font:800 1.125rem/1 var(--f)}
+.tnote{font-size:.75rem;color:var(--muted)}
+.sheet .row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.sheet .row .btn:first-child{grid-column:1/-1}
+.sheet .clear{margin-top:10px;width:100%;border:0;background:none;color:var(--muted);font-size:.8125rem;text-decoration:underline;min-height:36px}
+.toast{display:block;min-height:1.2em;margin-top:6px;text-align:center;font-size:.8125rem;color:var(--green);font-weight:600}
+
+/* ---------- tablet + desktop add-on */
+@media (min-width:760px){
+  :root{--pad:32px;--sec:60px;--nav:66px}
+  body{font-size:1rem}
+  .sub{font-size:1rem}
+  h2{font-size:2.25rem}
+  .brand svg{height:40px;width:40px}
+  .nav .links{display:flex;gap:22px;font:600 .875rem/1 var(--f);color:var(--muted)}
+  .ribbon{font-size:12.5px;padding:8px 16px}.ribbon .rm{display:inline}
+  .nav .links a{text-decoration:none}.nav .links a:hover{color:var(--ink)}
+  .hero{padding:40px 0 48px}
+  .hero .wrap{display:grid;grid-template-columns:1.15fr 1fr;gap:48px;align-items:center}
+  .hero h1{font-size:3.1rem}
+  .quick{max-width:460px}
+  .shot{margin:0}
+  .shot .sticker{width:130px;right:-20px;top:-34px}
+  .mhead{grid-template-columns:1fr 220px}
+  .sect.on .grps,.filtering .sect.hit .grps{display:grid;grid-template-columns:1fr 1fr;gap:0 36px;align-items:start}
+  .band{grid-template-columns:repeat(2,minmax(0,260px));justify-content:center;gap:48px}
+  .late{display:grid;grid-template-columns:1.1fr 1fr}
+  .late .ph{aspect-ratio:auto;min-height:420px}
+  .late .ph svg{position:absolute;inset:0}
+  .late .tx{padding:32px;align-self:center}
+  .hire{grid-template-columns:auto 1fr auto;padding:20px 24px}
+  .visit{grid-template-columns:1fr 1.2fr;align-items:stretch}
+  .map{aspect-ratio:auto;min-height:320px}
+  .close{padding:64px 0}
+  .close h2{font-size:2.5rem}
+  .dock{display:none}
+  .obar{left:auto;right:24px;bottom:24px;width:380px}
+  .sheet .panel{left:auto;right:24px;bottom:24px;width:420px;border-radius:22px;max-height:80vh}
+  footer.foot{padding-bottom:28px}
+}
+@media (min-width:1100px){ .hero h1{font-size:3.4rem} .nav .btn .lg{display:inline} }
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .intro{display:none}
+  .rv,.js .hero .t{opacity:1!important;transform:none!important}
+  .shot .ph>svg{transform:none}
+  .js .art.draw path{stroke-dashoffset:0}
+}
+</style>
+</head>
+<body>
+<script>document.documentElement.classList.add('js')</script>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-phone" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2Z"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></g></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h8M8 17h5"/></g></symbol>
+  <symbol id="i-ig" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6" fill="currentColor"/></g></symbol>
+  <symbol id="i-chili" viewBox="0 0 24 24"><path fill="currentColor" d="M14.6 6.2c1.6-.2 3.2.4 4.2 1.7 1.9 2.5.9 7.4-4.3 10.8-3.5 2.3-8 3.3-11.1 2.6-.8-.2-.8-1.3 0-1.5 3.6-.8 6.6-3.2 8.4-6.4.9-1.7 1.4-3.4 1.6-4.9.1-1.2.1-2.2 1.2-2.3Z"/><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M15.5 6.4c.2-1.6 1.1-3 2.6-3.6"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></g></symbol>
+</svg>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="mark" viewBox="0 0 64 64"><circle cx="32" cy="32" r="32" fill="#e31e26"/><circle cx="39" cy="21" r="11" fill="#fbf1e1"/><circle cx="44" cy="17" r="9" fill="#e31e26"/><rect x="11" y="34" width="42" height="15" rx="7.5" fill="#fbf1e1"/><path d="M15 41.5h34" stroke="#231f20" stroke-width="2.5" stroke-linecap="round"/></symbol>
+  <symbol id="i-dm" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M21 11.5a8.4 8.4 0 0 1-12.3 7.4L3 21l2.1-5.6A8.5 8.5 0 1 1 21 11.5Z"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></g></symbol>
+</svg>
+<a class="ribbon" href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener">Concept site by <b>ElaSystems</b> · <span class="rm">Owlwick Subs is a fictional shop · </span><u>Get one for your business →</u></a>
+<a class="elab" href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener" aria-label="Made by ElaSystems"><i>E</i>Made by ElaSystems</a>
+<div class="intro" id="intro" aria-hidden="true"><svg class="badge" viewBox="0 0 400 490" aria-hidden="true">
+  <circle class="b-sil" cx="200" cy="190" r="176"/>
+  <path class="b-ring" pathLength="1" fill-rule="evenodd" d="M24 190a176 176 0 1 0 352 0a176 176 0 1 0-352 0ZM40 190a160 160 0 1 0 320 0a160 160 0 1 0-320 0Z"/>
+  <g class="b-ink">
+    <circle cx="252" cy="112" r="40"/><circle cx="272" cy="96" r="36" fill="#fff"/>
+    <path d="M140 92l4 10 10 4-10 4-4 10-4-10-10-4 10-4ZM178 62l3 7 7 3-7 3-3 7-3-7-7-3 7-3Z"/>
+    <path d="M62 234C62 208 82 194 112 194H288C318 194 338 208 338 234Z"/>
+    <path d="M60 242q11.5-11 23 0t23 0 23 0 23 0 23 0 23 0 23 0 23 0 23 0 23 0 23 0 23 0" fill="none" stroke="#e31e26" stroke-width="11" stroke-linecap="round"/>
+    <path d="M64 258H336C336 276 320 286 294 286H106C80 286 64 276 64 258Z"/>
+    <g fill="#fff"><ellipse cx="110" cy="210" rx="7" ry="3.5" transform="rotate(-10 110 210)"/><ellipse cx="160" cy="204" rx="7" ry="3.5"/><ellipse cx="210" cy="206" rx="7" ry="3.5"/><ellipse cx="258" cy="203" rx="7" ry="3.5"/><ellipse cx="300" cy="212" rx="7" ry="3.5" transform="rotate(10 300 212)"/><ellipse cx="136" cy="220" rx="6" ry="3"/><ellipse cx="234" cy="220" rx="6" ry="3"/></g>
+  </g>
+  <g class="b-word" text-anchor="middle" font-size="64"><text x="62" y="432" style="--i:0">O</text><text x="116" y="432" style="--i:1">W</text><text x="166" y="432" style="--i:2">L</text><text x="217" y="432" style="--i:3">W</text><text x="259" y="432" style="--i:4">I</text><text x="293" y="432" style="--i:5">C</text><text x="338" y="432" style="--i:6">K</text></g>
+  <rect class="b-plate" x="86" y="450" width="228" height="34" rx="17"/>
+  <text class="b-sub" x="200" y="472" text-anchor="middle">SUBS · OPEN LATE</text>
+</svg></div>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Owlwick Subs, home"><svg aria-hidden="true"><use href="#mark"/></svg><span><b>OWLWICK</b><small>Subs, open late</small></span></a>
+    <nav class="links" aria-label="Sections"><a href="#menu">Menu</a><a href="#late">Hours</a><a href="#visit">Find us</a></nav>
+    <a class="btn" data-studio href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-dm"/></svg><span class="lg">Want a site like this? </span>DM @ela.systems</a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <span class="status t" id="status"><i></i><span id="statusText">Open 11 AM to midnight</span></span>
+        <h1 class="t">Hot subs, still going <em>at 2 AM.</em></h1>
+        <p class="sub t">Owlwick is a sub shop for people who get hungry late. Grilled chicken and steak subs, smash burgers, bowls and wings, till midnight most nights and 2 AM on Friday and Saturday.</p>
+        <div class="quick t">
+          <a href="#menu"><svg aria-hidden="true"><use href="#i-menu"/></svg>Menu</a>
+          <a href="#late"><svg aria-hidden="true"><use href="#i-clock"/></svg>Hours</a>
+          <a href="#visit"><svg aria-hidden="true"><use href="#i-pin"/></svg>Find us</a>
+          <a data-studio href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-dm"/></svg>DM us</a>
+        </div>
+      </div>
+      <figure class="shot t" id="shot">
+        <div class="ph"><svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Drawing of a small sub shop at night with a red striped awning and lit windows">
+          <defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1d1b33"/><stop offset="1" stop-color="#3b2c4a"/></linearGradient><linearGradient id="glow" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe2a0"/><stop offset="1" stop-color="#ffb649"/></linearGradient><pattern id="aw" width="40" height="40" patternUnits="userSpaceOnUse"><rect width="20" height="40" fill="#e31e26"/><rect x="20" width="20" height="40" fill="#fbf1e1"/></pattern></defs>
+          <rect width="400" height="300" fill="url(#sky)"/>
+          <circle cx="330" cy="46" r="20" fill="#fbf1e1"/><circle cx="341" cy="38" r="18" fill="#26213a"/>
+          <g fill="#fbf1e1" opacity=".8"><circle cx="60" cy="30" r="1.6"/><circle cx="120" cy="18" r="1.2"/><circle cx="250" cy="26" r="1.4"/><circle cx="290" cy="70" r="1"/><circle cx="30" cy="64" r="1"/></g>
+          <rect x="34" y="66" width="332" height="234" fill="#7d3427"/>
+          <g stroke="#6a2b20" stroke-width="2"><path d="M34 96h332M34 126h332"/></g>
+          <rect x="70" y="76" width="260" height="44" rx="6" fill="#231f20"/>
+          <text x="200" y="107" text-anchor="middle" font-family="Rubik,sans-serif" font-weight="900" font-size="26" fill="#fbf1e1" letter-spacing="2">OWLWICK <tspan fill="#ff5b61">SUBS</tspan></text>
+          <path d="M44 132h312l12 30H32Z" fill="url(#aw)"/>
+          <path d="M32 162q10 12 20 0t20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0" fill="#e31e26"/>
+          <rect x="54" y="180" width="110" height="88" rx="4" fill="url(#glow)"/><rect x="236" y="180" width="110" height="88" rx="4" fill="url(#glow)"/>
+          <path d="M54 252h110M236 252h110" stroke="#c9742a" stroke-width="3"/>
+          <rect x="176" y="186" width="48" height="96" rx="3" fill="#231f20"/><rect x="182" y="192" width="36" height="52" rx="2" fill="url(#glow)" opacity=".85"/><circle cx="214" cy="252" r="2.5" fill="#ffb649"/>
+          <rect x="250" y="192" width="54" height="22" rx="11" fill="none" stroke="#ff5b61" stroke-width="3"/><text x="277" y="208" text-anchor="middle" font-family="Rubik,sans-serif" font-weight="800" font-size="12" fill="#ff5b61">OPEN</text>
+          <g stroke="#7d3427" stroke-width="2"><path d="M86 180v16M132 180v22"/></g><g fill="#c9742a"><path d="M74 204a12 9 0 0 1 24 0Z"/><path d="M120 210a12 9 0 0 1 24 0Z"/></g><g transform="translate(78 236)"><path d="M0 14C0 6 8 2 20 2H48C60 2 66 6 66 14Z" fill="#e8a24b"/><path d="M-1 16q4-4 8 0t8 0 8 0 8 0 8 0 8 0 8 0 8 0 8 0" fill="none" stroke="#1f9d55" stroke-width="3" stroke-linecap="round"/><rect x="0" y="18" width="66" height="7" rx="3.5" fill="#e8a24b"/></g>
+          <rect y="282" width="400" height="18" fill="#2d2830"/><path d="M0 282h400" stroke="#4a4250" stroke-width="2"/>
+        </svg></div>
+        <span class="tag">CONCEPT · SAMPLE HOURS</span>
+        <svg class="sticker" viewBox="0 0 200 200" role="img" aria-label="Sticker that says pickles on everything"><path d="M196.0,100.0 L180.8,114.2 L190.2,132.8 L171.0,141.0 L173.5,161.7 L152.7,162.8 L148.0,183.1 L128.0,177.1 L116.7,194.5 L100.0,182.0 L83.3,194.5 L72.0,177.1 L52.0,183.1 L47.3,162.8 L26.5,161.7 L29.0,141.0 L9.8,132.8 L19.2,114.2 L4.0,100.0 L19.2,85.8 L9.8,67.2 L29.0,59.0 L26.5,38.3 L47.3,37.2 L52.0,16.9 L72.0,22.9 L83.3,5.5 L100.0,18.0 L116.7,5.5 L128.0,22.9 L148.0,16.9 L152.7,37.2 L173.5,38.3 L171.0,59.0 L190.2,67.2 L180.8,85.8Z" fill="#1f9d55" stroke="#fff" stroke-width="6" stroke-linejoin="round"/><g font-family="Rubik,sans-serif" font-weight="900" fill="#fff" text-anchor="middle" transform="rotate(-8 100 100)"><text x="100" y="86" font-size="25">PICKLES</text><text x="100" y="112" font-size="19">ON</text><text x="100" y="138" font-size="22">EVERYTHING</text></g></svg>
+      </figure>
+    </div>
+  </section>
+
+  <div class="tick" aria-hidden="true"><div><span>Pickles on everything</span><i>★</i><span>Half or whole</span><i>★</i><span>Ask for extra garlic</span><i>★</i><span>Open till 2 AM on weekends</span><i>★</i><span>Pickles on everything</span><i>★</i><span>Half or whole</span><i>★</i><span>Ask for extra garlic</span><i>★</i><span>Open till 2 AM on weekends</span><i>★</i></div></div>
+
+  <section class="sec" id="menu">
+    <div class="wrap">
+      <div class="mhead">
+        <div class="head rv"><h2>The <em>menu</em></h2><p class="sub">Tap a price to add it to your order list. This is a sample menu.</p></div>
+        <div class="rv"><svg class="art" viewBox="0 0 320 170" role="img" aria-label="Line drawing of a sub sandwich"><path pathLength="1" d="M28 92C26 56 84 40 160 40S294 56 292 92"/><path pathLength="1" d="M30 97q12-10 24 0t24 0 24 0 24 0 24 0 24 0 24 0 24 0 24 0 24 0 24 0"/><path pathLength="1" d="M34 108H286M50 108a14 9 0 0 0 28 0M120 108a14 9 0 0 0 28 0M190 108a14 9 0 0 0 28 0M250 108a14 9 0 0 0 28 0"/><path pathLength="1" d="M30 112C30 136 60 146 160 146S290 136 290 112"/><path pathLength="1" d="M90 60l8-3M130 52l8-2M175 52l8 1M220 58l8 3M110 72l7-1M200 70l7 1M160 40V14l22 6-22 6"/></svg></div>
+      </div>
+    </div>
+    <div class="tabs" id="tabs" role="tablist" aria-label="Menu sections"><div class="in"></div></div>
+    <div class="wrap">
+      <div class="crave" id="crave" aria-label="Filter by craving"><b>What are you craving?</b></div>
+      <p class="found" id="found" role="status"></p>
+      <div id="menuBody"></div>
+      <p class="mnote">Sample menu and prices for this concept. <svg aria-hidden="true" width="12" height="12" style="color:var(--red);vertical-align:-1px"><use href="#i-chili"/></svg> marks the spicy ones.</p>
+      <div class="band rv" aria-hidden="true">
+        <svg class="art" viewBox="0 0 200 220"><path pathLength="1" d="M58 92L44 26L55 27L69 92M76 92L69.2 14L80.2 15L87 92M96 92L97.4 10L108.4 11L107 92M116 92L125.3 16L136.3 17L127 92M136 92L150.8 28L161.8 29L147 92"/><path pathLength="1" d="M40 90H160L146 206H54Z"/><path pathLength="1" d="M104 128a20 20 0 1 0 16 30a16 16 0 1 1-16-30Z"/></svg>
+        <svg class="art" viewBox="0 0 240 200"><path pathLength="1" d="M40 150C20 120 40 80 80 70L190 40C215 35 230 60 220 85L210 110C200 130 180 135 160 140L70 165C55 170 45 162 40 150Z"/><path pathLength="1" d="M190 40C215 35 232 62 220 86C205 100 185 90 180 70C176 55 180 44 190 40Z"/><path pathLength="1" d="M190 60q6-8 12 0t12 0M188 74q6 6 12 0M100 56C114 96 122 126 120 154M70 165C80 140 76 100 62 76"/></svg>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="late">
+    <div class="wrap">
+      <div class="late rv">
+        <div class="ph"><svg viewBox="0 0 400 250" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Drawing of a glowing open late neon sign and a wall clock">
+          <defs><filter id="neon" x="-20%" y="-40%" width="140%" height="180%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter><pattern id="tile" width="24" height="24" patternUnits="userSpaceOnUse"><rect width="24" height="24" fill="#2a2526"/><path d="M0 0h24v24" fill="none" stroke="#332d2e" stroke-width="2"/></pattern></defs>
+          <rect width="400" height="250" fill="url(#tile)"/>
+          <g filter="url(#neon)" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="60" y="52" width="200" height="110" rx="22" stroke="#ff5b61" stroke-width="5"/>
+            <text x="160" y="106" text-anchor="middle" font-family="Rubik,sans-serif" font-weight="800" font-size="44" stroke="#ffe2a0" stroke-width="2.5" fill="none">OPEN</text>
+            <text x="160" y="145" text-anchor="middle" font-family="Rubik,sans-serif" font-weight="800" font-size="26" letter-spacing="6" stroke="#ff5b61" stroke-width="2" fill="none">LATE</text>
+          </g>
+          <circle cx="322" cy="96" r="44" fill="#fbf1e1"/><circle cx="322" cy="96" r="44" fill="none" stroke="#e31e26" stroke-width="6"/>
+          <g stroke="#231f20" stroke-linecap="round"><path d="M322 96H294" stroke-width="4"/><path d="M322 96L338 84" stroke-width="6"/><path d="M322 62v6M356 96h-6M322 130v-6M288 96h6" stroke-width="3"/></g>
+          <circle cx="322" cy="96" r="4" fill="#e31e26"/>
+          <rect y="196" width="400" height="54" fill="#1a1617"/><path d="M0 196h400" stroke="#e31e26" stroke-width="4"/>
+          <g transform="translate(250 160)"><path d="M0 34C0 14 26 6 56 6S112 14 112 34Z" fill="#e8a24b"/><path d="M-2 38q7-7 14 0t14 0 14 0 14 0 14 0 14 0 14 0 14 0" fill="none" stroke="#1f9d55" stroke-width="6" stroke-linecap="round"/><path d="M2 44H110C110 54 96 60 56 60S2 54 2 44Z" fill="#e8a24b"/></g>
+        </svg></div>
+        <div class="tx">
+          <h2>Hungry late? <em>We're up.</em></h2>
+          <p>Open every day from 11 AM. We close at midnight Sunday to Thursday and stay open till 2 AM on Friday and Saturday. These are sample hours for the concept.</p>
+          <ul class="hours" id="hours"></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="hiring" style="padding-top:0">
+    <div class="wrap">
+      <div class="hire rv">
+        <svg aria-hidden="true"><use href="#mark"/></svg>
+        <div><h3>We're hiring (sample)</h3><p>On a real site this card posts your open shifts and takes applications. <a data-studio href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener">DM @ela.systems</a> to get yours.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="visit" style="padding-top:0">
+    <div class="wrap">
+      <div class="head rv"><h2>Come <em>find us</em></h2></div>
+      <div class="visit">
+        <div class="card rv">
+          <h3>Owlwick Subs</h3>
+          <p class="addr">A fictional shop, so there's no real address here.</p>
+          <dl><dt>Today</dt><dd id="today"></dd><dt>On a real site</dt><dd>Address, one-tap directions, click-to-call and your Instagram</dd></dl>
+          <div class="row"><a class="btn" data-studio href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-dm"/></svg>DM @ela.systems</a><a class="btn line" href="#menu"><svg aria-hidden="true"><use href="#i-menu"/></svg>Menu</a></div>
+        </div>
+        <div class="map rv"><svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Illustrated neighborhood map with a pin on the shop">
+          <rect width="400" height="300" fill="#f3e3c7"/>
+          <path d="M250 30c40-10 90 0 110 30s0 70-40 70-90-20-90-50 0-44 20-50Z" fill="#cfe3b8"/><circle cx="300" cy="78" r="8" fill="#a9cc8c"/><circle cx="322" cy="96" r="6" fill="#a9cc8c"/>
+          <path d="M0 230c60-20 120 10 190-6s140-40 210-30v106H0Z" fill="#cfe0ea"/>
+          <g fill="none" stroke="#fffaf1" stroke-linecap="round"><path d="M-10 150H410" stroke-width="22"/><path d="M150 -10V310" stroke-width="18"/><path d="M40 -10L120 310" stroke-width="10"/><path d="M230 150L380 -10" stroke-width="10"/><path d="M-10 60H150M150 220H410" stroke-width="10"/></g>
+          <path d="M-10 150H410M150 -10V310" fill="none" stroke="#e6cfa5" stroke-width="1.5" stroke-dasharray="8 8"/>
+          <g fill="#e6cfa5"><rect x="170" y="70" width="40" height="30" rx="3"/><rect x="220" y="170" width="50" height="36" rx="3"/><rect x="40" y="170" width="44" height="30" rx="3"/><rect x="300" y="170" width="40" height="30" rx="3"/><rect x="66" y="90" width="50" height="34" rx="3"/></g>
+          <g font-family="Rubik,sans-serif" font-size="11" font-weight="600" fill="#8a7a6a"><text x="250" y="144">Main St</text><text x="156" y="40" transform="rotate(90 156 40)">Oak Ave</text></g>
+          <g transform="translate(150 150)"><path d="M0 0c-10-14-22-24-22-38a22 22 0 0 1 44 0c0 14-12 24-22 38Z" fill="#e31e26" stroke="#fff" stroke-width="3"/><circle cy="-38" r="12" fill="#fbf1e1"/><circle cx="3" cy="-41" r="9" fill="#e31e26"/></g>
+          <text x="384" y="288" text-anchor="end" font-family="Rubik,sans-serif" font-size="11" font-weight="600" fill="#8a7a6a">Illustration only</text>
+        </svg></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="close" id="closer">
+    <div class="wrap">
+      <svg class="sm rv" viewBox="0 0 200 200" role="img" aria-label="Sticker that says still up? so are we"><path d="M196.0,100.0 L180.8,114.2 L190.2,132.8 L171.0,141.0 L173.5,161.7 L152.7,162.8 L148.0,183.1 L128.0,177.1 L116.7,194.5 L100.0,182.0 L83.3,194.5 L72.0,177.1 L52.0,183.1 L47.3,162.8 L26.5,161.7 L29.0,141.0 L9.8,132.8 L19.2,114.2 L4.0,100.0 L19.2,85.8 L9.8,67.2 L29.0,59.0 L26.5,38.3 L47.3,37.2 L52.0,16.9 L72.0,22.9 L83.3,5.5 L100.0,18.0 L116.7,5.5 L128.0,22.9 L148.0,16.9 L152.7,37.2 L173.5,38.3 L171.0,59.0 L190.2,67.2 L180.8,85.8Z" fill="#e31e26" stroke="#231f20" stroke-width="5" stroke-linejoin="round"/><g font-family="Rubik,sans-serif" font-weight="900" fill="#fff" text-anchor="middle" transform="rotate(6 100 100)"><text x="100" y="92" font-size="30">STILL UP?</text><text x="100" y="126" font-size="25" fill="#ffe2a0">SO ARE WE</text></g></svg>
+      <h2>Want a site like <em>this one?</em></h2>
+      <p>Owlwick is made up. We build sites like this for real sub shops, with your menu, your hours and an order list your customers can actually use.</p>
+      <div class="row"><a class="btn" data-studio href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-dm"/></svg>DM @ela.systems</a><a class="btn line" href="#menu"><svg aria-hidden="true"><use href="#i-menu"/></svg>Menu</a></div>
+    </div>
+  </section>
+  <div class="check" aria-hidden="true"></div>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <p>Owlwick Subs is a fictional business. Concept site by ElaSystems; sample content only.</p>
+    <p><a data-studio href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener">Site by <b>ElaSystems</b> · @ela.systems</a> · © <span id="yr"></span></p>
+  </div>
+</footer>
+
+<div class="dock" id="dock"><a class="btn" data-studio href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-dm"/></svg>DM @ela.systems</a><a class="btn line" href="#menu"><svg aria-hidden="true"><use href="#i-menu"/></svg>Menu</a><a class="btn line" href="#late"><svg aria-hidden="true"><use href="#i-clock"/></svg>Hours</a></div>
+<button class="obar" id="obar" type="button" aria-haspopup="dialog" aria-controls="sheet"><span class="cnt" id="ocnt">0</span><span class="sum"><span id="osum">$0.00</span><small>Your order list</small></span><span class="go">View list</span></button>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetT">
+  <div class="bg" data-close></div>
+  <div class="panel">
+    <div class="top"><h3 id="sheetT">Your order list</h3><button class="x" type="button" data-close aria-label="Close">×</button></div>
+    <ul class="ol" id="olist"></ul>
+    <div class="tot"><span>Total</span><span id="otot">$0.00</span></div>
+    <p class="tnote">Sample prices before tax. On a real site this list goes to the shop by call, text or online order.</p>
+    <div class="row"><a class="btn" data-studio href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-dm"/></svg>Want a site like this? DM @ela.systems</a><button class="btn line" type="button" id="ocopy"><svg aria-hidden="true"><use href="#i-copy"/></svg>Copy list</button><button class="btn line" type="button" data-close><svg aria-hidden="true"><use href="#i-menu"/></svg>Keep adding</button></div>
+    <span class="toast" id="otoast" role="status"></span>
+    <button class="clear" type="button" id="oclear">Clear the list</button>
+  </div>
+</div>
+
+<script>
+/* SAMPLE menu for Owlwick Subs, a fictional shop. Every name and price below is made up for the concept. Sizes: [label, price]. */
+const H = (a, b) => [['Half', a], ['Whole', b]], SL = (a, b) => [['Small', a], ['Large', b]], ONE = p => [['', p]];
+const CONFIG = {
+  name: 'Owlwick Subs',
+  /* sample hours: [weekday, name, opens, closes] in 24h; past midnight counts up (26 = 2 AM) */
+  hours: [[0, 'Sunday', 11, 24], [1, 'Monday', 11, 24], [2, 'Tuesday', 11, 24], [3, 'Wednesday', 11, 24], [4, 'Thursday', 11, 24], [5, 'Friday', 11, 26], [6, 'Saturday', 11, 26]],
+  menu: [
+    { id: 'subs', title: 'Subs', groups: [
+      { title: 'Grilled chicken', sizes: H(10.49, 14.29), items: [
+        ['The Owl', 'Grilled chicken, garlic sauce, pickles, lettuce, tomato'], ['Midnight Melt', 'Grilled chicken, provolone, sautéed onions, peppers, mayo'],
+        ['Garlic Bomb', 'Grilled chicken, double garlic sauce, fries, pickles'], ['Hot Pepper', 'Grilled chicken, pepper jack, jalapeños, chipotle mayo, lettuce', 1],
+        ['Avocado Ranch', 'Grilled chicken, avocado, ranch, lettuce, tomato, cheddar'], ['Lemon Herb', 'Grilled chicken, herb mayo, cucumber, tomato, red onion']] },
+      { title: 'Steak', sizes: H(11.79, 15.49), items: [
+        ['Cheesesteak', 'Shaved steak, white American, grilled onions, mushrooms'], ['Pepper Steak', 'Shaved steak, peppers, onions, provolone, steak sauce'],
+        ['BBQ Steak', 'Shaved steak, BBQ sauce, crispy onions, cheddar, pickles'], ['Steak Ranch', 'Shaved steak, ranch, lettuce, tomato, mozzarella'],
+        ['Firehouse', 'Shaved steak, hot sauce, jalapeños, pepper jack, onions', 1]] },
+      { title: 'Crispy chicken', sizes: H(10.49, 14.29), items: [
+        ['Crispy Classic', 'Crispy chicken, mayo, lettuce, pickles, tomato'], ['Buffalo Crispy', 'Crispy chicken, buffalo sauce, ranch, lettuce, cheddar', 1],
+        ['Honey Crunch', 'Crispy chicken, hot honey, slaw, pickles', 1], ['BBQ Crispy', 'Crispy chicken, BBQ sauce, cheddar, crispy onions'],
+        ['Garlic Crispy', 'Crispy chicken, garlic sauce, fries, pickles, slaw']] },
+      { title: 'Cold and veggie', items: [
+        ['Veggie Stack', 'Grilled peppers, onions, mushrooms, corn, olives, lettuce, honey mustard', 0, H(8.49, 10.99)],
+        ['Turkey Club', 'Smoked turkey, turkey bacon, lettuce, tomato, mayo, Swiss', 0, H(10.99, 14.49)],
+        ['Fry Sub', 'Seasoned fries, garlic sauce, pickles, ketchup', 0, H(7.49, 9.49)]] },
+    ] },
+    { id: 'burgers', title: 'Burgers', groups: [
+      { title: 'Smash burgers', sizes: ONE(9.79), items: [
+        ['Single Smash', 'Beef patty, American cheese, pickles, onions, house sauce'], ['Mushroom Swiss', 'Beef patty, Swiss, sautéed mushrooms, garlic mayo'],
+        ['Jalapeño Smash', 'Beef patty, pepper jack, jalapeños, chipotle mayo', 1], ['BBQ Bacon', 'Beef patty, turkey bacon, BBQ sauce, cheddar, crispy onions']] },
+      { title: 'Chicken sandwiches', sizes: ONE(10.29), items: [
+        ['Crispy Sando', 'Crispy chicken breast, pickles, mayo, brioche'], ['Nashville Sando', 'Crispy chicken breast, hot oil, slaw, pickles', 1],
+        ['Grilled Sando', 'Grilled chicken breast, lettuce, tomato, garlic mayo']] },
+    ] },
+    { id: 'bowls', title: 'Bowls', note: 'Pick rice, fries or greens as the base.', groups: [
+      { title: 'Chicken bowls', sizes: SL(9.99, 13.49), items: [
+        ['Garlic Chicken Bowl', 'Grilled chicken, garlic sauce, pickles, corn'], ['Buffalo Bowl', 'Crispy chicken, buffalo sauce, ranch, cheddar', 1],
+        ['Fiesta Bowl', 'Grilled chicken, avocado, corn, peppers, cheese, chipotle mayo']] },
+      { title: 'Steak bowls', sizes: SL(11.49, 14.99), items: [
+        ['Steak and Cheese Bowl', 'Shaved steak, white American, onions, mushrooms'], ['BBQ Steak Bowl', 'Shaved steak, BBQ sauce, crispy onions, cheddar']] },
+    ] },
+    { id: 'wraps', title: 'Wraps', groups: [
+      { title: 'Wraps', note: 'Crispy or grilled', sizes: ONE(11.99), items: [
+        ['Ranch Wrap', 'Chicken, ranch, lettuce, cheddar, potato sticks'], ['Buffalo Wrap', 'Chicken, buffalo sauce, ranch, lettuce, cheddar', 1],
+        ['Garlic Wrap', 'Chicken, garlic sauce, pickles, fries'], ['Steak Wrap', 'Shaved steak, onions, peppers, provolone, house sauce']] },
+    ] },
+    { id: 'tenders', title: 'Tenders', groups: [{ title: 'Tender boxes', items: [
+      ['3 Tenders', 'Fries, slaw and one sauce', 0, ONE(8.49)], ['5 Tenders', 'Fries, slaw and two sauces', 0, ONE(11.49)], ['10 Tenders', 'Large fries, two slaws and three sauces', 0, ONE(19.99)]] }] },
+    { id: 'wings', title: 'Wings', groups: [{ title: 'Wings', note: 'Boneless or bone-in, any sauce.', items: [
+      ['6 Wings', '', 0, ONE(8.29)], ['12 Wings', '', 0, ONE(15.49)], ['20 Wings', '', 0, ONE(24.99)]] }] },
+    { id: 'sides', title: 'Sides', groups: [{ title: 'Sides', items: [
+      ['Fries', '', 0, [['S', 3.99], ['M', 5.49], ['L', 6.99]]], ['Garlic Fries', 'Fries tossed in garlic sauce', 0, [['S', 4.99], ['M', 6.49], ['L', 7.99]]],
+      ['Mozzarella Sticks', '', 0, ONE(6.49)], ['Onion Rings', '', 0, ONE(5.49)], ['Mac Bites', 'With cheese sauce', 0, ONE(6.49)], ['Side of Pickles', '', 0, ONE(1.49)]] }] },
+    { id: 'drinks', title: 'Drinks', groups: [{ title: 'Drinks', items: [['Fountain Drink', '', 0, ONE(2.29)], ['Bottled Water', '', 0, ONE(1.49)], ['Lemonade', '', 0, ONE(3.49)]] }] },
+  ],
+  cravings: [['garlic', 'Garlic', /garlic/], ['spicy', 'Spicy', null], ['cheese', 'Cheesy', /cheese|cheddar|provolone|pepper jack|swiss|mozzarella|american|mac/], ['avocado', 'Avocado', /avocado/], ['bbq', 'BBQ', /bbq/], ['buffalo', 'Buffalo', /buffalo/], ['ranch', 'Ranch', /ranch/], ['steak', 'Steak', /steak|beef/], ['under10', 'Under $10', null]],
+};
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches, root = document.documentElement;
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const money = n => '$' + n.toFixed(2);
+const STUDIO_URL = 'https://www.instagram.com/ela.systems/';
+$$('[data-studio]').forEach(a => { a.href = STUDIO_URL; a.target = '_blank'; a.rel = 'noopener'; });
+$('#yr').textContent = new Date().getFullYear();
+
+/* ---------- open now? sample hours in the viewer's own time: 11 AM to midnight, Friday and Saturday till 2 AM */
+(() => {
+  const now = new Date(), day = now.getDay();
+  const m = now.getHours() * 60 + now.getMinutes(), H = CONFIG.hours, fmt = h => { h %= 24; return h === 0 ? 'midnight' : (h % 12 || 12) + (h < 12 ? ' AM' : ' PM'); };
+  const prev = H[(day + 6) % 7], cur = H[day];
+  let open = false, closeAt = 0;
+  if (m < (prev[3] - 24) * 60) { open = true; closeAt = (prev[3] - 24) * 60; }
+  else if (m >= cur[2] * 60) { open = true; closeAt = cur[3] * 60; }
+  const st = $('#status'), txt = $('#statusText');
+  if (open) { const left = closeAt - m; st.classList.toggle('soon', left <= 45); txt.textContent = left <= 45 ? `Closing soon · open till ${fmt(closeAt / 60)}` : `Open now · till ${fmt(closeAt / 60)}`; }
+  else { st.classList.add('closed'); txt.textContent = 'Closed now · opens at 11 AM'; }
+  $('#today').textContent = `${fmt(cur[2])} to ${fmt(cur[3])} (sample)`;
+  const wk = day >= 0 && day <= 4;
+  $('#hours').innerHTML = `<li${wk ? ' class="today"' : ''}><b>Sunday to Thursday${wk ? ' (today)' : ''}</b><span>11 AM to midnight</span></li><li${wk ? '' : ' class="today"'}><b>Friday and Saturday${wk ? '' : ' (today)'}</b><span>11 AM to 2 AM</span></li>`;
+})();
+
+/* ---------- intro: the badge builds itself, then the cream sheet lifts. Once per visit, skippable. */
+(() => {
+  const intro = $('#intro'), reveal = () => root.classList.add('ready');
+  let seen = false; try { seen = sessionStorage.getItem('owl-intro') === '1'; } catch (e) {}
+  if (RM || seen) { intro.classList.add('done'); requestAnimationFrame(reveal); return; }
+  try { sessionStorage.setItem('owl-intro', '1'); } catch (e) {}
+  let ended = false, t1;
+  const lift = () => { if (ended) return; ended = true; clearTimeout(t1); reveal(); intro.classList.add('lift'); setTimeout(() => intro.classList.add('done'), 700); };
+  const skip = () => { if (!ended) { ended = true; clearTimeout(t1); reveal(); intro.classList.add('done'); } };
+  requestAnimationFrame(() => requestAnimationFrame(() => intro.classList.add('go')));
+  t1 = setTimeout(lift, 1900);
+  ['wheel', 'touchstart', 'keydown', 'pointerdown'].forEach(ev => addEventListener(ev, skip, { once: true, passive: true }));
+})();
+
+/* hero photo eases out of a zoom as you scroll */
+const shot = $('#shot .ph>svg');
+const zoom = () => { const r = $('#shot').getBoundingClientRect(); const k = Math.min(1, Math.max(0, 1 - r.top / innerHeight)); shot.style.setProperty('--z', (1.1 - .1 * k).toFixed(3)); };
+if (!RM) { addEventListener('scroll', () => requestAnimationFrame(zoom), { passive: true }); zoom(); }
+
+/* ---------- menu + order list */
+const ORDER = new Map(); // key -> {name, size, price, qty}
+(() => {
+  const SHOW = 4, body = $('#menuBody'), tabs = $('#tabs .in');
+  let uid = 0;
+  body.innerHTML = CONFIG.menu.map(s => `<section class="sect" id="s-${s.id}" role="tabpanel" aria-label="${esc(s.title)}"><h3>${esc(s.title)}</h3>${s.note ? `<p class="gn">${esc(s.note)}</p>` : ''}<div class="grps">${s.groups.map(g => {
+    const shared = g.sizes ? g.sizes.map(([l, p]) => (l ? l + ' ' : '') + money(p)).join(' · ') : '';
+    return `<div class="grp"><div class="gh"><h4>${esc(g.title)}</h4><span>${esc(shared)}</span></div>${g.note ? `<p class="gn">${esc(g.note)}</p>` : ''}<ul class="items">${g.items.map(([n, d, hot, sz], i) => {
+      const sizes = sz || g.sizes, label = s.id === 'subs' && g.title !== 'Other subs' ? `${n} (${g.title.toLowerCase()})` : s.id === 'bowls' ? `${n} bowl (${g.title.toLowerCase()})` : n;
+      const key = 'm' + (uid++), tags = (n + ' ' + (d || '') + ' ' + g.title).toLowerCase();
+      return `<li class="item${i >= SHOW ? ' more' : ''}" data-k="${esc(tags)}" data-hot="${hot ? 1 : 0}" data-min="${Math.min(...sizes.map(x => x[1]))}"><div><div class="nm">${esc(n)}${hot ? '<svg aria-label="spicy"><use href="#i-chili"/></svg>' : ''}</div>${d ? `<p>${esc(d)}</p>` : ''}</div><div class="px">${sizes.map(([l, p]) => `<button type="button" data-key="${key}-${esc(l || 'one')}" data-name="${esc(label)}" data-size="${esc(l)}" data-price="${p}" aria-label="Add ${esc(label)}${l ? ', ' + esc(l) : ''}, ${money(p)}">${l ? `<small>${esc(l)}</small>` : ''}${money(p)}<i aria-hidden="true">+</i></button>`).join('')}</div></li>`;
+    }).join('')}</ul>${g.items.length > SHOW ? `<button class="btn line showall" type="button">Show all ${g.items.length}</button>` : ''}</div>`;
+  }).join('')}</div></section>`).join('');
+  tabs.innerHTML = CONFIG.menu.map(s => `<button role="tab" data-id="${s.id}" aria-controls="s-${s.id}">${esc(s.title)}</button>`).join('');
+  const menu = $('#menu');
+  function setTab(id, scroll) {
+    $$('.sect').forEach(x => x.classList.toggle('on', x.id === 's-' + id));
+    tabs.querySelectorAll('button').forEach(b => { const on = b.dataset.id === id; b.classList.toggle('on', on); b.setAttribute('aria-selected', on); });
+    const on = tabs.querySelector('.on'); on && tabs.scrollTo({ left: on.offsetLeft - 18, behavior: RM ? 'auto' : 'smooth' });
+    if (scroll) { const top = $('#tabs').getBoundingClientRect().top; if (top < 0 || top > innerHeight * .5) $('#crave').scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'start' }); }
+  }
+  setTab('subs');
+  tabs.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; clearCrave(); setTab(b.dataset.id, true); });
+  body.addEventListener('click', e => {
+    const sa = e.target.closest('.showall'); if (sa) { sa.closest('.grp').classList.add('open'); return; }
+    const b = e.target.closest('.px button'); if (!b) return;
+    const k = b.dataset.key, o = ORDER.get(k) || { name: b.dataset.name, size: b.dataset.size, price: +b.dataset.price, qty: 0 };
+    o.qty++; ORDER.set(k, o); b.classList.add('got'); renderOrder(true);
+  });
+  /* cravings: filter across the whole menu */
+  const crave = $('#crave'), found = $('#found');
+  crave.insertAdjacentHTML('beforeend', CONFIG.cravings.map(([id, l]) => `<button type="button" data-c="${id}" aria-pressed="false">${l}</button>`).join(''));
+  const picked = new Set();
+  function apply() {
+    menu.classList.toggle('filtering', picked.size > 0); let n = 0;
+    $$('.sect').forEach(s => {
+      let any = 0;
+      s.querySelectorAll('.item').forEach(it => {
+        const hit = [...picked].every(c => { const cv = CONFIG.cravings.find(x => x[0] === c); return c === 'spicy' ? it.dataset.hot === '1' : c === 'under10' ? +it.dataset.min < 10 : cv[2].test(it.dataset.k); });
+        it.hidden = picked.size > 0 && !hit; if (picked.size && hit) { any++; n++; }
+      });
+      s.querySelectorAll('.grp').forEach(g => g.hidden = picked.size > 0 && !g.querySelector('.item:not([hidden])'));
+      s.classList.toggle('hit', any > 0);
+    });
+    found.innerHTML = picked.size ? `${n} match${n === 1 ? '' : 'es'} across the menu · <button type="button" id="cclear">Clear</button>` : '';
+  }
+  function clearCrave() { picked.clear(); crave.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', 'false')); apply(); }
+  crave.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; const c = b.dataset.c; picked.has(c) ? picked.delete(c) : picked.add(c); b.setAttribute('aria-pressed', picked.has(c)); apply(); });
+  found.addEventListener('click', e => { if (e.target.id === 'cclear') clearCrave(); });
+})();
+
+/* order bar + sheet */
+const obar = $('#obar'), sheet = $('#sheet'), olist = $('#olist');
+function totals() { let n = 0, t = 0; ORDER.forEach(o => { n += o.qty; t += o.qty * o.price; }); return [n, t]; }
+function listText() { const [, t] = totals(); return `Owlwick order (sample):\n${[...ORDER.values()].map(o => `${o.qty} x ${o.name}${o.size ? ', ' + o.size.toLowerCase() : ''}`).join('\n')}\nMenu total: ${money(t)}`; }
+function renderOrder(bump) {
+  const [n, t] = totals();
+  $('#ocnt').textContent = n; $('#osum').textContent = money(t); $('#otot').textContent = money(t);
+  obar.classList.toggle('on', n > 0); syncDock();
+  if (bump && !RM) { obar.classList.remove('bump'); void obar.offsetWidth; obar.classList.add('bump'); }
+  olist.innerHTML = [...ORDER.entries()].map(([k, o]) => `<li><div><b>${esc(o.name)}</b><small>${o.size ? esc(o.size) + ' · ' : ''}${money(o.price)} each</small></div><div class="qty"><button type="button" data-k="${k}" data-d="-1" aria-label="One less ${esc(o.name)}">−</button><span>${o.qty}</span><button type="button" data-k="${k}" data-d="1" aria-label="One more ${esc(o.name)}">+</button></div><span class="lp">${money(o.qty * o.price)}</span></li>`).join('');
+  $$('.px button').forEach(b => b.classList.toggle('got', ORDER.has(b.dataset.key)));
+  if (!n && sheet.classList.contains('open')) closeSheet();
+}
+olist.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; const o = ORDER.get(b.dataset.k); o.qty += +b.dataset.d; if (o.qty <= 0) ORDER.delete(b.dataset.k); renderOrder(); });
+let lastFocus = null;
+function openSheet() { lastFocus = document.activeElement; sheet.classList.add('open'); requestAnimationFrame(() => sheet.classList.add('show')); setTimeout(() => sheet.querySelector('.x').focus(), 50); }
+function closeSheet() { sheet.classList.remove('show'); setTimeout(() => sheet.classList.remove('open'), 300); lastFocus && lastFocus.focus && lastFocus.focus(); }
+obar.addEventListener('click', openSheet);
+sheet.addEventListener('click', e => { if (e.target.closest('[data-close]')) closeSheet(); });
+addEventListener('keydown', e => { if (e.key === 'Escape' && sheet.classList.contains('open')) closeSheet(); });
+$('#oclear').addEventListener('click', () => { ORDER.clear(); renderOrder(); });
+$('#ocopy').addEventListener('click', async () => { let ok = false; try { await navigator.clipboard.writeText(listText()); ok = true; } catch (e) {} $('#otoast').textContent = ok ? 'Copied. Paste it anywhere you like.' : 'Copy did not work here, read it off the list above.'; setTimeout(() => $('#otoast').textContent = '', 2600); });
+
+/* line art draws itself in when it reaches the screen */
+if (!RM) { const aio = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('on'); aio.unobserve(e.target); } }), { threshold: .4 }); $$('.art').forEach(a => { a.classList.add('draw'); aio.observe(a); }); }
+
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -10% 0px' });
+$$('.rv').forEach(el => io.observe(el));
+/* phone dock: hidden near the top, at the closing card, and whenever the order bar is showing */
+const dock = $('#dock'); let atClose = false;
+function syncDock() { dock.classList.toggle('on', scrollY > 420 && !atClose && !obar.classList.contains('on')); }
+new IntersectionObserver(es => { atClose = es[0].isIntersecting; syncDock(); }).observe($('#closer'));
+addEventListener('scroll', syncDock, { passive: true });
+</script>
+
+</script>
+<script>if (matchMedia('(max-width: 759px)').matches) document.querySelector('footer .wrap').appendChild(document.querySelector('.elab'));</script>
+</body>
+</html>
