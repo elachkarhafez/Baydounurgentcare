@@ -1,0 +1,708 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noai, noimageai">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bellcourt Booth Co. | Photo booth rentals (concept)</title>
+<meta name="description" content="Bellcourt Booth Co. is a fictional photo booth rental. A concept site by ElaSystems: a path-traced booth you can shoot with, a 3-2-1 countdown, prints that drop out, and a live print designer.">
+<meta property="og:title" content="Bellcourt Booth Co. | Concept site by ElaSystems">
+<meta property="og:description" content="A concept site for a photo booth rental business. Built by ElaSystems.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#f4eee4">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='3' y='3' width='26' height='26' rx='8' fill='%2326405a'/%3E%3Ccircle cx='16' cy='16' r='7.5' fill='none' stroke='%23f4eee4' stroke-width='2.5'/%3E%3Ccircle cx='16' cy='16' r='3' fill='%23d8b56f'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600&family=Gilda+Display&family=Josefin+Sans:wght@600&family=Ms+Madi&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="media/booth.webp" media="(min-width: 761px)">
+<link rel="preload" as="image" href="media/booth-sm.webp" media="(max-width: 760px)">
+<style>
+/* Bellcourt Booth Co. (fictional concept by ElaSystems). Visual language: light studio backdrop, the booth on cream
+   seamless paper, ink blue + brown, gold accents, handwritten notes. Motion: soft and quick, a camera's rhythm.
+   Every photo on this page is drawn in code (canvas); the booth is our own Cycles render. */
+:root{
+  --paper:#f4eee4; --paper2:#ebe2d3; --ink:#3a1c10; --ink2:#6e5446; --wine:#26405a; --wine2:#182b3e; --gold:#a8854a; --line:rgba(58,28,16,.14);
+  --serif:'Gilda Display', Georgia, serif; --sans:'Albert Sans', system-ui, sans-serif; --script:'Ms Madi', cursive; --mark:'Josefin Sans', sans-serif;
+  --pad:clamp(16px,4vw,48px); --max:1180px; --sec:clamp(40px,7vw,80px);
+}
+*{box-sizing:border-box;margin:0}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;overflow-x:clip;background:var(--paper)}
+body{background:var(--paper);color:var(--ink);font:400 clamp(.94rem,.9rem + .2vw,1.03rem)/1.6 var(--sans);overflow-x:clip}
+img{display:block;max-width:100%}
+a{color:inherit}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--wine);outline-offset:3px;border-radius:4px}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 var(--pad)}
+h1,h2,h3{font-family:var(--serif);font-weight:400;line-height:1.08;letter-spacing:-.01em}
+h2{font-size:clamp(1.55rem,1.2rem + 1.4vw,2.4rem)}
+.script{font-family:var(--script);font-size:clamp(1.5rem,1.2rem + .9vw,2rem);line-height:1;color:var(--wine)}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:13px 22px;border-radius:999px;background:var(--wine);color:#fbf5ec;text-decoration:none;font:600 clamp(.88rem,.85rem + .15vw,.98rem)/1 var(--sans);letter-spacing:.01em;border:1px solid var(--wine);transition:background .2s,transform .2s}
+.btn:hover{background:var(--wine2)}
+.btn.line{background:transparent;color:var(--ink);border-color:rgba(58,28,16,.35)}
+.btn.line:hover{background:rgba(58,28,16,.06)}
+
+/* ---------- header */
+.top{position:sticky;top:0;z-index:30;background:rgba(244,238,228,.86);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid transparent;transition:border-color .3s}
+.top.lined{border-bottom-color:var(--line)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;gap:20px}
+.logo{text-decoration:none;display:flex;align-items:center;gap:10px;line-height:1}.logo svg{width:32px;height:32px;flex:none}.logo>span{display:flex;flex-direction:column}
+.logo b{font:600 1.08rem/1 var(--mark);letter-spacing:.2em}
+.logo small{font:500 .56rem/1 var(--sans);letter-spacing:.24em;text-transform:uppercase;margin-top:5px;color:var(--ink2)}
+.top nav{display:flex;gap:26px;font-size:.92rem}
+.top nav a{text-decoration:none;color:var(--ink2)}
+.top nav a:hover{color:var(--ink)}
+.top .btn{padding:10px 18px}
+
+/* ---------- hero: the booth on seamless paper */
+.hero{position:relative;overflow:clip;background:
+  radial-gradient(60% 40% at 50% 96%, rgba(58,28,16,.07), transparent 70%),
+  linear-gradient(180deg,var(--paper) 0%, #f1e9dc 70%, var(--paper2) 100%)}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:clamp(16px,3vw,44px);padding-top:clamp(10px,2vh,24px);padding-bottom:clamp(14px,2.5vh,28px)}
+.copy{align-self:center;max-width:440px}
+.copy .script{margin-bottom:10px}
+.copy h1{font-size:clamp(1.95rem,1.4rem + 2vw,3.3rem)}
+.copy p.lede{margin-top:16px;color:var(--ink2);max-width:40ch}
+.ctas{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.facts{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:22px;font-size:.84rem;color:var(--ink2)}
+.facts span::before{content:"";display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--gold);margin-right:8px;vertical-align:middle}
+
+.stage{position:relative;z-index:2;height:clamp(440px,calc(100svh - 128px),640px);aspect-ratio:var(--ar,.24);transform-origin:var(--zx,50%) var(--zy,40%);transition:transform .75s cubic-bezier(.3,.1,.2,1)}
+.stage.zoom{transform:scale(var(--z,2.2));z-index:7}
+.stage.zoom .shutter,.stage.zoom .note{opacity:0}
+.stage>img{position:relative;z-index:2;height:100%;width:auto;pointer-events:none;user-select:none}
+.glow{position:absolute;z-index:1;border-radius:50%;pointer-events:none;background:radial-gradient(closest-side,rgba(255,226,182,.75),rgba(255,214,160,.28) 55%,transparent);opacity:.55;transform:translate(-50%,-50%) scale(1);transition:opacity .25s,transform .25s}
+.glow.hot{opacity:1;transform:translate(-50%,-50%) scale(1.25)}
+.screen{position:absolute;left:0;top:0;width:220px;height:310px;transform-origin:0 0;z-index:3;border:0;padding:0;background:#f3ece1;border-radius:5px;overflow:hidden;color:var(--ink);text-align:center}
+.screen:focus-visible{outline:3px solid var(--wine);outline-offset:2px}
+.screen>div{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:18px;opacity:0;transition:opacity .22s}
+.screen[data-s="idle"] .s-idle,.screen[data-s="ready"] .s-ready,.screen[data-s="count"] .s-count,.screen[data-s="shot"] .s-shot,.screen[data-s="print"] .s-print,.screen[data-s="thanks"] .s-thanks{opacity:1}
+.s-mark{font:600 21px/1 var(--mark);letter-spacing:.2em;margin-left:.2em}.s-logo{width:46px;height:46px;color:var(--wine)}
+.s-mark+small{font:500 7.5px/1 var(--sans);letter-spacing:.24em;text-transform:uppercase;color:var(--ink2);margin-top:-4px}
+.s-idle .tap{margin-top:30px;font:600 22px/1.2 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--wine);animation:pulse 1.6s ease-in-out infinite}
+.s-idle .tap i{display:block;width:78px;height:78px;margin:0 auto 12px;border-radius:50%;border:4px solid var(--wine);position:relative}
+.s-idle .tap i::after{content:"";position:absolute;inset:10px;border-radius:50%;background:var(--wine)}
+@keyframes pulse{50%{opacity:.45}}
+.s-ready b{font:400 52px/1.1 var(--serif);color:var(--wine)}
+.s-count b{font:400 190px/1 var(--serif);color:var(--wine)}
+.s-shot{padding:0!important;background:#fff}
+.s-shot img{width:100%;height:100%;object-fit:cover}
+.s-print b{font:400 22px/1.15 var(--serif)}
+.s-print .bar{width:120px;height:4px;border-radius:2px;background:rgba(58,28,16,.14);overflow:hidden}
+.s-print .bar i{display:block;height:100%;width:0;background:var(--wine)}
+.screen[data-s="print"] .bar i{animation:fill 1.3s linear forwards}
+@keyframes fill{to{width:100%}}
+.s-thanks p{font:600 12px/1.45 var(--sans);letter-spacing:.12em;text-transform:uppercase}
+.s-thanks .heart{width:18px;height:16px;color:var(--wine)}
+.s-thanks small{font:600 11px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase}
+
+.note{position:absolute;z-index:4;font:400 clamp(1.4rem,1.1rem + .6vw,1.75rem)/1 var(--script);color:var(--ink);white-space:nowrap;pointer-events:none}
+.note svg{position:absolute;width:56px;height:46px;fill:none;stroke:var(--ink);stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
+.n-ring{left:100%;top:6%;margin-left:-18px}.n-ring svg{left:-46px;top:22px;transform:scaleX(-1) rotate(-10deg)}
+.n-cam{right:100%;top:26%;margin-right:-6px}.n-cam svg{right:-48px;top:18px}
+
+.shutter{position:absolute;left:50%;bottom:4%;z-index:5;transform:translateX(-50%) translateX(var(--sx,0px));display:flex;align-items:center;gap:10px;padding:8px 16px 8px 8px;border-radius:999px;border:1px solid rgba(58,28,16,.2);background:rgba(251,247,240,.92);font:600 .86rem/1 var(--sans);box-shadow:0 6px 20px rgba(58,28,16,.1);white-space:nowrap}
+.shutter i{width:30px;height:30px;border-radius:50%;border:2px solid var(--wine);position:relative;flex:none}
+.shutter i::after{content:"";position:absolute;inset:4px;border-radius:50%;background:var(--wine);transition:transform .15s}
+.shutter:active i::after{transform:scale(.8)}
+.shutter[disabled]{opacity:.55;cursor:default}
+
+.tray-col{position:relative;align-self:stretch;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:14px}
+.tray{position:relative;width:min(100%,320px);aspect-ratio:3/2.5}
+.print{position:absolute;left:50%;top:50%;width:84%;aspect-ratio:3/2;margin:0;background:#fff;padding:2.2%;box-shadow:0 1px 1px rgba(58,28,16,.12),0 10px 24px rgba(58,28,16,.16);transform:translate(-50%,-50%) translate(var(--x,0px),var(--y,0px)) rotate(var(--r,0deg))}
+.print img{width:100%;height:100%;object-fit:cover}
+.tray-cap{text-align:center;min-height:3.4em}
+.tray-cap .script{display:block;font-size:clamp(1.5rem,1.3rem + .6vw,1.9rem)}
+.tray-cap small{font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2)}
+.n-tray{position:absolute;top:2%;right:4%;transform:rotate(-4deg)}
+.fly{position:absolute;z-index:1;margin:0;pointer-events:none}
+.flash{position:fixed;inset:0;z-index:60;background:#fffaf2;opacity:0;pointer-events:none}
+
+/* ---------- the booth: what comes with it */
+.sec{padding:var(--sec) 0}
+.what .wrap{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(28px,5vw,72px);align-items:center}
+.strip-hold{position:relative;justify-self:center;padding-top:34px}
+.strip-hold img{width:clamp(150px,18vw,210px);height:auto;box-shadow:0 18px 40px rgba(58,28,16,.22);transform:rotate(-2.5deg)}
+.clip{position:absolute;top:0;left:50%;width:62px;height:52px;transform:translateX(-50%) rotate(-2.5deg);z-index:2}
+.strip-hold figcaption{margin-top:16px;text-align:center;font-size:.8rem;color:var(--ink2)}
+.what h2{max-width:18ch}
+.what .intro{margin-top:14px;color:var(--ink2);max-width:52ch}
+.kit{list-style:none;padding:0;margin-top:28px;display:grid;grid-template-columns:1fr 1fr;gap:22px 32px}
+.kit li{border-top:1px solid var(--line);padding-top:14px}
+.kit b{display:block;font:400 1.22rem/1.2 var(--serif)}
+.kit span{display:block;margin-top:4px;font-size:.92rem;color:var(--ink2)}
+
+/* ---------- the print designer */
+.design{background:#efe6d8}
+.design .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(28px,5vw,64px);align-items:center}
+.design .intro{margin-top:12px;color:var(--ink2);max-width:46ch}
+.form{margin-top:24px;display:grid;gap:16px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+label.f{display:grid;gap:6px;font-size:.8rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink2)}
+.f input{font:500 1rem/1.2 var(--sans);color:var(--ink);padding:12px 14px;border-radius:10px;border:1px solid rgba(58,28,16,.22);background:#fbf7f0;width:100%;min-width:0;text-transform:none;letter-spacing:0}
+.f input:focus{outline:none;border-color:var(--wine);box-shadow:0 0 0 3px rgba(38,64,90,.16)}
+.seg{display:inline-flex;padding:4px;border-radius:999px;background:#fbf7f0;border:1px solid rgba(58,28,16,.18)}
+.seg button{border:0;background:none;padding:9px 16px;border-radius:999px;font-weight:600;font-size:.88rem}
+.seg button[aria-pressed="true"]{background:var(--ink);color:#fbf5ec}
+.opts{display:flex;flex-wrap:wrap;align-items:center;gap:14px 24px}
+.sw{display:flex;gap:10px}
+.sw button{width:34px;height:34px;border-radius:50%;border:2px solid #fbf7f0;box-shadow:0 0 0 1px rgba(58,28,16,.25);background:var(--c)}
+.sw button[aria-pressed="true"]{box-shadow:0 0 0 2px var(--ink)}
+.design .ctas{margin-top:6px}
+.preview{display:flex;justify-content:center;align-items:center;min-height:clamp(420px,46vw,560px)}
+/* strip 2x6 */
+.t-strip{width:clamp(160px,15vw,200px);aspect-ratio:2/6;background:var(--tb);color:var(--tf);padding:7% 7% 0;display:flex;flex-direction:column;gap:4.5%;box-shadow:0 18px 40px rgba(58,28,16,.22);transition:background .3s,color .3s}
+.t-strip img{width:100%;aspect-ratio:345/236;object-fit:cover}
+.t-strip .ft{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;padding-bottom:6%}
+.t-strip .nm{font:400 clamp(.95rem,1.15vw,1.12rem)/1.15 var(--serif);letter-spacing:.2em;text-transform:uppercase;overflow-wrap:anywhere}
+.t-strip .nm>span{display:block}
+.t-strip .nm i{font:400 1.9em/0 var(--script);letter-spacing:0;text-transform:none;vertical-align:-.22em;margin-right:.06em;font-style:normal}
+.t-strip .dt{font:400 clamp(.7rem,.8vw,.82rem)/1 var(--serif);letter-spacing:.22em}
+.t-strip .ct{font:600 clamp(.48rem,.55vw,.56rem)/1 var(--sans);letter-spacing:.26em;text-transform:uppercase;opacity:.85}
+/* 4x6 print */
+.t-print{width:min(100%,460px);aspect-ratio:3/2;background:#fff;position:relative;box-shadow:0 18px 40px rgba(58,28,16,.22);overflow:hidden}
+.t-print img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 70%}
+.t-print .hd{position:absolute;left:0;top:0;right:0;display:flex;align-items:center;gap:12px;padding:3.5% 4.5%;background:var(--tb);color:var(--tf);transition:background .3s,color .3s}
+.t-print .mono{position:relative;font:400 clamp(1.7rem,3vw,2.3rem)/1 var(--serif);width:1.5em;height:1.2em;flex:none}
+.t-print .mono span{position:absolute;left:0;top:0}
+.t-print .mono em{position:absolute;left:.5em;top:.18em;font:400 1.15em/1 var(--script);font-style:normal}
+.t-print .nm{font:400 clamp(.8rem,1.5vw,1.05rem)/1.2 var(--serif);letter-spacing:.08em;text-transform:uppercase}
+.t-print .dt{font:400 clamp(.72rem,1.2vw,.88rem)/1 var(--serif);font-style:italic;letter-spacing:.1em;margin-top:3px}
+.preview small{display:block}
+.pv{width:100%;display:flex;flex-direction:column;align-items:center;gap:14px}
+.pv>small{font-size:.78rem;color:var(--ink2);text-align:center}
+
+/* ---------- recent nights */
+.nights h2{max-width:20ch}
+.nights .intro{margin-top:10px;color:var(--ink2)}
+.wall{margin-top:30px;display:grid;grid-template-columns:1fr 1fr .72fr;gap:clamp(14px,2vw,24px)}
+.wall figure{margin:0}
+.wall .tall{grid-column:3;grid-row:1/span 2}
+.wall .tall img{height:100%;width:100%;object-fit:cover;border-radius:4px}
+.wall .p img{width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;background:#fff;padding:7px;box-shadow:0 1px 1px rgba(58,28,16,.1),0 8px 20px rgba(58,28,16,.1)}
+.wall figcaption{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-top:10px}
+.wall figcaption .script{font-size:1.55rem}
+.wall figcaption small{font-size:.76rem;letter-spacing:.12em;color:var(--ink2);white-space:nowrap}
+.wall .tall{display:flex;flex-direction:column}
+.wall .tall>div{flex:1;min-height:0}
+
+/* ---------- book */
+.book{position:relative;color:#f6eee3;background:var(--wine2) repeating-linear-gradient(90deg,rgba(255,255,255,.035) 0 14px,rgba(0,0,0,.06) 14px 28px);overflow:hidden}
+.book::before{content:"";position:absolute;inset:0;background:radial-gradient(70% 90% at 80% 40%,rgba(216,181,111,.16),transparent 70%),linear-gradient(90deg,rgba(20,34,50,.92),rgba(20,34,50,.5))}
+.book .wrap{position:relative;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(28px,5vw,64px);align-items:center}
+.book .script{color:#e9c98f}
+.book h2{margin-top:8px;max-width:16ch}
+.book p{margin-top:14px;color:rgba(246,238,227,.82);max-width:46ch}
+.mail{display:inline-block;margin-top:22px;font:400 clamp(1.25rem,1rem + 1.2vw,2rem)/1.1 var(--serif);color:#fff;text-decoration:none;border-bottom:1px solid rgba(233,201,143,.6);padding-bottom:4px;overflow-wrap:anywhere}
+.book .ctas{margin-top:24px}
+.book .btn{background:#f4eee4;color:var(--wine2);border-color:#f4eee4}
+.book .btn:hover{background:#fff}
+.book .btn.line{background:transparent;color:#f6eee3;border-color:rgba(246,238,227,.45)}
+.book figure{margin:0}
+.fan{position:relative;width:min(100%,420px);aspect-ratio:4/3;margin:0 auto}
+.fan img{position:absolute;left:50%;top:50%;width:68%;aspect-ratio:3/2;background:#fff;padding:2.4%;box-shadow:0 18px 40px rgba(0,0,0,.35);transform:translate(-50%,-50%) translate(var(--x),var(--y)) rotate(var(--r))}
+footer.foot{padding:28px 0 32px;font-size:.84rem;color:var(--ink2)}
+footer.foot .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-items:center}
+footer.foot b{font:600 1rem/1 var(--mark);letter-spacing:.2em;color:var(--ink)}
+.dock{display:none}
+.ribbon{display:block;padding:8px 16px;background:#141c25;color:#f6eee3;font:600 12.5px/1.35 var(--sans);text-align:center;text-decoration:none;position:relative;z-index:31}
+.ribbon b{color:#d8b56f}.ribbon u{text-underline-offset:3px}
+.fict{flex-basis:100%;font-size:.78rem}
+.fict a{text-underline-offset:3px}
+
+/* ---------- tablet */
+@media (max-width:1100px){
+  .n-cam{display:none}
+}
+@media (max-width:960px){
+  .top nav{display:none}
+  .hero .wrap{grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:"copy copy" "stage tray"}
+  .copy{grid-area:copy;max-width:620px}
+  .stage{grid-area:stage;justify-self:center;height:clamp(380px,56vw,560px)}
+  .tray-col{grid-area:tray}
+  .note{display:none}
+  .what .wrap,.design .wrap,.book .wrap{grid-template-columns:1fr}
+  .what .strip-hold{order:2}
+  .wall{grid-template-columns:1fr 1fr}
+  .wall .tall{grid-column:auto;grid-row:auto}
+  .wall .tall>div{aspect-ratio:3/2}
+}
+/* ---------- phones */
+@media (max-width:760px){
+  .top .wrap{height:56px}
+  .top .btn{display:none}
+  .hero .wrap{gap:8px 4px;padding-top:14px;padding-bottom:18px}
+  .copy .script{font-size:1.45rem;margin-bottom:6px}
+  .copy h1{font-size:clamp(1.9rem,8.4vw,2.3rem)}
+  .copy p.lede{margin-top:10px;font-size:.95rem}
+  .ctas{margin-top:16px}
+  .facts{display:none}
+  .stage{height:clamp(330px,92vw,420px)}
+  .shutter{bottom:1%;font-size:.8rem;padding:6px 12px 6px 6px}
+  .shutter i{width:26px;height:26px}
+  .tray{width:100%}
+  .tray-col{justify-content:center;gap:6px}
+  .tray-cap .script{font-size:1.35rem}
+  .tray-cap small{font-size:.66rem}
+  .kit{grid-template-columns:1fr 1fr;gap:16px 18px;margin-top:22px}
+  .kit b{font-size:1.05rem}
+  .kit span{font-size:.84rem}
+  .strip-hold img{width:150px}
+  .t-strip{width:170px}
+  .row2{grid-template-columns:1fr}
+  .wall{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:14px;margin:24px calc(var(--pad) * -1) 0;padding:0 var(--pad) 8px;scrollbar-width:none}
+  .wall::-webkit-scrollbar{display:none}
+  .wall figure{flex:0 0 82%;scroll-snap-align:center}
+  .wall .tall{flex-basis:62%}
+  .wall .tall>div{flex:none;aspect-ratio:auto;height:calc(82vw * .667 + 14px)}
+  .preview{min-height:auto}
+  .dock{display:flex;position:fixed;left:12px;right:12px;bottom:calc(10px + env(safe-area-inset-bottom));z-index:40;gap:8px;transform:translateY(140%);transition:transform .35s}
+  .dock.on{transform:none}
+  .dock a{flex:1;justify-content:center;box-shadow:0 10px 26px rgba(58,28,16,.25)}
+  .dock .line{background:#fbf7f0}
+  footer.foot{padding-bottom:90px}
+  .ribbon{font-size:11px;padding:6px 10px}
+  .fan{width:86%}
+  .dock .btn{white-space:nowrap;font-size:14px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+<a class="ribbon" href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener">Concept site by <b>ElaSystems</b> · Bellcourt Booth Co. is fictional · <u>Get one for your business →</u></a>
+<header class="top" id="top">
+  <div class="wrap">
+    <a class="logo" href="#main" aria-label="Bellcourt Booth Co., back to top"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="2" y="2" width="28" height="28" rx="9" fill="#26405a"/><circle cx="16" cy="16" r="8" fill="none" stroke="#f4eee4" stroke-width="2.4"/><circle cx="16" cy="16" r="3.2" fill="#d8b56f"/></svg><span><b>BELLCOURT</b><small>Booth Co.</small></span></a>
+    <nav aria-label="Sections"><a href="#booth">The booth</a><a href="#design">Your print</a><a href="#nights">Sample nights</a><a href="#book">Get a site</a></nav>
+    <a class="btn" data-studio href="https://www.instagram.com/ela.systems/">DM @ela.systems</a>
+  </div>
+</header>
+
+<main id="main">
+<section class="hero" aria-label="Bellcourt Booth Co.">
+  <div class="wrap">
+    <div class="copy">
+      <p class="script">Photo booth rentals, a concept</p>
+      <h1>A real photo booth for your party, prints included</h1>
+      <p class="lede">A DSLR camera, a ring light and prints with your names on them, handed to guests while the party's still going. Press the shutter on the booth and see for yourself.</p>
+      <div class="ctas"><a class="btn" data-studio href="https://www.instagram.com/ela.systems/">Want a site like this? DM @ela.systems</a></div>
+      <div class="facts"><span>Digital copies + prints</span><span>Custom print designs</span><span>Sample content</span></div>
+    </div>
+
+    <div class="stage" id="stage">
+      <div class="glow" id="glow" aria-hidden="true"></div>
+      <picture><source media="(max-width:760px)" srcset="media/booth-sm.webp"><img id="booth" src="media/booth.webp" alt="A photo booth: a ring light above a grey pod with a camera lens and a touch screen, on a stand with a warm light strip"></picture>
+      <button class="screen" id="screen" data-s="idle" aria-label="Take a photo with the booth">
+        <div class="s-idle"><svg class="s-logo" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="13" fill="none" stroke="currentColor" stroke-width="2.4"/><circle cx="16" cy="16" r="5" fill="#d8b56f"/></svg><span class="s-mark">BELLCOURT</span><small>Booth Co.</small><span class="tap"><i></i>Tap</span></div>
+        <div class="s-ready"><b>Smile!</b></div>
+        <div class="s-count"><b id="num">3</b></div>
+        <div class="s-shot"><img id="shot" alt=""></div>
+        <div class="s-print"><b>Printing your photo</b><span class="bar"><i></i></span></div>
+        <div class="s-thanks"><span class="s-mark">BELLCOURT</span><small>Booth Co.</small><p>Thank you for<br>celebrating with us!</p><svg class="heart" viewBox="0 0 20 18" aria-hidden="true"><path fill="currentColor" d="M10 18 1.6 9.6A5 5 0 0 1 10 2.8a5 5 0 0 1 8.4 6.8z"/></svg><small id="today"></small></div>
+      </button>
+      <p class="note n-ring" aria-hidden="true">Studio light<svg viewBox="0 0 56 46"><path d="M50 4c-6 12-20 14-24 8-3-5 5-8 7 0 2 9-10 22-26 26M7 38l7 1M7 38l3-6"/></svg></p>
+      <p class="note n-cam" aria-hidden="true">DSLR camera<svg viewBox="0 0 56 46"><path d="M4 6c2 14 14 18 20 12 4-5-4-8-6-2-2 7 10 18 30 20M48 36l-6 3M48 36l-4-5"/></svg></p>
+      <button class="shutter" id="shutter" type="button" aria-label="Take a photo"><i aria-hidden="true"></i><span>Take a photo</span></button>
+    </div>
+
+    <div class="tray-col">
+      <p class="note n-tray" aria-hidden="true" style="position:static;transform:rotate(-3deg)">Sample prints, fresh off the booth</p>
+      <div class="tray" id="tray" role="img" aria-label="A pile of sample prints drawn for this concept"></div>
+      <p class="tray-cap" aria-live="polite"><span class="script" id="capName"></span><small id="capMeta"></small></p>
+    </div>
+  </div>
+  <div class="fly-layer" id="flyLayer"></div>
+</section>
+
+<section class="sec what" id="booth" aria-labelledby="h-booth">
+  <div class="wrap">
+    <figure class="strip-hold">
+      <svg class="clip" viewBox="0 0 62 52" aria-hidden="true"><defs><linearGradient id="gd" x1="0" x2="1"><stop offset="0" stop-color="#8a6a33"/><stop offset=".45" stop-color="#e7cd8b"/><stop offset="1" stop-color="#7d5e2a"/></linearGradient></defs><rect x="6" y="26" width="50" height="20" rx="3" fill="url(#gd)"/><path d="M18 27c0-14 26-14 26 0" fill="none" stroke="url(#gd)" stroke-width="5"/><rect x="22" y="2" width="18" height="12" rx="6" fill="url(#gd)"/></svg>
+      <img id="stripImg" width="388" height="1087" alt="A green sample photo strip with three drawn photos and the names Maya and Theo in gold">
+      <figcaption>Sample strip, drawn for this concept</figcaption>
+    </figure>
+    <div>
+      <p class="script">The booth</p>
+      <h2 id="h-booth">Photos your guests will actually keep</h2>
+      <p class="intro">Phone pics get lost in the camera roll. A booth with a proper camera and a ring light makes everyone look good, then prints the photo right there with your names and date on it.</p>
+      <ul class="kit" id="kit"></ul>
+    </div>
+  </div>
+</section>
+
+<section class="sec design" id="design" aria-labelledby="h-design">
+  <div class="wrap">
+    <div>
+      <p class="script">Custom prints</p>
+      <h2 id="h-design">Put your names on it</h2>
+      <p class="intro">Every print gets designed around the event. Type your names, pick a colour and watch the print change. On a real booth site this goes straight to the owner.</p>
+      <div class="form">
+        <div class="row2">
+          <label class="f">First name<input id="n1" value="Maya" maxlength="14" autocomplete="off"></label>
+          <label class="f">Second name<input id="n2" value="Theo" maxlength="14" autocomplete="off"></label>
+        </div>
+        <div class="row2">
+          <label class="f">Date<input id="dt" type="date" value="2026-06-13"></label>
+          <label class="f">City<input id="ct" value="Your city" maxlength="22" autocomplete="off"></label>
+        </div>
+        <div class="opts">
+          <div class="seg" role="group" aria-label="Print format"><button type="button" data-fmt="strip" aria-pressed="true">2x6 strip</button><button type="button" data-fmt="print" aria-pressed="false">4x6 print</button></div>
+          <div class="sw" role="group" aria-label="Colour" id="sw"></div>
+        </div>
+        <div class="ctas"><a class="btn" data-studio href="https://www.instagram.com/ela.systems/">Want this on your site? DM @ela.systems</a></div>
+      </div>
+    </div>
+    <div class="preview"><div class="pv" id="pv"></div></div>
+  </div>
+</section>
+
+<section class="sec nights" id="nights" aria-labelledby="h-nights">
+  <div class="wrap">
+    <p class="script">Sample nights</p>
+    <h2 id="h-nights">What the prints look like</h2>
+    <p class="intro">These are drawn samples for the concept. A real booth business would show its own nights here.</p>
+    <div class="wall" id="wall"></div>
+  </div>
+</section>
+
+<section class="sec book" id="book" aria-labelledby="h-book">
+  <div class="wrap">
+    <div>
+      <p class="script">Run a booth business?</p>
+      <h2 id="h-book">Want a site like this for yours?</h2>
+      <p>Bellcourt is made up. We built it to show what a booth rental site can do. Send us your Instagram and we'll start from your own booth, prints and packages.</p>
+      <a class="mail" data-studio href="https://www.instagram.com/ela.systems/">DM @ela.systems</a>
+      <div class="ctas"><a class="btn" data-studio href="https://www.instagram.com/ela.systems/">Want a site like this? DM @ela.systems</a></div>
+    </div>
+    <figure class="fan" id="fan" role="img" aria-label="Three sample prints fanned out"></figure>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap"><b>BELLCOURT</b><span>Photo booth rentals · concept</span><a href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener">Site by ElaSystems</a><span class="fict">Bellcourt Booth Co. is a fictional business. Concept site by ElaSystems; sample content only.</span></div>
+</footer>
+<div class="dock" id="dock"><a class="btn" data-studio href="https://www.instagram.com/ela.systems/">Want a site like this? DM @ela.systems</a></div>
+<div class="flash" id="flash" aria-hidden="true"></div>
+
+<script>
+/* ================= CONFIG (all sample content: Bellcourt Booth Co. is fictional) ================= */
+const STUDIO_URL = 'https://www.instagram.com/ela.systems/';
+const CONFIG = {
+  name: 'Bellcourt Booth Co.',
+  // sample prints: every photo is drawn in code below (see scene()); names are made up
+  prints: [
+    { seed: 11, back: 0, n: 2, name: 'Maya & Theo', meta: 'Sample wedding' },
+    { seed: 23, back: 2, n: 4, name: 'Lena turns 30', meta: 'Sample birthday' },
+    { seed: 37, back: 1, n: 2, name: 'Ava & Noor', meta: 'Sample engagement' },
+    { seed: 41, back: 3, n: 3, name: 'Studio team night', meta: 'Sample work party' },
+    { seed: 59, back: 4, n: 2, name: 'Jonah & Ruth', meta: 'Sample anniversary' },
+  ],
+  kit: [
+    ['DSLR camera', 'Sharp, high quality photos, not phone camera shots.'],
+    ['Studio ring light', 'Soft, flattering light that works in any room.'],
+    ['Personalised screen', 'Your names and date on the booth all night.'],
+    ['Custom prints', 'Designed around your event and printed on the spot.'],
+    ['Digital copies', 'Every photo saved digitally too, so nothing gets lost.'],
+    ['Weddings, parties, work nights', 'One booth, set up in about an hour.'],
+  ],
+  colours: [
+    { id: 'sage', label: 'Sage and gold', bg: '#4d5a2c', fg: '#d8bb72' },
+    { id: 'navy', label: 'Ink blue and cream', bg: '#26405a', fg: '#f3e6d2' },
+    { id: 'ivory', label: 'Ivory and brown', bg: '#f3ece1', fg: '#3a1c10' },
+    { id: 'black', label: 'Black and gold', bg: '#1d1a18', fg: '#d2b06a' },
+  ],
+};
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const $ = s => document.querySelector(s);
+
+/* ---------- contact links: every call to action goes to ElaSystems */
+document.querySelectorAll('[data-studio]').forEach(a => { a.href = STUDIO_URL; a.target = '_blank'; a.rel = 'noopener'; });
+const hdr = $('#top'); addEventListener('scroll', () => hdr.classList.toggle('lined', scrollY > 8), { passive: true });
+
+/* ---------- drawn photos: flat-illustrated booth shots (backdrop, guests, props, confetti, flash falloff) */
+const SKIN = ['#f1c9a5', '#d9a27b', '#b27650', '#8a5638', '#5e3a26', '#e8b893'];
+const HAIR = ['#2a1b14', '#4a2e1e', '#16110f', '#7a4a2a', '#c99a5c', '#3b2a22'];
+const TOPS = ['#26405a', '#1d1a18', '#7d2e3a', '#f3ece1', '#4d5a2c', '#c58a4a', '#a64f5f', '#2f5d62'];
+const BACKS = [
+  { a: '#ecd9b6', b: '#b98d4e', k: 'sequin' },
+  { a: '#f3dcd6', b: '#d7a39d', k: 'balloon' },
+  { a: '#2a4560', b: '#121a24', k: 'lights' },
+  { a: '#d6dcc4', b: '#7f8f62', k: 'leaf' },
+  { a: '#f1e8da', b: '#c9b394', k: 'paper' },
+];
+const rng = seed => { let x = (seed * 9301 + 49297) % 233280 || 1; return () => (x = (x * 16807) % 2147483647) / 2147483647; };
+const pick = (r, arr) => arr[Math.floor(r() * arr.length)];
+function cast(seed, n) {
+  const r = rng(seed * 7 + 3), out = [];
+  for (let i = 0; i < n; i++) out.push({ skin: pick(r, SKIN), hair: pick(r, HAIR), top: pick(r, TOPS), style: pick(r, ['short', 'long', 'bun', 'short', 'long', 'curly']), h: .74 + r() * .12 });
+  return out;
+}
+function backdrop(c, W, H, bk, r) {
+  const g = c.createLinearGradient(0, 0, W * .3, H); g.addColorStop(0, bk.a); g.addColorStop(1, bk.b);
+  c.fillStyle = g; c.fillRect(0, 0, W, H);
+  if (bk.k === 'sequin') {
+    for (let i = 0; i < W * H / 260; i++) { c.fillStyle = `rgba(255,${235 + r() * 20 | 0},${190 + r() * 50 | 0},${r() * .5})`; c.beginPath(); c.arc(r() * W, r() * H, 1 + r() * 2.6, 0, 7); c.fill(); }
+  } else if (bk.k === 'balloon') {
+    const cols = ['#f7f1e8', '#e2b3ab', '#c98a83', '#d8b56f'];
+    for (let i = 0; i < 70; i++) {
+      const t = r() * Math.PI, rad = W * .46 + (r() - .5) * W * .1, bx = W / 2 + Math.cos(t) * rad, by = H * .95 - Math.sin(t) * H * .85, br = W * (.035 + r() * .05);
+      const bg = c.createRadialGradient(bx - br * .35, by - br * .4, br * .1, bx, by, br); bg.addColorStop(0, '#fff'); bg.addColorStop(.25, pick(r, cols)); bg.addColorStop(1, 'rgba(120,70,60,.9)');
+      c.fillStyle = bg; c.beginPath(); c.arc(bx, by, br, 0, 7); c.fill();
+    }
+  } else if (bk.k === 'lights') {
+    for (let row = 0; row < 4; row++) {
+      const y0 = H * (.08 + row * .16);
+      for (let i = 0; i <= 14; i++) {
+        const x = W * i / 14, y = y0 + Math.sin(i / 14 * Math.PI) * H * .07;
+        const gl = c.createRadialGradient(x, y, 0, x, y, W * .04); gl.addColorStop(0, 'rgba(255,224,160,.95)'); gl.addColorStop(.25, 'rgba(255,200,120,.45)'); gl.addColorStop(1, 'rgba(255,190,110,0)');
+        c.fillStyle = gl; c.beginPath(); c.arc(x, y, W * .04, 0, 7); c.fill();
+      }
+    }
+  } else if (bk.k === 'leaf') {
+    for (let i = 0; i < W * H / 900; i++) {
+      c.save(); c.translate(r() * W, r() * H); c.rotate(r() * 7); c.fillStyle = pick(r, ['#5d7046', '#6f8452', '#4a5c37', '#86996a', '#3f4f30']);
+      c.beginPath(); c.ellipse(0, 0, W * .03, W * .012, 0, 0, 7); c.fill(); c.restore();
+    }
+  } else {
+    const f = c.createLinearGradient(0, H * .7, 0, H); f.addColorStop(0, 'rgba(0,0,0,0)'); f.addColorStop(1, 'rgba(90,60,30,.18)'); c.fillStyle = f; c.fillRect(0, H * .7, W, H * .3);
+  }
+}
+function person(c, x, base, H, p, r, prop) {
+  const h = H * p.h, hr = h * .125, hy = base - h + hr, sy = hy + hr * 1.75, sw = hr * 3.9;
+  c.save(); c.translate(x, base); c.rotate((r() - .5) * .14); c.translate(-x, -base);
+  // long hair sits behind the shoulders
+  c.fillStyle = p.hair;
+  if (p.style === 'long') { c.beginPath(); c.ellipse(x, hy + hr * .9, hr * 1.18, hr * 2.05, 0, 0, 7); c.fill(); }
+  if (p.style === 'curly') for (let i = 0; i < 14; i++) { const t = i / 14 * 7; c.beginPath(); c.arc(x + Math.cos(t) * hr * 1.02, hy - hr * .1 + Math.sin(t) * hr * 1.05, hr * .42, 0, 7); c.fill(); }
+  // body
+  c.fillStyle = p.top; c.beginPath();
+  c.moveTo(x - sw / 2 - hr * .35, base + 4); c.lineTo(x - sw / 2, sy + hr * .9);
+  c.quadraticCurveTo(x - sw / 2, sy, x - sw * .18, sy - hr * .08); c.lineTo(x + sw * .18, sy - hr * .08);
+  c.quadraticCurveTo(x + sw / 2, sy, x + sw / 2, sy + hr * .9); c.lineTo(x + sw / 2 + hr * .35, base + 4); c.closePath(); c.fill();
+  const bs = c.createLinearGradient(0, sy, 0, base); bs.addColorStop(0, 'rgba(255,255,255,.1)'); bs.addColorStop(1, 'rgba(0,0,0,.22)'); c.fillStyle = bs; c.fill();
+  // neck + head
+  c.fillStyle = p.skin; c.fillRect(x - hr * .36, hy + hr * .5, hr * .72, hr * 1.25);
+  c.fillStyle = 'rgba(0,0,0,.14)'; c.fillRect(x - hr * .36, hy + hr * .85, hr * .72, hr * .3);
+  c.fillStyle = p.skin; c.beginPath(); c.ellipse(x, hy, hr * .86, hr, 0, 0, 7); c.fill();
+  const hl = c.createRadialGradient(x - hr * .3, hy - hr * .35, 0, x, hy, hr); hl.addColorStop(0, 'rgba(255,255,255,.28)'); hl.addColorStop(1, 'rgba(255,255,255,0)');
+  c.fillStyle = hl; c.beginPath(); c.ellipse(x, hy, hr * .86, hr, 0, 0, 7); c.fill();
+  // hair on top
+  c.fillStyle = p.hair; c.beginPath(); c.ellipse(x, hy - hr * .3, hr * .93, hr * .78, 0, Math.PI * .97, Math.PI * 2.03); c.fill();
+  if (p.style === 'bun') { c.beginPath(); c.arc(x, hy - hr * 1.12, hr * .42, 0, 7); c.fill(); }
+  // a happy face: closed eyes and a smile
+  c.strokeStyle = 'rgba(40,22,14,.62)'; c.lineWidth = Math.max(1.2, hr * .07); c.lineCap = 'round';
+  [-1, 1].forEach(s => { c.beginPath(); c.arc(x + s * hr * .32, hy + hr * .05, hr * .13, Math.PI * 1.1, Math.PI * 1.9); c.stroke(); });
+  c.beginPath(); c.arc(x, hy + hr * .3, hr * .28, Math.PI * .15, Math.PI * .85); c.stroke();
+  // props
+  if (prop === 'hat') { c.fillStyle = pick(r, ['#d8b56f', '#c98a83', '#26405a']); c.beginPath(); c.moveTo(x - hr * .55, hy - hr * .72); c.lineTo(x + hr * .55, hy - hr * .72); c.lineTo(x + hr * .1, hy - hr * 2.1); c.closePath(); c.fill(); c.fillStyle = '#fff'; c.beginPath(); c.arc(x + hr * .1, hy - hr * 2.1, hr * .14, 0, 7); c.fill(); }
+  if (prop === 'glasses') { c.fillStyle = '#16110f'; [-1, 1].forEach(s => { c.beginPath(); c.ellipse(x + s * hr * .34, hy + hr * .04, hr * .27, hr * .2, 0, 0, 7); c.fill(); }); c.fillRect(x - hr * .1, hy - hr * .02, hr * .2, hr * .06); }
+  if (prop === 'sign') { c.fillStyle = '#fbf7f0'; c.fillRect(x - hr * .9, sy + hr * .6, hr * 1.8, hr * 1.1); c.fillStyle = '#c0485a'; c.beginPath(); const hx = x, hy2 = sy + hr * 1.32, k = hr * .3; c.moveTo(hx, hy2); c.bezierCurveTo(hx - k * 2, hy2 - k * 1.2, hx - k * .8, hy2 - k * 2.6, hx, hy2 - k * 1.5); c.bezierCurveTo(hx + k * .8, hy2 - k * 2.6, hx + k * 2, hy2 - k * 1.2, hx, hy2); c.fill(); }
+  c.restore();
+}
+function scene({ seed, back, n, people, W = 900, H = 600 }) {
+  const cv = document.createElement('canvas'); cv.width = W; cv.height = H; const c = cv.getContext('2d'), r = rng(seed);
+  backdrop(c, W, H, BACKS[back % BACKS.length], r);
+  const crew = (people || cast(seed, n)).map((p, i) => ({ p, i })).sort((a, b) => b.p.h - a.p.h);
+  const cnt = crew.length, gap = Math.min(W * (cnt > 2 ? .2 : .26), W * .8 / cnt);
+  const sh = c.createRadialGradient(W / 2, H, 0, W / 2, H, W * .5); sh.addColorStop(0, 'rgba(0,0,0,.18)'); sh.addColorStop(1, 'rgba(0,0,0,0)'); c.fillStyle = sh; c.fillRect(0, H * .6, W, H * .4);
+  crew.forEach(({ p, i }) => person(c, W / 2 + (i - (cnt - 1) / 2) * gap + (r() - .5) * W * .03, H, Math.min(H, W * 1.15), p, r, pick(r, ['', '', 'hat', 'glasses', 'sign'])));
+  for (let i = 0; i < 60; i++) { c.save(); c.translate(r() * W, r() * H); c.rotate(r() * 7); c.fillStyle = pick(r, ['#d8b56f', '#f7f1e8', '#e2b3ab', '#c0485a', '#9fb7c9']); c.globalAlpha = .85; c.fillRect(-W * .006, -W * .003, W * .012, W * .006); c.restore(); }
+  // the flash: bright centre, gentle falloff to the corners
+  const v = c.createRadialGradient(W / 2, H * .45, Math.min(W, H) * .2, W / 2, H * .5, Math.max(W, H) * .75); v.addColorStop(0, 'rgba(255,250,240,.08)'); v.addColorStop(1, 'rgba(30,18,10,.32)');
+  c.fillStyle = v; c.fillRect(0, 0, W, H);
+  return cv.toDataURL('image/jpeg', .86);
+}
+CONFIG.prints.forEach(p => { p.src = scene(p); });
+
+/* the green sample strip in "The booth": three frames of the same pair, names and date in gold */
+const STRIP_CAST = cast(5, 2);
+const stripFrames = [61, 62, 63].map((sd, i) => scene({ seed: sd, back: [0, 4, 2][i], people: STRIP_CAST, W: 690, H: 550 }));
+function drawStrip() {
+  const W = 388, H = 1087, cv = document.createElement('canvas'); cv.width = W; cv.height = H; const c = cv.getContext('2d');
+  c.fillStyle = '#4d5a2c'; c.fillRect(0, 0, W, H);
+  let loaded = 0; const imgs = stripFrames.map(src => { const im = new Image(); im.onload = () => { if (++loaded === 3) done(); }; im.src = src; return im; });
+  function done() {
+    const pw = W - 52, ph = pw * 550 / 690;
+    imgs.forEach((im, i) => c.drawImage(im, 26, 26 + i * (ph + 18), pw, ph));
+    c.fillStyle = '#d8bb72'; c.textAlign = 'center';
+    const ty = 26 + 3 * (ph + 18) + 58;
+    c.font = '400 30px "Gilda Display", Georgia, serif'; c.fillText('MAYA & THEO', W / 2, ty);
+    c.font = '400 17px "Gilda Display", Georgia, serif'; c.fillText('0 6  /  1 3  /  2 0 2 6', W / 2, ty + 34);
+    c.font = '600 11px "Albert Sans", sans-serif'; c.fillText('S A M P L E   S T R I P', W / 2, ty + 62);
+    $('#stripImg').src = cv.toDataURL('image/jpeg', .88);
+  }
+}
+(document.fonts ? document.fonts.ready : Promise.resolve()).then(drawStrip);
+
+/* ---------- kit list + nights wall + fanned prints */
+$('#kit').innerHTML = CONFIG.kit.map(([b, s]) => `<li><b>${esc(b)}</b><span>${esc(s)}</span></li>`).join('');
+const wallPrints = CONFIG.prints.slice(1, 5);
+const tallSrc = scene({ seed: 77, back: 1, n: 2, W: 700, H: 1248 });
+$('#wall').innerHTML = wallPrints.map(p => `<figure class="p"><img src="${p.src}" width="900" height="600" alt="A drawn sample print: ${esc(p.name)}"><figcaption><span class="script">${esc(p.name)}</span><small>${esc(p.meta)}</small></figcaption></figure>`).join('')
+  + `<figure class="tall"><div><img src="${tallSrc}" width="700" height="1248" alt="A drawn sample photo of two guests in front of a balloon arch"></div><figcaption><span class="script">Balloon arch backdrop</span></figcaption></figure>`;
+$('#fan').innerHTML = [[0, '-22%', '-6%', '-8deg'], [2, '18%', '-14%', '6deg'], [4, '0%', '14%', '-2deg']].map(([i, x, y, rr]) => `<img src="${CONFIG.prints[i].src}" alt="" style="--x:${x};--y:${y};--r:${rr}">`).join('');
+
+/* ---------- the booth */
+const stage = $('#stage'), boothImg = $('#booth'), screen = $('#screen'), glow = $('#glow'), tray = $('#tray'), shutter = $('#shutter'), flash = $('#flash');
+const SW = 220, SH = 310;
+let A = null;
+function m3d(q) {
+  const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = q;
+  const sx = x0 - x1 + x2 - x3, sy = y0 - y1 + y2 - y3, dx1 = x1 - x2, dx2 = x3 - x2, dy1 = y1 - y2, dy2 = y3 - y2, den = dx1 * dy2 - dx2 * dy1;
+  const g = (sx * dy2 - dx2 * sy) / den, h = (dx1 * sy - sx * dy1) / den;
+  const a = x1 - x0 + g * x1, b = x3 - x0 + h * x3, d = y1 - y0 + g * y1, e = y3 - y0 + h * y3;
+  return `matrix3d(${a / SW},${d / SW},0,${g / SW},${b / SH},${e / SH},0,${h / SH},0,0,1,0,${x0},${y0},0,1)`;
+}
+function place() {
+  if (!A) return;
+  const w = boothImg.offsetWidth, h = boothImg.offsetHeight; if (!w) return;
+  screen.style.transform = m3d(A.screen.map(([x, y]) => [x * w, y * h]));
+  const r = Math.hypot((A.ringEdge[0] - A.ring[0]) * w, (A.ringEdge[1] - A.ring[1]) * h);
+  stage.style.setProperty('--zx', ((A.screen[0][0] + A.screen[1][0]) / 2 * w).toFixed(1) + 'px'); stage.style.setProperty('--zy', ((A.screen[0][1] + A.screen[3][1]) / 2 * h).toFixed(1) + 'px');
+  stage.style.setProperty('--z', Math.min(2.6, Math.max(1.8, innerHeight * .42 / ((A.screen[3][1] - A.screen[0][1]) * h))).toFixed(2));
+  Object.assign(glow.style, { left: A.ring[0] * w + 'px', top: A.ring[1] * h + 'px', width: r * 3.4 + 'px', height: r * 3.4 + 'px' });
+}
+fetch('media/booth.json').then(r => r.json()).then(j => { A = j; stage.style.setProperty('--ar', (j.w / j.h).toFixed(4)); place(); }).catch(() => {});
+addEventListener('resize', place); boothImg.addEventListener('load', place);
+const d = new Date(); $('#today').textContent = d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+
+/* ---------- print pile */
+let next = 0;
+const seeded = i => { const x = Math.sin(i * 91.7 + 3.1) * 43758.5453; return x - Math.floor(x); };
+function printEl(p, i) {
+  const f = document.createElement('figure'); f.className = 'print';
+  f.style.setProperty('--x', ((seeded(i) - .5) * 34).toFixed(1) + 'px');
+  f.style.setProperty('--y', ((seeded(i + 7) - .5) * 30).toFixed(1) + 'px');
+  f.style.setProperty('--r', ((seeded(i + 13) - .5) * 15).toFixed(1) + 'deg');
+  f.innerHTML = `<img src="${esc(p.src)}" alt="">`; return f;
+}
+let count = 0;
+function addToTray(p, el) {
+  el = el || printEl(p, count); count++;
+  tray.appendChild(el);
+  while (tray.children.length > 6) tray.firstElementChild.remove();
+  $('#capName').textContent = p.name; $('#capMeta').textContent = p.meta;
+}
+if (RM) { CONFIG.prints.forEach(p => addToTray(p)); next = 0; }
+else { addToTray(CONFIG.prints[0]); next = 1; }
+
+/* ---------- shoot: countdown, flash, print */
+const wait = ms => new Promise(r => setTimeout(r, ms));
+let busy = false;
+const setS = s => { screen.dataset.s = s; };
+async function shoot() {
+  if (busy) return; busy = true; shutter.disabled = true;
+  const p = CONFIG.prints[next % CONFIG.prints.length]; next++;
+  $('#shot').src = p.src;
+  if (RM) { setS('shot'); addToTray(p); await wait(900); setS('thanks'); await wait(1400); setS('idle'); busy = false; shutter.disabled = false; return; }
+  const zoom = matchMedia('(min-width: 961px)').matches;
+  if (zoom) stage.classList.add('zoom'); setS('ready'); await wait(zoom ? 900 : 600);
+  setS('count');
+  for (const n of [3, 2, 1]) { $('#num').textContent = n; glow.classList.toggle('hot', n === 1); await wait(620); }
+  flash.animate([{ opacity: 0 }, { opacity: .92, offset: .18 }, { opacity: 0 }], { duration: 520, easing: 'ease-out' });
+  glow.classList.add('hot'); setS('shot'); await wait(260); glow.classList.remove('hot');
+  await wait(900);
+  stage.classList.remove('zoom'); setS('print'); if (zoom) await wait(780);
+  await fly(p);
+  setS('thanks'); await wait(1900); setS('idle');
+  busy = false; shutter.disabled = false;
+}
+function fly(p) {
+  const layer = $('#flyLayer'), hero = stage.closest('.hero').getBoundingClientRect();
+  const sr = screen.getBoundingClientRect(), tr = tray.getBoundingClientRect();
+  const el = printEl(p, count);
+  const pw = tr.width * .84, ph = pw / 1.5;
+  el.classList.add('fly'); Object.assign(el.style, { width: pw + 'px', height: ph + 'px', left: 0, top: 0, transform: 'none' });
+  layer.appendChild(el);
+  // start: tucked behind the booth face, small; mid: fed out past the booth's right edge; end: lands on the pile
+  const sx = sr.left + sr.width / 2 - hero.left - pw / 2, sy = sr.top + sr.height * .55 - hero.top - ph / 2;
+  const br = boothImg.getBoundingClientRect();
+  const mx = br.right - hero.left - pw * .25, my = sy + ph * .25;
+  const ex = tr.left + tr.width / 2 - hero.left - pw / 2 + parseFloat(el.style.getPropertyValue('--x')), ey = tr.top + tr.height / 2 - hero.top - ph / 2 + parseFloat(el.style.getPropertyValue('--y'));
+  const rot = el.style.getPropertyValue('--r');
+  el.style.clipPath = 'inset(0 0 0 0)';
+  const a = el.animate([
+    { transform: `translate(${sx}px,${sy}px) scale(.42) rotate(0deg)`, zIndex: 1, filter: 'brightness(1.08)' },
+    { transform: `translate(${mx}px,${my}px) scale(.6) rotate(6deg)`, zIndex: 1, offset: .45 },
+    { transform: `translate(${mx + 10}px,${my - 10}px) scale(.66) rotate(4deg)`, zIndex: 6, offset: .5 },
+    { transform: `translate(${ex}px,${ey - 26}px) scale(1.04) rotate(${rot})`, zIndex: 6, offset: .88 },
+    { transform: `translate(${ex}px,${ey}px) scale(1) rotate(${rot})`, zIndex: 6, filter: 'brightness(1)' },
+  ], { duration: 1500, easing: 'cubic-bezier(.4,.1,.25,1)', fill: 'forwards' });
+  return a.finished.then(() => { el.remove(); addToTray(p); });
+}
+screen.addEventListener('click', shoot); shutter.addEventListener('click', shoot);
+// center the shutter under the pole even though the booth sits off-centre in its image
+function placeShutter() { if (A) shutter.style.setProperty('--sx', ((A.floor[0] - .5) * boothImg.offsetWidth).toFixed(1) + 'px'); }
+addEventListener('resize', placeShutter);
+// the booth demonstrates itself once when it first comes into view
+let demoed = false;
+new IntersectionObserver((es, io) => { if (es[0].isIntersecting && !demoed && !RM) { demoed = true; io.disconnect(); setTimeout(() => { placeShutter(); shoot(); }, 1100); } }, { threshold: .5 }).observe(stage);
+setTimeout(placeShutter, 400);
+
+/* ---------- print designer */
+const st = { fmt: 'strip', col: CONFIG.colours[0] };
+const sw = $('#sw');
+sw.innerHTML = CONFIG.colours.map((c, i) => `<button type="button" style="--c:${c.bg}" data-c="${i}" aria-pressed="${i === 0}" aria-label="${esc(c.label)}" title="${esc(c.label)}"></button>`).join('');
+sw.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; st.col = CONFIG.colours[+b.dataset.c]; sw.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); render(); });
+document.querySelectorAll('[data-fmt]').forEach(b => b.addEventListener('click', () => { st.fmt = b.dataset.fmt; document.querySelectorAll('[data-fmt]').forEach(x => x.setAttribute('aria-pressed', x === b)); render(); }));
+const v = id => $(id).value.trim().replace(/\s+/g, ' ');
+function fmtDate(sep, short) {
+  const raw = $('#dt').value; if (!raw) return '';
+  const [y, m, dd] = raw.split('-'); return [m, dd, short ? y.slice(2) : y].join(sep);
+}
+const DES = [71, 72, 73].map((sd, i) => scene({ seed: sd, back: [4, 0, 1][i], people: STRIP_CAST, W: 690, H: 472 }));
+function render() {
+  const a = v('#n1') || 'Name', b = v('#n2') || 'Name', c = v('#ct');
+  const pv = $('#pv'); pv.style.setProperty('--tb', st.col.bg); pv.style.setProperty('--tf', st.col.fg);
+  const cap = s => `<i>${esc(s[0])}</i>${esc(s.slice(1))}`;
+  if (st.fmt === 'strip') {
+    pv.innerHTML = `<div class="t-strip" role="img" aria-label="Preview of a 2x6 strip for ${esc(a)} and ${esc(b)}">
+      <img src="${DES[0]}" alt=""><img src="${DES[1]}" alt=""><img src="${DES[2]}" alt="">
+      <div class="ft"><span class="nm"><span>${cap(a)}</span><span style="font-size:.8em;margin:.15em 0">&amp;</span><span>${cap(b)}</span></span><span class="dt">${esc(fmtDate(' / '))}</span>${c ? `<span class="ct">${esc(c)}</span>` : ''}</div></div>
+      <small>Sample photos, drawn for this concept</small>`;
+  } else {
+    pv.innerHTML = `<div class="t-print" role="img" aria-label="Preview of a 4x6 print for ${esc(a)} and ${esc(b)}">
+      <img src="${DES[1]}" alt="">
+      <div class="hd"><span class="mono"><span>${esc(a[0])}</span><em>${esc(b[0])}</em></span><span><span class="nm">${esc(a)} &amp; ${esc(b)}</span><span class="dt" style="display:block">${esc(fmtDate('.', true))}</span></span></div></div>
+      <small>Sample photo, drawn for this concept</small>`;
+  }
+}
+['#n1', '#n2', '#dt', '#ct'].forEach(id => $(id).addEventListener('input', render));
+render();
+
+/* ---------- phone dock: shows once the hero buttons scroll away, hides at the booking section */
+const dock = $('#dock');
+const hb = document.querySelector('.hero .ctas'), bk = $('#book');
+let heroGone = false, bookIn = false;
+const sync = () => dock.classList.toggle('on', heroGone && !bookIn);
+new IntersectionObserver(es => { heroGone = !es[0].isIntersecting; sync(); }).observe(hb);
+new IntersectionObserver(es => { bookIn = es[0].isIntersecting; sync(); }).observe(bk);
+</script>
+
+<a class="studio" href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener" aria-label="Site by ElaSystems (opens in a new tab)"><i aria-hidden="true"></i><span>Site by <b>ElaSystems</b></span></a>
+<style>
+  .studio{position:fixed;right:16px;bottom:16px;z-index:50;display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;background:rgba(0,0,0,.55);backdrop-filter:blur(10px);color:#fff;font:500 12px/1 var(--sans);text-decoration:none;border:1px solid rgba(255,255,255,.14)}
+  .studio i{width:10px;height:10px;border-radius:3px;background:conic-gradient(from 210deg,#ff5a1f,#ffb03b,#ff5a1f)}
+  .eb-foot{position:static!important;display:flex!important;width:max-content;max-width:calc(100% - 32px);margin:18px auto 22px!important;transform:none!important;opacity:1!important}
+  .eb-hide{opacity:0!important;pointer-events:none!important;transform:translateY(8px)!important}
+  .eb-anim{transition:opacity .4s,transform .4s!important}
+</style>
+<script>
+(function () {
+  const place = () => {
+    const b = document.querySelector('.studio'), f = document.querySelector('footer');
+    if (!b || !f) return false;
+    if (matchMedia('(max-width: 760px)').matches) { f.appendChild(b); b.classList.add('eb-foot'); return true; }
+    b.classList.add('eb-anim');
+    const sync = () => b.classList.toggle('eb-hide', scrollY < innerHeight * .6 || scrollY + innerHeight > document.documentElement.scrollHeight - 140);
+    sync(); addEventListener('scroll', sync, { passive: true });
+    return true;
+  };
+  if (!place()) addEventListener('load', place);
+})();
+</script>
+</body>
+</html>
