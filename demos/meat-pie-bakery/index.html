@@ -1,0 +1,688 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noai, noimageai">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fennoura Bakehouse | Manakeesh + meat pie bakery (concept)</title>
+<meta name="description" content="Fennoura Bakehouse is a fictional manakeesh and meat pie bakery. A concept site by ElaSystems: an oven-door intro, a live weekly special countdown with a calendar reminder, a whole wheat dough toggle and a sample menu.">
+<meta property="og:title" content="Fennoura Bakehouse | Concept site by ElaSystems">
+<meta property="og:description" content="A concept site for a manakeesh and meat pie bakery. Built by ElaSystems.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#121010">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Ccircle cx='100' cy='100' r='96' fill='%23121010'/%3E%3Cpath fill='%23cf9058' fill-rule='evenodd' d='M60 140V104a40 40 0 0 1 80 0v36ZM80 140v-30a20 20 0 0 1 40 0v30Z'/%3E%3Cpath fill='%23ea6a2a' d='M100 138c-12 0-14-10-8-18 2 6 5 6 6 2 1-6 4-10 8-12-2 8 8 12 4 22-2 4-5 6-10 6Z'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* Fennoura Bakehouse (fictional concept by ElaSystems) · MOBILE FIRST (base = 390px phone; min-width queries add the desktop).
+   The oven-arch mark lights up like it sits in front of the oven: ring draws, the arch warms up in the firelight,
+   the letters pop in, embers rise, then the screen swings open toward you like an oven door. Signature: a live
+   weekly special countdown (sample: Sunday roast lamb) with a weekly calendar reminder. All food is drawn in SVG. */
+:root{
+  --char:#121010; --char2:#1b1716; --card:#211c1a; --cream:#f3e7d6; --muted:#b3a492; --line:rgba(243,231,214,.12);
+  --cu:#cf9058; --cu2:#a8693a; --fire:#ea6a2a;
+  --f:'Archivo', system-ui, -apple-system, sans-serif;
+  --pad:18px; --sec:36px; --r:18px; --nav:56px;
+  --ease:cubic-bezier(.22,.61,.36,1); --out:cubic-bezier(.16,1,.3,1);
+  --net:repeating-linear-gradient(45deg,transparent 0 13px,rgba(207,144,88,.06) 13px 14px),repeating-linear-gradient(-45deg,transparent 0 13px,rgba(207,144,88,.06) 13px 14px);
+}
+*{box-sizing:border-box;margin:0}
+html{-webkit-text-size-adjust:100%;overflow-x:clip;background:var(--char);scroll-padding-top:calc(var(--nav) + 12px)}
+body{background:var(--char);color:var(--cream);font:400 .9375rem/1.6 var(--f);overflow-x:clip;-webkit-font-smoothing:antialiased}
+svg{display:block}
+a{color:inherit}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--cu);outline-offset:3px;border-radius:8px}
+.wrap{max-width:1140px;margin:0 auto;padding:0 var(--pad)}
+h1,h2,h3{font-weight:800;letter-spacing:-.015em;line-height:1.08}
+h1 em,h2 em{font-style:normal;color:var(--cu)}
+h2{font-size:1.5rem}
+.sub{color:var(--muted);font-size:.9375rem}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 18px;border-radius:999px;background:var(--cu);color:#1a0f07;text-decoration:none;font:800 .875rem/1 var(--f);border:1.5px solid var(--cu);white-space:nowrap;transition:transform .15s}
+.btn:active{transform:scale(.97)}
+.btn.line{background:transparent;color:var(--cream);border-color:rgba(243,231,214,.35)}
+.btn svg{width:16px;height:16px;flex:0 0 auto}
+
+/* ---------- concept ribbon + ElaSystems badge */
+.ribbon{display:block;padding:7px 12px;background:#0b0909;color:var(--cream);font:600 11px/1.35 var(--f);text-align:center;text-decoration:none;border-bottom:1px solid var(--line)}
+.ribbon b{color:var(--cu)}.ribbon u{text-underline-offset:3px}
+.elab{position:fixed;left:14px;bottom:14px;z-index:80;display:flex;align-items:center;gap:8px;padding:8px 12px 8px 8px;border-radius:99px;background:#1a1414;color:#fffaf2;font:600 12px/1 var(--f);text-decoration:none;box-shadow:0 10px 24px -12px #0008;border:1px solid rgba(255,255,255,.12)}
+.elab i{width:22px;height:22px;border-radius:50%;background:#fffaf2;color:#1a1414;display:grid;place-items:center;font:800 11px/1 var(--f);font-style:normal}
+footer .elab{position:static;width:max-content;margin:14px auto 0}
+
+/* ---------- mark */
+.mark{width:100%;height:auto;overflow:visible}
+.mark .m-bg{fill:#0e0c0b}.mark .m-ring,.mark .m-face,.mark .m-top text,.mark .m-bot{fill:var(--cu)}.mark .m-fl{fill:var(--fire)}
+
+/* ---------- intro: the mark warms up in the oven light, embers rise, then the oven door swings open */
+.intro{position:fixed;inset:0;z-index:100;perspective:1200px;pointer-events:none}
+.intro .door{position:absolute;inset:0;display:grid;place-items:center;background:radial-gradient(70% 45% at 50% 100%,rgba(234,106,42,.38),transparent 70%),var(--net),var(--char);transform-origin:50% 100%;backface-visibility:hidden}
+.intro .door::after{content:"";position:absolute;left:50%;bottom:9%;width:34%;max-width:180px;height:6px;border-radius:3px;transform:translateX(-50%);background:linear-gradient(90deg,#6e4a2e,var(--cu),#6e4a2e);box-shadow:0 2px 0 rgba(0,0,0,.4)}
+.intro .mark{width:min(62vw,300px);filter:drop-shadow(0 0 0 rgba(234,106,42,0))}
+.intro .m-ring{fill-opacity:0;stroke:var(--cu);stroke-width:1.6;stroke-dasharray:1;stroke-dashoffset:1}
+.intro .m-face,.intro .m-fl{opacity:0}
+.intro .m-face{fill:#5a3a22}
+.intro .m-top text,.intro .m-bot{opacity:0;transform-box:fill-box;transform-origin:50% 50%}
+.intro.go .m-ring{animation:draw .8s var(--ease) forwards,fillin .3s ease .75s forwards}
+.intro.go .m-face{animation:warm 1.1s var(--ease) .35s forwards}
+.intro.go .m-fl{animation:fade .5s ease .9s forwards}
+.intro.go .m-top text{animation:pop .4s var(--out) calc(.7s + var(--i) * 55ms) forwards}
+.intro.go .m-bot{animation:fade .5s ease 1.25s forwards}
+.intro.go .mark{animation:glow 1.6s ease .3s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes fillin{to{fill-opacity:1;stroke-opacity:0}}
+@keyframes warm{0%{opacity:0;fill:#3a2414}50%{opacity:1;fill:#f0a35e}100%{opacity:1;fill:var(--cu)}}
+@keyframes pop{0%{opacity:0;transform:scale(.4) translateY(10px)}100%{opacity:1;transform:none}}
+@keyframes fade{to{opacity:1}}
+@keyframes glow{40%{filter:drop-shadow(0 0 26px rgba(234,106,42,.55))}100%{filter:drop-shadow(0 0 12px rgba(234,106,42,.25))}}
+.embers{position:absolute;inset:0;overflow:hidden}
+.embers i{position:absolute;bottom:-10px;width:4px;height:4px;border-radius:50%;background:#ffb06a;box-shadow:0 0 8px 2px rgba(234,106,42,.8);opacity:0}
+.intro.go .embers i{animation:ember 2.2s ease-out forwards}
+@keyframes ember{0%{opacity:0;transform:translate(0,0)}15%{opacity:1}100%{opacity:0;transform:translate(var(--dx),-70vh)}}
+.intro.open .door{transform:rotateX(-92deg);transition:transform .75s cubic-bezier(.55,0,.35,1)}
+.intro .heat{position:absolute;inset:0;background:radial-gradient(80% 60% at 50% 100%,rgba(234,106,42,.35),transparent 70%);opacity:0}
+.intro.open .heat{animation:heat .9s ease forwards}
+@keyframes heat{30%{opacity:1}100%{opacity:0}}
+.intro.done{display:none}
+
+/* ---------- nav */
+.nav{position:sticky;top:0;z-index:40;height:var(--nav);background:rgba(18,16,16,.94);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:100%;gap:10px}
+.brand{display:flex;align-items:center;gap:9px;text-decoration:none;min-width:0}
+.brand svg{width:32px;height:32px;flex:none}
+.brand b{font:900 .9375rem/1 var(--f);letter-spacing:.06em}
+.brand small{display:block;white-space:nowrap;margin-top:3px;font:600 .625rem/1 var(--f);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.nav .links{display:none}
+.brand .cx{display:none}
+.nav .btn{min-height:38px;padding:0 13px;font-size:.8125rem}
+
+/* ---------- hero */
+.hero{padding:16px 0 8px;background:var(--net)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.status,.ms{display:inline-flex;align-items:center;gap:7px;padding:6px 11px;border-radius:999px;background:var(--card);border:1px solid var(--line);font:700 .75rem/1 var(--f)}
+.status i{width:8px;height:8px;border-radius:50%;background:#46c47a;box-shadow:0 0 0 3px rgba(70,196,122,.18)}
+.status.closed i{background:#e0534a;box-shadow:0 0 0 3px rgba(224,83,74,.18)}
+.ms{background:rgba(234,106,42,.14);border-color:rgba(234,106,42,.4);color:#ffbf8a;text-decoration:none}
+.hero h1{margin-top:12px;font-size:1.875rem;text-wrap:balance}
+.hero .sub{margin-top:8px;max-width:44ch}
+.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:16px}
+.quick a{display:grid;justify-items:center;gap:6px;padding:11px 4px 9px;border-radius:14px;background:var(--card);border:1px solid var(--line);text-decoration:none;font:700 .8125rem/1 var(--f);white-space:nowrap;transition:transform .15s}
+.quick a:active{transform:scale(.96)}
+.quick a:first-child{background:var(--cu);color:#1a0f07;border-color:var(--cu)}
+.quick svg{width:20px;height:20px}
+.shot{position:relative;margin:16px auto 0;width:min(100%,44vh);aspect-ratio:1;border-radius:50%;overflow:hidden;background:#2a1a10;box-shadow:0 0 0 6px var(--char),0 0 0 8px var(--cu),0 24px 60px rgba(234,106,42,.25)}
+.shot svg{width:100%;height:100%}
+.shot figcaption{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);padding:6px 11px;border-radius:999px;background:rgba(18,16,16,.82);font:700 .75rem/1 var(--f);white-space:nowrap}
+.wedge{transform-box:fill-box;transform-origin:50% 100%;animation:lift 6s var(--ease) 2.6s infinite;filter:drop-shadow(0 10px 8px rgba(0,0,0,.45))}
+@keyframes lift{0%,18%{transform:none}38%,72%{transform:translate(0,-22px) rotate(-3deg)}92%,100%{transform:none}}
+.steam path{fill:none;stroke:rgba(255,244,228,.5);stroke-width:5;stroke-linecap:round;opacity:0;animation:steam 3.6s ease-in-out infinite}
+.steam path:nth-child(2){animation-delay:1.2s}.steam path:nth-child(3){animation-delay:2.4s}
+@keyframes steam{0%{opacity:0;transform:translateY(16px)}35%{opacity:.8}100%{opacity:0;transform:translateY(-30px)}}
+.js .hero .t{opacity:0;transform:translateY(12px)}
+.ready .hero .t{opacity:1;transform:none;transition:opacity .7s var(--ease),transform .8s var(--out)}
+.ready .hero .t:nth-child(2){transition-delay:.06s}.ready .hero .t:nth-child(3){transition-delay:.12s}.ready .hero .t:nth-child(4){transition-delay:.18s}.ready .hero .t:nth-child(5){transition-delay:.24s}
+
+/* ---------- sections */
+.sec{padding:var(--sec) 0}
+.head{margin-bottom:14px}
+.head .sub{margin-top:4px}
+
+/* weekly special countdown */
+.special{border-radius:22px;overflow:hidden;background:linear-gradient(170deg,#2a1810,#140e0c 60%);border:1px solid rgba(207,144,88,.3)}
+.special .ph{position:relative;background:#1d120c}
+.special .ph svg{width:100%;height:auto;aspect-ratio:16/10}
+.special .ph::after{content:"";position:absolute;inset:auto 0 0;height:40%;background:linear-gradient(transparent,#1c120d);pointer-events:none}
+.special .tx{padding:0 16px 18px;margin-top:-18px;position:relative}
+.special .when{display:inline-block;padding:5px 10px;border-radius:999px;background:var(--fire);color:#fff;font:800 .75rem/1.2 var(--f);letter-spacing:.04em}
+.special h2{margin-top:10px}
+.special p{margin-top:6px;color:var(--muted);font-size:.875rem}
+.clock{margin-top:14px;padding:12px;border-radius:16px;background:rgba(0,0,0,.35);border:1px solid var(--line)}
+.clock .lbl{font:700 .75rem/1 var(--f);letter-spacing:.08em;text-transform:uppercase;color:#ffbf8a}
+.clock .digits{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px}
+.clock .digits div{padding:8px 0 6px;border-radius:10px;background:var(--char2);text-align:center}
+.clock .digits b{display:block;font:800 1.625rem/1 var(--f);font-variant-numeric:tabular-nums;color:var(--cream)}
+.clock .digits span{display:block;margin-top:4px;font:600 .6875rem/1 var(--f);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.clock.live .digits b{color:#ffbf8a}
+.special .row{display:grid;grid-template-columns:1fr;gap:8px;margin-top:14px}
+#remind{min-width:0;white-space:normal;line-height:1.2;text-align:center}
+.saved{display:block;min-height:1.2em;margin-top:6px;font-size:.75rem;color:#ffbf8a}
+
+/* oven steps */
+.rail{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:2px var(--pad) 8px;margin:0 calc(var(--pad) * -1);scrollbar-width:none}
+.rail::-webkit-scrollbar{display:none}
+.step{flex:0 0 74%;scroll-snap-align:start;border-radius:var(--r);overflow:hidden;background:var(--card);border:1px solid var(--line)}
+.step svg{width:100%;height:auto;aspect-ratio:1}
+.step .tx{padding:11px 14px 14px}
+.step .n{font:800 .75rem/1 var(--f);letter-spacing:.1em;color:var(--cu)}
+.step h3{margin-top:4px;font-size:1.0625rem}
+.step p{margin-top:3px;color:var(--muted);font-size:.8125rem;line-height:1.45}
+.dots{display:flex;justify-content:center;gap:6px;margin-top:4px}
+.dots i{width:6px;height:6px;border-radius:50%;background:rgba(243,231,214,.2);transition:width .3s,background .3s}
+.dots i.on{width:16px;border-radius:3px;background:var(--cu)}
+.spoon{transform-box:fill-box;transform-origin:90% 90%;animation:spread 3.2s ease-in-out infinite}
+@keyframes spread{0%,100%{transform:translate(0,0) rotate(0)}50%{transform:translate(-26px,10px) rotate(-8deg)}}
+.flame{transform-box:fill-box;transform-origin:50% 100%;animation:flick 1.3s ease-in-out infinite alternate}
+.flame:nth-of-type(2){animation-duration:1.7s;animation-delay:-.4s}.flame:nth-of-type(3){animation-duration:1.1s;animation-delay:-.8s}
+@keyframes flick{0%{transform:scale(1,1)}50%{transform:scale(.92,1.12)}100%{transform:scale(1.05,.9)}}
+.peel{animation:peel 5s var(--ease) infinite}
+@keyframes peel{0%,10%{transform:translateX(70px)}45%,70%{transform:none}95%,100%{transform:translateX(70px)}}
+
+/* counter (menu) */
+.dough{display:grid;grid-template-columns:1fr 1fr;padding:4px;border-radius:999px;background:var(--card);border:1px solid var(--line);max-width:380px}
+.dough button{min-height:40px;border:0;border-radius:999px;background:none;font:700 .875rem/1 var(--f);color:var(--muted)}
+.dough button[aria-pressed=true]{background:var(--cu);color:#1a0f07}
+.dnote{min-height:1.4em;margin-top:8px;font-size:.8125rem;color:#ffbf8a}
+.counter{list-style:none;padding:0;margin-top:6px;display:grid;gap:8px}
+.counter li{display:grid;grid-template-columns:44px 1fr auto;gap:12px;align-items:center;padding:11px 12px;border-radius:14px;background:var(--card);border:1px solid var(--line);transition:opacity .3s}
+.counter .ic{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:rgba(207,144,88,.12);color:var(--cu)}
+.counter .ic svg{width:22px;height:22px}
+.counter b{font-size:.9375rem}
+.counter p{margin-top:1px;color:var(--muted);font-size:.8125rem;line-height:1.4}
+.counter .pr{text-align:right;font:800 .9375rem/1 var(--f);white-space:nowrap}
+.counter .pr small{display:block;margin-top:4px;font:600 .625rem/1 var(--f);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.counter li.dim{opacity:.45}
+.counter li.ww{border-color:rgba(207,144,88,.55)}
+.counter li.ww .ic{background:var(--cu);color:#1a0f07}
+.fine{margin-top:12px;font-size:.8125rem}
+
+/* box section */
+.boxsec{border-radius:var(--r);overflow:hidden;background:var(--card);border:1px solid var(--line)}
+.boxsec svg{width:100%;height:auto;aspect-ratio:16/10}
+.boxsec .tx{padding:14px 16px 16px}
+.boxsec h3{font-size:1.125rem}
+.boxsec p{margin-top:4px;color:var(--muted);font-size:.875rem}
+.sizes{list-style:none;padding:0;display:grid;gap:8px;margin-top:12px}
+.sizes li{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 14px;border-left:3px solid var(--cu);border-radius:0 12px 12px 0;background:var(--char2);font-size:.875rem}
+.sizes b{font-size:.9375rem}
+.sizes span{color:var(--muted);font-size:.8125rem}
+.sizes em{font-style:normal;font-weight:800;white-space:nowrap}
+
+/* visit */
+.visit{display:grid;gap:12px}
+.card{border-radius:var(--r);background:var(--card);border:1px solid var(--line);padding:16px}
+.card h3{font-size:1.125rem}
+.card h3 small{margin-left:8px;padding:3px 8px;border-radius:99px;background:rgba(207,144,88,.14);color:var(--cu);font:700 .6875rem/1 var(--f);letter-spacing:.06em;text-transform:uppercase;vertical-align:middle}
+.card .addr{margin-top:6px;font-weight:700}
+.card .addr small{display:block;font-weight:400;color:var(--muted);font-size:.8125rem}
+.hours{list-style:none;padding:0;margin-top:12px;display:grid;gap:4px}
+.hours li{display:flex;justify-content:space-between;gap:8px;padding:7px 10px;border-radius:9px;font-size:.875rem}
+.hours li.today{background:var(--cu);color:#1a0f07;font-weight:700}
+.card .row{display:grid;grid-template-columns:1fr;gap:8px;margin-top:14px}
+.map{border-radius:var(--r);overflow:hidden;aspect-ratio:4/3;background:#1f1a18;border:1px solid var(--line)}
+.map svg{width:100%;height:100%}
+.pin{animation:bob 2.4s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-6px)}}
+
+/* closing */
+.close{text-align:center;padding:40px 0;background:radial-gradient(70% 60% at 50% 100%,rgba(234,106,42,.22),transparent 70%),var(--net)}
+.close .mark{width:min(36vw,140px);margin:0 auto}
+.close blockquote{margin:14px auto 0;max-width:26ch;font:800 1.375rem/1.25 var(--f);letter-spacing:-.01em}
+.close blockquote em{font-style:normal;color:var(--cu)}
+.close p{margin:8px auto 0;max-width:34ch;color:var(--muted)}
+.close .lg{display:none}.close .row{display:grid;grid-template-columns:1fr;gap:8px;max-width:340px;margin:16px auto 0}
+footer.foot{padding:18px 0 96px;border-top:1px solid var(--line);color:var(--muted);font-size:.8125rem;text-align:center}
+footer.foot b{color:var(--cream)}
+footer.foot a{text-decoration:none}
+footer.foot p+p{margin-top:4px}
+.rv{opacity:0;transform:translateY(14px);transition:opacity .7s var(--ease),transform .8s var(--out)}
+.rv.on{opacity:1;transform:none}
+.dock{position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom));z-index:45;display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:6px;padding:6px;border-radius:18px;background:rgba(33,28,26,.97);box-shadow:0 12px 30px rgba(0,0,0,.5);border:1px solid var(--line);transform:translateY(150%);transition:transform .35s var(--out)}
+.dock.on{transform:none}
+.dock .btn{min-height:42px;padding:0 8px;font-size:.8125rem}
+
+/* ---------- tablet + desktop add-on */
+@media (min-width:760px){
+  :root{--pad:32px;--sec:64px;--nav:66px}
+  body{font-size:1rem}
+  .sub{font-size:1rem}
+  h2{font-size:2.25rem}
+  .ribbon{font-size:12.5px;padding:8px 16px}
+  .brand svg{width:40px;height:40px}
+  .brand b{font-size:1rem}
+  .brand .cx{display:inline}
+  .nav .links{display:flex;gap:24px;font:600 .875rem/1 var(--f);color:var(--muted)}
+  .nav .links a{text-decoration:none}.nav .links a:hover{color:var(--cream)}
+  .hero{padding:40px 0 56px}
+  .hero .wrap{display:grid;grid-template-columns:1.15fr 1fr;gap:40px;align-items:center}
+  .hero h1{font-size:2.6rem}
+  .quick{max-width:460px}
+  .shot{margin:0 auto;width:min(100%,56vh,420px)}
+  .special{display:grid;grid-template-columns:1fr 1.05fr;align-items:stretch}
+  .special .ph svg{height:100%;aspect-ratio:auto}
+  .special .ph::after{inset:0 0 0 auto;width:35%;height:auto;background:linear-gradient(90deg,transparent,#1c120d)}
+  .special .tx{padding:32px;margin:0;align-self:center}
+  .special .row{grid-template-columns:auto}
+  .rail{display:grid;grid-template-columns:repeat(3,1fr);overflow:visible;margin:0;padding:0}
+  .step{flex:none}
+  .dots{display:none}
+  .counter{grid-template-columns:1fr 1fr}
+  .pq{display:grid;grid-template-columns:1.1fr 1fr;gap:24px;align-items:center}
+  .sizes{margin-top:0}
+  .visit{grid-template-columns:1fr 1.2fr;align-items:stretch}
+  .map{aspect-ratio:auto;min-height:340px}
+  .close{padding:72px 0}
+  .close blockquote{font-size:2rem}
+  .close .row{grid-template-columns:auto;justify-content:center}
+  .close .lg{display:inline}.close .sm{display:none}
+  .dock{display:none}
+  footer.foot{padding-bottom:28px}
+  footer .elab{display:none}
+}
+@media (max-width:759px){ body>.elab{display:none} }
+@media (min-width:1100px){ .hero h1{font-size:3.25rem} }
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .intro{display:none}
+  .rv,.js .hero .t{opacity:1!important;transform:none!important}
+}
+</style>
+</head>
+<body>
+<script>document.documentElement.classList.add('js')</script>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-dm" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M21 11.5a8.4 8.4 0 0 1-12.3 7.5L3 21l2-5.5A8.4 8.4 0 1 1 21 11.5Z"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></g></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h8M8 17h5"/></g></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></g></symbol>
+  <symbol id="i-flat" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M8 10h.01M12 8h.01M15 11h.01M9 14h.01M13 15h.01"/></g></symbol>
+  <symbol id="i-pie" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16c3-6 15-6 18 0"/><path d="M3 16h18M7 13l1-2M12 12V9.5M17 13l-1-2"/></g></symbol>
+  <symbol id="i-tri" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4 21 19H3Z"/><path d="M12 4v15"/></g></symbol>
+  <symbol id="i-bowl" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11h18a9 9 0 0 1-18 0Z"/><path d="M8 7c0-1 1-1 1-2M12 7c0-1 1-1 1-2M16 7c0-1 1-1 1-2"/></g></symbol>
+  <symbol id="i-mark" viewBox="0 0 200 200"><circle cx="100" cy="100" r="96" fill="#0e0c0b"/><path fill="#cf9058" fill-rule="evenodd" d="M100 8a92 92 0 1 1 0 184a92 92 0 1 1 0-184ZM100 16a84 84 0 1 0 0 168a84 84 0 1 0 0-168Z"/><path fill="#cf9058" fill-rule="evenodd" d="M62 138V106a38 38 0 0 1 76 0v32ZM80 138v-28a20 20 0 0 1 40 0v28Z"/><rect x="52" y="140" width="96" height="7" rx="3.5" fill="#cf9058"/><path fill="#ea6a2a" d="M100 136c-11 0-13-9-7-16 2 5 4 5 5 1 1-5 4-9 7-10-1 7 7 10 4 19-2 4-5 6-9 6Z"/><text fill="#cf9058" font-family="Archivo, system-ui, sans-serif" font-weight="800" font-size="17" text-anchor="middle" letter-spacing="3" x="100" y="60">FENNOURA</text></symbol>
+</svg>
+
+<a class="ribbon" href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener">Concept site by <b>ElaSystems</b> · Fennoura is a fictional bakery · <u>Get one for your business →</u></a>
+<a class="elab" href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener" aria-label="Made by ElaSystems"><i>E</i>Made by ElaSystems</a>
+
+<div class="intro" id="intro" aria-hidden="true">
+  <div class="door"><svg class="mark" viewBox="0 0 200 200" aria-hidden="true">
+    <defs><path id="barc" d="M28 100A72 72 0 0 0 172 100"/></defs>
+    <circle class="m-bg" cx="100" cy="100" r="96"/>
+    <path class="m-ring" pathLength="1" fill-rule="evenodd" d="M100 8a92 92 0 1 1 0 184a92 92 0 1 1 0-184ZM100 16a84 84 0 1 0 0 168a84 84 0 1 0 0-168Z"/>
+    <path class="m-face" fill-rule="evenodd" d="M62 138V106a38 38 0 0 1 76 0v32ZM80 138v-28a20 20 0 0 1 40 0v28ZM52 143.5a3.5 3.5 0 0 1 3.5-3.5h89a3.5 3.5 0 0 1 0 7h-89a3.5 3.5 0 0 1-3.5-3.5Z"/>
+    <path class="m-fl" d="M100 136c-11 0-13-9-7-16 2 5 4 5 5 1 1-5 4-9 7-10-1 7 7 10 4 19-2 4-5 6-9 6Z"/>
+    <g class="m-top" font-family="Archivo, system-ui, sans-serif" font-weight="800" font-size="16" text-anchor="middle">
+      <g transform="translate(41.2 70) rotate(-63)"><text style="--i:0">F</text></g>
+      <g transform="translate(53.3 53.3) rotate(-45)"><text style="--i:1">E</text></g>
+      <g transform="translate(70 41.2) rotate(-27)"><text style="--i:2">N</text></g>
+      <g transform="translate(89.7 34.8) rotate(-9)"><text style="--i:3">N</text></g>
+      <g transform="translate(110.3 34.8) rotate(9)"><text style="--i:4">O</text></g>
+      <g transform="translate(130 41.2) rotate(27)"><text style="--i:5">U</text></g>
+      <g transform="translate(146.7 53.3) rotate(45)"><text style="--i:6">R</text></g>
+      <g transform="translate(158.8 70) rotate(63)"><text style="--i:7">A</text></g>
+    </g>
+    <text class="m-bot" font-family="Archivo, system-ui, sans-serif" font-weight="700" font-size="11" letter-spacing="3"><textPath href="#barc" startOffset="50%" text-anchor="middle">BAKEHOUSE</textPath></text>
+  </svg><div class="embers" id="embers"></div></div>
+  <div class="heat"></div>
+</div>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Fennoura Bakehouse, home"><svg viewBox="0 0 200 200" aria-hidden="true"><use href="#i-mark"/></svg><span><b>FENNOURA</b><small>Bakehouse<span class="cx"> · concept</span></small></span></a>
+    <nav class="links" aria-label="Sections"><a href="#special">Weekly special</a><a href="#oven">The oven</a><a href="#counter">Menu</a><a href="#visit">Hours</a></nav>
+    <a class="btn" data-studio href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener" aria-label="Want a site like this? DM @ela.systems"><svg aria-hidden="true"><use href="#i-dm"/></svg>DM @ela.systems</a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <div class="chips t"><span class="status" id="status"><i></i><span id="statusText">Open daily</span></span><a class="ms" href="#special" id="msChip">Roast lamb every Sunday</a></div>
+        <h1 class="t">Manakeesh and meat pies, pulled hot from the <em>oven all day.</em></h1>
+        <p class="sub t">Za'atar, cheese and spiced meat on fresh dough, meat pies by the box, and slow roast lamb with rice every Sunday. Grab one on the way to work or take a box home.</p>
+        <div class="quick t">
+          <a data-studio href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener" aria-label="Want a site like this? DM @ela.systems"><svg aria-hidden="true"><use href="#i-dm"/></svg>DM Ela</a>
+          <a href="#counter"><svg aria-hidden="true"><use href="#i-menu"/></svg>Menu</a>
+          <a href="#special"><svg aria-hidden="true"><use href="#i-bowl"/></svg>Sunday</a>
+          <a href="#visit"><svg aria-hidden="true"><use href="#i-clock"/></svg>Hours</a>
+        </div>
+      </div>
+      <figure class="shot t">
+        <svg viewBox="0 0 400 400" role="img" aria-label="Drawing of a za'atar manakeesh on a wooden board with one slice lifting out">
+          <defs>
+            <radialGradient id="board" cx="50%" cy="45%" r="60%"><stop offset="0" stop-color="#8a5a34"/><stop offset=".7" stop-color="#6a4226"/><stop offset="1" stop-color="#3e2615"/></radialGradient>
+            <radialGradient id="crust" cx="45%" cy="40%" r="60%"><stop offset="0" stop-color="#f0c27e"/><stop offset=".75" stop-color="#d89650"/><stop offset="1" stop-color="#a8652c"/></radialGradient>
+            <radialGradient id="zaatar" cx="45%" cy="40%" r="60%"><stop offset="0" stop-color="#8e8a3c"/><stop offset=".7" stop-color="#6b6a2b"/><stop offset="1" stop-color="#4d4c1d"/></radialGradient>
+            <clipPath id="cRest"><path d="M200 200L285 52.8A170 170 0 1 1 115 52.8Z"/></clipPath>
+            <clipPath id="cWedge"><path d="M200 200L115 52.8A170 170 0 0 1 285 52.8Z"/></clipPath>
+            <g id="pie">
+              <circle cx="200" cy="200" r="160" fill="url(#crust)"/>
+              <g id="bub" fill="#9c5a24" opacity=".45"></g>
+              <circle cx="200" cy="200" r="138" fill="url(#zaatar)"/>
+              <g id="zt"></g>
+              <ellipse cx="160" cy="150" rx="46" ry="20" fill="#fff6c8" opacity=".09" transform="rotate(-25 160 150)"/>
+              <ellipse cx="250" cy="250" rx="34" ry="12" fill="#fff6c8" opacity=".06" transform="rotate(-25 250 250)"/>
+            </g>
+          </defs>
+          <rect width="400" height="400" fill="url(#board)"/>
+          <g stroke="#2e1b0e" stroke-width="2" opacity=".25" fill="none"><path d="M0 60C120 50 260 72 400 58"/><path d="M0 130C140 120 250 142 400 126"/><path d="M0 280C120 270 280 292 400 276"/><path d="M0 350C150 340 260 360 400 346"/></g>
+          <ellipse cx="206" cy="214" rx="164" ry="160" fill="#000" opacity=".35"/>
+          <use href="#pie" clip-path="url(#cRest)"/>
+          <g stroke="#3a240f" stroke-width="2.5" opacity=".5"><path d="M200 200L370 200"/><path d="M200 200L115 347"/><path d="M200 200L285 347"/><path d="M200 200L30 200"/></g>
+          <g class="wedge"><use href="#pie" clip-path="url(#cWedge)"/></g>
+          <g class="steam"><path d="M170 70c-10-14 10-22 0-38"/><path d="M205 64c-10-14 10-22 0-38"/><path d="M240 70c-10-14 10-22 0-38"/></g>
+        </svg>
+        <figcaption>Za'atar and olive oil</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="sec" id="special">
+    <div class="wrap">
+      <div class="special rv">
+        <div class="ph">
+          <svg viewBox="0 0 640 400" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Drawing of a platter of roast lamb over golden rice with toasted almonds">
+            <defs>
+              <radialGradient id="tbl" cx="50%" cy="40%" r="75%"><stop offset="0" stop-color="#4a2c1a"/><stop offset="1" stop-color="#170e09"/></radialGradient>
+              <radialGradient id="plate" cx="45%" cy="40%" r="60%"><stop offset="0" stop-color="#f4ece0"/><stop offset=".85" stop-color="#d9cdbb"/><stop offset="1" stop-color="#a99a86"/></radialGradient>
+              <radialGradient id="rice" cx="45%" cy="35%" r="65%"><stop offset="0" stop-color="#f7d98a"/><stop offset=".8" stop-color="#e2b04e"/><stop offset="1" stop-color="#c48d34"/></radialGradient>
+              <radialGradient id="lamb" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#d79a63"/><stop offset=".6" stop-color="#a8622f"/><stop offset="1" stop-color="#6a3519"/></radialGradient>
+            </defs>
+            <rect width="640" height="400" fill="url(#tbl)"/>
+            <ellipse cx="330" cy="228" rx="250" ry="140" fill="#000" opacity=".4"/>
+            <ellipse cx="320" cy="214" rx="248" ry="140" fill="url(#plate)"/>
+            <ellipse cx="320" cy="214" rx="214" ry="116" fill="none" stroke="#bfae96" stroke-width="3" opacity=".6"/>
+            <ellipse cx="320" cy="210" rx="196" ry="100" fill="url(#rice)"/>
+            <g id="grains" fill="#fff3c8" opacity=".55"></g>
+            <g>
+              <path d="M224 196c-6-30 30-46 60-36 28 10 30 44 6 56-24 12-60 10-66-20Z" fill="url(#lamb)"/>
+              <path d="M300 168c4-30 54-34 70-10 14 22-4 48-30 48-26 0-44-14-40-38Z" fill="url(#lamb)"/>
+              <path d="M376 202c-8-26 26-44 54-32 24 12 22 42 0 52-22 10-48 6-54-20Z" fill="url(#lamb)"/>
+              <path d="M286 228c-4-22 28-32 50-22 20 10 16 34-4 40-22 6-42 2-46-18Z" fill="url(#lamb)"/>
+              <g fill="#f3c08a" opacity=".35"><ellipse cx="252" cy="178" rx="16" ry="6"/><ellipse cx="330" cy="160" rx="18" ry="6"/><ellipse cx="404" cy="184" rx="14" ry="5"/><ellipse cx="306" cy="216" rx="12" ry="4"/></g>
+            </g>
+            <g id="nuts"></g>
+            <g id="herb" fill="#5f8a3a"></g>
+            <g class="steam"><path d="M270 120c-12-16 12-26 0-44"/><path d="M330 108c-12-16 12-26 0-44"/><path d="M390 120c-12-16 12-26 0-44"/></g>
+          </svg>
+        </div>
+        <div class="tx">
+          <span class="when" id="whenTag">Sundays only · 12 PM to 8 PM</span>
+          <h2>Sunday <em>roast lamb</em></h2>
+          <p>Lamb roasted low all morning, piled on spiced rice with toasted almonds and a jug of yogurt sauce. It's the one dish we make once a week, so it goes fast.</p>
+          <div class="clock" id="clock" aria-live="polite">
+            <span class="lbl" id="clockLbl">Next roast in</span>
+            <div class="digits"><div><b id="cd">0</b><span>days</span></div><div><b id="ch">00</b><span>hrs</span></div><div><b id="cm">00</b><span>min</span></div><div><b id="cs">00</b><span>sec</span></div></div>
+          </div>
+          <div class="row"><button class="btn" type="button" id="remind"><svg aria-hidden="true"><use href="#i-cal"/></svg>Remind me every Sunday</button></div>
+          <span class="saved" id="saved" role="status"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="oven" style="padding-top:0">
+    <div class="wrap">
+      <div class="head rv"><h2>Straight from <em>the oven</em></h2><p class="sub">Every manakeesh is topped by hand and baked to order. Here's how a za'atar one comes together.</p></div>
+      <div class="rail" data-rail>
+        <article class="step">
+          <svg viewBox="0 0 300 300" role="img" aria-label="Drawing of a spoon spreading za'atar and oil over a round of dough">
+            <rect width="300" height="300" fill="#3a2414"/>
+            <g stroke="#2a190d" stroke-width="2" opacity=".5"><path d="M0 70H300M0 150H300M0 230H300"/></g>
+            <circle cx="150" cy="160" r="108" fill="#000" opacity=".3"/>
+            <circle cx="146" cy="154" r="108" fill="#f1dcb4"/>
+            <circle cx="146" cy="154" r="108" fill="none" stroke="#e1c590" stroke-width="6"/>
+            <path d="M146 154m-92 0a92 92 0 0 1 184 0Z" fill="#6f6c2c"/>
+            <path d="M54 154c30 14 60-8 92 4s58-6 92-4" fill="#6f6c2c"/>
+            <g fill="#4a4a1a"><circle cx="90" cy="120" r="2.5"/><circle cx="120" cy="100" r="2"/><circle cx="160" cy="92" r="2.5"/><circle cx="200" cy="112" r="2"/><circle cx="182" cy="136" r="2.5"/><circle cx="110" cy="140" r="2"/><circle cx="140" cy="124" r="2.5"/><circle cx="216" cy="140" r="2"/></g>
+            <g fill="#efe0b8"><ellipse cx="104" cy="128" rx="2.6" ry="1.4"/><ellipse cx="150" cy="108" rx="2.6" ry="1.4"/><ellipse cx="190" cy="124" rx="2.6" ry="1.4"/><ellipse cx="128" cy="146" rx="2.6" ry="1.4"/></g>
+            <g class="spoon"><path d="M186 182c22-8 44 2 44 18s-24 24-44 16c-14-6-14-28 0-34Z" fill="#c9ccd1"/><path d="M228 206l62 58" stroke="#a9adb4" stroke-width="10" stroke-linecap="round"/><path d="M192 190c14-4 28 2 30 10" stroke="#fff" stroke-width="3" opacity=".6" fill="none" stroke-linecap="round"/></g>
+          </svg>
+          <div class="tx"><span class="n">01</span><h3>Topped by hand</h3><p>Za'atar and olive oil spread right to the edge with the back of a spoon.</p></div>
+        </article>
+        <article class="step">
+          <svg viewBox="0 0 300 300" role="img" aria-label="Drawing of a wooden peel sliding a manakeesh into a fired dome oven">
+            <defs><radialGradient id="fire" cx="50%" cy="85%" r="70%"><stop offset="0" stop-color="#ffcf6a"/><stop offset=".45" stop-color="#ea6a2a"/><stop offset="1" stop-color="#2a0e06"/></radialGradient></defs>
+            <rect width="300" height="300" fill="#1a1110"/>
+            <path d="M20 250V140a130 112 0 0 1 260 0v110Z" fill="#5b3a26"/>
+            <g fill="none" stroke="#3e2617" stroke-width="3"><path d="M20 200h260M20 160h260"/><path d="M60 250v-50M120 250v-50M180 250v-50M240 250v-50M90 200v-40M150 200v-40M210 200v-40"/></g>
+            <path d="M60 250V160a90 80 0 0 1 180 0v90Z" fill="#a8693a"/>
+            <path d="M74 250V164a76 68 0 0 1 152 0v86Z" fill="url(#fire)"/>
+            <path class="flame" d="M110 250c-20 0-26-24-12-44 4 14 10 12 12 2 4-18 14-30 24-34-6 26 18 34 8 60-4 10-14 16-32 16Z" fill="#ffb347"/>
+            <path class="flame" d="M170 250c-18 0-24-20-12-38 4 12 8 10 10 2 3-14 12-24 20-28-4 22 16 30 6 50-4 9-12 14-24 14Z" fill="#ff8a2a"/>
+            <path class="flame" d="M140 250c-12 0-16-14-8-26 3 8 6 7 7 1 2-10 8-17 14-19-3 15 11 21 4 35-3 6-8 9-17 9Z" fill="#ffe08a"/>
+            <rect x="0" y="250" width="300" height="50" fill="#2a1b14"/>
+            <g class="peel"><path d="M150 262h160" stroke="#b78655" stroke-width="10" stroke-linecap="round"/><ellipse cx="128" cy="262" rx="70" ry="12" fill="#c9965f"/><ellipse cx="128" cy="256" rx="54" ry="10" fill="#f1dcb4"/><ellipse cx="128" cy="254" rx="44" ry="7" fill="#6f6c2c"/></g>
+          </svg>
+          <div class="tx"><span class="n">02</span><h3>Into the fire</h3><p>Off the peel and onto the oven floor until the edges go golden.</p></div>
+        </article>
+        <article class="step">
+          <svg viewBox="0 0 300 300" role="img" aria-label="Drawing of baked meat pies and a cheese manakeesh coming out hot on the peel">
+            <rect width="300" height="300" fill="#2a1a10"/>
+            <path d="M150 300V250" stroke="#b78655" stroke-width="14" stroke-linecap="round"/>
+            <path d="M30 140c0-70 240-70 240 0v60c0 30-30 50-120 50S30 230 30 200Z" fill="#c9965f"/>
+            <path d="M30 140c0-70 240-70 240 0" fill="none" stroke="#a87a48" stroke-width="3"/>
+            <circle cx="104" cy="150" r="46" fill="#e8b46a"/><circle cx="104" cy="150" r="38" fill="#f6dc9a"/><g fill="#e9b85a" opacity=".8"><circle cx="92" cy="140" r="7"/><circle cx="116" cy="160" r="8"/><circle cx="100" cy="166" r="5"/><circle cx="118" cy="138" r="5"/></g>
+            <g><path d="M176 108l40 70h-80Z" fill="#d99a52"/><path d="M176 108v70" stroke="#b37638" stroke-width="3"/><path d="M136 178h80" stroke="#b37638" stroke-width="3"/></g>
+            <g><circle cx="200" cy="208" r="26" fill="#d58c46"/><circle cx="200" cy="208" r="19" fill="#8a3a22"/><g fill="#c25a34"><circle cx="194" cy="202" r="4"/><circle cx="206" cy="212" r="4"/><circle cx="196" cy="214" r="3"/></g></g>
+            <g><circle cx="140" cy="214" r="22" fill="#d58c46"/><circle cx="140" cy="214" r="16" fill="#8a3a22"/><g fill="#c25a34"><circle cx="136" cy="210" r="3.5"/><circle cx="145" cy="218" r="3.5"/></g></g>
+            <g class="steam"><path d="M104 96c-10-14 10-22 0-38"/><path d="M176 84c-10-14 10-22 0-38"/><path d="M220 176c-8-12 8-18 0-30"/></g>
+          </svg>
+          <div class="tx"><span class="n">03</span><h3>Out hot</h3><p>Folded, boxed or sliced up, and handed over still hot.</p></div>
+        </article>
+      </div>
+      <div class="dots" data-dots></div>
+    </div>
+  </section>
+
+  <section class="sec" id="counter" style="padding-top:0">
+    <div class="wrap">
+      <div class="head rv"><h2>At the <em>counter</em></h2><p class="sub">We bake on whole wheat dough too. Pick it and see which ones come on it.</p></div>
+      <div class="dough rv" role="group" aria-label="Dough">
+        <button type="button" data-d="classic" aria-pressed="true">Classic dough</button>
+        <button type="button" data-d="ww" aria-pressed="false">Whole wheat</button>
+      </div>
+      <p class="dnote" id="dnote" role="status"></p>
+      <ul class="counter" id="counterList">
+        <li data-ww="1"><span class="ic"><svg aria-hidden="true"><use href="#i-flat"/></svg></span><div><b>Za'atar manakeesh</b><p>Thyme, sumac, sesame and plenty of olive oil.</p></div><span class="pr">$4<small>sample</small></span></li>
+        <li data-ww="1"><span class="ic"><svg aria-hidden="true"><use href="#i-flat"/></svg></span><div><b>Cheese manakeesh</b><p>Melty white cheese right to the edge.</p></div><span class="pr">$6<small>sample</small></span></li>
+        <li data-ww="1"><span class="ic"><svg aria-hidden="true"><use href="#i-flat"/></svg></span><div><b>Spiced meat manakeesh</b><p>Ground beef, tomato and onion baked onto thin dough.</p></div><span class="pr">$7<small>sample</small></span></li>
+        <li data-ww="0"><span class="ic"><svg aria-hidden="true"><use href="#i-flat"/></svg></span><div><b>Half and half</b><p>Za'atar on one side, cheese on the other. Can't decide, don't.</p></div><span class="pr">$6<small>sample</small></span></li>
+        <li data-ww="0"><span class="ic"><svg aria-hidden="true"><use href="#i-pie"/></svg></span><div><b>Meat pies</b><p>Small open pies by the piece or by the box.</p></div><span class="pr">$2<small>sample</small></span></li>
+        <li data-ww="0"><span class="ic"><svg aria-hidden="true"><use href="#i-tri"/></svg></span><div><b>Spinach triangles</b><p>Spinach, onion and lemon folded into a little triangle.</p></div><span class="pr">$2<small>sample</small></span></li>
+        <li data-ww="0"><span class="ic"><svg aria-hidden="true"><use href="#i-bowl"/></svg></span><div><b>Sunday roast lamb</b><p>Lamb, spiced rice, almonds and yogurt sauce. Sundays only.</p></div><span class="pr">$19<small>sample</small></span></li>
+      </ul>
+      <p class="sub fine">Fennoura is a concept, so the menu and prices here are sample content.</p>
+    </div>
+  </section>
+
+  <section class="sec" id="boxes" style="padding-top:0">
+    <div class="wrap pq">
+      <div class="boxsec rv">
+        <svg viewBox="0 0 640 400" role="img" aria-label="Drawing of an open bakery box holding a dozen small meat pies">
+          <rect width="640" height="400" fill="#2a1a10"/>
+          <path d="M90 150L170 40h300l80 110Z" fill="#e7d2ad"/>
+          <path d="M90 150h460v200H90Z" fill="#d6b98c"/>
+          <path d="M110 166h420v168H110Z" fill="#b8955f"/>
+          <g id="box"></g>
+          <path d="M90 350h460" stroke="#9d7c4c" stroke-width="4"/>
+          <text x="320" y="104" text-anchor="middle" fill="#a8693a" font-family="Archivo, system-ui, sans-serif" font-weight="800" font-size="30" letter-spacing="8">FENNOURA</text>
+        </svg>
+        <div class="tx"><h3>Bringing a box somewhere?</h3><p>Meat pies, cheese pies and spinach triangles in any mix. Order the night before for anything over two dozen.</p></div>
+      </div>
+      <ul class="sizes rv">
+        <li><div><b>Box of 6</b><br><span>One kind or mixed</span></div><em>$12 sample</em></li>
+        <li><div><b>Box of 12</b><br><span>Our most popular</span></div><em>$22 sample</em></li>
+        <li><div><b>Party tray of 36</b><br><span>Order a day ahead</span></div><em>$60 sample</em></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="sec" id="visit" style="padding-top:0">
+    <div class="wrap">
+      <div class="head rv"><h2>Come by <em>the bakery</em></h2></div>
+      <div class="visit">
+        <div class="card rv">
+          <h3>Fennoura Bakehouse<small>Fictional</small></h3>
+          <p class="addr">Your address here<small>Fennoura is a concept, so there's no real location.</small></p>
+          <ul class="hours" id="hours"></ul>
+          <div class="row"><a class="btn" data-studio href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener" aria-label="Want a site like this? DM @ela.systems"><svg aria-hidden="true"><use href="#i-dm"/></svg>Want this? DM @ela.systems</a></div>
+        </div>
+        <div class="map rv">
+          <svg viewBox="0 0 480 360" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Drawn neighbourhood map with a sample pin">
+            <rect width="480" height="360" fill="#221d1b"/>
+            <path d="M-10 290C90 250 150 320 260 280S420 230 490 250" fill="none" stroke="#2f3f4a" stroke-width="26"/>
+            <path d="M300 40c40-20 110-10 130 30s-20 80-70 70-90-70-60-100Z" fill="#2c3a24"/>
+            <g stroke="#3a3330" stroke-width="12" fill="none"><path d="M0 90H480M0 190H480M80 0V360M200 0V360M330 0V360"/></g>
+            <g stroke="#4a403b" stroke-width="20" fill="none"><path d="M0 140H480"/><path d="M260 0V360"/></g>
+            <g stroke="#5a4d46" stroke-width="2" stroke-dasharray="10 10" fill="none"><path d="M0 140H480"/><path d="M260 0V360"/></g>
+            <g fill="#2b2523"><rect x="96" y="104" width="88" height="26" rx="4"/><rect x="96" y="150" width="88" height="30" rx="4"/><rect x="216" y="104" width="34" height="26" rx="4"/><rect x="346" y="150" width="120" height="30" rx="4"/><rect x="10" y="200" width="60" height="50" rx="4"/><rect x="216" y="200" width="34" height="50" rx="4"/></g>
+            <ellipse cx="260" cy="148" rx="18" ry="6" fill="#000" opacity=".4"/>
+            <g class="pin"><path d="M260 146c-6-12-24-24-24-42a24 24 0 0 1 48 0c0 18-18 30-24 42Z" fill="#cf9058"/><circle cx="260" cy="104" r="9" fill="#121010"/></g>
+            <g font-family="Archivo, system-ui, sans-serif"><rect x="288" y="92" width="146" height="30" rx="15" fill="#121010" stroke="#cf9058"/><text x="361" y="112" text-anchor="middle" fill="#f3e7d6" font-size="13" font-weight="700">Fennoura (sample pin)</text></g>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="close" id="closer">
+    <div class="wrap">
+      <svg class="mark rv" viewBox="0 0 200 200" role="img" aria-label="Fennoura Bakehouse mark"><use href="#i-mark"/></svg>
+      <blockquote>Show up to a family visit with <em>a box of meat pies</em> and nobody asks why you're late.</blockquote>
+      <p>Your bakery could have a site like this one. Same oven door, your food, your hours.</p>
+      <div class="row"><a class="btn" data-studio href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener" aria-label="Want a site like this? DM @ela.systems"><svg aria-hidden="true"><use href="#i-dm"/></svg><span class="lg">Want a site like this?</span><span class="sm">Want one?</span><span>DM @ela.systems</span></a></div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <p>Fennoura is a fictional business. Concept site by ElaSystems; sample content only. © <span id="yr"></span></p>
+    <p><a href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener">Site by <b>ElaSystems</b></a></p>
+  </div>
+</footer>
+
+<div class="dock" id="dock"><a class="btn" data-studio href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener" aria-label="Want a site like this? DM @ela.systems"><svg aria-hidden="true"><use href="#i-dm"/></svg>DM @ela.systems</a><a class="btn line" href="#counter"><svg aria-hidden="true"><use href="#i-menu"/></svg>Menu</a><a class="btn line" href="#visit"><svg aria-hidden="true"><use href="#i-clock"/></svg>Hours</a></div>
+
+<script>
+/* ================= CONFIG (all sample content: Fennoura Bakehouse is fictional) ================= */
+const STUDIO_URL = 'https://www.instagram.com/ela.systems/';
+const CONFIG = {
+  name: 'Fennoura Bakehouse',
+  // [weekday 0=Sun, label, open hour, close hour (24 = midnight)], sample hours in the visitor's own time
+  hours: [[1, 'Monday', 8, 21], [2, 'Tuesday', 8, 21], [3, 'Wednesday', 8, 21], [4, 'Thursday', 8, 21], [5, 'Friday', 8, 23], [6, 'Saturday', 8, 23], [0, 'Sunday', 9, 20]],
+  special: { day: 0, from: 12, to: 20, name: 'Sunday roast lamb' },
+};
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches, root = document.documentElement;
+$('#yr').textContent = new Date().getFullYear();
+
+/* move the ElaSystems badge into the footer (it shows there on phones) */
+(() => { const b = $('.elab').cloneNode(true); $('footer .wrap').appendChild(b); })();
+
+/* ---------- drawn food details (seeded so they look the same every visit) */
+(() => {
+  let s = 7; const r = () => (s = (s * 16807) % 2147483647) / 2147483647;
+  const NS = 'http://www.w3.org/2000/svg', el = (t, a) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); return e; };
+  const zt = $('#zt'), bub = $('#bub');
+  const greens = ['#3f4317', '#55591f', '#7a7a34', '#2f3311', '#8f8f44'];
+  for (let i = 0; i < 320; i++) { const a = r() * 6.283, d = Math.sqrt(r()) * 134; zt.appendChild(el('circle', { cx: (200 + Math.cos(a) * d).toFixed(1), cy: (200 + Math.sin(a) * d).toFixed(1), r: (0.8 + r() * 2.2).toFixed(1), fill: greens[i % 5] })); }
+  for (let i = 0; i < 70; i++) { const a = r() * 6.283, d = Math.sqrt(r()) * 130, x = 200 + Math.cos(a) * d, y = 200 + Math.sin(a) * d; zt.appendChild(el('ellipse', { cx: x.toFixed(1), cy: y.toFixed(1), rx: 2.6, ry: 1.3, fill: '#efe0b8', transform: `rotate(${(r() * 180).toFixed(0)} ${x.toFixed(1)} ${y.toFixed(1)})` })); }
+  for (let i = 0; i < 22; i++) { const a = r() * 6.283, d = 142 + r() * 14; bub.appendChild(el('ellipse', { cx: (200 + Math.cos(a) * d).toFixed(1), cy: (200 + Math.sin(a) * d).toFixed(1), rx: (3 + r() * 6).toFixed(1), ry: (2 + r() * 3).toFixed(1) })); }
+  const gr = $('#grains');
+  for (let i = 0; i < 160; i++) { const a = r() * 6.283, d = Math.sqrt(r()), x = 320 + Math.cos(a) * d * 186, y = 210 + Math.sin(a) * d * 92; gr.appendChild(el('ellipse', { cx: x.toFixed(1), cy: y.toFixed(1), rx: 3.4, ry: 1.3, transform: `rotate(${(r() * 180).toFixed(0)} ${x.toFixed(1)} ${y.toFixed(1)})` })); }
+  const nuts = $('#nuts'), herb = $('#herb');
+  for (let i = 0; i < 34; i++) { const a = r() * 6.283, d = 0.2 + Math.sqrt(r()) * 0.75, x = 320 + Math.cos(a) * d * 186, y = 206 + Math.sin(a) * d * 90; nuts.appendChild(el('ellipse', { cx: x.toFixed(1), cy: y.toFixed(1), rx: 7, ry: 3, fill: i % 3 ? '#f2dcae' : '#d9a865', stroke: '#b98a4f', 'stroke-width': .8, transform: `rotate(${(r() * 180).toFixed(0)} ${x.toFixed(1)} ${y.toFixed(1)})` })); }
+  for (let i = 0; i < 40; i++) { const a = r() * 6.283, d = Math.sqrt(r()) * 0.9, x = 320 + Math.cos(a) * d * 186, y = 206 + Math.sin(a) * d * 92; herb.appendChild(el('circle', { cx: x.toFixed(1), cy: y.toFixed(1), r: (1.2 + r() * 1.8).toFixed(1) })); }
+  /* box of a dozen meat pies: 4 x 3 */
+  const box = $('#box');
+  for (let row = 0; row < 3; row++) for (let c = 0; c < 4; c++) {
+    const x = 170 + c * 100, y = 196 + row * 54, g = el('g', {});
+    g.appendChild(el('ellipse', { cx: x + 3, cy: y + 6, rx: 44, ry: 22, fill: '#000', opacity: .2 }));
+    if ((row + c) % 3 === 2) { g.appendChild(el('path', { d: `M${x} ${y - 22}L${x + 40} ${y + 20}H${x - 40}Z`, fill: '#d99a52' })); g.appendChild(el('path', { d: `M${x} ${y - 22}V${y + 20}`, stroke: '#b37638', 'stroke-width': 2.5 })); }
+    else { g.appendChild(el('ellipse', { cx: x, cy: y, rx: 42, ry: 22, fill: '#d58c46' })); g.appendChild(el('ellipse', { cx: x, cy: y - 1, rx: 32, ry: 15, fill: (row + c) % 3 ? '#8a3a22' : '#f6dc9a' })); g.appendChild(el('circle', { cx: x - 8, cy: y - 3, r: 3.5, fill: (row + c) % 3 ? '#c25a34' : '#e9b85a' })); g.appendChild(el('circle', { cx: x + 9, cy: y + 3, r: 3.5, fill: (row + c) % 3 ? '#c25a34' : '#e9b85a' })); }
+    box.appendChild(g);
+  }
+})();
+
+/* local wall-clock time: weekday + seconds since midnight (sample hours run on the visitor's clock) */
+function localNow() { const d = new Date(); return { day: d.getDay(), sec: d.getHours() * 3600 + d.getMinutes() * 60 + d.getSeconds() }; }
+const DAY = 24 * 3600;
+const fmt = h => { if (h === 24) return '12 AM'; return (h % 12 || 12) + (h < 12 ? ' AM' : ' PM'); };
+
+/* ---------- open now + hours list */
+(() => {
+  const { day, sec } = localNow(), row = CONFIG.hours.find(h => h[0] === day), open = sec >= row[2] * 3600 && sec < row[3] * 3600;
+  const st = $('#status');
+  if (open) $('#statusText').textContent = `Open now · till ${fmt(row[3])} (sample)`;
+  else { st.classList.add('closed'); const next = sec < row[2] * 3600 ? row : CONFIG.hours.find(h => h[0] === (day + 1) % 7); $('#statusText').textContent = `Closed · opens ${fmt(next[2])}${next === row ? '' : ' tomorrow'} (sample)`; }
+  const G = [['Monday to Thursday', [1, 2, 3, 4]], ['Friday and Saturday', [5, 6]], ['Sunday', [0]]];
+  $('#hours').innerHTML = G.map(([l, ds]) => { const h = CONFIG.hours.find(x => x[0] === ds[0]), t = ds.includes(day); return `<li${t ? ' class="today"' : ''}><span>${l}${t ? ' (today)' : ''}</span><span>${fmt(h[2])} to ${fmt(h[3])}</span></li>`; }).join('') + '<li><span style="color:var(--muted);font-size:.75rem">Sample hours for this concept</span></li>';
+})();
+
+/* ---------- weekly special: live countdown, or time left while it's on */
+(() => {
+  const M = CONFIG.special, pad = n => String(n).padStart(2, '0'), clock = $('#clock');
+  function tick() {
+    const { day, sec } = localNow(), wk = DAY * 7;
+    const now = day * DAY + sec, start = M.day * DAY + M.from * 3600, end = M.day * DAY + M.to * 3600;
+    const live = now >= start && now < end, left = live ? end - now : (start - now + wk) % wk;
+    clock.classList.toggle('live', live);
+    $('#clockLbl').textContent = live ? 'The roast is on now · ends in' : 'Next roast in';
+    $('#msChip').textContent = live ? `Roast lamb is on today, till ${fmt(M.to)}` : 'Roast lamb every Sunday';
+    $('#cd').textContent = Math.floor(left / DAY); $('#ch').textContent = pad(Math.floor(left % DAY / 3600)); $('#cm').textContent = pad(Math.floor(left % 3600 / 60)); $('#cs').textContent = pad(left % 60);
+  }
+  tick(); setInterval(tick, 1000);
+  /* weekly reminder: an .ics file with a Sunday event that repeats every week (floating local time, no location) */
+  $('#remind').addEventListener('click', () => {
+    const { day, sec } = localNow(), d = new Date();
+    let add = (M.day - day + 7) % 7; if (add === 0 && sec >= M.to * 3600 - 1) add = 7; d.setDate(d.getDate() + add);
+    const p2 = n => String(n).padStart(2, '0'), ymd = `${d.getFullYear()}${p2(d.getMonth() + 1)}${p2(d.getDate())}`;
+    const stamp = new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d+/, '');
+    const ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//ElaSystems concept//Fennoura weekly special//EN', 'CALSCALE:GREGORIAN',
+      'BEGIN:VEVENT', 'UID:weekly-special@fennoura-concept', 'DTSTAMP:' + stamp,
+      `DTSTART:${ymd}T${p2(M.from)}0000`, `DTEND:${ymd}T${p2(M.to)}0000`, 'RRULE:FREQ=WEEKLY;BYDAY=SU',
+      'SUMMARY:Sunday roast lamb at Fennoura (sample)',
+      'DESCRIPTION:Sample reminder from a concept site by ElaSystems. Fennoura Bakehouse is a fictional business. Want a site like this? instagram.com/ela.systems',
+      'BEGIN:VALARM', 'TRIGGER:-PT1H', 'ACTION:DISPLAY', 'DESCRIPTION:Sunday roast lamb today (sample)', 'END:VALARM', 'END:VEVENT', 'END:VCALENDAR'].join('\r\n');
+    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([ics], { type: 'text/calendar' })); a.download = 'sunday-roast.ics';
+    document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+    $('#saved').textContent = 'Open the file to add it to your calendar. It repeats every Sunday.';
+  });
+})();
+
+/* ---------- intro: the mark lights up in the oven glow, then the door swings open. Once per visit, skippable. */
+(() => {
+  const intro = $('#intro'), reveal = () => root.classList.add('ready');
+  let seen = false; try { seen = sessionStorage.getItem('fnr-intro') === '1'; } catch (e) {}
+  if (RM || seen) { intro.classList.add('done'); requestAnimationFrame(reveal); return; }
+  try { sessionStorage.setItem('fnr-intro', '1'); } catch (e) {}
+  $('#embers').innerHTML = Array.from({ length: 16 }, () => `<i style="left:${8 + Math.random() * 84}%;--dx:${(Math.random() * 120 - 60).toFixed(0)}px;animation-delay:${(.2 + Math.random() * 1.2).toFixed(2)}s;animation-duration:${(1.6 + Math.random() * 1.2).toFixed(2)}s"></i>`).join('');
+  let ended = false, t1;
+  const end = () => intro.classList.add('done');
+  const open = () => { if (ended) return; ended = true; clearTimeout(t1); reveal(); intro.classList.add('open'); setTimeout(end, 900); };
+  const skip = () => { if (!ended) { ended = true; clearTimeout(t1); reveal(); end(); } };
+  Promise.race([document.fonts ? document.fonts.load('800 50px Archivo') : Promise.resolve(), new Promise(r => setTimeout(r, 600))]).then(() => requestAnimationFrame(() => { intro.classList.add('go'); t1 = setTimeout(open, 1900); }));
+  ['wheel', 'touchstart', 'keydown', 'pointerdown'].forEach(ev => addEventListener(ev, skip, { once: true, passive: true }));
+})();
+
+/* oven steps rail dots */
+$$('[data-rail]').forEach(rail => {
+  const dots = rail.nextElementSibling; dots.innerHTML = [...rail.children].map(() => '<i></i>').join('');
+  const paint = () => { const w = rail.firstElementChild.getBoundingClientRect().width + 12; const k = Math.round(rail.scrollLeft / w); [...dots.children].forEach((d, i) => d.classList.toggle('on', i === k)); };
+  rail.addEventListener('scroll', () => requestAnimationFrame(paint), { passive: true }); paint();
+});
+
+/* dough toggle: whole wheat comes on za'atar, cheese and spiced meat */
+(() => {
+  const bs = $$('.dough button'), items = $$('#counterList li'), note = $('#dnote');
+  bs.forEach(b => b.addEventListener('click', () => {
+    const ww = b.dataset.d === 'ww';
+    bs.forEach(x => x.setAttribute('aria-pressed', x === b));
+    items.forEach(li => { const ok = li.dataset.ww === '1'; li.classList.toggle('ww', ww && ok); li.classList.toggle('dim', ww && !ok); });
+    note.textContent = ww ? "Za'atar, cheese and spiced meat all come on whole wheat." : '';
+  }));
+})();
+
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -10% 0px' });
+$$('.rv').forEach(el => io.observe(el));
+/* phone dock: hidden near the top and at the closing card */
+const dock = $('#dock'); let atClose = false;
+const syncDock = () => dock.classList.toggle('on', scrollY > 420 && !atClose);
+new IntersectionObserver(es => { atClose = es[0].isIntersecting; syncDock(); }).observe($('#closer'));
+addEventListener('scroll', syncDock, { passive: true });
+</script>
+</body>
+</html>
