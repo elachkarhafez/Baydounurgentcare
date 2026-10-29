@@ -12,6 +12,13 @@ Newest instruction from the user: "from now on if someone says no just pause dep
 
 Do NOT build a generic concept, deploy anything new, or `git rm` the folder any more. The older process in `references/declined.md` (concept rebuild) is retired unless the user asks for it.
 
+## Standing rule: the Big Wiss bar for cups and products (newest, overrides the three.js cup method below)
+
+The user said: "if the cups arent to the standard of the wiss ones i dont want to even see it, from now on stop making me mediocre shit". The reference is bigwissmatcha.com: each drink is a pre-rendered clip and still from one photoreal 3D cup (clear PET with real wall thickness and a rim bead, condensation droplets, a printed or foil logo, liquid with depth and texture, soft studio light on a seamless backdrop, a soft contact shadow).
+- Render cups and products in Blender Cycles through the performance engine. Ship them as frames or clips (scroll film, pour or spin), not as live three.js. A live three.js cup does not meet the bar.
+- Before showing the user anything, put a full-size still next to a Big Wiss cup (`scratchpad/bigwiss-ref/public/flavors/*.webp` or a fresh screenshot) and fix every place it looks worse: plastic, droplets, liquid, logo print, light, shadow.
+- If it isn't there yet, keep iterating and say so. Never deliver or preview a cup that's below the bar.
+
 ## Standing rule: 3D method for designs
 
 From now on, build every product/hero design (cups, drinks, food, objects) as a real 3D model using the Coffee Talks cup method, not flat SVG or canvas drawings:
