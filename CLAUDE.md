@@ -4,11 +4,12 @@ Each folder is a single-file client website built with the `ela-studio` skill (`
 
 ## Standing rule: when a business doesn't want their site
 
-Newest instruction from the user: "from now on if someone says no just pause deployment". When the user says a business doesn't want its site (or "said no", "passed", "not interested"), do this straight away, without asking:
-1. Find the business's Vercel project (`list_projects` with `search`) and pause it with `pause_project` (team `team_AYB0SFZ1qQkp6TebSji5xEKA`).
-2. Confirm the old link is down (curl returns 503).
-3. Mark the business as declined (paused) in `.claude/skills/ela-studio/references/signatures.md`.
-4. Report which links are paused.
+Newest instruction from the user: "When i say pause or said no i mean delete the entire damn project to free up space". The team sits at the 200-project Hobby limit, so a declined business's Vercel project gets deleted, not just paused. When the user says a business doesn't want its site (or "said no", "passed", "not interested", "pause it"), do this straight away, without asking again:
+1. Find the business's Vercel project (`list_projects` with `search`, team `team_AYB0SFZ1qQkp6TebSji5xEKA`).
+2. Delete it. The Vercel MCP can't delete; `get_project_deletion_link` gives the dashboard link, and the CLI needs the user's permission rule for `vercel api /v9/projects/<name> -X DELETE`. If neither works from here, hand the user the deletion link and pause the project in the meantime.
+3. Confirm the old link is gone (curl returns 404 DEPLOYMENT_NOT_FOUND).
+4. Mark the business as declined (deleted) in `.claude/skills/ela-studio/references/signatures.md`.
+5. Report which projects were deleted.
 
 Do NOT build a generic concept, deploy anything new, or `git rm` the folder any more. The older process in `references/declined.md` (concept rebuild) is retired unless the user asks for it.
 
