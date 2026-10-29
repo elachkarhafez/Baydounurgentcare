@@ -13,17 +13,16 @@
 <link rel="icon" href="media/icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Karla:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="preload" as="image" href="media/film/000.webp">
+<link rel="preload" as="image" href="media/hero.webp">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Restaurant","name":"Peepo's Subs & Shawarma","slogan":"Home of the Afrikano","foundingDate":"2011","servesCuisine":["Subs","Shawarma","Lebanese"],"image":"media/og.jpg","url":"https://peepossubs.com/","sameAs":["https://www.instagram.com/peepossubs/","https://www.facebook.com/peepossubsnshawarma/"],"department":[{"@type":"Restaurant","name":"Peepo's Canton","telephone":"+1-734-667-4361","address":{"@type":"PostalAddress","streetAddress":"41810 Ford Rd","addressLocality":"Canton","addressRegion":"MI","postalCode":"48187","addressCountry":"US"},"openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],"opens":"11:00","closes":"19:00"}]},{"@type":"Restaurant","name":"Peepo's Taylor","telephone":"+1-313-299-9992","address":{"@type":"PostalAddress","streetAddress":"10890 S. Beech Daly Rd","addressLocality":"Taylor","addressRegion":"MI","postalCode":"48180","addressCountry":"US"},"openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],"opens":"11:00","closes":"18:30"}]}]}
 </script>
 <style>
 /* Peepo's · MOBILE FIRST (base = 390px phone; min-width queries add tablet + desktop).
-   House anatomy: thin nav, a pinned scroll film rendered in Blender Cycles (their chicken Afrikano sub on a toasted
-   sesame roll, cut on the diagonal, on a paper liner printed with their logo; the halves open as you scroll and the cut
-   face is textured from their own photo), their real sub photo that grows, the Afrikano story word by word, a swipe rail of their food, two locations, a centred call to action.
-   Intro: their round badge draws its rings, Peepo's writes in, HOME OF THE AFRIKANO and SINCE 2011 fade up, then the
-   badge stamps down and the paper slides up. Light page in their red, white and charcoal. */
+   Photo-led: thin nav with their traced badge, a hero on their own photo of the Afrikano sub stacked on fries, a close-up
+   of the cut sub for the Afrikano, their story in one paragraph, a swipe rail of their food, how to order, two locations
+   with open-now, a centred call to action. Light motion only: the hero rises in on load, sections fade up as they
+   arrive. Light page in their red, white and charcoal. */
 :root{
   --paper:#f7f3ee; --white:#fff; --ink:#26221f; --char:#4a4a4a; --muted:#6c645d; --line:rgba(38,34,31,.12);
   --red:#c3202f; --red2:#a3192a; --mustard:#e9b44c;
@@ -52,23 +51,6 @@ h3{font-family:var(--f);font-weight:800;font-size:1rem;letter-spacing:0;line-hei
 .row{display:flex;flex-wrap:wrap;gap:8px}
 .logo{display:block;overflow:visible}
 
-/* ---------- intro */
-.intro{position:fixed;inset:0;z-index:100;display:grid;place-items:center;background:var(--paper);transition:transform .7s cubic-bezier(.7,0,.25,1)}
-.intro .logo{width:min(70vw,330px)}
-.intro .sweep{stroke-dasharray:100 100;stroke-dashoffset:100}
-.intro.go .sweep{animation:draw 1.1s var(--ease) forwards}
-@keyframes draw{to{stroke-dashoffset:0}}
-.intro .word{clip-path:inset(0 100% 0 0)}
-.intro.go .word{animation:write .9s cubic-bezier(.5,0,.3,1) .45s forwards}
-@keyframes write{to{clip-path:inset(0 0 0 0)}}
-.intro .small{opacity:0;transform:translateY(6px)}
-.intro.go .small{animation:rise .45s var(--out) 1.25s forwards}
-@keyframes rise{to{opacity:1;transform:none}}
-.intro.stamp .logo{animation:stamp .35s cubic-bezier(.3,1.6,.5,1)}
-@keyframes stamp{0%{transform:scale(1)}40%{transform:scale(.92)}100%{transform:scale(1)}}
-.intro.open{transform:translateY(-102%)}
-.intro.done{display:none}
-
 /* ---------- nav */
 .nav{position:fixed;top:0;left:0;right:0;z-index:40;height:var(--nav);background:rgba(247,243,238,.97);box-shadow:0 1px 0 var(--line)}
 .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:100%}
@@ -76,34 +58,31 @@ h3{font-family:var(--f);font-weight:800;font-size:1rem;letter-spacing:0;line-hei
 .nav .links{display:none}
 .nav .btn{min-height:36px;padding:0 14px;font-size:.8125rem}
 
-/* ---------- the film (bright: their paper liner) */
-.film{position:relative;height:330svh;background:var(--paper)}
-.stage{position:sticky;top:0;height:100svh;overflow:hidden;background:var(--paper)}
-.stage canvas{position:absolute;left:0;right:0;top:0;width:100%;height:62%}
-.stage .fade{position:absolute;left:0;right:0;top:calc(62% - 80px);height:82px;background:linear-gradient(rgba(247,243,238,0),var(--paper));pointer-events:none}
-.cap{position:absolute;left:var(--pad);right:var(--pad);bottom:calc(22px + env(safe-area-inset-bottom));opacity:0;transform:translateY(14px);filter:blur(6px);transition:opacity .55s var(--ease),transform .7s var(--out),filter .55s var(--ease);pointer-events:none}
-.cap.on{opacity:1;transform:none;filter:none;pointer-events:auto}
-.cap p{margin-top:8px;color:var(--muted);max-width:36ch}
-.cap .row{margin-top:14px}
+/* ---------- hero: their photo */
+.hero{padding:calc(var(--nav) + 12px) 0 var(--sec)}
+.hero .wrap{display:grid;gap:16px}
+.hero figure{border-radius:22px;overflow:hidden;aspect-ratio:4/3;max-height:46svh;background:#e9e2da}
+.hero figure img{width:100%;height:100%;object-fit:cover}
+.hero p{margin-top:8px;color:var(--muted);max-width:40ch}
+.hero .row{margin-top:14px}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
 .chip{display:inline-flex;align-items:center;gap:7px;padding:6px 11px;border-radius:999px;background:var(--white);box-shadow:inset 0 0 0 1px var(--line);font:700 .75rem/1 var(--f)}
 .chip i{width:8px;height:8px;border-radius:50%;background:#2fa866;box-shadow:0 0 0 3px rgba(47,168,102,.16)}
 .chip.closed i{background:#d24a4a;box-shadow:0 0 0 3px rgba(210,74,74,.16)}
-.hint{position:absolute;right:var(--pad);top:calc(62% - 30px);font:700 .75rem/1 var(--f);color:var(--muted);transition:opacity .4s}
-.hint.off{opacity:0}
+.up{animation:up .7s var(--out) both}
+.up.d1{animation-delay:.08s}.up.d2{animation-delay:.16s}
+@keyframes up{from{opacity:0;transform:translateY(12px)}}
 
 /* ---------- sections */
 .sec{padding:var(--sec) 0}
 .head{margin-bottom:14px}
 .head .sub{margin-top:6px}
-.real figure{position:relative;overflow:hidden;border-radius:28px;aspect-ratio:1;will-change:transform;background:#e9e2da}
+.real figure{position:relative;overflow:hidden;border-radius:22px;aspect-ratio:4/3;background:#e9e2da}
 .real img{width:100%;height:100%;object-fit:cover;object-position:50% 40%}
 .real .tx{margin-top:14px}
 .real .tx .sub{margin-top:6px}
 .words p{font:800 1.375rem/1.25 var(--h);letter-spacing:-.02em;max-width:28ch}
-.words span{color:rgba(38,34,31,.15);transition:color .35s}
-.words span.lit{color:var(--ink)}
-.words span.lit.r{color:var(--red)}
+
 
 .rail{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 calc(var(--pad) * -1);padding:0 var(--pad) 4px;scrollbar-width:none}
 .rail::-webkit-scrollbar{display:none}
@@ -115,6 +94,7 @@ h3{font-family:var(--f);font-weight:800;font-size:1rem;letter-spacing:0;line-hei
 .tile.text{justify-content:flex-end;min-height:220px;background:var(--red);color:#fff;box-shadow:none}
 .tile.text .big{font:800 1.5rem/1.1 var(--h);padding:16px 16px 0}
 .tile.text p{color:rgba(255,255,255,.88)}
+.tile.text.char{background:var(--char)}
 .dots{display:flex;justify-content:center;gap:6px;margin-top:10px}
 .dots i{width:6px;height:6px;border-radius:50%;background:rgba(38,34,31,.2);transition:background .2s,width .2s}
 .dots i.on{background:var(--red);width:16px;border-radius:3px}
@@ -129,6 +109,7 @@ h3{font-family:var(--f);font-weight:800;font-size:1rem;letter-spacing:0;line-hei
 .loc{border-radius:20px;background:var(--white);box-shadow:inset 0 0 0 1px var(--line);padding:16px}
 .loc h3{font:800 1.25rem/1.1 var(--h);letter-spacing:-.02em}
 .loc .addr{margin-top:4px;color:var(--muted)}
+.loc .addr a{white-space:nowrap}
 .loc .hrs{margin-top:10px;display:flex;justify-content:space-between;gap:10px;padding:8px 10px;border-radius:10px;background:var(--paper);font-size:.875rem}
 .loc .hrs.today{background:rgba(195,32,47,.1);color:var(--red2);font-weight:700}
 .loc .row{margin-top:12px;display:grid;grid-template-columns:repeat(3,1fr)}
@@ -163,8 +144,11 @@ footer.foot p+p{margin-top:4px}
   .brand{width:76px}
   .nav .links{display:flex;gap:24px;font:700 .875rem/1 var(--f);color:var(--muted)}
   .nav .links a{text-decoration:none}.nav .links a:hover{color:var(--ink)}
-  .real .wrap{display:grid;grid-template-columns:minmax(0,400px) 1fr;gap:56px;align-items:center}
-  .real figure{aspect-ratio:1}
+  .hero{padding-top:calc(var(--nav) + 40px)}
+  .hero .wrap{grid-template-columns:1fr minmax(0,540px);gap:48px;align-items:center}
+  .hero figure{order:2;max-height:none}
+  .hero p{font-size:1rem}
+  .real .wrap{display:grid;grid-template-columns:minmax(0,480px) 1fr;gap:56px;align-items:center}
   .real .tx{margin:0}
   .words p{font-size:2.25rem}
   .rail{display:grid;grid-template-columns:repeat(3,1fr);overflow:visible;margin:0;padding:0}
@@ -178,31 +162,11 @@ footer.foot p+p{margin-top:4px}
   .dock{display:none}
   footer.foot{padding-bottom:28px}
 }
-@media (min-width:760px) and (min-aspect-ratio:1/1){
-  .film{height:420vh}
-  .stage canvas{height:100%}
-  .stage .fade{top:0;bottom:0;height:auto;width:60%;background:linear-gradient(90deg,rgba(247,243,238,.95),rgba(247,243,238,.7) 50%,rgba(247,243,238,0))}
-  .cap{left:max(var(--pad),calc(50vw - 600px));right:auto;bottom:auto;top:50%;width:min(36vw,470px);transform:translateY(calc(-50% + 14px))}
-  .cap.on{transform:translateY(-50%)}
-  .cap p{font-size:1rem}
-  .hint{right:auto;left:50%;top:auto;bottom:18px;transform:translateX(-50%)}
-}
-@media (min-width:760px) and (max-width:1099px) and (min-aspect-ratio:1/1){
-  .cap{width:min(46vw,470px)}
-  .cap h1{font-size:2.5rem}
-}
-@media (min-width:760px) and (max-aspect-ratio:1/1){
-  .film{height:380vh}
-  .stage canvas{height:64%}
-  .stage .fade{top:calc(64% - 100px);height:102px}
-  .cap{left:var(--pad);right:var(--pad);max-width:640px}
-}
 @media (min-width:1100px){
   .tile .ph{aspect-ratio:4/3}
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
-  .intro{display:none}
   .rv{opacity:1!important;transform:none!important}
 }
 </style>
@@ -218,15 +182,6 @@ footer.foot p+p{margin-top:4px}
   <symbol id="i-bag" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l1 14H5L6 7Z"/><path d="M9 7a3 3 0 0 1 6 0"/></g></symbol>
 </svg>
 
-<div class="intro" id="intro" aria-hidden="true">
-  <svg class="logo" viewBox="0 0 1024 878">
-    <mask id="ringmask" maskUnits="userSpaceOnUse" x="0" y="0" width="1024" height="878"><circle class="sweep" cx="521" cy="439" r="405" fill="none" stroke="#fff" stroke-width="76" pathLength="100" transform="rotate(-90 521 439)"/></mask>
-    <g mask="url(#ringmask)"><use href="#pp-r" fill="#c3202f"/></g>
-    <g class="word"><use href="#pp-wd" fill="#c3202f"/></g>
-    <g class="small"><use href="#pp-g" fill="#4a4a4a"/></g>
-  </svg>
-</div>
-
 <header class="nav" id="nav">
   <div class="wrap">
     <a class="brand" href="#top" aria-label="Peepo's, back to the top"><svg class="logo" viewBox="0 0 1024 878"><use href="#pp"/></svg></a>
@@ -236,43 +191,38 @@ footer.foot p+p{margin-top:4px}
 </header>
 
 <main id="top">
-  <section class="film" id="film" aria-label="Our chicken Afrikano sub on a toasted sesame roll, cut in half and opening up as you scroll">
-    <div class="stage">
-      <canvas id="cv" aria-hidden="true"></canvas>
-      <div class="fade" aria-hidden="true"></div>
-      <div class="cap on" id="c0">
-        <div class="chips"><span class="chip" id="status"><i></i><span id="statusText">Open Monday to Saturday</span></span><span class="chip">Canton · Taylor</span></div>
-        <h1>Home of the <span class="red">Afrikano</span>, since 2011.</h1>
-        <p>Subs and shawarma in Canton and Taylor. Order online and it's ready when you get here.</p>
-        <div class="row"><a class="btn" href="#locations"><svg aria-hidden="true"><use href="#i-bag"/></svg>Order online</a><a class="btn line" href="#menu">See the menu</a></div>
+  <section class="hero" id="hero">
+    <div class="wrap">
+      <figure class="up"><img src="media/hero.webp" alt="Our chicken Afrikano sub cut in half and stacked on fries, on the Peepo's paper" width="1200" height="900" fetchpriority="high"></figure>
+      <div>
+        <div class="chips up d1"><span class="chip" id="status"><i></i><span id="statusText">Open Monday to Saturday</span></span><span class="chip">Canton · Taylor</span></div>
+        <h1 class="up d1">Home of the <span class="red">Afrikano</span>, since 2011.</h1>
+        <p class="up d2">Subs and shawarma in Canton and Taylor. Order online and it's ready when you get here.</p>
+        <div class="row up d2"><a class="btn" href="#locations"><svg aria-hidden="true"><use href="#i-bag"/></svg>Order online</a><a class="btn line" href="#menu">See the menu</a></div>
       </div>
-      <div class="cap" id="c1"><h2>Toasted till the sesame on top goes golden.</h2><p>Your protein with grilled peppers, lettuce, cheese and mayo.</p></div>
-      <div class="cap" id="c2"><h2>The Afrikano is our own spicy seasoning.</h2><p>Get it on chicken, crispy chicken, steak, shrimp or falafel.</p></div>
-      <div class="cap" id="c3"><h2>On a sub, on fries, in a bowl or on a salad.</h2><p>Often imitated, never duplicated.</p><div class="row"><a class="btn" href="#locations"><svg aria-hidden="true"><use href="#i-bag"/></svg>Order online</a></div></div>
-      <span class="hint" id="hint" aria-hidden="true">Scroll</span>
     </div>
   </section>
 
-  <section class="sec real">
+  <section class="sec real" style="padding-top:0">
     <div class="wrap">
-      <figure id="grow"><img src="media/sub-real.webp" alt="An Afrikano sub cut in half and stacked on fries, on the Peepo's paper" width="900" height="1109" loading="lazy"></figure>
-      <div class="tx"><h2>Here's the real one.</h2><p class="sub">Grilled, cut in half and stacked on a pile of fries.</p></div>
+      <figure class="rv"><img src="media/afrikano-fries.webp" alt="Afrikano fries topped with chicken, white sauce and parsley" width="800" height="800" loading="lazy"></figure>
+      <div class="tx rv"><h2>The Afrikano is our own spicy seasoning.</h2><p class="sub">Get it on chicken, crispy chicken, steak, shrimp or falafel. On a sub, on fries, in a bowl or on a salad. Often imitated, never duplicated.</p></div>
     </div>
   </section>
 
   <section class="sec words" id="story" style="padding-top:0">
-    <div class="wrap"><p id="words">People wanted a spicy sub, so we tried every hot sauce out there. None of them hit, so six months later we made our own. That's the Afrikano.</p></div>
+    <div class="wrap"><p class="rv">People wanted a spicy sub, so we tried every hot sauce out there. None of them hit, so six months later we made our own. That's the <span class="red">Afrikano</span>.</p></div>
   </section>
 
   <section class="sec" id="menu" style="padding-top:0">
     <div class="wrap">
       <div class="head rv"><h2>What to get</h2><p class="sub">The full menu is on our ordering page.</p></div>
       <div class="rail" data-rail>
-        <article class="tile"><div class="ph"><img src="media/afrikano-fries.webp" alt="Afrikano fries topped with chicken, white sauce and parsley" width="800" height="800" loading="lazy"></div><div class="tx"><h3>Afrikano Fries</h3><p>The Afrikano piled on fries. Pick any protein.</p></div></article>
-        <article class="tile"><div class="ph"><img src="media/film/still-sub.webp" alt="3D render of a chicken Afrikano sub cut in half on the Peepo's paper" width="800" height="800" loading="lazy"></div><div class="tx"><h3>Afrikano Sub</h3><p>Your protein, grilled peppers, lettuce, cheese and mayo.</p></div></article>
+        <article class="tile"><div class="ph"><img src="media/catering.webp" alt="Pressed wraps cut in half next to a pile of fries on a wooden table" width="800" height="800" loading="lazy"></div><div class="tx"><h3>Catering</h3><p>Trays for work and family events. Ask either store.</p></div></article>
         <article class="tile"><div class="ph"><img src="media/rice-bowl.webp" alt="A shawarma rice bowl with yellow turmeric rice, tomatoes and white sauce" width="800" height="800" loading="lazy"></div><div class="tx"><h3>Shawarma Rice Bowl</h3><p>Shawarma over turmeric rice.</p></div></article>
         <article class="tile"><div class="ph"><img src="media/shawarma.webp" alt="A chicken shawarma wrap cut in half with lettuce and tomato" width="800" height="800" loading="lazy"></div><div class="tx"><h3>Shawarma wraps</h3><p>Chicken, beef or the Super Chicken.</p></div></article>
         <article class="tile text"><p class="big">Steak Afrikano Eggrolls</p><div class="tx"><p>Two fried eggrolls with Steak Afrikano, onions, peppers and cheese, with our homemade ranch.</p></div></article>
+        <article class="tile text char"><p class="big">Sujuk Sub</p><div class="tx"><p>The J isn't silent.</p></div></article>
         <article class="tile"><div class="ph"><img src="media/spread.webp" alt="A table of Peepo's subs, bowls, fries and smoothies from above" width="800" height="800" loading="lazy"></div><div class="tx"><h3>Bring everyone</h3><p>Subs, bowls, fries and smoothies. They do catering too.</p></div></article>
       </div>
       <div class="dots" data-dots></div>
@@ -340,10 +290,8 @@ const CONFIG = {
   instagram: 'https://www.instagram.com/peepossubs/', tz: 'America/Detroit',
   // Monday to Saturday, closed Sunday. Canton closes at 7 PM, Taylor at 6:30 PM.
   open: 11, close: { canton: 19, taylor: 18.5 },
-  film: { n: 96, dir: 'media/film/' },
 };
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
-const RM = matchMedia('(prefers-reduced-motion: reduce)').matches, root = document.documentElement;
 const ext = (a, url) => { a.href = url; a.target = '_blank'; a.rel = 'noopener'; };
 $$('[data-tel]').forEach(a => a.href = 'tel:+1' + a.dataset.tel);
 $$('[data-dir]').forEach(a => ext(a, 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(a.dataset.dir)));
@@ -362,71 +310,6 @@ $('#yr').textContent = new Date().getFullYear();
   else { $('#status').classList.add('closed'); $('#statusText').textContent = `Closed · opens ${openDay && h < CONFIG.open ? '' : (day === 6 ? 'Monday ' : 'tomorrow ')}11 AM`; }
 })();
 
-/* ---------- intro: the rings draw, Peepo's writes in, the small type rises, a stamp, then the paper slides up. Once per visit, skippable. */
-(() => {
-  const intro = $('#intro'), reveal = () => root.classList.add('ready');
-  let seen = false; try { seen = sessionStorage.getItem('pp-intro') === '1'; } catch (e) {}
-  if (RM || seen) { intro.classList.add('done'); reveal(); return; }
-  try { sessionStorage.setItem('pp-intro', '1'); } catch (e) {}
-  let ended = false, t1, t0;
-  const end = () => intro.classList.add('done');
-  const open = () => { if (ended) return; ended = true; clearTimeout(t1); clearTimeout(t0); reveal(); intro.classList.add('open'); setTimeout(end, 800); };
-  const skip = () => { if (!ended) { ended = true; clearTimeout(t1); clearTimeout(t0); reveal(); end(); } };
-  requestAnimationFrame(() => requestAnimationFrame(() => { intro.classList.add('go'); t0 = setTimeout(() => intro.classList.add('stamp'), 1750); t1 = setTimeout(open, 2200); }));
-  ['wheel', 'touchstart', 'keydown', 'pointerdown'].forEach(ev => addEventListener(ev, skip, { once: true, passive: true }));
-})();
-
-/* ---------- ScrollFilm (house player, kit/scrollfilm). 16:10 frames: phones and portrait tablets crop to the sub. */
-function ScrollFilm(o) {
-  const small = matchMedia('(max-width: 760px)').matches, split = small || matchMedia('(max-aspect-ratio: 1/1)').matches;
-  const all = o.frames, step = small ? (o.mobileStep || 2) : 1, idx = all.map((_, i) => i).filter(i => i % step === 0 || i === all.length - 1);
-  const cv = o.canvas, ctx = cv.getContext('2d', { alpha: false }), sec = o.section, N = all.length;
-  const img = new Array(N).fill(null); let dirty = true, shown = -1;
-  const load = i => { if (img[i] !== null) return; img[i] = false; const im = new Image(); im.src = all[i]; im.decode().then(() => { img[i] = im; dirty = true; }).catch(() => { img[i] = null; }); };
-  const order = [...idx].sort((a, b) => ((a % 8 ? 1 : 0) - (b % 8 ? 1 : 0)) || ((a % 4 ? 1 : 0) - (b % 4 ? 1 : 0)) || a - b);
-  let q = 0; (function pump() { for (let n = 0; n < 6 && q < order.length; n++) load(order[q++]); if (q < order.length) setTimeout(pump, 90); })();
-  const size = () => { const d = Math.min(devicePixelRatio || 1, 1.5), w = Math.min(cv.clientWidth * d, 1600); cv.width = Math.round(w); cv.height = Math.round(w * cv.clientHeight / cv.clientWidth); ctx.fillStyle = getComputedStyle(sec).backgroundColor; ctx.fillRect(0, 0, cv.width, cv.height); dirty = true; };
-  addEventListener('resize', size); size();
-  const lerp = (a, b, t) => a + (b - a) * t;
-  const focusAt = t => { const P = (!split && o.focusWide) || o.focus || [[0, .5], [1, .5]]; for (let i = 1; i < P.length; i++) if (t <= P[i][0]) return lerp(P[i - 1][1], P[i][1], (t - P[i - 1][0]) / ((P[i][0] - P[i - 1][0]) || 1)); return P[P.length - 1][1]; };
-  function nearest(i) { if (img[i]) return i; for (let d = 1; d < N; d++) { if (img[i - d]) return i - d; if (img[i + d]) return i + d; } return -1; }
-  function draw(t) {
-    const k = nearest(Math.round(t * (N - 1))); if (k < 0) return; if (k === shown && !dirty) return; shown = k; dirty = false;
-    const A = img[k], W = cv.width, H = cv.height, s = Math.max(W / A.naturalWidth, H / A.naturalHeight), dw = A.naturalWidth * s, dh = A.naturalHeight * s;
-    ctx.drawImage(A, Math.min(0, Math.max(W - dw, W / 2 - focusAt(t) * dw)), (H - dh) / 2, dw, dh);
-  }
-  const progress = () => { const r = sec.getBoundingClientRect(), span = sec.offsetHeight - innerHeight; return Math.min(1, Math.max(0, -r.top / Math.max(1, span))); };
-  let cur = progress(), prev = performance.now(), lastP = -1;
-  (function tick(now) {
-    const dt = Math.min(.05, (now - prev) / 1000); prev = now; const p = progress();
-    cur = RM ? p : cur + (p - cur) * (1 - Math.exp(-dt * 8)); if (Math.abs(p - cur) < .0004) cur = p;
-    draw(cur);
-    if (o.onProgress && Math.abs(p - lastP) > .0003) { lastP = p; o.onProgress(p, cur); }
-    requestAnimationFrame(tick);
-  })(prev);
-}
-function ScrollGrow(el, from = .84) {
-  const f = () => { const r = el.getBoundingClientRect(), k = Math.min(1, Math.max(0, (innerHeight - r.top) / (innerHeight * .9))); el.style.transform = `scale(${(from + (1 - from) * k).toFixed(4)})`; el.style.borderRadius = `${(28 * (1 - k) + 14).toFixed(1)}px`; };
-  addEventListener('scroll', () => requestAnimationFrame(f), { passive: true }); f();
-}
-function ScrollWords(el) {
-  const words = el.textContent.trim().split(/\s+/); el.innerHTML = words.map(w => `<span${/Afrikano/.test(w) ? ' class="r"' : ''}>${w}</span>`).join(' '); const spans = [...el.children];
-  const f = () => { const r = el.getBoundingClientRect(), k = Math.min(1, Math.max(0, (innerHeight * .78 - r.top) / (r.height + innerHeight * .35))); const n = Math.round(k * spans.length); spans.forEach((s, i) => s.classList.toggle('lit', i < n)); };
-  addEventListener('scroll', () => requestAnimationFrame(f), { passive: true }); f();
-}
-
-const BEATS = [['#c0', -1, .08], ['#c1', .16, .38], ['#c2', .5, .74], ['#c3', .82, .985]];
-ScrollFilm({
-  section: $('#film'), canvas: $('#cv'), mobileStep: 2,
-  frames: Array.from({ length: CONFIG.film.n }, (_, i) => CONFIG.film.dir + String(i).padStart(3, '0') + '.webp'),
-  focus: [[0, .5], [.3, .46], [.46, .5], [.62, .5], [.8, .36], [.88, .36], [1, .62]],
-  focusWide: [[0, .48], [.5, .52], [1, .55]],
-  onProgress: (p) => { BEATS.forEach(([s, a, b]) => $(s).classList.toggle('on', p > a && p < b)); $('#hint').classList.toggle('off', p > .02); },
-});
-ScrollGrow($('#grow'));
-ScrollWords($('#words'));
-
-
 $$('[data-rail]').forEach(rail => {
   const dots = rail.nextElementSibling; dots.innerHTML = [...rail.children].map(() => '<i></i>').join('');
   const paint = () => { const w = rail.firstElementChild.getBoundingClientRect().width + 10; const k = Math.round(rail.scrollLeft / w); [...dots.children].forEach((d, i) => d.classList.toggle('on', i === k)); };
@@ -435,10 +318,10 @@ $$('[data-rail]').forEach(rail => {
 const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -10% 0px' });
 $$('.rv').forEach(el => io.observe(el));
 
-const dock = $('#dock'); let atClose = false, inFilm = true;
-const syncDock = () => dock.classList.toggle('on', !inFilm && !atClose);
+const dock = $('#dock'); let atClose = false, inHero = true;
+const syncDock = () => dock.classList.toggle('on', !inHero && !atClose);
 new IntersectionObserver(es => { atClose = es[0].isIntersecting; syncDock(); }).observe($('#closer'));
-new IntersectionObserver(es => { inFilm = es[0].isIntersecting; syncDock(); }, { rootMargin: '0px 0px -100% 0px' }).observe($('#film'));
+new IntersectionObserver(es => { inHero = es[0].isIntersecting; syncDock(); }).observe($('#hero .row'));
 </script>
 <a class="studio" href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener" aria-label="Site by ElaSystems (opens in a new tab)"><i aria-hidden="true"></i><span>Site by <b>ElaSystems</b></span></a>
 <style>

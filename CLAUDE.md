@@ -12,7 +12,15 @@ Newest instruction from the user: "from now on if someone says no just pause dep
 
 Do NOT build a generic concept, deploy anything new, or `git rm` the folder any more. The older process in `references/declined.md` (concept rebuild) is retired unless the user asks for it.
 
-## Standing rule: the Big Wiss bar for cups and products (newest, overrides the three.js cup method below)
+## Standing rule: not everything goes through Blender (newest, overrides the scroll-film anatomy below)
+
+The user said: "Not everything has to go through blender and severe Animating". The Blender scroll film is optional, not the default.
+- Lead with the business's own photography: a real-photo hero (headline, CTA and photo on the first phone screen), then the rest of the house sections (statement, menu/rail, steps, locations, closer, footer).
+- Motion stays light: fade/rise reveals and small hover states. No full-screen intro overlays, no pinned scroll films, no word-by-word or scale-on-scroll effects unless the user asks.
+- Reach for Blender only when the user asks for it or a product can't be shown well any other way, and then the Big Wiss bar below applies.
+- Ship fast. Mobile-first sizing, formatting, copy, bot blocking, QA and logging rules all still apply.
+
+## Standing rule: the Big Wiss bar for cups and products (overrides the three.js cup method below)
 
 The user said: "if the cups arent to the standard of the wiss ones i dont want to even see it, from now on stop making me mediocre shit". The reference is bigwissmatcha.com: each drink is a pre-rendered clip and still from one photoreal 3D cup (clear PET with real wall thickness and a rim bead, condensation droplets, a printed or foil logo, liquid with depth and texture, soft studio light on a seamless backdrop, a soft contact shadow).
 - Render cups and products in Blender Cycles through the performance engine. Ship them as frames or clips (scroll film, pour or spin), not as live three.js. A live three.js cup does not meet the bar.
