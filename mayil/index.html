@@ -1,0 +1,583 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noai, noimageai">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mayil Coffee · Coffee truck on W Warren, Dearborn Heights</title>
+<meta name="description" content="Mayil Coffee: lattes, shaken brown sugar oat milk, matcha, fruit refreshers and fresh sourdough from our coffee truck at 25947 W Warren St, Dearborn Heights. Open daily 9 AM to 6 PM.">
+<meta property="og:title" content="Mayil Coffee · Dearborn Heights">
+<meta property="og:description" content="Lattes, matcha, refreshers and sourdough from our coffee truck on W Warren. Open daily 9 AM to 6 PM.">
+<meta property="og:image" content="media/og.jpg">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#1c0f0a">
+<link rel="icon" href="media/icon.png">
+<link rel="apple-touch-icon" href="media/icon.png">
+<link rel="preload" as="image" href="media/spread.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600;700&family=Aref+Ruqaa:wght@700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+/* Mayil Coffee. Colours from their truck and logo: espresso brown, the truck's plum, cream, the maroon of the coffee in
+   their cup logo, crema caramel. DM Serif Display like their "mayil" wordmark, Albert Sans for text, Aref Ruqaa for ميل.
+   Motion: their cup logo is redrawn in SVG and pours itself (rim draws, cup fills in, handle draws, coffee spreads with a
+   ripple, ميل writes in right to left, the wordmark rises, steam curls up). Headline words rise from masks, the hero photo
+   tilts and drifts, the grinder-to-cup film scrubs with scroll, the menu tab pill slides, smooth scrolling on desktop.
+   Mobile first. One rAF loop, transform/opacity only. */
+:root{
+  --night:#1c0f0a; --esp:#2a1610; --plum:#3a2026; --cream:#f3e7d4; --paper:#faf3e8; --maroon:#7c2f2b; --crema:#c98b56;
+  --matcha:#9cb466; --soft:rgba(243,231,212,.72); --ink:#2a1610; --inks:#6c5146; --line:rgba(243,231,212,.12); --lined:rgba(42,22,16,.12);
+  --f:'Albert Sans', system-ui, sans-serif; --d:'DM Serif Display', Georgia, serif; --ar:'Aref Ruqaa', serif;
+  --pad:16px; --ease:cubic-bezier(.2,.75,.2,1); --spring:cubic-bezier(.3,1.5,.5,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;scroll-padding-top:64px}
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+body{background:var(--night);color:var(--cream);font:400 .9375rem/1.55 var(--f);overflow-x:hidden}
+img,video,canvas{display:block;max-width:100%}
+img{height:auto}
+a{color:inherit}
+.wrap{width:100%;max-width:1160px;margin:0 auto;padding:0 var(--pad)}
+h1,h2,h3{font-family:var(--d);font-weight:400;letter-spacing:-.005em;line-height:1.06}
+h1,h2,.cap p{text-wrap:balance}
+h1{font-size:1.875rem}
+h2{font-size:1.5rem}
+h3{font-size:1.0625rem;line-height:1.2}
+em{font-style:normal;color:var(--crema)}
+
+.btn{--mx:0px;--my:0px;--lift:0px;position:relative;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:0 20px;border-radius:999px;font:600 .875rem/1 var(--f);text-decoration:none;white-space:nowrap;border:0;cursor:pointer;transform:translate3d(var(--mx),calc(var(--my) - var(--lift)),0);transition:transform .35s var(--ease),background .2s,box-shadow .2s}
+.btn svg{width:17px;height:17px;flex:none}
+.btn.cream{background:var(--cream);color:var(--ink)}
+.btn.crema{background:var(--crema);color:var(--ink)}
+.btn.ghost{background:transparent;color:var(--cream);box-shadow:inset 0 0 0 1.5px rgba(243,231,212,.3)}
+.btn.dark{background:var(--esp);color:var(--cream)}
+.btn.cream::after,.btn.crema::after{content:'';position:absolute;inset:0;background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.45) 50%,transparent 70%);transform:translateX(-120%);transition:transform .8s var(--ease)}
+@media (hover:hover) and (pointer:fine){
+  .btn:hover{--lift:2px}
+  .btn.cream:hover::after,.btn.crema:hover::after{transform:translateX(120%)}
+  .btn.ghost:hover{box-shadow:inset 0 0 0 1.5px var(--cream)}
+}
+.btn:focus-visible,a:focus-visible,button:focus-visible{outline:2px solid var(--crema);outline-offset:3px}
+
+/* the logo, redrawn as SVG so it can pour itself */
+.mlogo{display:block;overflow:visible}
+.mlogo .rim{fill:none;stroke:var(--cream);stroke-width:5}
+.mlogo .body{fill:var(--cream)}
+.mlogo .m{fill:var(--maroon)}
+.mlogo .handle{fill:none;stroke:var(--cream);stroke-width:15;stroke-linecap:round}
+.mlogo .coffee{fill:var(--maroon)}
+.mlogo .ripple{fill:none;stroke:var(--crema);stroke-width:2;opacity:0}
+.mlogo .ar{font:700 50px var(--ar);fill:var(--cream)}
+.mlogo .word{font:400 56px var(--d);fill:var(--cream);letter-spacing:.01em}
+.mlogo .steam path{fill:none;stroke:var(--crema);stroke-width:3;stroke-linecap:round;stroke-dasharray:46;stroke-dashoffset:46;opacity:0}
+.mlogo .rim,.mlogo .handle{stroke-dasharray:var(--len);stroke-dashoffset:0}
+.mlogo .body,.mlogo .m,.mlogo .coffee,.mlogo .ripple,.mlogo .word,.mlogo .steam path{transform-box:fill-box}
+.js .mlogo.anim .rim,.js .mlogo.anim .handle{stroke-dashoffset:var(--len)}
+.js .mlogo.anim .body{transform-origin:50% 0;transform:scaleY(.15);opacity:0}
+.js .mlogo.anim .m{transform-origin:50% 100%;transform:translateY(60%);opacity:0}
+.js .mlogo.anim .coffee{transform-origin:50% 50%;transform:scale(0)}
+.js .mlogo.anim .arclip{transform-box:fill-box;transform-origin:100% 50%;transform:scaleX(0)}
+.js .mlogo.anim .word{transform-origin:50% 100%;transform:translateY(40%);opacity:0;letter-spacing:.3em}
+.mlogo.go .rim{animation:dash .7s var(--ease) forwards}
+.mlogo.go .body{animation:fillup .8s var(--spring) .25s forwards}
+.mlogo.go .handle{animation:dash .6s var(--ease) .55s forwards}
+.mlogo.go .m{animation:rise .7s var(--spring) .7s forwards}
+.mlogo.go .coffee{animation:pourin .7s var(--ease) .8s forwards}
+.mlogo.go .ripple{animation:ripple 1s var(--ease) 1.1s}
+.mlogo.go .arclip{animation:write .8s var(--ease) 1.25s forwards}
+.mlogo.go .word{animation:word 1s var(--ease) 1.45s forwards}
+.mlogo.done .steam path{animation:steam 3.6s ease-in-out infinite}
+.mlogo.done .steam path:nth-child(2){animation-delay:1.2s}
+.mlogo.done .steam path:nth-child(3){animation-delay:2.4s}
+@keyframes dash{to{stroke-dashoffset:0}}
+@keyframes fillup{to{transform:none;opacity:1}}
+@keyframes rise{to{transform:none;opacity:1}}
+@keyframes pourin{60%{transform:scale(1.06)}to{transform:none}}
+@keyframes ripple{0%{opacity:.9;transform:scale(.4)}100%{opacity:0;transform:scale(1.35)}}
+@keyframes write{to{transform:none}}
+@keyframes word{to{transform:none;opacity:1;letter-spacing:.01em}}
+@keyframes steam{0%{opacity:0;stroke-dashoffset:46;transform:translateY(6px)}35%{opacity:.7}75%{opacity:.3}100%{opacity:0;stroke-dashoffset:-46;transform:translateY(-8px)}}
+.mlogo .ripple,.mlogo .coffee{transform-origin:50% 50%}
+
+/* nav */
+.nav{position:sticky;top:0;z-index:30;height:56px;background:rgba(28,15,10,.96);border-bottom:1px solid transparent;transition:border-color .3s}
+.nav.solid{border-color:var(--line)}
+.nav .wrap{height:100%;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:9px;text-decoration:none}
+.brand .mlogo{width:46px;height:auto}
+.brand .mlogo .word,.brand .mlogo .steam,.brand .mlogo .ripple{display:none}
+.brand span{font:400 1.0625rem/1 var(--d)}
+.nav .links{display:none}
+.nav .btn{min-height:38px;padding:0 15px;font-size:.8125rem}
+
+/* hero */
+.hero{position:relative;padding:18px 0 34px;background:radial-gradient(90% 55% at 50% 0%,rgba(201,139,86,.16),transparent 70%)}
+.hero .wrap{display:grid;gap:22px}
+.hero .copy{text-align:center}
+.hero .mlogo{width:118px;margin:0 auto}
+.chips{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:14px}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:6px 12px;border-radius:999px;background:rgba(243,231,212,.07);box-shadow:inset 0 0 0 1px var(--line);font:600 .75rem/1.2 var(--f);color:var(--cream)}
+.chip i{width:8px;height:8px;border-radius:50%;background:#7c8a6a}
+.chip.open i{background:var(--matcha);box-shadow:0 0 0 3px rgba(156,180,102,.25);animation:ping 2s ease-in-out infinite}
+@keyframes ping{50%{box-shadow:0 0 0 6px rgba(156,180,102,0)}}
+.hero h1{margin-top:14px}
+.w{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.12em;margin-bottom:-.12em}
+.w>i{display:inline-block;font-style:normal}
+.hero .lede{margin:12px auto 0;color:var(--soft);max-width:31em}
+.ctas{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px;justify-content:center}
+.photo{justify-self:center;position:relative;will-change:transform}
+.photo .frame{position:relative;height:min(40svh,calc((100vw - 32px)*1.25));aspect-ratio:4/5;border-radius:26px;overflow:hidden;background:#2a1610;box-shadow:0 30px 60px -28px #000}
+.photo .frame img{width:100%;height:100%;object-fit:cover;animation:kb 18s ease-in-out infinite alternate}
+@keyframes kb{to{transform:scale(1.08) translate(-1.5%,1%)}}
+.photo .tag{position:absolute;left:12px;bottom:12px;padding:7px 12px;border-radius:999px;background:rgba(28,15,10,.82);color:var(--cream);font:600 .75rem/1 var(--f)}
+.js .w>i{transform:translateY(110%)}
+.js .ready .w>i{animation:wrise 1s var(--ease) forwards;animation-delay:calc(500ms + var(--k) * 65ms)}
+@keyframes wrise{to{transform:none}}
+.js .hero [data-in]{opacity:0;transform:translateY(16px)}
+.js .ready .hero [data-in]{animation:fin .9s var(--ease) forwards;animation-delay:calc(var(--i,0) * 110ms + 400ms)}
+.js .hero .frame{opacity:0;clip-path:inset(12% 10% 12% 10% round 30px);transform:scale(.94)}
+.js .ready .hero .frame{animation:open 1.3s var(--ease) .5s forwards}
+@keyframes fin{to{opacity:1;transform:none}}
+@keyframes open{to{opacity:1;transform:none;clip-path:inset(0 0 0 0 round 26px)}}
+
+/* film: grinder to cup */
+.film{position:relative;height:340svh;background:#140a07}
+.stage{position:sticky;top:56px;height:calc(100svh - 56px);overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:12px var(--pad) 18px}
+.stage .head{width:100%;max-width:520px;text-align:center}
+.stage .head h2{font-size:1.375rem}
+.fcard{position:relative;width:min(100%,50svh);aspect-ratio:1;border-radius:24px;overflow:hidden;background:#0d0705;box-shadow:0 30px 60px -30px #000;will-change:transform}
+.fcard canvas{width:100%;height:100%}
+.fcard .bar{position:absolute;left:12px;right:12px;top:12px;display:flex;gap:5px;z-index:2}
+.fcard .bar span{flex:1;height:3px;border-radius:3px;background:rgba(243,231,212,.28);overflow:hidden}
+.fcard .bar span i{display:block;height:100%;width:100%;background:var(--cream);transform-origin:left;transform:scaleX(0)}
+.caps{position:relative;width:100%;max-width:520px;min-height:92px}
+.cap{position:absolute;inset:0 0 auto;text-align:center;opacity:0;transform:translateY(14px);filter:blur(6px);transition:opacity .55s var(--ease),transform .55s var(--ease),filter .55s var(--ease)}
+.cap.on{opacity:1;transform:none;filter:none}
+.cap small{display:inline-block;font:600 .75rem/1 var(--f);color:var(--crema)}
+.cap p{margin-top:8px;font:400 1.25rem/1.25 var(--d)}
+
+/* menu: styled like the board on the truck */
+.menu{background:var(--paper);color:var(--ink);padding:40px 0 44px;position:relative}
+.menu .top{display:flex;align-items:flex-end;justify-content:space-between;gap:12px}
+.menu .word{font:400 3rem/.8 var(--d);color:var(--maroon);letter-spacing:.02em}
+.menu .top p{color:var(--inks);font-size:.8125rem;max-width:15em;text-align:right}
+.tabs{position:relative;display:flex;gap:4px;margin:18px calc(var(--pad) * -1) 0;padding:4px var(--pad);overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{position:relative;z-index:1;flex:none;border:0;background:transparent;color:var(--inks);font:600 .8125rem/1 var(--f);padding:11px 14px;border-radius:999px;cursor:pointer;transition:color .3s;white-space:nowrap}
+.tabs button[aria-selected="true"]{color:var(--cream)}
+.tabs .pill{position:absolute;z-index:0;top:4px;height:calc(100% - 8px);border-radius:999px;background:var(--maroon);transition:transform .5s var(--spring),width .5s var(--spring)}
+.board{margin-top:14px}
+.cat{display:none}
+.cat.on{display:block}
+.cat h3{font:600 .8125rem/1 var(--f);letter-spacing:.16em;text-transform:uppercase;color:var(--maroon);padding-bottom:10px;border-bottom:1.5px solid var(--maroon)}
+.row{display:grid;grid-template-columns:1fr auto;gap:2px 12px;padding:11px 0;border-bottom:1px dashed var(--lined)}
+.row b{font:400 1.0625rem/1.25 var(--d);color:var(--ink)}
+.row span{font:600 .9375rem/1.3 var(--f);color:var(--ink);font-variant-numeric:tabular-nums}
+.row small{grid-column:1/-1;color:var(--inks);font-size:.8125rem;line-height:1.4}
+.js .cat.on .row{animation:rowin .6s var(--ease) both;animation-delay:calc(var(--r) * 45ms)}
+@keyframes rowin{from{opacity:0;transform:translateY(10px)}}
+.feature{display:grid;grid-template-columns:110px 1fr;gap:14px;align-items:center;margin-top:20px;padding:12px;border-radius:20px;background:#f1e4d1}
+.feature img{width:110px;aspect-ratio:4/5;object-fit:cover;border-radius:14px}
+.feature b{display:block;font:400 1.25rem/1.1 var(--d);color:var(--maroon)}
+.feature p{margin-top:4px;color:var(--inks);font-size:.875rem}
+.feature span{display:inline-block;margin-top:8px;font:700 .875rem/1 var(--f);color:var(--ink)}
+.menu .note{margin-top:14px;color:var(--inks);font-size:.75rem}
+
+/* rail */
+.bites{padding:40px 0 40px}
+.bites .head p{margin-top:6px;color:var(--soft)}
+.rail{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;margin:18px calc(var(--pad) * -1) 0;padding:0 var(--pad) 4px;scrollbar-width:none}
+.rail::-webkit-scrollbar{display:none}
+.bite{flex:0 0 76%;scroll-snap-align:start;background:var(--esp);border-radius:20px;overflow:hidden;box-shadow:inset 0 0 0 1px var(--line)}
+.bite figure{aspect-ratio:1;overflow:hidden;background:#2a1610}
+.bite img{width:100%;height:100%;object-fit:cover}
+.bite div{padding:14px 16px 16px}
+.bite p{margin-top:4px;color:var(--soft);font-size:.875rem}
+.dots{display:flex;justify-content:center;gap:6px;margin-top:14px}
+.dots button{width:7px;height:7px;border-radius:7px;border:0;background:rgba(243,231,212,.25);cursor:pointer;transition:width .35s var(--ease),background .3s}
+.dots button.on{width:22px;background:var(--crema)}
+@media (hover:hover) and (pointer:fine){
+  .bite{transition:transform .5s var(--ease)}
+  .bite.in:hover{transform:translateY(-6px)}
+  .bite figure img{transition:transform .8s var(--ease)}
+  .bite:hover figure img{transform:scale(1.06)}
+}
+
+/* visit */
+.visit{background:var(--plum);padding:40px 0 44px}
+.vgrid{display:grid;gap:14px;margin-top:18px}
+.vcard{border-radius:22px;background:rgba(28,15,10,.45);box-shadow:inset 0 0 0 1px var(--line);overflow:hidden}
+.vcard .truck{aspect-ratio:4/3;width:100%;object-fit:cover}
+.vcard .in{padding:18px}
+.vcard h3{font-size:1.375rem}
+.vcard p{margin-top:6px;color:var(--soft)}
+.hours{display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding:12px 14px;border-radius:14px;background:rgba(243,231,212,.06)}
+.hours b{font-weight:600}
+.hours span{font-size:.8125rem;color:var(--soft)}
+.vcard .ctas{justify-content:flex-start}
+.map{border-radius:22px;overflow:hidden;aspect-ratio:4/3;background:#2a1610}
+.map iframe{width:100%;height:100%;border:0;filter:grayscale(.3) sepia(.25) contrast(.95)}
+
+/* closer */
+.close{padding:48px 0 50px;text-align:center;background:radial-gradient(90% 70% at 50% 0%,rgba(201,139,86,.14),transparent 70%)}
+.close .mlogo{width:min(220px,58vw);margin:0 auto}
+.close h2{margin-top:18px}
+.close p{margin:8px auto 0;color:var(--soft);max-width:28em}
+footer{padding:22px 0 104px;border-top:1px solid var(--line);font-size:.8125rem;color:var(--soft);text-align:center}
+footer b{color:var(--cream);font-weight:600}
+
+/* reveals */
+.js .rv{opacity:0;transform:translateY(26px);transition:opacity .9s var(--ease),transform .9s var(--ease);transition-delay:calc(var(--i,0) * 90ms)}
+.js .rv.in{opacity:1;transform:none}
+.js .rise{clip-path:inset(0 0 100% 0);transform:translateY(22px);transition:clip-path 1s var(--ease),transform 1s var(--ease)}
+.js .rise.in{clip-path:inset(-20% -5% -20% -5%);transform:none}
+.js .wipe img{clip-path:inset(0 0 100% 0);transform:scale(1.12);transition:clip-path 1.1s var(--ease),transform 1.6s var(--ease);transition-delay:calc(var(--i,0) * 90ms)}
+.js .wipe.in img{clip-path:inset(0 0 0 0);transform:none}
+
+/* dock */
+.dock{position:fixed;left:10px;right:10px;bottom:max(10px,env(safe-area-inset-bottom));z-index:40;display:flex;gap:8px;padding:8px;border-radius:999px;background:rgba(243,231,212,.96);box-shadow:0 14px 30px -12px rgba(0,0,0,.6);transform:translateY(140%);transition:transform .55s var(--spring)}
+.dock.show{transform:none}
+.dock .btn{flex:1;min-height:44px;padding:0 12px}
+
+@media (min-width:760px){
+  :root{--pad:28px}
+  h1{font-size:2.75rem} h2{font-size:2rem}
+  body{font-size:1rem}
+  .hero{padding:30px 0 52px}
+  .hero .mlogo{width:150px}
+  .photo .frame{height:min(56svh,560px)}
+  .rail{display:grid;grid-template-columns:repeat(4,1fr);overflow:visible;margin:22px 0 0;padding:0}
+  .dots{display:none}
+  .tabs{display:none}
+  .board{display:grid;grid-template-columns:repeat(2,1fr);gap:26px 36px;margin-top:22px}
+  .cat{display:block}
+  .js .cat .row{animation:none}
+  .feature{grid-column:1/-1;grid-template-columns:140px 1fr;max-width:620px}
+  .feature img{width:140px}
+  .vgrid{grid-template-columns:1.1fr 1fr;align-items:start}
+  .vcard .truck{aspect-ratio:16/9}
+  .map{aspect-ratio:auto;height:min(55vh,440px)}
+  .dock{display:none}
+  footer{padding-bottom:28px}
+  .stage .head h2{font-size:1.75rem}
+  .menu .word{font-size:4rem}
+}
+@media (min-width:1100px){
+  h1{font-size:3.5rem} h2{font-size:2.5rem}
+  body{font-size:1.0625rem}
+  .nav .links{display:flex;gap:26px;margin-left:auto;margin-right:22px}
+  .nav .links a{font:500 .875rem/1 var(--f);text-decoration:none;color:var(--soft);transition:color .2s}
+  .nav .links a:hover{color:var(--cream)}
+  .hero{padding:44px 0 72px}
+  .hero .wrap{grid-template-columns:1fr auto;align-items:center;gap:64px}
+  .hero .copy{text-align:left}
+  .hero .mlogo{margin:0}
+  .chips,.ctas{justify-content:flex-start}
+  .hero .lede{margin-left:0}
+  .photo .frame{height:min(52vh,500px)}
+  .film{height:380vh}
+  .stage{display:grid;grid-template-columns:auto minmax(0,440px);grid-template-areas:"card head" "card caps";grid-template-rows:auto 1fr;column-gap:72px;row-gap:28px;align-content:center;justify-content:center;padding:28px 0}
+  .stage .head{grid-area:head;text-align:left;align-self:end;max-width:none}
+  .stage .head h2{font-size:2.5rem}
+  .fcard{grid-area:card;width:min(64vh,580px)}
+  .caps{grid-area:caps;align-self:start;display:grid;gap:18px;min-height:0}
+  .cap{position:relative;inset:auto;text-align:left;opacity:.32;transform:none;filter:none;padding-left:18px;border-left:2px solid rgba(243,231,212,.18);transition:opacity .5s,border-color .5s,transform .5s var(--ease)}
+  .cap.on{opacity:1;border-color:var(--crema);transform:translateX(6px)}
+  .cap p{font-size:1.375rem}
+  .menu{padding:72px 0}
+  .menu .wrap{display:grid;grid-template-columns:auto 1fr;gap:56px}
+  .menu .top{flex-direction:column;align-items:flex-start;justify-content:flex-start}
+  .menu .word{writing-mode:vertical-rl;transform:rotate(180deg);font-size:7rem;line-height:1}
+  .menu .top p{text-align:left}
+  .board{grid-template-columns:repeat(3,1fr);margin-top:0}
+  .bites,.visit{padding:64px 0}
+  .close{padding:80px 0}
+  .close .mlogo{width:260px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .js .w>i,.js .hero [data-in],.js .hero .frame,.js .rv,.js .rise,.js .wipe img{opacity:1!important;transform:none!important;clip-path:none!important}
+}
+</style>
+</head>
+<body>
+<script>document.documentElement.classList.add('js')</script>
+<template id="logoTpl">
+  <svg class="mlogo" viewBox="0 -14 240 244" role="img" aria-label="Mayil Coffee logo: a cup of coffee with ميّل written on the coffee and the word mayil">
+    <defs><clipPath id="CUPCLIP"><path d="M28 78 C 30 140, 64 176, 108 176 C 152 176, 184 140, 186 78 A79 44 0 0 1 28 78 Z"/></clipPath></defs>
+    <g class="steam"><path d="M90 26c-6-8 6-13 0-22s5-14 1-20"/><path d="M108 22c-6-8 6-13 0-22s5-14 1-20"/><path d="M126 26c-6-8 6-13 0-22s5-14 1-20"/></g>
+    <path class="handle" style="--len:150" d="M180 98 C 226 84, 232 140, 168 146"/>
+    <path class="body" d="M28 78 C 30 140, 64 176, 108 176 C 152 176, 184 140, 186 78 A79 44 0 0 1 28 78 Z"/>
+    <g clip-path="url(#CUPCLIP)"><g class="m"><path d="M36 104 C 44 140, 62 160, 80 176 C 70 150, 56 128, 36 104 Z"/><path d="M78 182 C 92 160, 100 140, 108 118 C 116 140, 124 160, 138 182 Z"/></g></g>
+    <ellipse class="coffee" cx="107" cy="76" rx="76" ry="41"/>
+    <ellipse class="ripple" cx="107" cy="76" rx="44" ry="22"/>
+    <ellipse class="rim" style="--len:410" cx="107" cy="76" rx="79" ry="44"/>
+    <g class="arclip"><text class="ar" x="107" y="92" text-anchor="middle">ميّل</text></g>
+    <text class="word" x="108" y="222" text-anchor="middle">mayil</text>
+  </svg>
+</template>
+
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Mayil Coffee, back to top"><span class="logo-slot" data-static></span><span>Mayil Coffee</span></a>
+    <nav class="links" aria-label="Sections"><a href="#how">How it's made</a><a href="#menu">Menu</a><a href="#visit">Find the truck</a></nav>
+    <a class="btn cream" href="https://www.google.com/maps/dir/?api=1&amp;destination=25947+W+Warren+St,+Dearborn+Heights,+MI" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 21s-7-6.1-7-11.5A7 7 0 0 1 19 9.5C19 14.9 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Directions</a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero" aria-labelledby="h1">
+    <div class="wrap">
+      <div class="copy">
+        <span class="logo-slot" data-anim="load"></span>
+        <div class="chips" data-in style="--i:1"><span class="chip" id="openChip"><i aria-hidden="true"></i><span id="openTxt">Open daily, 9 AM to 6 PM</span></span><span class="chip">25947 W Warren St</span></div>
+        <h1 id="h1"><span class="w"><i style="--k:0">Your</i></span> <span class="w"><i style="--k:1">new</i></span> <span class="w"><i style="--k:2">favorite</i></span> <span class="w"><i style="--k:3">coffee</i></span> <span class="w"><i style="--k:4">spot</i></span> <span class="w"><i style="--k:5">in</i></span> <span class="w"><i style="--k:6"><em>Dearborn</em></i></span> <span class="w"><i style="--k:7"><em>Heights.</em></i></span></h1>
+        <p class="lede" data-in style="--i:3">Lattes, shaken brown sugar oat milk, creamy matcha, fruit refreshers and fresh sourdough, all from our coffee truck on W Warren.</p>
+        <div class="ctas" id="heroCta" data-in style="--i:4">
+          <a class="btn cream mag" href="https://www.google.com/maps/dir/?api=1&amp;destination=25947+W+Warren+St,+Dearborn+Heights,+MI" target="_blank" rel="noopener">Get directions</a>
+          <a class="btn ghost mag" href="#menu">See the menu</a>
+        </div>
+      </div>
+      <div class="photo" id="photo">
+        <div class="frame"><img src="media/spread.webp" alt="Iced lattes, a matcha, an orange refresher and a labneh sourdough toast on the counter, with coffee beans scattered around" width="640" height="800"><span class="tag">Fresh off the truck</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="film" id="how" aria-label="From the grinder to your cup">
+    <div class="stage">
+      <div class="head"><h2>From the grinder <em>to your cup</em></h2></div>
+      <div class="fcard" id="fcard">
+        <div class="bar" aria-hidden="true"><span><i></i></span><span><i></i></span><span><i></i></span></div>
+        <canvas id="fc" role="img" aria-label="Fresh grounds fall into the portafilter, an espresso shot pulls into a glass pitcher, then it's poured over ice for an iced latte"></canvas>
+      </div>
+      <div class="caps" aria-live="polite">
+        <div class="cap on"><small>1 · The grind</small><p>Fresh grounds go straight into the portafilter.</p></div>
+        <div class="cap"><small>2 · The shot</small><p>The espresso pulls right into the pitcher.</p></div>
+        <div class="cap"><small>3 · The pour</small><p>Then it goes over ice. This one's our maple sea salt latte.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="menu" id="menu" aria-labelledby="menuH">
+    <div class="wrap">
+      <div class="top"><h2 id="menuH" class="word rise">menu</h2><p class="rv">Straight off the board on the truck.</p></div>
+      <div>
+        <div class="tabs" role="tablist" aria-label="Menu sections" id="tabs"><span class="pill" aria-hidden="true"></span></div>
+        <div class="board" id="board"></div>
+        <p class="note">Prices are from the menu board on the truck and can change. Alt milk is oat or almond.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="bites" aria-labelledby="bitesH">
+    <div class="wrap">
+      <div class="head"><h2 id="bitesH" class="rise">Coffee, matcha and <em>sourdough</em>.</h2><p class="rv" style="--i:1">A few things people come back for.</p></div>
+      <div class="rail" id="rail">
+        <article class="bite wipe rv" style="--i:0"><figure><img src="media/matcha.webp" alt="Matcha poured from a mini pour bottle into an iced milk cup" width="640" height="800" loading="lazy"></figure><div><h3>Mayil Pour</h3><p>A latte or matcha with its own mini pour bottle.</p></div></article>
+        <article class="bite wipe rv" style="--i:1"><figure><img src="media/toast.webp" alt="Labneh sourdough with cucumber, tomato, olives and za'atar" width="640" height="800" loading="lazy"></figure><div><h3>Labneh sourdough</h3><p>Labneh, cucumber, tomato, za'atar, olive oil and olives.</p></div></article>
+        <article class="bite wipe rv" style="--i:2"><figure><img src="media/latte.webp" alt="An iced latte from above, topped with cocoa" width="640" height="640" loading="lazy"></figure><div><h3>Iced lattes</h3><p>Vanilla, caramel, hazelnut, white mocha, pistachio or banana.</p></div></article>
+        <article class="bite wipe rv" style="--i:3"><figure><img src="media/carrier.webp" alt="A carrier of four drinks: an iced latte, a matcha and two refreshers" width="640" height="800" loading="lazy"></figure><div><h3>One for everybody</h3><p>Grab a carrier for the car.</p></div></article>
+      </div>
+      <div class="dots" id="dots" role="tablist" aria-label="Choose a photo"></div>
+    </div>
+  </section>
+
+  <section class="visit" id="visit" aria-labelledby="visitH">
+    <div class="wrap">
+      <h2 id="visitH" class="rise">Find the truck</h2>
+      <div class="vgrid">
+        <div class="vcard rv">
+          <img class="truck" src="media/truck.webp" alt="The Mayil Coffee truck with its menu board and logo" width="720" height="540" loading="lazy">
+          <div class="in">
+            <h3>25947 W Warren St</h3>
+            <p>Dearborn Heights, MI</p>
+            <div class="hours"><b>Open daily</b><span>9 AM to 6 PM</span></div>
+            <div class="ctas">
+              <a class="btn crema mag" href="https://www.google.com/maps/dir/?api=1&amp;destination=25947+W+Warren+St,+Dearborn+Heights,+MI" target="_blank" rel="noopener">Get directions</a>
+              <a class="btn ghost mag" href="https://www.instagram.com/mayil.coffee/" target="_blank" rel="noopener">@mayil.coffee</a>
+            </div>
+          </div>
+        </div>
+        <div class="map rv" style="--i:1"><iframe title="Map to Mayil Coffee at 25947 W Warren St, Dearborn Heights" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=25947+W+Warren+St,+Dearborn+Heights,+MI+48127&amp;output=embed"></iframe></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="close" id="closer" aria-labelledby="closeH">
+    <div class="wrap">
+      <span class="logo-slot" data-anim="view"></span>
+      <h2 id="closeH" class="rise">Tag your coffee buddy and stop by.</h2>
+      <p class="rv" style="--i:1">We're on W Warren in Dearborn Heights, every day from 9 AM to 6 PM.</p>
+      <div class="ctas rv" style="--i:2">
+        <a class="btn cream mag" href="https://www.google.com/maps/dir/?api=1&amp;destination=25947+W+Warren+St,+Dearborn+Heights,+MI" target="_blank" rel="noopener">Get directions</a>
+        <a class="btn ghost mag" href="https://www.instagram.com/mayil.coffee/" target="_blank" rel="noopener">Follow us</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap"><b>Mayil Coffee</b> · 25947 W Warren St, Dearborn Heights, MI · Open daily 9 AM to 6 PM · @mayil.coffee</div>
+</footer>
+
+<div class="dock" id="dock" aria-label="Quick actions">
+  <a class="btn dark" href="https://www.google.com/maps/dir/?api=1&amp;destination=25947+W+Warren+St,+Dearborn+Heights,+MI" target="_blank" rel="noopener">Directions</a>
+  <a class="btn crema" href="#menu">Menu</a>
+</div>
+
+<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js" defer></script>
+<script>
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches, small = matchMedia('(max-width: 759px)').matches, fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
+const clamp = v => v < 0 ? 0 : v > 1 ? 1 : v, lerp = (a, b, k) => a + (b - a) * k, eCubic = p => 1 - Math.pow(1 - p, 3);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const ticks = [];
+let ready = false; const go = () => { if (ready) return; ready = true; document.body.classList.add('ready'); };
+addEventListener('load', go); setTimeout(go, 1200);
+
+/* everything on the page comes from here */
+const CONFIG = {
+  address: '25947 W Warren St, Dearborn Heights, MI', open: 9, close: 18, tz: 'America/Detroit',
+  menu: [
+    { id: 'coffee', name: 'Coffee', items: [['Espresso', '3.50'], ['Americano', '4.00'], ['Latte', '5.50', 'Vanilla, caramel, hazelnut, white mocha, pistachio or banana'], ['Cappuccino', '5.50'], ['Nescafé', '5.00']] },
+    { id: 'matcha', name: 'Matcha', items: [['Classic', '6.50'], ['Vanilla', '7.00'], ['Strawberry', '7.00'], ['Banana', '7.00']] },
+    { id: 'sig', name: 'Signatures', items: [['Mayil Pour', '7.50', 'Latte or matcha with a mini pour bottle'], ['Brown Sugar Shaken', '7.00', 'Oat milk'], ['The Fave', '7.00', 'Caramel macchiato']] },
+    { id: 'non', name: 'Non-coffee', items: [['Chai Tea', '5.00'], ['Hot Tea', '3.50'], ['Strawberry Refresher', '6.50'], ['Peach Mango Refresher', '6.50'], ['Wildberry Refresher', '6.50']] },
+    { id: 'bread', name: 'Sourdough & bagels', items: [['Avocado Sourdough', '7.50', 'Avocado smash, tomatoes, everything seasoning, salt, pepper'], ['Labneh Sourdough', '7.50', "Labneh, cucumber, tomato, za'atar, olive oil, olives"], ['Everything Bagel', '4.00'], ['Plain Bagel', '4.00']] },
+    { id: 'add', name: 'Add-ons', items: [['Extra Shot', '0.75'], ['Cold Foam', '1.25'], ['Alt. Milk', '1.00', 'Oat or almond'], ['20 oz', '1.00'], ['Syrup Flavor', '0.75']] }
+  ]
+};
+
+// logos: one SVG template, cloned with unique ids; the hero one pours on load, the closer one when it comes into view
+const tpl = $('#logoTpl').innerHTML; let lid = 0;
+$$('.logo-slot').forEach(slot => {
+  const id = 'cupclip' + (lid++); let h = tpl.replace(/CUPCLIP/g, id).replace('class="mlogo"', `class="mlogo${slot.dataset.anim ? ' anim' : ''}" data-anim="${slot.dataset.anim || ''}"`);
+  if (slot.hasAttribute('data-static')) h = h.replace('viewBox="0 -14 240 244"', 'viewBox="24 28 214 152"').replace(/role="img" aria-label="[^"]*"/, 'aria-hidden="true"');
+  slot.outerHTML = h;
+});
+$$('.mlogo[data-anim="load"],.mlogo[data-anim="view"]').forEach(svg => {
+  const play = () => { svg.classList.add('go'); setTimeout(() => svg.classList.add('done'), 2500); };
+  if (RM) { svg.classList.remove('anim'); return; }
+  if (svg.dataset.anim === 'load') setTimeout(play, 120);
+  else new IntersectionObserver((es, o) => { if (es[0].isIntersecting) { play(); o.disconnect(); } }, { threshold: .5 }).observe(svg);
+});
+$$('.mlogo:not(.anim)').forEach(s => s.classList.add('done'));
+$$('.brand .mlogo').forEach(s => s.classList.remove('done'));
+
+// open now (Detroit time), every day 9 to 6
+(function () {
+  const parts = new Intl.DateTimeFormat('en-US', { timeZone: CONFIG.tz, hour: 'numeric', minute: 'numeric', hour12: false }).formatToParts(new Date());
+  const h = +parts.find(p => p.type === 'hour').value % 24, m = +parts.find(p => p.type === 'minute').value, t = h + m / 60;
+  const openNow = t >= CONFIG.open && t < CONFIG.close;
+  $('#openChip').classList.toggle('open', openNow);
+  $('#openTxt').textContent = openNow ? 'Open now until 6 PM' : (t < CONFIG.open ? 'Opens today at 9 AM' : 'Closed now, opens 9 AM');
+})();
+
+// menu: tabs on phones (sliding pill), the whole board on bigger screens
+const tabs = $('#tabs'), board = $('#board'), pill = tabs.querySelector('.pill');
+CONFIG.menu.forEach((c, i) => {
+  const b = document.createElement('button'); b.type = 'button'; b.role = 'tab'; b.id = 'tab-' + c.id; b.textContent = c.name;
+  b.setAttribute('aria-controls', 'cat-' + c.id); b.setAttribute('aria-selected', i === 0); b.tabIndex = i === 0 ? 0 : -1;
+  tabs.appendChild(b);
+  const sec = document.createElement('div'); sec.className = 'cat' + (i === 0 ? ' on' : ''); sec.id = 'cat-' + c.id; sec.setAttribute('role', 'tabpanel'); sec.setAttribute('aria-labelledby', 'tab-' + c.id);
+  sec.innerHTML = `<h3>${esc(c.name)}</h3>` + c.items.map((it, r) => `<div class="row" style="--r:${r}"><b>${esc(it[0])}</b><span>$${esc(it[1])}</span>${it[2] ? `<small>${esc(it[2])}</small>` : ''}</div>`).join('');
+  board.appendChild(sec);
+});
+board.insertAdjacentHTML('beforeend', `<div class="feature rv"><img src="media/matcha.webp" alt="" width="640" height="800" loading="lazy"><div><b>Try the Mayil Pour</b><p>Your latte or matcha comes with a mini pour bottle, so you pour it in yourself.</p><span>$7.50</span></div></div>`);
+const tabBtns = [...tabs.querySelectorAll('button')];
+const movePill = b => { pill.style.width = b.offsetWidth + 'px'; pill.style.transform = `translateX(${b.offsetLeft - parseFloat(getComputedStyle(tabs).paddingLeft)}px)`; pill.style.left = getComputedStyle(tabs).paddingLeft; };
+const select = (b, focus) => {
+  tabBtns.forEach(x => { const on = x === b; x.setAttribute('aria-selected', on); x.tabIndex = on ? 0 : -1; $('#' + x.getAttribute('aria-controls')).classList.toggle('on', on); });
+  movePill(b); if (focus) b.focus(); b.scrollIntoView({ block: 'nearest', inline: 'center', behavior: RM ? 'auto' : 'smooth' });
+};
+tabBtns.forEach((b, i) => { b.onclick = () => select(b); b.onkeydown = e => { const k = { ArrowRight: 1, ArrowLeft: -1 }[e.key]; if (k) { e.preventDefault(); select(tabBtns[(i + k + tabBtns.length) % tabBtns.length], true); } }; });
+requestAnimationFrame(() => movePill(tabBtns[0])); addEventListener('resize', () => movePill(tabBtns.find(b => b.getAttribute('aria-selected') === 'true')));
+document.fonts && document.fonts.ready.then(() => movePill(tabBtns.find(b => b.getAttribute('aria-selected') === 'true')));
+
+// hero photo: tilts toward the pointer and drifts back as you scroll
+const photo = $('#photo'); let tx = 0, ty = 0, cx = 0, cy = 0;
+if (fine && !RM) { $('.hero').addEventListener('pointermove', e => { const r = photo.getBoundingClientRect(); tx = clamp((e.clientX - r.left) / r.width) - .5; ty = clamp((e.clientY - r.top) / r.height) - .5; }); $('.hero').addEventListener('pointerleave', () => { tx = ty = 0; }); }
+if (!RM) ticks.push((now, dt) => {
+  const k = 1 - Math.exp(-dt * 6); cx = lerp(cx, tx, k); cy = lerp(cy, ty, k);
+  const r = photo.getBoundingClientRect(); if (r.bottom < 0) return; const s = clamp(-r.top / (innerHeight * .9));
+  photo.style.transform = `perspective(900px) translate3d(0,${(s * -40).toFixed(1)}px,0) rotateX(${(-cy * 7).toFixed(2)}deg) rotateY(${(cx * 9).toFixed(2)}deg) scale(${(1 - s * .06).toFixed(4)})`;
+});
+
+// reveals
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -8% 0px' });
+$$('.rv,.rise').forEach(el => io.observe(el));
+
+// grinder-to-cup film from their reel: 113 frames, 3 shots
+const FRAMES = Array.from({ length: 113 }, (_, i) => `media/film/f${String(i).padStart(3, '0')}.webp`);
+const CUTS = [0, .244, .526, 1];
+(function ScrollFilm() {
+  const sec = $('#how'), cv = $('#fc'), ctx = cv.getContext('2d', { alpha: false }), N = FRAMES.length, step = small ? 2 : 1;
+  const idx = FRAMES.map((_, i) => i).filter(i => i % step === 0 || i === N - 1), img = new Array(N).fill(null);
+  let dirty = true, shown = -1, started = false;
+  const load = i => { if (img[i] !== null) return; img[i] = false; const im = new Image(); im.src = FRAMES[i]; im.decode().then(() => { img[i] = im; dirty = true; }).catch(() => { img[i] = null; }); };
+  const order = [...idx].sort((a, b) => ((a % 8 ? 1 : 0) - (b % 8 ? 1 : 0)) || ((a % 4 ? 1 : 0) - (b % 4 ? 1 : 0)) || a - b);
+  let q = 0; const pump = () => { for (let n = 0; n < 6 && q < order.length; n++) load(order[q++]); if (q < order.length) setTimeout(pump, 90); };
+  load(0); new IntersectionObserver(es => { if (es[0].isIntersecting && !started) { started = true; pump(); } }, { rootMargin: '1200px 0px' }).observe(sec);
+  const size = () => { const d = Math.min(devicePixelRatio || 1, 1.5); cv.width = Math.round(cv.clientWidth * d); cv.height = Math.round(cv.clientHeight * d); dirty = true; };
+  addEventListener('resize', size); size();
+  const nearest = i => { if (img[i]) return i; for (let d = 1; d < N; d++) { if (img[i - d]) return i - d; if (img[i + d]) return i + d; } return -1; };
+  const draw = t => { const k = nearest(Math.round(t * (N - 1))); if (k < 0 || (k === shown && !dirty)) return; shown = k; dirty = false; const A = img[k], W = cv.width, H = cv.height, s = Math.max(W / A.naturalWidth, H / A.naturalHeight); ctx.drawImage(A, (W - A.naturalWidth * s) / 2, (H - A.naturalHeight * s) / 2, A.naturalWidth * s, A.naturalHeight * s); };
+  const progress = () => { const r = sec.getBoundingClientRect(), span = sec.offsetHeight - innerHeight; return clamp(-r.top / Math.max(1, span)); };
+  const caps = $$('.cap'), bars = $$('.fcard .bar i'), fcard = $('#fcard'); let cur = progress(), lastP = -1, capOn = 0, fz = -1;
+  ticks.push((now, dt) => {
+    const r = sec.getBoundingClientRect(); if (r.bottom < -200 || r.top > innerHeight + 200) return;
+    const p = progress(); cur = RM ? p : cur + (p - cur) * (1 - Math.exp(-dt * 9)); if (Math.abs(p - cur) < .0004) cur = p;
+    draw(cur);
+    if (Math.abs(cur - lastP) > .0002) {
+      lastP = cur; let k = 0; while (k < 2 && cur >= CUTS[k + 1]) k++;
+      if (k !== capOn) { caps[capOn].classList.remove('on'); caps[k].classList.add('on'); capOn = k; }
+      bars.forEach((b, i) => b.style.transform = `scaleX(${clamp((cur - CUTS[i]) / (CUTS[i + 1] - CUTS[i])).toFixed(3)})`);
+    }
+    if (!RM) { const z = eCubic(clamp((innerHeight - r.top) / (innerHeight * .85))); if (Math.abs(z - fz) > .001) { fz = z; fcard.style.transform = `translate3d(0,${((1 - z) * 60).toFixed(1)}px,0) scale(${(.82 + .18 * z).toFixed(4)})`; } }
+  });
+})();
+
+// magnetic buttons
+if (fine && !RM) $$('.mag').forEach(b => {
+  b.addEventListener('pointermove', e => { const r = b.getBoundingClientRect(); b.style.setProperty('--mx', ((e.clientX - r.left - r.width / 2) * .22).toFixed(1) + 'px'); b.style.setProperty('--my', ((e.clientY - r.top - r.height / 2) * .32).toFixed(1) + 'px'); });
+  b.addEventListener('pointerleave', () => { b.style.setProperty('--mx', '0px'); b.style.setProperty('--my', '0px'); });
+});
+
+// rail dots
+const rail = $('#rail'), dots = $('#dots'), cards = [...rail.children];
+cards.forEach((c, i) => { const b = document.createElement('button'); b.setAttribute('role', 'tab'); b.setAttribute('aria-label', `Photo ${i + 1} of ${cards.length}`); b.onclick = () => rail.scrollTo({ left: c.offsetLeft - rail.offsetLeft - 16, behavior: RM ? 'auto' : 'smooth' }); dots.appendChild(b); });
+const setDot = () => { const w = cards[0].offsetWidth + 12, k = Math.min(cards.length - 1, Math.round(rail.scrollLeft / w)); [...dots.children].forEach((d, i) => { d.classList.toggle('on', i === k); d.setAttribute('aria-selected', i === k); }); };
+rail.addEventListener('scroll', () => requestAnimationFrame(setDot), { passive: true }); setDot();
+
+// nav + dock
+const nav = $('#nav'), dock = $('#dock'); let inHero = true, atClose = false;
+const syncDock = () => dock.classList.toggle('show', !inHero && !atClose);
+new IntersectionObserver(es => { inHero = es[0].isIntersecting; nav.classList.toggle('solid', !inHero); syncDock(); }).observe($('#heroCta'));
+new IntersectionObserver(es => { atClose = es[0].isIntersecting; syncDock(); }).observe($('#closer'));
+
+// smooth scrolling on desktop
+let lenis = null;
+addEventListener('DOMContentLoaded', () => {
+  if (!fine || RM || !window.Lenis) return;
+  lenis = new Lenis({ lerp: .11, smoothWheel: true });
+  $$('a[href^="#"]').forEach(a => a.addEventListener('click', e => { const id = a.getAttribute('href'), el = id === '#top' ? 0 : $(id); if (el === null) return; e.preventDefault(); lenis.scrollTo(el, { offset: -56, duration: 1.4 }); }));
+});
+
+let prev = performance.now();
+(function loop(now) { const dt = Math.min(.05, (now - prev) / 1000); prev = now; if (lenis) lenis.raf(now); for (let i = ticks.length - 1; i >= 0; i--) if (ticks[i](now, dt) === true) ticks.splice(i, 1); requestAnimationFrame(loop); })(prev);
+</script>
+<a class="studio" href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener" aria-label="Site by ElaSystems (opens in a new tab)"><i aria-hidden="true"></i><span>Site by <b>ElaSystems</b></span></a>
+<style>
+  .studio{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;background:#2a2725;color:#fff;font:500 12px/1 var(--f);text-decoration:none}
+  .studio i{width:9px;height:9px;border-radius:3px;background:conic-gradient(from 210deg,#ff5a1f,#ffb03b,#ff5a1f)}
+  .eb-foot{display:flex;width:max-content;margin:12px auto 0}
+  .studio b{color:#fff;font-weight:700}
+</style>
+<script>
+(function () { const b = document.querySelector('.studio'), f = document.querySelector('footer .wrap'); if (b && f) { f.appendChild(b); b.classList.add('eb-foot'); } })();
+</script>
+</body>
+</html>
