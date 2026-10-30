@@ -23,7 +23,7 @@
    their cup logo, crema caramel. DM Serif Display like their "mayil" wordmark, Albert Sans for text, Aref Ruqaa for ميل.
    Motion: their cup logo is redrawn in SVG and pours itself (rim draws, cup fills in, handle draws, coffee spreads with a
    ripple, ميل writes in right to left, the wordmark rises, steam curls up). Headline words rise from masks, the hero photo
-   tilts and drifts, the grinder-to-cup film scrubs with scroll, the menu tab pill slides, smooth scrolling on desktop.
+   tilts and drifts, a Blender-rendered Mayil Pour film scrubs with scroll, the menu tab pill slides, smooth scrolling on desktop.
    Mobile first. One rAF loop, transform/opacity only. */
 :root{
   --night:#1c0f0a; --esp:#2a1610; --plum:#3a2026; --cream:#f3e7d4; --paper:#faf3e8; --maroon:#7c2f2b; --crema:#c98b56;
@@ -142,7 +142,7 @@ em{font-style:normal;color:var(--crema)}
 @keyframes fin{to{opacity:1;transform:none}}
 @keyframes open{to{opacity:1;transform:none;clip-path:inset(0 0 0 0 round 26px)}}
 
-/* film: grinder to cup */
+/* film: the Mayil Pour, rendered in Blender (render/pour.py) */
 .film{position:relative;height:340svh;background:#140a07}
 .stage{position:sticky;top:56px;height:calc(100svh - 56px);overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:12px var(--pad) 18px}
 .stage .head{width:100%;max-width:520px;text-align:center}
@@ -322,7 +322,7 @@ footer b{color:var(--cream);font-weight:600}
 <header class="nav" id="nav">
   <div class="wrap">
     <a class="brand" href="#top" aria-label="Mayil Coffee, back to top"><span class="logo-slot" data-static></span><span>Mayil Coffee</span></a>
-    <nav class="links" aria-label="Sections"><a href="#how">How it's made</a><a href="#menu">Menu</a><a href="#visit">Find the truck</a></nav>
+    <nav class="links" aria-label="Sections"><a href="#how">The Mayil Pour</a><a href="#menu">Menu</a><a href="#visit">Find the truck</a></nav>
     <a class="btn cream" href="https://www.google.com/maps/dir/?api=1&amp;destination=25947+W+Warren+St,+Dearborn+Heights,+MI" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 21s-7-6.1-7-11.5A7 7 0 0 1 19 9.5C19 14.9 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Directions</a>
   </div>
 </header>
@@ -346,17 +346,17 @@ footer b{color:var(--cream);font-weight:600}
     </div>
   </section>
 
-  <section class="film" id="how" aria-label="From the grinder to your cup">
+  <section class="film" id="how" aria-label="The Mayil Pour">
     <div class="stage">
-      <div class="head"><h2>From the grinder <em>to your cup</em></h2></div>
+      <div class="head"><h2>The Mayil Pour. <em>You pour it.</em></h2></div>
       <div class="fcard" id="fcard">
         <div class="bar" aria-hidden="true"><span><i></i></span><span><i></i></span><span><i></i></span></div>
-        <canvas id="fc" role="img" aria-label="Fresh grounds fall into the portafilter, an espresso shot pulls into a glass pitcher, then it's poured over ice for an iced latte"></canvas>
+        <canvas id="fc" role="img" aria-label="A Mayil cup of milk over ice. A mini bottle of matcha lifts, tips and pours in, and the matcha swirls down through the milk"></canvas>
       </div>
       <div class="caps" aria-live="polite">
-        <div class="cap on"><small>1 · The grind</small><p>Fresh grounds go straight into the portafilter.</p></div>
-        <div class="cap"><small>2 · The shot</small><p>The espresso pulls right into the pitcher.</p></div>
-        <div class="cap"><small>3 · The pour</small><p>Then it goes over ice. This one's our maple sea salt latte.</p></div>
+        <div class="cap on"><small>1 · The cup</small><p>Cold milk over ice, and your matcha comes in its own mini bottle.</p></div>
+        <div class="cap"><small>2 · The pour</small><p>You pour it in yourself, as slow or as fast as you like.</p></div>
+        <div class="cap"><small>3 · The swirl</small><p>The matcha swirls down through the milk. Works with a latte too.</p></div>
       </div>
     </div>
   </section>
@@ -510,9 +510,9 @@ if (!RM) ticks.push((now, dt) => {
 const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -8% 0px' });
 $$('.rv,.rise').forEach(el => io.observe(el));
 
-// grinder-to-cup film from their reel: 113 frames, 3 shots
-const FRAMES = Array.from({ length: 113 }, (_, i) => `media/film/f${String(i).padStart(3, '0')}.webp`);
-const CUTS = [0, .244, .526, 1];
+// the Mayil Pour, rendered in Blender Cycles (render/pour.py): 96 frames, 3 beats
+const FRAMES = Array.from({ length: 96 }, (_, i) => `media/film/f${String(i).padStart(3, '0')}.webp`);
+const CUTS = [0, .36, .7, 1];
 (function ScrollFilm() {
   const sec = $('#how'), cv = $('#fc'), ctx = cv.getContext('2d', { alpha: false }), N = FRAMES.length, step = small ? 2 : 1;
   const idx = FRAMES.map((_, i) => i).filter(i => i % step === 0 || i === N - 1), img = new Array(N).fill(null);
