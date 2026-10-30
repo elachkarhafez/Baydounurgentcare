@@ -353,16 +353,20 @@ def bottle_pose(t):
     is (beside and above the cup), then lower straight down to the counter, so it never passes in front of the cup."""
     mouth = Vector((.024, -.006, H + .036))
     def base_for(ang): return mouth - Vector((sin(ang), 0., cos(ang))) * BH
+    a0 = radians(-122); c0 = base_for(a0) + Vector((sin(a0), 0., cos(a0))) * BH / 2
+    c_rest = REST[0] + Vector((0, 0, BH / 2))
+    if t < .37:
+        # up: rise straight up beside the cup, then slide over it while tipping about its middle
+        rise = smoother(seg(t, .17, .29)); side = smoother(seg(t, .26, .37)); rot = smoother(seg(t, .27, .37))
+        ang = a0 * rot
+        c = Vector((c_rest.x + (c0.x - c_rest.x) * side, c_rest.y + (c0.y - c_rest.y) * side, c_rest.z + (c0.z - c_rest.z) * rise))
+        return c - Vector((sin(ang), 0., cos(ang))) * BH / 2, ang
     if t < .80:
-        up = smoother(seg(t, .17, .37))
-        ang = (radians(-122) + radians(-6) * sin(pi * seg(t, .38, .80))) * up
-        lift = Vector((0, 0, .03 * sin(pi * up)))
-        return REST[0].lerp(base_for(ang), up) + lift, ang
+        ang = a0 + radians(-6) * sin(pi * seg(t, .38, .80))
+        return base_for(ang), ang
     # back: turn upright about its middle while sliding off to the side above the cup, then set down on the counter
     rot = smoother(seg(t, .80, .875)); side = smoother(seg(t, .80, .88)); down = smoother(seg(t, .865, .985))
     ang = radians(-122) * (1 - rot)
-    a0 = radians(-122); c0 = base_for(a0) + Vector((sin(a0), 0., cos(a0))) * BH / 2
-    c_rest = REST[0] + Vector((0, 0, BH / 2))
     c = Vector((c0.x + (c_rest.x - c0.x) * side, c0.y + (c_rest.y - c0.y) * side, c0.z + (c_rest.z - c0.z) * down))
     return c - Vector((sin(ang), 0., cos(ang))) * BH / 2, ang
 def remain(t): return .86 - .70 * smooth(seg(t, .38, .80))
