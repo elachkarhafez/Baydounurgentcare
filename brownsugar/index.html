@@ -21,16 +21,21 @@
 <style>
 /* Brown Sugar Bakery. Palette from their cupcake logo: cream, brown-sugar ribbon, chocolate frosting, butter-yellow liner.
    Young Serif for display (chunky like their logo lettering), Onest for text. Mobile first.
-   Motion: the hero rises in and the underline draws itself, the reel loops in the hero card, the build is a scroll-scrubbed
-   film cut from their own reel, chocolate drips run down out of the film, photos wipe in, sections fade up. */
+   Motion: their logo is cut into 20 layers and builds itself (ribbon unfurls, the cupcake rises out of it, frosting and
+   the coffee bean drop on, letters pop around the arc), on load in the hero, scrubbed by scroll in the statement and on
+   arrival in the closer. Headline words rise out of masks, the hero clip tilts with the pointer and drifts on scroll, the
+   build film zooms in and scrubs with scroll, chocolate drips pour then ooze, a marquee follows scroll speed, smooth
+   inertia scrolling on desktop. Everything is transform/opacity on one rAF loop. */
 :root{
   --cream:#fbf1e4; --paper:#fffaf3; --choc:#2b1a12; --choc2:#3d261a; --sugar:#a8714a; --sugar-d:#8a5632;
   --caramel:#d9a066; --butter:#f2bf4b; --soft:#6b5245; --line:rgba(43,26,18,.12);
   --f:'Onest', system-ui, sans-serif; --d:'Young Serif', Georgia, serif;
-  --pad:16px; --ease:cubic-bezier(.2,.75,.2,1);
+  --pad:16px; --ease:cubic-bezier(.2,.75,.2,1); --spring:cubic-bezier(.3,1.5,.5,1);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-text-size-adjust:100%;scroll-padding-top:64px}
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
 body{background:var(--cream);color:var(--choc);font:400 .9375rem/1.55 var(--f);overflow-x:hidden}
 img,video,canvas{display:block;max-width:100%}
 img{height:auto}
@@ -41,15 +46,19 @@ h1,h2,.state p,.cap p{text-wrap:balance}
 h1{font-size:1.875rem}
 h2{font-size:1.5rem}
 h3{font-size:1.0625rem;line-height:1.2}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:0 20px;border-radius:999px;font:600 .875rem/1 var(--f);text-decoration:none;white-space:nowrap;border:0;cursor:pointer;transition:transform .2s var(--ease),background .2s,box-shadow .2s}
+
+/* buttons: magnetic on fine pointers, a light sweep on the dark ones */
+.btn{--mx:0px;--my:0px;--lift:0px;position:relative;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:0 20px;border-radius:999px;font:600 .875rem/1 var(--f);text-decoration:none;white-space:nowrap;border:0;cursor:pointer;transform:translate3d(var(--mx),calc(var(--my) - var(--lift)),0);transition:transform .35s var(--ease),background .2s,box-shadow .2s}
 .btn svg{width:17px;height:17px;flex:none}
 .btn.dark{background:var(--choc);color:var(--paper);box-shadow:0 6px 18px -8px rgba(43,26,18,.6)}
+.btn.dark::after{content:'';position:absolute;inset:0;background:linear-gradient(105deg,transparent 30%,rgba(255,236,200,.28) 50%,transparent 70%);transform:translateX(-120%);transition:transform .8s var(--ease)}
 .btn.ghost{background:transparent;color:var(--choc);box-shadow:inset 0 0 0 1.5px rgba(43,26,18,.28)}
 .btn.sugar{background:var(--caramel);color:var(--choc)}
 .btn.light{background:var(--paper);color:var(--choc)}
 @media (hover:hover) and (pointer:fine){
-  .btn:hover{transform:translateY(-2px)}
+  .btn:hover{--lift:2px}
   .btn.dark:hover{background:var(--choc2)}
+  .btn.dark:hover::after{transform:translateX(120%)}
   .btn.ghost:hover{box-shadow:inset 0 0 0 1.5px var(--choc)}
 }
 .btn:focus-visible,a:focus-visible{outline:2px solid var(--sugar);outline-offset:3px}
@@ -59,39 +68,75 @@ h3{font-size:1.0625rem;line-height:1.2}
 .nav.solid{border-color:var(--line)}
 .nav .wrap{height:100%;display:flex;align-items:center;justify-content:space-between;gap:12px}
 .brand{display:flex;align-items:center;gap:8px;text-decoration:none}
-.brand img{height:34px;width:auto}
-.brand img,.nav img{height:34px}
+.brand img{height:34px;width:auto;max-width:0;margin-right:-8px;transform:scale(0) rotate(-30deg);opacity:0;transition:transform .6s var(--spring),opacity .3s,max-width .5s var(--ease),margin .5s var(--ease)}
+.nav.solid .brand img{max-width:80px;margin-right:0;transform:none;opacity:1}
+.nav.solid .brand:hover img{transform:rotate(-6deg) scale(1.06)}
 .brand span{font:400 1rem/1 var(--d);white-space:nowrap}
 .nav .links{display:none}
 .nav .btn{min-height:38px;padding:0 15px;font-size:.8125rem}
 
+/* the layered logo */
+.logo{position:relative;aspect-ratio:788/501;width:100%}
+.logo .ly{position:absolute;max-width:none;height:auto;will-change:transform,opacity;user-select:none;-webkit-user-drag:none}
+.logo .clipper{position:absolute;inset:0;clip-path:inset(-30% -5% 9% -5%)}
+.logo .cupwrap{position:absolute;inset:0}
+.logo .liner,.logo .frost{transform-origin:50% 100%}
+.logo .bean{transform-origin:50% 90%}
+.logo .ribbon{transform-origin:50% 70%}
+.logo .steam{position:absolute;left:43%;top:3%;width:12%;height:14%;overflow:visible;pointer-events:none}
+.logo .steam path{fill:none;stroke:var(--sugar);stroke-width:2.4;stroke-linecap:round;stroke-dasharray:40;stroke-dashoffset:40;opacity:0}
+.logo.built .steam path{animation:steam 3.4s ease-in-out infinite}
+.logo.built .steam path:nth-child(2){animation-delay:1.1s}
+.logo.built .steam path:nth-child(3){animation-delay:2.2s}
+@keyframes steam{0%{opacity:0;stroke-dashoffset:40;transform:translateY(4px)}35%{opacity:.6}75%{opacity:.3}100%{opacity:0;stroke-dashoffset:-40;transform:translateY(-6px)}}
+.logo.built .cupwrap{animation:float 5.5s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-1.6%)}}
+@media (hover:hover) and (pointer:fine){
+  .logo.built:hover .bean{animation:wiggle .7s var(--ease)}
+  .logo.built:hover .tl{animation:hop .55s var(--ease) calc(var(--k) * 35ms)}
+}
+@keyframes wiggle{25%{transform:rotate(-14deg)}55%{transform:rotate(10deg)}80%{transform:rotate(-4deg)}}
+@keyframes hop{40%{transform:translateY(-18%)}}
+
 /* hero */
-.hero{padding:18px 0 34px}
+.hero{padding:16px 0 34px}
 .hero .wrap{display:grid;gap:22px}
+.hero-top{display:flex;align-items:center;gap:12px}
+.hero-top .logo{width:112px;flex:none}
 .chip{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;background:var(--paper);box-shadow:inset 0 0 0 1px var(--line);font:600 .75rem/1.2 var(--f)}
 .chip i{width:8px;height:8px;border-radius:50%;background:var(--butter);box-shadow:0 0 0 3px rgba(242,191,75,.3);animation:ping 2.2s ease-in-out infinite}
 @keyframes ping{50%{box-shadow:0 0 0 6px rgba(242,191,75,0)}}
 .hero h1{margin-top:12px}
-.hero h1 .ul{position:relative;display:inline-block;color:var(--sugar-d)}
-.hero h1 .ul svg{position:absolute;left:-2%;bottom:-.2em;width:104%;height:.38em;overflow:visible}
-.hero h1 .ul path{fill:none;stroke:var(--caramel);stroke-width:5;stroke-linecap:round;stroke-dasharray:140;stroke-dashoffset:140}
+.w{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.12em;margin-bottom:-.12em}
+.w>i{display:inline-block;font-style:normal}
+.ul{position:relative;display:inline-block;color:var(--sugar-d)}
+.ul svg{position:absolute;left:-2%;bottom:-.2em;width:104%;height:.38em;overflow:visible}
+.ul path{fill:none;stroke:var(--caramel);stroke-width:5;stroke-linecap:round;stroke-dasharray:140;stroke-dashoffset:140}
 .hero .lede{margin-top:12px;color:var(--soft);max-width:34em}
 .hero .lede b{color:var(--choc);font-weight:600}
 .ctas{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
-.clip{position:relative;justify-self:center;height:min(46svh,calc((100vw - 32px)*1.25));aspect-ratio:4/5;border-radius:24px;background:#3a2a20 url(media/hero.webp) center/cover;box-shadow:0 26px 50px -26px rgba(43,26,18,.55)}
+.clipo{justify-self:center;position:relative;will-change:transform;transform-style:preserve-3d}
+.clip{position:relative;height:min(41svh,calc((100vw - 32px)*1.25));aspect-ratio:4/5;border-radius:24px;background:#3a2a20 url(media/hero.webp) center/cover;box-shadow:0 26px 50px -26px rgba(43,26,18,.55)}
 .clip video{width:100%;height:100%;object-fit:cover;border-radius:inherit}
 .clip .tag{position:absolute;left:12px;bottom:12px;display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border-radius:999px;background:rgba(255,250,243,.94);font:600 .75rem/1 var(--f)}
-.clip .tag i{width:7px;height:7px;border-radius:50%;background:#e2483c}
-.sticker{position:absolute;right:-10px;top:-12px;width:88px;height:88px;border-radius:50%;background:var(--butter);color:var(--choc);display:grid;place-items:center;text-align:center;font:400 .9375rem/1.05 var(--d);transform:rotate(-10deg);box-shadow:0 10px 22px -10px rgba(43,26,18,.5)}
-.sticker::before{content:'';position:absolute;inset:5px;border-radius:50%;border:1.5px dashed rgba(43,26,18,.35)}
+.clip .tag i{width:7px;height:7px;border-radius:50%;background:#e2483c;animation:ping2 1.6s ease-in-out infinite}
+@keyframes ping2{50%{opacity:.35}}
+.sticker{position:absolute;right:-14px;top:-16px;width:96px;height:96px;border-radius:50%;background:var(--butter);color:var(--choc);display:grid;place-items:center;text-align:center;font:400 .875rem/1.02 var(--d);box-shadow:0 10px 22px -10px rgba(43,26,18,.5)}
+.sticker svg{position:absolute;inset:4px;width:calc(100% - 8px);height:calc(100% - 8px);animation:spin 16s linear infinite}
+.sticker svg text{font:700 10.5px var(--f);letter-spacing:.1em;fill:var(--choc)}
+.sticker b{font-weight:400;transform:rotate(-10deg)}
+@keyframes spin{to{transform:rotate(360deg)}}
 /* hero entrance */
+.js .w>i{transform:translateY(110%)}
+.js .ready .w>i{animation:wrise 1s var(--ease) forwards;animation-delay:calc(120ms + var(--k) * 70ms)}
+@keyframes wrise{to{transform:none}}
 .js .hero [data-in]{opacity:0;transform:translateY(18px)}
-.js .ready .hero [data-in]{animation:rise .9s var(--ease) forwards;animation-delay:calc(var(--i,0) * 90ms)}
+.js .ready .hero [data-in]{animation:rise .9s var(--ease) forwards;animation-delay:calc(var(--i,0) * 110ms)}
 .js .hero .clip{opacity:0;transform:scale(.94);clip-path:inset(10% 8% 10% 8% round 28px)}
-.js .ready .hero .clip{animation:open 1.1s var(--ease) .25s forwards}
+.js .ready .hero .clip{animation:open 1.2s var(--ease) .3s forwards}
 .js .hero .sticker{opacity:0;transform:scale(.4) rotate(-40deg)}
-.js .ready .hero .sticker{animation:pop .7s cubic-bezier(.3,1.6,.5,1) 1.05s forwards}
-.js .ready .hero h1 .ul path{animation:draw .9s var(--ease) .75s forwards}
+.js .ready .hero .sticker{animation:pop .8s var(--spring) 1.25s forwards}
+.js .ready .ul path{animation:draw .9s var(--ease) .95s forwards}
 @keyframes rise{to{opacity:1;transform:none}}
 @keyframes open{to{opacity:1;transform:none;clip-path:inset(-60px -60px -60px -60px round 24px)}}
 @keyframes pop{to{opacity:1;transform:rotate(-10deg)}}
@@ -103,31 +148,39 @@ h3{font-size:1.0625rem;line-height:1.2}
 .stage .head{width:100%;max-width:520px;text-align:center}
 .stage .head h2{font-size:1.375rem}
 .stage .head h2 em{font-style:normal;color:var(--caramel)}
-.fcard{position:relative;height:min(52svh,calc((100vw - 32px)*1.25));aspect-ratio:4/5;border-radius:22px;overflow:hidden;background:#1d110b;box-shadow:0 30px 60px -30px #000}
+.fcard{position:relative;height:min(52svh,calc((100vw - 32px)*1.25));aspect-ratio:4/5;border-radius:22px;overflow:hidden;background:#1d110b;box-shadow:0 30px 60px -30px #000;will-change:transform}
 .fcard canvas{width:100%;height:100%}
 .fcard .bar{position:absolute;left:12px;right:12px;top:12px;display:flex;gap:5px;z-index:2}
 .fcard .bar span{flex:1;height:3px;border-radius:3px;background:rgba(255,250,243,.3);overflow:hidden}
 .fcard .bar span i{display:block;height:100%;width:100%;background:var(--paper);transform-origin:left;transform:scaleX(0)}
 .caps{position:relative;width:100%;max-width:520px;min-height:92px}
-.cap{position:absolute;inset:0 0 auto;text-align:center;opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s var(--ease)}
-.cap.on{opacity:1;transform:none}
+.cap{position:absolute;inset:0 0 auto;text-align:center;opacity:0;transform:translateY(14px);filter:blur(6px);transition:opacity .55s var(--ease),transform .55s var(--ease),filter .55s var(--ease)}
+.cap.on{opacity:1;transform:none;filter:none}
 .cap small{display:inline-block;font:600 .75rem/1 var(--f);color:var(--caramel);letter-spacing:.02em}
 .cap p{margin-top:8px;font:400 1.1875rem/1.25 var(--d);color:var(--paper)}
 .drip{position:absolute;left:0;right:0;top:100%;height:110px;overflow:hidden;z-index:3;pointer-events:none}
 .drip::before{content:'';position:absolute;left:0;right:0;top:-1px;height:12px;background:radial-gradient(circle at 50% 0,var(--choc) 8px,transparent 8.6px) 0 0/19px 12px repeat-x}
-.drip span{position:absolute;top:-2px;background:var(--choc);border-radius:0 0 999px 999px;transform-origin:top;transform:scaleY(.12);transition:transform 1.4s cubic-bezier(.3,.7,.2,1)}
+.drip span{position:absolute;top:-2px;background:var(--choc);border-radius:0 0 999px 999px;transform-origin:top;transform:scaleY(.12);transition:transform 1.6s cubic-bezier(.3,.7,.2,1)}
 .drip.go span{transform:scaleY(1)}
+.drip.ooze span{animation:ooze var(--d) ease-in-out infinite alternate}
+@keyframes ooze{from{transform:scaleY(1)}to{transform:scaleY(var(--o))}}
 
-/* statement */
-.state{padding:92px 0 40px;text-align:center}
-.state img{width:150px;margin:0 auto 16px}
+/* statement: the big logo builds as you scroll */
+.state{padding:96px 0 40px;text-align:center}
+.state .logo{width:min(250px,66vw);margin:0 auto 18px}
 .state p{font:400 1.375rem/1.3 var(--d);max-width:24em;margin:0 auto}
-.state p span{color:var(--sugar-d)}
+.state p .hl{color:var(--sugar-d)}
+.state .ln{display:inline;opacity:.14;transition:opacity .35s linear}
+.state .ln.lit{opacity:1}
 
-/* reveal */
-.js .rv{opacity:0;transform:translateY(22px);transition:opacity .8s var(--ease),transform .8s var(--ease);transition-delay:calc(var(--i,0) * 80ms)}
+/* reveals */
+.js .rv{opacity:0;transform:translateY(26px);transition:opacity .9s var(--ease),transform .9s var(--ease);transition-delay:calc(var(--i,0) * 90ms)}
 .js .rv.in{opacity:1;transform:none}
-.js .wipe img{clip-path:inset(0 0 100% 0);transform:scale(1.08);transition:clip-path 1s var(--ease),transform 1.4s var(--ease);transition-delay:calc(var(--i,0) * 90ms)}
+.js .rise{clip-path:inset(0 0 100% 0);transform:translateY(22px);transition:clip-path 1s var(--ease),transform 1s var(--ease)}
+.js .rise.in{clip-path:inset(-20% -5% -20% -5%);transform:none}
+.js .bite.rv{transform:translateY(34px) rotate(2.5deg)}
+.js .bite.rv.in{transform:none}
+.js .wipe img{clip-path:inset(0 0 100% 0);transform:scale(1.12);transition:clip-path 1.1s var(--ease),transform 1.6s var(--ease);transition-delay:calc(var(--i,0) * 90ms)}
 .js .wipe.in img{clip-path:inset(0 0 0 0);transform:none}
 
 /* bites rail */
@@ -141,9 +194,20 @@ h3{font-size:1.0625rem;line-height:1.2}
 .bite div{padding:14px 16px 16px}
 .bite p{margin-top:4px;color:var(--soft);font-size:.875rem}
 .dots{display:flex;justify-content:center;gap:6px;margin-top:14px}
-.dots button{width:7px;height:7px;border-radius:7px;border:0;background:rgba(43,26,18,.22);cursor:pointer;transition:width .3s,background .3s}
+.dots button{width:7px;height:7px;border-radius:7px;border:0;background:rgba(43,26,18,.22);cursor:pointer;transition:width .35s var(--ease),background .3s}
 .dots button.on{width:22px;background:var(--sugar)}
-@media (hover:hover) and (pointer:fine){.bite img{transition:transform .6s var(--ease)}.bite:hover img{transform:scale(1.04)}}
+@media (hover:hover) and (pointer:fine){
+  .bite{transition:transform .5s var(--ease),box-shadow .5s}
+  .bite.in:hover{transform:translateY(-6px);box-shadow:inset 0 0 0 1px var(--line),0 24px 40px -24px rgba(43,26,18,.45)}
+  .bite figure img{transition:transform .8s var(--ease)}
+  .bite:hover figure img{transform:scale(1.06)}
+}
+
+/* marquee: speed follows the scroll */
+.marq{background:var(--choc);color:var(--paper);overflow:hidden;padding:14px 0;border-block:1px solid rgba(255,250,243,.08)}
+.marq .tr{display:flex;width:max-content;will-change:transform}
+.marq span{font:400 1.25rem/1 var(--d);white-space:nowrap;padding:0 18px}
+.marq b{color:var(--caramel);font-weight:400;font-size:1rem;align-self:center}
 
 /* where */
 .find{padding:34px 0 40px}
@@ -159,8 +223,7 @@ h3{font-size:1.0625rem;line-height:1.2}
 
 /* closer */
 .close{padding:44px 0 46px;text-align:center;background:radial-gradient(120% 90% at 50% 0%,var(--paper),var(--cream) 70%)}
-.close img{width:min(260px,64vw);margin:0 auto;animation:bob 5s ease-in-out infinite}
-@keyframes bob{50%{transform:translateY(-8px) rotate(-1deg)}}
+.close .logo{width:min(260px,68vw);margin:0 auto}
 .close h2{margin-top:14px}
 .close p{margin:8px auto 0;color:var(--soft);max-width:28em}
 .close .ctas{justify-content:center}
@@ -168,7 +231,7 @@ footer{padding:22px 0 104px;border-top:1px solid var(--line);font-size:.8125rem;
 footer b{color:var(--choc);font-weight:600}
 
 /* dock */
-.dock{position:fixed;left:10px;right:10px;bottom:max(10px,env(safe-area-inset-bottom));z-index:40;display:flex;gap:8px;padding:8px;border-radius:999px;background:rgba(43,26,18,.96);box-shadow:0 14px 30px -12px rgba(0,0,0,.5);transform:translateY(140%);transition:transform .45s var(--ease)}
+.dock{position:fixed;left:10px;right:10px;bottom:max(10px,env(safe-area-inset-bottom));z-index:40;display:flex;gap:8px;padding:8px;border-radius:999px;background:rgba(43,26,18,.96);box-shadow:0 14px 30px -12px rgba(0,0,0,.5);transform:translateY(140%);transition:transform .55s var(--spring)}
 .dock.show{transform:none}
 .dock .btn{flex:1;min-height:44px;padding:0 12px}
 
@@ -176,12 +239,14 @@ footer b{color:var(--choc);font-weight:600}
   :root{--pad:28px}
   h1{font-size:2.75rem} h2{font-size:2rem}
   body{font-size:1rem}
-  .hero{padding:34px 0 52px}
-  .clip{height:min(56svh,560px)}
+  .hero{padding:30px 0 52px}
+  .hero-top .logo{width:132px}
+  .clip{height:min(54svh,560px)}
   .rail{display:grid;grid-template-columns:repeat(4,1fr);overflow:visible;margin:22px 0 0;padding:0}
   .dots{display:none}
   .grid2{grid-template-columns:1.3fr 1fr}
   .state p{font-size:1.875rem}
+  .marq span{font-size:1.625rem}
   .dock{display:none}
   footer{padding-bottom:28px}
   .stage .head h2{font-size:1.75rem}
@@ -190,35 +255,38 @@ footer b{color:var(--choc);font-weight:600}
   h1{font-size:3.5rem} h2{font-size:2.5rem}
   body{font-size:1.0625rem}
   .nav .links{display:flex;gap:26px;margin-left:auto;margin-right:22px}
-  .nav .links a{font:500 .875rem/1 var(--f);text-decoration:none;color:var(--soft)}
+  .nav .links a{font:500 .875rem/1 var(--f);text-decoration:none;color:var(--soft);transition:color .2s}
   .nav .links a:hover{color:var(--choc)}
   .brand img{height:38px}
   .brand span{font-size:1.125rem}
-  .hero{padding:56px 0 72px}
+  .hero{padding:44px 0 72px}
   .hero .wrap{grid-template-columns:1fr auto;align-items:center;gap:64px}
+  .hero-top .logo{width:150px}
   .clip{height:min(70vh,580px)}
-  .sticker{width:104px;height:104px;font-size:1.0625rem;right:-26px;top:-20px}
+  .sticker{width:116px;height:116px;font-size:1rem;right:-30px;top:-24px}
   .film{height:420vh}
   .stage{display:grid;grid-template-columns:auto minmax(0,440px);grid-template-areas:"card head" "card caps";grid-template-rows:auto 1fr;column-gap:72px;row-gap:28px;align-content:center;justify-content:center;padding:28px 0}
   .stage .head{grid-area:head;text-align:left;align-self:end;max-width:none}
   .stage .head h2{font-size:2.5rem}
   .fcard{grid-area:card;height:min(74vh,660px)}
   .caps{grid-area:caps;align-self:start;display:grid;gap:18px;min-height:0}
-  .cap{position:relative;inset:auto;text-align:left;opacity:.32;transform:none;padding-left:18px;border-left:2px solid rgba(255,250,243,.18);transition:opacity .45s,border-color .45s}
-  .cap.on{opacity:1;border-color:var(--caramel)}
+  .cap{position:relative;inset:auto;text-align:left;opacity:.32;transform:none;filter:none;padding-left:18px;border-left:2px solid rgba(255,250,243,.18);transition:opacity .5s,border-color .5s,transform .5s var(--ease)}
+  .cap.on{opacity:1;border-color:var(--caramel);transform:translateX(6px)}
   .cap p{font-size:1.375rem}
-  .state{padding:130px 0 64px}
-  .state img{width:180px}
+  .state{padding:136px 0 64px}
+  .state .logo{width:320px}
   .state p{font-size:2.5rem}
   .bites,.find{padding:56px 0 64px}
   .close{padding:72px 0}
+  .close .logo{width:300px}
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
-  .js .hero [data-in],.js .hero .clip,.js .hero .sticker,.js .rv,.js .wipe img{opacity:1!important;transform:none!important;clip-path:none!important}
-  .js .hero .sticker{transform:rotate(-10deg)!important}
-  .hero h1 .ul path{stroke-dashoffset:0}
+  .js .w>i,.js .hero [data-in],.js .hero .clip,.js .rv,.js .rise,.js .wipe img{opacity:1!important;transform:none!important;clip-path:none!important}
+  .js .hero .sticker{opacity:1!important;transform:rotate(-10deg)!important}
+  .ul path{stroke-dashoffset:0}
   .drip span{transform:none}
+  .state .ln{opacity:1}
 }
 </style>
 </head>
@@ -236,18 +304,23 @@ footer b{color:var(--choc);font-weight:600}
   <section class="hero" aria-labelledby="h1">
     <div class="wrap">
       <div>
-        <span class="chip" data-in style="--i:0"><i aria-hidden="true"></i>New at JJ's Custard Co.</span>
-        <h1 id="h1" data-in style="--i:1">Scoopable cookie cups, served <span class="ul">hot.<svg viewBox="0 0 100 12" preserveAspectRatio="none" aria-hidden="true"><path d="M2 8 C 22 2, 48 2, 64 6 S 92 10, 98 4"/></svg></span></h1>
-        <p class="lede" data-in style="--i:2">We bake the cookie in one big pan, scoop it while it's warm and set it on JJ's custard with chocolate over the top. <b>Starting Friday, Oct 30 at JJ's Custard Co.</b></p>
-        <div class="ctas" id="heroCta" data-in style="--i:3">
-          <a class="btn dark" href="#find">Where to get one</a>
-          <a class="btn ghost" href="#film">See how it's made</a>
+        <div class="hero-top">
+          <div class="logo" data-logo="load" aria-label="Brown Sugar Bakery logo"></div>
+          <span class="chip" data-in style="--i:1"><i aria-hidden="true"></i>New at JJ's Custard Co.</span>
+        </div>
+        <h1 id="h1"><span class="w"><i style="--k:0">Scoopable</i></span> <span class="w"><i style="--k:1">cookie</i></span> <span class="w"><i style="--k:2">cups,</i></span> <span class="w"><i style="--k:3">served</i></span> <span class="ul"><span class="w"><i style="--k:4">hot.</i></span><svg viewBox="0 0 100 12" preserveAspectRatio="none" aria-hidden="true"><path d="M2 8 C 22 2, 48 2, 64 6 S 92 10, 98 4"/></svg></span></h1>
+        <p class="lede" data-in style="--i:4">We bake it in one big pan, scoop it warm onto JJ's custard and pour chocolate over the top. <b>Starting Friday, Oct 30 at JJ's Custard Co.</b></p>
+        <div class="ctas" id="heroCta" data-in style="--i:5">
+          <a class="btn dark mag" href="#find">Where to get one</a>
+          <a class="btn ghost mag" href="#film">See how it's made</a>
         </div>
       </div>
-      <div class="clip">
-        <video id="heroVid" muted loop playsinline preload="metadata" poster="media/hero.webp" aria-label="A spoon pulling a gooey bite out of a scoopable cookie cup covered in chocolate"><source src="media/hero.mp4" type="video/mp4"></video>
-        <span class="tag"><i aria-hidden="true"></i>Hot out of the oven</span>
-        <span class="sticker" aria-hidden="true">Grab a<br>spoon</span>
+      <div class="clipo" id="clipo">
+        <div class="clip">
+          <video id="heroVid" muted loop playsinline preload="metadata" poster="media/hero.webp" aria-label="A spoon pulling a gooey bite out of a scoopable cookie cup covered in chocolate"><source src="media/hero.mp4" type="video/mp4"></video>
+          <span class="tag"><i aria-hidden="true"></i>Hot out of the oven</span>
+          <span class="sticker" aria-hidden="true"><svg viewBox="0 0 100 100"><defs><path id="ring" d="M50 50 m-39 0 a39 39 0 1 1 78 0 a39 39 0 1 1 -78 0"/></defs><text textLength="243" lengthAdjust="spacing"><textPath href="#ring" textLength="243" lengthAdjust="spacing">HOT · GOOEY · SCOOPABLE ·</textPath></text></svg><b>Grab a<br>spoon</b></span>
+        </div>
       </div>
     </div>
   </section>
@@ -255,7 +328,7 @@ footer b{color:var(--choc);font-weight:600}
   <section class="film" id="film" aria-label="How a scoopable cookie cup comes together">
     <div class="stage">
       <div class="head"><h2>How a cookie cup <em>comes together</em></h2></div>
-      <div class="fcard">
+      <div class="fcard" id="fcard">
         <div class="bar" aria-hidden="true"><span><i></i></span><span><i></i></span><span><i></i></span><span><i></i></span></div>
         <canvas id="fc" role="img" aria-label="Custard goes into a cup, the cookie comes out of the oven in a pan, a scoop goes in and chocolate is drizzled on top"></canvas>
       </div>
@@ -269,16 +342,16 @@ footer b{color:var(--choc);font-weight:600}
     <div class="drip" id="drip" aria-hidden="true"></div>
   </section>
 
-  <section class="state" aria-label="About Brown Sugar Bakery">
+  <section class="state" id="state" aria-label="About Brown Sugar Bakery">
     <div class="wrap">
-      <img class="rv" src="media/logo.png" alt="Brown Sugar Bakery logo: a cupcake with a ribbon" width="480" height="305" loading="lazy">
-      <p class="rv" style="--i:1">Brown Sugar Bakery is new to Southeast Michigan. We bake cookies, muffins and brownies, and the <span>scoopable cookie cup</span> is our first drop.</p>
+      <div class="logo" data-logo="scroll" aria-label="Brown Sugar Bakery logo: a cupcake with a ribbon"></div>
+      <p id="stateP"><span class="ln">Brown Sugar Bakery is new to Southeast Michigan.</span> <span class="ln">We bake cookies, muffins and brownies,</span> <span class="ln">and the <span class="hl">scoopable cookie cup</span> is our first drop.</span></p>
     </div>
   </section>
 
   <section class="bites" aria-labelledby="bitesH">
     <div class="wrap">
-      <div class="head rv"><h2 id="bitesH">Best eaten while it's hot.</h2><p>Here's what goes into every cup.</p></div>
+      <div class="head"><h2 id="bitesH" class="rise">Best eaten while it's hot.</h2><p class="rv" style="--i:1">Here's what goes into every cup.</p></div>
       <div class="rail" id="rail">
         <article class="bite wipe rv" style="--i:0"><figure><img src="media/tray.webp" alt="A pan of baked cookie, golden on top" width="600" height="750" loading="lazy"></figure><div><h3>The pan</h3><p>It bakes as one big, soft cookie.</p></div></article>
         <article class="bite wipe rv" style="--i:1"><figure><img src="media/scoop.webp" alt="A scoop pulling warm cookie out of the pan" width="600" height="750" loading="lazy"></figure><div><h3>The scoop</h3><p>Every cup gets a scoop straight from the pan.</p></div></article>
@@ -289,20 +362,22 @@ footer b{color:var(--choc);font-weight:600}
     </div>
   </section>
 
+  <div class="marq" aria-hidden="true"><div class="tr" id="marq"><span>Scoopable cookie cups</span><b>✦</b><span>Starting Friday, Oct 30</span><b>✦</b><span>At JJ's Custard Co.</span><b>✦</b><span>Grab a spoon</span><b>✦</b><span>Scoopable cookie cups</span><b>✦</b><span>Starting Friday, Oct 30</span><b>✦</b><span>At JJ's Custard Co.</span><b>✦</b><span>Grab a spoon</span><b>✦</b></div></div>
+
   <section class="find" id="find" aria-labelledby="findH">
     <div class="wrap">
-      <div class="head rv"><h2 id="findH">Where to get one</h2></div>
+      <div class="head"><h2 id="findH" class="rise">Where to get one</h2></div>
       <div class="grid2">
         <div class="card jj rv">
           <span class="pill">Starting Friday, Oct 30</span>
           <h3>JJ's Custard Co.</h3>
           <p>Ask for the scoopable cookie cup at JJ's. They have shops around Southeast Michigan, so check their site for the one closest to you.</p>
-          <a class="btn dark" href="https://www.custardco.com/" target="_blank" rel="noopener">Find a JJ's near you</a>
+          <a class="btn dark mag" href="https://www.custardco.com/" target="_blank" rel="noopener">Find a JJ's near you</a>
         </div>
         <div class="card ig rv" style="--i:1">
           <h3>See the next drop first</h3>
           <p>We post everything new on Instagram. Questions or big orders? Send us a message there.</p>
-          <a class="btn sugar" href="https://www.instagram.com/brownsugarbakery.mi/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>@brownsugarbakery.mi</a>
+          <a class="btn sugar mag" href="https://www.instagram.com/brownsugarbakery.mi/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>@brownsugarbakery.mi</a>
         </div>
       </div>
     </div>
@@ -310,12 +385,12 @@ footer b{color:var(--choc);font-weight:600}
 
   <section class="close" id="closer" aria-labelledby="closeH">
     <div class="wrap">
-      <img src="media/logo.png" alt="" width="480" height="305" loading="lazy">
-      <h2 id="closeH" class="rv">Grab a spoon and come find us.</h2>
+      <div class="logo" data-logo="view" aria-label="Brown Sugar Bakery logo"></div>
+      <h2 id="closeH" class="rise">Grab a spoon and come find us.</h2>
       <p class="rv" style="--i:1">Scoopable cookie cups at JJ's Custard Co., starting Friday, Oct 30.</p>
       <div class="ctas rv" style="--i:2">
-        <a class="btn dark" href="https://www.custardco.com/" target="_blank" rel="noopener">Find a JJ's near you</a>
-        <a class="btn ghost" href="https://www.instagram.com/brownsugarbakery.mi/" target="_blank" rel="noopener">Follow us</a>
+        <a class="btn dark mag" href="https://www.custardco.com/" target="_blank" rel="noopener">Find a JJ's near you</a>
+        <a class="btn ghost mag" href="https://www.instagram.com/brownsugarbakery.mi/" target="_blank" rel="noopener">Follow us</a>
       </div>
     </div>
   </section>
@@ -330,23 +405,83 @@ footer b{color:var(--choc);font-weight:600}
   <a class="btn light" href="https://www.instagram.com/brownsugarbakery.mi/" target="_blank" rel="noopener">Follow</a>
 </div>
 
+<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js" defer></script>
 <script>
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
-const RM = matchMedia('(prefers-reduced-motion: reduce)').matches, small = matchMedia('(max-width: 759px)').matches;
-addEventListener('load', () => document.body.classList.add('ready'));
-setTimeout(() => document.body.classList.add('ready'), 1200);
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches, small = matchMedia('(max-width: 759px)').matches, fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
+const clamp = v => v < 0 ? 0 : v > 1 ? 1 : v, seg = (t, a, d) => clamp((t - a) / d), lerp = (a, b, k) => a + (b - a) * k;
+const eCubic = p => 1 - Math.pow(1 - p, 3), eQuint = p => 1 - Math.pow(1 - p, 5);
+const eBack = (p, s = 1.7) => p <= 0 ? 0 : 1 + (s + 1) * Math.pow(p - 1, 3) + s * Math.pow(p - 1, 2);
+const eBounce = p => { const n = 7.5625, d = 2.75; if (p < 1 / d) return n * p * p; if (p < 2 / d) return n * (p -= 1.5 / d) * p + .75; if (p < 2.5 / d) return n * (p -= 2.25 / d) * p + .9375; return n * (p -= 2.625 / d) * p + .984375; };
+const ticks = [];                       // everything animated runs on one rAF loop
+let ready = false;
+const go = () => { if (ready) return; ready = true; document.body.classList.add('ready'); };
+addEventListener('load', go); setTimeout(go, 1200);
+
+/* their logo, rebuilt from 20 layers cut out of the original artwork (positions in % of the 788x501 logo) */
+const LAYERS = {"t0":[15.99,23.952,7.36,10.778],"t1":[20.178,15.17,8.376,12.176],"t2":[26.523,9.182,6.091,9.581],"t3":[31.853,0.998,9.898,12.176],"t4":[42.64,0.0,5.711,10.379],"t5":[53.68,0.798,5.711,9.581],"t6":[60.025,2.196,6.726,11.178],"t7":[65.99,8.184,6.218,11.577],"t8":[70.051,15.968,7.36,14.77],"t9":[77.284,21.557,5.584,12.974],"b0":[28.68,78.643,7.107,12.375],"b1":[36.041,82.635,7.741,11.776],"b2":[44.67,83.633,6.726,11.377],"b3":[51.904,83.633,6.345,11.377],"b4":[58.122,82.635,7.868,11.776],"b5":[65.228,78.842,7.234,12.575],"bean":[40.863,17.166,14.086,11.776],"frost":[27.03,15.369,45.939,44.311],"liner":[29.315,52.894,39.975,25.15],"ribbon":[0.0,43.313,100.0,56.687]};
+function Logo(el) {
+  const L = (n, cls = '') => { const [x, y, w, h] = LAYERS[n], i = new Image(); i.src = `media/logo/${n}.webp`; i.alt = ''; i.decoding = 'async'; i.draggable = false; i.className = `ly ${n} ${cls}`; i.style.cssText = `left:${x}%;top:${y}%;width:${w}%;height:${h}%`; return i; };
+  el.setAttribute('role', 'img');
+  el.innerHTML = '<div class="clipper"><div class="cupwrap"></div></div>';
+  const cup = el.querySelector('.cupwrap'), liner = L('liner'), frost = L('frost'), bean = L('bean');
+  cup.append(liner, frost, bean);
+  cup.insertAdjacentHTML('beforeend', '<svg class="steam" viewBox="0 0 30 40" aria-hidden="true"><path d="M6 38c-4-6 4-10 0-17s3-11 1-19"/><path d="M15 38c-4-6 4-10 0-17s3-11 1-19"/><path d="M24 38c-4-6 4-10 0-17s3-11 1-19"/></svg>');
+  const rib = L('ribbon'); el.append(rib);
+  const bot = [...Array(6)].map((_, k) => L('b' + k)); el.append(...bot);
+  const top = [...Array(10)].map((_, k) => { const i = L('t' + k, 'tl'); i.style.setProperty('--k', k); return i; }); el.append(...top);
+  const S = (e, tr, o) => { e.style.transform = tr; e.style.opacity = o; };
+  let last = -1;
+  function set(t) {
+    t = clamp(t); if (Math.abs(t - last) < .0005) return; last = t;
+    let p = seg(t, 0, .32), e = eQuint(p);
+    S(rib, `translateY(${((1 - e) * 5).toFixed(2)}%) scaleX(${(.04 + .96 * e).toFixed(4)})`, clamp(p * 3));
+    bot.forEach((b, k) => { const q = seg(t, .16 + .045 * k, .24), f = eBack(q, 2.2); S(b, `translateY(${((1 - f) * 80).toFixed(1)}%) scale(${(.5 + .5 * f).toFixed(3)})`, clamp(q * 3)); });
+    p = seg(t, .22, .3); S(liner, `translateY(${((1 - eBack(p, 1.25)) * 150).toFixed(1)}%)`, clamp(p * 6));
+    p = seg(t, .36, .3); { const y = eCubic(seg(p, 0, .6)), q = seg(p, .6, .4), sq = Math.sin(q * Math.PI) * .13 * (1 - q * .5);
+      S(frost, `translateY(${(-(1 - y) * 95).toFixed(1)}%) scale(${(1 + sq * .55).toFixed(3)},${(1 - sq).toFixed(3)})`, clamp(p * 5)); }
+    p = seg(t, .6, .24); { const f = eBounce(p); S(bean, `translateY(${(-(1 - f) * 280).toFixed(1)}%) rotate(${((1 - f) * -50).toFixed(1)}deg)`, clamp(p * 6)); }
+    top.forEach((l, k) => { const q = seg(t, .62 + .032 * k, .2), f = eBack(q, 2.6); S(l, `translateY(${((1 - q) * 45).toFixed(1)}%) rotate(${((1 - f) * (k - 4.5) * 7).toFixed(1)}deg) scale(${Math.max(0, f).toFixed(3)})`, clamp(q * 3)); });
+    el.classList.toggle('built', t >= 1);
+    if (t >= 1) [rib, liner, frost, bean, ...bot, ...top].forEach(x => { x.style.transform = ''; x.style.opacity = ''; });
+  }
+  set(0); return { set };
+}
+$$('[data-logo]').forEach(el => {
+  const lg = Logo(el), mode = el.dataset.logo;
+  if (RM) { lg.set(1); return; }
+  const play = (delay = 0, dur = 2600) => { const t0 = performance.now() + delay; ticks.push(now => { const t = (now - t0) / dur; if (t < 0) return; lg.set(t); return t >= 1; }); };
+  if (mode === 'load') play(150);
+  if (mode === 'view') new IntersectionObserver((es, o) => { if (es[0].isIntersecting) { play(100, 2300); o.disconnect(); } }, { threshold: .45 }).observe(el);
+  if (mode === 'scroll') { let cur = 0; ticks.push((now, dt) => { const r = el.getBoundingClientRect(); if (r.bottom < -200 || r.top > innerHeight + 200) return; const p = clamp((innerHeight * .98 - r.top) / (innerHeight * .62)); cur = lerp(cur, p, 1 - Math.exp(-dt * 7)); if (Math.abs(p - cur) < .001) cur = p; lg.set(cur); }); }
+});
 
 // hero loop: plays only while on screen, never with reduced motion
 const vid = $('#heroVid');
 if (!RM) new IntersectionObserver(es => { es[0].isIntersecting ? vid.play().catch(() => {}) : vid.pause(); }).observe(vid);
 
+// hero clip: tilts toward the pointer, drifts and settles back as the hero scrolls away
+const clipo = $('#clipo'); let tx = 0, ty = 0, cx = 0, cy = 0;
+if (fine && !RM) $('.hero').addEventListener('pointermove', e => { const r = clipo.getBoundingClientRect(); tx = clamp((e.clientX - r.left) / r.width) - .5; ty = clamp((e.clientY - r.top) / r.height) - .5; });
+if (fine && !RM) $('.hero').addEventListener('pointerleave', () => { tx = ty = 0; });
+if (!RM) ticks.push((now, dt) => {
+  const k = 1 - Math.exp(-dt * 6); cx = lerp(cx, tx, k); cy = lerp(cy, ty, k);
+  const r = clipo.getBoundingClientRect(); if (r.bottom < 0) return;
+  const s = clamp(-r.top / (innerHeight * .9));
+  clipo.style.transform = `perspective(900px) translate3d(0,${(s * -40).toFixed(1)}px,0) rotateX(${(-cy * 7).toFixed(2)}deg) rotateY(${(cx * 9).toFixed(2)}deg) scale(${(1 - s * .06).toFixed(4)})`;
+});
+
 // reveals
 const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -8% 0px' });
-$$('.rv').forEach(el => io.observe(el));
+$$('.rv,.rise').forEach(el => io.observe(el));
+
+// statement lines light up as they cross the screen
+const lns = $$('#stateP .ln');
+if (!RM) ticks.push(() => { const r = $('#stateP').getBoundingClientRect(); if (r.top > innerHeight || r.bottom < 0) return; const p = clamp((innerHeight * .86 - r.top) / (r.height + innerHeight * .3)); lns.forEach((l, i) => l.classList.toggle('lit', p > (i + .35) / lns.length)); });
 
 // scroll film from their reel: 122 frames, 4 shots
 const FRAMES = Array.from({ length: 122 }, (_, i) => `media/film/f${String(i).padStart(3, '0')}.webp`);
-const CUTS = [0, .22, .48, .71, 1];          // where each shot starts and ends in the film
+const CUTS = [0, .22, .48, .71, 1];
 function ScrollFilm(o) {
   const all = o.frames, step = small ? 2 : 1, N = all.length, cv = o.canvas, ctx = cv.getContext('2d', { alpha: false }), sec = o.section;
   const idx = all.map((_, i) => i).filter(i => i % step === 0 || i === N - 1), img = new Array(N).fill(null);
@@ -364,39 +499,58 @@ function ScrollFilm(o) {
     const A = img[k], W = cv.width, H = cv.height, s = Math.max(W / A.naturalWidth, H / A.naturalHeight), dw = A.naturalWidth * s, dh = A.naturalHeight * s;
     ctx.drawImage(A, (W - dw) / 2, (H - dh) / 2, dw, dh);
   };
-  const progress = () => { const r = sec.getBoundingClientRect(), span = sec.offsetHeight - innerHeight; return Math.min(1, Math.max(0, -r.top / Math.max(1, span))); };
-  let cur = progress(), prev = performance.now(), lastP = -1, vis = true;
-  new IntersectionObserver(es => { vis = es[0].isIntersecting; }, { rootMargin: '200px 0px' }).observe(sec);
-  (function tick(now) {
-    const dt = Math.min(.05, (now - prev) / 1000); prev = now;
-    if (vis) {
-      const p = progress(); cur = RM ? p : cur + (p - cur) * (1 - Math.exp(-dt * 8)); if (Math.abs(p - cur) < .0004) cur = p;
-      draw(cur);
-      if (Math.abs(cur - lastP) > .0002) { lastP = cur; o.onProgress(cur); }
-    }
-    requestAnimationFrame(tick);
-  })(prev);
+  const progress = () => { const r = sec.getBoundingClientRect(), span = sec.offsetHeight - innerHeight; return clamp(-r.top / Math.max(1, span)); };
+  let cur = progress(), lastP = -1;
+  ticks.push((now, dt) => {
+    const r = sec.getBoundingClientRect(); if (r.bottom < -200 || r.top > innerHeight + 200) return;
+    const p = progress(); cur = RM ? p : cur + (p - cur) * (1 - Math.exp(-dt * 9)); if (Math.abs(p - cur) < .0004) cur = p;
+    draw(cur);
+    if (Math.abs(cur - lastP) > .0002) { lastP = cur; o.onProgress(cur); }
+    if (o.onEnter) o.onEnter(r);
+  });
 }
-const caps = $$('.cap'), bars = $$('.fcard .bar i');
-let capOn = 0;
-ScrollFilm({ section: $('#film'), canvas: $('#fc'), frames: FRAMES, onProgress: t => {
-  let k = 0; while (k < 3 && t >= CUTS[k + 1]) k++;
-  if (k !== capOn) { caps[capOn].classList.remove('on'); caps[k].classList.add('on'); capOn = k; }
-  bars.forEach((b, i) => b.style.transform = `scaleX(${Math.min(1, Math.max(0, (t - CUTS[i]) / (CUTS[i + 1] - CUTS[i]))).toFixed(3)})`);
-} });
+const caps = $$('.cap'), bars = $$('.fcard .bar i'), fcard = $('#fcard');
+let capOn = 0, fz = -1;
+ScrollFilm({ section: $('#film'), canvas: $('#fc'), frames: FRAMES,
+  onProgress: t => {
+    let k = 0; while (k < 3 && t >= CUTS[k + 1]) k++;
+    if (k !== capOn) { caps[capOn].classList.remove('on'); caps[k].classList.add('on'); capOn = k; }
+    bars.forEach((b, i) => b.style.transform = `scaleX(${clamp((t - CUTS[i]) / (CUTS[i + 1] - CUTS[i])).toFixed(3)})`);
+  },
+  onEnter: r => {                      // the card zooms up to full size as the film arrives
+    if (RM) return; const z = clamp((innerHeight - r.top) / (innerHeight * .85)), e = eCubic(z);
+    if (Math.abs(e - fz) < .001) return; fz = e;
+    fcard.style.transform = `translate3d(0,${((1 - e) * 60).toFixed(1)}px,0) scale(${(.82 + .18 * e).toFixed(4)})`;
+  } });
 
-// chocolate drips out of the bottom of the film
+// chocolate drips pour out of the bottom of the film, then keep oozing
 const drip = $('#drip');
 (function () {
   let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
   const n = small ? 9 : 18;
   for (let i = 0; i < n; i++) {
     const s = document.createElement('span'), w = 12 + rnd() * 16, h = 22 + rnd() * (small ? 46 : 72);
-    s.style.cssText = `left:${((i + .15 + rnd() * .7) / n * 100).toFixed(2)}%;width:${w.toFixed(0)}px;height:${h.toFixed(0)}px;transition-delay:${(rnd() * .5).toFixed(2)}s`;
+    s.style.cssText = `left:${((i + .15 + rnd() * .7) / n * 100).toFixed(2)}%;width:${w.toFixed(0)}px;height:${h.toFixed(0)}px;transition-delay:${(rnd() * .5).toFixed(2)}s;--d:${(2.6 + rnd() * 2.6).toFixed(2)}s;--o:${(1.06 + rnd() * .14).toFixed(3)}`;
     drip.appendChild(s);
   }
-  new IntersectionObserver(es => { if (es[0].isIntersecting) drip.classList.add('go'); }, { rootMargin: '0px 0px -12% 0px' }).observe(drip);
+  new IntersectionObserver((es, o) => { if (es[0].isIntersecting) { drip.classList.add('go'); setTimeout(() => drip.classList.add('ooze'), 2200); o.disconnect(); } }, { rootMargin: '0px 0px -12% 0px' }).observe(drip);
 })();
+
+// marquee: drifts on its own, speeds up and changes direction with the scroll
+const marq = $('#marq'); let mx = 0, lastY = scrollY, vel = 0, dir = 1;
+if (!RM) ticks.push((now, dt) => {
+  const r = marq.getBoundingClientRect(); const y = scrollY, dy = y - lastY; lastY = y;
+  vel = lerp(vel, Math.abs(dy) / Math.max(dt, .001), .12); if (dy) dir = dy > 0 ? 1 : -1;
+  if (r.bottom < 0 || r.top > innerHeight) return;
+  const half = marq.scrollWidth / 2; mx -= dir * (40 + Math.min(vel, 3000) * .35) * dt; mx = ((mx % half) - half) % half;
+  marq.style.transform = `translate3d(${mx.toFixed(1)}px,0,0)`;
+});
+
+// magnetic buttons (fine pointers)
+if (fine && !RM) $$('.mag').forEach(b => {
+  b.addEventListener('pointermove', e => { const r = b.getBoundingClientRect(); b.style.setProperty('--mx', ((e.clientX - r.left - r.width / 2) * .22).toFixed(1) + 'px'); b.style.setProperty('--my', ((e.clientY - r.top - r.height / 2) * .32).toFixed(1) + 'px'); });
+  b.addEventListener('pointerleave', () => { b.style.setProperty('--mx', '0px'); b.style.setProperty('--my', '0px'); });
+});
 
 // rail dots on phones
 const rail = $('#rail'), dots = $('#dots'), cards = [...rail.children];
@@ -409,6 +563,23 @@ const nav = $('#nav'), dock = $('#dock'); let inHero = true, atClose = false;
 const syncDock = () => dock.classList.toggle('show', !inHero && !atClose);
 new IntersectionObserver(es => { inHero = es[0].isIntersecting; nav.classList.toggle('solid', !inHero); syncDock(); }).observe($('#heroCta'));
 new IntersectionObserver(es => { atClose = es[0].isIntersecting; syncDock(); }).observe($('#closer'));
+
+// smooth inertia scrolling on desktop (native scrolling stays on touch and with reduced motion)
+let lenis = null;
+addEventListener('DOMContentLoaded', () => {
+  if (!fine || RM || !window.Lenis) return;
+  lenis = new Lenis({ lerp: .11, smoothWheel: true });
+  $$('a[href^="#"]').forEach(a => a.addEventListener('click', e => { const id = a.getAttribute('href'); const el = id === '#top' ? 0 : $(id); if (el === null) return; e.preventDefault(); lenis.scrollTo(el, { offset: -56, duration: 1.4 }); }));
+});
+
+// the one loop
+let prev = performance.now();
+(function loop(now) {
+  const dt = Math.min(.05, (now - prev) / 1000); prev = now;
+  if (lenis) lenis.raf(now);
+  for (let i = ticks.length - 1; i >= 0; i--) if (ticks[i](now, dt) === true) ticks.splice(i, 1);
+  requestAnimationFrame(loop);
+})(prev);
 </script>
 <a class="studio" href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener" aria-label="Site by ElaSystems (opens in a new tab)"><i aria-hidden="true"></i><span>Site by <b>ElaSystems</b></span></a>
 <style>
