@@ -357,6 +357,30 @@ footer a{color:var(--muted)}
   .close{padding:90px 0}
   .close .logo{width:340px;margin:0 auto}
 }
+
+/* intro: a tommy gun burst punches bullet holes through a black screen, BANG bursts pop, then the screen splits along the line of holes */
+html.intro-on{overflow:hidden}
+.intro{position:fixed;inset:0;z-index:80;pointer-events:auto;cursor:pointer}
+.intro .half{position:absolute;inset:0;will-change:transform}
+.intro .half canvas,.intro .fx{position:absolute;inset:0;width:100%;height:100%}
+.intro .fx{pointer-events:none}
+.intro .gun{position:absolute;right:-4vw;bottom:13vh;width:min(560px,94vw);height:auto;overflow:visible;transform-origin:70% 60%;animation:gunin .32s cubic-bezier(.2,.8,.2,1) both}
+@keyframes gunin{from{transform:translateX(75%) rotate(14deg)}to{transform:translateX(0) rotate(9deg)}}
+.intro .gun .flash{opacity:0}
+.intro .bangs{position:absolute;inset:0;pointer-events:none}
+.bang{position:absolute;left:0;top:0;display:grid;place-items:center;transform:translate(-50%,-50%) rotate(var(--r)) scale(0);animation:pow .42s cubic-bezier(.3,1.6,.5,1) forwards}
+.bang svg{position:absolute;left:50%;top:50%;width:calc(var(--fs) * 3.4);height:calc(var(--fs) * 2.5);transform:translate(-50%,-50%);overflow:visible}
+.bang span{position:relative;font:700 var(--fs)/1 'Antonio',Impact,'Arial Narrow',sans-serif;color:var(--cream);letter-spacing:.01em;-webkit-text-stroke:calc(var(--fs) * .07) #0b0707;paint-order:stroke fill;text-shadow:calc(var(--fs) * .06) calc(var(--fs) * .06) 0 #0b0707}
+@keyframes pow{60%{transform:translate(-50%,-50%) rotate(var(--r)) scale(1.22)}100%{transform:translate(-50%,-50%) rotate(var(--r)) scale(1)}}
+.shell{position:absolute;left:0;top:0;width:12px;height:5px;border-radius:1.5px;background:linear-gradient(90deg,#8a5a1c,#e6b45a 45%,#a8701f);will-change:transform}
+.intro .cut{position:absolute;left:0;top:0;height:3px;transform-origin:0 50%;background:linear-gradient(90deg,transparent,#fff 15%,#ffd2b8 50%,#fff 85%,transparent);box-shadow:0 0 18px 4px rgba(255,90,60,.8);opacity:0}
+.intro .skip{position:absolute;right:14px;top:max(14px,env(safe-area-inset-top));z-index:2;border:0;cursor:pointer;padding:9px 14px;border-radius:999px;background:rgba(244,236,225,.1);box-shadow:inset 0 0 0 1px rgba(244,236,225,.2);color:var(--cream);font:600 .75rem/1 'Antonio','Arial Narrow',sans-serif;letter-spacing:.14em;text-transform:uppercase}
+.intro.split{pointer-events:none}
+.intro.split .top{transform:translate(-5%,-85%) rotate(-6deg);transition:transform .62s cubic-bezier(.65,0,.35,1)}
+.intro.split .bot{transform:translate(5%,85%) rotate(5deg);transition:transform .62s cubic-bezier(.65,0,.35,1)}
+.intro.split .cut{animation:cut .5s ease-out forwards}
+@keyframes cut{0%{opacity:1;transform:var(--ct) scaleX(0)}30%{opacity:1;transform:var(--ct) scaleX(1)}100%{opacity:0;transform:var(--ct) scaleX(1)}}
+.intro.split .fx,.intro.split .bangs,.intro.split .skip{opacity:0;transition:opacity .22s}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
   .js .logo .word,.js .logo .hat,.js .hero .w>i,.js .hero [data-in],.js .stage .f,.js .rise,.js .rv{opacity:1!important;transform:none!important;filter:none!important;clip-path:none!important}
@@ -365,6 +389,108 @@ footer a{color:var(--muted)}
 </head>
 <body>
 <script>document.documentElement.classList.add('js')</script>
+<script>
+/* the intro runs before anything else paints; the page waits on WF_INTRO before its own entrance animations */
+(function () {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  let release; window.WF_INTRO = new Promise(r => release = r);
+  const W = innerWidth, H = innerHeight, D = Math.min(devicePixelRatio || 1, 2), mob = W < 760;
+  const root = document.createElement('div'); root.className = 'intro'; root.setAttribute('role', 'presentation');
+  root.innerHTML = `<div class="half top"><canvas></canvas></div><div class="half bot"><canvas></canvas>
+  <svg class="gun" viewBox="0 0 600 220" aria-hidden="true">
+    <defs><linearGradient id="gst" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5b5354"/><stop offset=".45" stop-color="#2b2627"/><stop offset="1" stop-color="#131011"/></linearGradient>
+    <linearGradient id="gwd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a4b2a"/><stop offset=".5" stop-color="#5a2c16"/><stop offset="1" stop-color="#2e150a"/></linearGradient></defs>
+    <g stroke="rgba(255,214,190,.35)" stroke-width="1.4">
+      <path fill="url(#gwd)" d="M388 74 L560 70 Q592 70 594 82 L596 148 Q596 160 582 160 L548 160 Q470 128 398 114 Z"/>
+      <path fill="url(#gwd)" d="M336 108 L370 108 L392 182 Q394 192 382 194 L362 196 Q352 196 350 186 Z"/>
+      <path fill="url(#gwd)" d="M182 106 L214 106 L222 168 Q222 178 212 178 L196 178 Q186 178 186 168 Z"/>
+      <circle fill="url(#gst)" cx="282" cy="142" r="50"/><circle fill="none" cx="282" cy="142" r="34" stroke="rgba(255,214,190,.25)"/><circle fill="#1a1617" cx="282" cy="142" r="8"/>
+      <path fill="url(#gst)" d="M160 72 L392 70 Q402 70 402 80 L402 112 L160 114 Z"/>
+      <path fill="url(#gst)" d="M350 62 L372 62 L372 72 L350 72 Z"/>
+      <path fill="url(#gst)" d="M30 84 L170 84 L170 104 L30 104 Z"/>
+      <g fill="#2b2627">${Array.from({ length: 11 }, (_, i) => `<rect x="${62 + i * 9.6}" y="79" width="4.6" height="30" rx="1.5"/>`).join('')}</g>
+      <path fill="url(#gst)" d="M6 80 L46 80 L46 108 L6 108 Z"/><path fill="#1a1617" d="M6 86 L18 86 L18 102 L6 102 Z"/>
+      <path fill="none" d="M332 112 Q332 136 350 138" stroke="rgba(255,214,190,.45)" stroke-width="3"/>
+    </g>
+    <g class="flash"><polygon fill="#fff3c4" points="6,94 -40,74 -22,90 -78,94 -22,98 -40,114"/><polygon fill="#ffb347" opacity=".8" points="6,94 -26,60 -16,86 -60,72 -18,94 -60,116 -16,102 -26,128"/><circle cx="-6" cy="94" r="16" fill="#fff8e0" opacity=".9"/></g>
+    <circle class="mz" cx="0" cy="94" r="1" fill="none"/><circle class="ej" cx="300" cy="70" r="1" fill="none"/>
+  </svg></div><canvas class="fx"></canvas><div class="bangs"></div><div class="cut"></div><button class="skip" type="button">Skip</button>`;
+  document.body.appendChild(root); document.documentElement.classList.add('intro-on');
+  const [cTop, cBot] = root.querySelectorAll('.half canvas'), fx = root.querySelector('.fx'), gun = root.querySelector('.gun'), flash = gun.querySelector('.flash');
+  const ctxs = [cTop, cBot].map(c => { c.width = W * D; c.height = H * D; const x = c.getContext('2d'); x.scale(D, D); return x; });
+  fx.width = W * D; fx.height = H * D; const fc = fx.getContext('2d'); fc.scale(D, D);
+  // the black screen, lit from the middle so it reads as a room, not a void
+  ctxs.forEach(x => { const g = x.createRadialGradient(W * .5, H * .45, 0, W * .5, H * .45, Math.max(W, H) * .75); g.addColorStop(0, '#1a0c0a'); g.addColorStop(1, '#050303'); x.fillStyle = g; x.fillRect(0, 0, W, H); });
+  // the burst line, also the line the screen splits along
+  const A = mob ? [W * .1, H * .6] : [W * .06, H * .62], B = mob ? [W * .9, H * .22] : [W * .94, H * .3];
+  const UL = Math.hypot(B[0] - A[0], B[1] - A[1]), U = [(B[0] - A[0]) / UL, (B[1] - A[1]) / UL], NV = [U[1], -U[0]];
+  const yAt = x => A[1] + (B[1] - A[1]) * (x - A[0]) / (B[0] - A[0]), yL = yAt(0), yR = yAt(W);
+  root.querySelector('.top').style.clipPath = `polygon(0 0, ${W}px 0, ${W}px ${yR + 1}px, 0 ${yL + 1}px)`;
+  root.querySelector('.bot').style.clipPath = `polygon(0 ${yL}px, ${W}px ${yR}px, ${W}px ${H}px, 0 ${H}px)`;
+  const cut = root.querySelector('.cut'), ang = Math.atan2(yR - yL, W); cut.style.width = Math.hypot(W, yR - yL) + 'px'; cut.style.setProperty('--ct', `translate(0, ${yL}px) rotate(${ang}rad)`);
+  const rng = s => () => (s = (s * 16807) % 2147483647) / 2147483647;
+  function hole(x, cx, cy, r, seed) {
+    const R = rng(seed); x.save();
+    const g = x.createRadialGradient(cx, cy, r * .6, cx, cy, r * 3.4); g.addColorStop(0, 'rgba(255,150,80,.6)'); g.addColorStop(.35, 'rgba(210,46,33,.28)'); g.addColorStop(1, 'rgba(210,46,33,0)');
+    x.fillStyle = g; x.beginPath(); x.arc(cx, cy, r * 3.4, 0, 7); x.fill();
+    x.strokeStyle = 'rgba(244,236,225,.55)'; x.lineWidth = 1.1; x.lineCap = 'round';
+    const n = 7 + Math.floor(R() * 5);
+    for (let k = 0; k < n; k++) {
+      let a = k / n * Math.PI * 2 + R() * .5, d = r * 1.05, len = r * (2.2 + R() * 4.8); x.beginPath(); x.moveTo(cx + Math.cos(a) * d, cy + Math.sin(a) * d);
+      for (let s = 0; s < 3; s++) { d += len / 3; a += (R() - .5) * .35; x.lineTo(cx + Math.cos(a) * d, cy + Math.sin(a) * d); } x.stroke();
+    }
+    x.strokeStyle = 'rgba(244,236,225,.25)'; for (let k = 0; k < 2; k++) { const a0 = R() * 6.3; x.beginPath(); x.arc(cx, cy, r * (1.8 + k * .9), a0, a0 + 1 + R() * 1.4); x.stroke(); }
+    x.globalCompositeOperation = 'destination-out'; x.beginPath();
+    for (let k = 0; k <= 18; k++) { const a = k / 18 * Math.PI * 2, rr = r * (.82 + R() * .34); k ? x.lineTo(cx + Math.cos(a) * rr, cy + Math.sin(a) * rr) : x.moveTo(cx + rr, cy); }
+    x.fill(); x.globalCompositeOperation = 'source-over'; x.strokeStyle = 'rgba(255,190,150,.5)'; x.lineWidth = 1.4; x.beginPath(); x.arc(cx, cy, r * 1.08, 0, 7); x.stroke(); x.restore();
+  }
+  const star = s => { const R = rng(s); let p = []; for (let i = 0; i < 18; i++) { const a = i / 18 * Math.PI * 2, r = (i % 2 ? 58 : 100) * (.85 + R() * .3); p.push(`${(Math.cos(a) * r * 1.25).toFixed(1)},${(Math.sin(a) * r).toFixed(1)}`); } return p.join(' '); };
+  // sound, only if the browser already allows it (most block audio until the first tap)
+  let ac = null; try { ac = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {}
+  function boom() {
+    if (!ac || ac.state !== 'running') return; const t = ac.currentTime, len = .22, buf = ac.createBuffer(1, ac.sampleRate * len, ac.sampleRate), d = buf.getChannelData(0);
+    for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / d.length, 3);
+    const src = ac.createBufferSource(); src.buffer = buf; const lp = ac.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.setValueAtTime(3200, t); lp.frequency.exponentialRampToValueAtTime(400, t + len);
+    const g = ac.createGain(); g.gain.setValueAtTime(.32, t); g.gain.exponentialRampToValueAtTime(.001, t + len); src.connect(lp).connect(g).connect(ac.destination); src.start(t);
+    const o = ac.createOscillator(), og = ac.createGain(); o.frequency.setValueAtTime(140, t); o.frequency.exponentialRampToValueAtTime(40, t + .14); og.gain.setValueAtTime(.4, t); og.gain.exponentialRampToValueAtTime(.001, t + .16); o.connect(og).connect(ac.destination); o.start(t); o.stop(t + .17);
+  }
+  const SHOTS = 6, T0 = 340, GAP = 125, SPLIT = T0 + GAP * SHOTS + 160, sparks = [], shells = [], tracers = [];
+  const SIZES = mob ? [34, 26, 36, 26, 28, 48] : [62, 40, 68, 42, 46, 92];
+  let shake = 0, recoil = 0, fired = 0, split = false, start = performance.now(), last = start;
+  const pt = el => { const r = el.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; };
+  function fire(i) {
+    const R = rng(31 + i * 7), f = (i + .35 + R() * .3) / SHOTS, hx = A[0] + (B[0] - A[0]) * f, hy = yAt(hx) + (R() - .5) * H * .05, r = (mob ? 7 : 10) + R() * 4;
+    ctxs.forEach(x => hole(x, hx, hy, r, 97 + i * 13));
+    const m = pt(gun.querySelector('.mz')); tracers.push({ x0: m[0], y0: m[1], x1: hx, y1: hy, life: 1 });
+    for (let k = 0; k < 12; k++) { const a = Math.random() * Math.PI * 2, v = 160 + Math.random() * 420; sparks.push({ x: hx, y: hy, vx: Math.cos(a) * v, vy: Math.sin(a) * v - 120, life: .35 + Math.random() * .3 }); }
+    const e = pt(gun.querySelector('.ej')), sh = document.createElement('i'); sh.className = 'shell'; root.appendChild(sh);
+    shells.push({ el: sh, x: e[0], y: e[1], vx: 90 + Math.random() * 160, vy: -(320 + Math.random() * 200), r: 0, vr: 900 + Math.random() * 900, life: 1.1 });
+    const b = document.createElement('div'), fs = SIZES[i], side = i % 2 ? 1 : -1; b.className = 'bang';
+    const off = fs * (1.25 + R() * .35) * side, bx = hx + NV[0] * off, by = hy + NV[1] * off;
+    b.style.cssText = `left:${Math.min(W - fs * 1.6, Math.max(fs * 1.6, bx)).toFixed(0)}px;top:${Math.min(H - fs * 1.2, Math.max(fs * 1.4, by)).toFixed(0)}px;--r:${((R() - .5) * 26).toFixed(1)}deg;--fs:${fs}px`;
+    b.innerHTML = `<svg viewBox="-125 -100 250 200" aria-hidden="true"><polygon points="${star(5 + i)}" fill="#d22e21" stroke="#0b0707" stroke-width="7" stroke-linejoin="round"/><polygon points="${star(5 + i)}" fill="none" stroke="#ff7a55" stroke-width="3" transform="scale(.82)"/></svg><span>BANG!</span>`;
+    root.querySelector('.bangs').appendChild(b);
+    flash.style.opacity = 1; setTimeout(() => flash.style.opacity = 0, 55); recoil = 1; shake = 1; boom();
+  }
+  function doSplit() { if (split) return; split = true; root.querySelectorAll('.half').forEach(h => h.style.transform = ''); void root.offsetWidth; root.classList.add('split'); release(); setTimeout(() => { root.remove(); document.documentElement.classList.remove('intro-on'); if (ac) ac.close && ac.close(); }, 700); }
+  ['pointerdown', 'keydown', 'wheel', 'touchmove'].forEach(ev => addEventListener(ev, doSplit, { once: true, passive: true }));
+  (function loop(now) {
+    if (!root.isConnected) return; const t = now - start, dt = Math.min(.05, (now - last) / 1000); last = now;
+    while (!split && fired < SHOTS && t >= T0 + fired * GAP) fire(fired++);
+    if (!split && t >= SPLIT) doSplit();
+    shake *= Math.pow(.0009, dt); recoil *= Math.pow(.0005, dt);
+    const sx = (Math.random() - .5) * 14 * shake, sy = (Math.random() - .5) * 10 * shake;
+    if (!split) { root.querySelector('.top').style.transform = root.querySelector('.bot').style.transform = `translate(${sx.toFixed(1)}px,${sy.toFixed(1)}px)`; }
+    gun.style.translate = `${(recoil * 14).toFixed(1)}px ${(-recoil * 4).toFixed(1)}px`; gun.style.rotate = `${(recoil * 3).toFixed(2)}deg`;
+    fc.globalCompositeOperation = 'destination-out'; fc.fillStyle = 'rgba(0,0,0,.3)'; fc.fillRect(0, 0, W, H); fc.globalCompositeOperation = 'lighter';
+    for (let i = tracers.length - 1; i >= 0; i--) { const s = tracers[i]; const g = fc.createLinearGradient(s.x0, s.y0, s.x1, s.y1); g.addColorStop(0, `rgba(255,220,150,${.0})`); g.addColorStop(1, `rgba(255,236,190,${s.life})`); fc.strokeStyle = g; fc.lineWidth = 2.6; fc.beginPath(); fc.moveTo(s.x0, s.y0); fc.lineTo(s.x1, s.y1); fc.stroke(); s.life -= dt * 7; if (s.life <= 0) tracers.splice(i, 1); }
+    for (let i = sparks.length - 1; i >= 0; i--) { const p = sparks[i]; const x0 = p.x, y0 = p.y; p.vy += 900 * dt; p.x += p.vx * dt; p.y += p.vy * dt; p.life -= dt; fc.strokeStyle = `rgba(255,${150 + Math.random() * 80 | 0},80,${Math.max(0, p.life * 2)})`; fc.lineWidth = 1.6; fc.beginPath(); fc.moveTo(x0, y0); fc.lineTo(p.x, p.y); fc.stroke(); if (p.life <= 0) sparks.splice(i, 1); }
+    fc.globalCompositeOperation = 'source-over';
+    for (let i = shells.length - 1; i >= 0; i--) { const s = shells[i]; s.vy += 1500 * dt; s.x += s.vx * dt; s.y += s.vy * dt; s.r += s.vr * dt; s.life -= dt; s.el.style.transform = `translate(${s.x.toFixed(1)}px,${s.y.toFixed(1)}px) rotate(${s.r.toFixed(0)}deg)`; if (s.life <= 0 || s.y > H + 20) { s.el.remove(); shells.splice(i, 1); } }
+    requestAnimationFrame(loop);
+  })(start);
+})();
+</script>
 <div class="grain" aria-hidden="true"></div>
 
 <header class="nav" id="nav">
@@ -525,7 +651,7 @@ const clamp = v => v < 0 ? 0 : v > 1 ? 1 : v, lerp = (a, b, k) => a + (b - a) * 
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const ticks = [];
 let ready = false; const go = () => { if (ready) return; ready = true; document.body.classList.add('ready'); };
-addEventListener('load', go); setTimeout(go, 1300);
+if (window.WF_INTRO) window.WF_INTRO.then(go); else { addEventListener('load', go); setTimeout(go, 1300); }
 const store = { get(k) { try { return localStorage.getItem(k); } catch { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch {} } };
 
 /* everything below renders from here: stores and hours from thewingfellas.com, menu and prices from the Dearborn store menu,
