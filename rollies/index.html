@@ -175,6 +175,39 @@ footer.foot p+p{margin-top:4px}
   .hero{padding-bottom:56px}
   .hero .wrap{grid-template-columns:1fr minmax(0,540px);gap:56px;align-items:center}
 }
+
+/* ---------- intro: rolled ice cream on the cold plate. Cream pours and spreads, the scraper sweeps across and curls it
+   into rolls, the rolls hop, the logo pops on top, then the cover lifts. ~2.2s, tap/key/scroll skips, off for reduced motion. */
+.intro{position:fixed;inset:0;z-index:100;display:grid;place-items:center;background:radial-gradient(70% 55% at 50% 45%,#fff6f0,var(--bg) 60%,var(--bg2));transition:clip-path .62s cubic-bezier(.7,0,.2,1);clip-path:inset(0 0 0 0 round 0)}
+.intro.out{clip-path:inset(0 0 100% 0 round 0 0 40px 40px)}
+.intro .stage{position:relative;width:min(84vw,420px);aspect-ratio:1}
+.intro svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.intro .plate{transform-origin:200px 200px;animation:i-plate .45s var(--out) both}
+.intro .frost{animation:i-fade .6s .15s both}
+.intro .pour{transform-origin:200px 200px;transform:scale(0);animation:i-pour .5s .2s cubic-bezier(.2,.9,.3,1.15) both}
+.intro .cliprect{transform:translateX(70px);animation:i-scrape .62s .72s cubic-bezier(.5,.1,.45,1) both}
+.intro .scraper{opacity:0;transform:translateX(40px) rotate(-8deg);animation:i-scraper .9s .5s cubic-bezier(.5,.1,.45,1) both}
+.intro .roll{transform-box:fill-box;transform-origin:center;transform:scale(0) rotate(-200deg)}
+.intro .r1{animation:i-roll .45s .84s cubic-bezier(.3,1.6,.5,1) both,i-hop .5s 1.36s cubic-bezier(.5,0,.7,1) forwards}
+.intro .r2{animation:i-roll .45s .93s cubic-bezier(.3,1.6,.5,1) both,i-hop .5s 1.38s cubic-bezier(.5,0,.7,1) forwards}
+.intro .r3{animation:i-roll .45s 1.02s cubic-bezier(.3,1.6,.5,1) both,i-hop .5s 1.4s cubic-bezier(.5,0,.7,1) forwards}
+.intro .r4{animation:i-roll .45s 1.11s cubic-bezier(.3,1.6,.5,1) both,i-hop .5s 1.42s cubic-bezier(.5,0,.7,1) forwards}
+.intro .r5{animation:i-roll .45s 1.2s cubic-bezier(.3,1.6,.5,1) both,i-hop .5s 1.44s cubic-bezier(.5,0,.7,1) forwards}
+.intro .badge-i{position:absolute;left:50%;top:50%;width:74%;aspect-ratio:1;border-radius:50%;background:#fbf2eb;box-shadow:0 0 0 6px #5ca4a1,0 18px 40px rgba(31,95,92,.35);display:grid;place-items:center;transform:translate(-50%,-50%) scale(.2);opacity:0;animation:i-logo .6s 1.62s cubic-bezier(.3,1.7,.5,1) both}
+.intro .badge-i img{width:86%;height:auto}
+.intro .sp{position:absolute;left:50%;top:50%;width:8px;height:8px;border-radius:50%;opacity:0;animation:i-sp .7s 1.72s var(--out) both}
+.intro .skip{position:absolute;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));padding:8px 14px;border:0;border-radius:999px;background:rgba(36,64,62,.08);color:var(--ink);font:700 .75rem/1 var(--f);letter-spacing:.04em;text-transform:uppercase;cursor:pointer}
+@keyframes i-plate{from{transform:scale(.7);opacity:0}}
+@keyframes i-fade{from{opacity:0}}
+@keyframes i-pour{to{transform:scale(1)}}
+@keyframes i-scrape{from{transform:translateX(70px)}to{transform:translateX(330px)}}
+@keyframes i-scraper{0%{opacity:0;transform:translateX(30px) rotate(-8deg)}24%{opacity:1;transform:translateX(70px) rotate(-8deg)}92%{opacity:1;transform:translateX(330px) rotate(6deg)}100%{opacity:0;transform:translateX(350px) rotate(8deg)}}
+@keyframes i-roll{to{transform:scale(1) rotate(0)}}
+@keyframes i-hop{0%{transform:translate(0,0) scale(1)}45%{transform:translate(calc(var(--dx) * .3),-46px) scale(1.12) rotate(90deg)}100%{transform:translate(var(--dx),-10px) scale(0) rotate(240deg)}}
+@keyframes i-logo{to{transform:translate(-50%,-50%) scale(1);opacity:1}}
+@keyframes i-sp{0%{opacity:1;transform:translate(-50%,-50%)}100%{opacity:0;transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) scale(.4)}}
+html.intro-on{overflow:hidden}
+html.intro-on .up{animation-play-state:paused}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
   .rv{opacity:1!important;transform:none!important}
@@ -183,6 +216,25 @@ footer.foot p+p{margin-top:4px}
 </head>
 <body>
 <script>document.documentElement.classList.add('js')</script>
+<script>
+(function () {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const d = document, root = d.createElement('div'); root.className = 'intro'; root.setAttribute('aria-hidden', 'true');
+  root.innerHTML = `<div class="stage"><svg viewBox="0 0 400 400" aria-hidden="true">
+      <g class="plate"><circle cx="200" cy="200" r="182" fill="#1f5f5c"/><circle cx="200" cy="200" r="182" fill="none" stroke="#5ca4a1" stroke-width="6"/><circle cx="200" cy="200" r="166" fill="#2f7d79"/></g>
+      <g class="frost" fill="#c4e7e1" opacity=".55"><circle cx="120" cy="110" r="2"/><circle cx="290" cy="120" r="1.6"/><circle cx="310" cy="270" r="2.2"/><circle cx="96" cy="262" r="1.5"/><circle cx="210" cy="330" r="1.8"/><circle cx="160" cy="70" r="1.4"/></g>
+      <defs><clipPath id="scr"><rect class="cliprect" x="0" y="0" width="420" height="400"/></clipPath></defs><g class="sheet" clip-path="url(#scr)"><g class="pour"><path d="M200 62c46 2 92 26 112 64c22 40 14 92-12 124c-26 34-70 52-112 50c-44-2-86-24-106-62c-20-38-14-88 10-122c24-34 64-56 108-54z" fill="#eb7e61"/><path d="M200 92c36 2 70 20 86 48c15 28 10 64-8 88c-18 24-50 38-82 36" fill="none" stroke="#ffb8a1" stroke-width="10" stroke-linecap="round" opacity=".55"/></g></g>
+      <g transform="translate(104 200)"><g class="roll r1" style="--dx:96px"><circle r="21" fill="#eb7e61"/><circle r="21" fill="none" stroke="#c4513a" stroke-width="1.5" opacity=".5"/><path d="M0 0m-2 0a2 2 0 1 1 4 0a5 5 0 1 1-9 0a8 8 0 1 1 15 0a11 11 0 1 1-21 0a14 14 0 1 1 26 0" fill="none" stroke="#ffe3d6" stroke-width="2.6" stroke-linecap="round"/></g></g><g transform="translate(152 200)"><g class="roll r2" style="--dx:48px"><circle r="21" fill="#eb7e61"/><circle r="21" fill="none" stroke="#c4513a" stroke-width="1.5" opacity=".5"/><path d="M0 0m-2 0a2 2 0 1 1 4 0a5 5 0 1 1-9 0a8 8 0 1 1 15 0a11 11 0 1 1-21 0a14 14 0 1 1 26 0" fill="none" stroke="#ffe3d6" stroke-width="2.6" stroke-linecap="round"/></g></g><g transform="translate(200 200)"><g class="roll r3" style="--dx:0px"><circle r="21" fill="#eb7e61"/><circle r="21" fill="none" stroke="#c4513a" stroke-width="1.5" opacity=".5"/><path d="M0 0m-2 0a2 2 0 1 1 4 0a5 5 0 1 1-9 0a8 8 0 1 1 15 0a11 11 0 1 1-21 0a14 14 0 1 1 26 0" fill="none" stroke="#ffe3d6" stroke-width="2.6" stroke-linecap="round"/></g></g><g transform="translate(248 200)"><g class="roll r4" style="--dx:-48px"><circle r="21" fill="#eb7e61"/><circle r="21" fill="none" stroke="#c4513a" stroke-width="1.5" opacity=".5"/><path d="M0 0m-2 0a2 2 0 1 1 4 0a5 5 0 1 1-9 0a8 8 0 1 1 15 0a11 11 0 1 1-21 0a14 14 0 1 1 26 0" fill="none" stroke="#ffe3d6" stroke-width="2.6" stroke-linecap="round"/></g></g><g transform="translate(296 200)"><g class="roll r5" style="--dx:-96px"><circle r="21" fill="#eb7e61"/><circle r="21" fill="none" stroke="#c4513a" stroke-width="1.5" opacity=".5"/><path d="M0 0m-2 0a2 2 0 1 1 4 0a5 5 0 1 1-9 0a8 8 0 1 1 15 0a11 11 0 1 1-21 0a14 14 0 1 1 26 0" fill="none" stroke="#ffe3d6" stroke-width="2.6" stroke-linecap="round"/></g></g>
+      <g class="scraper"><rect x="-10" y="70" width="18" height="260" rx="6" fill="#e9eef0" stroke="#9fb3b7" stroke-width="2"/><rect x="-16" y="50" width="30" height="34" rx="8" fill="#24403e"/></g>
+    </svg><div class="badge-i"><img src="media/logo.webp" alt="" width="440" height="307"></div><i class="sp" style="--x:-150px;--y:-90px;background:#eb7e61"></i><i class="sp" style="--x:160px;--y:-80px;background:#5ca4a1"></i><i class="sp" style="--x:-130px;--y:110px;background:#29efde"></i><i class="sp" style="--x:150px;--y:120px;background:#eb7e61"></i><i class="sp" style="--x:0px;--y:-160px;background:#ffd3c4"></i><i class="sp" style="--x:-180px;--y:10px;background:#2f7d79"></i><i class="sp" style="--x:180px;--y:0px;background:#29efde"></i><i class="sp" style="--x:10px;--y:170px;background:#5ca4a1"></i></div><button class="skip" type="button">Skip</button>`;
+  d.documentElement.classList.add('intro-on'); d.body.prepend(root);
+  let done = false;
+  const end = () => { if (done) return; done = true; root.classList.add('out'); d.documentElement.classList.remove('intro-on');
+    ['pointerdown', 'keydown', 'wheel', 'touchmove'].forEach(e => removeEventListener(e, end)); setTimeout(() => root.remove(), 700); };
+  setTimeout(end, 2450);
+  ['pointerdown', 'keydown', 'wheel', 'touchmove'].forEach(e => addEventListener(e, end, { passive: true }));
+})();
+</script>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-ig" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6" fill="currentColor"/></g></symbol>
   <symbol id="i-chat" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M4 5h16v11H9l-5 4z"/></symbol>
