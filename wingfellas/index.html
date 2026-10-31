@@ -1,0 +1,781 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noai, noimageai">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Wing Fellas · Fresh halal wings in Michigan · Order online</title>
+<meta name="description" content="Fresh, never frozen, 100% halal wings cooked to order in 31 flavors. Burgers, subs, wraps and party packs. Six Wing Fellas across Michigan: Dearborn, Dearborn Heights, Belleville, Wyandotte, Flint and Ottawa Lake.">
+<meta property="og:title" content="Wing Fellas · We'll make a wing you can't refuse">
+<meta property="og:description" content="Fresh, never frozen halal wings in 31 flavors. Six spots across Michigan. Order pickup or delivery.">
+<meta property="og:image" content="media/og.jpg">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0b0707">
+<link rel="icon" href="media/icon.png">
+<link rel="apple-touch-icon" href="media/icon.png">
+<link rel="preload" as="image" href="media/logo/word.png">
+<link rel="preload" as="image" href="media/food/boneless.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Antonio:wght@500;600;700&family=Gloock&family=Schibsted+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Wing Fellas, the redesign. Their brand is a mob movie: "We'll make a wing you can't refuse", The Don, the Capone Burger,
+   a Goodfellas-style red wordmark with a white fedora, and a dining room done up like a gangster film.
+   Over the top on purpose (smoke, a spotlight, the fedora dropping onto the logo, a most-wanted lineup, the flavor "family"),
+   but every section has one job and ordering is two taps: pick your spot, land on that store's menu.
+   Type: Gloock for headlines (movie poster serif), Antonio for buttons and prices, Schibsted Grotesk for text. Mobile first.
+   Motion runs on one rAF loop, transform/opacity only; reduced motion gets the finished state. */
+:root{
+  --ink:#0b0707; --ink2:#140c0b; --ink3:#1f1210; --red:#d22e21; --red2:#ff4433; --blood:#7e130d; --cream:#f4ece1;
+  --muted:rgba(244,236,225,.7); --dim:rgba(244,236,225,.5); --line:rgba(244,236,225,.12); --gold:#d9b46a;
+  --d:'Gloock', Georgia, serif; --c:'Antonio', 'Arial Narrow', sans-serif; --f:'Schibsted Grotesk', system-ui, sans-serif;
+  --pad:16px; --ease:cubic-bezier(.2,.75,.2,1); --spring:cubic-bezier(.3,1.5,.5,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;scroll-padding-top:64px}
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+body{background:var(--ink);color:var(--cream);font:400 .9375rem/1.55 var(--f);overflow-x:hidden}
+img{display:block;max-width:100%;height:auto}
+a{color:inherit}
+button{font:inherit;color:inherit}
+.wrap{width:100%;max-width:1180px;margin:0 auto;padding:0 var(--pad)}
+h1,h2,h3{font-family:var(--d);font-weight:400;line-height:1.04;letter-spacing:-.005em;text-wrap:balance}
+h1{font-size:1.875rem}
+h2{font-size:1.5rem}
+h3{font-size:1.0625rem;line-height:1.15}
+em{font-style:normal;color:var(--red2)}
+.grain{position:fixed;inset:0;pointer-events:none;z-index:60;opacity:.07;mix-blend-mode:overlay;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* buttons */
+.btn{--mx:0px;--my:0px;--lift:0px;position:relative;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:0 20px;border-radius:999px;border:0;cursor:pointer;font:600 .875rem/1 var(--c);letter-spacing:.06em;text-transform:uppercase;text-decoration:none;white-space:nowrap;transform:translate3d(var(--mx),calc(var(--my) - var(--lift)),0);transition:transform .35s var(--ease),background .25s,box-shadow .25s,color .25s}
+.btn svg{width:17px;height:17px;flex:none}
+.btn.red{background:var(--red);color:#fff;box-shadow:0 10px 26px -12px rgba(210,46,33,.9)}
+.btn.red::after{content:'';position:absolute;inset:0;background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.35) 50%,transparent 70%);transform:translateX(-120%);transition:transform .8s var(--ease)}
+.btn.ghost{background:transparent;color:var(--cream);box-shadow:inset 0 0 0 1.5px rgba(244,236,225,.3)}
+.btn.cream{background:var(--cream);color:var(--ink)}
+.btn.sm{min-height:38px;padding:0 15px;font-size:.8125rem}
+@media (hover:hover) and (pointer:fine){
+  .btn:hover{--lift:2px}
+  .btn.red:hover{background:var(--red2)}
+  .btn.red:hover::after{transform:translateX(120%)}
+  .btn.ghost:hover{box-shadow:inset 0 0 0 1.5px var(--cream)}
+}
+.btn:focus-visible,a:focus-visible,button:focus-visible{outline:2px solid var(--red2);outline-offset:3px}
+
+/* nav */
+.nav{position:sticky;top:0;z-index:40;height:56px;background:rgba(11,7,7,.94);border-bottom:1px solid transparent;transition:border-color .3s}
+.nav.solid{border-color:var(--line)}
+.nav .wrap{height:100%;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;text-decoration:none}
+.brand img{height:32px;width:auto}
+.nav .links{display:none}
+
+/* hero */
+.hero{position:relative;overflow:hidden;padding:14px 0 26px;isolation:isolate}
+.smoke{position:absolute;inset:-20%;z-index:-2;pointer-events:none}
+.smoke i{position:absolute;border-radius:50%;filter:blur(50px);opacity:.55;will-change:transform}
+.smoke i:nth-child(1){width:70%;height:55%;left:-10%;top:30%;background:radial-gradient(closest-side,rgba(150,22,14,.9),transparent);animation:drift1 18s ease-in-out infinite alternate}
+.smoke i:nth-child(2){width:60%;height:50%;right:-12%;top:10%;background:radial-gradient(closest-side,rgba(110,14,10,.85),transparent);animation:drift2 22s ease-in-out infinite alternate}
+.smoke i:nth-child(3){width:50%;height:40%;left:30%;bottom:-5%;background:radial-gradient(closest-side,rgba(70,40,36,.7),transparent);animation:drift1 26s ease-in-out infinite alternate-reverse}
+@keyframes drift1{to{transform:translate3d(12%,-8%,0) scale(1.15)}}
+@keyframes drift2{to{transform:translate3d(-14%,10%,0) scale(.9)}}
+.beam{position:absolute;z-index:-1;top:-10%;left:50%;width:140%;height:120%;transform:translateX(-50%);pointer-events:none;background:conic-gradient(from 180deg at 50% 0%,transparent 160deg,rgba(255,236,214,.09) 172deg,rgba(255,236,214,.16) 180deg,rgba(255,236,214,.09) 188deg,transparent 200deg);transform-origin:50% 0;animation:sweep 9s ease-in-out infinite alternate}
+@keyframes sweep{from{transform:translateX(-50%) rotate(-9deg)}to{transform:translateX(-50%) rotate(9deg)}}
+.hero .wrap{display:grid;gap:12px}
+.copy{text-align:center}
+.logo{position:relative;width:min(232px,64vw);aspect-ratio:701/343;margin:0 auto}
+.logo img{position:absolute;max-width:none}
+.logo .word{left:0;top:14.29%;width:100%;filter:drop-shadow(0 6px 18px rgba(210,46,33,.35))}
+.logo .hat{left:56.35%;top:0;width:40.51%;transform-origin:30% 80%}
+.js .logo .word{opacity:0;transform:scale(1.18);filter:blur(10px)}
+.js .ready .logo .word{animation:slam .9s var(--ease) .1s forwards}
+@keyframes slam{60%{opacity:1;filter:blur(0) drop-shadow(0 6px 30px rgba(255,68,51,.7))}to{opacity:1;transform:none;filter:drop-shadow(0 6px 18px rgba(210,46,33,.35))}}
+.js .logo .hat{opacity:0;transform:translate(-30%,-180%) rotate(-38deg)}
+.js .ready .logo .hat{animation:hatdrop 1.15s cubic-bezier(.25,.9,.3,1) .75s forwards}
+@keyframes hatdrop{0%{opacity:0;transform:translate(-30%,-180%) rotate(-38deg)}55%{opacity:1;transform:translate(0,6%) rotate(5deg)}72%{transform:translate(0,-6%) rotate(-3deg)}86%{transform:translate(0,2%) rotate(1deg)}to{opacity:1;transform:none}}
+.logo.tip .hat{animation:tip .8s var(--ease) both!important;opacity:1}
+@keyframes tip{40%{transform:translate(-4%,-22%) rotate(-14deg)}to{transform:none}}
+.chips{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-top:10px}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:6px 11px;border-radius:999px;background:rgba(244,236,225,.06);box-shadow:inset 0 0 0 1px var(--line);font:600 .75rem/1.2 var(--f);color:var(--cream)}
+.chip i{width:7px;height:7px;border-radius:50%;background:var(--red2)}
+.hero h1{margin-top:10px}
+.w{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.1em;margin-bottom:-.1em}
+.w>i{display:inline-block;font-style:normal}
+.js .hero .w>i{transform:translateY(110%)}
+.js .ready .hero .w>i{animation:wrise 1s var(--ease) forwards;animation-delay:calc(.35s + var(--k) * 65ms)}
+@keyframes wrise{to{transform:none}}
+.hero .lede{margin:8px auto 0;max-width:30em;color:var(--muted)}
+.ctas{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:14px}
+.myspot{display:none;margin-top:10px;font-size:.8125rem;color:var(--muted)}
+.myspot.on{display:block}
+.myspot a{color:var(--cream);font-weight:600}
+.js .hero [data-in]{opacity:0;transform:translateY(16px)}
+.js .ready .hero [data-in]{animation:fin .9s var(--ease) forwards;animation-delay:calc(.6s + var(--i,0) * 100ms)}
+@keyframes fin{to{opacity:1;transform:none}}
+.stage{position:relative;height:min(30svh,250px);margin:6px auto 0;width:min(100%,460px)}
+.stage .pool{position:absolute;left:8%;right:8%;bottom:2%;height:30%;border-radius:50%;background:radial-gradient(closest-side,rgba(255,226,196,.22),transparent);filter:blur(6px)}
+.stage .f{position:absolute;will-change:transform;filter:drop-shadow(0 18px 18px rgba(0,0,0,.6))}
+.stage .f1{width:62%;left:19%;bottom:4%;z-index:3}
+.stage .f2{width:46%;left:-2%;bottom:30%;z-index:2}
+.stage .f3{width:42%;right:-2%;bottom:26%;z-index:1}
+.js .stage .f{opacity:0}
+.js .ready .stage .f{animation:plate 1.1s var(--spring) forwards}
+.js .ready .stage .f1{animation-delay:1s}.js .ready .stage .f2{animation-delay:1.15s}.js .ready .stage .f3{animation-delay:1.3s}
+@keyframes plate{from{opacity:0;transform:translateY(40px) scale(.85)}to{opacity:1;transform:none}}
+.stage .bob{animation:bob 6s ease-in-out infinite}
+@keyframes bob{50%{translate:0 -6px}}
+
+/* ticker */
+.tickwrap{overflow:hidden;padding:10px 0 6px}
+.ticker{background:var(--red);color:#fff;overflow:hidden;padding:11px 0;transform:rotate(-1.2deg);margin:0 -10px;box-shadow:0 10px 30px -12px rgba(210,46,33,.7)}
+.ticker .tr{display:flex;width:max-content;will-change:transform}
+.ticker span{font:600 1rem/1 var(--c);letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;padding:0 16px}
+.ticker b{font-weight:400;opacity:.8}
+
+/* sections */
+.sec{padding:40px 0}
+.head{display:flex;flex-direction:column;gap:6px}
+.head p{color:var(--muted);max-width:34em}
+.js .rise{clip-path:inset(0 0 100% 0);transform:translateY(20px);transition:clip-path 1s var(--ease),transform 1s var(--ease)}
+.js .rise.in{clip-path:inset(-20% -5% -20% -5%);transform:none}
+.js .rv{opacity:0;transform:translateY(24px);transition:opacity .9s var(--ease),transform .9s var(--ease);transition-delay:calc(var(--i,0) * 80ms)}
+.js .rv.in{opacity:1;transform:none}
+.spot{position:relative}
+.spot::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(420px circle at var(--sx,50%) var(--sy,30%),rgba(210,46,33,.12),transparent 70%);opacity:0;transition:opacity .4s}
+.spot.lit::before{opacity:1}
+
+/* rails + dots */
+.rail{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;margin:18px calc(var(--pad) * -1) 0;padding:6px var(--pad) 10px;scrollbar-width:none}
+.rail::-webkit-scrollbar{display:none}
+.rail>*{flex:0 0 78%;scroll-snap-align:start}
+.dots{display:flex;justify-content:center;gap:6px;margin-top:8px}
+.dots button{width:7px;height:7px;border-radius:7px;border:0;background:rgba(244,236,225,.25);cursor:pointer;transition:width .35s var(--ease),background .3s}
+.dots button.on{width:22px;background:var(--red)}
+
+/* most wanted */
+.case{position:relative;background:linear-gradient(180deg,var(--ink3),var(--ink2));border-radius:20px;box-shadow:inset 0 0 0 1px var(--line);overflow:hidden;display:flex;flex-direction:column;transform-style:preserve-3d;will-change:transform}
+.case .poster{position:relative;height:190px;display:grid;place-items:center;background:radial-gradient(70% 70% at 50% 60%,rgba(210,46,33,.28),transparent 70%)}
+.case .poster::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0 23px,rgba(244,236,225,.05) 23px 24px)}
+.case .poster img{position:relative;max-height:150px;width:auto;max-width:82%;filter:drop-shadow(0 16px 16px rgba(0,0,0,.65));transition:transform .6s var(--ease)}
+.case .no{position:absolute;left:12px;top:12px;font:600 .75rem/1 var(--c);letter-spacing:.14em;color:var(--dim)}
+.case .stamp{position:absolute;right:10px;top:12px;padding:5px 9px;border:2px solid var(--red2);color:var(--red2);font:700 .75rem/1 var(--c);letter-spacing:.14em;text-transform:uppercase;transform:rotate(8deg);border-radius:4px;opacity:.9}
+.case .body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px;flex:1}
+.case .body p{color:var(--muted);font-size:.875rem;line-height:1.45}
+.case .row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:auto;padding-top:8px}
+.price{font:600 1.25rem/1 var(--c);letter-spacing:.02em;color:var(--cream)}
+.js .case.rv{transform:translateY(40px) rotate(4deg)}
+.js .case.rv.in{transform:none}
+@media (hover:hover) and (pointer:fine){.case:hover .poster img{transform:scale(1.07) rotate(-2deg)}}
+
+/* the family */
+.family{background:radial-gradient(80% 60% at 50% 0%,rgba(126,19,13,.35),transparent 70%),var(--ink)}
+.fam-top{display:grid;gap:16px}
+.dipring{width:min(180px,46vw);margin:0 auto;will-change:transform}
+.crews{display:flex;gap:6px;overflow-x:auto;margin:18px calc(var(--pad) * -1) 0;padding:2px var(--pad);scrollbar-width:none}
+.crews::-webkit-scrollbar{display:none}
+.crews button{flex:none;border:0;cursor:pointer;padding:10px 14px;border-radius:999px;background:rgba(244,236,225,.06);box-shadow:inset 0 0 0 1px var(--line);font:600 .8125rem/1 var(--c);letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;transition:background .25s,color .25s,box-shadow .25s}
+.crews button[aria-selected="true"]{background:var(--red);box-shadow:none;color:#fff}
+.crew{margin-top:14px;min-height:150px}
+.crew .who{font-size:.875rem;color:var(--muted)}
+.members{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.mem{position:relative;display:inline-flex;align-items:center;gap:8px;padding:10px 13px;border-radius:12px;background:var(--ink3);box-shadow:inset 0 0 0 1px var(--line);font:500 .875rem/1.1 var(--f);transition:transform .35s var(--spring),box-shadow .3s,background .3s}
+.mem .heat{display:inline-flex;gap:2px}
+.mem .heat b{width:6px;height:10px;border-radius:2px;background:rgba(244,236,225,.16)}
+.mem .heat b.on{background:var(--red2)}
+.mem.hit{background:var(--red);box-shadow:0 0 0 2px var(--red2),0 12px 30px -10px rgba(255,68,51,.8);transform:scale(1.06)}
+.js .crew.on .mem{animation:memin .55s var(--ease) both;animation-delay:calc(var(--m) * 45ms)}
+@keyframes memin{from{opacity:0;transform:translateY(10px) scale(.96)}}
+.pick{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:18px;padding:14px;border-radius:16px;background:rgba(244,236,225,.04);box-shadow:inset 0 0 0 1px var(--line)}
+.pick p{flex:1 1 200px;color:var(--muted);font-size:.875rem}
+.pick p b{display:block;font:400 1.375rem/1.1 var(--d);color:var(--cream);margin-top:2px}
+
+/* menu */
+.menu{background:var(--ink2)}
+.tabs{position:relative;display:flex;gap:2px;overflow-x:auto;margin:18px calc(var(--pad) * -1) 0;padding:0 var(--pad);scrollbar-width:none;border-bottom:1px solid var(--line)}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{flex:none;border:0;background:none;cursor:pointer;padding:12px 12px 13px;font:600 .875rem/1 var(--c);letter-spacing:.06em;text-transform:uppercase;color:var(--dim);white-space:nowrap;transition:color .25s}
+.tabs button[aria-selected="true"]{color:var(--cream)}
+.tabs .bar{position:absolute;bottom:-1px;height:3px;border-radius:3px;background:var(--red);left:0;transition:transform .5s var(--spring),width .5s var(--spring)}
+.panel{display:none;padding-top:16px}
+.panel.on{display:block}
+.items{display:grid;gap:10px}
+.item{display:grid;grid-template-columns:84px 1fr;gap:12px;align-items:center;padding:10px;border-radius:16px;background:var(--ink3);box-shadow:inset 0 0 0 1px var(--line)}
+.item.noimg{grid-template-columns:1fr}
+.item .ph{width:84px;height:68px;display:grid;place-items:center;border-radius:12px;background:radial-gradient(closest-side,rgba(210,46,33,.25),transparent)}
+.item .ph img{max-height:64px;width:auto;max-width:84px;filter:drop-shadow(0 6px 8px rgba(0,0,0,.6))}
+.item .t{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.item h3{font-size:1.0625rem}
+.item .pr{font:600 1rem/1 var(--c);white-space:nowrap}
+.item p{margin-top:4px;color:var(--muted);font-size:.8125rem;line-height:1.45}
+.js .panel.on .item{animation:memin .55s var(--ease) both;animation-delay:calc(var(--m) * 40ms)}
+.note{margin-top:14px;font-size:.75rem;color:var(--dim)}
+/* wing builder */
+.builder{display:grid;gap:14px;padding:16px;border-radius:20px;background:linear-gradient(180deg,var(--ink3),var(--ink2));box-shadow:inset 0 0 0 1px var(--line)}
+.seg{display:flex;padding:4px;border-radius:999px;background:rgba(244,236,225,.06);position:relative}
+.seg button{position:relative;z-index:1;flex:1;border:0;background:none;cursor:pointer;padding:10px 8px;border-radius:999px;font:600 .8125rem/1 var(--c);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);transition:color .3s}
+.seg button[aria-checked="true"]{color:#fff}
+.seg .knob{position:absolute;top:4px;bottom:4px;left:4px;border-radius:999px;background:var(--red);transition:transform .5s var(--spring),width .5s var(--spring)}
+.bvis{position:relative;height:150px;display:grid;place-items:center}
+.bvis img{position:absolute;max-height:140px;width:auto;max-width:80%;filter:drop-shadow(0 16px 16px rgba(0,0,0,.6));transition:opacity .45s,transform .6s var(--spring)}
+.bvis img:not(.on){opacity:0;transform:translateY(20px) scale(.9) rotate(-6deg)}
+.counts{display:flex;flex-wrap:wrap;gap:6px}
+.counts button{border:0;cursor:pointer;min-width:52px;padding:10px 12px;border-radius:12px;background:rgba(244,236,225,.06);box-shadow:inset 0 0 0 1px var(--line);font:600 .9375rem/1 var(--c);transition:background .25s,box-shadow .25s,transform .3s var(--spring)}
+.counts button[aria-checked="true"]{background:var(--cream);color:var(--ink);box-shadow:none;transform:translateY(-2px)}
+.btot{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.btot .big{font:600 2.5rem/.9 var(--c);letter-spacing:.01em}
+.btot small{display:block;margin-top:6px;color:var(--muted);font-size:.8125rem}
+
+/* party */
+.party{position:relative;overflow:hidden}
+.party .card{position:relative;display:grid;gap:12px;padding:20px 18px;border-radius:22px;background:linear-gradient(140deg,var(--blood),#3a0906 70%);overflow:hidden}
+.party .card::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(-45deg,transparent 0 22px,rgba(255,255,255,.035) 22px 44px);pointer-events:none}
+.party .card>*{position:relative;z-index:1}
+.party img.buckets{width:min(260px,70vw);margin:0 auto;filter:drop-shadow(0 22px 22px rgba(0,0,0,.6))}
+.packs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:4px}
+.packs div{padding:10px 6px;border-radius:12px;background:rgba(0,0,0,.25);text-align:center}
+.packs b{display:block;font:600 1.25rem/1 var(--c)}
+.packs span{display:block;margin-top:4px;font-size:.75rem;color:rgba(255,255,255,.75)}
+
+/* fresh */
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:18px}
+.stat{padding:14px;border-radius:16px;background:var(--ink3);box-shadow:inset 0 0 0 1px var(--line)}
+.stat b{display:block;font:400 1.75rem/1 var(--d);color:var(--cream)}
+.stat span{display:block;margin-top:6px;font-size:.8125rem;color:var(--muted)}
+
+/* reviews */
+.quote{padding:18px;border-radius:18px;background:var(--ink3);box-shadow:inset 0 0 0 1px var(--line);display:flex;flex-direction:column;gap:12px}
+.quote p{font:400 1.0625rem/1.35 var(--d)}
+.quote span{font:600 .75rem/1 var(--c);letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+
+/* locations */
+.locs{display:grid;gap:10px;margin-top:16px}
+.loc{padding:14px;border-radius:18px;background:var(--ink3);box-shadow:inset 0 0 0 1px var(--line);display:grid;gap:6px}
+.loc .acts .btn{padding:0 13px}
+.loc .top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.loc h3{font-size:1.1875rem}
+.loc .addr{color:var(--muted);font-size:.875rem}
+.status{display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border-radius:999px;font:600 .75rem/1 var(--f);white-space:nowrap;background:rgba(244,236,225,.07);color:var(--muted)}
+.status i{width:7px;height:7px;border-radius:50%;background:#8a7f78}
+.status.open{background:rgba(88,181,104,.14);color:#9fe0aa}
+.status.open i{background:#58b568;box-shadow:0 0 0 3px rgba(88,181,104,.25);animation:ping 2s ease-in-out infinite}
+@keyframes ping{50%{box-shadow:0 0 0 6px rgba(88,181,104,0)}}
+.loc .acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.loc .dist{font:600 .75rem/1 var(--c);letter-spacing:.1em;color:var(--red2)}
+.loc.mine{box-shadow:inset 0 0 0 1.5px var(--red)}
+.near{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:12px}
+.near small{color:var(--dim);font-size:.75rem}
+
+/* closer */
+.close{padding:52px 0 54px;text-align:center;background:radial-gradient(80% 70% at 50% 100%,rgba(126,19,13,.5),transparent 70%)}
+.close .logo{width:min(260px,70vw)}
+.close h2{margin-top:18px}
+.close p{margin:8px auto 0;color:var(--muted);max-width:28em}
+footer{padding:22px 0 104px;border-top:1px solid var(--line);font-size:.8125rem;color:var(--dim);text-align:center}
+footer .fl{display:flex;flex-wrap:wrap;justify-content:center;gap:14px;margin-bottom:10px}
+footer a{color:var(--muted)}
+
+/* dock */
+.dock{position:fixed;left:10px;right:10px;bottom:max(10px,env(safe-area-inset-bottom));z-index:45;display:flex;gap:8px;padding:8px;border-radius:999px;background:rgba(20,12,11,.96);box-shadow:0 14px 30px -12px #000,inset 0 0 0 1px var(--line);transform:translateY(140%);transition:transform .55s var(--spring)}
+.dock.show{transform:none}
+.dock .btn{flex:1;min-height:44px;padding:0 12px}
+
+/* store picker */
+.sheet{position:fixed;inset:0;z-index:70;display:none}
+.sheet.open{display:block}
+.sheet .scrim{position:absolute;inset:0;background:rgba(0,0,0,.65);opacity:0;transition:opacity .35s}
+.sheet.show .scrim{opacity:1}
+.sheet .panelx{position:absolute;left:0;right:0;bottom:0;max-height:88svh;overflow:auto;background:var(--ink2);border-radius:22px 22px 0 0;box-shadow:0 -20px 60px -20px #000,inset 0 1px 0 var(--line);padding:18px var(--pad) 24px;transform:translateY(105%);transition:transform .5s var(--ease)}
+.sheet.show .panelx{transform:none}
+.sheet .grab{width:42px;height:4px;border-radius:4px;background:rgba(244,236,225,.25);margin:0 auto 14px}
+.sheet h2{font-size:1.5rem}
+.sheet .x{position:absolute;right:12px;top:12px;width:40px;height:40px;border-radius:50%;border:0;background:rgba(244,236,225,.08);cursor:pointer;display:grid;place-items:center}
+.sheet .x svg{width:18px;height:18px}
+.mode{display:flex;padding:4px;border-radius:999px;background:rgba(244,236,225,.06);margin-top:14px}
+.mode button{flex:1;border:0;background:none;cursor:pointer;padding:11px 8px;border-radius:999px;font:600 .875rem/1 var(--c);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.mode button[aria-pressed="true"]{background:var(--red);color:#fff}
+.slist{display:grid;gap:8px;margin-top:12px}
+.sopt{display:grid;grid-template-columns:1fr auto;gap:4px 10px;align-items:center;padding:13px 14px;border-radius:16px;background:var(--ink3);box-shadow:inset 0 0 0 1px var(--line);text-decoration:none;transition:box-shadow .25s,transform .3s var(--spring)}
+.sopt b{font:400 1.125rem/1.1 var(--d)}
+.sopt small{grid-column:1;color:var(--muted);font-size:.8125rem}
+.sopt .go{grid-row:1/span 2;grid-column:2;display:inline-flex;align-items:center;gap:6px;font:600 .8125rem/1 var(--c);letter-spacing:.06em;text-transform:uppercase;color:var(--red2)}
+.sopt.mine{box-shadow:inset 0 0 0 1.5px var(--red)}
+@media (hover:hover) and (pointer:fine){.sopt:hover{box-shadow:inset 0 0 0 1.5px var(--red2);transform:translateX(4px)}}
+.deliv{display:none;margin-top:14px;padding:16px;border-radius:16px;background:var(--ink3);box-shadow:inset 0 0 0 1px var(--line)}
+.deliv p{color:var(--muted);font-size:.875rem;margin-bottom:12px}
+.sheet.delivery .deliv{display:block}
+.sheet.delivery .slist,.sheet.delivery .sfoot{display:none}
+.sfoot{display:flex;align-items:center;gap:10px;margin-top:12px;flex-wrap:wrap}
+.sfoot small{color:var(--dim);font-size:.75rem}
+
+@media (min-width:760px){
+  :root{--pad:28px}
+  h1{font-size:2.75rem} h2{font-size:2.125rem}
+  body{font-size:1rem}
+  .logo{width:300px}
+  .stage{height:min(40svh,360px);width:min(100%,560px)}
+  .rail{display:grid;grid-template-columns:repeat(3,1fr);overflow:visible;margin:22px 0 0;padding:0}
+  .rail>*{flex:none}
+  .dots{display:none}
+  .sec{padding:56px 0}
+  .fam-top{grid-template-columns:1fr auto;align-items:center}
+  .dipring{width:220px;margin:0}
+  .crews{flex-wrap:wrap;overflow:visible;margin:22px 0 0;padding:0}
+  .items{grid-template-columns:repeat(2,1fr)}
+  .stats{grid-template-columns:repeat(4,1fr)}
+  .locs{grid-template-columns:repeat(2,1fr)}
+  .party .card{grid-template-columns:1fr auto;align-items:center;padding:30px}
+  .dock{display:none}
+  footer{padding-bottom:28px}
+  .sheet .panelx{left:50%;right:auto;bottom:auto;top:50%;width:min(560px,92vw);max-height:86vh;border-radius:22px;transform:translate(-50%,-46%) scale(.96);opacity:0;transition:transform .45s var(--ease),opacity .3s}
+  .sheet.show .panelx{transform:translate(-50%,-50%);opacity:1}
+  .sheet .grab{display:none}
+}
+@media (min-width:1100px){
+  h1{font-size:3.5rem} h2{font-size:2.5rem}
+  body{font-size:1.0625rem}
+  .nav .links{display:flex;gap:26px;margin-left:auto;margin-right:22px}
+  .nav .links a{font:600 .875rem/1 var(--c);letter-spacing:.08em;text-transform:uppercase;text-decoration:none;color:var(--muted);transition:color .2s}
+  .nav .links a:hover{color:var(--cream)}
+  .brand img{height:36px}
+  .hero{padding:36px 0 56px}
+  .hero .wrap{grid-template-columns:1.05fr 1fr;align-items:center;gap:40px}
+  .copy{text-align:left}
+  .logo{margin:0;width:320px}
+  .chips,.ctas{justify-content:flex-start}
+  .hero .lede{margin-left:0}
+  .stage{height:min(62vh,500px);width:100%;margin:0}
+  .sec{padding:76px 0}
+  .case .poster{height:220px}
+  .case .poster img{max-height:180px}
+  .items{grid-template-columns:repeat(3,1fr)}
+  .menu .wings{display:grid;grid-template-columns:1.1fr 1fr;gap:20px;align-items:start}
+  .bvis{height:200px}
+  .bvis img{max-height:190px}
+  .locs{grid-template-columns:repeat(3,1fr)}
+  .close{padding:90px 0}
+  .close .logo{width:340px;margin:0 auto}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .js .logo .word,.js .logo .hat,.js .hero .w>i,.js .hero [data-in],.js .stage .f,.js .rise,.js .rv{opacity:1!important;transform:none!important;filter:none!important;clip-path:none!important}
+}
+</style>
+</head>
+<body>
+<script>document.documentElement.classList.add('js')</script>
+<div class="grain" aria-hidden="true"></div>
+
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Wing Fellas, back to top"><img src="media/logo/mark.png" alt="" width="196" height="96"></a>
+    <nav class="links" aria-label="Sections"><a href="#menu">Menu</a><a href="#flavors">Flavors</a><a href="#party">Party packs</a><a href="#locations">Locations</a></nav>
+    <button class="btn red sm" type="button" data-order>Order now</button>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero" aria-labelledby="h1">
+    <div class="smoke" aria-hidden="true"><i></i><i></i><i></i></div>
+    <div class="beam" aria-hidden="true"></div>
+    <div class="wrap">
+      <div class="copy">
+        <div class="logo" id="heroLogo" role="img" aria-label="Wing Fellas logo with a white fedora"><img class="word" src="media/logo/word.png" alt="" width="701" height="294"><img class="hat" src="media/logo/hat.png" alt="" width="284" height="197"></div>
+        <div class="chips" data-in style="--i:0"><span class="chip"><i aria-hidden="true"></i>100% halal</span><span class="chip">Fresh, never frozen</span><span class="chip">6 Michigan spots</span></div>
+        <h1 id="h1"><span class="w"><i style="--k:0">We'll</i></span> <span class="w"><i style="--k:1">make</i></span> <span class="w"><i style="--k:2">a</i></span> <span class="w"><i style="--k:3">wing</i></span> <span class="w"><i style="--k:4">you</i></span> <span class="w"><i style="--k:5"><em>can't</em></i></span> <span class="w"><i style="--k:6"><em>refuse.</em></i></span></h1>
+        <p class="lede" data-in style="--i:1">Fresh halal chicken, cooked when you order it and tossed in any of our 31 flavors. Pick your closest spot and you're on its menu in two taps.</p>
+        <div class="ctas" id="heroCta" data-in style="--i:2">
+          <button class="btn red mag" type="button" data-order><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 7h12l-1 13H7L6 7z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>Order now</button>
+          <a class="btn ghost mag" href="#menu">See the menu</a>
+        </div>
+        <p class="myspot" id="mySpot" data-in style="--i:3"></p>
+      </div>
+      <div class="stage" id="stage" aria-hidden="true">
+        <div class="pool"></div>
+        <img class="f f2" data-depth="18" src="media/food/bonein.webp" alt="" width="760" height="531">
+        <img class="f f3" data-depth="12" src="media/food/fingers.webp" alt="" width="760" height="500">
+        <img class="f f1" data-depth="26" src="media/food/boneless.webp" alt="" width="760" height="548">
+      </div>
+    </div>
+  </section>
+
+  <div class="tickwrap" aria-hidden="true"><div class="ticker"><div class="tr" id="ticker"><span>Fresh, never frozen</span><b>✦</b><span>100% halal</span><b>✦</b><span>31 flavors</span><b>✦</b><span>Cooked to order</span><b>✦</b><span>Dearborn · Dearborn Heights · Belleville · Wyandotte · Flint · Ottawa Lake</span><b>✦</b><span>Fresh, never frozen</span><b>✦</b><span>100% halal</span><b>✦</b><span>31 flavors</span><b>✦</b><span>Cooked to order</span><b>✦</b><span>Dearborn · Dearborn Heights · Belleville · Wyandotte · Flint · Ottawa Lake</span><b>✦</b></div></div></div>
+
+  <section class="sec spot" id="wanted" aria-labelledby="wantedH">
+    <div class="wrap">
+      <div class="head"><h2 id="wantedH" class="rise">The most <em>wanted.</em></h2><p class="rv" style="--i:1">The ones people keep coming back for. Tap any of them to order from your spot.</p></div>
+      <div class="rail" id="wantedRail"></div>
+      <div class="dots" id="wantedDots" role="tablist" aria-label="Choose a card"></div>
+    </div>
+  </section>
+
+  <section class="sec family spot" id="flavors" aria-labelledby="famH">
+    <div class="wrap">
+      <div class="fam-top">
+        <div class="head"><h2 id="famH" class="rise">Meet the family. <em>31 flavors.</em></h2><p class="rv" style="--i:1">Every wing, boneless and finger can go in any of them. Here's who's who.</p></div>
+        <img class="dipring rv" id="dipring" src="media/food/dips.webp" alt="A ring of Wing Fellas sauce cups" width="523" height="538" loading="lazy">
+      </div>
+      <div class="crews" role="tablist" aria-label="Flavor families" id="crews"></div>
+      <div id="crewPanels"></div>
+      <div class="pick rv">
+        <p>Can't decide? Let the house pick for you.<b id="pickOut">Honey Habanero</b></p>
+        <button class="btn red mag" type="button" id="pickBtn">Pick my flavor</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec menu" id="menu" aria-labelledby="menuH">
+    <div class="wrap">
+      <div class="head"><h2 id="menuH" class="rise">The <em>menu.</em></h2><p class="rv" style="--i:1">Everything on the board, with prices. Build your wings, then pick your spot.</p></div>
+      <div class="tabs" role="tablist" aria-label="Menu sections" id="tabs"><span class="bar" aria-hidden="true"></span></div>
+      <div id="panels"></div>
+      <p class="note">Prices are from the Dearborn menu and can vary a little by location. Your store's menu shows the final price when you order.</p>
+    </div>
+  </section>
+
+  <section class="sec party" id="party" aria-labelledby="partyH">
+    <div class="wrap">
+      <div class="card rv">
+        <div>
+          <h2 id="partyH">Feeding the whole <em style="color:#fff">family?</em></h2>
+          <p style="margin-top:8px;color:rgba(255,255,255,.8)">Party packs of 50, 75 or 100 wings, plus trays of fingers, LittleFellas, wraps, fries and salads. Order ahead from your closest spot.</p>
+          <div class="packs" id="packs"></div>
+          <div class="ctas" style="justify-content:flex-start"><button class="btn cream mag" type="button" data-order>Order a party pack</button><a class="btn ghost mag" href="#menu" data-tab="party">See all trays</a></div>
+        </div>
+        <img class="buckets" src="media/food/buckets.webp" alt="Three Wing Fellas buckets full of wings" width="317" height="228" loading="lazy">
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="freshH">
+    <div class="wrap">
+      <div class="head"><h2 id="freshH" class="rise">Fresh is the <em>difference.</em></h2><p class="rv" style="--i:1">Great wings start long before they're tossed in sauce. We use fresh, never frozen halal chicken and cook every order when you order it. Wings made us famous, but there's crispy fingers, burgers, Philly cheesesteaks, wraps and family meals too.</p></div>
+      <div class="stats">
+        <div class="stat rv" style="--i:0"><b data-count="100" data-suffix="%">100%</b><span>Halal chicken</span></div>
+        <div class="stat rv" style="--i:1"><b>Never</b><span>Frozen, ever</span></div>
+        <div class="stat rv" style="--i:2"><b data-count="31">31</b><span>Wing flavors</span></div>
+        <div class="stat rv" style="--i:3"><b data-count="6">6</b><span>Spots in Michigan</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" style="padding-top:0" aria-labelledby="revH">
+    <div class="wrap">
+      <div class="head"><h2 id="revH" class="rise">Word on the <em>street.</em></h2></div>
+      <div class="rail" id="revRail">
+        <figure class="quote"><p>"WingFella has never let me down. I've been here multiple times and honestly never had a bad experience. The wings are always fresh, flavorful, and cooked just right."</p><span>Moses</span></figure>
+        <figure class="quote"><p>"They always hook me up with extra ranch and even extra wings which I really appreciate!!! The wings are a big size, cooked perfectly and full of flavor."</p><span>Batool Almousa</span></figure>
+        <figure class="quote"><p>"I enjoyed the dining room, old style gangster theme to this restaurant. They had some unique flavor options for the wings, including the one that I chose, which was honey habanero."</p><span>Chris Freeman</span></figure>
+        <figure class="quote"><p>"Service 10/10. So kind to my daughter and myself. We got the bone in wings, as well as boneless and a chicken chipotle. Everything was fresh and pretty fast. Will return."</p><span>Keyanna Gardner</span></figure>
+        <figure class="quote"><p>"I came from Boston and the staff were top tear. Restaurant is clean and the interior of restaurant was pretty cool. They had a nice theme."</p><span>Bushra Alrahma</span></figure>
+      </div>
+      <div class="dots" id="revDots" role="tablist" aria-label="Choose a review"></div>
+    </div>
+  </section>
+
+  <section class="sec spot" id="locations" aria-labelledby="locH" style="background:var(--ink2)">
+    <div class="wrap">
+      <div class="head"><h2 id="locH" class="rise">Six spots. <em>Pick yours.</em></h2><p class="rv" style="--i:1">Dine in, pick up or get it delivered. Open-now times are live.</p></div>
+      <div class="near"><button class="btn ghost sm" type="button" id="nearBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>Find my closest</button><small id="nearMsg"></small></div>
+      <div class="locs" id="locs"></div>
+    </div>
+  </section>
+
+  <section class="close" id="closer" aria-labelledby="closeH">
+    <div class="wrap">
+      <div class="logo" id="closeLogo" role="img" aria-label="Wing Fellas logo"><img class="word" src="media/logo/word.png" alt="" width="701" height="294" loading="lazy" style="opacity:1;transform:none;filter:none"><img class="hat" src="media/logo/hat.png" alt="" width="284" height="197" loading="lazy" style="opacity:1;transform:none"></div>
+      <h2 id="closeH" class="rise">Hungry? <em>Make the call.</em></h2>
+      <p class="rv" style="--i:1">Pick your spot and your order is on its way to the fryer.</p>
+      <div class="ctas rv" style="--i:2"><button class="btn red mag" type="button" data-order>Order now</button><a class="btn ghost mag" href="#locations">Find a location</a></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="fl"><a href="https://www.instagram.com/thewingfellashq" target="_blank" rel="noopener">Instagram</a><a href="https://www.facebook.com/thewingfellashq" target="_blank" rel="noopener">Facebook</a><a href="#locations">Locations</a><a href="#menu">Menu</a></div>
+    <div>Wing Fellas · Fresh halal wings · Michigan · © 2026</div>
+  </div>
+</footer>
+
+<div class="dock" id="dock" aria-label="Quick actions">
+  <button class="btn red" type="button" data-order>Order now</button>
+  <a class="btn cream" href="#menu">Menu</a>
+</div>
+
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetH" hidden>
+  <div class="scrim" data-close></div>
+  <div class="panelx" tabindex="-1">
+    <div class="grab" aria-hidden="true"></div>
+    <button class="x" type="button" data-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    <h2 id="sheetH">Where are we <em>cooking?</em></h2>
+    <div class="mode" role="group" aria-label="Order type"><button type="button" aria-pressed="true" data-mode="pickup">Pickup</button><button type="button" aria-pressed="false" data-mode="delivery">Delivery</button></div>
+    <div class="slist" id="slist"></div>
+    <div class="sfoot"><button class="btn ghost sm" type="button" id="sheetNear">Sort by closest</button><small>We'll remember your spot for next time.</small></div>
+    <div class="deliv"><p>Enter your address on the next screen and we'll match you with the Wing Fellas that delivers to you.</p><a class="btn red" href="https://www.thewingfellas.com/stores?service_type=delivery">Start a delivery order</a></div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js" defer></script>
+<script>
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches, small = matchMedia('(max-width: 759px)').matches, fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
+const clamp = v => v < 0 ? 0 : v > 1 ? 1 : v, lerp = (a, b, k) => a + (b - a) * k;
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const ticks = [];
+let ready = false; const go = () => { if (ready) return; ready = true; document.body.classList.add('ready'); };
+addEventListener('load', go); setTimeout(go, 1300);
+const store = { get(k) { try { return localStorage.getItem(k); } catch { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch {} } };
+
+/* everything below renders from here: stores and hours from thewingfellas.com, menu and prices from the Dearborn store menu,
+   flavors from the bone-in wings flavor list. Hours are [open, close] in minutes, Sunday first. */
+const H = (a, b) => [a * 60, b * 60];
+const CONFIG = {
+  tz: 'America/Detroit', order: id => `https://www.thewingfellas.com/store/${id}`,
+  stores: [
+    { id: '23914/Dearborn', name: 'Dearborn', addr: '5854 Schaefer Rd', city: 'Dearborn, MI 48126', phone: '313-254-9464', lat: 42.33185, lon: -83.17622, hours: [H(12, 23), H(11, 23), H(11, 23), H(11, 23), H(11, 23), H(11, 23.98), H(12, 23.98)] },
+    { id: '24565/Dearborn%20Heights', name: 'Dearborn Heights', addr: '2227 N. Beech Daly Rd', city: 'Dearborn Heights, MI 48127', phone: '313-429-9222', lat: 42.3305, lon: -83.2873, hours: Array(7).fill(H(11, 23)) },
+    { id: '23917/Belleville', name: 'Belleville', addr: '17441 Sumpter Rd', city: 'Belleville, MI 48111', phone: '734-345-8032', lat: 42.17525, lon: -83.48249, hours: [H(12, 20), H(10, 20), H(10, 20), H(10, 20), H(10, 20), H(10, 22), H(12, 22)] },
+    { id: '23920/Wyandotte', name: 'Wyandotte', addr: '541 Eureka Rd', city: 'Wyandotte, MI 48192', phone: '734-407-7467', lat: 42.19963, lon: -83.15704, hours: [H(12, 22), H(11, 22), H(11, 22), H(11, 22), H(11, 22), H(11, 22), H(12, 22)] },
+    { id: '23923/Flint', name: 'Flint', addr: '4240 Miller Rd', city: 'Flint, MI 48507', phone: '810-339-6900', lat: 42.98001, lon: -83.76164, hours: [H(11, 20), H(10, 21), H(10, 21), H(10, 21), H(10, 21), H(10, 21), H(10, 21)] },
+    { id: '23926/Ottawa%20Lake', name: 'Ottawa Lake', addr: '6044 US-223', city: 'Ottawa Lake, MI 49267', phone: '734-715-9991', lat: 41.78116, lon: -83.75076, hours: Array(7).fill(H(10, 22)) }
+  ],
+  wanted: [
+    { n: 'Capone Burger', img: 'capone', p: '16.99', d: '6 oz fresh beef patty, 4 oz shaved ribeye, 3 oz grilled chicken, beef bacon and three cheeses with Capone sauce.', tag: 'The boss' },
+    { n: 'Bone-In Wings', img: 'bonein', p: 'from 7.99', d: 'Fresh, never frozen, cooked to order and tossed in any of the 31 flavors.', tag: 'Famous' },
+    { n: 'The Don Chicken Sandwich', img: 'don-chicken', p: '8.99', d: 'Two fingers in your choice of sauce, lettuce, tomato, swiss american and mayo on Texas toast.', tag: 'Made man' },
+    { n: 'Whole BigFella Sub', img: 'bigfella', p: '14.99', d: 'Crispy boneless chicken in your choice of sauce or seasoning, lettuce, tomato, swiss american and mayo.', tag: 'Big' },
+    { n: 'LittleFellas', img: 'littlefellas', p: '8.99', d: 'Crispy boneless chicken in your sauce, pickles and mayo on Hawaiian rolls.', tag: 'Crew' },
+    { n: 'The Don Steak Sandwich', img: 'don-steak', p: '8.99', d: 'Shaved ribeye, lettuce, tomato, swiss american and mayo on Texas toast.', tag: 'Made man' }
+  ],
+  crews: [
+    { n: 'The BBQ Crew', f: ['Sweet BBQ', 'Spicy BBQ', 'Tangy BBQ', 'Ruff Buff BBQ'] },
+    { n: 'Buffalo Brothers', f: ['Buffalo Mild', 'Buffalo Medium', 'Buffalo Hot'] },
+    { n: 'The Garlic Gang', f: ["Kickn' Mild Garlic", "Kickn' Med Garlic", "Kickn' Hot Garlic", 'Garlic Parm'] },
+    { n: 'Lemon Pepper Outfit', f: ['BLP Mild Lemon Pepper', 'BLP Med Lemon Pepper', 'BLP Hot Lemon Pepper', 'Lemon Pepper', 'Lime Pepper', 'Lemon Lime Pepper'] },
+    { n: 'Sweet Heat', f: ['Mango Habanero', 'Honey Habanero', "Sizzlin' Honey", 'Nashville Sweet', 'Sriracha', 'Honey Garlic Sriracha'] },
+    { n: 'Out of Towners', f: ['Asian Twist', 'Teriyaki', 'Cajun', 'Cali Golden Pepper'] },
+    { n: 'Straight Shooters', f: ['Ranch', 'Ranch Parm', 'Plain', 'Dressed (Battered)'] }
+  ],
+  wings: {
+    boneless: { n: 'Boneless', img: 'boneless', sizes: [[5, 7.49, 12.49], [10, 13.99, 18.49], [15, 19.99, 24.48], [20, 25.99], [25, 31.99], [30, 38.99], [40, 49.99]] },
+    bonein: { n: 'Bone-in', img: 'bonein', sizes: [[5, 7.99, 12.99], [10, 14.99, 19.99], [15, 21.99, 26.48], [25, 35.99]] },
+    fingers: { n: 'Fingers', img: 'fingers', sizes: [[3, 7.49, 12.49], [5, 12.49, 16.98], [8, 19.99], [10, 22.99]] }
+  },
+  menu: [
+    { id: 'subs', n: 'Subs', items: [['BigFella Sub', 'bigfella', 'Whole 14.99 · Half 7.99', 'Crispy boneless chicken with your choice of sauce or seasoning, lettuce, tomato, swiss american cheese and mayo.'], ['Original Philly Sub', 'philly', 'Whole 14.99 · Half 7.99', 'Shaved ribeye, grilled mushrooms, green peppers, onions, swiss american blend and mayo.'], ['Steak Sub', 'steak-sub', 'Whole 14.99 · Half 7.99', 'Shaved ribeye, grilled onions, lettuce, tomato, swiss american cheese and mayo.'], ['Grilled Chicken Sub', '', 'Whole 14.99 · Half 7.99', 'Grilled chicken, grilled onions, lettuce, tomato, banana peppers, swiss american cheese and mayo.']] },
+    { id: 'burgers', n: 'Burgers & sandwiches', items: [['Capone Burger', 'capone', '16.99', '6 oz fresh beef patty, 4 oz shaved ribeye, 3 oz grilled chicken, 2 strips of beef bacon, american, swiss american and pepper jack, lettuce, pickles, jalapeños and Capone sauce.'], ['Classic Cheeseburger', 'cheeseburger', '12.99', 'Lettuce, tomato, pickles, red onions and mayo.'], ['Veggie Burger', 'veggie-burger', '12.99', 'Black bean patty, american cheese, lettuce, tomato, red onions, pickles and mayo.'], ['The Don Chicken Sandwich', 'don-chicken', '8.99', 'Two fingers with your choice of sauce or seasoning, lettuce, tomato, swiss american and mayo on Texas toast.'], ['The Don Steak Sandwich', 'don-steak', '8.99', 'Shaved ribeye, lettuce, tomato, swiss american and mayo on Texas toast.'], ['The Wise Guy', '', '6.99', 'Chicken gyro.']] },
+    { id: 'wraps', n: 'Wraps', items: [['WingFella Wrap', 'wingfella-wrap', '14.99', 'Boneless or grilled chicken with your choice of sauce or seasoning, lettuce, tomato, swiss american and mayo.'], ['Steak Wrap', 'steak-wrap', '14.99', 'Shaved ribeye, grilled mushrooms, onions, green peppers, swiss american and chipotle sauce.'], ['Chicken Bacon Ranch Wrap', 'cbr-wrap', '14.99', 'Grilled chicken, beef bacon, lettuce, tomato, shredded cheese and ranch.'], ['Chicken Caesar Wrap', '', '14.99', 'Grilled chicken, lettuce, parmesan and caesar dressing.'], ['Chicken Chipotle Wrap', '', '14.99', 'Grilled chicken, lettuce, tomato, shredded cheese and chipotle sauce.'], ['Veggie Wrap', '', '14.99', 'Lettuce, tomato, cucumbers, grilled onions, green peppers and your choice of dressing.']] },
+    { id: 'little', n: 'Little Fellas', items: [['LittleFellas (Boneless)', 'littlefellas', '8.99', 'Crispy boneless chicken in your sauce, pickles and mayo on Hawaiian rolls.'], ['LittleFellas (Steak & Cheese)', 'littlefellas-steak', '9.99', 'Shaved ribeye, grilled onions, lettuce, tomato, swiss american and mayo on Hawaiian rolls.'], ['LittleFellas (Philly)', '', '9.99', 'Shaved ribeye, grilled mushrooms, green peppers, onions, swiss american blend and mayo on Hawaiian rolls.']] },
+    { id: 'salads', n: 'Salads', items: [['House Salad', 'house', '10.99', 'Romaine, tomato, onions, cucumbers, croutons, shredded cheese and your choice of dressing.'], ['Caesar Salad', 'caesar', '9.99', 'Romaine, parmesan, croutons and caesar dressing.'], ['Greek Salad', '', '11.99', 'Romaine, feta, tomato, cucumbers, beets, red onions, pepperoncini, black olives and greek dressing.']] },
+    { id: 'sides', n: 'Sides', items: [['Fries', 'fries', 'Small 3.99 · Large 5.99', ''], ['Curly Fries', 'curly', 'Small 4.99 · Large 6.99', ''], ['Onion Rings', 'onion-rings', 'Small 4.99 · Large 7.99', ''], ['Mozzarella Sticks (6)', 'mozz', '5.99', ''], ['Mac Bites (10)', 'mac-bites', '5.99', ''], ['Jalapeño Poppers (6)', 'poppers', '5.99', ''], ['Corn Bites (10)', '', '5.99', ''], ['Pickle Chips (10)', '', '5.99', ''], ['Hawaiian Roll or Texas Toast', '', '0.95', '']] },
+    { id: 'combos', n: 'Combos', items: [['Boneless combo', 'boneless', '5pc 12.49 · 10pc 18.49 · 15pc 24.48', ''], ['Bone-in combo', 'bonein', '5pc 12.99 · 10pc 19.99 · 15pc 26.48', ''], ['Fingers combo', 'fingers', '3pc 12.49 · 5pc 16.98', ''], ['Half sub combo', '', '12.99', 'BigFella, Steak, Original Philly or Grilled Chicken.'], ['Whole sub combo', '', '19.48', 'BigFella, Steak, Original Philly or Grilled Chicken.'], ['The Don combo', '', '12.99', 'Chicken or steak.'], ['LittleFellas combo', '', 'Boneless 12.99 · Steak & Cheese or Philly 13.99', ''], ['Cheeseburger combo', '', '13.49', '']] },
+    { id: 'party', n: 'Party packs & trays', items: [['Bone-in party pack', 'bucket', '50pc 64.50 · 75pc 96.75 · 100pc 129.00', ''], ['Boneless party pack', 'buckets', '50pc 59.50 · 75pc 84.75 · 100pc 119.00', ''], ['LittleFellas tray', 'tray-littlefellas', 'Half (12) 26.99 · Whole (24) 53.99', 'Boneless. Steak & Cheese or Philly: half 39.99, whole 71.99.'], ['Fingers tray', '', 'Half (20) 55.00 · Whole (48) 110.00', ''], ['Wraps tray', '', 'Half 44.00 · Whole 88.00', ''], ['Fries or curly fries tray', '', 'Half 19.99 · Whole 39.99', ''], ['Salad tray', '', 'Half 24.95 · Whole 39.99', 'House or Caesar. Greek: half 28.95, whole 47.99.'], ['Mac bites tray', '', 'Half 49.00 · Whole 96.00', ''], ['Mozzarella sticks or jalapeño poppers tray', '', 'Half 43.99', '']] }
+  ]
+};
+
+/* ---------- hours, open now (Detroit time) ---------- */
+const nowDetroit = () => { const p = new Intl.DateTimeFormat('en-US', { timeZone: CONFIG.tz, weekday: 'short', hour: 'numeric', minute: 'numeric', hour12: false }).formatToParts(new Date()); const g = t => p.find(x => x.type === t).value; return { day: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(g('weekday')), min: (+g('hour') % 24) * 60 + +g('minute') }; };
+const fmt = m => { m = Math.round(m); if (m >= 1439) return '11:59 PM'; const h = Math.floor(m / 60), mm = m % 60, ap = h >= 12 ? 'PM' : 'AM', hh = h % 12 || 12; return mm ? `${hh}:${String(mm).padStart(2, '0')} ${ap}` : `${hh} ${ap}`; };
+function status(s) {
+  const n = nowDetroit(), [o, c] = s.hours[n.day];
+  if (n.min >= o && n.min < c) return { open: true, text: `Open till ${fmt(c)}` };
+  if (n.min < o) return { open: false, text: `Opens ${fmt(o)}` };
+  return { open: false, text: `Opens ${fmt(s.hours[(n.day + 1) % 7][0])} tomorrow` };
+}
+const today = s => { const [o, c] = s.hours[nowDetroit().day]; return `Today ${fmt(o)} to ${fmt(c)}`; };
+
+/* ---------- your spot (remembered) ---------- */
+let userPos = null;
+const mine = () => CONFIG.stores.find(s => s.id === store.get('wf-store'));
+const dist = s => { if (!userPos) return null; const R = 3958.8, r = x => x * Math.PI / 180, dLa = r(s.lat - userPos[0]), dLo = r(s.lon - userPos[1]); const a = Math.sin(dLa / 2) ** 2 + Math.cos(r(userPos[0])) * Math.cos(r(s.lat)) * Math.sin(dLo / 2) ** 2; return 2 * R * Math.asin(Math.sqrt(a)); };
+const sorted = () => { const l = [...CONFIG.stores]; if (userPos) l.sort((a, b) => dist(a) - dist(b)); else { const m = mine(); if (m) l.sort((a, b) => (b === m) - (a === m)); } return l; };
+function renderMySpot() {
+  const m = mine(), el = $('#mySpot');
+  if (!m) { el.classList.remove('on'); return; }
+  el.innerHTML = `Your spot: <a href="${CONFIG.order(m.id)}">${esc(m.name)}</a> · ${esc(status(m).text)}`; el.classList.add('on');
+}
+
+/* ---------- store picker sheet ---------- */
+const sheet = $('#sheet'); let lastFocus = null;
+function renderSheet() {
+  const m = mine();
+  $('#slist').innerHTML = sorted().map(s => { const st = status(s), d = dist(s); return `<a class="sopt${m === s ? ' mine' : ''}" href="${CONFIG.order(s.id)}" data-store="${esc(s.id)}"><b>${esc(s.name)}</b><span class="go">${m === s ? 'Your spot' : 'Order'} <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span><small>${esc(s.addr)} · ${st.open ? '<span style="color:#9fe0aa">' + esc(st.text) + '</span>' : esc(st.text)}${d != null ? ` · ${d.toFixed(1)} mi` : ''}</small></a>`; }).join('');
+  $$('#slist .sopt').forEach(a => a.addEventListener('click', () => store.set('wf-store', a.dataset.store)));
+}
+function openSheet() {
+  lastFocus = document.activeElement; renderSheet(); sheet.hidden = false; sheet.classList.add('open');
+  requestAnimationFrame(() => requestAnimationFrame(() => sheet.classList.add('show')));
+  document.documentElement.style.overflow = 'hidden'; if (lenis) lenis.stop();
+  setTimeout(() => sheet.querySelector('.panelx').focus(), 60);
+}
+function closeSheet() {
+  sheet.classList.remove('show'); document.documentElement.style.overflow = ''; if (lenis) lenis.start();
+  setTimeout(() => { sheet.classList.remove('open'); sheet.hidden = true; }, RM ? 0 : 450); if (lastFocus) lastFocus.focus();
+}
+document.addEventListener('click', e => { const t = e.target.closest('[data-order]'); if (t) { e.preventDefault(); openSheet(); } if (e.target.closest('[data-close]')) closeSheet(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && sheet.classList.contains('open')) closeSheet(); if (e.key === 'Tab' && sheet.classList.contains('open')) { const f = [...sheet.querySelectorAll('a,button')].filter(x => x.offsetParent); if (!f.length) return; const a = f[0], z = f[f.length - 1]; if (e.shiftKey && document.activeElement === a) { e.preventDefault(); z.focus(); } else if (!e.shiftKey && document.activeElement === z) { e.preventDefault(); a.focus(); } } });
+$$('.mode button').forEach(b => b.addEventListener('click', () => { $$('.mode button').forEach(x => x.setAttribute('aria-pressed', x === b)); sheet.classList.toggle('delivery', b.dataset.mode === 'delivery'); }));
+function locate(msgEl) {
+  if (!navigator.geolocation) { if (msgEl) msgEl.textContent = "Your browser can't share location. Pick from the list."; return; }
+  if (msgEl) msgEl.textContent = 'Finding you...';
+  navigator.geolocation.getCurrentPosition(p => { userPos = [p.coords.latitude, p.coords.longitude]; renderLocs(); renderSheet(); if (msgEl) msgEl.textContent = `Closest first. ${sorted()[0].name} is ${dist(sorted()[0]).toFixed(1)} mi away.`; },
+    () => { if (msgEl) msgEl.textContent = "Couldn't get your location. Pick from the list."; }, { timeout: 9000, maximumAge: 600000 });
+}
+$('#sheetNear').addEventListener('click', () => locate(null));
+$('#nearBtn').addEventListener('click', () => locate($('#nearMsg')));
+
+/* ---------- locations ---------- */
+function renderLocs() {
+  const m = mine();
+  $('#locs').innerHTML = sorted().map((s, i) => { const st = status(s), d = dist(s); return `<article class="loc rv in${m === s ? ' mine' : ''}" style="--i:${i}">
+    <div class="top"><div><h3>${esc(s.name)}</h3><div class="addr">${esc(s.addr)}, ${esc(s.city)}</div></div><span class="status${st.open ? ' open' : ''}"><i aria-hidden="true"></i>${esc(st.text)}</span></div>
+    <div class="addr">${esc(today(s))} · <a href="tel:${s.phone.replace(/-/g, '')}" style="color:inherit">${esc(s.phone)}</a>${d != null ? ` · <span class="dist">${d.toFixed(1)} MI</span>` : ''}</div>
+    <div class="acts"><a class="btn red sm" href="${CONFIG.order(s.id)}" data-store="${esc(s.id)}">Order here</a><a class="btn ghost sm" href="tel:${s.phone.replace(/-/g, '')}" aria-label="Call ${esc(s.name)} at ${esc(s.phone)}">Call</a><a class="btn ghost sm" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent('Wing Fellas ' + s.addr + ', ' + s.city)}" target="_blank" rel="noopener" aria-label="Directions to ${esc(s.name)}">Directions</a></div>
+  </article>`; }).join('');
+  $$('#locs [data-store]').forEach(a => a.addEventListener('click', () => store.set('wf-store', a.dataset.store)));
+}
+
+/* ---------- most wanted ---------- */
+$('#wantedRail').innerHTML = CONFIG.wanted.map((w, i) => `<article class="case rv" style="--i:${i % 3}">
+  <div class="poster"><span class="no">No. ${String(i + 1).padStart(2, '0')}</span><span class="stamp">${esc(w.tag)}</span><img src="media/food/${w.img}.webp" alt="${esc(w.n)}" loading="lazy"></div>
+  <div class="body"><h3>${esc(w.n)}</h3><p>${esc(w.d)}</p><div class="row"><span class="price">${/^from /.test(w.p) ? 'From $' + esc(w.p.slice(5)) : '$' + esc(w.p)}</span><button class="btn red sm" type="button" data-order>Order</button></div></div></article>`).join('');
+
+/* ---------- the family ---------- */
+const crewsEl = $('#crews'), cpEl = $('#crewPanels');
+const heat = f => /hot/i.test(f) ? 3 : /med/i.test(f) ? 2 : /mild/i.test(f) ? 1 : 0;
+CONFIG.crews.forEach((c, i) => {
+  const b = document.createElement('button'); b.type = 'button'; b.setAttribute('role', 'tab'); b.id = 'crew-t' + i; b.setAttribute('aria-controls', 'crew-p' + i); b.setAttribute('aria-selected', i === 0); b.tabIndex = i ? -1 : 0; b.textContent = c.n; crewsEl.appendChild(b);
+  const p = document.createElement('div'); p.className = 'crew' + (i ? '' : ' on'); p.id = 'crew-p' + i; p.setAttribute('role', 'tabpanel'); p.setAttribute('aria-labelledby', b.id); p.hidden = i !== 0;
+  p.innerHTML = `<p class="who">${c.f.length} in the ${esc(c.n.replace(/^The /, ''))}</p><div class="members">${c.f.map((f, k) => { const h = heat(f); return `<span class="mem" style="--m:${k}" data-f="${esc(f)}">${esc(f)}${h ? `<span class="heat" aria-label="heat ${h} of 3">${[1, 2, 3].map(x => `<b class="${x <= h ? 'on' : ''}"></b>`).join('')}</span>` : ''}</span>`; }).join('')}</div>`;
+  cpEl.appendChild(p);
+});
+const crewBtns = [...crewsEl.children];
+const showCrew = (i, focus) => { crewBtns.forEach((b, k) => { b.setAttribute('aria-selected', k === i); b.tabIndex = k === i ? 0 : -1; const p = $('#crew-p' + k); p.hidden = k !== i; p.classList.toggle('on', k === i); }); if (focus) crewBtns[i].focus(); };
+crewBtns.forEach((b, i) => { b.onclick = () => showCrew(i); b.onkeydown = e => { const k = { ArrowRight: 1, ArrowLeft: -1 }[e.key]; if (k) { e.preventDefault(); showCrew((i + k + crewBtns.length) % crewBtns.length, true); } }; });
+const ALL = CONFIG.crews.flatMap((c, i) => c.f.map(f => [f, i]));
+let rolling = false;
+$('#pickBtn').addEventListener('click', () => {
+  if (rolling) return; rolling = true; const out = $('#pickOut'), pick = ALL[Math.floor(Math.random() * ALL.length)];
+  const land = () => { out.textContent = pick[0]; showCrew(pick[1]); $$('.mem.hit').forEach(m => m.classList.remove('hit')); const m = $(`#crew-p${pick[1]} .mem[data-f="${CSS.escape(pick[0])}"]`); if (m) { m.classList.add('hit'); } rolling = false; };
+  if (RM) return land();
+  let n = 0; const spin = () => { out.textContent = ALL[Math.floor(Math.random() * ALL.length)][0]; n++; if (n < 16) setTimeout(spin, 30 + n * n * 1.05); else land(); }; spin();
+});
+
+/* ---------- menu ---------- */
+const tabsEl = $('#tabs'), panelsEl = $('#panels'), bar = tabsEl.querySelector('.bar');
+const W = CONFIG.wings;
+const sections = [{ id: 'wings', n: 'Wings' }, ...CONFIG.menu];
+sections.forEach((s, i) => {
+  const b = document.createElement('button'); b.type = 'button'; b.setAttribute('role', 'tab'); b.id = 'tab-' + s.id; b.setAttribute('aria-controls', 'pan-' + s.id); b.setAttribute('aria-selected', i === 0); b.tabIndex = i ? -1 : 0; b.textContent = s.n; tabsEl.appendChild(b);
+  const p = document.createElement('div'); p.className = 'panel' + (i ? '' : ' on'); p.id = 'pan-' + s.id; p.setAttribute('role', 'tabpanel'); p.setAttribute('aria-labelledby', b.id); p.hidden = i !== 0;
+  if (s.id === 'wings') {
+    p.innerHTML = `<div class="wings"><div class="builder">
+      <div class="seg" role="radiogroup" aria-label="Wing type"><span class="knob" aria-hidden="true"></span>${Object.entries(W).map(([k, v], j) => `<button type="button" role="radio" aria-checked="${j === 0}" data-type="${k}">${v.n}</button>`).join('')}</div>
+      <div class="bvis">${Object.entries(W).map(([k, v], j) => `<img class="${j ? '' : 'on'}" data-img="${k}" src="media/food/${v.img}.webp" alt="${v.n} wings" loading="lazy">`).join('')}</div>
+      <div class="counts" role="radiogroup" aria-label="How many" id="counts"></div>
+      <div class="btot"><div><div class="big" id="bprice" aria-live="polite">$13.99</div><small id="bnote"></small></div><button class="btn red mag" type="button" data-order>Order these</button></div>
+    </div><div class="items" style="margin-top:12px" id="wingInfo"></div></div>`;
+  } else {
+    p.innerHTML = `<div class="items">${s.items.map((it, k) => `<div class="item${it[1] ? '' : ' noimg'}" style="--m:${k}">${it[1] ? `<div class="ph"><img src="media/food/${it[1]}.webp" alt="" loading="lazy"></div>` : ''}<div><div class="t"><h3>${esc(it[0])}</h3>${/·/.test(it[2]) ? '' : `<span class="pr">$${esc(it[2])}</span>`}</div>${/·/.test(it[2]) ? `<p style="color:var(--cream);font-weight:600">${esc(it[2].split(' · ').map(x => x.replace(/(\d+\.\d\d)/, '$$$1')).join(' · '))}</p>` : ''}${it[3] ? `<p>${esc(it[3])}</p>` : ''}</div></div>`).join('')}</div>`;
+  }
+  panelsEl.appendChild(p);
+});
+$('#wingInfo').innerHTML = `<div class="item noimg"><div><h3>Every wing, your way</h3><p>Any of the 31 flavors, a dip on the side and all flats or all drums if you like. You'll pick those on your store's menu.</p></div></div><div class="item noimg"><div><h3>Bigger crowd?</h3><p>Party packs come in 50, 75 and 100 wings. They're under Party packs &amp; trays.</p></div></div>`;
+const tabBtns = [...tabsEl.querySelectorAll('button')];
+const moveBar = b => { bar.style.width = b.offsetWidth + 'px'; bar.style.transform = `translateX(${b.offsetLeft}px)`; };
+const showTab = (b, focus) => { tabBtns.forEach(x => { const on = x === b; x.setAttribute('aria-selected', on); x.tabIndex = on ? 0 : -1; const p = $('#' + x.getAttribute('aria-controls')); p.hidden = !on; p.classList.toggle('on', on); }); moveBar(b); if (focus) b.focus(); b.scrollIntoView({ block: 'nearest', inline: 'center', behavior: RM ? 'auto' : 'smooth' }); };
+tabBtns.forEach((b, i) => { b.onclick = () => showTab(b); b.onkeydown = e => { const k = { ArrowRight: 1, ArrowLeft: -1 }[e.key]; if (k) { e.preventDefault(); showTab(tabBtns[(i + k + tabBtns.length) % tabBtns.length], true); } }; });
+requestAnimationFrame(() => moveBar(tabBtns[0])); addEventListener('resize', () => moveBar(tabBtns.find(b => b.getAttribute('aria-selected') === 'true')));
+document.fonts && document.fonts.ready.then(() => { moveBar(tabBtns.find(b => b.getAttribute('aria-selected') === 'true')); moveKnob(); });
+$$('[data-tab]').forEach(a => a.addEventListener('click', () => showTab($('#tab-' + a.dataset.tab))));
+
+// wing builder
+let wType = 'boneless', wIdx = 1, shown = 13.99;
+const seg = $('.seg'), knob = seg.querySelector('.knob');
+const moveKnob = () => { const b = seg.querySelector('[aria-checked="true"]'); if (!b) return; knob.style.width = b.offsetWidth + 'px'; knob.style.transform = `translateX(${b.offsetLeft - 4}px)`; };
+function tweenPrice(to) {
+  const el = $('#bprice'), from = shown; shown = to; if (RM) { el.textContent = '$' + to.toFixed(2); return; }
+  const t0 = performance.now(); ticks.push(now => { const k = clamp((now - t0) / 450), e = 1 - Math.pow(1 - k, 3); el.textContent = '$' + lerp(from, to, e).toFixed(2); return k >= 1; });
+}
+function renderWings() {
+  const t = W[wType]; if (wIdx >= t.sizes.length) wIdx = t.sizes.length - 1;
+  $('#counts').innerHTML = t.sizes.map((s, i) => `<button type="button" role="radio" aria-checked="${i === wIdx}" data-i="${i}">${s[0]}</button>`).join('');
+  $$('#counts button').forEach(b => b.onclick = () => { wIdx = +b.dataset.i; renderWings(); });
+  const s = t.sizes[wIdx]; tweenPrice(s[1]);
+  $('#bnote').textContent = `${s[0]} ${wType === 'fingers' ? 'fingers' : 'pieces'}, any flavor${s[2] ? ` · as a combo $${s[2].toFixed(2)}` : ''}`;
+  $$('.bvis img').forEach(im => im.classList.toggle('on', im.dataset.img === wType));
+  seg.querySelectorAll('button').forEach(b => b.setAttribute('aria-checked', b.dataset.type === wType)); moveKnob();
+}
+seg.querySelectorAll('button').forEach(b => b.onclick = () => { wType = b.dataset.type; renderWings(); });
+renderWings(); requestAnimationFrame(moveKnob); addEventListener('resize', moveKnob);
+$('#packs').innerHTML = [[50, '64.50'], [75, '96.75'], [100, '129.00']].map(([n, p]) => `<div><b>${n}</b><span>bone-in · $${p}</span></div>`).join('');
+
+/* ---------- motion ---------- */
+// reveals
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -8% 0px' });
+$$('.rv,.rise').forEach(el => io.observe(el));
+// count-up stats
+const cio = new IntersectionObserver(es => es.forEach(e => { if (!e.isIntersecting) return; cio.unobserve(e.target); const el = e.target, to = +el.dataset.count, suf = el.dataset.suffix || ''; if (RM) return; const t0 = performance.now(); ticks.push(now => { const k = clamp((now - t0) / 1100), v = Math.round(to * (1 - Math.pow(1 - k, 3))); el.textContent = v + suf; return k >= 1; }); }), { threshold: .6 });
+$$('[data-count]').forEach(el => cio.observe(el));
+// hero: food floats with the pointer and drifts on scroll
+const stage = $('#stage'), foods = $$('#stage .f'); let px = 0, py = 0, cx = 0, cy = 0;
+if (fine && !RM) $('.hero').addEventListener('pointermove', e => { px = e.clientX / innerWidth - .5; py = e.clientY / innerHeight - .5; });
+if (!RM) ticks.push((now, dt) => {
+  const k = 1 - Math.exp(-dt * 5); cx = lerp(cx, px, k); cy = lerp(cy, py, k);
+  const r = stage.getBoundingClientRect(); if (r.bottom < 0) return; const s = clamp(-r.top / innerHeight);
+  foods.forEach((f, i) => { const d = +f.dataset.depth; f.style.translate = `${(cx * d).toFixed(1)}px ${(cy * d * .7 - s * d * 2.2 + Math.sin(now / 1100 + i * 2) * 4).toFixed(1)}px`; f.style.rotate = `${(cx * d * .12 + Math.sin(now / 1600 + i) * 1.2).toFixed(2)}deg`; });
+});
+// tip the hat when you hover or tap the logo (and once in the closer)
+[$('#heroLogo'), $('#closeLogo')].forEach(l => { const tip = () => { l.classList.remove('tip'); void l.offsetWidth; l.classList.add('tip'); }; l.addEventListener('pointerenter', tip); l.addEventListener('click', tip); });
+new IntersectionObserver((es, o) => { if (es[0].isIntersecting && !RM) { setTimeout(() => { const l = $('#closeLogo'); l.classList.add('tip'); }, 300); o.disconnect(); } }, { threshold: .6 }).observe($('#closeLogo'));
+// the sauce ring turns as you scroll
+const ring = $('#dipring');
+if (!RM) ticks.push(() => { const r = ring.getBoundingClientRect(); if (r.bottom < 0 || r.top > innerHeight) return; ring.style.transform = `rotate(${((innerHeight - r.top) * .18).toFixed(1)}deg)`; });
+// spotlight that follows the pointer on dark sections
+if (fine && !RM) $$('.spot').forEach(s => { s.addEventListener('pointermove', e => { const r = s.getBoundingClientRect(); s.style.setProperty('--sx', (e.clientX - r.left) + 'px'); s.style.setProperty('--sy', (e.clientY - r.top) + 'px'); s.classList.add('lit'); }); s.addEventListener('pointerleave', () => s.classList.remove('lit')); });
+// most wanted cards tilt toward the pointer
+if (fine && !RM) $$('.case').forEach(c => { c.addEventListener('pointermove', e => { const r = c.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5; c.style.transform = `perspective(800px) rotateY(${(x * 10).toFixed(2)}deg) rotateX(${(-y * 8).toFixed(2)}deg) translateY(-4px)`; }); c.addEventListener('pointerleave', () => { c.style.transform = ''; }); });
+// ticker speeds up with the scroll
+const tk = $('#ticker'); let tx = 0, lastY = scrollY, vel = 0;
+if (!RM) ticks.push((now, dt) => { const y = scrollY, dy = Math.abs(y - lastY); lastY = y; vel = lerp(vel, dy / Math.max(dt, .001), .1); const half = tk.scrollWidth / 2; tx -= (55 + Math.min(vel, 2500) * .3) * dt; if (-tx > half) tx += half; tk.style.transform = `translate3d(${tx.toFixed(1)}px,0,0)`; });
+// magnetic buttons
+if (fine && !RM) $$('.mag').forEach(b => { b.addEventListener('pointermove', e => { const r = b.getBoundingClientRect(); b.style.setProperty('--mx', ((e.clientX - r.left - r.width / 2) * .2).toFixed(1) + 'px'); b.style.setProperty('--my', ((e.clientY - r.top - r.height / 2) * .3).toFixed(1) + 'px'); }); b.addEventListener('pointerleave', () => { b.style.setProperty('--mx', '0px'); b.style.setProperty('--my', '0px'); }); });
+// rails with dots
+function dots(railSel, dotSel) {
+  const rail = $(railSel), d = $(dotSel), cards = [...rail.children];
+  cards.forEach((c, i) => { const b = document.createElement('button'); b.setAttribute('role', 'tab'); b.setAttribute('aria-label', `Card ${i + 1} of ${cards.length}`); b.onclick = () => rail.scrollTo({ left: c.offsetLeft - rail.offsetLeft - 16, behavior: RM ? 'auto' : 'smooth' }); d.appendChild(b); });
+  const set = () => { const w = cards[0].offsetWidth + 12, k = Math.min(cards.length - 1, Math.round(rail.scrollLeft / w)); [...d.children].forEach((x, i) => { x.classList.toggle('on', i === k); x.setAttribute('aria-selected', i === k); }); };
+  rail.addEventListener('scroll', () => requestAnimationFrame(set), { passive: true }); set();
+}
+dots('#wantedRail', '#wantedDots'); dots('#revRail', '#revDots');
+// nav + dock
+const nav = $('#nav'), dock = $('#dock'); let inHero = true, atClose = false;
+const syncDock = () => dock.classList.toggle('show', !inHero && !atClose);
+new IntersectionObserver(es => { inHero = es[0].isIntersecting; nav.classList.toggle('solid', !inHero); syncDock(); }).observe($('#heroCta'));
+new IntersectionObserver(es => { atClose = es[0].isIntersecting; syncDock(); }).observe($('#closer'));
+// smooth scrolling on desktop
+let lenis = null;
+addEventListener('DOMContentLoaded', () => {
+  if (!fine || RM || !window.Lenis) return;
+  lenis = new Lenis({ lerp: .11, smoothWheel: true });
+  $$('a[href^="#"]').forEach(a => a.addEventListener('click', e => { const id = a.getAttribute('href'), el = id === '#top' ? 0 : $(id); if (el === null) return; e.preventDefault(); lenis.scrollTo(el, { offset: -56, duration: 1.3 }); }));
+});
+renderMySpot(); renderLocs();
+setInterval(() => { renderMySpot(); renderLocs(); }, 60000);
+let prev = performance.now();
+(function loop(now) { const dt = Math.min(.05, (now - prev) / 1000); prev = now; if (lenis) lenis.raf(now); for (let i = ticks.length - 1; i >= 0; i--) if (ticks[i](now, dt) === true) ticks.splice(i, 1); requestAnimationFrame(loop); })(prev);
+</script>
+<a class="studio" href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener" aria-label="Site by ElaSystems (opens in a new tab)"><i aria-hidden="true"></i><span>Site by <b>ElaSystems</b></span></a>
+<style>
+  .studio{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;background:#2a2725;color:#fff;font:500 12px/1 var(--f);text-decoration:none}
+  .studio i{width:9px;height:9px;border-radius:3px;background:conic-gradient(from 210deg,#ff5a1f,#ffb03b,#ff5a1f)}
+  .eb-foot{display:flex;width:max-content;margin:12px auto 0}
+  .studio b{color:#fff;font-weight:700}
+</style>
+<script>
+(function () { const b = document.querySelector('.studio'), f = document.querySelector('footer .wrap'); if (b && f) { f.appendChild(b); b.classList.add('eb-foot'); } })();
+</script>
+</body>
+</html>
