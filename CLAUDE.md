@@ -13,13 +13,13 @@ Newest instruction from the user: "When i say pause or said no i mean delete the
 
 Do NOT build a generic concept, deploy anything new, or `git rm` the folder any more. The older process in `references/declined.md` (concept rebuild) is retired unless the user asks for it.
 
-## Standing rule: coffee and matcha sites reuse the Wiss template (newest)
+## Standing rule: coffee and matcha sites reuse the 3D cup renders (newest)
 
-The user said: "Whenever its anything to do w matcha or coffee use the wiss approach but reuse whatever we made already while just changing the logo so we dont have to re render stuff everytime, i want this done in 15 mins tops".
-- Copy `matchaclub/index.html` (the Big Wiss style page) and swap the logo, name, copy, CONFIG and links. Reference: `luma/`.
-- No Blender, no new renders, no new layouts. Cups come from the business's own photos or reel frames, cut out with rembg (isnet-general-use), onto the cream and pink cards.
-- Never carry another client's photos, cups or facts over. Swap every image for the new business's own.
-- Target 15 minutes from handle to live link: research, cut out 2 cups and pull 5 step frames, swap the copy, QA at 390 and 1366, deploy.
+The user said: "Whenever its anything to do w matcha or coffee use the wiss approach but reuse whatever we made already while just changing the logo so we dont have to re render stuff everytime, i want this done in 15 mins tops", then clarified: "I meant for the 3d renders ... keep their branding colors the focus of the website".
+- **Reuse the 3D cup scene, swap only the logo.** `luma/render/cup.py` (the Buzz'n Brew iced cup: PET, condensation, cream top, ice) takes the sticker from `tex/label.png` (1600x740, transparent outside the sticker; make it with `scratchpad/lumalabel.mjs` or any 1600x740 PNG). `LUMA_MATCHA=1` turns the latte into iced matcha. Copy the script into the new site's `render/`, drop in their label, and render 2 stills through bpe: `bpe run <site>/render/cup.py -m final -- <out> 112 150 96 1` (latte, ~110 s) and `LUMA_MATCHA=1 ... 98 150 96 1` (matcha). Crop 864x864+0+130. No new modelling.
+- **Their brand colours lead the page.** Start from `luma/index.html` (Wiss layout) and change the `:root` tokens to the business's own palette (logo, cups, signage). Don't carry over another client's colours.
+- Never carry another client's photos or facts over. Real photos (steps, events, cart) come from the business's own posts.
+- Target about 15 minutes: research, label, 2 renders in the background while the copy and colours are swapped, QA at 390 and 1366, deploy.
 
 ## Standing rule: not everything goes through Blender (newest, overrides the scroll-film anatomy below)
 
