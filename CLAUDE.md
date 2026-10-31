@@ -13,6 +13,14 @@ Newest instruction from the user: "When i say pause or said no i mean delete the
 
 Do NOT build a generic concept, deploy anything new, or `git rm` the folder any more. The older process in `references/declined.md` (concept rebuild) is retired unless the user asks for it.
 
+## Standing rule: coffee and matcha sites reuse the Wiss template (newest)
+
+The user said: "Whenever its anything to do w matcha or coffee use the wiss approach but reuse whatever we made already while just changing the logo so we dont have to re render stuff everytime, i want this done in 15 mins tops".
+- Copy `matchaclub/index.html` (the Big Wiss style page) and swap the logo, name, copy, CONFIG and links. Reference: `luma/`.
+- No Blender, no new renders, no new layouts. Cups come from the business's own photos or reel frames, cut out with rembg (isnet-general-use), onto the cream and pink cards.
+- Never carry another client's photos, cups or facts over. Swap every image for the new business's own.
+- Target 15 minutes from handle to live link: research, cut out 2 cups and pull 5 step frames, swap the copy, QA at 390 and 1366, deploy.
+
 ## Standing rule: not everything goes through Blender (newest, overrides the scroll-film anatomy below)
 
 The user said: "Not everything has to go through blender and severe Animating". The Blender scroll film is optional, not the default.
