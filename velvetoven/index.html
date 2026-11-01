@@ -18,7 +18,7 @@
 /* Velvet Oven Bakery · the page is their pastry case.
    A glass cloche lifts off one raspberry pastry on black velvet; the menu sits on three lit glass shelves like their real case
    (LED strip along each shelf edge, a reflection under every piece, a gold tag on each); the "picture perfect finish" is told
-   with red glaze rising up the screen as you scroll; wholesale is a foil order ticket; visit is their storefront with an OPEN sign.
+   with red glaze rising up the screen as you scroll; wholesale is a foil order ticket; visit is their storefront with an OPEN/CLOSED sign. A sticky menu bar (scrollspy) jumps to each shelf and section.
    Colours: velvet black, deep velvet red, glaze red, their gold flame, cream. MOBILE FIRST. */
 :root{
   --black:#0d0a09; --velvet:#2a0a0e; --wine:#4a0c14; --glaze:#c8102e; --glaze2:#e0263f; --gold:#c9a35a; --gold2:#e9d29b;
@@ -27,7 +27,7 @@
   --pad:18px; --nav:56px; --out:cubic-bezier(.16,1,.3,1);
 }
 *{box-sizing:border-box;margin:0}
-html{-webkit-text-size-adjust:100%;overflow-x:clip;background:var(--black);scroll-padding-top:calc(var(--nav) + 10px)}
+html{-webkit-text-size-adjust:100%;overflow-x:clip;background:var(--black);scroll-padding-top:calc(var(--nav) + 58px)}
 body{background:var(--black);color:var(--cream);font:400 .9375rem/1.6 var(--f);overflow-x:clip;-webkit-font-smoothing:antialiased}
 img{display:block;max-width:100%;height:auto}
 a{color:inherit}
@@ -54,6 +54,17 @@ h1 i,h2 i{font-style:italic;font-weight:500;color:var(--gold2)}
 .brand b{display:block;font:600 .9375rem/1 var(--caps);letter-spacing:.16em;color:var(--cream)}
 .brand small{display:block;margin-top:4px;font:500 .5rem/1 var(--caps);letter-spacing:.5em;color:var(--gold)}
 .nav .links{display:none}
+.tabs{position:fixed;top:var(--nav);left:0;right:0;z-index:39;background:rgba(13,10,9,.94);box-shadow:0 1px 0 var(--line);transform:translateY(-12px);opacity:0;visibility:hidden;transition:transform .35s var(--out),opacity .25s,visibility 0s .35s}
+.tabs.on{transform:none;opacity:1;visibility:visible;transition:transform .35s var(--out),opacity .25s}
+.tabs ul{display:flex;gap:4px;max-width:1140px;margin:0 auto;padding:7px var(--pad);overflow-x:auto;scrollbar-width:none;list-style:none}
+.tabs ul::-webkit-scrollbar{display:none}
+.tabs a{display:block;padding:8px 12px;border-radius:999px;color:var(--soft);text-decoration:none;font:500 .8125rem/1 var(--f);white-space:nowrap;transition:background .2s,color .2s}
+.tabs a.on{background:rgba(201,163,90,.16);color:var(--gold2);box-shadow:inset 0 0 0 1px rgba(201,163,90,.45)}
+.where{position:relative;margin-top:8px;font-size:.8125rem;color:var(--soft)}
+.where a{color:var(--gold2)}
+.sdots{display:flex;justify-content:center;gap:5px;margin-top:10px}
+.sdots i{width:5px;height:5px;border-radius:50%;background:rgba(244,236,224,.2);transition:width .2s,background .2s}
+.sdots i.on{width:14px;border-radius:3px;background:var(--gold)}
 .nav .btn{min-height:36px;padding:0 14px;font-size:.75rem}
 
 /* hero: the cloche */
@@ -61,7 +72,7 @@ h1 i,h2 i{font-style:italic;font-weight:500;color:var(--gold2)}
   background:radial-gradient(60% 46% at 50% 34%,rgba(201,163,90,.16),transparent 70%),radial-gradient(120% 70% at 50% 110%,var(--wine),transparent 60%),var(--black)}
 .hero::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(255,255,255,.012) 0 2px,transparent 2px 5px);pointer-events:none}
 .stage{position:relative;width:min(70vw,290px);margin:12px auto 0;aspect-ratio:1/1.02}
-.spot{position:absolute;left:50%;top:-30%;width:150%;height:140%;transform:translateX(-50%);background:radial-gradient(closest-side,rgba(255,236,200,.22),transparent);opacity:0;animation:spot 1.4s .9s ease forwards;pointer-events:none}
+.spot{position:absolute;left:50%;top:-30%;width:150%;height:140%;transform:translateX(-50%);background:radial-gradient(closest-side,rgba(255,236,200,.22),transparent);opacity:0;animation:spot 1.2s .5s ease forwards;pointer-events:none}
 @keyframes spot{to{opacity:1}}
 .plate{position:absolute;left:4%;right:4%;bottom:2%;height:22%;border-radius:50%;background:radial-gradient(closest-side,#2b2420,#120e0c 70%);box-shadow:0 0 0 2px rgba(201,163,90,.55),0 0 0 7px rgba(201,163,90,.08),0 22px 30px rgba(0,0,0,.7)}
 .pastry{position:absolute;left:14%;right:14%;bottom:10%;aspect-ratio:1;border-radius:50%;overflow:hidden;
@@ -71,7 +82,7 @@ h1 i,h2 i{font-style:italic;font-weight:500;color:var(--gold2)}
   background:linear-gradient(100deg,rgba(255,255,255,.0) 18%,rgba(255,255,255,.22) 24%,rgba(255,255,255,.04) 30%,rgba(255,255,255,0) 60%,rgba(255,255,255,.1) 84%,rgba(255,255,255,0) 92%),
   radial-gradient(120% 90% at 50% 0%,rgba(255,255,255,.1),rgba(255,255,255,.02) 60%);
   box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.28),inset 0 -14px 24px rgba(255,255,255,.06);
-  animation:lift 1.3s .55s cubic-bezier(.6,0,.2,1) forwards}
+  animation:lift 1s .3s cubic-bezier(.6,0,.2,1) forwards}
 .cloche::before{content:'';position:absolute;left:50%;top:-11px;width:22px;height:14px;transform:translateX(-50%);border-radius:50% 50% 4px 4px;background:linear-gradient(#f3dfab,#a8833d);box-shadow:0 2px 4px rgba(0,0,0,.4)}
 @keyframes lift{0%{transform:none;opacity:1}30%{transform:translateY(4px)}100%{transform:translateY(-78%) rotate(-4deg);opacity:0}}
 .hero .kick{position:relative}
@@ -81,7 +92,7 @@ h1 i,h2 i{font-style:italic;font-weight:500;color:var(--gold2)}
 .open{display:inline-flex;align-items:center;gap:8px;margin-top:14px;font:500 .8125rem/1 var(--f);color:var(--soft)}
 .open i{width:7px;height:7px;border-radius:50%;background:#53d18a;box-shadow:0 0 0 3px rgba(83,209,138,.2)}
 .open.shut i{background:#d65353;box-shadow:0 0 0 3px rgba(214,83,83,.2)}
-.up{animation:up .9s var(--out) both}.up.d1{animation-delay:.85s}.up.d2{animation-delay:.95s}.up.d3{animation-delay:1.05s}
+.up{animation:up .9s var(--out) both}.up.d1{animation-delay:.5s}.up.d2{animation-delay:.6s}.up.d3{animation-delay:.7s}
 @keyframes up{from{opacity:0;transform:translateY(14px)}}
 
 /* the vitrine */
@@ -92,14 +103,17 @@ h1 i,h2 i{font-style:italic;font-weight:500;color:var(--gold2)}
 .case::before{content:'';position:absolute;inset:0;border-radius:14px;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.04) 36%,transparent 44%);pointer-events:none}
 .shelf{position:relative;padding:22px 0 26px}
 .shelf+.shelf{border-top:1px solid rgba(255,255,255,.06)}
-.shelf::before{content:'';position:absolute;left:10px;right:10px;top:6px;height:3px;border-radius:2px;background:repeating-linear-gradient(90deg,var(--led) 0 5px,rgba(223,243,255,.25) 5px 8px);box-shadow:0 0 12px rgba(223,243,255,.55),0 6px 26px rgba(223,243,255,.18)}
+.shelf::before{content:'';position:absolute;left:10px;right:10px;top:6px;height:3px;transform:scaleX(0);transform-origin:left;transition:transform 1s cubic-bezier(.5,0,.2,1);border-radius:2px;background:repeating-linear-gradient(90deg,var(--led) 0 5px,rgba(223,243,255,.25) 5px 8px);box-shadow:0 0 12px rgba(223,243,255,.55),0 6px 26px rgba(223,243,255,.18)}
 .shelf::after{content:'';position:absolute;left:0;right:0;top:9px;height:90px;background:linear-gradient(rgba(223,243,255,.08),transparent);pointer-events:none}
 .shelf h3{padding:0 14px;font:600 .6875rem/1 var(--caps);letter-spacing:.28em;color:var(--gold)}
 .row-items{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:14px 14px 4px;scrollbar-width:none;list-style:none}
 .row-items::-webkit-scrollbar{display:none}
 .piece{flex:0 0 58%;scroll-snap-align:start;position:relative}
 .piece .ph{position:relative;aspect-ratio:1;border-radius:10px;overflow:hidden;background:#000;-webkit-box-reflect:below 2px linear-gradient(transparent 72%,rgba(255,255,255,.16))}
-.piece .ph img{width:100%;height:100%;object-fit:cover;transition:transform .7s var(--out)}
+.piece .ph img{width:100%;height:100%;object-fit:cover;transition:transform .7s var(--out),filter .9s ease;filter:brightness(.35) saturate(.6)}
+.shelf.lit::before{transform:none}
+.shelf.lit .piece .ph img{filter:none}
+.shelf.lit .piece:nth-child(2) .ph img{transition-delay:0s,.15s}.shelf.lit .piece:nth-child(3) .ph img{transition-delay:0s,.3s}.shelf.lit .piece:nth-child(4) .ph img{transition-delay:0s,.45s}
 .tag{position:relative;margin:-26px 0 0 10px;width:max-content;max-width:88%;padding:8px 12px 9px;border-radius:4px;background:var(--cream);color:#1d1512;box-shadow:0 8px 18px rgba(0,0,0,.45);transform:rotate(-2.5deg);transform-origin:left top}
 .tag::before{content:'';position:absolute;left:-5px;top:12px;width:9px;height:9px;border-radius:50%;background:var(--black);box-shadow:inset 0 0 0 2px var(--gold)}
 .tag b{display:block;font:600 1.0625rem/1.1 var(--serif)}
@@ -157,13 +171,12 @@ h1 i,h2 i{font-style:italic;font-weight:500;color:var(--gold2)}
 .front{position:relative;overflow:hidden}
 .front img{width:100%;aspect-ratio:16/9;object-fit:cover;filter:brightness(.82) contrast(1.05)}
 .front::after{content:'';position:absolute;inset:0;background:linear-gradient(transparent 40%,var(--black))}
-.sign{position:absolute;right:18px;top:12px;z-index:2;transform-origin:50% -18px;animation:swing 2.4s ease-in-out 1}
+.sign{position:absolute;right:18px;top:12px;z-index:2}
 .sign::before,.sign::after{content:'';position:absolute;top:-18px;width:1.5px;height:20px;background:var(--gold)}
 .sign::before{left:18px;transform:rotate(14deg)}.sign::after{right:18px;transform:rotate(-14deg)}
 .sign div{padding:9px 14px 8px;border-radius:6px;background:var(--cream);color:#1d1512;text-align:center;box-shadow:0 10px 18px rgba(0,0,0,.45)}
 .sign b{display:block;font:600 1rem/1 var(--caps);letter-spacing:.2em;color:var(--glaze)}
 .sign span{display:block;margin-top:4px;font:500 .6875rem/1 var(--f);letter-spacing:.06em}
-@keyframes swing{0%{transform:rotate(9deg)}25%{transform:rotate(-6deg)}50%{transform:rotate(3deg)}75%{transform:rotate(-1.5deg)}100%{transform:none}}
 .visit .card{position:relative;margin-top:-34px;padding:20px;border-radius:14px;background:rgba(20,15,13,.94);box-shadow:inset 0 0 0 1px var(--line)}
 .visit address{font:600 1.375rem/1.25 var(--serif);font-style:normal}
 .hours{display:flex;justify-content:space-between;margin-top:12px;padding-top:12px;border-top:1px solid var(--line);font-size:.9375rem}
@@ -184,7 +197,7 @@ footer a{text-decoration:none}
   body{font-size:1rem}
   h1{font-size:3.25rem}
   h2{font-size:2.5rem}
-  .nav .links{display:flex;gap:28px;font:500 .6875rem/1 var(--caps);letter-spacing:.24em;color:var(--soft)}
+  .nav .links{display:none}
   .nav .links a{text-decoration:none}.nav .links a:hover{color:var(--gold2)}
   .brand b{font-size:1.0625rem}
   .hero{padding:calc(var(--nav) + 26px) 0 56px}
@@ -195,7 +208,7 @@ footer a{text-decoration:none}
   .row-items{overflow:visible;display:grid;grid-template-columns:repeat(4,1fr);gap:22px;padding:16px 22px 6px}
   .piece{flex:none}
   .shelf h3{padding:0 22px}
-  .hint{display:none}
+  .hint,.sdots{display:none}
   .dip{padding:80px 0}
   .drops{grid-template-columns:repeat(3,1fr);gap:28px}
   .drop,.drop:nth-child(even){grid-template-columns:1fr;text-align:center}
@@ -218,6 +231,7 @@ footer a{text-decoration:none}
 @media (min-width:1100px){ .stage{width:270px} }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
+  .shelf::before{transform:none}.piece .ph img{filter:none}
   .cloche{display:none}.spot{opacity:1}
   .rv{opacity:1;transform:none}
 }
@@ -239,6 +253,9 @@ footer a{text-decoration:none}
     <a class="btn" data-maps href="#visit"><svg aria-hidden="true"><use href="#pin"/></svg>Directions</a>
   </div>
 </header>
+<nav class="tabs" id="tabs" aria-label="Menu sections"><ul>
+  <li><a href="#fruit">Viral fruit</a></li><li><a href="#cheesecakes">Cheesecakes</a></li><li><a href="#bar">Cakes &amp; drinks</a></li><li><a href="#dip">How it's made</a></li><li><a href="#wholesale">Wholesale</a></li><li><a href="#visit">Visit</a></li>
+</ul></nav>
 
 <main id="top">
   <section class="hero" aria-labelledby="h1">
@@ -252,8 +269,9 @@ footer a{text-decoration:none}
       </div>
       <h1 id="h1" class="up d1">Pastries that look <i>too real to eat.</i></h1>
       <p class="up d2">The viral fruit pastries, rich cheesecakes and cozy lattes of Velvet Oven, made by hand on Hunt Road.</p>
-      <div class="row up d3" id="heroCta"><a class="btn" data-maps href="#visit"><svg aria-hidden="true"><use href="#pin"/></svg>Get directions</a><a class="btn line" href="#case">See the case</a></div>
+      <div class="row up d3" id="heroCta"><a class="btn" data-maps href="#visit"><svg aria-hidden="true"><use href="#pin"/></svg>Get directions</a><a class="btn line" href="#fruit">See the menu</a></div>
       <div class="open up d3" id="openNow"><i></i><span>Open every day, 8 AM to 9 PM</span></div>
+      <p class="where up d3">4171 Hunt Road, Blue Ash · <a href="#case">see the full menu</a></p>
     </div>
   </section>
 
@@ -261,29 +279,29 @@ footer a{text-decoration:none}
     <div class="wrap">
       <div class="vhead rv"><div><p class="kick">THE VITRINE</p><h2 id="caseh" style="margin-top:8px">What's in the <i>case.</i></h2></div><p>Three shelves, lit like the real thing. The menu changes with the season, so here's the fall lineup.</p></div>
       <div class="case rv">
-        <div class="shelf"><h3>TOP SHELF · THE VIRAL FRUIT</h3>
+        <div class="shelf" id="fruit"><h3>TOP SHELF · THE VIRAL FRUIT</h3>
           <ul class="row-items">
             <li class="piece"><div class="ph"><img src="media/berry.webp" alt="A glossy red raspberry fruit pastry" width="600" height="600" loading="lazy"></div><div class="tag"><b>The Raspberry</b><span>The picture perfect one</span></div></li>
             <li class="piece"><div class="ph"><img src="media/apple.webp" alt="A shiny red caramel apple fruit pastry with a stem and leaf" width="480" height="480" loading="lazy"></div><div class="tag"><b>Caramel Apple</b><span>The viral one everybody asks for</span></div></li>
             <li class="piece"><div class="ph"><img src="media/pink.webp" alt="Rows of pink raspberry shells before the glaze" width="720" height="540" loading="lazy"></div><div class="tag"><b>Fresh shells</b><span>Shaped by hand every day</span></div></li>
             <li class="piece"><div class="ph"><img src="media/hero.webp" alt="A tray of finished red raspberry pastries" width="960" height="720" loading="lazy"></div><div class="tag"><b>By the tray</b><span>Grab a few for the table</span></div></li>
-          </ul>
+          </ul><div class="sdots" aria-hidden="true"></div>
         </div>
-        <div class="shelf"><h3>MIDDLE SHELF · CHEESECAKES</h3>
+        <div class="shelf" id="cheesecakes"><h3>MIDDLE SHELF · CHEESECAKES</h3>
           <ul class="row-items">
             <li class="piece"><div class="ph"><img src="media/snickers.webp" alt="Snickers cheesecake with chocolate, caramel and peanuts dripping down" width="960" height="720" loading="lazy"></div><div class="tag"><b>Snickers</b><span>Chocolate, caramel and peanuts</span></div></li>
             <li class="piece"><div class="ph"><img src="media/kinder.webp" alt="Trays of Kinder cheesecakes" width="720" height="540" loading="lazy"></div><div class="tag"><b>Kinder</b><span>Creamy, chocolatey, gone fast</span></div></li>
             <li class="piece"><div class="ph"><img src="media/assort.webp" alt="Blueberry and Dubai chocolate cheesecakes on trays" width="720" height="540" loading="lazy"></div><div class="tag"><b>Blueberry &amp; Dubai</b><span>Two of the minis</span></div></li>
             <li class="piece"><div class="ph"><img src="media/case.webp" alt="Pumpkin cheesecake next to a caramel apple pastry" width="720" height="540" loading="lazy"></div><div class="tag"><b>Pumpkin &amp; Biscoff</b><span>On the fall menu</span></div></li>
-          </ul>
+          </ul><div class="sdots" aria-hidden="true"></div>
         </div>
-        <div class="shelf"><h3>BOTTOM SHELF · CAKES &amp; THE BAR</h3>
+        <div class="shelf" id="bar"><h3>BOTTOM SHELF · CAKES &amp; THE BAR</h3>
           <ul class="row-items">
             <li class="piece"><div class="ph"><img src="media/spread.webp" alt="A slice of pumpkin spice cake with cream cheese frosting" width="720" height="540" loading="lazy"></div><div class="tag"><b>Pumpkin Spice Cake</b><span>Layered and frosted</span></div></li>
             <li class="piece"><div class="ph"><img src="media/piping.webp" alt="Frosting piped onto red velvet cake" width="720" height="540" loading="lazy"></div><div class="tag"><b>Red Velvet</b><span>It's in the name</span></div></li>
             <li class="piece"><div class="ph"><img src="media/latte.webp" alt="A Sugar and Spice Pumpkin Latte in a red Velvet Oven mug" width="720" height="540" loading="lazy"></div><div class="tag"><b>Sugar + Spice Pumpkin Latte</b><span>Hot or iced</span></div></li>
             <li class="piece"><div class="ph"><img src="media/iced.webp" alt="An iced latte with cold foam in a Velvet Oven cup" width="720" height="540" loading="lazy"></div><div class="tag"><b>Iced lattes</b><span>Plus hot chocolate</span></div></li>
-          </ul>
+          </ul><div class="sdots" aria-hidden="true"></div>
         </div>
       </div>
       <p class="hint"><svg aria-hidden="true"><use href="#swipe"/></svg>Swipe each shelf</p>
@@ -328,7 +346,7 @@ footer a{text-decoration:none}
             <li><b>Signature cheesecakes</b><span>by the tray</span></li>
             <li><b>Flavors</b><span>Snickers, Kinder, Biscoff, blueberry, Dubai and more</span></li>
             <li><b>To start</b><span>send us a DM</span></li>
-          </ul>
+          </ul><div class="sdots" aria-hidden="true"></div>
         </div>
         <div class="stub"><small>VELVET OVEN BAKERY<br>BLUE ASH, OH</small><a class="btn" data-dm href="#wholesale"><svg aria-hidden="true"><use href="#ig"/></svg>DM us</a></div>
         <div class="imgs" aria-hidden="true"><img src="media/trays.webp" alt="" width="720" height="540" loading="lazy"><img src="media/kinder.webp" alt="" width="720" height="540" loading="lazy"><img src="media/assort.webp" alt="" width="720" height="540" loading="lazy"><img src="media/snickers.webp" alt="" width="960" height="720" loading="lazy"></div>
@@ -361,7 +379,7 @@ footer a{text-decoration:none}
   </div>
 </footer>
 
-<div class="dock" id="dock"><a class="btn line" href="#case">The case</a><a class="btn" data-maps href="#visit"><svg aria-hidden="true"><use href="#pin"/></svg>Directions</a></div>
+<div class="dock" id="dock"><a class="btn line" href="#fruit">Menu</a><a class="btn" data-maps href="#visit"><svg aria-hidden="true"><use href="#pin"/></svg>Directions</a></div>
 
 <script>
 const CONFIG = { instagram: 'https://www.instagram.com/velvetoven1/', dm: 'https://ig.me/m/velvetoven1', maps: 'https://www.google.com/maps/search/?api=1&query=Velvet+Oven+Bakery+4171+Hunt+Rd+Blue+Ash+OH+45236', open: 8 * 60, close: 21 * 60 };
@@ -391,9 +409,21 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
   addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(level); } }, { passive: true }); level();
 } else glaze.style.setProperty('--lvl', 1);
 
-// the OPEN sign swings once when it comes into view
-const sign = $('#sign'); sign.style.animationPlayState = 'paused';
-new IntersectionObserver((es, o) => { if (es[0].isIntersecting) { sign.style.animationPlayState = 'running'; o.disconnect(); } }, { threshold: .6 }).observe(sign);
+// the menu bar shows after the hero and follows where you are
+const tabs = $('#tabs'), links = $$('#tabs a'), secs = links.map(a => $(a.getAttribute('href')));
+new IntersectionObserver(es => tabs.classList.toggle('on', !es[0].isIntersecting), { rootMargin: '-60px 0px 0px 0px' }).observe($('#heroCta'));
+const spy = () => { const y = innerHeight * .35; let k = -1; secs.forEach((s, i) => { if (s.getBoundingClientRect().top < y) k = i; });
+  links.forEach((a, i) => a.classList.toggle('on', i === k)); const on = links[k]; if (on) on.scrollIntoView({ block: 'nearest', inline: 'nearest' }); };
+let st = false; addEventListener('scroll', () => { if (!st) { st = true; requestAnimationFrame(() => { st = false; spy(); }); } }, { passive: true });
+
+// each shelf switches on when it comes into view: the LED strip draws across, the pieces light up
+const lio = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('lit'); lio.unobserve(e.target); } }), { threshold: .3 });
+$$('.shelf').forEach(s => lio.observe(s));
+
+// dots under each swipeable shelf
+$$('.shelf').forEach(s => { const row = s.querySelector('.row-items'), d = s.querySelector('.sdots'); d.innerHTML = [...row.children].map(() => '<i></i>').join('');
+  const paint = () => { const w = row.firstElementChild.getBoundingClientRect().width + 14, k = Math.round(row.scrollLeft / w); [...d.children].forEach((x, i) => x.classList.toggle('on', i === k)); };
+  row.addEventListener('scroll', () => requestAnimationFrame(paint), { passive: true }); paint(); });
 
 // phone dock: after the hero, hidden at the visit card
 const dock = $('#dock'); let inHero = true, atVisit = false;
