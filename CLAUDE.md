@@ -13,6 +13,13 @@ Newest instruction from the user: "When i say pause or said no i mean delete the
 
 Do NOT build a generic concept, deploy anything new, or `git rm` the folder any more. The older process in `references/declined.md` (concept rebuild) is retired unless the user asks for it.
 
+## Standing rule: no template sites (newest, overrides "start from luma/index.html" and the house anatomy)
+
+The user said: "The designs ur making are coming out as generic ai concepts i dont like them theres no uniqueness and creativity". Billionaire Dough, Son of a Burger, Rollies, Olive Tree, MGP Built and Velvet Oven were all the same template (chips, headline left + photo card right, marquee, swipe rail, bento, closer, dock) with new colours. That is what read as generic.
+- Every site gets its own concept taken from the business itself (their product, their room, their ritual, their numbers), and the layout follows the concept. No shared skeleton, no recycled section order.
+- Before building, write the concept in one line ("the page is X because they do Y") and check it couldn't be swapped onto another client.
+- Still professional, mobile first, fast and honest with facts. Formatting, copy, bot blocking and QA rules still apply.
+
 ## Standing rule: coffee and matcha sites reuse the 3D cup renders (newest)
 
 The user said: "Whenever its anything to do w matcha or coffee use the wiss approach but reuse whatever we made already while just changing the logo so we dont have to re render stuff everytime, i want this done in 15 mins tops", then clarified: "I meant for the 3d renders ... keep their branding colors the focus of the website".
