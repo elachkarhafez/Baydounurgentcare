@@ -1,0 +1,650 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noai, noimageai">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hangry Joe's Hot Chicken &amp; Wings</title>
+<meta name="description" content="Nashville hot chicken sandos, fingers, wings and waffles in six heat levels, from No Seasoning to Angry Hot (waiver required). Find one of 117 Hangry Joe's near you and order pickup.">
+<meta property="og:title" content="Hangry Joe's Hot Chicken & Wings">
+<meta property="og:description" content="Six heat levels, from No Seasoning to Angry Hot. 117 locations and counting.">
+<meta property="og:image" content="media/og.jpg">
+<meta name="theme-color" content="#e0261f">
+<link rel="icon" href="media/icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bowlby+One&family=Barlow:wght@400;500;600;700;800&family=Permanent+Marker&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="media/sando.webp">
+<style>
+/* Hangry Joe's, redesign. Concept: the page is the heat scale. It starts cool at the top and gets hotter the further
+   you scroll: the heat section walks No Seasoning to Angry Hot with their own mascots getting angrier and the whole
+   screen heating from cream to fire, the Angry Hot challenge sits in the flames, and the page cools back down to a
+   black graffiti wall for rewards, locations and the footer. Their red, flame yellow and black; their graffiti art. */
+:root{
+  --cream:#fff6e8; --ink:#181010; --soft:#6b5a52; --line:rgba(24,16,16,.12);
+  --red:#e0261f; --deep:#9e130f; --flame:#ffc21a; --orange:#ff7a1a; --char:#140c0b;
+  --fd:"Bowlby One",Impact,sans-serif; --fb:"Barlow",system-ui,sans-serif; --fm:"Permanent Marker",cursive;
+  --pad:16px; --r:18px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{background:var(--cream);color:var(--ink);font:500 15px/1.5 var(--fb);overflow-x:hidden}
+img{display:block;max-width:100%;height:auto}
+a{color:inherit}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--flame);outline-offset:3px;border-radius:6px}
+.wrap{width:100%;max-width:1180px;margin:0 auto;padding:0 var(--pad)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:48px;padding:0 22px;border-radius:999px;font:800 14.5px/1 var(--fb);letter-spacing:.02em;text-transform:uppercase;text-decoration:none;white-space:nowrap;transition:transform .2s cubic-bezier(.3,1.6,.5,1),background .2s,box-shadow .2s}
+.btn.red{background:var(--red);color:#fff;box-shadow:0 5px 0 var(--deep)}
+.btn.red:active{transform:translateY(4px);box-shadow:0 1px 0 var(--deep)}
+.btn.y{background:var(--flame);color:var(--ink);box-shadow:0 5px 0 #c78f00}
+.btn.y:active{transform:translateY(4px);box-shadow:0 1px 0 #c78f00}
+.btn.line{border:2px solid currentColor}
+@media (hover:hover) and (pointer:fine){.btn.red:hover,.btn.y:hover{transform:translateY(-3px) rotate(-1.5deg)}}
+
+/* nav */
+.nav{position:sticky;top:0;z-index:50;height:56px;background:var(--ink);color:#fff}
+.nav .wrap{display:flex;align-items:center;gap:12px;height:100%}
+.brand{display:flex;align-items:center;gap:9px;text-decoration:none;margin-right:auto}
+.brand img{width:36px;height:36px}
+.brand b{font:400 15px/1 var(--fd);letter-spacing:.01em}
+.links{display:none;gap:22px}
+.links a{font:700 13.5px/1 var(--fb);text-transform:uppercase;letter-spacing:.06em;text-decoration:none;color:rgba(255,255,255,.7);padding:6px 0;border-bottom:3px solid transparent;transition:color .2s,border-color .2s}
+.links a.on{color:#fff;border-color:var(--red)}
+.nav .btn{height:36px;padding:0 14px;font-size:12.5px;box-shadow:0 3px 0 var(--deep)}
+
+/* hero */
+.hero{position:relative;overflow:clip;padding:18px 0 0}
+.hero .grid{position:relative;z-index:2}
+.kick{display:inline-flex;align-items:center;gap:8px;font:400 14px/1 var(--fm);color:var(--red);transform:rotate(-2deg)}
+.hero h1{font:400 28px/1.08 var(--fd);letter-spacing:-.01em;margin-top:8px;max-width:15ch;text-transform:uppercase}
+.hero h1 .hot{background:linear-gradient(90deg,var(--orange),var(--red),var(--flame),var(--red));background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:lava 4s linear infinite}
+@keyframes lava{to{background-position:300% 0}}
+.lead{margin-top:10px;color:var(--soft);max-width:42ch;font-size:15px}
+.cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.stage{position:relative;margin:14px auto 0;width:min(100%,46vh);aspect-ratio:1/1}
+.stage .plate{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 50% 55%,#fff 0 58%,rgba(255,255,255,0) 59%),repeating-conic-gradient(var(--red) 0 7.5deg,#fff 7.5deg 15deg);opacity:0;animation:plate .7s cubic-bezier(.2,1.4,.4,1) .15s forwards}
+@keyframes plate{from{opacity:0;transform:scale(.5) rotate(-60deg)}to{opacity:1;transform:none}}
+.stage .spin{position:absolute;inset:0;border-radius:50%;animation:spin 30s linear infinite}
+.stage .food{position:absolute;inset:9%;width:82%;height:82%;object-fit:contain;mix-blend-mode:multiply;opacity:0;animation:drop .9s cubic-bezier(.3,1.5,.5,1) .55s forwards}
+@keyframes drop{from{opacity:0;transform:translateY(-70%) rotate(-14deg) scale(1.2)}to{opacity:1;transform:none}}
+.stage .stamp{position:absolute;right:-6px;top:-4px;width:30%;aspect-ratio:1/1;opacity:0;animation:slam .5s cubic-bezier(.3,1.7,.5,1) 1.3s forwards;filter:drop-shadow(0 6px 10px rgba(0,0,0,.25))}
+@keyframes slam{from{opacity:0;transform:scale(2.6) rotate(-30deg)}to{opacity:1;transform:rotate(12deg)}}
+.stage .ring{position:absolute;left:50%;top:50%;width:30%;aspect-ratio:1/1;border-radius:50%;border:3px solid var(--red);transform:translate(-50%,-50%) scale(.2);opacity:0;animation:shock .7s ease-out 1.05s}
+@keyframes shock{0%{opacity:.9;transform:translate(-50%,-50%) scale(.2)}100%{opacity:0;transform:translate(-50%,-50%) scale(3.6)}}
+.stage .tag{position:absolute;left:-2px;bottom:8%;background:var(--ink);color:#fff;font:700 12.5px/1.2 var(--fb);padding:8px 11px;border-radius:12px;transform:rotate(-4deg);opacity:0;animation:pop .45s cubic-bezier(.3,1.7,.5,1) 1.6s forwards;max-width:52%}
+.stage .tag b{color:var(--flame)}
+@keyframes pop{from{opacity:0;transform:scale(.4) rotate(-12deg)}to{opacity:1;transform:rotate(-4deg)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.wallband{position:relative;margin-top:22px;height:88px;overflow:hidden;background:var(--ink);border-top:4px solid var(--red)}
+.wallband div{position:absolute;inset:0;width:300%;background:url(media/wall.webp) 0 50%/auto 100% repeat-x;animation:wall 60s linear infinite}
+@keyframes wall{to{transform:translateX(-33.333%)}}
+.rise{opacity:0;transform:translateY(14px);animation:rise .7s cubic-bezier(.2,.7,.2,1) forwards}
+@keyframes rise{to{opacity:1;transform:none}}
+
+/* sections */
+.sec{padding:40px 0}
+.head{margin-bottom:18px}
+.head .kick{font-size:15px}
+.head h2{font:400 22px/1.12 var(--fd);text-transform:uppercase;margin-top:6px;letter-spacing:-.005em}
+.head p{color:var(--soft);margin-top:8px;max-width:54ch;font-size:15px}
+
+/* HEAT */
+.heat{position:relative;height:560vh;background:var(--hbg,#fff6e8);color:var(--hfg,#181010);transition:color .4s}
+.heat .pin{position:sticky;top:56px;height:calc(100svh - 56px);overflow:hidden;display:flex;flex-direction:column}
+.heat canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.heat .in{position:relative;z-index:2;flex:1;display:flex;flex-direction:column;padding-top:18px;padding-bottom:84px}
+.heat .top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.heat .top h2{font:400 18px/1 var(--fd);text-transform:uppercase}
+.meter{display:flex;gap:5px;margin-top:12px}
+.meter button{flex:1;height:34px;border-radius:8px;background:rgba(0,0,0,.08);position:relative;overflow:hidden;font:800 9.5px/1 var(--fb);text-transform:uppercase;letter-spacing:.03em;color:inherit;opacity:.85}
+.heat.dark .meter button{background:rgba(255,255,255,.12)}
+.meter button::before{content:"";position:absolute;inset:0;background:var(--c);transform:scaleY(0);transform-origin:bottom;transition:transform .35s cubic-bezier(.3,1.4,.5,1)}
+.meter button.lit::before{transform:scaleY(1)}
+.meter button span{position:relative}
+.meter button.lit{color:#fff;opacity:1}
+.meter button.lit.lt{color:var(--ink)}
+.lvl{flex:1;display:grid;grid-template-rows:auto 1fr;gap:6px;margin-top:14px;min-height:0}
+.lvl .txt{min-height:150px;position:relative;z-index:3}
+.lvl .num{font:800 12px/1 var(--fb);letter-spacing:.14em;text-transform:uppercase;opacity:.7}
+.lvl h3{font:400 clamp(34px,10vw,46px)/.95 var(--fd);text-transform:uppercase;margin-top:6px;letter-spacing:-.01em}
+.lvl p{margin-top:10px;font-size:16px;max-width:34ch;font-weight:600}
+.lvl .note{display:inline-block;margin-top:8px;font:400 13px/1.3 var(--fm);opacity:.85}
+.lvl .swap{animation:swap .45s cubic-bezier(.2,1.2,.3,1)}
+@keyframes swap{from{opacity:0;transform:translateY(16px) skewY(3deg)}to{opacity:1;transform:none}}
+.mascot{position:relative;min-height:0;display:flex;align-items:center;justify-content:center}
+.mascot img{max-height:100%;max-width:min(78%,330px);width:auto;object-fit:contain;filter:drop-shadow(0 18px 18px rgba(0,0,0,.25));transform-origin:50% 100%}
+.mascot img.pop{animation:mpop .55s cubic-bezier(.3,1.6,.5,1)}
+@keyframes mpop{from{transform:scale(.6) rotate(-8deg);opacity:0}to{transform:none;opacity:1}}
+.mascot .who{position:absolute;right:0;bottom:6px;font:400 13px/1 var(--fm);transform:rotate(-4deg);opacity:.8}
+.waiver{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.waiver .btn{height:42px;font-size:13px;padding:0 16px}
+.waiver .btn.line{color:#fff}
+.stampw{position:absolute;z-index:3;right:5%;bottom:38%;font:400 15px/1 var(--fd);color:var(--flame);border:3px solid var(--flame);padding:8px 10px;border-radius:8px;text-transform:uppercase;transform:rotate(-12deg) scale(2.4);opacity:0;pointer-events:none}
+.heat.angry .stampw{animation:wslam .45s cubic-bezier(.3,1.7,.5,1) forwards}
+@keyframes wslam{to{opacity:1;transform:rotate(-12deg) scale(1)}}
+.heat.shake .pin{animation:shake .5s cubic-bezier(.36,.07,.19,.97)}
+@keyframes shake{10%,90%{transform:translateX(-2px)}20%,80%{transform:translateX(4px)}30%,50%,70%{transform:translateX(-7px)}40%,60%{transform:translateX(7px)}}
+.flames{position:absolute;left:0;right:0;bottom:0;height:42%;z-index:1;pointer-events:none;opacity:var(--fl,0);transition:opacity .5s;background:radial-gradient(60% 90% at 20% 100%,rgba(255,194,26,.9),transparent 70%),radial-gradient(50% 80% at 55% 100%,rgba(255,122,26,.9),transparent 70%),radial-gradient(55% 95% at 85% 100%,rgba(224,38,31,.95),transparent 70%);filter:blur(6px);animation:lick 1.4s ease-in-out infinite alternate}
+@keyframes lick{0%{transform:scaleY(.92) translateX(-2%)}100%{transform:scaleY(1.08) translateX(2%)}}
+.hint{position:absolute;left:0;right:0;bottom:92px;z-index:2;text-align:center;font:700 12px/1 var(--fb);letter-spacing:.12em;text-transform:uppercase;opacity:.55;transition:opacity .3s}
+.heat.moved .hint{opacity:0}
+.hint i{display:inline-block;animation:bob 1.2s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(5px)}}
+.heatlist{display:none}
+
+/* menu */
+.menu{background:var(--char);color:#fff;position:relative}
+.menu .head p{color:rgba(255,255,255,.7)}
+.chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:0 calc(var(--pad)*-1) 14px;padding:2px var(--pad)}
+.chips::-webkit-scrollbar{display:none}
+.chips button{flex:none;height:36px;padding:0 15px;border-radius:999px;border:2px solid rgba(255,255,255,.25);font:800 12.5px/1 var(--fb);text-transform:uppercase;letter-spacing:.05em;white-space:nowrap;transition:background .2s,color .2s,border-color .2s}
+.chips button[aria-pressed="true"]{background:var(--flame);color:var(--ink);border-color:var(--flame)}
+.mrail{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin:0 calc(var(--pad)*-1);padding:6px var(--pad) 10px;overscroll-behavior-x:contain}
+.mrail::-webkit-scrollbar{display:none}
+.item{flex:0 0 74%;scroll-snap-align:center;background:var(--cream);color:var(--ink);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;position:relative;transition:transform .3s cubic-bezier(.3,1.5,.5,1)}
+.item.hide{display:none}
+.item .ph{aspect-ratio:1/1;background:#fff;position:relative;overflow:hidden}
+.item .ph img{width:100%;height:100%;object-fit:cover;transition:transform .5s cubic-bezier(.3,1.4,.5,1)}
+.item .bd{padding:12px 14px 14px;display:flex;flex-direction:column;gap:6px;flex:1}
+.item h3{font:400 17px/1.1 var(--fd);text-transform:uppercase}
+.item p{font-size:13.5px;color:var(--soft);line-height:1.4}
+.item .hbar{margin-top:auto;display:flex;align-items:center;gap:8px;font:800 10.5px/1 var(--fb);letter-spacing:.08em;text-transform:uppercase;color:var(--soft)}
+.item .hbar i{width:56px;height:8px;border-radius:4px;background:linear-gradient(90deg,#f3e6cf,#ffd65c,#ffb21a,#ff7a1a,#e0261f,#9e130f)}
+.item.in .ph img{animation:tray .7s cubic-bezier(.3,1.5,.5,1) both}
+@keyframes tray{from{transform:translateY(-30%) rotate(-6deg);opacity:0}to{transform:none;opacity:1}}
+@media (hover:hover) and (pointer:fine){.item:hover{transform:translateY(-6px) rotate(-1deg)}.item:hover .ph img{transform:scale(1.06) rotate(2deg)}}
+.mdots{display:flex;gap:6px;justify-content:center;margin-top:10px}
+.mdots i{width:7px;height:7px;border-radius:4px;background:rgba(255,255,255,.3);transition:width .3s,background .3s}
+.mdots i.on{width:18px;background:var(--flame)}
+.mnote{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;font-size:13px;color:rgba(255,255,255,.72)}
+.mnote span{display:inline-flex;align-items:center;gap:6px;border:1.5px solid rgba(255,255,255,.2);border-radius:999px;padding:6px 11px}
+.mnote b{color:var(--flame)}
+
+/* challenge */
+.chal{background:radial-gradient(120% 80% at 50% 100%,#ff7a1a 0,#e0261f 35%,#6e0b08 70%,#1a0606 100%);color:#fff;position:relative;overflow:hidden}
+.chal .head p{color:rgba(255,255,255,.82)}
+.steps{display:grid;gap:10px;counter-reset:s}
+.step{background:rgba(0,0,0,.28);border:1.5px solid rgba(255,255,255,.16);border-radius:16px;padding:14px 14px 14px 58px;position:relative}
+.step::before{counter-increment:s;content:counter(s);position:absolute;left:14px;top:14px;width:32px;height:32px;border-radius:50%;background:var(--flame);color:var(--ink);font:400 16px/32px var(--fd);text-align:center}
+.step h3{font:400 16px/1.15 var(--fd);text-transform:uppercase}
+.step p{font-size:14px;color:rgba(255,255,255,.82);margin-top:3px}
+.chal .cta{margin-top:18px}
+.chal .btn.line{color:#fff}
+.chal .jim{display:none}
+
+/* rewards */
+.flock{background:var(--cream)}
+.tiers{position:relative;display:grid;gap:10px;margin-top:4px}
+.tier{display:grid;grid-template-columns:44px 1fr auto;gap:12px;align-items:center;background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:11px 13px}
+.tier .egg{width:44px;height:44px;border-radius:50%;background:var(--c);display:flex;align-items:center;justify-content:center;font:400 15px/1 var(--fd);color:#fff;transform:scale(.4);opacity:0;transition:transform .5s cubic-bezier(.3,1.7,.5,1),opacity .3s}
+.tier.in .egg{transform:none;opacity:1}
+.tier h3{font:400 15px/1.15 var(--fd);text-transform:uppercase}
+.tier small{display:block;font-size:12.5px;color:var(--soft);font-weight:600;margin-top:2px}
+.tier .pts{font:800 13px/1.1 var(--fb);text-align:right;color:var(--red)}
+.tier .pts span{display:block;font-size:10.5px;color:var(--soft);letter-spacing:.06em;text-transform:uppercase}
+.phone{position:relative;width:min(56%,210px);margin:0 auto 18px;border-radius:28px;padding:7px;background:var(--ink);box-shadow:0 22px 40px -18px rgba(0,0,0,.6);transform:rotate(-5deg)}
+.phone img{border-radius:22px;width:100%}
+.phone .pts{position:absolute;right:-18px;top:18%;background:var(--flame);color:var(--ink);font:400 13px/1.05 var(--fd);padding:9px 10px;border-radius:12px;transform:rotate(9deg);text-align:center;box-shadow:0 8px 16px -8px rgba(0,0,0,.4)}
+.stores{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.stores a{display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 16px;border-radius:12px;background:var(--ink);color:#fff;text-decoration:none;font:700 13.5px/1.1 var(--fb)}
+.stores a svg{width:18px;height:18px}
+.fine{font-size:12.5px;color:var(--soft);margin-top:10px}
+
+/* locations */
+.locs{background:var(--ink);color:#fff;position:relative;overflow:hidden}
+.locs::before{content:"";position:absolute;inset:0;background:url(media/wall.webp) 50% 0/auto 340px repeat-x;opacity:.09;pointer-events:none}
+.locs .wrap{position:relative}
+.locs .head p{color:rgba(255,255,255,.72)}
+.big{display:flex;gap:18px;margin:4px 0 16px}
+.big div{font:400 34px/1 var(--fd);color:var(--flame)}
+.big small{display:block;font:700 11.5px/1.2 var(--fb);letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.7);margin-top:6px}
+.tmap{display:grid;grid-template-columns:repeat(12,1fr);gap:3px;max-width:520px}
+.tmap button{aspect-ratio:1/1;border-radius:5px;background:rgba(255,255,255,.07);font:800 9px/1 var(--fb);color:rgba(255,255,255,.35);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1px;padding:0;transition:transform .2s,background .3s}
+.tmap button.has{background:var(--red);color:#fff;cursor:pointer}
+.tmap button.has i{font-style:normal;font-size:8px;opacity:.85}
+.tmap button.sel{background:var(--flame);color:var(--ink);transform:scale(1.12)}
+.tmap span{aspect-ratio:1/1}
+.tmap.in button.has{animation:light .5s cubic-bezier(.3,1.6,.5,1) both;animation-delay:calc(var(--k)*28ms)}
+@keyframes light{from{transform:scale(.3);background:rgba(255,255,255,.07)}}
+.find{margin-top:16px;display:flex;gap:8px;align-items:center}
+.find input{flex:1;min-width:0;height:46px;border-radius:12px;border:2px solid rgba(255,255,255,.18);background:rgba(255,255,255,.06);padding:0 14px;font:600 15px/1 var(--fb);color:#fff}
+.find input::placeholder{color:rgba(255,255,255,.5)}
+.find button{height:46px;padding:0 14px;border-radius:12px;border:2px solid rgba(255,255,255,.18);font:700 13px/1 var(--fb);white-space:nowrap}
+.list{margin-top:12px;max-height:340px;overflow:auto;border-radius:14px;background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.1);overscroll-behavior:contain}
+.list h3{position:sticky;top:0;background:#231816;font:400 13px/1 var(--fd);letter-spacing:.04em;padding:10px 14px;text-transform:uppercase;color:var(--flame);z-index:1}
+.list a,.list .row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 14px;border-top:1px solid rgba(255,255,255,.07);text-decoration:none;font-size:14.5px;font-weight:600}
+.list a span:last-child,.list .row span:last-child{font:800 11.5px/1 var(--fb);letter-spacing:.06em;text-transform:uppercase;color:var(--flame);white-space:nowrap}
+.list .row span:last-child{color:rgba(255,255,255,.45)}
+.list .none{padding:16px 14px;color:rgba(255,255,255,.7)}
+.intl{margin-top:12px;font-size:13.5px;color:rgba(255,255,255,.75)}
+.intl b{color:#fff}
+.lnote{margin-top:12px;font-size:13px;color:rgba(255,255,255,.65)}
+.deliv{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.deliv a{display:inline-flex;align-items:center;height:38px;padding:0 14px;border-radius:999px;border:1.5px solid rgba(255,255,255,.22);font:700 13px/1 var(--fb);text-decoration:none}
+
+/* franchise + footer */
+.fr{background:var(--red);color:#fff;text-align:center;padding:44px 0;position:relative;overflow:hidden}
+.fr img.joe{width:110px;height:110px;margin:0 auto 12px;border-radius:24px;transform:rotate(-6deg);box-shadow:0 14px 26px -12px rgba(0,0,0,.5)}
+.fr h2{font:400 24px/1.1 var(--fd);text-transform:uppercase;max-width:20ch;margin:0 auto}
+.fr p{margin:10px auto 0;max-width:44ch;font-size:15px;color:rgba(255,255,255,.88)}
+.fr .cta{justify-content:center}
+.fr .btn.line{color:#fff}
+footer{background:var(--char);color:rgba(255,255,255,.66);font-size:13px;padding:26px 0 96px}
+footer .wrap{display:grid;gap:18px}
+footer h4{font:400 13px/1 var(--fd);color:#fff;text-transform:uppercase;margin-bottom:8px;letter-spacing:.03em}
+footer a{color:rgba(255,255,255,.88);text-decoration:none}
+footer ul{list-style:none;display:flex;flex-wrap:wrap;gap:6px 14px}
+.legal{display:flex;flex-direction:column;gap:10px;border-top:1px solid rgba(255,255,255,.1);padding-top:14px}
+.studio{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;background:#2b1f1d;color:#fff;font:600 11px/1 var(--fb);text-decoration:none;align-self:flex-start}
+.studio i{width:9px;height:9px;border-radius:3px;background:conic-gradient(from 210deg,#ff5a1f,#ffb03b,#ff5a1f)}
+
+.dock{position:fixed;left:10px;right:10px;bottom:max(10px,env(safe-area-inset-bottom));z-index:60;display:flex;gap:8px;padding:8px;border-radius:999px;background:rgba(24,16,16,.96);box-shadow:0 10px 30px -10px rgba(0,0,0,.6);transition:transform .35s,opacity .35s}
+.dock .btn{flex:1;height:42px;font-size:13px;padding:0 10px;box-shadow:none}
+.dock .btn.line{color:#fff;border-color:rgba(255,255,255,.3)}
+.dock.hide{transform:translateY(130%);opacity:0;pointer-events:none}
+
+.rv{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s cubic-bezier(.2,1.2,.3,1)}
+.rv.in{opacity:1;transform:none}
+
+@media (min-width:600px){
+  .item{flex-basis:44%}
+  .steps{grid-template-columns:1fr 1fr}
+  .tiers{grid-template-columns:1fr 1fr}
+}
+@media (min-width:900px){
+  :root{--pad:28px}
+  body{font-size:16px}
+  .nav{height:64px}
+  .links{display:flex}
+  .hero{padding:30px 0 0}
+  .hero .grid{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center}
+  .hero h1{font-size:clamp(40px,3.9vw,54px)}
+  .kick{font-size:17px}
+  .lead{font-size:17px}
+  .stage{margin:0 auto;width:min(100%,calc(100vh - 260px),480px)}
+  .wallband{height:120px;margin-top:30px}
+  .sec{padding:72px 0}
+  .head h2{font-size:clamp(30px,2.8vw,38px)}
+  .heat .pin{top:64px;height:calc(100vh - 64px)}
+  .heat .in{padding-bottom:40px}
+  .stampw{bottom:auto;top:34%;right:6%}
+  .meter button{height:42px;font-size:11px}
+  .lvl{grid-template-columns:1fr 1fr;grid-template-rows:1fr;align-items:center;gap:30px}
+  .lvl .txt{min-height:0}
+  .lvl h3{font-size:clamp(54px,6vw,84px)}
+  .lvl p{font-size:19px}
+  .mascot{height:100%;max-height:62vh}
+  .mascot img{max-width:100%}
+  .hint{bottom:30px}
+  .item{flex-basis:calc((100% - 36px)/4)}
+  .mdots{display:none}
+  .chal .wrap{display:grid;grid-template-columns:1.3fr .7fr;gap:40px;align-items:center}
+  .chal .jim{display:block;width:100%;max-width:360px;filter:drop-shadow(0 24px 30px rgba(0,0,0,.45));animation:hover 3s ease-in-out infinite}
+  @keyframes hover{50%{transform:translateY(-12px) rotate(2deg)}}
+  .flock .wrap{display:grid;grid-template-columns:.8fr 1.2fr;gap:48px;align-items:center}
+  .phone{width:250px;margin:0 auto}
+  .locs .wrap{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+  .list{max-height:470px;margin-top:0}
+  .fr{padding:72px 0}
+  .fr h2{font-size:clamp(30px,2.8vw,40px)}
+  .dock{display:none}
+  footer{padding-bottom:26px}
+  footer .wrap{grid-template-columns:1.2fr 1fr 1fr 1fr}
+  .legal{grid-column:1/-1;flex-direction:row;justify-content:space-between;align-items:center}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .rise,.rv,.stage .plate,.stage .food,.stage .stamp,.stage .tag,.jarlist a{opacity:1;transform:none}
+  .stage .stamp{transform:rotate(12deg)}
+  .heat{height:auto}
+  .heat .pin{display:none}
+  .heatlist{display:grid;gap:10px;padding:40px var(--pad)}
+  .tier .egg{transform:none;opacity:1}
+}
+.heatlist div{border-radius:14px;padding:14px 16px;background:var(--c);color:#fff}
+.heatlist div.lt{color:var(--ink)}
+.heatlist h3{font:400 20px/1 var(--fd);text-transform:uppercase}
+</style>
+</head>
+<body>
+<nav class="nav" aria-label="Main">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Hangry Joe's, back to top"><img src="media/logo.webp" alt="" width="36" height="36"><b>Hangry Joe's</b></a>
+    <div class="links"><a href="#heat">Heat levels</a><a href="#menu">Menu</a><a href="#challenge">Angry Hot</a><a href="#flock">Rewards</a><a href="#locations">Locations</a></div>
+    <a class="btn red" href="https://ordernow.hangryjoes.com/" target="_blank" rel="noopener">Order now</a>
+  </div>
+</nav>
+
+<main id="top">
+<header class="hero">
+  <div class="wrap grid">
+    <div>
+      <span class="kick rise">Nashville hot chicken &amp; wings</span>
+      <h1 class="rise" style="animation-delay:.1s">From no heat to a <span class="hot">signed waiver.</span></h1>
+      <p class="lead rise" style="animation-delay:.22s">Sandos, fingers, wings and waffles at six heat levels. Pick yours, order pickup from one of 117 spots, and stack FLOCK points while you're at it.</p>
+      <div class="cta rise" style="animation-delay:.34s">
+        <a class="btn red" id="heroCta" href="https://ordernow.hangryjoes.com/" target="_blank" rel="noopener">Order pickup</a>
+        <a class="btn y" href="#heat">Pick your heat</a>
+      </div>
+    </div>
+    <div class="stage" aria-hidden="true">
+      <div class="spin"><div class="plate"></div></div>
+      <img class="food" src="media/sando.webp" alt="" width="640" height="640" fetchpriority="high">
+      <span class="ring"></span>
+      <img class="stamp" src="media/logo.webp" alt="" width="360" height="360">
+      <span class="tag">The <b>Chicken Sando</b>: brioche, pickles, cider slaw, special sauce</span>
+    </div>
+  </div>
+  <div class="wallband" aria-hidden="true"><div></div></div>
+</header>
+
+<section class="heat" id="heat" aria-labelledby="heatH">
+  <div class="pin">
+    <canvas id="embers" aria-hidden="true"></canvas>
+    <div class="flames" aria-hidden="true"></div>
+    <div class="wrap in">
+      <div class="top"><h2 id="heatH">Pick your heat</h2><span class="kick" id="kick" style="color:inherit">Scroll to turn it up</span></div>
+      <div class="meter" id="meter" role="group" aria-label="Heat levels"></div>
+      <div class="lvl" aria-live="polite">
+        <div class="txt" id="ltxt"></div>
+        <div class="mascot"><img id="mimg" src="media/waffle-wendy.webp" alt="" width="560" height="560"><span class="who" id="who"></span></div>
+      </div>
+    </div>
+    <span class="stampw" aria-hidden="true">Waiver required</span>
+    <div class="hint" aria-hidden="true">Keep scrolling <i>↓</i></div>
+  </div>
+  <div class="heatlist" id="heatlist"></div>
+</section>
+
+<section class="sec menu" id="menu" aria-labelledby="menuH">
+  <div class="wrap">
+    <div class="head rv">
+      <span class="kick" style="color:var(--flame)">Any heat, any order</span>
+      <h2 id="menuH">The menu</h2>
+      <p>Everything comes in all six heat levels. Pick it up in the store, in the app, or have it delivered.</p>
+    </div>
+    <div class="chips" id="chips" role="group" aria-label="Filter the menu"></div>
+    <div class="mrail" id="mrail" tabindex="0" aria-label="Menu items, scroll sideways"></div>
+    <div class="mdots" id="mdots" aria-hidden="true"></div>
+    <div class="mnote">
+      <span><b>Halal</b> at most locations, check with your store</span>
+      <span>Fried in <b>100% soybean oil</b></span>
+      <span>Wings can be made <b>without flour</b></span>
+    </div>
+  </div>
+</section>
+
+<section class="sec chal" id="challenge" aria-labelledby="chH">
+  <div class="wrap">
+    <div>
+      <div class="head rv">
+        <span class="kick" style="color:var(--flame)">Think you can handle it?</span>
+        <h2 id="chH">The Angry Hot Challenge</h2>
+        <p>Make it through Angry Hot and you go on the Wall of Fame, online and in the store if yours has one.</p>
+      </div>
+      <div class="steps">
+        <div class="step rv"><h3>Sign the waiver</h3><p>This heat isn't for the faint of heart, so the waiver comes first.</p></div>
+        <div class="step rv"><h3>Document the heat</h3><p>Film it or snap pics. This is your spicy moment, own it.</p></div>
+        <div class="step rv"><h3>Hit "I Survived"</h3><p>Once the heat settles, send us your proof.</p></div>
+        <div class="step rv"><h3>Claim your spot</h3><p>Your name goes up on the Angry Hot Wall of Fame.</p></div>
+      </div>
+      <div class="cta rv">
+        <a class="btn y" href="https://hangryjoes.com/angry-hot-waiver/" target="_blank" rel="noopener">Sign the waiver</a>
+        <a class="btn line" href="https://hangryjoes.com/spicy-wall-of-fame/" target="_blank" rel="noopener">See the Wall of Fame</a>
+      </div>
+    </div>
+    <img class="jim" src="media/hangry-jim.webp" alt="" width="560" height="560" loading="lazy">
+  </div>
+</section>
+
+<section class="sec flock" id="flock" aria-labelledby="flH">
+  <div class="wrap">
+    <div class="phone rv"><img src="media/app.webp" alt="The Hangry Joe's app home screen" width="360" height="742" loading="lazy"><span class="pts">+100<br>pts</span></div>
+    <div>
+      <div class="head rv">
+        <span class="kick">FLOCK Rewards</span>
+        <h2 id="flH">Join the Flock</h2>
+        <p>Earn points on every order in the app or online. The more you spend in a year, the faster you earn. Refer a friend and you both get 100 bonus points.</p>
+      </div>
+      <div class="tiers" id="tiers"></div>
+      <div class="stores rv">
+        <a href="https://apps.apple.com/us/app/hangry-joes/id6714466557" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.4 12.6c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.2-2.8.8-3.5.8-.7 0-1.9-.8-3.1-.8-1.6 0-3 .9-3.8 2.3-1.6 2.8-.4 7 1.2 9.3.8 1.1 1.7 2.4 2.9 2.3 1.2 0 1.6-.7 3-.7s1.8.7 3 .7c1.3 0 2.1-1.1 2.8-2.3.9-1.3 1.3-2.6 1.3-2.6s-2.4-1-2.4-3.7zM14.1 5.8c.6-.8 1.1-1.9 1-3-1 0-2.1.7-2.8 1.4-.6.7-1.1 1.8-1 2.9 1 .1 2.1-.6 2.8-1.3z"/></svg>App Store</a>
+        <a href="https://play.google.com/store/apps/details?id=com.ce.android.brand.hangryjoes" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 2.8v18.4c0 .4.4.6.7.4l10.6-9.2L4.7 2.4c-.3-.2-.7 0-.7.4zM16.6 13.5l2.7 2.3 2.4-1.4c.6-.4.6-1.3 0-1.7l-2.4-1.4-2.7 2.2zM15.3 12.4L5.6 3.1l9.7 5.6zM5.6 20.9l9.7-9.3v3.7z"/></svg>Google Play</a>
+        <a href="https://order.incentivio.com/c/hangryjoes/signup" target="_blank" rel="noopener">Sign up on the web</a>
+      </div>
+      <p class="fine">Points aren't earned on tax, tips, gift cards or third-party delivery orders.</p>
+    </div>
+  </div>
+</section>
+
+<section class="sec locs" id="locations" aria-labelledby="loH">
+  <div class="wrap">
+    <div>
+      <div class="head rv">
+        <span class="kick" style="color:var(--flame)">Find your nearest</span>
+        <h2 id="loH">117 Hangry Joe's and counting</h2>
+        <p>Tap a state or search your city. Stores with their own site link straight to it, everything else orders through pickup.</p>
+      </div>
+      <div class="big rv"><div><span data-count="117">117</span><small>US locations</small></div><div><span data-count="22">22</span><small>States + DC</small></div><div><span data-count="3">3</span><small>Overseas</small></div></div>
+      <div class="tmap" id="tmap" role="group" aria-label="Map of states with Hangry Joe's"></div>
+      <p class="intl">Overseas: <b>Dubai</b>, United Arab Emirates · <b>Kang Nam</b>, Korea · <b>Tokyo</b>, Japan</p>
+    </div>
+    <div>
+      <div class="find"><label class="sr" for="q">Search by city or state</label><input id="q" type="search" placeholder="Search a city or state" autocomplete="off"><button id="clr">Show all</button></div>
+      <div class="list" id="list" aria-live="polite"></div>
+      <p class="lnote">Hours and phone numbers are on each store's order page.</p>
+      <div class="deliv">
+        <a href="https://ordernow.hangryjoes.com/" target="_blank" rel="noopener">Order pickup</a>
+        <a href="https://www.doordash.com/business/hangry-joes-hot-chicken-11118496/" target="_blank" rel="noopener">DoorDash</a>
+        <a href="https://www.grubhub.com/food/hangry_joes_chicken" target="_blank" rel="noopener">Grubhub</a>
+        <a href="https://www.ubereats.com/" target="_blank" rel="noopener">Uber Eats</a>
+        <a href="https://www.ezcater.com/brand/pvt/hangry-joes-1" target="_blank" rel="noopener">Catering on ezCater</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="fr" id="closer" aria-labelledby="frH">
+  <div class="wrap">
+    <img class="joe rv" src="media/joe.webp" alt="Hangry Joe, the angry rooster" width="400" height="400" loading="lazy">
+    <h2 id="frH" class="rv">Want a Hangry Joe's of your own?</h2>
+    <p class="rv">We back every franchise partner with training, marketing help and ongoing support. Honesty, hustle and heart, and a whole lot of heat.</p>
+    <div class="cta rv">
+      <a class="btn y" href="https://hangryjoes.com/franchise-info/" target="_blank" rel="noopener">Franchise info</a>
+      <a class="btn line" href="https://ordernow.hangryjoes.com/" target="_blank" rel="noopener">Order now</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <h4>Hangry Joe's Hot Chicken &amp; Wings</h4>
+      <p>7601 Lewinsville Rd, Suite 310<br>McLean, VA 22102<br><a href="mailto:info@hangryjoes.com">info@hangryjoes.com</a></p>
+    </div>
+    <div><h4>Eat</h4><ul><li><a href="https://ordernow.hangryjoes.com/" target="_blank" rel="noopener">Order</a></li><li><a href="#menu">Menu</a></li><li><a href="#locations">Locations</a></li><li><a href="https://www.ezcater.com/brand/pvt/hangry-joes-1" target="_blank" rel="noopener">Catering</a></li><li><a href="https://hangryjoes.com/faqs/" target="_blank" rel="noopener">FAQs</a></li></ul></div>
+    <div><h4>Work with us</h4><ul><li><a href="https://hangryjoes.com/careers/" target="_blank" rel="noopener">Careers</a></li><li><a href="https://hangryjoes.com/franchise-info/" target="_blank" rel="noopener">Franchise</a></li><li><a href="https://hangryjoes.com/feedback/" target="_blank" rel="noopener">Feedback</a></li><li><a href="https://hangryjoes.com/news/" target="_blank" rel="noopener">News</a></li></ul></div>
+    <div><h4>Follow</h4><ul><li><a href="https://www.instagram.com/hangryjoeschicken/" target="_blank" rel="noopener">Instagram</a></li><li><a href="https://www.tiktok.com/@hangryjoeschicken" target="_blank" rel="noopener">TikTok</a></li><li><a href="https://www.facebook.com/hangryjoeschicken" target="_blank" rel="noopener">Facebook</a></li><li><a href="https://www.youtube.com/@hangryjoeshotchicken" target="_blank" rel="noopener">YouTube</a></li><li><a href="https://x.com/hangryjoeshot" target="_blank" rel="noopener">X</a></li></ul></div>
+    <div class="legal">
+      <span>© 2018–2026 Hangry Joe's Franchising, LLC. <a href="https://hangryjoes.com/privacypolicy/" target="_blank" rel="noopener">Privacy</a> · <a href="https://hangryjoes.com/accessibility/" target="_blank" rel="noopener">Accessibility</a> · Redesign concept</span>
+      <a class="studio" href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener" aria-label="Site by ElaSystems (opens in a new tab)"><i aria-hidden="true"></i><span>Site by <b>ElaSystems</b></span></a>
+    </div>
+  </div>
+</footer>
+
+<div class="dock" id="dock">
+  <a class="btn line" href="#locations">Find a store</a>
+  <a class="btn red" href="https://ordernow.hangryjoes.com/" target="_blank" rel="noopener">Order now</a>
+</div>
+
+<script>
+const CONFIG = {
+  /* their six levels and their own words, from the FAQ */
+  heat:[
+    {n:"No Seasoning", d:"For the purists who like it au naturel.", bg:"#fff6e8", fg:"#181010", c:"#f3e6cf", m:"waffle-wendy", who:"Waffle Wendy", e:0},
+    {n:"No Heat", d:"A little warmth, just to keep things interesting.", note:"May still be a little spicy", bg:"#ffefc4", fg:"#181010", c:"#ffd65c", m:"waffle-wendy", who:"Waffle Wendy", e:.08},
+    {n:"Mild", d:"When you want some flavor but don't want to breathe fire.", bg:"#ffd166", fg:"#181010", c:"#ffb21a", m:"fried-freddy", who:"Fried Freddy", e:.22},
+    {n:"Medium", d:"The middle path for those who like a bit of a kick.", bg:"#ff9a3c", fg:"#181010", c:"#ff7a1a", m:"cluck-norris", who:"Cluck Norris", e:.42},
+    {n:"Hot", d:"For the brave souls who like to turn up the heat.", bg:"#e8361f", fg:"#ffffff", c:"#e0261f", m:"cluck-norris", who:"Cluck Norris", e:.7},
+    {n:"Angry Hot", d:"The point of no return. It's so fiery, we need a waiver to protect you from the sizzle.", note:"Waiver required", bg:"#1c0605", fg:"#ffffff", c:"#9e130f", m:"hangry-jim", who:"Hangry Jim", e:1}
+  ],
+  menu:[
+    {n:"Chicken Sando", img:"sando", cat:"Sandos", d:"Nashville hot chicken breast, special sauce, pickles and cider slaw on a brioche bun."},
+    {n:"Jr. Sando", img:"jr", cat:"Sandos", d:"The sando, a size down."},
+    {n:"Chicken Wrap", img:"wrap", cat:"Sandos", d:"Hot chicken, rolled up."},
+    {n:"Chicken Fingers", img:"fingers", cat:"Chicken", d:"Chicken fingers at your heat level, with a sauce for dipping."},
+    {n:"Chicken Wings", img:"wings", cat:"Chicken", d:"Wings at your heat. Ask for them without flour."},
+    {n:"Chicken & Waffles", img:"waffles", cat:"Chicken", d:"Hot chicken and a waffle, the way it should be."},
+    {n:"Loaded Fries", img:"fries", cat:"Loaded", d:"Fries with everything on them. Ask about the vegetarian-friendly way."},
+    {n:"Loaded Mac & Cheese", img:"mac", cat:"Loaded", d:"Mac & cheese loaded with hot chicken."},
+    {n:"Chicken Salad", img:"salad", cat:"Loaded", d:"Hot chicken over greens."}
+  ],
+  tiers:[
+    {n:"Hatchling", s:"Where everyone starts", p:10, c:"#ffb21a"},
+    {n:"Barnyard Big Shot", s:"$250 a year", p:11, c:"#ff7a1a"},
+    {n:"Wing Commander", s:"$500 a year", p:12, c:"#e0261f"},
+    {n:"Beak Boss", s:"$1,000 a year", p:13, c:"#181010"}
+  ],
+  locs: [{"c":"Cullman","s":"AL","u":"https://hangryjoescullman.com/"},{"c":"Cabot","s":"AR"},{"c":"Washington","s":"DC"},{"c":"Dover","s":"DE","u":"https://hangryjoesdover.com/"},{"c":"Wilmington","s":"DE"},{"c":"Zephyrhills","s":"FL","u":"https://hangryjoeszephyrhills.com"},{"c":"West Melbourne","s":"FL"},{"c":"Orlando","s":"FL"},{"c":"Kahului","s":"HI"},{"c":"Rockford","s":"IL","u":"https://hangryjoesrockford.com/"},{"c":"Mt Prospect","s":"IL"},{"c":"Naperville","s":"IL"},{"c":"Lagrange","s":"IL"},{"c":"Arlington Heights","s":"IL"},{"c":"Glendale Heights","s":"IL"},{"c":"Chicago","s":"IL"},{"c":"Franklin","s":"IN"},{"c":"Annapolis","s":"MD"},{"c":"Wheaton","s":"MD"},{"c":"Rockville","s":"MD"},{"c":"Rockville Pike","s":"MD"},{"c":"Frederick","s":"MD"},{"c":"Waldorf","s":"MD"},{"c":"Frederick","s":"MD"},{"c":"Montgomery Village","s":"MD"},{"c":"Columbia","s":"MD"},{"c":"Germantown","s":"MD","u":"https://hangryjoesgermantown.com/"},{"c":"Ft. Washington","s":"MD"},{"c":"Ellicott City","s":"MD"},{"c":"Bowie","s":"MD"},{"c":"Sykesville","s":"MD"},{"c":"Westminster","s":"MD"},{"c":"Elkton","s":"MD"},{"c":"Windsor Mill","s":"MD"},{"c":"Catonsville","s":"MD"},{"c":"Laurel","s":"MD"},{"c":"Livonia","s":"MI","u":"https://hangryjoeslivonia.com/"},{"c":"Flint","s":"MI","u":"https://flint.hangryjoes.com/"},{"c":"Inver Grove","s":"MN","u":"https://hangryjoesinvergrove.com/"},{"c":"Edina","s":"MN","u":"https://edina.hangryjoes.com/"},{"c":"Woodbury","s":"MN","u":"https://woodbury.hangryjoes.com/"},{"c":"Hickory","s":"NC","u":"https://hangryjoeshickory.com"},{"c":"Charlotte","s":"NC"},{"c":"Greensboro","s":"NC","u":"https://greensboro.hangryjoes.com/"},{"c":"Greensboro","s":"NC"},{"c":"High Point","s":"NC","u":"https://hangryjoeshighpoint.com/"},{"c":"North Fargo (NDSU)","s":"ND","u":"https://ndsu.hangryjoes.com/"},{"c":"North Fargo 15th Ave","s":"ND","u":"https://fargo.hangryjoes.com/"},{"c":"Northvale","s":"NJ"},{"c":"Florham Park","s":"NJ"},{"c":"Brooklyn","s":"NY"},{"c":"Cincinnati","s":"OH","u":"https://cincinnati.hangryjoes.com/"},{"c":"Weatherford","s":"OK"},{"c":"Philadelphia 40th St.","s":"PA"},{"c":"Philadelphia · Market Street","s":"PA"},{"c":"Bala Cynwyd","s":"PA"},{"c":"Philadelphia 20th St.","s":"PA"},{"c":"Frankford Ave · Philadelphia","s":"PA"},{"c":"Cecil Ave · Philadelphia","s":"PA"},{"c":"Philadelphia","s":"PA"},{"c":"Rock Hill","s":"SC","u":"https://rockhill.hangryjoes.com/"},{"c":"Antioch","s":"TN","u":"https://antioch.hangryjoes.com/"},{"c":"Gallatin","s":"TN"},{"c":"Lebanon","s":"TN","u":"https://hangryjoeslebanon.com/"},{"c":"Murfreesboro","s":"TN","u":"https://hangryjoesmurfreesboro.com/"},{"c":"Hermitage","s":"TN","u":"https://hermitage.hangryjoes.com/"},{"c":"Kyle","s":"TX","u":"https://kyle.hangryjoes.com/"},{"c":"Dallas","s":"TX"},{"c":"Houston · Bay Area Blvd","s":"TX"},{"c":"Houston · Beechnut","s":"TX"},{"c":"Houston-Hwy 6","s":"TX"},{"c":"La Marque","s":"TX"},{"c":"North Richland Hills","s":"TX"},{"c":"San Marcos","s":"TX","u":"https://hangryjoessanmarcos.com/"},{"c":"Tyler","s":"TX"},{"c":"University of Houston","s":"TX","u":"https://hangryjoesuh.com/"},{"c":"Dillingham Square · Lake Ridge","s":"VA"},{"c":"Tysons","s":"VA","u":"https://hangryjoestysonscorner.com/"},{"c":"Lynchburg","s":"VA","u":"https://hangryjoeslynchburg.com"},{"c":"Norfolk-Janaf","s":"VA","u":"https://hangryjoesjanaf.com/"},{"c":"Alexandria · Landsdowne","s":"VA","u":"https://hangryjoeslandsdownecentre.com/"},{"c":"Annandale","s":"VA"},{"c":"Alexandria · Duke St","s":"VA"},{"c":"Norfolk-Little Creek Rd","s":"VA"},{"c":"Alexandria-Van Dorn St.","s":"VA"},{"c":"Falls Church","s":"VA"},{"c":"Herndon","s":"VA"},{"c":"Manassas-Liberia Ave","s":"VA"},{"c":"Stafford","s":"VA"},{"c":"Leesburg","s":"VA"},{"c":"Richmond · Parham Rd","s":"VA"},{"c":"Fairfax · Green Briar Chantilly","s":"VA"},{"c":"Fredericksburg · Southpoint Parkway","s":"VA"},{"c":"Henrico","s":"VA"},{"c":"Ashland","s":"VA"},{"c":"Richmond/VCU","s":"VA"},{"c":"Sterling","s":"VA"},{"c":"Ashburn","s":"VA"},{"c":"Virginia Beach","s":"VA"},{"c":"Woodbridge","s":"VA"},{"c":"Arlington","s":"VA"},{"c":"Oakton","s":"VA"},{"c":"Harrisonburg","s":"VA"},{"c":"Fairfax Blvd.","s":"VA"},{"c":"Centerville","s":"VA"},{"c":"Gainesville","s":"VA"},{"c":"Burke","s":"VA","u":"https://burke.hangryjoes.com/"},{"c":"Chantilly","s":"VA","u":"https://chantilly.hangryjoes.com/"},{"c":"Hampton","s":"VA"},{"c":"Norfolk · Monarch","s":"VA"},{"c":"Williamsburg","s":"VA"},{"c":"Fredericksburg · Plane Rd","s":"VA"},{"c":"Manassas","s":"VA"},{"c":"Alexandria","s":"VA"},{"c":"Lorton","s":"VA"},{"c":"Seattle","s":"WA"},{"c":"Kirkland","s":"WA"}],
+  tiles:{AK:[0,0],ME:[0,11],WI:[1,6],VT:[1,10],NH:[1,11],WA:[2,1],ID:[2,2],MT:[2,3],ND:[2,4],MN:[2,5],IL:[2,6],MI:[2,7],NY:[2,9],MA:[2,10],OR:[3,1],NV:[3,2],WY:[3,3],SD:[3,4],IA:[3,5],IN:[3,6],OH:[3,7],PA:[3,8],NJ:[3,9],CT:[3,10],RI:[3,11],CA:[4,1],UT:[4,2],CO:[4,3],NE:[4,4],MO:[4,5],KY:[4,6],WV:[4,7],VA:[4,8],MD:[4,9],DE:[4,10],AZ:[5,2],NM:[5,3],KS:[5,4],AR:[5,5],TN:[5,6],NC:[5,7],SC:[5,8],DC:[5,9],OK:[6,4],LA:[6,5],MS:[6,6],AL:[6,7],GA:[6,8],HI:[7,0],TX:[7,4],FL:[7,9]},
+  stateNames:{AL:"Alabama",AR:"Arkansas",DC:"Washington, DC",DE:"Delaware",FL:"Florida",HI:"Hawaii",IL:"Illinois",IN:"Indiana",MD:"Maryland",MI:"Michigan",MN:"Minnesota",NC:"North Carolina",ND:"North Dakota",NJ:"New Jersey",NY:"New York",OH:"Ohio",OK:"Oklahoma",PA:"Pennsylvania",SC:"South Carolina",TN:"Tennessee",TX:"Texas",VA:"Virginia",WA:"Washington"}
+};
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const H = CONFIG.heat;
+
+/* ---------- heat scale ---------- */
+const heat = document.getElementById("heat"), meter = document.getElementById("meter"), ltxt = document.getElementById("ltxt"),
+      mimg = document.getElementById("mimg"), who = document.getElementById("who"), kick = document.getElementById("kick");
+const light = c => { const n = parseInt(c.slice(1),16), r = n>>16, g = n>>8&255, b = n&255; return (r*299+g*587+b*114)/1000 > 150; };
+H.forEach((h,i) => {
+  const b = document.createElement("button"); b.style.setProperty("--c", h.c); if (light(h.c)) b.classList.add("lt");
+  b.innerHTML = `<span>${esc(h.n)}</span>`; b.setAttribute("aria-label", `Jump to ${h.n}`);
+  b.addEventListener("click", () => { const top = heat.offsetTop + (heat.offsetHeight - innerHeight) * ((i + .5) / H.length); scrollTo({ top, behavior: RM ? "auto" : "smooth" }); });
+  meter.appendChild(b);
+});
+document.getElementById("heatlist").innerHTML = H.map(h => `<div class="${light(h.c)?'lt':''}" style="--c:${h.c}"><h3>${esc(h.n)}</h3><p>${esc(h.d)}${h.note ? ` (${esc(h.note)})` : ""}</p></div>`).join("");
+const mix = (a,b,t) => { const A = parseInt(a.slice(1),16), B = parseInt(b.slice(1),16); const ch = s => Math.round(((A>>s)&255) + (((B>>s)&255) - ((A>>s)&255))*t); return `rgb(${ch(16)},${ch(8)},${ch(0)})`; };
+let cur = -1, heatT = 0, shook = false;
+H.forEach(h => { const im = new Image(); im.src = `media/${h.m}.webp`; });
+function setLevel(i){
+  if (i === cur) return; const up = i > cur; cur = i; const h = H[i];
+  [...meter.children].forEach((b,k) => { b.classList.toggle("lit", k <= i); b.setAttribute("aria-current", k === i ? "true" : "false"); });
+  ltxt.innerHTML = `<div class="swap"><span class="num">Level ${i+1} of 6</span><h3>${esc(h.n)}</h3><p>${esc(h.d)}</p>${h.note ? `<span class="note">${esc(h.note)}</span>` : ""}${i === 5 ? `<div class="waiver"><a class="btn y" href="https://hangryjoes.com/angry-hot-waiver/" target="_blank" rel="noopener">Sign the waiver</a><a class="btn line" href="#challenge">Take the challenge</a></div>` : ""}</div>`;
+  if (!mimg.src.endsWith(h.m + ".webp")){ mimg.src = `media/${h.m}.webp`; mimg.classList.remove("pop"); void mimg.offsetWidth; mimg.classList.add("pop"); }
+  who.textContent = h.who; kick.textContent = i === 5 ? "You've been warned" : i >= 3 ? "Getting warmer..." : "Scroll to turn it up";
+  heat.classList.toggle("dark", light(h.fg));
+  heat.style.setProperty("--hfg", h.fg);
+  const angry = i === 5; heat.classList.toggle("angry", angry);
+  if (angry && up && !shook && !RM){ shook = true; heat.classList.remove("shake"); void heat.offsetWidth; heat.classList.add("shake"); setTimeout(() => { shook = false; }, 1600); }
+}
+function onScroll(){
+  const r = heat.getBoundingClientRect(), span = heat.offsetHeight - innerHeight;
+  const p = Math.min(1, Math.max(0, -r.top / span)); const x = p * (H.length - .001);
+  const i = Math.floor(x), t = x - i, j = Math.min(H.length - 1, i + 1);
+  /* colour eases between levels, holding most of each step on its own colour */
+  const tt = Math.max(0, (t - .62) / .38);
+  heat.style.setProperty("--hbg", mix(H[i].bg, H[j].bg, tt));
+  heatT = H[i].e + (H[j].e - H[i].e) * tt;
+  heat.style.setProperty("--fl", Math.max(0, (heatT - .55) / .45).toFixed(3));
+  heat.classList.toggle("moved", p > .03);
+  setLevel(i);
+}
+addEventListener("scroll", onScroll, { passive:true }); addEventListener("resize", onScroll); onScroll();
+
+/* embers: count and speed follow the heat, paused offscreen */
+(function(){
+  const cv = document.getElementById("embers"), ctx = cv.getContext("2d"); if (!ctx || RM) return;
+  let W = 0, Hh = 0, run = false, raf = 0; const P = [];
+  const dpr = Math.min(2, devicePixelRatio || 1);
+  const size = () => { W = cv.clientWidth; Hh = cv.clientHeight; cv.width = W*dpr; cv.height = Hh*dpr; ctx.setTransform(dpr,0,0,dpr,0,0); };
+  const spawn = () => ({ x: Math.random()*W, y: Hh + 10, vx: (Math.random()-.5)*.6, vy: -(0.6 + Math.random()*1.6), r: 1 + Math.random()*2.6, life: 0, max: 120 + Math.random()*140 });
+  function tick(){
+    ctx.clearRect(0,0,W,Hh);
+    const want = Math.round(heatT * 110);
+    while (P.length < want) P.push(spawn());
+    for (let k = P.length - 1; k >= 0; k--){
+      const e = P[k]; e.life++; e.x += e.vx + Math.sin((e.life + k)*.05)*.4; e.y += e.vy*(0.6 + heatT);
+      const a = Math.max(0, 1 - e.life/e.max);
+      if (a <= 0 || e.y < -10){ if (P.length > want) P.splice(k,1); else P[k] = spawn(); continue; }
+      ctx.beginPath(); ctx.arc(e.x, e.y, e.r, 0, 6.283);
+      ctx.fillStyle = `rgba(255,${Math.round(120 + 100*a)},${Math.round(30*a)},${(a*.9).toFixed(2)})`; ctx.fill();
+    }
+    raf = run ? requestAnimationFrame(tick) : 0;
+  }
+  size(); addEventListener("resize", size);
+  new IntersectionObserver(es => es.forEach(e => { run = e.isIntersecting && !document.hidden; if (run && !raf) raf = requestAnimationFrame(tick); })).observe(heat);
+  document.addEventListener("visibilitychange", () => { if (document.hidden) run = false; else if (heat.getBoundingClientRect().bottom > 0 && heat.getBoundingClientRect().top < innerHeight){ run = true; if (!raf) raf = requestAnimationFrame(tick); } });
+})();
+
+/* ---------- menu ---------- */
+const mrail = document.getElementById("mrail"), chips = document.getElementById("chips"), mdots = document.getElementById("mdots");
+mrail.innerHTML = CONFIG.menu.map((m,i) => `<article class="item rv" data-cat="${esc(m.cat)}"><div class="ph"><img src="media/${esc(m.img)}.webp" alt="${esc(m.n)}" width="640" height="640" loading="lazy"></div><div class="bd"><h3>${esc(m.n)}</h3><p>${esc(m.d)}</p><div class="hbar"><i></i><span>All 6 heat levels</span></div></div></article>`).join("");
+const cats = ["All", ...new Set(CONFIG.menu.map(m => m.cat))];
+chips.innerHTML = cats.map((c,i) => `<button aria-pressed="${i===0}" data-c="${esc(c)}">${esc(c)}</button>`).join("");
+const items = [...mrail.children];
+function dotsFor(){ const vis = items.filter(x => !x.classList.contains("hide")); mdots.innerHTML = vis.map((_,k) => `<i class="${k?'':'on'}"></i>`).join(""); return vis; }
+let visItems = dotsFor();
+chips.addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return;
+  [...chips.children].forEach(x => x.setAttribute("aria-pressed", x === b));
+  items.forEach(x => { const show = b.dataset.c === "All" || x.dataset.cat === b.dataset.c; x.classList.toggle("hide", !show); if (show && !RM){ x.classList.remove("in"); void x.offsetWidth; x.classList.add("in"); } });
+  mrail.scrollTo({ left:0 }); visItems = dotsFor(); });
+mrail.addEventListener("scroll", () => { const mid = mrail.scrollLeft + mrail.clientWidth/2; let k = 0, bd = 1e9; visItems.forEach((c,i) => { const d = Math.abs(c.offsetLeft + c.clientWidth/2 - mid); if (d < bd){ bd = d; k = i; } }); [...mdots.children].forEach((d,i) => d.classList.toggle("on", i === k)); }, { passive:true });
+
+/* ---------- rewards ---------- */
+document.getElementById("tiers").innerHTML = CONFIG.tiers.map((t,i) => `<div class="tier rv" style="transition-delay:${i*90}ms"><span class="egg" style="--c:${t.c};transition-delay:${200+i*120}ms">${i+1}</span><div><h3>${esc(t.n)}</h3><small>${esc(t.s)}</small></div><div class="pts">${t.p} pts<span>per $1</span></div></div>`).join("");
+
+/* ---------- locations ---------- */
+const L = CONFIG.locs, byState = {}; L.forEach(l => (byState[l.s] ||= []).push(l));
+const tmap = document.getElementById("tmap"), list = document.getElementById("list"), q = document.getElementById("q");
+const grid = []; for (const [s,[r,c]] of Object.entries(CONFIG.tiles)) grid[r*12+c] = s;
+let k = 0;
+for (let n = 0; n < 96; n++){
+  const s = grid[n];
+  if (!s){ tmap.appendChild(document.createElement("span")); continue; }
+  const b = document.createElement("button"); const cnt = (byState[s] || []).length;
+  b.innerHTML = cnt ? `${s}<i>${cnt}</i>` : s;
+  if (cnt){ b.className = "has"; b.style.setProperty("--k", k++); b.setAttribute("aria-label", `${CONFIG.stateNames[s] || s}: ${cnt} location${cnt>1?'s':''}`); b.addEventListener("click", () => pickState(s)); }
+  else { b.disabled = true; b.setAttribute("aria-hidden","true"); b.tabIndex = -1; }
+  b.dataset.s = s; tmap.appendChild(b);
+}
+let selState = null;
+function pickState(s){ selState = selState === s ? null : s; q.value = ""; [...tmap.querySelectorAll("button")].forEach(b => b.classList.toggle("sel", b.dataset.s === selState)); draw(); if (selState && innerWidth < 900) list.scrollIntoView({ behavior: RM ? "auto" : "smooth", block:"nearest" }); }
+function draw(){
+  const term = q.value.trim().toLowerCase();
+  const order = Object.keys(byState).sort((a,b) => (CONFIG.stateNames[a]||a).localeCompare(CONFIG.stateNames[b]||b));
+  let html = "", n = 0;
+  order.forEach(s => {
+    if (selState && s !== selState) return;
+    const name = CONFIG.stateNames[s] || s;
+    const rows = byState[s].filter(l => !term || l.c.toLowerCase().includes(term) || name.toLowerCase().includes(term) || s.toLowerCase() === term);
+    if (!rows.length) return; n += rows.length;
+    html += `<h3>${esc(name)} · ${rows.length}</h3>` + rows.map(l => l.u
+      ? `<a href="${esc(l.u)}" target="_blank" rel="noopener"><span>${esc(l.c)}, ${esc(s)}</span><span>Store site ↗</span></a>`
+      : `<a href="https://ordernow.hangryjoes.com/" target="_blank" rel="noopener"><span>${esc(l.c)}, ${esc(s)}</span><span>Order pickup ↗</span></a>`).join("");
+  });
+  list.innerHTML = n ? html : `<p class="none">No Hangry Joe's matches "${esc(q.value)}" yet. Try a nearby city, or check back. New spots open all the time.</p>`;
+}
+q.addEventListener("input", () => { selState = null; tmap.querySelectorAll(".sel").forEach(b => b.classList.remove("sel")); draw(); });
+document.getElementById("clr").addEventListener("click", () => { q.value = ""; selState = null; tmap.querySelectorAll(".sel").forEach(b => b.classList.remove("sel")); draw(); });
+draw();
+
+/* ---------- reveals, counters, scrollspy, dock ---------- */
+const rv = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting){ e.target.classList.add("in"); rv.unobserve(e.target); } }), { threshold:.15, rootMargin:"0px 0px -6% 0px" });
+document.querySelectorAll(".rv, .tmap").forEach(el => RM ? el.classList.add("in") : rv.observe(el));
+const cio = new IntersectionObserver(es => es.forEach(e => { if (!e.isIntersecting) return; cio.unobserve(e.target); const el = e.target, to = +el.dataset.count; if (RM) return; const t0 = performance.now(); const f = t => { const p = Math.min(1,(t - t0)/1100); el.textContent = Math.round(to * (1 - Math.pow(1-p,3))); if (p < 1) requestAnimationFrame(f); }; requestAnimationFrame(f); }), { threshold:.6 });
+document.querySelectorAll("[data-count]").forEach(el => cio.observe(el));
+const links = [...document.querySelectorAll(".links a")];
+const spy = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) links.forEach(a => a.classList.toggle("on", a.getAttribute("href") === "#"+e.target.id)); }), { rootMargin:"-45% 0px -50% 0px" });
+["heat","menu","challenge","flock","locations"].forEach(id => spy.observe(document.getElementById(id)));
+const dock = document.getElementById("dock");
+new IntersectionObserver(es => es.forEach(e => dock.classList.toggle("hide", e.isIntersecting))).observe(document.getElementById("closer"));
+</script>
+</body>
+</html>
