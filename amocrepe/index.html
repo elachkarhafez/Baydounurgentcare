@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noai, noimageai">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Amo Crepe Catering · Live crepe station for events</title>
+<meta name="description" content="Live mobile dessert crepe catering for weddings, showers, birthdays, graduations and corporate events. Fresh crepes made right in front of your guests. Book your date: 313-633-3599.">
+<meta property="og:title" content="Amo Crepe Catering">
+<meta property="og:description" content="Watch it sizzle. Taste it fresh. Live crepe station for your event.">
+<meta property="og:image" content="media/og.jpg">
+<meta name="theme-color" content="#c8102e">
+<link rel="icon" href="media/icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Poppins:wght@400;500;600;700&family=Kaushan+Script&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="media/team.webp">
+<style>
+/* Amo Crepe. Concept: the page is run by the fez and mustache from their logo. The fez drops onto the page, its
+   tassel keeps swinging with how fast you scroll, mustaches twirl in as dividers, and the booking form writes the
+   text message to their number for you. Their crimson, cream and gold; their own lines ("We make it fresh!",
+   "Watch it sizzle. Taste it fresh.", "Sweet moments, made fresh"). */
+:root{
+  --cream:#fbf5ec; --paper:#fffaf3; --ink:#1d1a1a; --soft:#6d625c; --line:rgba(29,26,26,.12);
+  --red:#c8102e; --deep:#8f0b20; --gold:#f2b33d; --choc:#4b2a1d;
+  --fd:"DM Serif Display",Georgia,serif; --fb:"Poppins",system-ui,sans-serif; --fs:"Kaushan Script",cursive;
+  --pad:16px; --r:18px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{background:var(--cream);color:var(--ink);font:400 14.5px/1.6 var(--fb);overflow-x:hidden}
+img{display:block;max-width:100%;height:auto}
+a{color:inherit}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+input{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--red);outline-offset:3px;border-radius:6px}
+.wrap{width:100%;max-width:1140px;margin:0 auto;padding:0 var(--pad)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:46px;padding:0 20px;border-radius:999px;font:600 14px/1 var(--fb);text-decoration:none;white-space:nowrap;transition:transform .2s cubic-bezier(.3,1.6,.5,1),background .2s,border-color .2s}
+.btn.red{background:var(--red);color:#fff;box-shadow:0 8px 20px -10px rgba(200,16,46,.8)}
+.btn.line{border:1.5px solid rgba(29,26,26,.25)}
+.btn.gold{background:var(--gold);color:var(--ink)}
+.btn:active{transform:scale(.96)}
+.btn svg{width:17px;height:17px}
+@media (hover:hover) and (pointer:fine){.btn.red:hover{background:var(--deep);transform:translateY(-2px)}.btn.line:hover{border-color:var(--ink)}}
+
+/* the logo, redrawn: fez with a swinging tassel, mustache, script */
+.fez .body{fill:var(--red)}
+.fez .top{fill:var(--deep)}
+.fez .band{fill:var(--deep);opacity:.55}
+.fez .cord{fill:none;stroke:var(--ink);stroke-width:1.6;stroke-linecap:round}
+.fez .tuft{stroke:var(--gold);stroke-width:1.6;stroke-linecap:round}
+.fez .knot{fill:var(--gold)}
+.tassel{transform-box:view-box;transform-origin:60px 15px}
+.stache{fill:var(--ink)}
+.logo text{font-family:var(--fs)}
+.logo .a{fill:var(--red)}
+.logo .c{fill:var(--ink)}
+.logo .u{fill:none;stroke:var(--red);stroke-width:2.2;stroke-linecap:round}
+
+/* nav */
+.nav{position:sticky;top:0;z-index:50;height:56px;background:rgba(251,245,236,.95);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;gap:12px;height:100%}
+.brand{display:flex;align-items:center;gap:8px;text-decoration:none;margin-right:auto}
+.brand svg{width:38px;height:38px;overflow:visible}
+.brand b{font:400 21px/1 var(--fs);color:var(--red)}
+.brand b span{color:var(--ink)}
+.links{display:none;gap:22px}
+.links a{font:500 14px/1 var(--fb);text-decoration:none;color:var(--soft);padding:6px 0;border-bottom:2px solid transparent;transition:color .2s,border-color .2s}
+.links a.on{color:var(--ink);border-color:var(--red)}
+.nav .btn{height:36px;padding:0 14px;font-size:13px}
+
+/* hero */
+.hero{padding:14px 0 30px;overflow:clip}
+.hero .logo{display:block;width:min(150px,38vw);height:auto;margin:0 auto;overflow:visible}
+.hero .logo .fezg{animation:fezdrop .9s cubic-bezier(.3,1.5,.5,1) .1s both;transform-box:fill-box;transform-origin:50% 100%}
+@keyframes fezdrop{0%{transform:translateY(-120px) rotate(-14deg);opacity:0}60%{opacity:1}100%{transform:none}}
+.hero .logo .stache{animation:stache .6s cubic-bezier(.3,1.8,.5,1) .7s both;transform-box:fill-box;transform-origin:50% 50%}
+@keyframes stache{from{transform:scale(.2) rotate(-20deg);opacity:0}to{transform:none;opacity:1}}
+.hero .logo text{opacity:0;animation:fade .6s ease forwards}
+.hero .logo .a{animation-delay:1s}.hero .logo .c{animation-delay:1.2s}
+.hero .logo .u{stroke-dasharray:1 1;stroke-dashoffset:1;animation:dr .6s ease 1.4s forwards}
+@keyframes fade{to{opacity:1}}
+@keyframes dr{to{stroke-dashoffset:0}}
+.hero .txt{text-align:center;margin-top:4px}
+.kick{display:inline-block;font:400 19px/1 var(--fs);color:var(--red);transform:rotate(-3deg)}
+.hero h1{font:400 28px/1.15 var(--fd);margin:10px auto 0;max-width:18ch}
+.hero h1 em{font-style:italic;color:var(--red)}
+.lead{color:var(--soft);margin:10px auto 0;max-width:42ch}
+.cta{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:16px}
+.hpic{position:relative;margin:22px auto 0;width:min(100%,62vh);aspect-ratio:4/3;border-radius:var(--r);overflow:hidden;box-shadow:0 22px 40px -26px rgba(75,42,29,.7)}
+.hpic img{width:100%;height:100%;object-fit:cover}
+.hpic .tag{position:absolute;left:12px;bottom:12px;background:var(--paper);border-radius:999px;padding:7px 12px;font:600 12px/1 var(--fb);display:flex;align-items:center;gap:6px}
+.hpic .tag i{width:8px;height:8px;border-radius:50%;background:var(--red)}
+.rise{opacity:0;transform:translateY(12px);animation:rise .7s cubic-bezier(.2,.7,.2,1) forwards}
+@keyframes rise{to{opacity:1;transform:none}}
+
+/* mustache divider */
+.div{display:flex;justify-content:center;padding:6px 0}
+.div svg{width:76px;height:auto;transform:scale(.2) rotate(-25deg);opacity:0;transition:transform .7s cubic-bezier(.3,1.8,.5,1),opacity .3s}
+.div.in svg{transform:none;opacity:1}
+
+/* sections */
+.sec{padding:34px 0}
+.head{margin-bottom:16px}
+.head .kick{font-size:17px}
+.head h2{font:400 24px/1.15 var(--fd);margin-top:6px}
+.head h2 em{font-style:italic;color:var(--red)}
+.head p{color:var(--soft);margin-top:8px;max-width:52ch}
+
+/* sizzle */
+.sizzle{background:var(--red);color:#fff;position:relative;overflow:hidden}
+.sizzle .head .kick{color:var(--gold)}
+.sizzle .head h2 em{color:var(--gold)}
+.sizzle .head p{color:rgba(255,255,255,.85)}
+.live{position:relative;border-radius:200px 200px 18px 18px;overflow:hidden;aspect-ratio:4/3.4;border:3px solid var(--gold);background:#5a0715}
+.live img{width:100%;height:100%;object-fit:cover;transform:scale(1.06)}
+.live .badge{position:absolute;right:14px;top:22%;background:#fff;color:var(--ink);font:700 12px/1 var(--fb);letter-spacing:.06em;padding:7px 11px;border-radius:999px;display:flex;align-items:center;gap:6px}
+.live .badge i{width:9px;height:9px;border-radius:50%;background:var(--red);animation:pulse 1.2s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.25;transform:scale(.7)}}
+.steam{position:absolute;left:12%;bottom:22%;width:30%;height:45%;pointer-events:none}
+.steam i{position:absolute;bottom:0;width:14px;height:60px;border-radius:50%;background:radial-gradient(closest-side,rgba(255,255,255,.55),transparent);filter:blur(4px);opacity:0;animation:steam 3s ease-in infinite}
+.steam i:nth-child(2){left:35%;animation-delay:1s}.steam i:nth-child(3){left:70%;animation-delay:2s}
+@keyframes steam{0%{opacity:0;transform:translateY(10px) scaleX(.6)}30%{opacity:.8}100%{opacity:0;transform:translateY(-90px) scaleX(1.6)}}
+.sizzle.off .steam i,.sizzle.off .badge i{animation-play-state:paused}
+.three{list-style:none;display:grid;gap:8px;margin-top:16px}
+.three li{display:flex;align-items:center;gap:12px;background:rgba(0,0,0,.18);border:1px solid rgba(255,255,255,.18);border-radius:14px;padding:11px 14px;font:500 15px/1.3 var(--fb)}
+.three li svg{width:36px;flex:none}
+.three li svg{fill:var(--gold)}
+
+/* events */
+.evts{display:flex;flex-wrap:wrap;gap:8px}
+.evt{display:inline-flex;align-items:center;gap:8px;height:42px;padding:0 15px;border-radius:999px;background:var(--paper);border:1.5px solid var(--line);font:500 14px/1 var(--fb);opacity:0;transform:scale(.7);transition:opacity .4s,transform .5s cubic-bezier(.3,1.7,.5,1)}
+.evts.in .evt{opacity:1;transform:none}
+.evt svg{width:18px;height:18px;color:var(--red)}
+.evt svg path{fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+
+/* station */
+.station{display:grid;gap:14px}
+.station .big{border-radius:var(--r);overflow:hidden;aspect-ratio:4/3}
+.station .big img{width:100%;height:100%;object-fit:cover}
+.station .row{display:flex;gap:14px;align-items:center}
+.station .circ{flex:none;width:118px;height:118px;border-radius:50%;overflow:hidden;border:3px solid var(--gold)}
+.station .circ img{width:100%;height:100%;object-fit:cover;transform:scale(1.12)}
+.station .row p{font-size:14px;color:var(--soft)}
+.station .row b{display:block;font:400 18px/1.2 var(--fd);color:var(--ink);margin-bottom:4px}
+
+/* booking */
+.book{background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.form{display:grid;gap:12px}
+.lbl{font:600 11.5px/1 var(--fb);letter-spacing:.1em;text-transform:uppercase;color:var(--soft);margin-bottom:7px;display:block}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{height:36px;padding:0 13px;border-radius:999px;border:1.5px solid var(--line);font:500 13px/1 var(--fb);white-space:nowrap;background:#fff;transition:background .2s,color .2s,border-color .2s}
+.chip[aria-pressed="true"]{background:var(--red);border-color:var(--red);color:#fff}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.form input{width:100%;height:46px;border:1.5px solid rgba(29,26,26,.16);border-radius:12px;padding:0 12px;font:400 15px/1 var(--fb);background:#fff}
+.card{background:var(--cream);border-radius:var(--r);padding:16px;border:1px dashed rgba(200,16,46,.4);position:relative}
+.card h3{font:400 18px/1.2 var(--fd)}
+.card pre{white-space:pre-wrap;font:400 13.5px/1.55 var(--fb);color:var(--soft);margin-top:8px}
+.card .acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.card .acts .btn{height:42px;font-size:13.5px;padding:0 16px}
+.card .st{position:absolute;right:12px;top:-14px;width:46px;height:auto;transform:rotate(12deg)}
+
+/* closer */
+.close{background:var(--ink);color:#fff;text-align:center;padding:44px 0;position:relative;overflow:hidden}
+.close .logo{width:150px;height:auto;margin:0 auto;display:block;overflow:visible}
+.close .logo .c{fill:#fff}
+.close .stache{fill:#fff}
+.close h2{font:400 26px/1.15 var(--fd);margin-top:12px}
+.close h2 em{font-style:italic;color:var(--gold)}
+.close p{color:rgba(255,255,255,.75);margin:8px auto 0;max-width:40ch}
+.close .btn.line{border-color:rgba(255,255,255,.35);color:#fff}
+footer{background:#141212;color:rgba(255,255,255,.62);font-size:12.5px;padding:18px 0 96px}
+footer .wrap{display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+footer a{color:rgba(255,255,255,.9)}
+.studio{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;background:#2a2626;color:#fff;font:600 11px/1 var(--fb);text-decoration:none}
+.studio i{width:9px;height:9px;border-radius:3px;background:conic-gradient(from 210deg,#ff5a1f,#ffb03b,#ff5a1f)}
+
+.dock{position:fixed;left:10px;right:10px;bottom:max(10px,env(safe-area-inset-bottom));z-index:60;display:flex;gap:8px;padding:8px;border-radius:999px;background:rgba(29,26,26,.95);box-shadow:0 10px 30px -10px rgba(0,0,0,.5);transition:transform .35s,opacity .35s}
+.dock .btn{flex:1;height:42px;font-size:13.5px;padding:0 10px}
+.dock .btn.line{border-color:rgba(255,255,255,.3);color:#fff}
+.dock.hide{transform:translateY(130%);opacity:0;pointer-events:none}
+.nl .dock{bottom:calc(max(10px,env(safe-area-inset-bottom)) + 60px)}
+.nl footer{padding-bottom:150px}
+.toast{position:fixed;left:50%;bottom:150px;transform:translate(-50%,20px);background:var(--ink);color:#fff;padding:10px 16px;border-radius:999px;font:500 13px/1.3 var(--fb);opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;z-index:80;max-width:calc(100% - 32px);text-align:center}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+.rv{opacity:0;transform:translateY(14px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
+.rv.in{opacity:1;transform:none}
+
+@media (min-width:900px){
+  :root{--pad:28px}
+  body{font-size:15.5px}
+  .nav{height:64px}
+  .links{display:flex}
+  .hero{padding:24px 0 52px}
+  .hero .grid{display:grid;grid-template-columns:.95fr 1.05fr;gap:48px;align-items:center}
+  .hero .logo{width:220px;margin:0}
+  .hero .txt{text-align:left}
+  .hero h1{font-size:clamp(40px,3.7vw,50px);margin-left:0}
+  .lead{margin-left:0;font-size:16.5px}
+  .cta{justify-content:flex-start}
+  .hpic{margin:0;width:100%}
+  .sec{padding:64px 0}
+  .head h2{font-size:clamp(30px,2.8vw,38px)}
+  .sizzle .wrap{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+  .ev .wrap{display:grid;grid-template-columns:.8fr 1.2fr;gap:48px;align-items:center}
+  .station{grid-template-columns:1.4fr 1fr;align-items:center;gap:28px}
+  .station .row{flex-direction:column;align-items:flex-start}
+  .station .circ{width:170px;height:170px}
+  .book .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:start}
+  .card{position:sticky;top:96px;padding:22px}
+  .close{padding:72px 0}
+  .close h2{font-size:clamp(32px,3vw,42px)}
+  .dock{display:none}
+  footer{padding-bottom:22px}
+  .nl footer{padding-bottom:70px}
+  footer .wrap{flex-direction:row;justify-content:space-between;align-items:center}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .rise,.rv,.hero .logo text,.evt,.div svg{opacity:1;transform:none}
+  .hero .logo .u{stroke-dashoffset:0}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <g id="fezg">
+      <path class="body" d="M36 64 41 16Q60 9 79 16L84 64Q60 70 36 64Z"/>
+      <path class="band" d="M37.5 56Q60 62 82.5 56L84 64Q60 70 36 64Z"/>
+      <ellipse class="top" cx="60" cy="15.5" rx="19" ry="4.2"/>
+      <g class="tassel"><path class="cord" d="M60 15Q72 15 82 24"/><circle class="knot" cx="82.5" cy="25" r="2.2"/><path class="tuft" d="M81 27v15M82.5 27v17M84 27v15"/></g>
+    </g>
+    <path id="stache" d="M60 84C54 76 43 74 33 80C27 84 20 84 15 78C16 89 29 95 42 91C50 89 55 87 60 91C65 87 70 89 78 91C91 95 104 89 105 78C100 84 93 84 87 80C77 74 66 76 60 84Z"/>
+  </defs>
+</svg>
+
+<nav class="nav" aria-label="Main">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Amo Crepe, back to top"><svg class="fez" viewBox="18 4 84 96" aria-hidden="true"><g class="fezg"></g></svg><b>Amo <span>Crepe</span></b></a>
+    <div class="links"><a href="#sizzle">Live station</a><a href="#events">Events</a><a href="#book">Book a date</a></div>
+    <a class="btn red" href="#book">Book your date</a>
+  </div>
+</nav>
+
+<main id="top">
+<header class="hero">
+  <div class="wrap grid">
+    <div>
+      <svg class="logo fez" viewBox="0 0 120 150" role="img" aria-label="Amo Crepe">
+        <g class="fezg"></g>
+        <use class="stache" href="#stache"/>
+        <text class="a" x="6" y="128" font-size="28" textLength="42" lengthAdjust="spacingAndGlyphs">Amo</text><text class="c" x="53" y="128" font-size="28" textLength="62" lengthAdjust="spacingAndGlyphs">Crepe</text>
+        <path class="u" pathLength="1" d="M18 138Q60 131 106 136"/>
+      </svg>
+      <div class="txt">
+        <span class="kick rise" style="animation-delay:.9s">We make it fresh!</span>
+        <h1 class="rise" style="animation-delay:1s">A live crepe station, made <em>right in front of your guests</em>.</h1>
+        <p class="lead rise" style="animation-delay:1.1s">We bring our made-to-order dessert crepes and the whole live cooking setup to your wedding, shower, birthday or company event.</p>
+        <div class="cta rise" style="animation-delay:1.2s">
+          <a class="btn red" id="heroCta" href="#book">Book your date</a>
+          <a class="btn line" href="tel:+13136333599">Call 313-633-3599</a>
+        </div>
+      </div>
+    </div>
+    <figure class="hpic rise" style="animation-delay:.4s">
+      <img src="media/team.webp" alt="The Amo Crepe team behind their crepe station, with Nutella jars and griddles ready" width="960" height="720" fetchpriority="high">
+      <figcaption class="tag"><i></i>Our station, set up and ready</figcaption>
+    </figure>
+  </div>
+</header>
+
+<div class="div" aria-hidden="true"><svg viewBox="10 70 100 30"><use href="#stache" class="stache"/></svg></div>
+
+<section class="sec sizzle" id="sizzle" aria-labelledby="szH">
+  <div class="wrap">
+    <div>
+      <div class="head rv"><span class="kick">Live mobile dessert crepe catering</span><h2 id="szH">Watch it sizzle. <em>Taste it fresh.</em></h2><p>Every crepe gets poured, filled and folded at the station while your guests watch. It's dessert and a show at the same time.</p></div>
+      <ul class="three">
+        <li class="rv"><svg viewBox="10 70 100 30" aria-hidden="true"><use href="#stache"/></svg>Sweet crepes</li>
+        <li class="rv"><svg viewBox="10 70 100 30" aria-hidden="true"><use href="#stache"/></svg>Fresh ingredients</li>
+        <li class="rv"><svg viewBox="10 70 100 30" aria-hidden="true"><use href="#stache"/></svg>Made live</li>
+      </ul>
+    </div>
+    <div class="live rv">
+      <img src="media/griddle.webp" alt="A crepe cooking on the griddle at an Amo Crepe event, with Nutella and toppings laid out" width="560" height="433" loading="lazy">
+      <div class="steam" aria-hidden="true"><i></i><i></i><i></i></div>
+      <span class="badge"><i aria-hidden="true"></i>LIVE</span>
+    </div>
+  </div>
+</section>
+
+<section class="sec ev" id="events" aria-labelledby="evH">
+  <div class="wrap">
+    <div class="head rv"><span class="kick">Perfect for</span><h2 id="evH">Any event that needs <em>something sweet</em></h2><p>If there's a crowd and a reason to celebrate, we can bring the station.</p></div>
+    <div class="evts" id="evts"></div>
+  </div>
+</section>
+
+<div class="div" aria-hidden="true"><svg viewBox="10 70 100 30"><use href="#stache" class="stache"/></svg></div>
+
+<section class="sec" aria-labelledby="stH" style="padding-top:20px">
+  <div class="wrap station">
+    <div class="big rv"><img src="media/station.webp" alt="The Amo Crepe station: a white counter with a wooden top, their fez logo and red fez caps on each end" width="900" height="652" loading="lazy"></div>
+    <div class="row rv">
+      <div class="circ"><img src="media/wedding.webp" alt="Making crepes at a wedding reception" width="400" height="400" loading="lazy"></div>
+      <p><b id="stH">We bring the crepe experience to you</b>Our station, our griddles and everything that goes on the crepes. We set up at your venue and make every crepe fresh, one after another.</p>
+    </div>
+  </div>
+</section>
+
+<section class="sec book" id="book" aria-labelledby="bkH">
+  <div class="wrap">
+    <div>
+      <div class="head rv"><span class="kick">Book your date</span><h2 id="bkH">Tell us about <em>your event</em></h2><p>Fill this in and we'll write the message for you. Send it by text, email or Instagram, whatever's easiest.</p></div>
+      <div class="form">
+        <div><span class="lbl">The occasion</span><div class="chips" id="occ" role="group" aria-label="The occasion"></div></div>
+        <div class="two">
+          <label><span class="lbl">Date</span><input id="date" type="date"></label>
+          <label><span class="lbl">Guests</span><input id="ppl" inputmode="numeric" placeholder="About how many"></label>
+        </div>
+        <label><span class="lbl">Venue or city</span><input id="loc" placeholder="Where's the party?"></label>
+        <label><span class="lbl">Your name</span><input id="who" autocomplete="name" placeholder="So we know who's asking"></label>
+      </div>
+    </div>
+    <aside class="card rv" aria-live="polite">
+      <svg class="st fez" viewBox="18 4 84 96" aria-hidden="true"><g class="fezg"></g></svg>
+      <h3>Your message</h3>
+      <pre id="msg"></pre>
+      <div class="acts">
+        <a class="btn red" id="sms" href="sms:+13136333599"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg>Text it</a>
+        <a class="btn line" id="mail" href="mailto:amocrepe.catering@gmail.com">Email it</a>
+        <button class="btn line" id="dm">Copy for Instagram</button>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<section class="close" id="closer" aria-labelledby="clH">
+  <div class="wrap">
+    <svg class="logo fez rv" viewBox="0 0 120 150" aria-hidden="true"><g class="fezg"></g><use class="stache" href="#stache"/><text class="a" x="6" y="128" font-size="28" textLength="42" lengthAdjust="spacingAndGlyphs">Amo</text><text class="c" x="53" y="128" font-size="28" textLength="62" lengthAdjust="spacingAndGlyphs">Crepe</text></svg>
+    <h2 id="clH" class="rv">Sweet moments, <em>made fresh.</em></h2>
+    <p class="rv">Book your date and we'll bring the station, the griddles and the crepes.</p>
+    <div class="cta rv">
+      <a class="btn gold" href="tel:+13136333599">Call 313-633-3599</a>
+      <a class="btn line" href="https://ig.me/m/amocrepe.catering" target="_blank" rel="noopener">Message on Instagram</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Amo Crepe Catering · <a href="tel:+13136333599">313-633-3599</a> · <a href="mailto:amocrepe.catering@gmail.com">amocrepe.catering@gmail.com</a> · <a href="https://www.instagram.com/amocrepe.catering/" target="_blank" rel="noopener">@amocrepe.catering</a></span>
+    <a class="studio" href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener" aria-label="Site by ElaSystems (opens in a new tab)"><i aria-hidden="true"></i><span>Site by <b>ElaSystems</b></span></a>
+  </div>
+</footer>
+
+<div class="dock" id="dock">
+  <a class="btn line" href="tel:+13136333599">Call</a>
+  <a class="btn red" href="#book">Book your date</a>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+if (/netlify\.app$/.test(location.hostname)) document.documentElement.classList.add("nl");
+const CONFIG = {
+  phone:"+13136333599", email:"amocrepe.catering@gmail.com", dm:"https://ig.me/m/amocrepe.catering",
+  /* the events from their flyers */
+  events:[
+    {n:"Weddings", p:"M8 14a4 4 0 1 0 0 .1M16 14a4 4 0 1 0 0 .1M10 6l2-2 2 2"},
+    {n:"Showers", p:"M12 3a6 6 0 0 1 6 6c0 4-6 12-6 12S6 13 6 9a6 6 0 0 1 6-6z"},
+    {n:"Birthdays", p:"M4 20h16M5 20v-7h14v7M5 16c2 1 3-1 5 0s3 1 5 0 3-1 4 0M12 13V9M12 6v.5"},
+    {n:"Graduations", p:"M2 9l10-5 10 5-10 5zM6 11v5c3 2 9 2 12 0v-5M22 9v6"},
+    {n:"Corporate events", p:"M4 8h16v12H4zM9 8V5h6v3M4 13h16"},
+    {n:"Private parties", p:"M4 11l8-7 8 7v9H4zM10 20v-5h4v5"},
+    {n:"Festivals & more", p:"M9 11a3 3 0 1 0 0-.1M17 12a2.5 2.5 0 1 0 0-.1M3 20c1-4 4-6 6-6s5 2 6 6M14 20c.5-3 2-4.5 4-4.5s3.5 1.5 4 4.5"}
+  ]
+};
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* copy the fez into the big logos so page CSS can animate it */
+const FEZ = document.getElementById("fezg").innerHTML;
+document.querySelectorAll("g.fezg").forEach(g => g.innerHTML = FEZ);
+
+/* the tassel swings with scroll speed (a damped pendulum), and settles when you stop */
+(function(){
+  if (RM) return;
+  const tassels = () => document.querySelectorAll(".tassel");
+  let a = 0, v = 0, lastY = scrollY, lastT = performance.now(), raf = 0;
+  function tick(t){
+    const dt = Math.min(48, t - lastT) / 16.67; lastT = t;
+    const push = Math.max(-26, Math.min(26, (scrollY - lastY) * .9)); lastY = scrollY;
+    v += (-a * .08 - v * .09 + push * .06) * dt; a += v * dt;
+    a = Math.max(-38, Math.min(38, a));
+    const s = `rotate(${(-a).toFixed(2)}deg)`; tassels().forEach(el => el.style.transform = s);
+    if (Math.abs(a) < .05 && Math.abs(v) < .05 && Math.abs(push) < .1){ raf = 0; tassels().forEach(el => el.style.transform = ""); return; }
+    raf = requestAnimationFrame(tick);
+  }
+  const kick = () => { if (!raf){ lastY = scrollY; lastT = performance.now(); raf = requestAnimationFrame(tick); } };
+  addEventListener("scroll", kick, { passive:true });
+  /* one swing when the fez lands */
+  setTimeout(() => { v = 3.2; kick(); }, 950);
+})();
+
+/* events */
+const evts = document.getElementById("evts");
+evts.innerHTML = CONFIG.events.map((e,i) => `<span class="evt" style="transition-delay:${i*70}ms"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="${e.p}"/></svg>${esc(e.n)}</span>`).join("");
+
+/* booking: write the message, then text / email / copy it */
+const occ = document.getElementById("occ"), msg = document.getElementById("msg");
+const state = { occ:"" };
+occ.innerHTML = CONFIG.events.map(e => `<button class="chip" aria-pressed="false" data-o="${esc(e.n.replace(' & more',''))}">${esc(e.n.replace(' & more',''))}</button>`).join("");
+occ.addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; state.occ = state.occ === b.dataset.o ? "" : b.dataset.o; [...occ.children].forEach(c => c.setAttribute("aria-pressed", c.dataset.o === state.occ)); render(); });
+const val = id => document.getElementById(id).value.trim();
+function text(){
+  const d = val("date"), when = d ? new Date(d + "T12:00").toLocaleDateString("en-US",{weekday:"long",month:"long",day:"numeric",year:"numeric"}) : "";
+  const L = ["Hi Amo Crepe! I'd like to book your live crepe station."];
+  if (state.occ) L.push(`Event: ${state.occ}`);
+  if (when) L.push(`Date: ${when}`);
+  if (val("ppl")) L.push(`Guests: about ${val("ppl")}`);
+  if (val("loc")) L.push(`Where: ${val("loc")}`);
+  if (val("who")) L.push(`Name: ${val("who")}`);
+  L.push("Is that date open?");
+  return L.join("\n");
+}
+function render(){
+  const t = text(); msg.textContent = t;
+  document.getElementById("sms").href = `sms:${CONFIG.phone}?&body=${encodeURIComponent(t)}`;
+  document.getElementById("mail").href = `mailto:${CONFIG.email}?subject=${encodeURIComponent("Crepe station booking" + (state.occ ? " – " + state.occ : ""))}&body=${encodeURIComponent(t)}`;
+}
+["date","ppl","loc","who"].forEach(id => document.getElementById(id).addEventListener("input", render));
+const toast = document.getElementById("toast"); let tT;
+const say = s => { toast.textContent = s; toast.classList.add("on"); clearTimeout(tT); tT = setTimeout(() => toast.classList.remove("on"), 2400); };
+document.getElementById("dm").addEventListener("click", async () => {
+  const t = text(); let ok = false;
+  try { await navigator.clipboard.writeText(t); ok = true; } catch(_){ const ta = document.createElement("textarea"); ta.value = t; ta.style.cssText = "position:fixed;opacity:0"; document.body.appendChild(ta); ta.select(); try { ok = document.execCommand("copy"); } catch(__){} ta.remove(); }
+  say(ok ? "Copied. Paste it in our Instagram DMs." : "Opening Instagram. Copy the message from the box.");
+  window.open(CONFIG.dm, "_blank", "noopener");
+});
+render();
+
+/* reveals, scrollspy, dock */
+const rv = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting){ e.target.classList.add("in"); rv.unobserve(e.target); } }), { threshold:.2, rootMargin:"0px 0px -6% 0px" });
+document.querySelectorAll(".rv, .div, .evts").forEach((el,i) => { if (el.classList.contains("rv")) el.style.transitionDelay = ((i%4)*80)+"ms"; RM ? el.classList.add("in") : rv.observe(el); });
+const sz = document.getElementById("sizzle");
+new IntersectionObserver(es => es.forEach(e => sz.classList.toggle("off", !e.isIntersecting))).observe(sz);
+const links = [...document.querySelectorAll(".links a")];
+const spy = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) links.forEach(a => a.classList.toggle("on", a.getAttribute("href") === "#"+e.target.id)); }), { rootMargin:"-45% 0px -50% 0px" });
+["sizzle","events","book"].forEach(id => spy.observe(document.getElementById(id)));
+const dock = document.getElementById("dock");
+new IntersectionObserver(es => es.forEach(e => dock.classList.toggle("hide", e.isIntersecting))).observe(document.getElementById("closer"));
+</script>
+</body>
+</html>
