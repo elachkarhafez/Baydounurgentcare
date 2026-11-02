@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noai, noimageai">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Crepes Gone Wild · Crepe catering from East LA</title>
+<meta name="description" content="Crepe catering for all occasions from a family recipe out of East LA. Now booking 2027 to 2028. Check an open date and message us to reserve.">
+<meta property="og:title" content="Crepes Gone Wild">
+<meta property="og:description" content="Crepe catering for all occasions. Now booking 2027 to 2028.">
+<meta property="og:image" content="media/og.jpg">
+<meta name="theme-color" content="#f7eefa">
+<link rel="icon" href="media/icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,800&family=Yellowtail&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="media/nutella.webp">
+<style>
+/* Crepes Gone Wild. Concept: the page is their booking calendar and great-grandma Zenaida's recipe card, because
+   they're a family recipe ("quequis") that now books events a year out. Open dates come straight from their
+   availability post and turn into a ready-to-send DM; the story is written on a recipe card. Colours from their logo
+   (banana yellow, berry script) and their lilac availability posts. */
+:root{
+  --bg:#f7eefa; --card:#fff; --ink:#2a1a2e; --soft:#6c5a70; --line:rgba(42,26,46,.12);
+  --lilac:#dcb6ee; --plum:#9b4fb5; --berry:#c2185b; --banana:#f2c94c; --choc:#4a2a1f;
+  --fd:"Young Serif",Georgia,serif; --fb:"Nunito Sans",system-ui,sans-serif; --fs:"Yellowtail",cursive; --fh:"Caveat",cursive;
+  --pad:16px; --r:16px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--ink);font:400 15px/1.55 var(--fb);overflow-x:hidden}
+img{display:block;max-width:100%;height:auto}
+a{color:inherit}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+input,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--berry);outline-offset:3px;border-radius:6px}
+.wrap{width:100%;max-width:1160px;margin:0 auto;padding:0 var(--pad)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:46px;padding:0 20px;border-radius:999px;font:800 14px/1 var(--fb);text-decoration:none;white-space:nowrap;transition:transform .2s,background .2s,border-color .2s}
+.btn.pk{background:var(--berry);color:#fff;box-shadow:0 8px 20px -10px rgba(194,24,91,.8)}
+.btn.line{border:1.5px solid rgba(42,26,46,.22)}
+.btn:active{transform:scale(.97)}
+@media (hover:hover) and (pointer:fine){.btn.pk:hover{background:#a0124a;transform:translateY(-2px)}.btn.line:hover{border-color:var(--ink)}}
+
+/* wordmark */
+.wm text{paint-order:stroke}
+.wm .w1,.wm .w3{font-family:var(--fs);fill:#7a2e45}
+.wm .w2{font-family:var(--fh);font-weight:700;fill:var(--ink)}
+.wm .nana{fill:var(--banana);stroke:#b88a12;stroke-width:1.2}
+.wm .tip{fill:var(--choc)}
+.wm.anim .w1,.wm.anim .w2,.wm.anim .w3{fill-opacity:0;stroke:currentColor;stroke-width:1;stroke-dasharray:900;stroke-dashoffset:900;animation:write 1.6s ease forwards,fillin .5s ease forwards}
+.wm.anim .w1{color:#7a2e45;animation-delay:.55s,1.7s}
+.wm.anim .w2{color:var(--ink);animation-delay:1.05s,2.05s}
+.wm.anim .w3{color:#7a2e45;animation-delay:1.35s,2.35s}
+.wm.anim .nanag{transform-box:fill-box;transform-origin:50% 50%;animation:peel .9s cubic-bezier(.3,1.5,.5,1) both}
+@keyframes write{to{stroke-dashoffset:0}}
+@keyframes fillin{to{fill-opacity:1;stroke-width:0}}
+@keyframes peel{from{transform:rotate(-70deg) scale(.4);opacity:0}to{transform:none;opacity:1}}
+
+/* nav */
+.nav{position:sticky;top:0;z-index:50;height:56px;background:rgba(247,238,250,.95);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;gap:12px;height:100%}
+.brand{margin-right:auto;display:block;text-decoration:none}
+.brand svg{display:block;height:34px;width:auto}
+.links{display:none;gap:24px}
+.links a{font:600 14px/1 var(--fb);text-decoration:none;color:var(--soft);padding:6px 0;border-bottom:2px solid transparent;transition:color .2s,border-color .2s}
+.links a.on{color:var(--ink);border-color:var(--berry)}
+.nav .btn{height:36px;padding:0 14px;font-size:13px}
+
+/* hero */
+.hero{padding:16px 0 30px;overflow:clip}
+.hero .wm{display:block;width:min(210px,56vw);height:auto;margin:0 0 6px -6px}
+.hero h1{font:400 27px/1.18 var(--fd);max-width:18ch}
+.hero h1 em{font-style:normal;color:var(--berry)}
+.lead{margin-top:10px;color:var(--soft);max-width:44ch}
+.cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.pic{position:relative;margin:22px auto 0;width:min(100%,44vh);aspect-ratio:1/1}
+.pic img{width:100%;height:100%;object-fit:cover;border-radius:50%;box-shadow:0 20px 40px -24px rgba(74,42,31,.7)}
+.pic .badge{position:absolute;right:-4px;top:6%;width:96px;height:96px;border-radius:50%;background:var(--banana);color:var(--ink);display:flex;align-items:center;justify-content:center;text-align:center;font:800 11.5px/1.15 var(--fb);transform:rotate(10deg);box-shadow:0 8px 18px -10px rgba(0,0,0,.4)}
+.pic .badge span{display:block;font:400 19px/1 var(--fd)}
+.pic .ring{position:absolute;inset:-10px;border-radius:50%;border:1.5px dashed rgba(155,79,181,.45);animation:spin 40s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.rise{opacity:0;transform:translateY(12px);animation:rise .7s cubic-bezier(.2,.7,.2,1) forwards}
+@keyframes rise{to{opacity:1;transform:none}}
+
+/* sections */
+.sec{padding:36px 0}
+.head{margin-bottom:16px}
+.head h2{font:400 22px/1.2 var(--fd)}
+.head h2 .s{font-family:var(--fs);color:var(--berry);font-size:1.15em}
+.head p{color:var(--soft);margin-top:6px;max-width:54ch;font-size:14.5px}
+
+/* calendar */
+.cal{background:linear-gradient(180deg,#e9cdf5,#dcb6ee);border-radius:24px;padding:18px 14px 16px;position:relative}
+.cal .rings{position:absolute;left:0;right:0;top:-9px;display:flex;justify-content:space-around;padding:0 18%}
+.cal .rings i{width:10px;height:22px;border-radius:6px;background:linear-gradient(90deg,#8a8a92,#e7e7ec,#8a8a92);box-shadow:0 2px 3px rgba(0,0,0,.2)}
+.month{margin-top:6px}
+.month h3{display:inline-block;background:#fff;color:var(--berry);font:800 13px/1 var(--fb);letter-spacing:.14em;padding:8px 14px;border-radius:8px;margin:8px 0 10px}
+.days{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}
+.day{position:relative;perspective:500px;aspect-ratio:1/1.05}
+.day button{position:absolute;inset:0;border-radius:12px;background:var(--plum);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;transition:transform .25s,background .25s,box-shadow .25s;box-shadow:0 3px 0 #7a3a90}
+.day button small{font:800 9.5px/1 var(--fb);letter-spacing:.06em;text-transform:uppercase;opacity:.9}
+.day button b{font:400 22px/1 var(--fd)}
+.day button small{font-size:8.5px}
+.day button:active{transform:translateY(2px);box-shadow:0 1px 0 #7a3a90}
+.day button[aria-pressed="true"]{background:var(--berry);box-shadow:0 3px 0 #8d0f41}
+.day .page{position:absolute;inset:0;border-radius:12px;background:var(--plum);transform-origin:50% 0;pointer-events:none;opacity:0}
+.day.flip .page{animation:tear .6s cubic-bezier(.5,0,.6,1) forwards}
+@keyframes tear{0%{opacity:1;transform:rotateX(0)}100%{opacity:0;transform:rotateX(-110deg) translateY(-6px)}}
+.day button .ok{position:absolute;top:5px;right:6px;width:16px;height:16px;border-radius:50%;background:#fff;color:var(--berry);font:800 11px/16px var(--fb);text-align:center;transform:scale(0);transition:transform .3s cubic-bezier(.3,1.6,.5,1)}
+.day button[aria-pressed="true"] .ok{transform:scale(1)}
+.other{margin-top:12px;display:flex;align-items:center;justify-content:space-between;gap:10px;background:rgba(255,255,255,.55);border-radius:12px;padding:10px 12px;font-size:13.5px}
+.other button{font:800 13px/1 var(--fb);color:var(--berry);white-space:nowrap;padding:8px 0}
+.slip{margin-top:14px;background:var(--card);border-radius:var(--r);padding:16px;border:1px solid var(--line)}
+.slip h3{font:400 18px/1.25 var(--fd)}
+.slip h3 span{color:var(--berry)}
+.fields{display:grid;gap:10px;margin-top:12px}
+.fields label{display:flex;flex-direction:column;gap:5px;font:800 11.5px/1 var(--fb);letter-spacing:.08em;text-transform:uppercase;color:var(--soft)}
+.fields input,.fields textarea{border:1.5px solid rgba(42,26,46,.15);border-radius:12px;padding:10px 12px;font:400 15px/1.35 var(--fb);background:#fff;letter-spacing:0;text-transform:none;color:var(--ink)}
+.fields textarea{min-height:58px;resize:vertical}
+.slip pre{white-space:pre-wrap;font:400 13px/1.5 var(--fb);color:var(--soft);background:var(--bg);border-radius:12px;padding:10px 12px;margin-top:12px}
+.slip .acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.dep{display:flex;gap:8px;align-items:flex-start;margin-top:12px;font-size:13px;color:var(--soft)}
+.dep i{flex:none;width:18px;height:18px;border-radius:50%;background:var(--banana);font:800 12px/18px var(--fb);text-align:center;font-style:normal;color:var(--ink)}
+.toast{position:fixed;left:50%;bottom:88px;transform:translate(-50%,20px);background:var(--ink);color:#fff;padding:10px 16px;border-radius:999px;font:600 13px/1.3 var(--fb);opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;z-index:80;max-width:calc(100% - 32px);text-align:center}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+/* crepes */
+.rail{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin:0 calc(var(--pad)*-1);padding:4px var(--pad) 6px;overscroll-behavior-x:contain}
+.rail::-webkit-scrollbar{display:none}
+.cr{flex:0 0 78%;scroll-snap-align:center;background:var(--card);border-radius:var(--r);overflow:hidden;border:1px solid var(--line);display:flex;flex-direction:column}
+.cr .ph{aspect-ratio:4/3;overflow:hidden;background:#efe2f3;position:relative;display:flex;align-items:center;justify-content:center}
+.cr .ph img{width:100%;height:100%;object-fit:cover}
+.cr .ph svg{width:62%;height:auto;overflow:visible}
+.cr.wild .ph{background:radial-gradient(circle at 50% 60%,#fff6dc,#f6e2a8)}
+.cr .bd{padding:12px 14px 14px}
+.cr h3{font:400 17px/1.2 var(--fd)}
+.cr p{font-size:13.5px;color:var(--soft);margin-top:4px}
+.cr .tag{display:inline-block;margin-top:8px;font:800 10.5px/1 var(--fb);letter-spacing:.1em;text-transform:uppercase;color:var(--berry);background:#fbe3ee;padding:5px 8px;border-radius:6px}
+.treat{transform-box:fill-box;transform-origin:50% 100%}
+.cr.in .treat{animation:drop .8s cubic-bezier(.3,1.5,.5,1) both}
+@keyframes drop{from{transform:translateY(-60px) rotate(-25deg);opacity:0}to{transform:none;opacity:1}}
+.dots{display:flex;gap:6px;justify-content:center;margin-top:12px}
+.dots i{width:7px;height:7px;border-radius:4px;background:rgba(42,26,46,.22);transition:width .3s,background .3s}
+.dots i.on{width:18px;background:var(--berry)}
+
+/* events */
+.evs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ev{border-radius:var(--r);overflow:hidden;position:relative;aspect-ratio:3/4;background:#2a1a2e}
+.ev img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s ease}
+.ev.in img{transform:scale(1.03)}
+.ev figcaption{position:absolute;left:8px;bottom:8px;right:8px;background:rgba(255,255,255,.92);border-radius:10px;padding:7px 9px;font:600 12px/1.3 var(--fb)}
+.ev.wide{grid-column:1/-1;aspect-ratio:16/10}
+.ev.wide img{object-position:50% 22%}
+
+/* recipe card story */
+.story{background:#fff8e6;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.recipe{position:relative;background:#fffdf7;border-radius:6px;padding:20px 18px 18px 42px;box-shadow:0 18px 40px -26px rgba(74,42,31,.6);transform:rotate(-1deg);background-image:repeating-linear-gradient(180deg,transparent 0 27px,rgba(155,79,181,.18) 27px 28px);background-position:0 46px}
+.recipe::before{content:"";position:absolute;left:30px;top:0;bottom:0;width:1.5px;background:rgba(194,24,91,.35)}
+.recipe h3{font:700 32px/1 var(--fh);color:var(--choc)}
+.recipe .by{font:500 18px/1.3 var(--fh);color:var(--soft);margin-top:2px}
+.tl{list-style:none;margin-top:14px;position:relative}
+.tl li{font:500 19px/1.4 var(--fh);color:var(--ink);padding:0 0 6px;position:relative;opacity:0;transform:translateX(-6px);transition:opacity .5s ease,transform .5s ease}
+.tl li::before{content:"";position:absolute;left:-21px;top:.55em;width:8px;height:8px;border-radius:50%;background:var(--berry)}
+.tl li b{font-weight:700;color:var(--berry)}
+.recipe.in .tl li{opacity:1;transform:none}
+.quote{margin-top:18px}
+.quote q{display:block;quotes:none;font:400 20px/1.3 var(--fd)}
+.quote q::before{content:"\201C";color:var(--berry)}
+.quote q::after{content:"\201D";color:var(--berry)}
+.quote cite{display:block;margin-top:6px;font-size:13px;color:var(--soft);font-style:normal}
+.quote cite a{color:var(--soft)}
+
+/* closer */
+.close{background:var(--plum);color:#fff;text-align:center;padding:44px 0;position:relative;overflow:hidden}
+.close .wm{width:min(240px,62vw);height:auto;margin:0 auto 6px;display:block}
+.close .wm .w1,.close .wm .w3{fill:#fff}
+.close .wm .w2{fill:#2a1a2e}
+.close h2{font:400 24px/1.2 var(--fd);max-width:20ch;margin:0 auto}
+.close p{margin:8px auto 0;max-width:40ch;font-size:14.5px;color:rgba(255,255,255,.85)}
+.close .cta{justify-content:center}
+.close .btn.pk{background:#fff;color:var(--berry)}
+.close .btn.line{border-color:rgba(255,255,255,.45);color:#fff}
+.close .sprk{position:absolute;width:8px;height:8px;background:var(--banana);border-radius:2px;transform:rotate(45deg);opacity:.8;animation:tw 3s ease-in-out infinite}
+@keyframes tw{50%{opacity:.15;transform:rotate(45deg) scale(.6)}}
+footer{background:#24152a;color:rgba(255,255,255,.62);font-size:12.5px;padding:18px 0 96px}
+footer .wrap{display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+footer a{color:rgba(255,255,255,.88)}
+.studio{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;background:#3a2741;color:#fff;font:600 11px/1 var(--fb);text-decoration:none}
+.studio i{width:9px;height:9px;border-radius:3px;background:conic-gradient(from 210deg,#ff5a1f,#ffb03b,#ff5a1f)}
+
+.dock{position:fixed;left:10px;right:10px;bottom:max(10px,env(safe-area-inset-bottom));z-index:60;display:flex;gap:8px;padding:8px;border-radius:999px;background:rgba(42,26,46,.95);box-shadow:0 10px 30px -10px rgba(0,0,0,.5);transition:transform .35s,opacity .35s}
+.dock .btn{flex:1;height:42px;font-size:13.5px;padding:0 10px}
+.dock .btn.line{border-color:rgba(255,255,255,.3);color:#fff}
+.dock.hide{transform:translateY(130%);opacity:0;pointer-events:none}
+
+.rv{opacity:0;transform:translateY(14px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
+.rv.in{opacity:1;transform:none}
+
+@media (min-width:600px){
+  .day button small{font-size:9.5px}
+  .cr{flex-basis:44%}
+  .evs{grid-template-columns:repeat(3,1fr)}
+  .ev.wide{grid-column:auto;aspect-ratio:3/4}
+}
+@media (min-width:900px){
+  :root{--pad:28px}
+  body{font-size:16px}
+  .nav{height:64px}
+  .links{display:flex}
+  .hero{padding:24px 0 52px}
+  .hero .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center}
+  .hero .wm{width:300px}
+  .hero h1{font-size:clamp(38px,3.4vw,48px)}
+  .lead{font-size:16.5px}
+  .pic{margin:0 auto;width:min(100%,calc(100vh - 220px),440px)}
+  .pic .badge{width:116px;height:116px;font-size:13px}
+  .pic .badge span{font-size:23px}
+  .sec{padding:64px 0}
+  .head h2{font-size:clamp(28px,2.6vw,36px)}
+  .book{display:grid;grid-template-columns:1.15fr .85fr;gap:28px;align-items:start}
+  .cal{padding:26px 22px 20px}
+  .slip{margin-top:0;position:sticky;top:90px;padding:22px}
+  .cr{flex-basis:calc((100% - 36px)/4)}
+  .story .wrap{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+  .quote{margin-top:0}
+  .quote q{font-size:clamp(26px,2.4vw,32px)}
+  .close{padding:72px 0}
+  .close h2{font-size:clamp(30px,2.8vw,38px)}
+  .dock{display:none}
+  footer{padding-bottom:22px}
+  footer .wrap{flex-direction:row;justify-content:space-between;align-items:center}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .rise,.rv,.tl li{opacity:1;transform:none}
+  .wm.anim .w1,.wm.anim .w2,.wm.anim .w3{fill-opacity:1;stroke-width:0}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- their wordmark, redrawn: a banana is the C of Crepes -->
+    <g id="wmk">
+      <g class="nanag"><path class="nana" d="M40 12c-20 6-31 26-29 46 2 18 15 32 33 36 4 1 6-2 3-4-14-7-22-21-21-37 1-15 9-28 20-36 3-2 0-6-6-5z"/><path class="tip" d="M44 8c2-2 6-1 6 2l-4 4z"/><path class="tip" d="M44 92c3 1 5 4 2 6l-5-3z"/></g>
+      <text class="w1" x="44" y="62" font-size="58">repes</text>
+      <text class="w2" x="12" y="108" font-size="40">gone</text>
+      <text class="w3" x="96" y="110" font-size="56">Wild</text>
+    </g>
+  </defs>
+</svg>
+
+<nav class="nav" aria-label="Main">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Crepes Gone Wild, back to top"><svg viewBox="0 0 230 120" class="wm" aria-hidden="true"></svg></a>
+    <div class="links"><a href="#book">Open dates</a><a href="#crepes">The crepes</a><a href="#story">Our story</a></div>
+    <a class="btn pk" href="#book">Check a date</a>
+  </div>
+</nav>
+
+<main id="top">
+<header class="hero">
+  <div class="wrap grid">
+    <div>
+      <svg class="wm anim" viewBox="0 0 230 120" role="img" aria-label="Crepes gone Wild"></svg>
+      <h1 class="rise" style="animation-delay:.3s">Crepes for your party, from a <em>family recipe</em> out of East LA.</h1>
+      <p class="lead rise" style="animation-delay:.45s">We bring the crepe cart, the lit-up flower wall and the Nutella to your event, whatever the occasion. Now booking 2027 to 2028.</p>
+      <div class="cta rise" style="animation-delay:.6s">
+        <a class="btn pk" id="heroCta" href="#book">Check an open date</a>
+        <a class="btn line" href="#crepes">See the crepes</a>
+      </div>
+    </div>
+    <figure class="pic rise" style="animation-delay:.2s">
+      <span class="ring" aria-hidden="true"></span>
+      <img src="media/nutella.webp" alt="A crepe on the griddle with Nutella, strawberries and banana" width="900" height="900" fetchpriority="high">
+      <figcaption class="badge"><div><span>2027–28</span>now booking</div></figcaption>
+    </figure>
+  </div>
+</header>
+
+<section class="sec" id="book" aria-labelledby="bookH">
+  <div class="wrap">
+    <div class="head rv">
+      <h2 id="bookH">Open dates, <span class="s">January to March 2027</span></h2>
+      <p>These are the dates we posted as open. Tap one and we'll write the message for you. Dates go fast, so we'll confirm in the DM.</p>
+    </div>
+    <div class="book">
+      <div class="cal rv">
+        <div class="rings" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+        <div id="months"></div>
+        <div class="other"><span>Need a different date or later in 2027 or 2028?</span><button id="otherBtn">Ask about it</button></div>
+      </div>
+      <aside class="slip rv" aria-live="polite">
+        <h3 id="slipH">Pick a date on the calendar</h3>
+        <div class="fields">
+          <label>The occasion<input id="occ" placeholder="What are you celebrating?"></label>
+          <label>Where<input id="loc" placeholder="City or venue"></label>
+          <label>About how many guests<input id="ppl" inputmode="numeric" placeholder="e.g. 80"></label>
+        </div>
+        <pre id="msg">Your message shows up here.</pre>
+        <div class="acts">
+          <button class="btn pk" id="send">Copy &amp; message us</button>
+        </div>
+        <p class="dep"><i>!</i><span>Heads up: we don't hold dates without a deposit. We'll send the details in the DM.</span></p>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="crepes" aria-labelledby="crH" style="padding-top:0">
+  <div class="wrap">
+    <div class="head rv">
+      <h2 id="crH">Simple, or <span class="s">gone wild</span></h2>
+      <p>We do the classics, and then we do the crazy ones with the Mexican treats you grew up with.</p>
+    </div>
+    <div class="rail" id="rail" tabindex="0" aria-label="Crepes, scroll sideways">
+      <article class="cr rv"><div class="ph"><img src="media/nutella.webp" alt="Nutella crepe with strawberries and banana on the griddle" width="900" height="900" loading="lazy"></div><div class="bd"><h3>Nutella, strawberry &amp; banana</h3><p>Folded right off the griddle and drizzled while it's hot.</p><span class="tag">Classic</span></div></article>
+      <article class="cr rv"><div class="ph"><img src="media/berries.webp" alt="Crepe with strawberries, blueberries, Nutella and powdered sugar" width="600" height="656" loading="lazy"></div><div class="bd"><h3>Berries &amp; Nutella</h3><p>Strawberries, blueberries, a Nutella drizzle and powdered sugar on top.</p><span class="tag">Classic</span></div></article>
+      <article class="cr wild rv"><div class="ph"><svg viewBox="0 0 120 90" aria-hidden="true"><ellipse cx="60" cy="80" rx="46" ry="6" fill="rgba(74,42,31,.12)"/><g class="treat"><circle cx="60" cy="48" r="32" fill="#e9b97a"/><circle cx="60" cy="48" r="26" fill="none" stroke="#c98d48" stroke-width="2" stroke-dasharray="3 4"/><g fill="#c98d48"><circle cx="52" cy="40" r="2"/><circle cx="66" cy="44" r="2"/><circle cx="58" cy="56" r="2"/><circle cx="70" cy="56" r="1.6"/><circle cx="48" cy="52" r="1.6"/></g></g></svg></div><div class="bd"><h3>Mazapán</h3><p>The crumbly peanut candy, broken up over a crepe.</p><span class="tag">Gone wild</span></div></article>
+      <article class="cr wild rv"><div class="ph"><svg viewBox="0 0 120 90" aria-hidden="true"><ellipse cx="60" cy="80" rx="46" ry="6" fill="rgba(74,42,31,.12)"/><g class="treat" style="animation-delay:.1s"><circle cx="60" cy="46" r="33" fill="#f0c56a"/><path d="M60 13a33 33 0 1 0 .1 0" fill="none" stroke="#d9a440" stroke-width="5" stroke-dasharray="4 3.5"/><circle cx="60" cy="46" r="20" fill="none" stroke="#d9a440" stroke-width="1.5"/><text x="60" y="51" font-family="Young Serif, serif" font-size="12" fill="#c48f2e" text-anchor="middle">Marías</text></g></svg></div><div class="bd"><h3>Marías cookies</h3><p>The cookie that goes with every cafecito, on a crepe.</p><span class="tag">Gone wild</span></div></article>
+      <article class="cr wild rv"><div class="ph"><svg viewBox="0 0 120 90" aria-hidden="true"><ellipse cx="60" cy="80" rx="46" ry="6" fill="rgba(74,42,31,.12)"/><g class="treat" style="animation-delay:.15s"><rect x="18" y="30" width="84" height="40" rx="7" fill="#d9944a"/><rect x="18" y="45" width="84" height="10" fill="#d23a5a"/><g fill="#b8743a"><circle cx="30" cy="38" r="1.6"/><circle cx="48" cy="36" r="1.6"/><circle cx="66" cy="39" r="1.6"/><circle cx="86" cy="36" r="1.6"/><circle cx="38" cy="63" r="1.6"/><circle cx="74" cy="62" r="1.6"/></g></g></svg></div><div class="bd"><h3>Barritas</h3><p>The fruit-filled cookie bars, right on the crepe.</p><span class="tag">Gone wild</span></div></article>
+    </div>
+    <div class="dots" id="dots" aria-hidden="true"></div>
+  </div>
+</section>
+
+<section class="sec" id="events" aria-labelledby="evH" style="padding-top:0">
+  <div class="wrap">
+    <div class="head rv">
+      <h2 id="evH">Catering for all occasions</h2>
+      <p>The cart rolls up with the lit-up flower wall, the griddles get hot and we make every crepe right there in front of your guests.</p>
+    </div>
+    <div class="evs">
+      <figure class="ev rv"><img src="media/cart2.webp" alt="The Crepes Gone Wild cart at night with its lit flower wall sign" width="720" height="867" loading="lazy"><figcaption>Amanda Solis x Crepes Gone Wild</figcaption></figure>
+      <figure class="ev rv"><img src="media/cart1.webp" alt="The crepe cart set up at an outdoor party" width="720" height="867" loading="lazy"><figcaption>Chuzzington x Crepes Gone Wild</figcaption></figure>
+      <figure class="ev wide rv"><img src="media/zavala.webp" alt="A guest taking the first bite of a crepe" width="720" height="693" loading="lazy"><figcaption>Zavala x Crepes Gone Wild</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="sec story" id="story" aria-labelledby="stH">
+  <div class="wrap">
+    <div class="recipe rv" id="recipe">
+      <h3 id="stH">Quequis</h3>
+      <p class="by">from Great-Grandma Zenaida's kitchen</p>
+      <ol class="tl">
+        <li style="transition-delay:.15s">Zenaida makes them for her grandkids and calls them <b>quequis</b></li>
+        <li style="transition-delay:.35s">The recipe gets passed down, one generation at a time</li>
+        <li style="transition-delay:.55s">Mom's idea: put it on wheels and bring it to <b>East LA</b></li>
+        <li style="transition-delay:.75s">A trailer on Whittier Blvd, and the crepes go wild</li>
+        <li style="transition-delay:.95s">Now the cart comes to <b>your party</b></li>
+      </ol>
+    </div>
+    <div class="quote rv">
+      <q>She would call them quequis.</q>
+      <cite>Valerie Nunez, talking about her great-grandma, to <a href="https://abc7.com/food/crepes-gone-wild-in-east-la-is-literally-making-wild-crepes-with-a-mexican-twist/5925936/" target="_blank" rel="noopener">ABC7</a> in 2020</cite>
+    </div>
+  </div>
+</section>
+
+<section class="close" id="closer" aria-labelledby="closeH">
+  <i class="sprk" style="left:12%;top:24%" aria-hidden="true"></i><i class="sprk" style="left:84%;top:30%;animation-delay:1s" aria-hidden="true"></i><i class="sprk" style="left:22%;top:78%;animation-delay:2s" aria-hidden="true"></i><i class="sprk" style="left:76%;top:76%;animation-delay:.5s" aria-hidden="true"></i>
+  <div class="wrap">
+    <svg class="wm rv" viewBox="0 0 230 120" aria-hidden="true"></svg>
+    <h2 id="closeH" class="rv">Got a date in mind? Send us a message.</h2>
+    <p class="rv">Tell us the day, the place and the crowd. We'll let you know if it's open and how the deposit works.</p>
+    <div class="cta rv">
+      <a class="btn pk" href="https://ig.me/m/crepesgonewild" target="_blank" rel="noopener">Message us on Instagram</a>
+      <a class="btn line" href="https://www.instagram.com/crepesgonewild/" target="_blank" rel="noopener">See our posts</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Crepes Gone Wild · Crepe catering from East LA · <a href="https://www.instagram.com/crepesgonewild/" target="_blank" rel="noopener">@crepesgonewild</a></span>
+    <a class="studio" href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener" aria-label="Site by ElaSystems (opens in a new tab)"><i aria-hidden="true"></i><span>Site by <b>ElaSystems</b></span></a>
+  </div>
+</footer>
+
+<div class="dock" id="dock">
+  <a class="btn line" href="#book">Check a date</a>
+  <a class="btn pk" href="https://ig.me/m/crepesgonewild" target="_blank" rel="noopener">Message us</a>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+const CONFIG = {
+  dm:"https://ig.me/m/crepesgonewild", tz:"America/Los_Angeles",
+  /* straight from their "2027 January–March availability" post */
+  open:["2027-01-08","2027-01-10","2027-01-22","2027-01-24","2027-02-19","2027-02-20","2027-02-21","2027-02-27","2027-02-28","2027-03-06","2027-03-20","2027-03-21"]
+};
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const today = new Intl.DateTimeFormat("en-CA",{timeZone:CONFIG.tz}).format(new Date());
+const D = s => { const [y,m,d] = s.split("-").map(Number); return new Date(Date.UTC(y,m-1,d,12)); };
+const fmt = (s,o) => D(s).toLocaleDateString("en-US",{timeZone:"UTC",...o});
+
+/* wordmark: copy the drawing into each spot so page CSS can colour and animate it */
+const WM = document.getElementById("wmk").innerHTML; document.querySelectorAll("svg.wm").forEach(s => s.insertAdjacentHTML("beforeend", WM));
+
+/* calendar */
+const months = document.getElementById("months"), state = { date:null, other:false };
+const upcoming = CONFIG.open.filter(s => s >= today);
+const byMonth = {}; upcoming.forEach(s => (byMonth[s.slice(0,7)] ||= []).push(s));
+Object.entries(byMonth).forEach(([m, list]) => {
+  const sec = document.createElement("div"); sec.className = "month";
+  sec.innerHTML = `<h3>${esc(fmt(m+"-01",{month:"long"}).toUpperCase())}</h3><div class="days">${list.map(s => `<div class="day"><span class="page" aria-hidden="true"></span><button data-d="${s}" aria-pressed="false" aria-label="${esc(fmt(s,{weekday:"long",month:"long",day:"numeric",year:"numeric"}))}"><small>${esc(fmt(s,{weekday:"long"}))}</small><b>${D(s).getUTCDate()}</b><span class="ok" aria-hidden="true">✓</span></button></div>`).join("")}</div>`;
+  months.appendChild(sec);
+});
+if (!upcoming.length) months.innerHTML = `<p style="padding:10px 4px">Those dates have passed. Message us for what's open now.</p>`;
+const slipH = document.getElementById("slipH"), msg = document.getElementById("msg");
+function pick(s){
+  state.date = s; state.other = false;
+  document.querySelectorAll(".day button").forEach(b => { const on = b.dataset.d === s; b.setAttribute("aria-pressed", on); if (on && !RM){ const d = b.parentNode; d.classList.remove("flip"); void d.offsetWidth; d.classList.add("flip"); } });
+  render();
+}
+months.addEventListener("click", e => { const b = e.target.closest("button[data-d]"); if (b) pick(b.dataset.d); });
+document.getElementById("otherBtn").addEventListener("click", () => { state.date = null; state.other = true; document.querySelectorAll(".day button").forEach(b => b.setAttribute("aria-pressed","false")); render(); document.getElementById("occ").focus({preventScroll:true}); });
+function text(){
+  const occ = document.getElementById("occ").value.trim(), loc = document.getElementById("loc").value.trim(), ppl = document.getElementById("ppl").value.trim();
+  const when = state.date ? fmt(state.date,{weekday:"long",month:"long",day:"numeric",year:"numeric"}) : "a different date (I'll tell you which)";
+  const L = [`Hi Crepes Gone Wild! Is ${when} still open?`];
+  if (occ) L.push(`Occasion: ${occ}`); if (loc) L.push(`Where: ${loc}`); if (ppl) L.push(`Guests: about ${ppl}`);
+  L.push("How does the deposit work?");
+  return L.join("\n");
+}
+function render(){
+  if (state.date) slipH.innerHTML = `Ask for <span>${esc(fmt(state.date,{weekday:"long",month:"long",day:"numeric"}))}</span>`;
+  else if (state.other) slipH.innerHTML = `Ask about <span>another date</span>`;
+  else slipH.textContent = "Pick a date on the calendar";
+  msg.textContent = (state.date || state.other) ? text() : "Your message shows up here.";
+}
+["occ","loc","ppl"].forEach(id => document.getElementById(id).addEventListener("input", render));
+const toast = document.getElementById("toast"); let tT;
+const say = s => { toast.textContent = s; toast.classList.add("on"); clearTimeout(tT); tT = setTimeout(() => toast.classList.remove("on"), 2400); };
+document.getElementById("send").addEventListener("click", async () => {
+  if (!state.date && !state.other){ say("Pick a date first, or tap Ask about it."); document.getElementById("months").scrollIntoView({behavior: RM ? "auto" : "smooth", block:"center"}); return; }
+  const t = text(); let ok = false;
+  try { await navigator.clipboard.writeText(t); ok = true; } catch(_){ const ta = document.createElement("textarea"); ta.value = t; ta.style.cssText = "position:fixed;opacity:0"; document.body.appendChild(ta); ta.select(); try { ok = document.execCommand("copy"); } catch(__){} ta.remove(); }
+  say(ok ? "Message copied. Paste it in the DM." : "Opening the DM. Copy the message from the box.");
+  window.open(CONFIG.dm, "_blank", "noopener");
+});
+
+/* crepe rail dots */
+const rail = document.getElementById("rail"), dots = document.getElementById("dots"), cards = [...rail.children];
+dots.innerHTML = cards.map((_,i) => `<i class="${i?'':'on'}"></i>`).join("");
+rail.addEventListener("scroll", () => { const mid = rail.scrollLeft + rail.clientWidth/2; let k = 0, bd = 1e9; cards.forEach((c,i) => { const d = Math.abs(c.offsetLeft + c.clientWidth/2 - mid); if (d < bd){ bd = d; k = i; } }); [...dots.children].forEach((d,i) => d.classList.toggle("on", i === k)); }, { passive:true });
+
+/* reveals, scrollspy, dock */
+const rv = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting){ e.target.classList.add("in"); rv.unobserve(e.target); } }), { threshold:.15, rootMargin:"0px 0px -6% 0px" });
+document.querySelectorAll(".rv").forEach((el,i) => { el.style.transitionDelay = el.style.transitionDelay || ((i%4)*70)+"ms"; RM ? el.classList.add("in") : rv.observe(el); });
+const links = [...document.querySelectorAll(".links a")];
+const spy = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) links.forEach(a => a.classList.toggle("on", a.getAttribute("href") === "#"+e.target.id)); }), { rootMargin:"-45% 0px -50% 0px" });
+["book","crepes","story"].forEach(id => spy.observe(document.getElementById(id)));
+const dock = document.getElementById("dock");
+new IntersectionObserver(es => es.forEach(e => dock.classList.toggle("hide", e.isIntersecting))).observe(document.getElementById("closer"));
+</script>
+</body>
+</html>
