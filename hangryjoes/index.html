@@ -246,6 +246,9 @@ footer ul{list-style:none;display:flex;flex-wrap:wrap;gap:6px 14px}
 .dock .btn{flex:1;height:42px;font-size:13px;padding:0 10px;box-shadow:none}
 .dock .btn.line{color:#fff;border-color:rgba(255,255,255,.3)}
 .dock.hide{transform:translateY(130%);opacity:0;pointer-events:none}
+/* on Netlify hosting, sit above the host badge in the bottom corner */
+.nl .dock{bottom:calc(max(10px,env(safe-area-inset-bottom)) + 60px)}
+.nl footer{padding-bottom:150px}
 
 .rv{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s cubic-bezier(.2,1.2,.3,1)}
 .rv.in{opacity:1;transform:none}
@@ -515,6 +518,7 @@ const CONFIG = {
   tiles:{AK:[0,0],ME:[0,11],WI:[1,6],VT:[1,10],NH:[1,11],WA:[2,1],ID:[2,2],MT:[2,3],ND:[2,4],MN:[2,5],IL:[2,6],MI:[2,7],NY:[2,9],MA:[2,10],OR:[3,1],NV:[3,2],WY:[3,3],SD:[3,4],IA:[3,5],IN:[3,6],OH:[3,7],PA:[3,8],NJ:[3,9],CT:[3,10],RI:[3,11],CA:[4,1],UT:[4,2],CO:[4,3],NE:[4,4],MO:[4,5],KY:[4,6],WV:[4,7],VA:[4,8],MD:[4,9],DE:[4,10],AZ:[5,2],NM:[5,3],KS:[5,4],AR:[5,5],TN:[5,6],NC:[5,7],SC:[5,8],DC:[5,9],OK:[6,4],LA:[6,5],MS:[6,6],AL:[6,7],GA:[6,8],HI:[7,0],TX:[7,4],FL:[7,9]},
   stateNames:{AL:"Alabama",AR:"Arkansas",DC:"Washington, DC",DE:"Delaware",FL:"Florida",HI:"Hawaii",IL:"Illinois",IN:"Indiana",MD:"Maryland",MI:"Michigan",MN:"Minnesota",NC:"North Carolina",ND:"North Dakota",NJ:"New Jersey",NY:"New York",OH:"Ohio",OK:"Oklahoma",PA:"Pennsylvania",SC:"South Carolina",TN:"Tennessee",TX:"Texas",VA:"Virginia",WA:"Washington"}
 };
+if (/netlify\.app$/.test(location.hostname)) document.documentElement.classList.add("nl");
 const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const H = CONFIG.heat;
