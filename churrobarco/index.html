@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noai, noimageai">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Churro Bar Co. · Mobile churro cart, Modesto CA</title>
+<meta name="description" content="A mobile churro cart for weddings, quinceañeras, birthdays and company events out of Modesto, CA. Packages from $400. Build your quote and send it to us.">
+<meta property="og:title" content="Churro Bar Co.">
+<meta property="og:description" content="Hot churros at your wedding, quince or party. Packages from $400.">
+<meta property="og:image" content="media/og.jpg">
+<meta name="theme-color" content="#f3efe7">
+<link rel="icon" href="media/icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gloock&family=Jost:wght@400;500;600&family=Barlow+Condensed:wght@600&family=Pinyon+Script&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="media/cart.webp">
+<style>
+/* Churro Bar Co. Concept: the page is their felt letter board ("Congratulations / HOT CHURROS ←").
+   Letters get pressed into the board one by one, a second board swaps through the reasons from their reel
+   ("I'm getting married", "I'm graduating"...), and the quote builder prints your real total on the board using
+   their own package prices. Fringe from their cart umbrella sways along the top. Cream, felt black, cinnamon. */
+:root{
+  --cream:#f3efe7; --paper:#fbf8f2; --ink:#221f1c; --soft:#6f655c; --line:rgba(34,31,28,.12);
+  --felt:#1f1d1c; --wood:#c49a6c; --woodd:#9a7149; --cin:#9a5f33; --sugar:#fffaf0; --gold:#d9b27c;
+  --fd:"Gloock",Georgia,serif; --fb:"Jost",system-ui,sans-serif; --fl:"Barlow Condensed",sans-serif; --fs:"Pinyon Script",cursive;
+  --pad:16px; --r:16px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{background:var(--cream);color:var(--ink);font:400 15px/1.55 var(--fb);overflow-x:hidden}
+img{display:block;max-width:100%;height:auto}
+a{color:inherit}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+input{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--cin);outline-offset:3px;border-radius:6px}
+.wrap{width:100%;max-width:1120px;margin:0 auto;padding:0 var(--pad)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:46px;padding:0 20px;border-radius:999px;font:500 14.5px/1 var(--fb);text-decoration:none;white-space:nowrap;transition:transform .2s,background .2s,border-color .2s}
+.btn.dark{background:var(--felt);color:var(--sugar)}
+.btn.line{border:1.5px solid rgba(34,31,28,.28)}
+.btn.cin{background:var(--cin);color:#fff}
+.btn:active{transform:scale(.97)}
+@media (hover:hover) and (pointer:fine){.btn.dark:hover{background:#3a3532}.btn.line:hover{border-color:var(--ink)}}
+
+/* fringe from the umbrella */
+.fringe{height:16px;background:repeating-linear-gradient(90deg,var(--sugar) 0 2px,transparent 2px 6px);-webkit-mask:linear-gradient(#000 40%,transparent);mask:linear-gradient(#000 40%,transparent);transform-origin:50% 0;animation:sway 3.2s ease-in-out infinite alternate;border-top:5px solid var(--sugar)}
+@keyframes sway{from{transform:skewX(-6deg)}to{transform:skewX(6deg)}}
+
+/* nav */
+.nav{position:sticky;top:0;z-index:50;background:rgba(243,239,231,.96);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;gap:12px;height:56px}
+.brand{display:flex;align-items:center;gap:9px;text-decoration:none;margin-right:auto}
+.brand img{width:34px;height:34px;border-radius:50%;background:#fff}
+.brand b{font:400 18px/1 var(--fd);letter-spacing:.01em}
+.links{display:none;gap:22px}
+.links a{font:500 14px/1 var(--fb);text-decoration:none;color:var(--soft);padding:6px 0;border-bottom:2px solid transparent;transition:color .2s,border-color .2s}
+.links a.on{color:var(--ink);border-color:var(--cin)}
+.nav .btn{height:36px;padding:0 15px;font-size:13.5px}
+
+/* the letter board */
+.board{position:relative;background:var(--felt);border:10px solid var(--wood);border-radius:6px;box-shadow:inset 0 0 0 2px var(--woodd),0 18px 30px -18px rgba(0,0,0,.6);padding:12px 12px 14px;text-align:center;background-image:repeating-linear-gradient(180deg,rgba(255,255,255,.05) 0 1px,transparent 1px 7px)}
+.board .top{display:block;font:400 26px/1 var(--fs);color:var(--sugar);margin-bottom:4px;min-height:26px}
+.board .ln{display:block;min-height:1.15em;font:600 30px/1.15 var(--fl);letter-spacing:.06em;color:var(--sugar);text-transform:uppercase;white-space:nowrap}
+.board .ln.sm{font-size:15px;letter-spacing:.08em;margin-top:6px}
+.board .ch{display:inline-block;opacity:0;transform:translateY(-10px) rotate(var(--r,0deg));animation:press .28s cubic-bezier(.3,1.6,.5,1) forwards;animation-delay:var(--d,0ms)}
+.board .ch.sp{width:.32em}
+@keyframes press{to{opacity:1;transform:translateY(0) rotate(var(--r,0deg))}}
+.board .ch.out{animation:pull .2s ease-in forwards;animation-delay:var(--d,0ms)}
+@keyframes pull{from{opacity:1;transform:translateY(0) rotate(var(--r,0deg))}to{opacity:0;transform:translateY(8px) rotate(calc(var(--r,0deg) * 4))}}
+.easel{position:relative;height:22px;margin:0 auto;width:60%}
+.easel::before,.easel::after{content:"";position:absolute;top:-2px;width:6px;height:26px;background:var(--woodd);border-radius:2px}
+.easel::before{left:12%;transform:rotate(14deg)}.easel::after{right:12%;transform:rotate(-14deg)}
+
+/* hero */
+.hero{padding:0 0 32px;overflow:clip}
+.hero .fringe{margin-bottom:16px}
+.hero .bwrap{width:min(100%,330px);margin:0 auto}
+.hero h1{font:400 27px/1.18 var(--fd);margin-top:18px;text-align:center;max-width:20ch;margin-left:auto;margin-right:auto}
+.hero h1 em{font-style:normal;color:var(--cin)}
+.lead{color:var(--soft);margin:10px auto 0;max-width:44ch;text-align:center}
+.cta{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:16px}
+.hpic{display:none}
+.rise{opacity:0;transform:translateY(12px);animation:rise .7s cubic-bezier(.2,.7,.2,1) forwards}
+@keyframes rise{to{opacity:1;transform:none}}
+
+/* sections */
+.sec{padding:36px 0}
+.head{margin-bottom:16px}
+.head small{display:block;font:400 22px/1 var(--fs);color:var(--cin)}
+.head h2{font:400 23px/1.2 var(--fd);margin-top:4px}
+.head p{color:var(--soft);margin-top:8px;max-width:52ch;font-size:14.5px}
+
+/* reasons */
+.why{display:grid;gap:16px;align-items:center}
+.why .board .ln{font-size:22px;white-space:normal}
+.why .board{min-height:150px;display:flex;flex-direction:column;justify-content:center}
+.why .pic{border-radius:var(--r);overflow:hidden;aspect-ratio:3/4;max-height:52vh;margin:0 auto;width:min(100%,calc(52vh * .75))}
+.why .pic img{width:100%;height:100%;object-fit:cover}
+.why .note{text-align:center;font:400 15px/1.5 var(--fb);color:var(--soft)}
+.why .note b{display:block;font:400 21px/1.2 var(--fd);color:var(--ink)}
+
+/* quote */
+.quote{background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:var(--cream);border-radius:14px;padding:5px}
+.tabs button{border-radius:10px;padding:10px 8px;font:500 13.5px/1.25 var(--fb);text-align:center;color:var(--soft);transition:background .2s,color .2s}
+.tabs button b{display:block;font:400 17px/1.1 var(--fd);color:inherit}
+.tabs button[aria-pressed="true"]{background:var(--felt);color:var(--sugar)}
+.pkgnote{font-size:13px;color:var(--soft);margin:10px 2px 12px}
+.tiers{display:grid;gap:8px}
+.tier{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;text-align:left;border:1.5px solid var(--line);background:#fff;border-radius:14px;padding:12px 14px;transition:border-color .2s,box-shadow .2s}
+.tier[aria-pressed="true"]{border-color:var(--cin);box-shadow:0 0 0 3px rgba(154,95,51,.14)}
+.tier .dot{width:18px;height:18px;border-radius:50%;border:2px solid var(--line);position:relative}
+.tier[aria-pressed="true"] .dot{border-color:var(--cin)}
+.tier[aria-pressed="true"] .dot::after{content:"";position:absolute;inset:3px;border-radius:50%;background:var(--cin)}
+.tier b{display:block;font:400 18px/1.15 var(--fd)}
+.tier span{font-size:13px;color:var(--soft)}
+.tier .p{font:400 21px/1 var(--fd);color:var(--cin)}
+.extras{display:grid;gap:10px;margin-top:14px}
+.ex{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:11px 14px}
+.ex b{display:block;font:500 14.5px/1.3 var(--fb)}
+.ex span{font-size:12.5px;color:var(--soft)}
+.step{display:flex;align-items:center;gap:2px;background:var(--cream);border-radius:999px;padding:3px}
+.step button{width:32px;height:32px;border-radius:50%;font:500 18px/1 var(--fb)}
+.step output{min-width:26px;text-align:center;font:600 14px/1 var(--fb)}
+.sw{position:relative;width:46px;height:28px;border-radius:999px;background:rgba(34,31,28,.18);transition:background .2s;flex:none}
+.sw::after{content:"";position:absolute;left:3px;top:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:transform .25s cubic-bezier(.3,1.5,.5,1)}
+.sw[aria-checked="true"]{background:var(--cin)}
+.sw[aria-checked="true"]::after{transform:translateX(18px)}
+.miles{width:76px;height:36px;border:1.5px solid var(--line);border-radius:10px;text-align:center;font:500 14px/1 var(--fb)}
+.result{margin-top:4px}
+.result .board .ln{font-size:34px}
+.result .board .ln.sm{font-size:14px}
+.break{list-style:none;margin-top:12px;font-size:13.5px;color:var(--soft)}
+.break li{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px dashed var(--line)}
+.break li b{font-weight:600;color:var(--ink)}
+.result .acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.result .fine{font-size:12.5px;color:var(--soft);margin-top:8px}
+
+/* includes */
+.inc{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.inc div{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:13px}
+.inc b{display:block;font:400 16px/1.2 var(--fd)}
+.inc span{font-size:13px;color:var(--soft)}
+
+/* photos */
+.rail{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin:0 calc(var(--pad)*-1);padding:4px var(--pad) 6px;overscroll-behavior-x:contain}
+.rail::-webkit-scrollbar{display:none}
+.rail figure{flex:0 0 76%;scroll-snap-align:center}
+.rail .ph{border-radius:var(--r);overflow:hidden;aspect-ratio:3/4;background:#e6dfd3}
+.rail .ph.w{aspect-ratio:4/3}
+.rail img{width:100%;height:100%;object-fit:cover}
+.rail figcaption{font-size:13.5px;color:var(--soft);margin-top:8px}
+.dots{display:flex;gap:6px;justify-content:center;margin-top:12px}
+.dots i{width:7px;height:7px;border-radius:4px;background:rgba(34,31,28,.2);transition:width .3s,background .3s}
+.dots i.on{width:18px;background:var(--cin)}
+
+/* closer */
+.close{background:var(--felt);color:var(--sugar);text-align:center;padding:0 0 44px;position:relative;overflow:hidden}
+.close .fringe{margin-bottom:30px}
+.close img{width:84px;height:84px;border-radius:50%;margin:0 auto 12px;background:#fff}
+.close h2{font:400 26px/1.15 var(--fd)}
+.close h2 em{font:400 1.25em/1 var(--fs);color:var(--gold);font-style:normal}
+.close p{color:rgba(255,250,240,.75);margin:8px auto 0;max-width:40ch}
+.close .btn.line{border-color:rgba(255,250,240,.35);color:var(--sugar)}
+.close .btn.cin{background:var(--sugar);color:var(--felt)}
+footer{background:#171514;color:rgba(255,250,240,.6);font-size:12.5px;padding:18px 0 96px}
+footer .wrap{display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+footer a{color:rgba(255,250,240,.9)}
+.studio{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;background:#2c2826;color:#fff;font:500 11px/1 var(--fb);text-decoration:none}
+.studio i{width:9px;height:9px;border-radius:3px;background:conic-gradient(from 210deg,#ff5a1f,#ffb03b,#ff5a1f)}
+
+.dock{position:fixed;left:10px;right:10px;bottom:max(10px,env(safe-area-inset-bottom));z-index:60;display:flex;gap:8px;padding:8px;border-radius:999px;background:rgba(31,29,28,.95);box-shadow:0 10px 30px -10px rgba(0,0,0,.5);transition:transform .35s,opacity .35s}
+.dock .btn{flex:1;height:42px;font-size:13.5px;padding:0 10px}
+.dock .btn.line{border-color:rgba(255,250,240,.3);color:var(--sugar)}
+.dock .btn.cin{background:var(--sugar);color:var(--felt)}
+.dock.hide{transform:translateY(130%);opacity:0;pointer-events:none}
+.nl .dock{bottom:calc(max(10px,env(safe-area-inset-bottom)) + 60px)}
+.nl footer{padding-bottom:150px}
+.toast{position:fixed;left:50%;bottom:150px;transform:translate(-50%,20px);background:var(--felt);color:#fff;padding:10px 16px;border-radius:999px;font:500 13px/1.3 var(--fb);opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;z-index:80;max-width:calc(100% - 32px);text-align:center}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+.rv{opacity:0;transform:translateY(14px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
+.rv.in{opacity:1;transform:none}
+
+@media (min-width:600px){
+  .rail figure{flex-basis:44%}
+  .inc{grid-template-columns:repeat(4,1fr)}
+}
+@media (min-width:900px){
+  :root{--pad:28px}
+  body{font-size:16px}
+  .nav .wrap{height:64px}
+  .links{display:flex}
+  .hero{padding-bottom:56px}
+  .hero .grid{display:grid;grid-template-columns:1fr 1.1fr;gap:48px;align-items:center}
+  .hero .bwrap{width:340px;margin:0}
+  .hero h1{text-align:left;margin-left:0;font-size:clamp(38px,3.5vw,48px)}
+  .lead{text-align:left;margin-left:0;font-size:16.5px}
+  .cta{justify-content:flex-start}
+  .hpic{display:block;border-radius:var(--r);overflow:hidden;aspect-ratio:4/3}
+  .hpic img{width:100%;height:100%;object-fit:cover}
+  .sec{padding:64px 0}
+  .head h2{font-size:clamp(28px,2.6vw,36px)}
+  .why{grid-template-columns:1fr 1fr 1fr;gap:28px}
+  .why .pic{width:100%;max-height:none}
+  .quote .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:start}
+  .result{position:sticky;top:96px;margin-top:0}
+  .rail figure{flex-basis:calc((100% - 36px)/4)}
+  .dots{display:none}
+  .close{padding-bottom:72px}
+  .close h2{font-size:clamp(32px,3vw,42px)}
+  .dock{display:none}
+  footer{padding-bottom:22px}
+  .nl footer{padding-bottom:70px}
+  footer .wrap{flex-direction:row;justify-content:space-between;align-items:center}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .rise,.rv,.board .ch{opacity:1;transform:none}
+  .board .ch.out{opacity:0}
+}
+</style>
+</head>
+<body>
+<nav class="nav" aria-label="Main">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Churro Bar Co., back to top"><img src="media/logo.png" alt="" width="34" height="34"><b>churro bar co.</b></a>
+    <div class="links"><a href="#reasons">Celebrations</a><a href="#quote">Packages</a><a href="#photos">Photos</a></div>
+    <a class="btn dark" href="#quote">Get a quote</a>
+  </div>
+</nav>
+
+<main id="top">
+<header class="hero">
+  <div class="fringe" aria-hidden="true"></div>
+  <div class="wrap grid">
+    <div>
+      <div class="bwrap rise" style="animation-delay:.1s">
+        <div class="board" id="heroBoard" role="img" aria-label="Letter board: Congratulations, hot churros, tag us at churrobarco"><span class="top" data-top="Congratulations"></span><span class="ln"></span><span class="ln"></span><span class="ln sm"></span></div>
+        <div class="easel" aria-hidden="true"></div>
+      </div>
+      <h1 class="rise" style="animation-delay:.3s">A mobile churro cart for <em>weddings, quinceañeras</em> and every reason to celebrate.</h1>
+      <p class="lead rise" style="animation-delay:.45s">Hot churros, your pick of sauces and our fringe-umbrella cart, set up and served at your event out of Modesto, California.</p>
+      <div class="cta rise" style="animation-delay:.6s">
+        <a class="btn dark" id="heroCta" href="#quote">Build your quote</a>
+        <a class="btn line" href="https://ig.me/m/churrobarco" target="_blank" rel="noopener">Message us</a>
+      </div>
+    </div>
+    <figure class="hpic rise" style="animation-delay:.2s"><img src="media/cart.webp" alt="Newlyweds with churros in front of the Churro Bar Co. cart and its white fringe umbrella" width="960" height="720"></figure>
+  </div>
+</header>
+
+<section class="sec" id="reasons" aria-labelledby="rsH">
+  <div class="wrap">
+    <div class="head rv"><small>No matter the reason</small><h2 id="rsH">We're here. Let's celebrate.</h2></div>
+    <div class="why">
+      <div class="rv"><div class="board" id="whyBoard" aria-live="polite"><span class="top"></span><span class="ln"></span><span class="ln"></span></div><div class="easel" aria-hidden="true"></div></div>
+      <div class="pic rv"><img src="media/sign.webp" alt="Hot churros wrapped in paper held up next to the Churro Bar Co. letter board and flowers" width="600" height="778" loading="lazy"></div>
+      <p class="note rv"><b>Big day or small win</b>Weddings and quinces any day of the week. Birthdays, showers, graduations, luncheons and office parties too.</p>
+    </div>
+  </div>
+</section>
+
+<section class="sec quote" id="quote" aria-labelledby="qH">
+  <div class="wrap">
+    <div>
+      <div class="head rv"><small>Packages</small><h2 id="qH">Build your churro quote</h2><p>These are our real package prices. Pick your day and size, add any extras, and send it to us to lock in your date.</p></div>
+      <div class="tabs" role="group" aria-label="Type of event">
+        <button data-k="lux" aria-pressed="true"><b>Luxury</b>Weekends, weddings &amp; quinces</button>
+        <button data-k="party" aria-pressed="false"><b>Party</b>Weekday celebrations</button>
+      </div>
+      <p class="pkgnote" id="pkgnote"></p>
+      <div class="tiers" id="tiers" role="radiogroup" aria-label="Package size"></div>
+      <div class="extras">
+        <div class="ex"><div><b>Extra churros</b><span>$50 per 25 more</span></div><div class="step"><button id="xm" aria-label="25 fewer churros">−</button><output id="xn">0</output><button id="xp" aria-label="25 more churros">+</button></div></div>
+        <div class="ex"><div><b>Premium serving trays</b><span>+$0.25 per churro</span></div><button class="sw" id="trays" role="switch" aria-checked="false" aria-label="Premium serving trays"></button></div>
+        <div class="ex"><div><b>Farther than <span id="mins">35</span> minutes from 95350?</b><span>$1 per mile, round trip. Miles past the travel area, one way:</span></div><input class="miles" id="miles" inputmode="numeric" placeholder="0" aria-label="Miles past the travel area, one way"></div>
+      </div>
+    </div>
+    <aside class="result rv" aria-live="polite">
+      <div class="board" id="totalBoard"><span class="top" data-top="Your Total"></span><span class="ln"></span><span class="ln sm"></span></div>
+      <div class="easel" aria-hidden="true"></div>
+      <ul class="break" id="break"></ul>
+      <div class="acts">
+        <button class="btn dark" id="send">Send this quote</button>
+        <a class="btn line" href="https://www.instagram.com/churrobarco/" target="_blank" rel="noopener">See our posts</a>
+      </div>
+      <p class="fine">We copy your quote and open our Instagram DMs so you can paste it in. Travel and date are confirmed with you there.</p>
+    </aside>
+  </div>
+</section>
+
+<section class="sec" aria-labelledby="incH">
+  <div class="wrap">
+    <div class="head rv"><small>Every package</small><h2 id="incH">What comes with the cart</h2></div>
+    <div class="inc">
+      <div class="rv"><b>Setup &amp; breakdown</b><span>We bring the cart and pack it up after.</span></div>
+      <div class="rv"><b>Your choice of umbrella</b><span>Pick the one that fits your day.</span></div>
+      <div class="rv"><b>Serving supplies</b><span>Standard serving trays included.</span></div>
+      <div class="rv"><b>Travel included</b><span>Within 30 to 35 minutes of 95350.</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="photos" aria-labelledby="phH" style="padding-top:0">
+  <div class="wrap">
+    <div class="head rv"><small>From real events</small><h2 id="phH">Hot churros, happy people</h2></div>
+    <div class="rail" id="rail" tabindex="0" aria-label="Photos, scroll sideways">
+      <figure><div class="ph w"><img src="media/cart.webp" alt="Bride and groom at the churro cart at night" width="960" height="720" loading="lazy"></div><figcaption>The cart and our fringe umbrella, wedding night</figcaption></figure>
+      <figure><div class="ph"><img src="media/couple.webp" alt="Newlyweds laughing with churros at their reception" width="600" height="800" loading="lazy"></div><figcaption>Churros for the newlyweds</figcaption></figure>
+      <figure><div class="ph"><img src="media/boat.webp" alt="A guest holding a paper boat of churros" width="600" height="600" loading="lazy"></div><figcaption>Straight off the cart</figcaption></figure>
+      <figure><div class="ph"><img src="media/sign.webp" alt="Churros next to the Hot Churros letter board" width="600" height="778" loading="lazy"></div><figcaption>Follow the sign</figcaption></figure>
+    </div>
+    <div class="dots" id="dots" aria-hidden="true"></div>
+  </div>
+</section>
+
+<section class="close" id="closer" aria-labelledby="clH">
+  <div class="fringe" aria-hidden="true"></div>
+  <div class="wrap">
+    <img class="rv" src="media/logo.png" alt="Churro Bar Co. mobile churro cart logo" width="84" height="84" loading="lazy">
+    <h2 id="clH" class="rv"><em>Let's</em> celebrate.</h2>
+    <p class="rv">Tell us the date and the reason. We'll bring the churros.</p>
+    <div class="cta rv">
+      <a class="btn cin" href="#quote">Build your quote</a>
+      <a class="btn line" href="https://ig.me/m/churrobarco" target="_blank" rel="noopener">Message us</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Churro Bar Co. · Mobile churro cart · Modesto, CA 95350 · <a href="https://www.instagram.com/churrobarco/" target="_blank" rel="noopener">@churrobarco</a></span>
+    <a class="studio" href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener" aria-label="Site by ElaSystems (opens in a new tab)"><i aria-hidden="true"></i><span>Site by <b>ElaSystems</b></span></a>
+  </div>
+</footer>
+
+<div class="dock" id="dock">
+  <a class="btn line" href="https://ig.me/m/churrobarco" target="_blank" rel="noopener">Message us</a>
+  <a class="btn cin" href="#quote">Get a quote</a>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+if (/netlify\.app$/.test(location.hostname)) document.documentElement.classList.add("nl");
+const CONFIG = {
+  dm:"https://ig.me/m/churrobarco",
+  /* straight from their two package sheets */
+  pkgs:{
+    lux:{ name:"Luxury Package", mins:35, note:"For all Saturday and Sunday events, plus weddings and quinceañeras any day of the week.",
+      tiers:[{n:100,p:500,h:"2 hours",s:2},{n:150,p:575,h:"2 hours",s:3},{n:200,p:650,h:"2.5 hours",s:3}] },
+    party:{ name:"Party Package", mins:30, note:"For weekday birthdays, small company events and luncheons, Monday to Friday. Not for weddings or quinceañeras.",
+      tiers:[{n:50,p:400,h:"1.5 hours",s:2},{n:100,p:450,h:"1.5 hours",s:2},{n:150,p:500,h:"1.5 hours",s:2}] }
+  },
+  extra:{ per:25, price:50 }, trays:.25, mile:1,
+  reasons:[["I'm getting","married"],["I'm having a","baby shower"],["My baby's","1st birthday"],["I'm","graduating"],["It's my","anniversary"],["I got a","promotion"]]
+};
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* letter board: press letters in one at a time, slightly crooked like a real board */
+let seed = 7; const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
+function press(el, text, start = 0, step = 45){
+  el.innerHTML = [...text].map((c,i) => c === " " ? `<span class="ch sp" style="--d:${start + i*step}ms"> </span>` : `<span class="ch" style="--d:${start + i*step}ms;--r:${((rnd()-.5)*4).toFixed(1)}deg">${esc(c)}</span>`).join("");
+  return start + text.length * step;
+}
+function pull(el, step = 18){
+  const chs = [...el.querySelectorAll(".ch")]; chs.forEach((c,i) => { c.classList.add("out"); c.style.setProperty("--d", (i*step)+"ms"); });
+  return chs.length * step + 200;
+}
+function setBoard(board, lines, start = 0){
+  const top = board.querySelector(".top"), lns = [...board.querySelectorAll(".ln")];
+  let t = start;
+  if (top && top.dataset.top && !top.dataset.done){ top.textContent = top.dataset.top; top.dataset.done = 1; top.style.opacity = 0; top.style.transition = "opacity .5s"; setTimeout(() => top.style.opacity = 1, start); t += 250; }
+  lns.forEach((ln,i) => { t = press(ln, lines[i] || "", t) + 60; });
+  return t;
+}
+
+/* hero board */
+setBoard(document.getElementById("heroBoard"), ["Hot", "Churros  ←", "Tag us @churrobarco"], 400);
+
+/* reasons board cycles only while on screen */
+(function(){
+  const b = document.getElementById("whyBoard"), lns = [...b.querySelectorAll(".ln")];
+  let i = 0, timer = 0, on = false;
+  const show = () => { const r = CONFIG.reasons[i % CONFIG.reasons.length]; press(lns[0], r[0], 0, 40); press(lns[1], r[1], r[0].length*40 + 60, 40); };
+  const next = () => { const w = Math.max(pull(lns[0]), pull(lns[1])); setTimeout(() => { i++; show(); }, w); };
+  if (RM){ lns[0].textContent = "No matter"; lns[1].textContent = "the reason"; return; }
+  new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting && !on){ on = true; if (!lns[0].textContent) show(); timer = setInterval(next, 2600); }
+    else if (!e.isIntersecting && on){ on = false; clearInterval(timer); }
+  }), { threshold:.4 }).observe(b);
+})();
+
+/* quote builder, using their package rules */
+const state = { k:"lux", t:1, x:0, trays:false, miles:0 };
+const tiersEl = document.getElementById("tiers"), totalBoard = document.getElementById("totalBoard");
+const money = n => "$" + (Math.round(n*100)/100).toLocaleString("en-US",{minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits:2});
+function renderTiers(){
+  const P = CONFIG.pkgs[state.k];
+  document.getElementById("pkgnote").textContent = P.note;
+  document.getElementById("mins").textContent = P.mins;
+  tiersEl.innerHTML = P.tiers.map((t,i) => `<button class="tier" role="radio" aria-pressed="${i===state.t}" aria-checked="${i===state.t}" data-i="${i}"><span class="dot" aria-hidden="true"></span><span><b>${t.n} churros</b><span>${esc(t.h)} of service · ${t.s} sauces of your choice</span></span><span class="p">${money(t.p)}</span></button>`).join("");
+}
+let lastTotal = "";
+function calc(){
+  const P = CONFIG.pkgs[state.k], t = P.tiers[state.t];
+  const churros = t.n + state.x * CONFIG.extra.per;
+  const items = [[`${P.name}, ${t.n} churros`, t.p]];
+  if (state.x) items.push([`${state.x * CONFIG.extra.per} extra churros`, state.x * CONFIG.extra.price]);
+  if (state.trays) items.push([`Premium trays (${churros} churros)`, churros * CONFIG.trays]);
+  if (state.miles) items.push([`Extra travel (${state.miles} mi each way)`, state.miles * 2 * CONFIG.mile]);
+  const total = items.reduce((a,b) => a + b[1], 0);
+  return { P, t, churros, items, total };
+}
+function render(){
+  const q = calc();
+  document.getElementById("xn").textContent = state.x * CONFIG.extra.per;
+  document.getElementById("break").innerHTML = q.items.map(([a,b]) => `<li><span>${esc(a)}</span><b>${money(b)}</b></li>`).join("") + `<li><span>${esc(q.t.h)} of service · ${q.t.s} sauces</span><span>${q.churros} churros</span></li>`;
+  const tt = money(q.total);
+  if (tt !== lastTotal){
+    const lns = totalBoard.querySelectorAll(".ln");
+    if (!lastTotal || RM){ setBoard(totalBoard, [tt, `${q.churros} hot churros`], 0); }
+    else { const w = Math.max(pull(lns[0]), pull(lns[1])); setTimeout(() => { press(lns[0], tt, 0, 55); press(lns[1], `${q.churros} hot churros`, 200, 25); }, w); }
+    lastTotal = tt;
+  }
+}
+document.querySelector(".tabs").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; state.k = b.dataset.k; state.t = Math.min(state.t, 2); document.querySelectorAll(".tabs button").forEach(x => x.setAttribute("aria-pressed", x === b)); renderTiers(); render(); });
+tiersEl.addEventListener("click", e => { const b = e.target.closest(".tier"); if (!b) return; state.t = +b.dataset.i; renderTiers(); render(); });
+document.getElementById("xp").addEventListener("click", () => { state.x = Math.min(20, state.x + 1); render(); });
+document.getElementById("xm").addEventListener("click", () => { state.x = Math.max(0, state.x - 1); render(); });
+const trays = document.getElementById("trays");
+trays.addEventListener("click", () => { state.trays = !state.trays; trays.setAttribute("aria-checked", state.trays); render(); });
+document.getElementById("miles").addEventListener("input", e => { state.miles = Math.max(0, Math.min(500, parseInt(e.target.value.replace(/\D/g,"")) || 0)); render(); });
+renderTiers();
+/* the total board fills in when it comes into view */
+new IntersectionObserver((es,o) => es.forEach(e => { if (e.isIntersecting){ o.disconnect(); render(); } }), { threshold:.3 }).observe(totalBoard);
+
+const toast = document.getElementById("toast"); let tT;
+const say = s => { toast.textContent = s; toast.classList.add("on"); clearTimeout(tT); tT = setTimeout(() => toast.classList.remove("on"), 2400); };
+document.getElementById("send").addEventListener("click", async () => {
+  const q = calc();
+  const text = ["Hi Churro Bar Co.! I'd like to book the churro cart.", ...q.items.map(([a,b]) => `• ${a}: ${money(b)}`), `Total from your price sheet: ${money(q.total)}`, "Date: ", "Venue/city: ", "Occasion: "].join("\n");
+  let ok = false;
+  try { await navigator.clipboard.writeText(text); ok = true; } catch(_){ const ta = document.createElement("textarea"); ta.value = text; ta.style.cssText = "position:fixed;opacity:0"; document.body.appendChild(ta); ta.select(); try { ok = document.execCommand("copy"); } catch(__){} ta.remove(); }
+  say(ok ? "Quote copied. Paste it in our DMs and add your date." : "Opening our DMs. Copy your quote from the page.");
+  window.open(CONFIG.dm, "_blank", "noopener");
+});
+
+/* photo rail dots */
+const rail = document.getElementById("rail"), dots = document.getElementById("dots"), figs = [...rail.children];
+dots.innerHTML = figs.map((_,i) => `<i class="${i?'':'on'}"></i>`).join("");
+rail.addEventListener("scroll", () => { const mid = rail.scrollLeft + rail.clientWidth/2; let k = 0, bd = 1e9; figs.forEach((c,i) => { const d = Math.abs(c.offsetLeft + c.clientWidth/2 - mid); if (d < bd){ bd = d; k = i; } }); [...dots.children].forEach((d,i) => d.classList.toggle("on", i === k)); }, { passive:true });
+
+/* reveals, scrollspy, dock */
+const rv = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting){ e.target.classList.add("in"); rv.unobserve(e.target); } }), { threshold:.15, rootMargin:"0px 0px -6% 0px" });
+document.querySelectorAll(".rv").forEach((el,i) => { el.style.transitionDelay = ((i%4)*80)+"ms"; RM ? el.classList.add("in") : rv.observe(el); });
+const links = [...document.querySelectorAll(".links a")];
+const spy = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) links.forEach(a => a.classList.toggle("on", a.getAttribute("href") === "#"+e.target.id)); }), { rootMargin:"-45% 0px -50% 0px" });
+["reasons","quote","photos"].forEach(id => spy.observe(document.getElementById(id)));
+const dock = document.getElementById("dock");
+new IntersectionObserver(es => es.forEach(e => dock.classList.toggle("hide", e.isIntersecting))).observe(document.getElementById("closer"));
+</script>
+</body>
+</html>
