@@ -1,0 +1,569 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noai, noimageai">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Memory to Magnet | Live photo magnet cart for Chicago events</title>
+<meta name="description" content="Memory to Magnet is a live photo magnet cart for weddings, birthdays and events in Chicago. Guests scan, snap and take home a magnet printed on the spot. DM @memory.to.magnet to book.">
+<meta property="og:title" content="Memory to Magnet">
+<meta property="og:description" content="Your guests deserve more than a thank-you bag. Live photo magnets, printed and pressed at your event.">
+<meta property="og:image" content="og.jpg">
+<meta name="theme-color" content="#fbf7f1">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Allura&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+<script>
+(function(){var d=document.documentElement,seen=false;try{seen=sessionStorage.getItem("mmIntro")==="1"}catch(e){}
+if(!seen&&!matchMedia("(prefers-reduced-motion: reduce)").matches)d.classList.add("intro-on");})();
+</script>
+<style>
+/* Memory to Magnet. The page is their pickup board: real event photos come out as magnets in their own design
+   (cream border, MEMORY TO MAGNET on top, "Keep what matters close" underneath) and snap onto a dark board.
+   Blush and sage from their watercolor logo, the sage cart, gold from the mirror sign.
+   Allura (their logo script), Cormorant Garamond (their caps), Jost. GSAP for motion. */
+:root{
+  --cream:#fbf7f1; --paper:#fffdf9; --blush:#f3d9d5; --blushD:#d99c97; --rose:#c2655f;
+  --sage:#7b8768; --sageD:#5d6a4e; --sageL:#e4e9dc; --gold:#b8955a;
+  --board:#232428; --board2:#2c2e33; --ink:#26231f; --muted:#6c655c; --line:#e7dfd3;
+  --max:1120px; --r:14px; --ease:cubic-bezier(.2,.75,.2,1);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;overflow-x:clip}
+body{margin:0;background:var(--cream);color:var(--ink);font:15px/1.65 "Jost",system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:clip}
+a{color:inherit}
+img{display:block;max-width:100%}
+h1,h2,h3{margin:0;font-family:"Cormorant Garamond",serif;font-weight:600;line-height:1.08;letter-spacing:-.005em}
+h1 em,h2 em{font-family:"Allura",cursive;font-style:normal;font-weight:400;color:var(--rose);font-size:1.18em;letter-spacing:0;white-space:nowrap}
+h2{font-size:30px}
+p{margin:0 0 1em}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 16px}
+section{padding:44px 0;position:relative}
+.cap{display:inline-flex;align-items:center;gap:10px;font:500 11.5px/1 "Jost",sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--sageD)}
+.cap::before{content:"";width:22px;height:1px;background:currentColor}
+.lead{color:var(--muted)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 20px;border-radius:999px;font:500 14.5px/1 "Jost",sans-serif;text-decoration:none;white-space:nowrap;border:1.5px solid var(--ink);cursor:pointer;transition:transform .2s var(--ease),background-color .2s,color .2s}
+.btn:hover{transform:translateY(-2px)}
+.btn-ink{background:var(--ink);color:#fff}
+.btn-ink:hover{background:var(--sageD);border-color:var(--sageD)}
+.btn-line{background:transparent;color:var(--ink)}
+.btn-line:hover{background:var(--ink);color:#fff}
+.btn svg{width:17px;height:17px}
+:focus-visible{outline:2px solid var(--rose);outline-offset:3px}
+
+/* ---------- the magnet (their design) ---------- */
+.mag{position:relative;background:var(--paper);padding:7% 7% 4%;box-shadow:0 1px 0 #00000012,0 14px 22px -14px #0000008a,0 2px 4px #0000002a;border-radius:3px}
+.mag::before{content:"MEMORY TO MAGNET";display:block;text-align:center;font:600 clamp(5.5px,.85vw,9px)/1 "Cormorant Garamond",serif;letter-spacing:.14em;color:#5b524a;margin:0 0 6%;white-space:nowrap;overflow:hidden}
+.mag .ph{aspect-ratio:1/1;overflow:hidden;background:#ddd}
+.mag .ph img{width:100%;height:100%;object-fit:cover}
+.mag .sig{display:block;text-align:center;font:400 clamp(9px,1.12vw,14.5px)/1.4 "Allura",cursive;color:var(--rose);margin-top:4%;white-space:nowrap;overflow:hidden;text-overflow:clip}
+.pin{position:absolute;top:-6px;left:50%;width:12px;height:12px;margin-left:-6px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff 0 18%,#c9a96e 30%,#8d6c35 100%);box-shadow:0 2px 3px #0006}
+
+/* ---------- opening ---------- */
+#intro{display:none}
+.intro-on #intro{display:grid;position:fixed;inset:0;z-index:100;place-items:center;background:var(--cream);cursor:pointer;overflow:hidden}
+.intro-on body{overflow:hidden}
+#intro .wash{position:absolute;width:120vmax;height:120vmax;border-radius:50%;background:radial-gradient(circle at 35% 40%,#f3d9d5 0,#f3d9d5aa 22%,transparent 46%),radial-gradient(circle at 68% 62%,#dfe5d4 0,#dfe5d4aa 22%,transparent 48%);filter:blur(10px);opacity:0;transform:scale(.6)}
+#intro .lg{position:relative;text-align:center}
+#intro .cam{width:64px;height:52px;margin:0 auto 4px}
+#intro .cam path,#intro .cam rect,#intro .cam circle{fill:none;stroke:#4a443d;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1}
+#intro .cam .hrt{fill:var(--rose);stroke:none;opacity:0;transform-box:fill-box;transform-origin:50% 50%}
+#intro .w{font:400 76px/1 "Allura",cursive;color:#4a443d;clip-path:inset(0 100% 0 0)}
+#intro .to{font:600 12px/1 "Cormorant Garamond",serif;letter-spacing:.3em;color:#6c655c;opacity:0;margin-top:-4px}
+#intro .mg{font:600 26px/1 "Cormorant Garamond",serif;letter-spacing:.32em;color:#4a443d;opacity:0;margin-top:6px}
+#intro .kw{font:500 10.5px/1 "Jost",sans-serif;letter-spacing:.3em;text-transform:uppercase;color:var(--sageD);opacity:0;margin-top:16px}
+#intro .skip{position:absolute;bottom:max(20px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);border:0;background:none;font:500 11px/1 "Jost",sans-serif;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);cursor:pointer}
+
+/* ---------- header ---------- */
+header.nav{position:sticky;top:0;z-index:40;background:var(--cream);border-bottom:1px solid var(--line)}
+header.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:58px;gap:12px}
+.logo{display:flex;align-items:center;gap:8px;text-decoration:none;line-height:1}
+.logo svg{width:30px;height:26px;flex:none}
+.logo .t{display:flex;flex-direction:column;align-items:center}
+.logo .t b{font:400 27px/.8 "Allura",cursive;font-weight:400;color:#4a443d}
+.logo .t small{font:600 8.5px/1 "Cormorant Garamond",serif;letter-spacing:.3em;color:#6c655c;margin-top:2px}
+nav.links{display:none;gap:26px}
+nav.links a{text-decoration:none;font-size:14.5px;color:var(--muted);position:relative}
+nav.links a::after{content:"";position:absolute;left:0;right:0;bottom:-6px;height:1.5px;background:var(--rose);transform:scaleX(0);transition:transform .3s var(--ease)}
+nav.links a:hover,nav.links a.on{color:var(--ink)}
+nav.links a:hover::after,nav.links a.on::after{transform:scaleX(1)}
+header.nav .btn{padding:10px 15px;font-size:13.5px}
+
+/* ---------- hero: the pickup board ---------- */
+.hero{padding:22px 0 40px;overflow:clip}
+.hero .wrap{display:grid;gap:22px}
+.hero h1{font-size:33px;margin-top:10px}
+.hero .lead{margin:12px 0 0;max-width:30em}
+.hero .actions{display:flex;gap:8px;margin-top:18px}
+.hero .actions .btn{flex:1 1 0;padding:13px 8px}
+.hero .note{margin-top:12px;font-size:13px;color:var(--muted);display:flex;align-items:center;gap:8px}
+.hero .note i{width:7px;height:7px;border-radius:50%;background:var(--sage)}
+.board{position:relative;border-radius:10px;padding:16px 14px 18px;background:radial-gradient(120% 90% at 30% 0%,#34363c,var(--board) 60%);border:10px solid #5a3e2a;box-shadow:inset 0 0 0 1px #00000055,inset 0 10px 30px #0006,0 30px 50px -30px #26231f99;outline:1px solid #3d2a1c}
+.board::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.12;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.board .bh{text-align:center;color:#f1ece4;margin-bottom:14px;position:relative;z-index:1}
+.board .bh svg{width:40px;height:34px;display:block;margin:0 auto 4px}
+.board .bh b{display:block;font:600 14px/1 "Cormorant Garamond",serif;letter-spacing:.24em}
+.board .bh small{display:flex;align-items:center;justify-content:center;gap:8px;font:500 9.5px/1 "Jost",sans-serif;letter-spacing:.26em;color:#c9c2b6;margin-top:7px}
+.board .bh small::before,.board .bh small::after{content:"";width:26px;height:1px;background:#c9c2b6}
+.slots{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.slots .mag{will-change:transform}
+.slots .mag:nth-child(3n+1){rotate:-2.2deg}.slots .mag:nth-child(3n+2){rotate:1.4deg}.slots .mag:nth-child(3n){rotate:-.8deg}
+.slots .mag:nth-child(n+4){display:none}
+.slots .mag.empty{background:transparent;box-shadow:inset 0 0 0 1.5px #ffffff26;rotate:0deg}
+.slots .mag.empty::before,.slots .mag.empty .sig{visibility:hidden}
+.slots .mag.empty .ph{background:transparent}
+
+/* ---------- strip ---------- */
+.strip{background:var(--sage);color:#fff;overflow:hidden;white-space:nowrap}
+.strip .row{display:inline-flex;align-items:center;gap:30px;padding:12px 0;animation:roll 30s linear infinite}
+.strip span{font:500 22px/1 "Cormorant Garamond",serif;font-style:italic}
+.strip i{font:400 15px/1 "Jost",sans-serif;font-style:normal;color:var(--blush)}
+@keyframes roll{to{transform:translateX(-50%)}}
+
+/* ---------- how it works ---------- */
+.how{background:var(--paper)}
+.how .top{display:grid;gap:10px}
+.steps{display:grid;gap:12px;margin-top:22px;position:relative}
+.step{display:grid;grid-template-columns:56px 1fr;gap:14px;align-items:center;padding:12px 14px;border:1px solid var(--line);border-radius:var(--r);background:var(--cream)}
+.step .ic{width:56px;height:56px;border-radius:50%;background:var(--blush);display:grid;place-items:center;position:relative;overflow:hidden}
+.step:nth-child(2n) .ic{background:var(--sageL)}
+.step .ic svg{width:34px;height:34px;stroke:#4a443d;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.step .n{font:600 12px/1 "Jost",sans-serif;letter-spacing:.18em;color:var(--rose)}
+.step h3{font-size:21px;margin:3px 0 1px}
+.step p{margin:0;color:var(--muted);font-size:14px}
+.scanline{position:absolute;left:14px;right:14px;height:2px;background:var(--rose);top:18px;box-shadow:0 0 8px var(--rose)}
+.flash{position:absolute;inset:0;background:#fff;opacity:0}
+.behind{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.behind figure{margin:0;border-radius:var(--r);overflow:hidden;position:relative;aspect-ratio:1/1}
+.behind img{width:100%;height:112%;object-fit:cover}
+.behind figcaption{position:absolute;left:8px;bottom:8px;background:#fffdf9ee;border-radius:999px;padding:5px 10px;font-size:12px}
+
+/* ---------- try it ---------- */
+.try{background:linear-gradient(180deg,var(--blush),#f7e7e3)}
+.trygrid{display:grid;gap:18px;margin-top:20px;align-items:center}
+.ctrl{display:grid;gap:12px;background:var(--paper);border-radius:var(--r);padding:16px;border:1px solid #ecd2cc}
+.ctrl label{display:grid;gap:6px;font:500 12px/1 "Jost",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.ctrl input[type=text]{font:500 16px/1.2 "Jost",sans-serif;padding:12px;border:1.5px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);width:100%}
+.ctrl input[type=text]:focus{outline:none;border-color:var(--rose)}
+.file{display:flex;gap:8px;flex-wrap:wrap}
+.file input{position:absolute;opacity:0;width:1px;height:1px}
+.ctrl .row{display:flex;gap:8px;flex-wrap:wrap}
+.ctrl .row .btn{flex:1 1 0}
+.ctrl small{color:var(--muted);font-size:12px}
+.machine{position:relative;height:360px;display:grid;place-items:center}
+.printer{position:absolute;top:0;left:50%;width:250px;height:60px;margin-left:-125px;border-radius:14px 14px 6px 6px;background:linear-gradient(180deg,#f4f1ec,#d8d3cb);box-shadow:inset 0 -6px 0 #bdb6ab,0 12px 18px -12px #0007;z-index:3}
+.printer::before{content:"";position:absolute;left:24px;right:24px;bottom:10px;height:6px;border-radius:3px;background:#2b2b2b}
+.printer i{position:absolute;right:16px;top:14px;width:8px;height:8px;border-radius:50%;background:#7fd38f;box-shadow:0 0 8px #7fd38f}
+.feed{position:absolute;top:48px;left:-20px;right:-20px;bottom:-20px;overflow:hidden;z-index:2;padding-top:4px}
+.outmag{position:absolute;top:4px;left:50%;width:210px;margin-left:-105px}
+.press{position:absolute;left:50%;top:30px;width:240px;height:22px;margin-left:-120px;border-radius:6px;background:linear-gradient(180deg,#c9ccd1,#8e939b);box-shadow:0 8px 14px -8px #0008;opacity:0;z-index:4}
+.outmag .mag::before{font-size:10px}
+.outmag .mag .sig{font-size:21px;white-space:normal;line-height:1.15;padding:0 2px}
+.out-flash{position:absolute;inset:0;background:radial-gradient(circle,#fff,transparent 60%);opacity:0;pointer-events:none;z-index:5}
+
+/* ---------- events ---------- */
+.events{background:var(--cream);overflow:clip}
+.rail{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin:20px -16px 0;padding:0 16px 8px;scroll-padding:0 16px}
+.rail::-webkit-scrollbar{display:none}
+.ev{flex:0 0 74%;scroll-snap-align:start;margin:0;border-radius:var(--r);overflow:hidden;position:relative;aspect-ratio:3/4;max-height:52vh}
+.ev img{width:100%;height:112%;object-fit:cover}
+.ev figcaption{position:absolute;left:10px;right:10px;bottom:10px;background:#fffdf9f0;border-radius:10px;padding:8px 12px;font-size:13px;line-height:1.35}
+.ev figcaption b{display:block;font:600 17px/1.15 "Cormorant Garamond",serif}
+.dots{display:flex;justify-content:center;gap:6px;margin-top:8px}
+.dots i{width:6px;height:6px;border-radius:50%;background:#26231f2e;transition:width .25s,background-color .25s}
+.dots i.on{width:18px;border-radius:3px;background:var(--sageD)}
+.perfect{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.perfect span{border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:8px 14px;font-size:14px}
+
+/* ---------- book ---------- */
+.book{background:var(--board);color:#f1ece4}
+.book .cap{color:#c8d1b9}
+.book h2 em{color:var(--blush)}
+.book .lead{color:#c9c2b6}
+.bgrid{display:grid;gap:18px;margin-top:20px}
+.bform{display:grid;gap:10px}
+.bform label{display:grid;gap:6px;font:500 12px/1 "Jost",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#c9c2b6}
+.bform input,.bform select{font:500 16px/1.2 "Jost",sans-serif;padding:12px;border:1px solid #ffffff2e;border-radius:10px;background:#ffffff0d;color:#fff;width:100%}
+.bform select option{color:#26231f}
+.bform .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.note-card{position:relative;background:var(--paper);color:var(--ink);border-radius:4px;padding:22px 20px 18px;box-shadow:0 26px 40px -24px #000;rotate:-1.2deg}
+.note-card .pin{top:-6px}
+.note-card h3{font:400 30px/1 "Allura",cursive;color:var(--rose);margin-bottom:8px}
+.note-card #note{white-space:pre-wrap;font-size:14.5px;line-height:1.55;min-height:6em;margin:0}
+.note-card .caret{display:inline-block;width:1.5px;height:1em;background:var(--ink);vertical-align:-2px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.note-card .btn{width:100%;margin-top:14px}
+.sent{font-size:12.5px;color:var(--sageD);text-align:center;margin:8px 0 0;min-height:1.3em}
+
+/* ---------- closer + footer ---------- */
+.closer{text-align:center;padding:52px 0;background:radial-gradient(70% 90% at 30% 20%,#f3d9d5,transparent 60%),radial-gradient(70% 90% at 75% 80%,#dfe5d4,transparent 60%),var(--cream)}
+.closer .sc{font:400 54px/1 "Allura",cursive;color:#4a443d}
+.closer p{color:var(--muted);margin:10px auto 18px;max-width:26em}
+.closer .actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+footer{background:var(--sageD);color:#e6eadf;font-size:13.5px;padding:24px 0 104px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;align-items:center}
+footer a{text-decoration:none}
+.studio{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;background:#ffffff1a;color:#fff;font:600 11px/1 "Jost",sans-serif}
+.studio i{width:9px;height:9px;border-radius:3px;background:conic-gradient(from 210deg,#ff5a1f,#ffb03b,#ff5a1f)}
+
+/* ---------- phone bar ---------- */
+.dock{position:fixed;z-index:45;left:10px;right:10px;bottom:max(10px,env(safe-area-inset-bottom));display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:6px;background:#fffdf9f5;border:1px solid var(--line);border-radius:999px;box-shadow:0 14px 30px -14px #26231f88;transition:transform .3s var(--ease),opacity .3s}
+.dock .btn{padding:12px 8px}
+.dock.off{transform:translateY(150%);opacity:0;pointer-events:none}
+.nl .dock{bottom:calc(max(10px,env(safe-area-inset-bottom)) + 60px)}
+.nl footer{padding-bottom:170px}
+.rv{opacity:0;transform:translateY(18px)}
+.no-motion .rv{opacity:1;transform:none}
+
+@media (min-width:640px){
+  .ev{flex-basis:44%}
+  .bform .two{grid-template-columns:1fr 1fr}
+  .behind{grid-template-columns:repeat(3,1fr)}
+}
+@media (min-width:900px){
+  body{font-size:16px}
+  .wrap{padding:0 28px}
+  section{padding:80px 0}
+  h2{font-size:46px}
+  nav.links{display:flex}
+  header.nav .btn{padding:11px 20px;font-size:14px}
+  .hero{padding:40px 0 70px}
+  .hero .wrap{grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+  .hero h1{font-size:58px}
+  .hero .lead{font-size:17.5px}
+  .hero .actions .btn{flex:0 0 auto;padding:14px 26px}
+  .board{padding:22px 22px 26px}
+  .slots{gap:18px}
+  .slots .mag:nth-child(n+4){display:block}
+  .how .top{grid-template-columns:1fr 1fr;align-items:end;gap:40px}
+  .steps{grid-template-columns:repeat(4,1fr);gap:16px}
+  .step{grid-template-columns:1fr;text-align:left;padding:22px}
+  .step .ic{width:70px;height:70px}
+  .step h3{font-size:24px}
+  .feed{top:48px}
+  .outmag{width:250px;margin-left:-125px}
+  .trygrid{grid-template-columns:1fr 1fr;gap:48px}
+  .machine{height:460px}
+  .rail{display:grid;grid-template-columns:repeat(4,1fr);overflow:visible;margin:28px 0 0;padding:0;gap:16px}
+  .ev{max-height:none}
+  .dots{display:none}
+  .bgrid{grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+  .closer .sc{font-size:84px}
+  .dock{display:none}
+  footer,.nl footer{padding-bottom:28px}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.strip .row,.note-card .caret{animation:none}.rv{opacity:1!important;transform:none!important}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <symbol id="cam" viewBox="0 0 40 34"><path d="M6 9h6l3-4h10l3 4h6a3 3 0 0 1 3 3v15a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V12a3 3 0 0 1 3-3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="17" cy="19" r="6" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="26" y="14" width="8" height="9" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M30 21.2c-2.2-1.5-3-2.5-3-3.5a1.5 1.5 0 0 1 3-.4 1.5 1.5 0 0 1 3 .4c0 1-.8 2-3 3.5z" fill="#c2655f"/></symbol>
+</defs></svg>
+
+<div id="intro" aria-hidden="true">
+  <div class="wash"></div>
+  <div class="lg">
+    <svg class="cam" viewBox="0 0 40 34"><path pathLength="1" d="M6 9h6l3-4h10l3 4h6a3 3 0 0 1 3 3v15a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V12a3 3 0 0 1 3-3z"/><circle pathLength="1" cx="17" cy="19" r="6"/><rect pathLength="1" x="26" y="14" width="8" height="9" rx="1"/><path class="hrt" d="M30 21.2c-2.2-1.5-3-2.5-3-3.5a1.5 1.5 0 0 1 3-.4 1.5 1.5 0 0 1 3 .4c0 1-.8 2-3 3.5z"/></svg>
+    <div class="w">Memory</div>
+    <div class="to">TO</div>
+    <div class="mg">MAGNET</div>
+    <div class="kw">Keep what matters close</div>
+  </div>
+  <button class="skip" type="button">Tap to skip</button>
+</div>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="logo" href="#top" aria-label="Memory to Magnet, back to top"><svg aria-hidden="true" style="color:#4a443d"><use href="#cam"/></svg><span class="t"><b>Memory</b><small>TO MAGNET</small></span></a>
+    <nav class="links" aria-label="Main"><a href="#how">How it works</a><a href="#try">Try it</a><a href="#events">Events</a><a href="#book">Book</a></nav>
+    <a class="btn btn-ink" href="#book">Book your event</a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <span class="cap rv">Live photo magnets · Chicago</span>
+        <h1 class="rv">Your guests deserve more than a <em>thank-you bag.</em></h1>
+        <p class="lead rv">We bring the cart to your wedding, birthday or event. Guests snap a photo, we print it and press it into a magnet right there, and they take it home to the fridge.</p>
+        <div class="actions rv">
+          <a class="btn btn-ink" id="heroCta" href="#book"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Book your event</a>
+          <a class="btn btn-line" href="#how">How it works</a>
+        </div>
+        <p class="note rv"><i></i>Weddings · Birthdays · Galas · Corporate events</p>
+      </div>
+      <div class="board rv" aria-label="The Memory to Magnet pickup station with guest magnets">
+        <div class="bh"><svg aria-hidden="true" style="color:#f1ece4"><use href="#cam"/></svg><b>MEMORY TO MAGNET</b><small>PICKUP STATION</small></div>
+        <div class="slots" id="slots"></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="strip" aria-hidden="true"><div class="row" id="strip"></div></div>
+
+  <section class="how" id="how">
+    <div class="wrap">
+      <div class="top">
+        <div><span class="cap rv">Here's how it works</span><h2 class="rv" style="margin-top:8px">Scan. Snap. <em>Take home.</em></h2></div>
+        <p class="lead rv">The same four steps on the sign at our cart. Guests do it from their own phone, and the magnet is usually ready by the time they've grabbed a drink.</p>
+      </div>
+      <div class="steps" id="steps">
+        <article class="step rv"><span class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM18 18h3v3M14 21h1"/></svg><span class="scanline"></span></span><div><span class="n">01</span><h3>Scan the QR code</h3><p>Open your phone camera and scan the code at the cart.</p></div></article>
+        <article class="step rv"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13.5" r="3.5"/></svg><span class="flash"></span></span><div><span class="n">02</span><h3>Take a photo</h3><p>Snap one on the spot or pick a favorite from your camera roll.</p></div></article>
+        <article class="step rv"><span class="ic"><svg viewBox="0 0 24 24" class="plane"><path d="M21 3 3 10.5l7 2.5 2.5 7z"/><path d="M10 13 21 3"/></svg></span><div><span class="n">03</span><h3>Send it to us</h3><p>It comes straight to the cart, and we print and press it.</p></div></article>
+        <article class="step rv"><span class="ic"><svg viewBox="0 0 24 24"><path d="M6 3v8a6 6 0 0 0 12 0V3h-4v8a2 2 0 0 1-4 0V3z"/><path d="M6 7h4M14 7h4"/></svg></span><div><span class="n">04</span><h3>Pick up &amp; enjoy</h3><p>Find yours on the pickup station board and take it home.</p></div></article>
+      </div>
+      <div class="behind">
+        <figure class="rv"><img src="media/printer.jpg" alt="Photos printing at the Memory to Magnet cart" width="720" height="720" loading="lazy" data-par><figcaption>Printed on the spot</figcaption></figure>
+        <figure class="rv"><img src="media/press.jpg" alt="Pressing a photo into a magnet" width="720" height="720" loading="lazy" data-par><figcaption>Pressed into a magnet</figcaption></figure>
+        <figure class="rv"><img src="media/magnets.jpg" alt="Finished magnets in clear sleeves" width="720" height="760" loading="lazy" data-par><figcaption>Sleeved and ready</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="try" id="try">
+    <div class="wrap">
+      <span class="cap rv">Try it</span>
+      <h2 class="rv" style="margin-top:8px">See your photo <em>as a magnet.</em></h2>
+      <p class="lead rv" style="margin-top:8px;max-width:34em">Pick a photo and add your names or the date. Your photo stays on your phone, nothing gets uploaded.</p>
+      <div class="trygrid">
+        <div class="ctrl rv">
+          <div class="file">
+            <label class="btn btn-ink" for="photo" style="text-transform:none;letter-spacing:0;font-size:14.5px;color:#fff;display:inline-flex"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13.5" r="3.5"/></svg>Choose a photo</label>
+            <input id="photo" type="file" accept="image/*">
+            <button class="btn btn-line" id="sample" type="button">Use a sample</button>
+          </div>
+          <label>Caption<input id="capIn" type="text" maxlength="34" value="Keep what matters close" placeholder="Sara & Adam · 10.12.26"></label>
+          <div class="row"><button class="btn btn-ink" id="printBtn" type="button">Print my magnet</button><button class="btn btn-line" id="saveBtn" type="button">Save it</button></div>
+          <small>A preview of the magnet design. The real ones are printed and pressed at your event.</small>
+        </div>
+        <div class="machine" aria-live="polite">
+          <div class="printer" aria-hidden="true"><i></i></div>
+          <div class="press" aria-hidden="true"></div>
+          <div class="feed"><div class="outmag"><div class="mag"><span class="pin" style="display:none"></span><div class="ph"><canvas id="tryCanvas" width="600" height="600" style="width:100%;height:100%;display:block"></canvas></div><span class="sig" id="trySig">Keep what matters close</span></div></div></div>
+          <div class="out-flash" aria-hidden="true"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="events" id="events">
+    <div class="wrap">
+      <span class="cap rv">Where we've been</span>
+      <h2 class="rv" style="margin-top:8px">The cart, <em>at your party.</em></h2>
+      <div class="rail" id="rail"></div>
+      <p class="cap rv" style="margin-top:22px">Great for</p><div class="perfect rv" style="margin-top:10px"><span>Weddings</span><span>Birthdays</span><span>Galas &amp; conferences</span><span>Corporate events</span><span>Bridal &amp; baby showers</span><span>Graduations</span></div>
+    </div>
+  </section>
+
+  <section class="book" id="book">
+    <div class="wrap">
+      <div class="bgrid">
+        <div>
+          <span class="cap rv">Book your event</span>
+          <h2 class="rv" style="margin-top:8px">Tell us about it. <em>We'll take it from there.</em></h2>
+          <p class="lead rv" style="margin-top:10px">Fill this in and we'll write your message. One tap copies it and opens our Instagram DMs.</p>
+          <div class="bform rv">
+            <label>Your name<input id="bName" type="text" autocomplete="given-name" placeholder="First name"></label>
+            <div class="two">
+              <label>Event<select id="bType"><option>Wedding</option><option>Birthday</option><option>Gala or conference</option><option>Corporate event</option><option>Shower</option><option>Graduation</option><option>Something else</option></select></label>
+              <label>Date<input id="bDate" type="text" placeholder="e.g. June 14"></label>
+            </div>
+            <div class="two">
+              <label>Guests<input id="bGuests" type="text" inputmode="numeric" placeholder="About how many"></label>
+              <label>Venue or area<input id="bVenue" type="text" placeholder="e.g. Downtown Chicago"></label>
+            </div>
+          </div>
+        </div>
+        <div class="note-card rv"><span class="pin"></span><h3>Your message</h3><p id="note"></p><button class="btn btn-ink" id="sendBtn" type="button">Copy &amp; open Instagram</button><p class="sent" id="sent" aria-live="polite"></p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="closer" id="closer">
+    <div class="wrap">
+      <div class="sc rv">Keep what matters close</div>
+      <p class="rv">Live photo magnets for weddings, birthdays and events in Chicago.</p>
+      <div class="actions rv"><a class="btn btn-ink" href="#book">Book your event</a><a class="btn btn-line js-ig" href="#" target="_blank" rel="noopener">@memory.to.magnet</a></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div><b style="font:400 26px/1 'Allura',cursive;color:#fff">Memory to Magnet</b><br>Chicago, IL · <a class="js-ig" href="#" target="_blank" rel="noopener">@memory.to.magnet</a></div>
+    <a class="studio" href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener" aria-label="Site by ElaSystems (opens in a new tab)"><i aria-hidden="true"></i><span>Site by <b>ElaSystems</b></span></a>
+  </div>
+</footer>
+
+<nav class="dock" aria-label="Quick actions">
+  <a class="btn btn-ink" href="#book">Book your event</a>
+  <a class="btn btn-line" href="#try">Try it</a>
+</nav>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+const CONFIG = {
+  handle: "memory.to.magnet",
+  board: ["media/m1.jpg", "media/m2.jpg", "media/m3.jpg", "media/m4.jpg", "media/m5.jpg", "media/m6.jpg"],
+  sample: "media/m1.jpg",
+  events: [
+    { img: "media/board.jpg", alt: "The Memory to Magnet pickup station board full of guest magnets", t: "Birthday party", c: "A full pickup board by the end of the night" },
+    { img: "media/gala.jpg", alt: "The Memory to Magnet cart at the SAMS gala dinner", t: "SAMS Gala Dinner", c: "At the 14th National Conference" },
+    { img: "media/rooftop.jpg", alt: "Guests lined up at the cart on a Chicago rooftop", t: "Rooftop event", c: "Golden hour over the city" },
+    { img: "media/cart.jpg", alt: "The sage Memory to Magnet cart outdoors with the owners", t: "Outdoor party", c: "The cart goes wherever the party is" }
+  ],
+  strip: ["Weddings", "Birthdays", "Galas", "Showers", "Corporate events", "Graduations"]
+};
+const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const REDUCE = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const G = typeof gsap !== "undefined" && !REDUCE;
+if (!G) document.documentElement.classList.add("no-motion");
+const IG = "https://www.instagram.com/" + CONFIG.handle + "/", DM = "https://ig.me/m/" + CONFIG.handle;
+$$(".js-ig").forEach(a => a.href = IG);
+if (/netlify\.app$/.test(location.hostname)) document.documentElement.classList.add("nl");
+
+/* ---------- board ---------- */
+const slots = $("#slots");
+slots.innerHTML = CONFIG.board.map((src, i) => `<div class="mag" data-i="${i}"><span class="pin"></span><div class="ph"><img src="${src}" alt="" width="720" height="720"${i > 2 ? ' loading="lazy"' : ""}></div><span class="sig">Keep what matters close</span></div>`).join("");
+$("#strip").innerHTML = [...CONFIG.strip, ...CONFIG.strip].map(w => `<span>${w}</span><i>♡</i>`).join("");
+
+/* ---------- events rail ---------- */
+const rail = $("#rail");
+rail.innerHTML = CONFIG.events.map(e => `<figure class="ev rv"><img src="${e.img}" alt="${esc(e.alt)}" loading="lazy" width="720" height="960" data-par><figcaption><b>${esc(e.t)}</b>${esc(e.c)}</figcaption></figure>`).join("");
+const dots = document.createElement("div"); dots.className = "dots"; dots.setAttribute("aria-hidden", "true");
+CONFIG.events.forEach(() => dots.appendChild(document.createElement("i"))); rail.after(dots);
+const markDots = () => { const max = rail.scrollWidth - rail.clientWidth, i = max <= 0 ? 0 : Math.round(rail.scrollLeft / max * (CONFIG.events.length - 1)); [...dots.children].forEach((d, j) => d.classList.toggle("on", j === i)); };
+rail.addEventListener("scroll", markDots, { passive: true }); markDots();
+
+/* ---------- try it: render the magnet photo into a canvas ---------- */
+const cv = $("#tryCanvas"), cx = cv.getContext("2d"), sig = $("#trySig"), capIn = $("#capIn");
+let img = new Image(), hasImg = false;
+function draw() {
+  cx.fillStyle = "#e9e2d8"; cx.fillRect(0, 0, 600, 600);
+  if (!hasImg) return;
+  const s = Math.max(600 / img.naturalWidth, 600 / img.naturalHeight), w = img.naturalWidth * s, h = img.naturalHeight * s;
+  cx.drawImage(img, (600 - w) / 2, (600 - h) / 2, w, h);
+}
+function load(src) { img = new Image(); img.onload = () => { hasImg = true; draw(); printIt(); }; img.src = src; }
+$("#photo").addEventListener("change", e => { const f = e.target.files && e.target.files[0]; if (!f) return; const r = new FileReader(); r.onload = () => load(r.result); r.readAsDataURL(f); });
+$("#sample").addEventListener("click", () => load(CONFIG.sample));
+capIn.addEventListener("input", () => sig.textContent = capIn.value.trim() || "Keep what matters close");
+function printIt() {
+  if (!G) return;
+  const m = $(".outmag"), pr = $(".press"), fl = $(".out-flash");
+  const tl = gsap.timeline();
+  const H = m.offsetHeight;
+  tl.set(m, { y: -H - 10, rotate: 0, scale: 1 })
+    .set(pr, { opacity: 0, y: 0 })
+    .to(".printer i", { opacity: .2, repeat: 5, yoyo: true, duration: .1 }, 0)
+    .to(m, { y: -H * .25, duration: 1.2, ease: "steps(16)" }, .1)
+    .to(m, { y: 24, duration: .45, ease: "power2.in" })
+    .to(pr, { opacity: 1, y: 60, duration: .25, ease: "power3.in" }, "-=.05")
+    .to(m, { scaleY: .97, duration: .08 }, "<.2")
+    .to(fl, { opacity: .9, duration: .08 }, "<")
+    .to(fl, { opacity: 0, duration: .5 })
+    .to(m, { scaleY: 1, duration: .3, ease: "back.out(3)" }, "<")
+    .to(pr, { y: 0, opacity: 0, duration: .35 }, "<")
+    .to(m, { rotate: -2, y: 30, duration: .6, ease: "elastic.out(1,.5)" });
+}
+$("#printBtn").addEventListener("click", printIt);
+$("#saveBtn").addEventListener("click", () => {
+  const W = 700, H = 860, c = document.createElement("canvas"); c.width = W; c.height = H; const x = c.getContext("2d");
+  x.fillStyle = "#fffdf9"; x.fillRect(0, 0, W, H);
+  x.fillStyle = "#5b524a"; x.font = '600 26px "Cormorant Garamond", serif'; x.textAlign = "center";
+  if ("letterSpacing" in x) x.letterSpacing = "5px";
+  x.fillText("MEMORY TO MAGNET", W / 2, 66);
+  if ("letterSpacing" in x) x.letterSpacing = "0px";
+  x.drawImage(cv, 50, 92, 600, 600);
+  x.fillStyle = "#c2655f"; x.font = '400 54px "Allura", cursive'; x.fillText(sig.textContent, W / 2, 780);
+  c.toBlob(b => { const a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = "memory-to-magnet.png"; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000); }, "image/png");
+});
+
+/* ---------- booking note ---------- */
+const note = $("#note");
+function compose() {
+  const n = $("#bName").value.trim(), t = $("#bType").value, d = $("#bDate").value.trim(), g = $("#bGuests").value.trim(), v = $("#bVenue").value.trim();
+  let m = `Hi Memory to Magnet! ${n ? "I'm " + n + ". " : ""}I'd love to book the magnet cart for a ${t.toLowerCase()}`;
+  m += d ? ` on ${d}` : ""; m += v ? ` at ${v}` : ""; m += ".";
+  if (g) m += ` We're expecting about ${g} guests.`;
+  m += " Can you send me availability and pricing?";
+  typeTo(m); return m;
+}
+let typed = "", tt = 0;
+function typeTo(m) {
+  if (REDUCE) { note.textContent = m; return; }
+  let i = 0; while (i < typed.length && i < m.length && typed[i] === m[i]) i++;
+  typed = typed.slice(0, i); clearInterval(tt);
+  tt = setInterval(() => { typed = m.slice(0, typed.length + 2); note.innerHTML = esc(typed) + '<span class="caret"></span>'; if (typed.length >= m.length) clearInterval(tt); }, 16);
+}
+["bName", "bType", "bDate", "bGuests", "bVenue"].forEach(id => $("#" + id).addEventListener("input", compose));
+$("#sendBtn").addEventListener("click", async () => {
+  const m = compose(); let ok = false;
+  try { await navigator.clipboard.writeText(m); ok = true; } catch (e) { const t = document.createElement("textarea"); t.value = m; document.body.appendChild(t); t.select(); try { ok = document.execCommand("copy"); } catch (e2) {} t.remove(); }
+  $("#sent").textContent = ok ? "Copied. Paste it into the chat that just opened." : "Opening Instagram. Copy the message above if it isn't there.";
+  window.open(DM, "_blank", "noopener");
+});
+compose();
+
+/* ---------- nav + dock ---------- */
+const navA = $$("nav.links a");
+if ("IntersectionObserver" in window) {
+  const vis = new Map();
+  const io = new IntersectionObserver(es => { es.forEach(e => vis.set(e.target.id, e.intersectionRatio)); let best = null, br = .1; vis.forEach((r, id) => { if (r > br) { br = r; best = id; } }); navA.forEach(a => a.classList.toggle("on", a.hash === "#" + best)); }, { threshold: [0, .15, .4, .7] });
+  ["how", "try", "events", "book"].forEach(id => io.observe(document.getElementById(id)));
+  new IntersectionObserver(([e]) => $(".dock").classList.toggle("off", e.isIntersecting), { threshold: .05 }).observe($("#book"));
+}
+
+/* ---------- motion ---------- */
+function motion() {
+  if (!G) { load(CONFIG.sample); return; }
+  gsap.registerPlugin(ScrollTrigger);
+  const hero = $$(".hero .rv");
+  gsap.to(hero, { opacity: 1, y: 0, duration: .9, stagger: .08, ease: "power3.out" });
+  const mags = $$(".mag", slots);
+  gsap.from(mags, { y: -40, x: () => gsap.utils.random(-30, 30), rotate: () => gsap.utils.random(-14, 14), scale: 1.15, opacity: 0, duration: .7, ease: "back.out(2.4)", stagger: { each: .14, from: "random" }, delay: .5 });
+  gsap.from($$(".pin", slots), { scale: 0, duration: .3, stagger: .14, delay: 1.1, ease: "back.out(4)" });
+  /* magnets lean toward the cursor like they're pulled */
+  if (matchMedia("(hover: hover) and (pointer: fine)").matches) {
+    const b = $(".board");
+    b.addEventListener("pointermove", e => mags.forEach(m => { const r = m.getBoundingClientRect(), dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2), d = Math.hypot(dx, dy), f = Math.max(0, 1 - d / 260); gsap.to(m, { x: dx * f * .08, y: dy * f * .08, scale: 1 + f * .05, duration: .4 }); }));
+    b.addEventListener("pointerleave", () => gsap.to(mags, { x: 0, y: 0, scale: 1, duration: .8, ease: "elastic.out(1,.4)" }));
+    $$(".btn").forEach(btn => { btn.addEventListener("pointermove", e => { const r = btn.getBoundingClientRect(); gsap.to(btn, { x: (e.clientX - r.left - r.width / 2) * .16, y: (e.clientY - r.top - r.height / 2) * .22, duration: .3 }); }); btn.addEventListener("pointerleave", () => gsap.to(btn, { x: 0, y: 0, duration: .5, ease: "elastic.out(1,.4)" })); });
+  }
+  $$("main .rv").filter(el => !el.closest(".hero")).forEach(el => gsap.to(el, { opacity: 1, y: 0, duration: .85, ease: "power3.out", scrollTrigger: { trigger: el, start: "top 90%" } }));
+  $$("[data-par]").forEach(im => gsap.fromTo(im, { yPercent: -6 }, { yPercent: 6, ease: "none", scrollTrigger: { trigger: im.parentElement, start: "top bottom", end: "bottom top", scrub: true } }));
+  /* step icons act out their step */
+  gsap.to(".scanline", { top: 50, duration: 1.1, repeat: -1, yoyo: true, ease: "sine.inOut" });
+  gsap.to(".flash", { opacity: .9, duration: .06, repeat: -1, repeatDelay: 2.2, yoyo: true });
+  gsap.to(".plane", { x: 6, y: -6, rotate: 6, duration: 1.2, repeat: -1, yoyo: true, ease: "sine.inOut" });
+  gsap.from(".step", { y: 30, duration: .7, stagger: .12, ease: "power3.out", scrollTrigger: { trigger: "#steps", start: "top 82%" } });
+  ScrollTrigger.create({ trigger: "#try", start: "top 65%", once: true, onEnter: () => load(CONFIG.sample) });
+  gsap.from(".note-card", { rotate: 8, y: 40, duration: 1, ease: "back.out(1.6)", scrollTrigger: { trigger: ".note-card", start: "top 85%" } });
+  gsap.from(".closer .sc", { clipPath: "inset(0 100% 0 0)", duration: 1.4, ease: "power2.inOut", scrollTrigger: { trigger: ".closer", start: "top 80%" } });
+}
+(function intro() {
+  const root = document.documentElement, el = $("#intro");
+  if (!root.classList.contains("intro-on") || !G) { el.remove(); root.classList.remove("intro-on"); motion(); return; }
+  let fin = false;
+  const finish = () => { if (fin) return; fin = true; try { sessionStorage.setItem("mmIntro", "1"); } catch (e) {} tl.kill(); gsap.to("#intro .lg", { y: -20, opacity: 0, duration: .35 }); gsap.to(el, { opacity: 0, duration: .55, delay: .15, onComplete() { root.classList.remove("intro-on"); el.remove(); } }); gsap.delayedCall(.25, motion); };
+  const tl = gsap.timeline({ onComplete: finish });
+  tl.to("#intro .wash", { opacity: 1, scale: 1, duration: 1.2, ease: "power2.out" }, 0)
+    .to("#intro .cam path:not(.hrt),#intro .cam circle,#intro .cam rect", { strokeDashoffset: 0, duration: .7, stagger: .1, ease: "power2.out" }, .1)
+    .to("#intro .cam .hrt", { opacity: 1, scale: 1.3, duration: .25, ease: "back.out(3)" }, .7)
+    .to("#intro .cam .hrt", { scale: 1, duration: .2 })
+    .to("#intro .w", { clipPath: "inset(0 0% 0 0)", duration: .9, ease: "power2.inOut" }, .5)
+    .to("#intro .to", { opacity: 1, duration: .3 }, 1.2)
+    .fromTo("#intro .mg", { opacity: 0, letterSpacing: ".1em" }, { opacity: 1, letterSpacing: ".32em", duration: .6, ease: "power2.out" }, 1.25)
+    .to("#intro .kw", { opacity: 1, duration: .4 }, 1.6)
+    .to({}, { duration: .35 });
+  ["click", "keydown", "wheel", "touchstart"].forEach(ev => addEventListener(ev, finish, { once: true, passive: true }));
+})();
+if (document.fonts) document.fonts.ready.then(() => { if (window.ScrollTrigger) ScrollTrigger.refresh(); });
+</script>
+</body>
+</html>
