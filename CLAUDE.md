@@ -4,7 +4,9 @@ Each folder is a single-file client website built with the `ela-studio` skill (`
 
 ## Standing rule: when a business doesn't want their site
 
-Newest instruction from the user: "When i say pause or said no i mean delete the entire damn project to free up space". The team sits at the 200-project Hobby limit, so a declined business's Vercel project gets deleted, not just paused. When the user says a business doesn't want its site (or "said no", "passed", "not interested", "pause it"), do this straight away, without asking again:
+Newest instruction from the user: "When i say pause or said no i mean delete the entire damn project to free up space". The team sits at the 200-project Hobby limit, so a declined business's Vercel project gets deleted, not just paused. **Newer clarification (overrides the "pause" part above):** "No when i tell you they didnt want it you delete, when i say pause it just means pause". So "pause X" = only `pause_project` on Vercel (no deletion link, no DECLINED marker). Delete only when the user says the business didn't want it / said no / passed / not interested.
+
+When the user says a business doesn't want its site (or "said no", "passed", "not interested"), do this straight away, without asking again:
 1. Find the business's Vercel project (`list_projects` with `search`, team `team_AYB0SFZ1qQkp6TebSji5xEKA`).
 2. Delete it. The Vercel MCP can't delete; `get_project_deletion_link` gives the dashboard link, and the CLI needs the user's permission rule for `vercel api /v9/projects/<name> -X DELETE`. If neither works from here, hand the user the deletion link and pause the project in the meantime.
 3. Confirm the old link is gone (curl returns 404 DEPLOYMENT_NOT_FOUND).
