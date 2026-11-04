@@ -4,281 +4,457 @@
 <meta charset="utf-8">
 <meta name="robots" content="noai, noimageai">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Evolved Nutrition | Wellness shots, fresh juice and nutrition coaching</title>
-<meta name="description" content="Evolved Nutrition: 2 oz wellness shots, 8 oz fresh juices, an ice cart for your event, and 6 week, 8 week and hormone health coaching packages. DM @evolvednutrition.hts to order.">
+<title>Evolved Nutrition | Wellness shots, fresh juice and 1-on-1 nutrition coaching</title>
+<meta name="description" content="Evolved Nutrition: 2 oz wellness shots, 8 oz fresh juice, the ice cart for your event, and 1-on-1 nutrition coaching with 6 week, 8 week and hormone health packages. DM @evolvednutrition.hts.">
 <meta property="og:title" content="Evolved Nutrition">
-<meta property="og:description" content="Wellness shots and fresh juice, served on ice. Book the cart or a coaching package.">
+<meta property="og:description" content="Wellness shots, fresh juice and nutrition coaching built around you.">
 <meta property="og:image" content="og.jpg">
 <meta name="theme-color" content="#f4f0e7">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;800&family=Marcellus&display=swap" rel="stylesheet">
+<script>
+(function(){var d=document.documentElement,seen=false;try{seen=sessionStorage.getItem("enIntro")==="1"}catch(e){}
+if(!seen&&!matchMedia("(prefers-reduced-motion: reduce)").matches)d.classList.add("intro-on");d.classList.add("js");})();
+</script>
 <style>
-/* Evolved Nutrition: the page is their bottle label. Black EVOLVED NUTRITION plate, ruled boxes, ounce sizes,
-   on their cream and sage, with the shot colours (beet red, spirulina teal, golden) as accents.
-   Marcellus (their logo caps) + Archivo (their label type). */
+/* Evolved Nutrition v2. Their label is the design system (black EVOLVED/NUTRITION plate, ruled boxes, ounce sizes)
+   on cream and sage. Live SVG bottles with a liquid surface that sloshes with scroll; coaching is a plan you build.
+   Marcellus (their logo caps) + Archivo (their label type). GSAP + ScrollTrigger for motion. */
 :root{
-  --cream:#f4f0e7; --paper:#fffdf8; --sage:#7f8f6a; --sageL:#dfe4d3; --olive:#39432f;
+  --cream:#f4f0e7; --paper:#fffdf8; --sage:#7f8f6a; --sageD:#5f6e4c; --sageL:#dfe4d3; --olive:#39432f;
   --ink:#141414; --muted:#5d6156; --rule:#141414;
-  --red:#b0173a; --teal:#34b394; --gold:#eab21c;
-  --max:1120px; --r:10px;
+  --red:#b0173a; --teal:#2fb39a; --gold:#e9b21b; --flav:#b0173a;
+  --max:1120px; --r:12px; --ease:cubic-bezier(.2,.75,.2,1);
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;background:var(--cream);color:var(--ink);font:15px/1.6 "Archivo",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+html{scroll-behavior:smooth;overflow-x:clip}
+body{margin:0;background:var(--cream);color:var(--ink);font:15px/1.6 "Archivo",system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:clip}
 a{color:inherit}
 img{display:block;max-width:100%}
 h1,h2,h3{margin:0;font-weight:400;font-family:"Marcellus",serif;line-height:1.12}
 h2{font-size:24px}
+h2 em,h1 em{font-style:normal;color:var(--sageD)}
 p{margin:0 0 1em}
 .wrap{max-width:var(--max);margin:0 auto;padding:0 16px}
-section{padding:36px 0}
+section{padding:40px 0;position:relative}
 .muted{color:var(--muted)}
-
-/* the plate from their label */
+.kick{display:inline-flex;align-items:center;gap:8px;font:600 11px/1 "Archivo",sans-serif;letter-spacing:.18em;text-transform:uppercase;color:var(--sageD)}
+.kick::before{content:"";width:18px;height:1.5px;background:currentColor}
 .plate{display:inline-flex;flex-direction:column;align-items:center;background:var(--ink);color:#fff;font:800 11px/1 "Archivo",sans-serif;letter-spacing:.08em;padding:5px 7px 4px;gap:2px}
 .plate span:last-child{font-size:7.5px;letter-spacing:.24em;border-top:1px solid #fff;padding-top:2px}
-
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 18px;border-radius:999px;font:600 14px/1 "Archivo",sans-serif;text-decoration:none;white-space:nowrap;border:1.5px solid var(--ink);transition:transform .15s ease,background-color .15s ease,color .15s ease}
-.btn:hover{transform:translateY(-1px)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 18px;border-radius:999px;font:600 14px/1 "Archivo",sans-serif;text-decoration:none;white-space:nowrap;border:1.5px solid var(--ink);cursor:pointer;transition:transform .2s var(--ease),background-color .2s ease,color .2s ease}
+.btn:hover{transform:translateY(-2px)}
 .btn-ink{background:var(--ink);color:#fff}
 .btn-ink:hover{background:var(--olive);border-color:var(--olive)}
 .btn-line{background:transparent;color:var(--ink)}
 .btn-line:hover{background:var(--ink);color:#fff}
 .btn svg{width:16px;height:16px}
 :focus-visible{outline:2px solid var(--sage);outline-offset:3px}
-
-/* nav */
-header.nav{position:sticky;top:0;z-index:20;background:var(--cream);border-bottom:1px solid #1414141a}
-header.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:56px;gap:12px}
-.logo{display:flex;align-items:center;gap:8px;text-decoration:none}
-.logo svg{width:28px;height:28px}
-.logo b{font:400 17px/1 "Marcellus",serif;letter-spacing:.12em}
-.logo small{display:block;font:500 8.5px/1 "Archivo",sans-serif;letter-spacing:.34em;color:var(--muted);margin-top:3px}
-nav.links{display:none;gap:26px}
-nav.links a{text-decoration:none;font-size:14px;font-weight:500;color:var(--muted)}
-nav.links a:hover{color:var(--ink)}
-header.nav .btn{padding:10px 14px;font-size:13px}
-
-/* label card */
-.label{background:var(--paper);border:1.5px solid var(--rule);border-radius:var(--r);box-shadow:0 18px 40px -26px #14141466}
+.label{background:var(--paper);border:1.5px solid var(--rule);border-radius:var(--r)}
 .lhead{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 14px}
 .oz{font:600 11px/1 "Archivo",sans-serif;letter-spacing:.14em;text-transform:uppercase}
 .lrow{display:grid;grid-template-columns:1fr 92px;border-top:1px solid var(--rule)}
 .lrow > *{padding:10px 14px}
-.lrow > *+*{border-left:1px solid var(--rule)}
+.lrow > *+*{border-left:1px solid var(--rule);text-align:center}
+/* split text */
+.ln{display:block;overflow:hidden;padding-bottom:.06em;vertical-align:top}
+.ln > span{display:inline-block}
 
-/* hero */
-.hero{padding:12px 0 30px}
-.hero .photo{border-radius:14px;overflow:hidden;aspect-ratio:4/3;background:#dfe6e6}
-.hero .photo img{width:100%;height:100%;object-fit:cover;object-position:50% 45%}
-.hero .label{position:relative;margin:-48px 10px 0}
-.hero .lhead .tag{font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);text-align:right}
-.hero h1{font-size:28px;padding:4px 14px 12px}
-.hero .lrow span{font-size:14px}
-.hero .lrow b{text-align:center;font:600 11px/1.6 "Archivo",sans-serif;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap}
-.hero .actions{display:flex;gap:8px;padding:12px 14px 14px;border-top:1px solid var(--rule)}
-.hero .actions .btn{flex:1 1 0;padding:13px 10px}
+/* ---------- opening ---------- */
+#intro{display:none}
+.intro-on #intro{display:grid;position:fixed;inset:0;z-index:100;place-items:center;cursor:pointer}
+.intro-on body{overflow:hidden}
+#intro .half{position:absolute;left:0;right:0;height:50.5%;background:var(--cream)}
+#intro .top{top:0}#intro .bot{bottom:0}
+#intro .mk{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:6px}
+#intro svg{width:54px;height:66px}
+#intro svg path{fill:none;stroke:var(--olive);stroke-width:1.6;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1}
+#intro .w1{font:400 44px/1 "Marcellus",serif;letter-spacing:.14em;display:flex}
+#intro .w1 span{display:inline-block;opacity:0;transform:translateY(60%)}
+#intro .w2{font:500 11px/1 "Archivo",sans-serif;letter-spacing:.2em;color:var(--muted);opacity:0}
+#intro .w3{font:500 11px/1 "Archivo",sans-serif;letter-spacing:.24em;text-transform:uppercase;color:var(--sageD);opacity:0;margin-top:14px}
+#intro .skip{position:absolute;z-index:3;bottom:max(20px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);background:none;border:0;font:500 11px/1 "Archivo",sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);cursor:pointer}
 
-/* shots */
-.shots .intro{max-width:34em}
-.rail{display:flex;align-items:flex-start;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin:18px -16px 0;padding:4px 16px 10px;scroll-padding:0 16px}
-.rail::-webkit-scrollbar{display:none}
-.rail > *{scroll-snap-align:start}
-.shot{flex:0 0 78%;position:relative;overflow:hidden}
-.shot .cap{height:10px;background:var(--c)}
-.shot h3{font-size:26px;padding:4px 14px 10px}
-.shot .lrow{grid-template-columns:1fr 1fr}
-.shot .lrow small{display:block;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
-.shot .lrow p{margin:0;font-size:13.5px;line-height:1.45}
-.shot .foot{border-top:1px solid var(--rule);text-align:center;padding:8px}
-.pic{flex:0 0 70%;border-radius:var(--r);overflow:hidden;aspect-ratio:3/4;max-height:52vh;position:relative}
-.pic img{width:100%;height:100%;object-fit:cover}
-.pic figcaption{position:absolute;left:8px;bottom:8px;right:8px;background:#fffdf8ee;border:1px solid var(--rule);border-radius:6px;padding:6px 9px;font-size:12px;line-height:1.35}
-.dots{display:flex;justify-content:center;gap:6px;margin-top:4px}
-.dots i{width:6px;height:6px;border-radius:50%;background:#14141426;transition:width .2s,background .2s}
-.dots i.on{width:18px;border-radius:3px;background:var(--ink)}
+/* ---------- header ---------- */
+header.nav{position:sticky;top:0;z-index:40;background:var(--cream);border-bottom:1px solid #1414141a}
+header.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:56px;gap:12px}
+.logo{display:flex;align-items:center;gap:8px;text-decoration:none}
+.logo svg{width:26px;height:32px}
+.logo b{font:400 17px/1 "Marcellus",serif;letter-spacing:.12em;display:block}
+.logo small{display:block;font:500 8.5px/1 "Archivo",sans-serif;letter-spacing:.34em;color:var(--muted);margin-top:3px}
+nav.links{display:none;position:relative;gap:4px}
+nav.links a{text-decoration:none;font-size:14px;font-weight:500;color:var(--muted);padding:8px 12px;border-radius:999px;position:relative;z-index:1;transition:color .2s}
+nav.links a.on{color:#fff}
+nav.links .pill{position:absolute;top:0;left:0;height:100%;border-radius:999px;background:var(--ink);transition:transform .45s var(--ease),width .45s var(--ease),opacity .3s;opacity:0}
+header.nav .btn{padding:10px 14px;font-size:13px}
+.prog{position:absolute;left:0;bottom:-1px;height:2px;width:100%;background:var(--sage);transform-origin:0 50%;transform:scaleX(0)}
 
-/* juice */
+/* ---------- bottle ---------- */
+.bottle{display:block;overflow:visible}
+.bottle .glass{fill:#ffffff1f;stroke:#14141433;stroke-width:1.2}
+.bottle .hl{fill:url(#glassHL)}
+.bottle .capr{fill:#151515}
+.bottle .rib{stroke:#ffffff1f;stroke-width:1.4}
+.bottle .lab{fill:#fffdf8}
+.bottle .shadow{fill:#14141422}
+.bottle text{font-family:"Archivo",sans-serif}
+
+/* ---------- hero ---------- */
+.hero{padding:18px 0 34px;overflow:clip}
+.hero::before{content:"";position:absolute;width:520px;height:520px;right:-220px;top:120px;border-radius:50%;background:radial-gradient(closest-side,#dfe4d3,transparent);pointer-events:none}
+.hero .wrap{position:relative;display:grid;gap:8px}
+.hero h1{font-size:29px;margin-top:10px}
+.hero .lead{margin:10px 0 0;color:var(--muted);max-width:30em}
+.hero .actions{display:flex;gap:8px;margin-top:16px}
+.hero .actions .btn{flex:1 1 0;padding:13px 8px}
+.stage{position:relative;height:300px;display:grid;place-items:center;margin-top:4px}
+.stage .bottle{height:100%;width:auto;cursor:pointer;touch-action:manipulation}
+.ice{position:absolute;width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#ffffffe6,#d9eef2a8 55%,#b9dde6a0);box-shadow:inset 0 0 0 1px #ffffffc0,0 10px 20px -12px #2a5c6a66;animation:bob 5s ease-in-out infinite}
+.ice.i1{left:12%;top:58%;transform:rotate(-14deg)}
+.ice.i2{right:14%;top:18%;width:34px;height:34px;animation-delay:-1.6s}
+.ice.i3{right:6%;top:66%;width:28px;height:28px;animation-delay:-3s}
+@keyframes bob{50%{translate:0 -10px;rotate:8deg}}
+.flavtag{position:absolute;left:0;right:0;bottom:-6px;display:flex;justify-content:center;gap:6px}
+.flavtag button{border:1.5px solid var(--ink);background:var(--paper);border-radius:999px;font:600 12px/1 "Archivo",sans-serif;padding:8px 12px;cursor:pointer;display:flex;align-items:center;gap:6px}
+.flavtag button i{width:9px;height:9px;border-radius:50%;background:var(--c)}
+.flavtag button.on{background:var(--ink);color:#fff}
+.tapnote{position:absolute;top:6px;left:0;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+
+/* marquee of what they do */
+.ticker{border-block:1.5px solid var(--ink);background:var(--paper);overflow:hidden;white-space:nowrap}
+.ticker .row{display:inline-flex;gap:28px;padding:11px 0;animation:tick 26s linear infinite;font:400 16px/1 "Marcellus",serif;letter-spacing:.06em}
+.ticker .row span{display:inline-flex;align-items:center;gap:28px}
+.ticker .row span::after{content:"";width:6px;height:6px;border-radius:50%;background:var(--sage)}
+@keyframes tick{to{transform:translateX(-50%)}}
+
+/* ---------- shots ---------- */
+.shots{background:color-mix(in srgb,var(--flav) 10%,var(--cream));transition:background-color .6s ease}
+.tabs3{display:inline-flex;border:1.5px solid var(--ink);border-radius:999px;padding:3px;gap:2px;margin-top:16px;background:var(--paper);position:relative}
+.tabs3 button{position:relative;z-index:1;border:0;background:none;border-radius:999px;padding:9px 16px;font:600 13px/1 "Archivo",sans-serif;cursor:pointer;transition:color .25s}
+.tabs3 button.on{color:#fff}
+.tabs3 .pill{position:absolute;top:3px;bottom:3px;left:0;border-radius:999px;background:var(--ink);transition:transform .45s var(--ease),width .45s var(--ease)}
+.shotgrid{display:grid;gap:16px;margin-top:18px;align-items:center}
+.shotstage{position:relative;height:300px;display:grid;place-items:center}
+.shotstage .bottle{height:100%;width:auto}
+.chips{position:absolute;inset:0;pointer-events:none}
+.chip{position:absolute;left:50%;top:50%;background:var(--paper);border:1.5px solid var(--ink);border-radius:999px;padding:6px 10px;font:600 12px/1 "Archivo",sans-serif;white-space:nowrap;display:flex;gap:6px;align-items:center;box-shadow:0 8px 18px -12px #14141466}
+.chip i{width:8px;height:8px;border-radius:50%;background:var(--c,#7f8f6a)}
+.shotcard .lrow{grid-template-columns:1fr 1fr}
+.shotcard .lrow > *{text-align:left}
+.shotcard h3{font-size:30px;padding:4px 14px 12px}
+.shotcard small{display:block;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+.shotcard p{margin:0;font-size:14px;line-height:1.45}
+.shotcard .foot{border-top:1px solid var(--rule);display:flex;justify-content:space-between;align-items:center;padding:10px 14px}
+.shotcard .cap{height:10px;background:var(--flav);border-radius:10px 10px 0 0;transition:background-color .5s}
+
+/* ---------- juice ---------- */
 .juice{background:var(--sageL)}
 .jgrid{display:grid;gap:16px;margin-top:18px}
 .jcard{overflow:hidden}
 .jcard .ph{aspect-ratio:4/3;overflow:hidden;border-bottom:1.5px solid var(--rule)}
-.jcard .ph img{width:100%;height:100%;object-fit:cover}
+.jcard .ph img{width:100%;height:115%;object-fit:cover}
 .jcard h3{font-size:21px;padding:12px 14px 10px}
 .jcard ul{list-style:none;margin:0;padding:0}
 .jcard li{display:grid;grid-template-columns:1fr 64px;border-top:1px solid var(--rule)}
 .jcard li > *{padding:9px 14px}
 .jcard li span{font-size:14px}
 .jcard li span small{display:block;color:var(--muted);font-size:12.5px}
-.jcard li b{text-align:center;border-left:1px solid var(--rule);font:600 11px/1.9 "Archivo",sans-serif;letter-spacing:.14em;white-space:nowrap}
+.jcard li b{border-left:1px solid var(--rule);font:600 11px/1.9 "Archivo",sans-serif;letter-spacing:.14em;text-align:center;white-space:nowrap}
 
-/* the cart */
-.cart{background:var(--ink);color:#f1efe9}
-.cart .plate{background:#fff;color:var(--ink);font-size:20px;padding:8px 12px 6px}
-.cart .plate span:last-child{font-size:12px;border-color:var(--ink)}
-.cart h2{margin-top:16px}
+/* ---------- events ---------- */
+.cart{background:var(--ink);color:#f1efe9;overflow:clip}
+.cart .kick{color:#b7c3a6}
+.cart h2 em{color:#b7c3a6}
 .cart .muted{color:#b7b5ad}
-.cart .pic figcaption{background:#141414e6;color:#fff;border-color:#ffffff40}
-.cart .dots i{background:#ffffff33}.cart .dots i.on{background:#fff}
-.cart .actions{margin-top:16px}
+.rail{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin:20px -16px 0;padding:0 16px 6px;scroll-padding:0 16px}
+.rail::-webkit-scrollbar{display:none}
+.pic{flex:0 0 72%;scroll-snap-align:start;border-radius:var(--r);overflow:hidden;aspect-ratio:3/4;max-height:52vh;position:relative;margin:0}
+.pic img{width:100%;height:112%;object-fit:cover}
+.pic figcaption{position:absolute;left:8px;bottom:8px;right:8px;background:#141414e0;color:#fff;border:1px solid #ffffff3a;border-radius:8px;padding:7px 10px;font-size:12px;line-height:1.35}
 .cart .btn-line{color:#fff;border-color:#fff}
 .cart .btn-line:hover{background:#fff;color:var(--ink)}
+.cart .plate{background:#fff;color:var(--ink);font-size:18px;padding:7px 11px 5px}
+.cart .plate span:last-child{font-size:11px;border-color:var(--ink)}
 
-/* coaching */
-.pk{flex:0 0 82%}
-.pk h3{font-size:22px;padding:4px 14px 10px}
-.pk ul{list-style:none;margin:0;padding:0}
-.pk li{display:flex;gap:10px;align-items:flex-start;border-top:1px solid var(--rule);padding:9px 14px;font-size:14px}
-.pk li svg{flex:none;width:16px;height:16px;margin-top:3px;stroke:var(--sage)}
-.coach .note{margin-top:14px;font-size:14px}
+/* ---------- coaching ---------- */
+.coach{background:var(--paper)}
+.coach .intro{display:grid;gap:10px}
+.goals{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.goal{border:1.5px solid var(--ink);background:var(--paper);border-radius:999px;padding:10px 14px;font:600 13.5px/1 "Archivo",sans-serif;cursor:pointer;transition:background-color .25s,color .25s,transform .25s var(--ease)}
+.goal:hover{transform:translateY(-2px)}
+.goal.on{background:var(--ink);color:#fff}
+.step{margin-top:22px}
+.step h3{font:600 12px/1 "Archivo",sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--sageD);display:flex;gap:10px;align-items:center}
+.step h3 b{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--sage);color:#fff;font-size:11px;letter-spacing:0}
+.lengths{display:flex;gap:8px;margin-top:12px}
+.lengths .goal{flex:1 1 0;text-align:center;padding:12px 10px}
+.lengths .goal small{display:block;font-weight:500;font-size:11.5px;opacity:.75;margin-top:4px}
+.step.off > *{opacity:.35;transition:opacity .4s}.step.off{pointer-events:none}.step > *{transition:opacity .4s}
+.planwrap{display:grid;gap:16px;margin-top:22px}
+.pkg{overflow:hidden;position:relative}
+.pkg .empty{padding:22px 16px;color:var(--muted)}
+.pkg h4{margin:0;font:400 26px/1.1 "Marcellus",serif;padding:2px 14px 12px}
+.pkg ul{list-style:none;margin:0;padding:0}
+.pkg li{display:flex;gap:10px;align-items:center;border-top:1px solid var(--rule);padding:10px 14px;font-size:14px}
+.pkg li svg{flex:none;width:16px;height:16px;stroke:var(--sageD)}
+.pkg .why{border-top:1px solid var(--rule);padding:10px 14px;font-size:13px;color:var(--muted);background:#f7f5ef}
+.pkg .go{border-top:1.5px solid var(--rule);padding:12px 14px}
+.pkg .go .btn{width:100%}
+.timeline{border:1.5px solid var(--rule);border-radius:var(--r);background:var(--cream);padding:16px 14px}
+.timeline .tl-steps{list-style:none;margin:0;padding:0;position:relative}
+.timeline .tl-steps::before{content:"";position:absolute;left:11px;top:10px;bottom:10px;width:2px;background:#14141422}
+.timeline .tl-steps .fill{position:absolute;left:11px;top:10px;width:2px;height:calc(100% - 20px);background:var(--sage);transform-origin:50% 0;transform:scaleY(0)}
+.timeline li.s{position:relative;padding:0 0 14px 36px}
+.timeline li.s::before{content:"";position:absolute;left:4px;top:4px;width:16px;height:16px;border-radius:50%;background:var(--paper);border:2px solid var(--sage);box-sizing:border-box}
+.timeline li.s b{display:block;font:400 17px/1.25 "Marcellus",serif}
+.timeline li.s span{font-size:13.5px;color:var(--muted)}
+.weeks{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 0 36px}
+.wk{width:34px;height:34px;border-radius:50%;border:1.5px dashed #14141455;display:grid;place-items:center;font:600 10.5px/1 "Archivo",sans-serif;color:var(--muted);transition:background-color .3s,color .3s,border-color .3s}
+.wk.lit{background:var(--sage);color:#fff;border:1.5px solid var(--sage)}
+.wkcap{margin:8px 0 0 36px;font-size:12.5px;color:var(--muted)}
+.compare{display:flex;gap:12px;margin:16px -16px 0;padding:0 16px 6px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;scroll-padding:0 16px}
+.compare::-webkit-scrollbar{display:none}
+.compare .label{flex:0 0 82%;scroll-snap-align:start}
+.compare .label h4{margin:0;font:400 21px/1.1 "Marcellus",serif;padding:2px 14px 10px}
+.compare .label.pick{box-shadow:0 0 0 3px var(--sage)}
+.compare li{display:flex;gap:10px;align-items:center;border-top:1px solid var(--rule);padding:9px 14px;font-size:13.5px}
+.compare ul{list-style:none;margin:0;padding:0}
+.compare li svg{flex:none;width:15px;height:15px;stroke:var(--sageD)}
+/* consult composer */
+.consult{margin-top:30px;display:grid;gap:16px}
+.form{display:grid;gap:10px}
+.form label{display:grid;gap:5px;font:600 12px/1 "Archivo",sans-serif;letter-spacing:.06em;color:var(--muted)}
+.form input,.form select{font:500 15px/1.2 "Archivo",sans-serif;padding:12px 12px;border:1.5px solid var(--ink);border-radius:10px;background:var(--paper);color:var(--ink);width:100%}
+.phone{border:1.5px solid var(--ink);border-radius:26px;background:#fff;padding:14px 12px 16px;max-width:360px;width:100%;justify-self:center;box-shadow:0 22px 40px -28px #14141488}
+.phone .bar{display:flex;align-items:center;gap:8px;padding:0 4px 12px;border-bottom:1px solid #14141414}
+.phone .av{width:30px;height:30px;border-radius:50%;background:var(--cream);display:grid;place-items:center;border:1px solid #14141422}
+.phone .av svg{width:16px;height:20px}
+.phone .bar b{font-size:13px}.phone .bar small{display:block;color:var(--muted);font-size:11px}
+.bubble{margin:14px 0 0 auto;max-width:88%;background:linear-gradient(135deg,#7f8f6a,#5f6e4c);color:#fff;border-radius:18px 18px 4px 18px;padding:11px 13px;font-size:14px;line-height:1.45;min-height:44px;white-space:pre-wrap}
+.bubble .caret{display:inline-block;width:2px;height:1em;background:#fff;vertical-align:-2px;margin-left:1px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.phone .send{display:flex;gap:8px;margin-top:14px}
+.phone .send .btn{flex:1}
+.sent{font-size:12.5px;color:var(--sageD);margin:8px 0 0;text-align:center;min-height:1.4em}
+.fine{font-size:12px;color:var(--muted);margin-top:18px}
 
-/* closer */
-.closer{text-align:center;padding:44px 0;background:var(--sage);color:#fff}
+/* ---------- closer + footer ---------- */
+.closer{text-align:center;padding:48px 0;background:var(--sage);color:#fff;overflow:clip}
 .closer .plate{font-size:22px;padding:9px 13px 7px}
 .closer .plate span:last-child{font-size:13px}
-.closer h2{margin-top:16px;font-size:26px}
+.closer h2{margin-top:16px;font-size:28px}
 .closer p{color:#eef1e8;margin:10px auto 18px;max-width:26em}
-.closer .actions{display:flex;gap:8px;justify-content:center}
+.closer .actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
 .closer .btn-line{color:#fff;border-color:#fff}
 .closer .btn-line:hover{background:#fff;color:var(--olive)}
-
-footer{background:var(--olive);color:#d9ddd0;font-size:13px;padding:22px 0 96px}
+footer{background:var(--olive);color:#d9ddd0;font-size:13px;padding:22px 0 104px}
 footer .wrap{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;align-items:center}
 footer a{text-decoration:none}
 .studio{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;background:#ffffff14;color:#fff;font:600 11px/1 "Archivo",sans-serif}
 .studio i{width:9px;height:9px;border-radius:3px;background:conic-gradient(from 210deg,#ff5a1f,#ffb03b,#ff5a1f)}
 
-/* phone bar */
-.dock{position:fixed;z-index:30;left:10px;right:10px;bottom:max(10px,env(safe-area-inset-bottom));display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:6px;background:var(--paper);border:1.5px solid var(--ink);border-radius:999px;box-shadow:0 14px 30px -14px #14141488;transition:transform .25s ease,opacity .25s ease}
-.dock .btn{padding:11px 8px}
-.dock.off{transform:translateY(150%);opacity:0;pointer-events:none}
-.nl .dock{bottom:calc(max(10px,env(safe-area-inset-bottom)) + 60px)}
-.nl footer{padding-bottom:160px}
-
-.rv{opacity:0;transform:translateY(12px);transition:opacity .6s ease,transform .6s ease}
-.rv.in{opacity:1;transform:none}
+/* ---------- phone tab bar ---------- */
+.tabbar{position:fixed;z-index:45;left:8px;right:8px;bottom:max(8px,env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(5,1fr);align-items:end;background:#fffdf8f5;border:1.5px solid var(--ink);border-radius:20px;padding:6px 4px;box-shadow:0 14px 30px -16px #14141488}
+.tabbar a{display:flex;flex-direction:column;align-items:center;gap:3px;text-decoration:none;font:600 10.5px/1 "Archivo",sans-serif;color:var(--muted);padding:5px 0;border-radius:12px;transition:color .2s}
+.tabbar a svg{width:20px;height:20px}
+.tabbar a.on{color:var(--ink)}
+.tabbar a.on svg{stroke:var(--sageD)}
+.tabbar a.dm{background:var(--ink);color:#fff;margin:-14px 4px 0;padding:10px 0 8px;border-radius:14px;box-shadow:0 10px 20px -10px #141414aa}
+.nl .tabbar{bottom:calc(max(8px,env(safe-area-inset-bottom)) + 60px)}
+.nl footer{padding-bottom:170px}
 
 @media (min-width:640px){
-  .shot,.pk{flex-basis:46%}
-  .pic{flex-basis:40%}
+  .pic{flex-basis:44%}
   .jgrid{grid-template-columns:1fr 1fr}
+  .compare{display:grid;grid-template-columns:repeat(3,1fr);overflow:visible;margin:16px 0 0;padding:0}
+  .compare .label{flex:none}
 }
 @media (min-width:900px){
   body{font-size:16px}
   .wrap{padding:0 28px}
-  section{padding:68px 0}
-  h2{font-size:36px}
+  section{padding:76px 0}
+  h2{font-size:38px}
   nav.links{display:flex}
   header.nav .btn{padding:11px 18px;font-size:14px}
-  .hero{padding:28px 0 56px}
-  .hero .wrap{display:grid;grid-template-columns:1.15fr 1fr;align-items:center;gap:0}
-  .hero .photo{aspect-ratio:1/1;max-height:600px}
-  .hero .label{margin:0 0 0 -60px}
-  .hero h1{font-size:44px;padding:8px 22px 18px}
-  .lhead{padding:16px 22px}
-  .lrow > *{padding:12px 22px}
-  .hero .actions{padding:16px 22px 18px}
+  .hero{padding:36px 0 64px}
+  .hero .wrap{grid-template-columns:1.1fr .9fr;align-items:center;gap:40px}
+  .hero h1{font-size:52px}
+  .hero .lead{font-size:17px}
   .hero .actions .btn{flex:0 0 auto;padding:14px 22px}
-  .rail{overflow:visible;display:grid;grid-template-columns:repeat(4,1fr);align-items:stretch;margin:28px 0 0;padding:0;gap:16px}
-  .shot,.pk{display:flex;flex-direction:column}
-  .shot .lrow,.pk ul{flex:1}
-  .pk-rail{grid-template-columns:repeat(3,1fr)}
-  .ev-rail{grid-template-columns:repeat(4,1fr)}
+  .stage{height:520px}
+  .shotgrid{grid-template-columns:1fr 1fr;gap:40px}
+  .shotstage{height:460px}
+  .pic{flex-basis:auto}
+  .rail{display:grid;grid-template-columns:repeat(4,1fr);overflow:visible;margin:28px 0 0;padding:0;gap:16px}
   .pic{max-height:none}
-  .dots{display:none}
-  .cart .wrap{display:block}
-  .closer{padding:80px 0}
-  .closer h2{font-size:38px}
-  .dock{display:none}
+  .coach .intro{grid-template-columns:1fr 1fr;gap:40px;align-items:end}
+  .planwrap{grid-template-columns:1fr 1fr;align-items:start}
+  .consult{grid-template-columns:1fr 1fr;align-items:center;gap:40px}
+  .tabbar{display:none}
   footer,.nl footer{padding-bottom:26px}
 }
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.rv{opacity:1;transform:none;transition:none}.btn,.dock{transition:none}}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .ice,.ticker .row,.bubble .caret{animation:none}
+}
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="glassHL" x1="0" x2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity=".0"/><stop offset=".1" stop-color="#fff" stop-opacity=".55"/><stop offset=".2" stop-color="#fff" stop-opacity=".0"/>
+      <stop offset=".82" stop-color="#fff" stop-opacity="0"/><stop offset=".9" stop-color="#fff" stop-opacity=".3"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+    <symbol id="leaf" viewBox="0 0 32 40"><path d="M16 38V16" fill="none"/><path d="M16 19c-1.2-7 2.5-12 9.5-13 1.2 7-2.5 12-9.5 13z" fill="none"/><path d="M16 25c-1.2-5-5-8.5-11-8.5 0 6 3.6 9.4 11 8.5z" fill="none"/></symbol>
+  </defs>
+</svg>
+
+<div id="intro" aria-hidden="true">
+  <div class="half top"></div><div class="half bot"></div>
+  <div class="mk">
+    <svg viewBox="0 0 32 40"><path pathLength="1" d="M16 38V16"/><path pathLength="1" d="M16 19c-1.2-7 2.5-12 9.5-13 1.2 7-2.5 12-9.5 13z"/><path pathLength="1" d="M16 25c-1.2-5-5-8.5-11-8.5 0 6 3.6 9.4 11 8.5z"/></svg>
+    <div class="w1"><span>E</span><span>V</span><span>O</span><span>L</span><span>V</span><span>E</span><span>D</span></div>
+    <div class="w2">NUTRITION</div>
+    <div class="w3">Nourish · Balance · Evolve</div>
+  </div>
+  <button class="skip" type="button">Tap to skip</button>
+</div>
+
 <header class="nav">
   <div class="wrap">
-    <a class="logo" href="#top" aria-label="Evolved Nutrition, top of page">
-      <svg viewBox="0 0 32 32" fill="none" stroke="#39432f" stroke-width="1.4" aria-hidden="true"><path d="M16 29V13"/><path d="M16 15c-1-6 2-10 8-11 1 6-2 10-8 11z"/><path d="M16 19c-1-4-4-7-9-7 0 5 3 8 9 7z"/></svg>
+    <a class="logo" href="#top" aria-label="Evolved Nutrition, back to top">
+      <svg viewBox="0 0 32 40" stroke="#39432f" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><use href="#leaf"/></svg>
       <span><b>EVOLVED</b><small>NUTRITION</small></span>
     </a>
-    <nav class="links" aria-label="Main"><a href="#shots">Shots</a><a href="#juice">Juice</a><a href="#cart">Events</a><a href="#coaching">Coaching</a></nav>
-    <a class="btn btn-ink js-dm" href="#">DM to order</a>
+    <nav class="links" aria-label="Main"><span class="pill" aria-hidden="true"></span><a href="#shots">Shots</a><a href="#juice">Juice</a><a href="#events">Events</a><a href="#coaching">Coaching</a></nav>
+    <a class="btn btn-ink js-dm" href="#">DM us</a>
   </div>
+  <i class="prog" aria-hidden="true"></i>
 </header>
 
 <main id="top">
   <section class="hero">
     <div class="wrap">
-      <div class="photo"><img src="media/cart.jpg" alt="Evolved Nutrition wellness shots in red, teal and gold on ice in their cart" width="720" height="720" fetchpriority="high"></div>
-      <div class="label">
-        <div class="lhead"><span class="plate" aria-hidden="true"><span>EVOLVED</span><span>NUTRITION</span></span><span class="tag">Nourish · Balance · Evolve</span></div>
-        <h1>Wellness shots and fresh juice, served on ice.</h1>
-        <div class="lrow"><span>Wellness shots</span><b>2 oz</b></div>
-        <div class="lrow"><span>Fresh juice</span><b>8 oz</b></div>
-        <div class="lrow"><span>Nutrition coaching</span><b>6 &amp; 8 wk</b></div>
-        <div class="actions">
-          <a class="btn btn-ink js-dm" id="heroCta" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12a8.5 8.5 0 0 1-12.4 7.6L3 21l1.4-5.4A8.5 8.5 0 1 1 21 12z"/></svg>DM to order</a>
-          <a class="btn btn-line" href="#cart">Book the cart</a>
+      <div class="copy">
+        <span class="kick" data-rise>Shots · Juice · Coaching</span>
+        <h1 data-split>Fuel a healthier you, one shot and <em>one week</em> at a time.</h1>
+        <p class="lead" data-rise>Cold 2 oz wellness shots off the ice, fresh 8 oz juice, the cart for your event, and 1-on-1 nutrition coaching built around your goals.</p>
+        <div class="actions" data-rise>
+          <a class="btn btn-ink js-dm" id="heroCta" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12a8.5 8.5 0 0 1-12.4 7.6L3 21l1.4-5.4A8.5 8.5 0 1 1 21 12z"/></svg>Order shots</a>
+          <a class="btn btn-line" href="#coaching">Start coaching</a>
         </div>
+      </div>
+      <div class="stage" data-heroStage>
+        <span class="ice i1" aria-hidden="true"></span><span class="ice i2" aria-hidden="true"></span><span class="ice i3" aria-hidden="true"></span>
+        <div id="heroBottle" style="height:100%"></div>
+        <div class="flavtag" id="heroTags" role="group" aria-label="Pick a shot"></div>
       </div>
     </div>
   </section>
 
+  <div class="ticker" aria-hidden="true"><div class="row" id="tick"></div></div>
+
   <section class="shots" id="shots">
     <div class="wrap">
-      <div class="intro rv">
-        <h2>Off the ice</h2>
-        <p class="muted" style="margin-top:8px">Three 2 oz wellness shots. Grab one at an event, or DM us to order a batch.</p>
+      <span class="kick" data-rise>Off the ice</span>
+      <h2 data-split>Three shots, <em>2 oz each.</em></h2>
+      <div class="tabs3" id="shotTabs" role="tablist" aria-label="Shots"><span class="pill" aria-hidden="true"></span></div>
+      <div class="shotgrid">
+        <div class="shotstage"><div id="shotBottle" style="height:100%"></div><div class="chips" id="chips" aria-hidden="true"></div></div>
+        <article class="label shotcard" id="shotCard" aria-live="polite"></article>
       </div>
-      <div class="rail" id="shotRail"></div>
     </div>
   </section>
 
   <section class="juice" id="juice">
     <div class="wrap">
-      <div class="rv">
-        <h2>Fresh juice, 8 oz</h2>
-        <p class="muted" style="margin-top:8px">Real ingredients in glass bottles. DM us what you want and how many.</p>
-      </div>
+      <span class="kick" data-rise>Fresh juice</span>
+      <h2 data-split>Real ingredients, <em>8 oz glass bottles.</em></h2>
+      <p class="muted" data-rise style="margin-top:8px">DM us what you want and how many.</p>
       <div class="jgrid" id="juiceGrid"></div>
     </div>
   </section>
 
-  <section class="cart" id="cart">
+  <section class="cart" id="events">
     <div class="wrap">
-      <div class="rv">
-        <span class="plate" aria-hidden="true"><span>EVOLVED</span><span>NUTRITION</span></span>
-        <h2>Book the cart for your event</h2>
-        <p class="muted" style="margin-top:8px;max-width:34em">We roll up with the cart, a full tub of ice and shots for your guests. Pilates mornings, pop-ups, community events. Here's where it's been.</p>
-      </div>
-      <div class="rail ev-rail" id="eventRail"></div>
-      <div class="actions rv"><a class="btn btn-line js-dm" href="#">DM to book an event</a></div>
+      <span class="plate" aria-hidden="true" data-rise><span>EVOLVED</span><span>NUTRITION</span></span>
+      <h2 data-split style="margin-top:16px">Book the cart for <em>your event.</em></h2>
+      <p class="muted" data-rise style="margin-top:8px;max-width:34em">We roll up with the cart, a full tub of ice and shots for your guests. Pilates mornings, pop-ups, community events.</p>
+      <div class="rail" id="eventRail"></div>
+      <div data-rise style="margin-top:18px"><a class="btn btn-line js-dm" href="#">DM to book an event</a></div>
     </div>
   </section>
 
   <section class="coach" id="coaching">
     <div class="wrap">
-      <div class="rv">
-        <h2>Coaching that's built around you</h2>
-        <p class="muted" style="margin-top:8px;max-width:36em">Whether you want to lose weight, put on healthy weight or just feel better, you get a plan made for you and someone checking in every week.</p>
+      <div class="intro">
+        <div>
+          <span class="kick" data-rise>Nutrition coaching</span>
+          <h2 data-split>Your goals are personal. <em>Your plan should be too.</em></h2>
+        </div>
+        <p class="muted" data-rise>Personalized coaching with weekly 1-on-1 support and progress tracking. Tell us what you're working toward and we'll show you where to start.</p>
       </div>
-      <div class="rail pk-rail" id="pkRail"></div>
-      <p class="note rv">Not sure which one fits? <a class="js-dm" href="#"><b>DM us to book a consultation.</b></a></p>
+
+      <div class="step" data-rise>
+        <h3><b>1</b>What's your goal?</h3>
+        <div class="goals" id="goals" role="group" aria-label="Your goal"></div>
+      </div>
+      <div class="step off" id="stepLen" data-rise>
+        <h3><b>2</b>How long do you want to start with?</h3>
+        <div class="lengths" id="lengths" role="group" aria-label="Package length">
+          <button class="goal" type="button" data-len="6">6 weeks<small>A focused start</small></button>
+          <button class="goal" type="button" data-len="8">8 weeks<small>More time to build habits</small></button>
+        </div>
+      </div>
+
+      <div class="planwrap">
+        <article class="label pkg" id="pkg" aria-live="polite"></article>
+        <div class="timeline" data-rise>
+          <ol class="tl-steps" id="tl">
+            <span class="fill" id="tlFill"></span>
+            <li class="s"><b>Initial health assessment</b><span>Where you are now, what you eat, how you live.</span></li>
+            <li class="s"><b>A plan built for you</b><span>Personalized guidance around your needs and goals.</span></li>
+            <li class="s"><b>Weekly 1-on-1 meetings</b><span>Every week, someone in your corner.</span></li>
+            <li class="s" style="padding-bottom:6px"><b>Weekly tracking</b><span>See the progress add up.</span></li>
+          </ol>
+          <div class="weeks" id="weeks" aria-hidden="true"></div>
+          <p class="wkcap" id="wkcap"></p>
+        </div>
+      </div>
+
+      <h3 class="kick" style="margin-top:34px" data-rise>All three packages</h3>
+      <div class="compare" id="compare"></div>
+
+      <div class="consult" id="consult">
+        <div>
+          <span class="kick" data-rise>Book your consultation</span>
+          <h2 data-split style="margin-top:8px">We'll write the message. <em>You hit send.</em></h2>
+          <div class="form" style="margin-top:16px">
+            <label>First name<input id="fName" type="text" autocomplete="given-name" placeholder="Your name"></label>
+            <label>Package<select id="fPkg"><option value="">Not sure yet</option><option>6 Week Package</option><option>8 Week Package</option><option>Hormone Health Package</option></select></label>
+            <label>Best time to reach you<input id="fTime" type="text" placeholder="e.g. weekday evenings"></label>
+          </div>
+        </div>
+        <div class="phone" data-rise>
+          <div class="bar"><span class="av"><svg viewBox="0 0 32 40" stroke="#39432f" stroke-width="1.6" stroke-linecap="round"><use href="#leaf"/></svg></span><span><b>evolvednutrition.hts</b><small>Instagram</small></span></div>
+          <div class="bubble" id="bubble"></div>
+          <div class="send"><button class="btn btn-ink" id="sendBtn" type="button">Copy &amp; open Instagram</button></div>
+          <p class="sent" id="sent" aria-live="polite"></p>
+        </div>
+      </div>
+      <p class="fine">Have a medical condition or take medication? Check with your doctor before changing how you eat.</p>
     </div>
   </section>
 
   <section class="closer" id="closer">
     <div class="wrap">
       <span class="plate" aria-hidden="true"><span>EVOLVED</span><span>NUTRITION</span></span>
-      <h2>Fuel a healthier you</h2>
-      <p>Order shots and juice, book the cart, or start a coaching package. It all starts with a DM.</p>
-      <div class="actions">
-        <a class="btn btn-ink js-dm" href="#">DM to order</a>
-        <a class="btn btn-line js-ig" href="#" target="_blank" rel="noopener">See our Instagram</a>
-      </div>
+      <h2>Nourish. Balance. Evolve.</h2>
+      <p>Order shots and juice, book the cart, or start coaching. It all starts with a DM.</p>
+      <div class="actions"><a class="btn btn-ink js-dm" href="#">DM to order</a><a class="btn btn-line" href="#coaching">Start coaching</a></div>
     </div>
   </section>
 </main>
@@ -290,28 +466,28 @@ footer a{text-decoration:none}
   </div>
 </footer>
 
-<nav class="dock" aria-label="Quick actions">
-  <a class="btn btn-ink js-dm" href="#">DM to order</a>
-  <a class="btn btn-line" href="#cart">Book an event</a>
+<nav class="tabbar" aria-label="Sections">
+  <a href="#shots" data-sec="shots"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3h4v3l2 3v11a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1V9l2-3z"/><path d="M8 13h8"/></svg>Shots</a>
+  <a href="#juice" data-sec="juice"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 2h6v3l3 4v12a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V9l3-4z"/><path d="M6 14c2-1.5 4 1.5 6 0s4 1.5 6 0"/></svg>Juice</a>
+  <a class="dm js-dm" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12a8.5 8.5 0 0 1-12.4 7.6L3 21l1.4-5.4A8.5 8.5 0 1 1 21 12z"/></svg>DM us</a>
+  <a href="#events" data-sec="events"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="10" rx="2"/><circle cx="7" cy="19" r="1.6"/><circle cx="17" cy="19" r="1.6"/><path d="M7 7V5M12 7V4M17 7V5"/></svg>Events</a>
+  <a href="#coaching" data-sec="coaching"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21V11"/><path d="M12 13c-1-6 2-9 8-10 1 6-2 9-8 10z"/><path d="M12 17c-1-4-4-6-8-6 0 4 3 7 8 6z"/></svg>Coaching</a>
 </nav>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script>
 const CONFIG = {
   handle: "evolvednutrition.hts",
-  // From their bottle labels and Instagram posts.
   shots: [
-    { name: "Reset", color: "#b0173a", what: "Lemon, apple, ginger, orange, beetroot", why: "Bloating relief, gut health" },
-    { name: "Restore", color: "#34b394", what: "Lemon, ginger, coconut water, blue spirulina", why: "Antioxidant support" },
-    { name: "Golden", color: "#eab21c", what: "Ask us for the full list", why: "Our golden wellness shot" }
+    { key: "reset", name: "Reset", color: "#b0173a", what: ["Lemon", "Apple", "Ginger", "Orange", "Beetroot"], why: "Bloating relief, gut health" },
+    { key: "restore", name: "Restore", color: "#2fb39a", what: ["Lemon", "Ginger", "Coconut water", "Blue spirulina"], why: "Antioxidant support" },
+    { key: "golden", name: "Golden", color: "#e9b21b", what: [], why: "Our golden wellness shot. DM us for the full ingredient list." }
   ],
-  shotPhoto: { src: "media/table.jpg", alt: "Golden, Reset and Restore shots on the Evolved Nutrition table", cap: "Golden, Reset and Restore" },
+  chipColor: { Lemon: "#f2d64b", Apple: "#c6d65a", Ginger: "#d9b37a", Orange: "#f39a2b", Beetroot: "#9c1d3e", "Coconut water": "#efe8d6", "Blue spirulina": "#2aa7c4" },
   juiceSets: [
-    { title: "The everyday five", img: "media/juices.jpg", alt: "Five Evolved Nutrition juices in glass bottles with fresh fruit", items: [
-      ["Orange juice", ""], ["Carrot & beet", ""], ["Pineapple, lemon, ginger", ""], ["Carrot juice", ""], ["Green apple, lemon, ginger", ""] ] },
-    { title: "The Gut Refresh Trio", img: "media/gut.jpg", alt: "Gut Reset, Gut Refresh and Gut Glow juices", items: [
-      ["Gut Reset", "Carrot, cucumber, apple, ginger. Supports digestion."],
-      ["Gut Refresh", "Pineapple, cucumber, ginger, apple. Hydration and digestion."],
-      ["Gut Glow", "Cucumber, green apple, ginger, celery. Hydrating and fresh."] ] }
+    { title: "The everyday five", img: "media/juices.jpg", alt: "Five Evolved Nutrition juices in glass bottles with fresh fruit", items: [["Orange juice", ""], ["Carrot & beet", ""], ["Pineapple, lemon, ginger", ""], ["Carrot juice", ""], ["Green apple, lemon, ginger", ""]] },
+    { title: "The Gut Refresh Trio", img: "media/gut.jpg", alt: "Gut Reset, Gut Refresh and Gut Glow juices", items: [["Gut Reset", "Carrot, cucumber, apple, ginger. Supports digestion."], ["Gut Refresh", "Pineapple, cucumber, ginger, apple. Hydration and digestion."], ["Gut Glow", "Cucumber, green apple, ginger, celery. Hydrating and fresh."]] }
   ],
   events: [
     { img: "media/pilates.jpg", alt: "Outdoor Pilates class in Plymouth", cap: "Fall into Pilates with HerEra, Plymouth" },
@@ -319,60 +495,294 @@ const CONFIG = {
     { img: "media/crew.jpg", alt: "Three men holding shots next to the ice cart", cap: "Men's Mental Health event with Gunny's Garage and Dearborn DPH" },
     { img: "media/ballroom.jpg", alt: "The Evolved Nutrition cart at an indoor pop-up", cap: "Indoor pop-up with Omry Fragrances" }
   ],
-  packages: [
-    { name: "6 Week Package", items: ["Initial health assessment", "Weekly 1-on-1 meetings", "Personalized weekly tracking"] },
-    { name: "8 Week Package", items: ["Initial health assessment", "Weekly 1-on-1 meetings", "Personalized weekly tracking"] },
-    { name: "Hormone Health Package", items: ["Initial health assessment", "Personalized hormone health support", "Weekly 1-on-1 meetings", "Weekly tracking"] }
-  ]
+  goals: [
+    { k: "lose", t: "Lose weight", s: "support my weight loss goals" },
+    { k: "gain", t: "Gain healthy weight", s: "work toward healthy weight gain" },
+    { k: "well", t: "Feel better overall", s: "improve my overall health and wellness" },
+    { k: "habits", t: "Build habits that last", s: "build healthier habits that stick" },
+    { k: "hormone", t: "Support my hormone health", s: "support my hormone health" }
+  ],
+  packages: {
+    "6": { name: "6 Week Package", weeks: 6, items: ["Initial health assessment", "Weekly 1-on-1 meetings", "Personalized weekly tracking"] },
+    "8": { name: "8 Week Package", weeks: 8, items: ["Initial health assessment", "Weekly 1-on-1 meetings", "Personalized weekly tracking"] },
+    "hormone": { name: "Hormone Health Package", weeks: 0, items: ["Initial health assessment", "Personalized hormone health support", "Weekly 1-on-1 meetings", "Weekly tracking"] }
+  }
 };
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-const $ = s => document.querySelector(s), $$ = s => document.querySelectorAll(s);
+const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const REDUCE = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const HAS_GSAP = typeof gsap !== "undefined" && !REDUCE;
+const IG_DM = "https://ig.me/m/" + CONFIG.handle, IG = "https://www.instagram.com/" + CONFIG.handle + "/";
 const plate = '<span class="plate" aria-hidden="true"><span>EVOLVED</span><span>NUTRITION</span></span>';
 const check = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5"/></svg>';
+$$(".js-dm").forEach(a => { a.href = IG_DM; a.target = "_blank"; a.rel = "noopener"; });
+$$(".js-ig").forEach(a => a.href = IG);
 
-$$(".js-dm").forEach(a => { a.href = "https://ig.me/m/" + CONFIG.handle; a.target = "_blank"; a.rel = "noopener"; });
-$$(".js-ig").forEach(a => a.href = "https://www.instagram.com/" + CONFIG.handle + "/");
+/* ================= live bottle: 2 oz Boston round, liquid with a real surface ================= */
+let BID = 0;
+function makeBottle(host, opt = {}) {
+  const id = "b" + (++BID);
+  const body = "M72 58 L128 58 L128 76 C128 92 168 96 168 124 L168 318 C168 334 158 342 144 342 L56 342 C42 342 32 334 32 318 L32 124 C32 96 72 92 72 76 Z";
+  host.innerHTML = `<svg class="bottle" viewBox="0 0 200 372" role="img" aria-label="A 2 oz Evolved Nutrition wellness shot">
+    <defs>
+      <clipPath id="${id}c"><path d="${body}"/></clipPath>
+      <linearGradient id="${id}g" x1="0" x2="1"><stop offset="0" class="s0"/><stop offset=".35" class="s1"/><stop offset=".7" class="s2"/><stop offset="1" class="s0"/></linearGradient>
+    </defs>
+    <ellipse class="shadow" cx="100" cy="350" rx="70" ry="9"/>
+    <g clip-path="url(#${id}c)">
+      <path class="liq" fill="url(#${id}g)" d=""/>
+      <path class="surf" fill="#ffffff" opacity=".18" d=""/>
+      <g class="bub"></g>
+    </g>
+    <path class="glass" d="${body}"/>
+    <path class="hl" d="${body}"/>
+    <rect class="lab" x="44" y="176" width="112" height="112" rx="3"/>
+    <rect x="50" y="182" width="100" height="100" rx="2" fill="none" stroke="#141414" stroke-width=".8"/>
+    <rect x="72" y="190" width="56" height="20" fill="#141414"/>
+    <text x="100" y="201" text-anchor="middle" font-size="8.6" font-weight="800" fill="#fff" letter-spacing=".6">EVOLVED</text>
+    <line x1="78" y1="203" x2="122" y2="203" stroke="#fff" stroke-width=".5"/>
+    <text x="100" y="208.5" text-anchor="middle" font-size="4.6" font-weight="800" fill="#fff" letter-spacing="1.4">NUTRITION</text>
+    <text class="nm" x="100" y="238" text-anchor="middle" font-size="19" font-family="Marcellus, serif" fill="#141414"></text>
+    <line x1="50" y1="248" x2="150" y2="248" stroke="#141414" stroke-width=".6"/>
+    <text x="100" y="262" text-anchor="middle" font-size="6.4" font-weight="600" fill="#141414" letter-spacing="1.2">WELLNESS SHOT</text>
+    <text x="100" y="276" text-anchor="middle" font-size="6.4" font-weight="600" fill="#141414" letter-spacing="1.2">2 OZ</text>
+    <g class="cap">
+      <rect class="capr" x="64" y="12" width="72" height="48" rx="6"/>
+      ${Array.from({ length: 11 }, (_, i) => `<line class="rib" x1="${70 + i * 6}" y1="16" x2="${70 + i * 6}" y2="56"/>`).join("")}
+      <rect x="64" y="12" width="72" height="8" rx="4" fill="#2a2a2a"/>
+    </g>
+    <g class="drops">${[[48, 140, 2.2], [150, 160, 1.6], [58, 300, 1.8], [146, 304, 2.4], [40, 230, 1.4], [158, 214, 1.5]].map(([x, y, r]) => `<circle cx="${x}" cy="${y}" r="${r}" fill="#fff" opacity=".7"/>`).join("")}</g>
+  </svg>`;
+  const svg = $("svg", host), liq = $(".liq", svg), surf = $(".surf", svg), bub = $(".bub", svg), nm = $(".nm", svg), stops = $$("stop", svg);
+  const S = { level: opt.level ?? 128, target: opt.level ?? 128, amp: 2, ampT: 2, t: Math.random() * 10, tilt: 0, color: "#b0173a" };
+  const bubbles = Array.from({ length: 7 }, () => ({ x: 50 + Math.random() * 100, y: 340 - Math.random() * 200, r: 1 + Math.random() * 2.2, v: .25 + Math.random() * .5 }));
+  bub.innerHTML = bubbles.map(() => `<circle fill="#fff" opacity=".35"/>`).join("");
+  const bc = $$("circle", bub);
+  function shade(hex, f) { const n = parseInt(hex.slice(1), 16), r = n >> 16, g = (n >> 8) & 255, b = n & 255, m = v => Math.max(0, Math.min(255, Math.round(f < 0 ? v * (1 + f) : v + (255 - v) * f))); return `rgb(${m(r)},${m(g)},${m(b)})`; }
+  function paint(c) { S.color = c; stops[0].setAttribute("stop-color", shade(c, -.38)); stops[1].setAttribute("stop-color", shade(c, .12)); stops[2].setAttribute("stop-color", c); stops[3].setAttribute("stop-color", shade(c, -.38)); }
+  function wave() {
+    const L = S.level, A = S.amp, t = S.t, tilt = S.tilt;
+    let d = "", s = "";
+    for (let x = 20; x <= 180; x += 8) {
+      const y = L + Math.sin(x * .055 + t * 2.1) * A + Math.sin(x * .11 - t * 1.4) * A * .5 + (x - 100) * tilt;
+      d += (x === 20 ? "M" : "L") + x + " " + y.toFixed(2) + " ";
+      s += (x === 20 ? "M" : "L") + x + " " + (y - 1).toFixed(2) + " ";
+    }
+    liq.setAttribute("d", d + "L180 372 L20 372 Z");
+    let back = ""; for (let x = 180; x >= 20; x -= 8) { const y = L + Math.sin(x * .055 + t * 2.1) * A + Math.sin(x * .11 - t * 1.4) * A * .5 + (x - 100) * tilt; back += `L${x} ${(y + 3).toFixed(2)} `; }
+    surf.setAttribute("d", s + back + "Z");
+    bubbles.forEach((b, i) => { b.y -= b.v; if (b.y < L + 6) { b.y = 336; b.x = 50 + Math.random() * 100; } bc[i].setAttribute("cx", (b.x + Math.sin(t * 2 + i) * 1.5).toFixed(1)); bc[i].setAttribute("cy", b.y.toFixed(1)); bc[i].setAttribute("r", b.r); });
+  }
+  let on = true, raf = 0, lastT = 0;
+  function loop(now) {
+    raf = 0; if (!on) return;
+    const dt = Math.min(.05, (now - (lastT || now)) / 1000); lastT = now;
+    S.t += dt; S.amp += (S.ampT - S.amp) * .06; S.ampT += (2 - S.ampT) * .02; S.level += (S.target - S.level) * .08; S.tilt *= .94;
+    wave(); if (!REDUCE) raf = requestAnimationFrame(loop);
+  }
+  function start() { if (!raf) { lastT = 0; raf = requestAnimationFrame(loop); } }
+  if ("IntersectionObserver" in window) new IntersectionObserver(([e]) => { on = e.isIntersecting; if (on) start(); }, { rootMargin: "100px" }).observe(host);
+  paint(opt.color || "#b0173a"); wave(); start();
+  return {
+    svg,
+    setFlavor(f, animate = true) {
+      nm.textContent = f.name;
+      if (!animate || !HAS_GSAP) { paint(f.color); S.level = S.target = opt.level ?? 128; wave(); return; }
+      const from = { c: S.color }; S.target = 330; S.ampT = 7;
+      setTimeout(() => { paint(f.color); S.level = 345; S.target = opt.level ?? 128; S.ampT = 9; }, 420);
+      gsap.fromTo($(".cap", svg), { y: 0, rotate: 0 }, { keyframes: [{ y: -26, rotate: -22, duration: .3, ease: "power2.out" }, { y: 0, rotate: 0, duration: .45, ease: "bounce.out", delay: .5 }], svgOrigin: "100 36" });
+    },
+    slosh(v) { S.ampT = Math.min(12, S.ampT + Math.abs(v)); S.tilt = Math.max(-.12, Math.min(.12, S.tilt + v * .004)); }
+  };
+}
 
-$("#shotRail").innerHTML = CONFIG.shots.map(s => `
-  <article class="label shot rv" style="--c:${esc(s.color)}">
-    <div class="cap" aria-hidden="true"></div>
-    <div class="lhead">${plate}<span class="oz">Wellness shot</span></div>
-    <h3>${esc(s.name)}</h3>
-    <div class="lrow"><div><small>In it</small><p>${esc(s.what)}</p></div><div><small>For</small><p>${esc(s.why)}</p></div></div>
-    <div class="foot oz">2 oz</div>
-  </article>`).join("") + `<figure class="pic rv" style="margin:0"><img src="${CONFIG.shotPhoto.src}" alt="${esc(CONFIG.shotPhoto.alt)}" loading="lazy" width="720" height="960"><figcaption>${esc(CONFIG.shotPhoto.cap)}</figcaption></figure>`;
+/* ================= hero bottle ================= */
+const hero = makeBottle($("#heroBottle"), { level: 128 });
+let heroI = 0;
+$("#heroTags").innerHTML = CONFIG.shots.map((s, i) => `<button type="button" style="--c:${s.color}" data-i="${i}" aria-pressed="${i === 0}"${i === 0 ? ' class="on"' : ""}><i></i>${esc(s.name)}</button>`).join("");
+function heroSet(i, anim = true) {
+  heroI = i; hero.setFlavor(CONFIG.shots[i], anim);
+  $$("#heroTags button").forEach((b, j) => { b.classList.toggle("on", j === i); b.setAttribute("aria-pressed", j === i); });
+}
+heroSet(0, false);
+$("#heroTags").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; heroSet(+b.dataset.i); heroAuto = false; });
+let heroAuto = true;
+setInterval(() => { if (heroAuto && !document.hidden && window.scrollY < innerHeight) heroSet((heroI + 1) % 3); }, 4200);
+hero.svg.addEventListener("click", () => { heroAuto = false; heroSet((heroI + 1) % 3); });
 
-$("#juiceGrid").innerHTML = CONFIG.juiceSets.map(j => `
-  <article class="label jcard rv">
-    <div class="ph"><img src="${j.img}" alt="${esc(j.alt)}" loading="lazy" width="720" height="720"></div>
-    <h3>${esc(j.title)}</h3>
-    <ul>${j.items.map(([n, d]) => `<li><span>${esc(n)}${d ? `<small>${esc(d)}</small>` : ""}</span><b>8 OZ</b></li>`).join("")}</ul>
-  </article>`).join("");
+/* ticker */
+const tickWords = ["Cold-pressed shots", "Fresh juice", "Nutrition coaching", "Event cart", "Real ingredients", "Weekly 1-on-1s"];
+$("#tick").innerHTML = (tickWords.concat(tickWords)).map(w => `<span>${w}</span>`).join("");
 
-$("#eventRail").innerHTML = CONFIG.events.map(e => `<figure class="pic rv" style="margin:0"><img src="${e.img}" alt="${esc(e.alt)}" loading="lazy" width="720" height="960"><figcaption>${esc(e.cap)}</figcaption></figure>`).join("");
+/* ================= shots section ================= */
+const shotB = makeBottle($("#shotBottle"), { level: 128 });
+const tabs = $("#shotTabs");
+tabs.insertAdjacentHTML("beforeend", CONFIG.shots.map((s, i) => `<button type="button" role="tab" data-i="${i}" aria-selected="${i === 0}">${esc(s.name)}</button>`).join(""));
+function movePill(wrap, btn) { const p = $(".pill", wrap); if (!p || !btn) return; p.style.width = btn.offsetWidth + "px"; p.style.transform = `translateX(${btn.offsetLeft}px)`; p.style.opacity = 1; }
+function shotSet(i, anim = true) {
+  const s = CONFIG.shots[i];
+  $$("button", tabs).forEach((b, j) => { b.classList.toggle("on", j === i); b.setAttribute("aria-selected", j === i); });
+  movePill(tabs, $$("button", tabs)[i]);
+  document.documentElement.style.setProperty("--flav", s.color);
+  shotB.setFlavor(s, anim);
+  $("#shotCard").innerHTML = `<div class="cap"></div><div class="lhead">${plate}<span class="oz">Wellness shot</span></div><h3>${esc(s.name)}</h3>
+    <div class="lrow"><div><small>In it</small><p>${s.what.length ? esc(s.what.join(", ")) : "Ask us for the full list"}</p></div><div><small>For</small><p>${esc(s.why)}</p></div></div>
+    <div class="foot"><span class="oz">2 oz</span><a class="btn btn-ink js-dm2" href="${IG_DM}" target="_blank" rel="noopener" style="padding:10px 14px;font-size:13px">Order ${esc(s.name)}</a></div>`;
+  const chips = $("#chips"); chips.innerHTML = s.what.map(w => `<span class="chip" style="--c:${CONFIG.chipColor[w] || "#7f8f6a"}"><i></i>${esc(w)}</span>`).join("");
+  const els = $$(".chip", chips), n = els.length;
+  els.forEach((el, k) => {
+    const side = k % 2 ? 1 : -1, r = Math.min(chips.clientWidth * .4, 190);
+    const x = side * r, y = (k - (n - 1) / 2) * 46 - 14;
+    if (HAS_GSAP && anim) gsap.fromTo(el, { x: -el.offsetWidth / 2, y: -40, scale: .2, opacity: 0 }, { x: x - el.offsetWidth / 2, y, scale: 1, opacity: 1, duration: .9, delay: .55 + k * .07, ease: "back.out(1.6)" });
+    else { el.style.transform = `translate(${x - el.offsetWidth / 2}px,${y}px)`; }
+  });
+  if (HAS_GSAP && anim) gsap.fromTo("#shotCard", { y: 14, opacity: .4 }, { y: 0, opacity: 1, duration: .6, ease: "power3.out" });
+}
+tabs.addEventListener("click", e => { const b = e.target.closest("button[data-i]"); if (b) shotSet(+b.dataset.i); });
+tabs.addEventListener("keydown", e => { const cur = $$("button", tabs).findIndex(b => b.classList.contains("on")); if (e.key === "ArrowRight" || e.key === "ArrowLeft") { const n = (cur + (e.key === "ArrowRight" ? 1 : 2)) % 3; shotSet(n); $$("button", tabs)[n].focus(); } });
 
-$("#pkRail").innerHTML = CONFIG.packages.map(p => `
-  <article class="label pk rv">
-    <div class="lhead">${plate}<span class="oz">Coaching</span></div>
-    <h3>${esc(p.name)}</h3>
-    <ul>${p.items.map(i => `<li>${check}<span>${esc(i)}</span></li>`).join("")}</ul>
-  </article>`).join("");
+/* ================= juice ================= */
+$("#juiceGrid").innerHTML = CONFIG.juiceSets.map(j => `<article class="label jcard" data-rise>
+  <div class="ph"><img src="${j.img}" alt="${esc(j.alt)}" loading="lazy" width="720" height="720" data-par></div>
+  <h3>${esc(j.title)}</h3>
+  <ul>${j.items.map(([n, d]) => `<li><span>${esc(n)}${d ? `<small>${esc(d)}</small>` : ""}</span><b>8 OZ</b></li>`).join("")}</ul></article>`).join("");
 
-$$(".rail").forEach(rail => {
-  const kids = [...rail.children], dots = document.createElement("div");
-  dots.className = "dots"; dots.setAttribute("aria-hidden", "true");
-  kids.forEach(() => dots.appendChild(document.createElement("i"))); rail.after(dots);
-  const mark = () => { const max = rail.scrollWidth - rail.clientWidth, i = max <= 0 ? 0 : Math.round(rail.scrollLeft / max * (kids.length - 1)); [...dots.children].forEach((d, j) => d.classList.toggle("on", j === i)); };
-  rail.addEventListener("scroll", mark, { passive: true }); mark();
+/* ================= events ================= */
+$("#eventRail").innerHTML = CONFIG.events.map(e => `<figure class="pic" data-rise><img src="${e.img}" alt="${esc(e.alt)}" loading="lazy" width="720" height="960" data-par><figcaption>${esc(e.cap)}</figcaption></figure>`).join("");
+
+/* ================= coaching: goal → package → plan ================= */
+const st = { goal: null, len: null };
+$("#goals").innerHTML = CONFIG.goals.map(g => `<button class="goal" type="button" data-g="${g.k}" aria-pressed="false">${esc(g.t)}</button>`).join("");
+const pkgKey = () => st.goal === "hormone" ? "hormone" : st.len;
+function renderPkg(anim = true) {
+  const k = pkgKey(), el = $("#pkg");
+  $("#stepLen").classList.toggle("off", !st.goal || st.goal === "hormone");
+  $$("#goals .goal").forEach(b => { const on = b.dataset.g === st.goal; b.classList.toggle("on", on); b.setAttribute("aria-pressed", on); });
+  $$("#lengths .goal").forEach(b => { const on = b.dataset.len === st.len && st.goal !== "hormone"; b.classList.toggle("on", on); b.setAttribute("aria-pressed", on); });
+  $$("#compare .label").forEach(c => c.classList.toggle("pick", c.dataset.k === k));
+  if (!k) {
+    el.innerHTML = `<div class="lhead">${plate}<span class="oz">Your plan</span></div><div class="empty">${st.goal ? "Pick how long you want to start with and your package shows up here." : "Pick a goal and we'll suggest a package."}</div>`;
+    weeks(0); return;
+  }
+  const P = CONFIG.packages[k], g = CONFIG.goals.find(x => x.k === st.goal);
+  const why = k === "hormone" ? "Made for hormone health, with support built around you." : (k === "6" ? "A focused start with a weekly check-in every step." : "Two extra weeks to lock in the habits.");
+  el.innerHTML = `<div class="lhead">${plate}<span class="oz">Suggested for you</span></div><h4>${esc(P.name)}</h4>
+    <ul>${P.items.map(i => `<li>${check}<span>${esc(i)}</span></li>`).join("")}</ul>
+    <div class="why">${esc(g ? g.t : "")} · ${esc(why)}</div>
+    <div class="go"><a class="btn btn-ink" href="#consult" data-book>Book a consultation</a></div>`;
+  $("#fPkg").value = P.name; compose();
+  if (HAS_GSAP && anim) { gsap.fromTo(el, { scale: .97, opacity: .5 }, { scale: 1, opacity: 1, duration: .5, ease: "power3.out" }); gsap.fromTo($$("li", el), { x: -12, opacity: 0 }, { x: 0, opacity: 1, duration: .45, stagger: .07, ease: "power2.out" }); }
+  weeks(P.weeks, k === "hormone");
+}
+let wkTween;
+function weeks(n, open) {
+  const w = $("#weeks"), cap = $("#wkcap");
+  const count = n || (open ? 4 : 6);
+  w.innerHTML = Array.from({ length: count }, (_, i) => `<span class="wk">Wk ${i + 1}</span>`).join("") + (open ? '<span class="wk" style="border-style:dotted">…</span>' : "");
+  cap.textContent = n ? `${n} weekly check-ins, each one tracked.` : (open ? "Weekly check-ins, with the length set together with you." : "Your weeks light up once you pick a plan.");
+  if (!n && !open) return;
+  const dots = $$(".wk", w).slice(0, count);
+  if (wkTween) wkTween.kill();
+  if (HAS_GSAP) wkTween = gsap.to({}, { duration: count * .16, onUpdate() { const k = Math.round(this.progress() * count); dots.forEach((d, i) => d.classList.toggle("lit", i < k)); } });
+  else dots.forEach(d => d.classList.add("lit"));
+}
+$("#goals").addEventListener("click", e => { const b = e.target.closest("[data-g]"); if (!b) return; st.goal = b.dataset.g; if (st.goal !== "hormone" && !st.len) st.len = null; renderPkg(); compose(); });
+$("#lengths").addEventListener("click", e => { const b = e.target.closest("[data-len]"); if (!b) return; st.len = b.dataset.len; renderPkg(); });
+$("#compare").innerHTML = ["6", "8", "hormone"].map(k => { const P = CONFIG.packages[k]; return `<article class="label" data-k="${k}" data-rise><div class="lhead">${plate}<span class="oz">${k === "hormone" ? "Hormone" : k + " weeks"}</span></div><h4>${esc(P.name)}</h4><ul>${P.items.map(i => `<li>${check}<span>${esc(i)}</span></li>`).join("")}</ul></article>`; }).join("");
+renderPkg(false);
+
+/* consultation message composer */
+function compose() {
+  const name = $("#fName").value.trim(), pkg = $("#fPkg").value, time = $("#fTime").value.trim(), g = CONFIG.goals.find(x => x.k === st.goal);
+  let m = `Hi Evolved Nutrition! ${name ? "I'm " + name + ". " : ""}I'd like to book a nutrition coaching consultation.`;
+  if (g) m += ` My goal is to ${g.s}.`;
+  m += pkg ? ` I'm interested in the ${pkg}.` : " I'm not sure which package fits yet.";
+  if (time) m += ` Best time to reach me: ${time}.`;
+  typeTo(m);
+  return m;
+}
+let typed = "", typeTimer = 0;
+function typeTo(m) {
+  const b = $("#bubble");
+  if (REDUCE) { b.textContent = m; return; }
+  let i = 0; while (i < typed.length && i < m.length && typed[i] === m[i]) i++;
+  typed = typed.slice(0, i); clearInterval(typeTimer);
+  typeTimer = setInterval(() => { if (typed.length < m.length) { typed = m.slice(0, typed.length + 2); b.innerHTML = esc(typed) + '<span class="caret"></span>'; } else { clearInterval(typeTimer); b.innerHTML = esc(typed) + '<span class="caret"></span>'; } }, 16);
+}
+["fName", "fPkg", "fTime"].forEach(id => $("#" + id).addEventListener("input", compose));
+$("#sendBtn").addEventListener("click", async () => {
+  const m = compose(); let ok = false;
+  try { await navigator.clipboard.writeText(m); ok = true; } catch (e) { const t = document.createElement("textarea"); t.value = m; document.body.appendChild(t); t.select(); try { ok = document.execCommand("copy"); } catch (e2) {} t.remove(); }
+  $("#sent").textContent = ok ? "Copied. Paste it into the chat that just opened." : "Opening Instagram. Copy the message above if it isn't there.";
+  window.open(IG_DM, "_blank", "noopener");
 });
+document.addEventListener("click", e => { if (e.target.closest("[data-book]")) setTimeout(() => $("#fName").focus({ preventScroll: true }), 700); });
+compose();
 
-if (/netlify\.app$/.test(location.hostname)) document.documentElement.classList.add("nl");
-const dock = $(".dock");
+/* ================= navigation: active section, pill, progress ================= */
+const secs = ["shots", "juice", "events", "coaching"].map(id => document.getElementById(id));
+const navLinks = $$("nav.links a"), tabLinks = $$(".tabbar a[data-sec]");
+function setActive(id) {
+  navLinks.forEach(a => a.classList.toggle("on", a.getAttribute("href") === "#" + id));
+  tabLinks.forEach(a => a.classList.toggle("on", a.dataset.sec === id));
+  const on = navLinks.find(a => a.classList.contains("on")), pill = $("nav.links .pill");
+  if (on) movePill($("nav.links"), on); else if (pill) pill.style.opacity = 0;
+}
 if ("IntersectionObserver" in window) {
-  new IntersectionObserver(([e]) => dock.classList.toggle("off", e.isIntersecting)).observe($("#closer"));
-  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { threshold: .1 });
-  $$(".rv").forEach(el => io.observe(el));
-} else $$(".rv").forEach(el => el.classList.add("in"));
+  const vis = new Map();
+  const io = new IntersectionObserver(es => { es.forEach(e => vis.set(e.target.id, e.intersectionRatio)); let best = null, br = 0; vis.forEach((r, id) => { if (r > br) { br = r; best = id; } }); setActive(br > .08 ? best : null); }, { threshold: [0, .1, .25, .5, .75] });
+  secs.forEach(s => io.observe(s));
+}
+let lastY = scrollY;
+addEventListener("scroll", () => {
+  const y = scrollY, v = y - lastY; lastY = y;
+  $(".prog").style.transform = `scaleX(${Math.min(1, y / Math.max(1, document.documentElement.scrollHeight - innerHeight))})`;
+  if (Math.abs(v) > 2) { hero.slosh(v * .05); shotB.slosh(v * .05); }
+}, { passive: true });
+addEventListener("resize", () => { movePill(tabs, $("button.on", tabs)); setActive((navLinks.find(a => a.classList.contains("on")) || {}).hash?.slice(1)); });
+if (/netlify\.app$/.test(location.hostname)) document.documentElement.classList.add("nl");
+
+/* ================= motion ================= */
+function splitLines(el) {
+  const words = el.innerHTML.split(/(\s+|<em>|<\/em>)/).filter(Boolean);
+  let html = "", inEm = false;
+  words.forEach(w => { if (w === "<em>") { inEm = true; return; } if (w === "</em>") { inEm = false; return; } if (/^\s+$/.test(w)) { html += " "; return; } html += `<span class="ln" style="display:inline-block"><span>${inEm ? "<em>" + w + "</em>" : w}</span></span>`; });
+  el.innerHTML = html; return $$(".ln > span", el);
+}
+function intro(done) {
+  const root = document.documentElement, el = $("#intro");
+  if (!root.classList.contains("intro-on") || !HAS_GSAP) { el.remove(); root.classList.remove("intro-on"); done(); return; }
+  let fin = false;
+  const finish = () => { if (fin) return; fin = true; try { sessionStorage.setItem("enIntro", "1"); } catch (e) {} tl.kill(); gsap.to("#intro .mk", { opacity: 0, y: -10, duration: .25 }); gsap.to("#intro .top", { yPercent: -100, duration: .7, ease: "power3.inOut" }); gsap.to("#intro .bot", { yPercent: 100, duration: .7, ease: "power3.inOut", onComplete() { root.classList.remove("intro-on"); el.remove(); } }); gsap.delayedCall(.25, done); };
+  const tl = gsap.timeline({ onComplete: finish });
+  tl.to("#intro svg path", { strokeDashoffset: 0, duration: .6, stagger: .12, ease: "power2.out" })
+    .to("#intro .w1 span", { opacity: 1, y: 0, duration: .45, stagger: .04, ease: "power3.out" }, "-=.35")
+    .fromTo("#intro .w2", { opacity: 0, letterSpacing: ".05em" }, { opacity: 1, letterSpacing: ".42em", duration: .55, ease: "power2.out" }, "-=.25")
+    .to("#intro .w3", { opacity: 1, duration: .35 }, "-=.15")
+    .to({}, { duration: .25 });
+  ["click", "keydown", "wheel", "touchstart"].forEach(ev => addEventListener(ev, finish, { once: true, passive: true }));
+}
+function motion() {
+  if (!HAS_GSAP) return;
+  gsap.registerPlugin(ScrollTrigger);
+  $$("[data-split]").forEach(h => { const parts = splitLines(h); gsap.from(parts, { yPercent: 110, duration: .9, stagger: .05, ease: "power4.out", scrollTrigger: { trigger: h, start: "top 88%" } }); });
+  $$("[data-rise]").forEach(el => gsap.from(el, { y: 26, opacity: 0, duration: .8, ease: "power3.out", scrollTrigger: { trigger: el, start: "top 90%" } }));
+  $$("[data-par]").forEach(img => gsap.fromTo(img, { yPercent: -6 }, { yPercent: 6, ease: "none", scrollTrigger: { trigger: img.parentElement, start: "top bottom", end: "bottom top", scrub: true } }));
+  gsap.from("#heroBottle", { y: -60, rotate: -8, opacity: 0, duration: 1.1, ease: "bounce.out", delay: .1 });
+  gsap.from("#heroTags button", { y: 14, opacity: 0, stagger: .08, duration: .5, delay: .6 });
+  ScrollTrigger.create({ trigger: "#shots", start: "top 70%", once: true, onEnter: () => shotSet(0, true) });
+  gsap.fromTo("#tlFill", { scaleY: 0 }, { scaleY: 1, ease: "none", scrollTrigger: { trigger: "#tl", start: "top 75%", end: "bottom 55%", scrub: true } });
+  gsap.from(".timeline li.s", { x: -14, opacity: 0, stagger: .15, duration: .6, ease: "power2.out", scrollTrigger: { trigger: "#tl", start: "top 80%" } });
+  gsap.fromTo(".closer .plate", { scale: .6, rotate: -6 }, { scale: 1, rotate: 0, ease: "back.out(2)", duration: 1, scrollTrigger: { trigger: ".closer", start: "top 80%" } });
+  if (matchMedia("(hover: hover) and (pointer: fine)").matches) {
+    $$(".btn").forEach(b => { b.addEventListener("pointermove", e => { const r = b.getBoundingClientRect(); gsap.to(b, { x: (e.clientX - r.left - r.width / 2) * .18, y: (e.clientY - r.top - r.height / 2) * .25, duration: .3 }); }); b.addEventListener("pointerleave", () => gsap.to(b, { x: 0, y: 0, duration: .5, ease: "elastic.out(1,.4)" })); });
+    $(".stage").addEventListener("pointermove", e => { const r = e.currentTarget.getBoundingClientRect(), dx = (e.clientX - r.left) / r.width - .5; gsap.to("#heroBottle", { rotate: dx * 10, duration: .6 }); hero.slosh(dx * 2); });
+  }
+}
+shotSet(0, false);
+requestAnimationFrame(() => movePill(tabs, $("button.on", tabs)));
+intro(motion);
+if (document.fonts) document.fonts.ready.then(() => { movePill(tabs, $("button.on", tabs)); if (window.ScrollTrigger) ScrollTrigger.refresh(); });
 </script>
 </body>
 </html>
