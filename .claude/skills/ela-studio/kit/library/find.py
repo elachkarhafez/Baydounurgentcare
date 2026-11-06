@@ -36,7 +36,9 @@ rows = []
 for x in cat:
     if a.kind and x["kind"] != a.kind: continue
     if a.src and x["src"] != a.src: continue
-    if a.cc0 and x.get("license", "").upper() not in ("CC0", "CC0 PUBLIC DOMAIN"): continue
+    lic_ok = x.get("license", "").upper() in ("CC0", "CC0 PUBLIC DOMAIN")
+    if a.cc0 and not lic_ok: continue
+    if x["src"] == "sketchfab" and not lic_ok: continue  # user rule: Sketchfab CC0 only (no credit lines)
     s = score(x) if words else 1
     if s: rows.append((s, x))
 rows.sort(key=lambda r: -r[0])

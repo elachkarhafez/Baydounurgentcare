@@ -15,6 +15,10 @@ When the user says a business doesn't want its site (or "said no", "passed", "no
 
 Do NOT build a generic concept, deploy anything new, or `git rm` the folder any more. The older process in `references/declined.md` (concept rebuild) is retired unless the user asks for it.
 
+## Standing rule: Sketchfab models are CC0 only
+
+The user said: "use only free ones tht dont need credits shown". Only free CC0 (public domain) Sketchfab models, never CC-BY, NonCommercial or paid. `kit/library/find.py` hides the rest and `fetch.py` re-checks the live license and refuses anything else. Downloads need `SKETCHFAB_TOKEN` (the user hasn't added it yet).
+
 ## Standing rule: no template sites (newest, overrides "start from luma/index.html" and the house anatomy)
 
 The user said: "The designs ur making are coming out as generic ai concepts i dont like them theres no uniqueness and creativity". Billionaire Dough, Son of a Burger, Rollies, Olive Tree, MGP Built and Velvet Oven were all the same template (chips, headline left + photo card right, marquee, swipe rail, bento, closer, dock) with new colours. That is what read as generic.

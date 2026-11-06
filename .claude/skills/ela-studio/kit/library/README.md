@@ -35,7 +35,7 @@ python3 $L/fetch.py polyhaven:comfy_cafe /tmp/h && python3 $L/hdrsize.py /tmp/h/
    - `repaint-wall.py in.glb out.glb` glazes a bowl/cup wall the photo couldn't see (it comes out dark).
    - In three.js, generated GLBs have **no normals** and **metalness 1** (glTF default):
      `geometry.computeVertexNormals()`, `metalness = 0`, or they render black (and GTAO reads them as fully occluded).
-3. **Sketchfab** models need `SKETCHFAB_TOKEN` (free account → Settings → Password & API). CC-BY needs a credit line in the footer; skip NonCommercial.
+3. **Sketchfab** models need `SKETCHFAB_TOKEN` (free account → Settings → Password & API). **User rule: CC0 only**, free models that need no credit shown on the site. `find.py` hides every non-CC0 Sketchfab model and `fetch.py` re-checks the live license and refuses anything else (CC-BY, NonCommercial, paid).
 
 ## Render recipe that sells it (see `demos/catering-kitchen/src/platter.js`)
 - HDRI from `hdri/` matched to the venue (warm restaurant for food) at `environmentIntensity` .7–.9.

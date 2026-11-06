@@ -94,7 +94,15 @@ def ambientcg(aid, entry, out, res):
     return got
 
 
+CC0_LABELS = ("CC0", "CC0 PUBLIC DOMAIN")
+
+
 def sketchfab(uid, out, maxpx):
+    # User rule: only free models that need no credit on the site, i.e. CC0. Checked live, not just from the catalog.
+    info = api(f"https://api.sketchfab.com/v3/models/{uid}", {})
+    lic = ((info.get("license") or {}).get("label") or "").upper()
+    if lic not in CC0_LABELS:
+        sys.exit(f"refused: {uid} is '{lic or 'unknown'}', only CC0 (no credit needed) Sketchfab models are allowed")
     tok = os.environ.get("SKETCHFAB_TOKEN")
     if not tok:
         sys.exit("sketchfab downloads need SKETCHFAB_TOKEN (free account → Settings → Password & API → API token)")
@@ -121,7 +129,10 @@ if __name__ == "__main__":
     if not entry: sys.exit(f"{a.ref} not in catalog.json (run find.py)")
     if src == "polyhaven": r = polyhaven(aid, entry["kind"], a.out, a.res, a.max)
     elif src == "ambientcg": r = ambientcg(aid, entry, a.out, a.res)
-    elif src == "sketchfab": r = sketchfab(aid, a.out, a.max)
+    elif src == "sketchfab":
+        if entry.get("license", "").upper() not in CC0_LABELS:
+            sys.exit(f"refused: {a.ref} is '{entry.get('license')}', only CC0 Sketchfab models are allowed")
+        r = sketchfab(aid, a.out, a.max)
     else: sys.exit("unknown source")
     if a.web and isinstance(r, list):
         from PIL import Image
