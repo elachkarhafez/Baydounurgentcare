@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noai, noimageai">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Maison de Crème | Custom tiramisu &amp; dessert experiences</title>
+<meta name="description" content="Maison de Crème: custom tiramisu and luxury dessert experiences in Metro Detroit. The Roaming Experience, dessert tables, tiramisu towers and stenciled celebration tiramisu. Now booking 2026 and 2027.">
+<meta property="og:title" content="Maison de Crème">
+<meta property="og:description" content="Layered indulgence. Custom tiramisu and dessert experiences for your celebration.">
+<meta property="og:image" content="og.jpg">
+<meta name="theme-color" content="#f6efe4">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Libre+Caslon+Display&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Maison de Crème. The page is a slice of their tiramisu: each section is a layer (cocoa, mascarpone, espresso-soaked
+   ladyfinger, cream, cocoa), with a small cross-section that tracks where you are. The signature is their stencil:
+   powdered sugar sifted through a word onto cocoa, like their "Engaged" tiramisu.
+   Their wine red and cream; Libre Caslon Display (their caps), Great Vibes (their script), Manrope. */
+:root{
+  --cream:#f6efe4; --mascarpone:#fbf7f0; --cocoa:#5a3524; --cocoaD:#3e2318; --espresso:#25150f; --sponge:#d9b98c;
+  --wine:#7b1e2c; --wineL:#9d3343; --gold:#b89255; --ink:#2b1d17; --muted:#7a6a5f; --line:#e6dccd;
+  --max:1120px; --r:14px; --ease:cubic-bezier(.2,.75,.2,1);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;overflow-x:clip}
+body{margin:0;background:var(--cream);color:var(--ink);font:15px/1.65 "Manrope",system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:clip}
+a{color:inherit}
+img{display:block;max-width:100%}
+h1,h2,h3{margin:0;font-family:"Libre Caslon Display",serif;font-weight:400;line-height:1.08}
+h2{font-size:24px}
+h1 em,h2 em{font-family:"Great Vibes",cursive;font-style:normal;color:var(--wine);font-size:1.25em;line-height:.8}
+p{margin:0 0 1em}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 16px}
+section{padding:42px 0;position:relative}
+.lbl{display:block;font:600 11px/1 "Manrope",sans-serif;letter-spacing:.24em;text-transform:uppercase;color:var(--wine)}
+.lead{color:var(--muted)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 20px;border-radius:999px;font:600 14px/1 "Manrope",sans-serif;letter-spacing:.02em;text-decoration:none;white-space:nowrap;border:1.5px solid var(--wine);cursor:pointer;transition:transform .2s var(--ease),background-color .2s,color .2s}
+.btn:hover{transform:translateY(-2px)}
+.btn-wine{background:var(--wine);color:#fff}
+.btn-wine:hover{background:var(--wineL);border-color:var(--wineL)}
+.btn-line{background:transparent;color:var(--wine)}
+.btn-line:hover{background:var(--wine);color:#fff}
+.btn svg{width:16px;height:16px}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+
+/* ---------- nav ---------- */
+header.nav{position:sticky;top:0;z-index:40;background:var(--cream);border-bottom:1px solid var(--line)}
+header.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:58px;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand .mc{font:400 28px/1 "Great Vibes",cursive;color:var(--wine);flex:none;padding-right:4px;margin-top:4px}
+.brand b{display:block;font:400 13px/1 "Libre Caslon Display",serif;letter-spacing:.1em;color:var(--wine);white-space:nowrap}
+.brand small{white-space:nowrap}
+@media(min-width:768px){.brand b{font-size:15px;letter-spacing:.14em}}
+.brand small{display:block;font:500 8.5px/1 "Manrope",sans-serif;letter-spacing:.3em;color:var(--muted);margin-top:4px}
+nav.links{display:none;gap:26px}
+nav.links a{text-decoration:none;font-size:14px;color:var(--muted)}
+nav.links a:hover{color:var(--wine)}
+header.nav .btn{padding:10px 16px;font-size:13px;white-space:nowrap}
+@media(max-width:379px){.brand small{display:none}.brand b{font-size:12px;letter-spacing:.06em}.brand .mc{font-size:24px}header.nav .btn{padding:9px 13px}}
+
+/* ---------- cross-section (desktop) ---------- */
+.slice{position:fixed;right:22px;top:50%;transform:translateY(-50%);z-index:30;display:none;flex-direction:column;width:16px;border-radius:5px;overflow:hidden;box-shadow:0 6px 14px -8px #2b1d1788;border:1px solid #2b1d1722}
+.slice i{display:block;height:22px;position:relative}
+.slice i.cocoa{background:var(--cocoa);height:8px}
+.slice i.cream{background:var(--mascarpone)}
+.slice i.sponge{background:repeating-linear-gradient(90deg,#c9a06f 0 5px,#b8895a 5px 6px)}
+.slice i::after{content:"";position:absolute;inset:0;box-shadow:inset 0 0 0 2px var(--wine);opacity:0;transition:opacity .3s}
+.slice i.on::after{opacity:1}
+
+/* ---------- hero (cocoa layer) ---------- */
+.hero{padding:16px 0 36px}
+.hero .wrap{display:grid;gap:18px}
+.hero .ph{position:relative;border-radius:18px;overflow:hidden;aspect-ratio:4/3;max-height:52svh;background:#1d1210}
+.hero .ph img{width:100%;height:100%;object-fit:cover;object-position:50% 55%}
+.hero .ph::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 60%,#1d121066)}
+.hero .ph .chip{position:absolute;left:12px;bottom:12px;z-index:2;background:#fbf7f0ee;border-radius:999px;padding:7px 12px;font:600 12px/1 "Manrope",sans-serif;color:var(--wine)}
+.hero h1{font-size:29px;margin-top:10px}
+.hero .lead{margin:12px 0 0;max-width:30em}
+.hero .actions{display:flex;gap:8px;margin-top:16px}
+.hero .actions .btn{flex:1 1 0;padding:13px 8px}
+
+/* ---------- stencil (the signature) ---------- */
+.stencil{background:linear-gradient(180deg,var(--mascarpone),var(--cream))}
+.sgrid{display:grid;gap:18px;margin-top:18px;align-items:center}
+.dish{position:relative;aspect-ratio:3/2;max-height:46svh;margin:0 auto;width:100%}
+.dish canvas{width:100%;height:100%;display:block}
+.sctl{display:grid;gap:10px}
+.sctl .field{display:flex;gap:8px}
+.sctl input{flex:1;min-width:0;font:500 16px/1.2 "Manrope",sans-serif;padding:12px 14px;border:1.5px solid var(--line);border-radius:999px;background:#fff;color:var(--ink)}
+.sctl input:focus{outline:none;border-color:var(--wine)}
+.ideas{display:flex;flex-wrap:wrap;gap:6px}
+.ideas button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 12px;font:500 13px/1 "Manrope",sans-serif;color:var(--ink);cursor:pointer}
+.ideas button:hover{border-color:var(--wine);color:var(--wine)}
+.real{display:flex;gap:12px;align-items:center;margin-top:6px}
+.real img{width:96px;height:72px;object-fit:cover;border-radius:10px}
+.real p{margin:0;font-size:13px;color:var(--muted)}
+
+/* ---------- experiences (sponge layer) ---------- */
+.exp{background:var(--cream)}
+.exp::before{content:"";position:absolute;left:0;right:0;top:0;height:10px;background:repeating-linear-gradient(90deg,#c9a06f 0 22px,#b8895a 22px 24px);opacity:.55}
+.rail{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin:20px -16px 0;padding:0 16px 8px;scroll-padding:0 16px}
+.rail::-webkit-scrollbar{display:none}
+.card{flex:0 0 78%;scroll-snap-align:start;background:#fff;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin:0}
+.card .pic{aspect-ratio:4/3;overflow:hidden;position:relative}
+.card .pic img{width:100%;height:100%;object-fit:cover;transition:transform 1s var(--ease)}
+.card:hover .pic img{transform:scale(1.05)}
+.card .new{position:absolute;left:10px;top:10px;background:var(--wine);color:#fff;border-radius:999px;padding:5px 10px;font:600 11px/1 "Manrope",sans-serif;letter-spacing:.1em;text-transform:uppercase}
+.card .body{padding:14px 16px 16px}
+.card h3{font-size:22px}
+.card p{margin:6px 0 0;color:var(--muted);font-size:14px}
+.dots{display:flex;justify-content:center;gap:6px;margin-top:6px}
+.dots i{width:6px;height:6px;border-radius:50%;background:#2b1d1726;transition:width .25s,background-color .25s}
+.dots i.on{width:18px;border-radius:3px;background:var(--wine)}
+
+/* ---------- roaming (espresso layer) ---------- */
+.roam{background:var(--espresso);color:#f3e7d8;overflow:clip}
+.roam .lbl{color:#d9a7ae}
+.roam h2 em{color:#e7b9bf}
+.roam .lead{color:#c9b8a6}
+.rgrid{display:grid;gap:20px;align-items:center}
+.rph{border-radius:18px;overflow:hidden;aspect-ratio:4/3;max-height:50svh;position:relative}
+.rph img{width:100%;height:110%;object-fit:cover}
+.perks{list-style:none;margin:16px 0 0;padding:0;border-top:1px solid #ffffff1c}
+.perks li{display:flex;gap:12px;align-items:baseline;padding:11px 0;border-bottom:1px solid #ffffff1c}
+.perks li b{font:400 20px/1 "Libre Caslon Display",serif;color:#fff;min-width:70px}
+.perks li span{color:#c9b8a6;font-size:14px}
+.roam .btn-line{color:#f3e7d8;border-color:#f3e7d899}
+.roam .btn-line:hover{background:#f3e7d8;color:var(--espresso)}
+
+/* ---------- seen at ---------- */
+.seen{background:var(--mascarpone)}
+.sgrid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+.sgrid2 figure{margin:0;border-radius:var(--r);overflow:hidden;position:relative;aspect-ratio:3/4}
+.sgrid2 img{width:100%;height:100%;object-fit:cover}
+.sgrid2 figcaption{position:absolute;left:8px;right:8px;bottom:8px;background:#fbf7f0ee;border-radius:8px;padding:6px 9px;font-size:12px;line-height:1.35}
+
+/* ---------- book (cocoa layer) ---------- */
+.book{background:var(--cocoa);color:#f6ebdd}
+.book .lbl{color:#e7b9bf}
+.book h2 em{color:#f0c9ce}
+.book .lead{color:#dcc7b2}
+.bgrid{display:grid;gap:18px;margin-top:18px}
+.form{display:grid;gap:10px}
+.form label{display:grid;gap:6px;font:600 11px/1 "Manrope",sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#dcc7b2}
+.form input,.form select{font:500 16px/1.2 "Manrope",sans-serif;padding:12px;border:1px solid #ffffff2e;border-radius:10px;background:#ffffff12;color:#fff;width:100%}
+.form select option{color:#2b1d17}
+.form .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.card-note{background:var(--mascarpone);color:var(--ink);border-radius:6px;padding:20px 18px 16px;box-shadow:0 26px 40px -24px #000;position:relative}
+.card-note .seal{position:absolute;right:16px;top:-18px;width:44px;height:44px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#a8384a,#6e1724);color:#f6dfe2;display:grid;place-items:center;font:400 22px/1 "Great Vibes",cursive;box-shadow:0 6px 12px -6px #000}
+.card-note h3{font:400 30px/1 "Great Vibes",cursive;color:var(--wine)}
+.card-note #msg{white-space:pre-wrap;font-size:14.5px;line-height:1.6;margin:10px 0 0;min-height:5em}
+.card-note .caret{display:inline-block;width:1.5px;height:1em;background:var(--ink);vertical-align:-2px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.card-note .btn{width:100%;margin-top:14px}
+.card-note .sent{font-size:12.5px;color:var(--muted);text-align:center;margin:8px 0 0;min-height:1.3em}
+
+footer{background:var(--espresso);color:#c9b8a6;font-size:13.5px;padding:28px 0 104px;text-align:center}
+footer .mc{font:400 44px/1 "Great Vibes",cursive;color:#e7b9bf}
+footer .nm{display:block;font:400 16px/1 "Libre Caslon Display",serif;letter-spacing:.2em;color:#fff;margin:6px 0 4px}
+footer .tg{display:block;font:500 10px/1 "Manrope",sans-serif;letter-spacing:.3em;margin-bottom:12px}
+footer a{text-decoration:none;color:#f3e7d8}
+.studio{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;background:#ffffff12;color:#fff;font:600 11px/1 "Manrope",sans-serif;margin-top:14px}
+.studio i{width:9px;height:9px;border-radius:3px;background:conic-gradient(from 210deg,#ff5a1f,#ffb03b,#ff5a1f)}
+
+.dock{position:fixed;z-index:45;left:10px;right:10px;bottom:max(10px,env(safe-area-inset-bottom));display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:6px;background:#fbf7f0f5;border:1px solid var(--line);border-radius:999px;box-shadow:0 14px 30px -14px #2b1d1788;transition:transform .3s var(--ease),opacity .3s}
+.dock .btn{padding:12px 8px}
+.dock.off{transform:translateY(150%);opacity:0;pointer-events:none}
+.rv{opacity:0;transform:translateY(16px);transition:opacity .8s ease,transform .8s var(--ease)}
+.rv.in{opacity:1;transform:none}
+
+@media (min-width:640px){
+  .card{flex-basis:46%}
+  .sgrid2{grid-template-columns:repeat(4,1fr)}
+}
+@media (min-width:900px){
+  body{font-size:16px}
+  .wrap{padding:0 28px}
+  section{padding:80px 0}
+  h2{font-size:40px}
+  nav.links{display:flex}
+  header.nav .btn{padding:11px 20px;font-size:14px}
+  .slice{display:flex}
+  .hero{padding:40px 0 70px}
+  .hero .wrap{grid-template-columns:1fr 1.05fr;gap:52px;align-items:center}
+  .hero .ph{order:2;aspect-ratio:4/5;max-height:620px}
+  .hero h1{font-size:54px}
+  .hero .lead{font-size:17.5px}
+  .hero .actions .btn{flex:0 0 auto;padding:15px 26px}
+  .sgrid{grid-template-columns:1.2fr .8fr;gap:48px}
+  .dish{max-height:none}
+  .rail{display:grid;grid-template-columns:repeat(4,1fr);overflow:visible;margin:28px 0 0;padding:0;gap:16px}
+  .card{flex:none}
+  .dots{display:none}
+  .rgrid{grid-template-columns:.85fr 1.15fr;gap:56px}
+  .rph{aspect-ratio:3/4;max-height:640px}
+  .bgrid{grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+  .dock{display:none}
+  footer{padding-bottom:30px}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.rv{opacity:1;transform:none;transition:none}.card-note .caret{animation:none}}
+</style>
+</head>
+<body>
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Maison de Crème, back to top"><span class="mc" aria-hidden="true">MC</span><span><b>MAISON de CRÈME</b><small>LAYERED INDULGENCE</small></span></a>
+    <nav class="links" aria-label="Main"><a href="#stencil">Stencil it</a><a href="#experiences">Experiences</a><a href="#roaming">Roaming</a><a href="#book">Book</a></nav>
+    <a class="btn btn-wine" href="#book">Book your date</a>
+  </div>
+</header>
+
+<div class="slice" aria-hidden="true" title="Where you are in the tiramisu">
+  <i class="cocoa" data-for="top"></i><i class="cream" data-for="stencil"></i><i class="sponge" data-for="experiences"></i><i class="cream" data-for="roaming"></i><i class="sponge" data-for="seen"></i><i class="cocoa" data-for="book"></i>
+</div>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <div class="ph rv"><img src="media/tower.jpg" alt="A tower of Maison de Crème tiramisu coupes at a wedding with a wine red backdrop" width="600" height="800" fetchpriority="high"><span class="chip">Now booking 2026 &amp; 2027</span></div>
+      <div>
+        <span class="lbl rv">Custom tiramisu · Metro Detroit</span>
+        <h1 class="rv">Tiramisu, made for <em>your moment.</em></h1>
+        <p class="lead rv">Engagements, weddings, birthdays and girls' nights. We make custom tiramisu and bring the whole dessert experience to your event, down to your names stenciled in sugar.</p>
+        <div class="actions rv">
+          <a class="btn btn-wine" id="heroCta" href="#book"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Book your date</a>
+          <a class="btn btn-line" href="#stencil">Stencil yours</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="stencil" id="stencil">
+    <div class="wrap">
+      <span class="lbl rv">Stencil it</span>
+      <h2 class="rv" style="margin-top:8px">Your words, <em>in sugar.</em></h2>
+      <p class="lead rv" style="margin-top:8px;max-width:34em">Type a name, a date or a word and watch it sift onto the cocoa, the way we finish our celebration tiramisu.</p>
+      <div class="sgrid">
+        <div class="dish rv"><canvas id="dish" width="900" height="600" role="img" aria-label="A tiramisu top with your word stenciled in powdered sugar"></canvas></div>
+        <div class="sctl rv">
+          <div class="field"><input id="word" type="text" maxlength="18" value="Engaged" aria-label="Word to stencil"><button class="btn btn-wine" id="sift" type="button">Sift</button></div>
+          <div class="ideas" id="ideas"></div>
+          <div class="real"><img src="media/engaged.jpg" alt="A real Maison de Crème tiramisu stenciled with Engaged" width="720" height="540" loading="lazy"><p>The real thing: an engagement tiramisu, cocoa on top and "Engaged" in powdered sugar.</p></div>
+          <a class="btn btn-line js-stencil-book" href="#book" style="justify-self:start">Order with this word</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="exp" id="experiences">
+    <div class="wrap">
+      <span class="lbl rv">Ways to have it</span>
+      <h2 class="rv" style="margin-top:8px">Pick your <em>layer of luxury.</em></h2>
+      <div class="rail" id="rail"></div>
+    </div>
+  </section>
+
+  <section class="roam" id="roaming">
+    <div class="wrap rgrid">
+      <div class="rph rv"><img src="media/roaming.jpg" alt="Serving tiramisu from the roaming tray at an event" width="600" height="800" loading="lazy" data-par></div>
+      <div>
+        <span class="lbl rv">The Roaming Experience</span>
+        <h2 class="rv" style="margin-top:8px">We bring it <em>to your guests.</em></h2>
+        <p class="lead rv" style="margin-top:10px">Our newest service. We roam through your event with a tray personalized with your name and serve tiramisu right where the celebration is happening.</p>
+        <ul class="perks rv">
+          <li><b>No lines</b><span>Guests stay on the dance floor and the dessert comes to them.</span></li>
+          <li><b>No waiting</b><span>Served fresh, scoop by scoop, all night.</span></li>
+          <li><b>Your name</b><span>The tray carries your name, like "The Salehs".</span></li>
+        </ul>
+        <div class="rv" style="margin-top:18px;display:flex;gap:8px;flex-wrap:wrap"><a class="btn btn-wine" href="#book" data-exp="The Roaming Experience">Book the Roaming Experience</a></div>
+        <p class="rv" style="margin-top:14px;font-size:13px;color:#c9b8a6">Now taking bookings for the rest of 2026 and 2027.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="seen" id="seen">
+    <div class="wrap">
+      <span class="lbl rv">Seen at</span>
+      <h2 class="rv" style="margin-top:8px">Galoween in <em>Northville.</em></h2>
+      <p class="lead rv" style="margin-top:8px;max-width:36em">A Phantom of the Opera girls' night at The TOX with Glow Club. Roses, candles, and a full table of tiramisu.</p>
+      <div class="sgrid2">
+        <figure class="rv"><img src="media/setup.jpg" alt="The Maison de Crème table set up at Galoween" width="600" height="800" loading="lazy"><figcaption>The table, set for the night</figcaption></figure>
+        <figure class="rv"><img src="media/table.jpg" alt="Rows of labelled tiramisu boxes with cherries and roses" width="600" height="800" loading="lazy"><figcaption>Boxed and labelled</figcaption></figure>
+        <figure class="rv"><img src="media/boxes.jpg" alt="Labelled tiramisu boxes on a draped table with rose petals" width="720" height="720" loading="lazy" style="object-position:50% 50%"><figcaption>Rose petals and cocoa</figcaption></figure>
+        <figure class="rv"><img src="media/birthday.jpg" alt="A birthday tiramisu with candles and a photo topper" width="720" height="720" loading="lazy"><figcaption>Birthday tiramisu, candles in</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="book" id="book">
+    <div class="wrap">
+      <div class="bgrid">
+        <div>
+          <span class="lbl rv">Book your date</span>
+          <h2 class="rv" style="margin-top:8px">Tell us about <em>your celebration.</em></h2>
+          <p class="lead rv" style="margin-top:10px">We'll write the message. One tap copies it and opens our Instagram DMs.</p>
+          <div class="form rv">
+            <div class="two">
+              <label>Your name<input id="bName" type="text" autocomplete="given-name" placeholder="First name"></label>
+              <label>Occasion<select id="bOcc"><option>Wedding</option><option>Engagement</option><option>Birthday</option><option>Bridal or baby shower</option><option>Girls' night or event</option><option>Something else</option></select></label>
+            </div>
+            <div class="two">
+              <label>Date<input id="bDate" type="text" placeholder="e.g. June 20"></label>
+              <label>Guests<input id="bGuests" type="text" inputmode="numeric" placeholder="About how many"></label>
+            </div>
+            <div class="two">
+              <label>Experience<select id="bExp"><option>Not sure yet</option><option>The Roaming Experience</option><option>A dessert table</option><option>Tiramisu cups or a tower</option><option>A custom tiramisu</option></select></label>
+              <label>Stencil word<input id="bWord" type="text" maxlength="18" placeholder="Optional, e.g. Engaged"></label>
+            </div>
+          </div>
+        </div>
+        <div class="card-note rv"><span class="seal" aria-hidden="true">MC</span><h3>Your note</h3><p id="msg"></p><button class="btn btn-wine" id="send" type="button">Copy &amp; open Instagram</button><p class="sent" id="sent" aria-live="polite"></p></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span class="mc" aria-hidden="true">MC</span>
+    <span class="nm">MAISON de CRÈME</span>
+    <span class="tg">LAYERED INDULGENCE</span>
+    <a class="js-ig" href="#" target="_blank" rel="noopener">@maisondecreme_</a> · Metro Detroit<br>
+    <a class="studio" href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener" aria-label="Site by ElaSystems (opens in a new tab)"><i aria-hidden="true"></i><span>Site by <b>ElaSystems</b></span></a>
+  </div>
+</footer>
+
+<nav class="dock" aria-label="Quick actions">
+  <a class="btn btn-wine" href="#book">Book your date</a>
+  <a class="btn btn-line" href="#stencil">Stencil yours</a>
+</nav>
+
+<script>
+const CONFIG = {
+  handle: "maisondecreme_",
+  ideas: ["Engaged", "Mr & Mrs", "Happy 30th", "The Salehs", "Bride to be", "Love"],
+  experiences: [
+    { t: "The Roaming Experience", d: "We walk your event with a personalized tray and serve tiramisu right where the party is.", img: "media/roaming.jpg", alt: "The roaming tiramisu tray", tag: "New" },
+    { t: "Dessert table", d: "Individual boxed tiramisu, labelled and styled with roses for your guests to grab.", img: "media/boxes.jpg", alt: "A table of labelled tiramisu boxes" },
+    { t: "Tiramisu towers", d: "Tiramisu in coupe glasses, stacked into a tower for weddings and big moments.", img: "media/tower.jpg", alt: "A tower of tiramisu coupes at a wedding" },
+    { t: "Celebration tiramisu", d: "One big tiramisu with your word stenciled on top, or candles in for the birthday.", img: "media/engaged.jpg", alt: "An engagement tiramisu stenciled with Engaged" }
+  ]
+};
+const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const REDUCE = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const DM = "https://ig.me/m/" + CONFIG.handle, IG = "https://www.instagram.com/" + CONFIG.handle + "/";
+$$(".js-ig").forEach(a => a.href = IG);
+if (/netlify\.app$/.test(location.hostname)) document.documentElement.classList.add("nl");
+
+/* ---------- experiences rail ---------- */
+const rail = $("#rail");
+rail.innerHTML = CONFIG.experiences.map(e => `<figure class="card rv"><div class="pic"><img src="${e.img}" alt="${esc(e.alt)}" width="720" height="540" loading="lazy">${e.tag ? `<span class="new">${esc(e.tag)}</span>` : ""}</div><div class="body"><h3>${esc(e.t)}</h3><p>${esc(e.d)}</p></div></figure>`).join("");
+const dots = document.createElement("div"); dots.className = "dots"; dots.setAttribute("aria-hidden", "true");
+CONFIG.experiences.forEach(() => dots.appendChild(document.createElement("i"))); rail.after(dots);
+const markDots = () => { const max = rail.scrollWidth - rail.clientWidth, i = max <= 0 ? 0 : Math.round(rail.scrollLeft / max * (CONFIG.experiences.length - 1)); [...dots.children].forEach((d, j) => d.classList.toggle("on", j === i)); };
+rail.addEventListener("scroll", markDots, { passive: true }); markDots();
+
+/* ---------- the stencil: powdered sugar through a word onto cocoa ---------- */
+const cv = $("#dish"), cx = cv.getContext("2d");
+const W = 900, H = 600;
+let cocoaBase = null, grains = [], shown = 0, raf = 0, rnd = 1;
+const R = () => (rnd = (rnd * 16807) % 2147483647) / 2147483647;
+function ovalPath(c, inset = 0) { c.beginPath(); c.ellipse(W / 2, H / 2, W / 2 - 30 - inset, H / 2 - 40 - inset, 0, 0, Math.PI * 2); }
+function buildCocoa() {
+  const c = document.createElement("canvas"); c.width = W; c.height = H; const g = c.getContext("2d");
+  /* glass dish rim + shadow */
+  g.save(); g.shadowColor = "#2b1d1755"; g.shadowBlur = 30; g.shadowOffsetY = 14; ovalPath(g, -14); g.fillStyle = "#efe7dc"; g.fill(); g.restore();
+  ovalPath(g, -14); g.fillStyle = "#e9e1d6"; g.fill();
+  ovalPath(g, -6); g.lineWidth = 3; g.strokeStyle = "#ffffffcc"; g.stroke();
+  /* cocoa surface */
+  ovalPath(g); g.save(); g.clip();
+  const grd = g.createRadialGradient(W * .42, H * .38, 40, W / 2, H / 2, W * .55);
+  grd.addColorStop(0, "#7a4630"); grd.addColorStop(.7, "#62361f"); grd.addColorStop(1, "#4b2817");
+  g.fillStyle = grd; g.fillRect(0, 0, W, H);
+  rnd = 7; for (let i = 0; i < 26000; i++) { const x = R() * W, y = R() * H, s = R(); g.fillStyle = s < .5 ? `rgba(40,18,8,${.12 + R() * .18})` : `rgba(160,98,62,${.08 + R() * .14})`; g.fillRect(x, y, 1 + R() * 1.4, 1 + R() * 1.4); }
+  g.restore();
+  /* light sheen on the glass */
+  g.save(); ovalPath(g, -14); g.lineWidth = 2; g.strokeStyle = "#ffffff99"; g.setLineDash([140, 900]); g.lineDashOffset = 60; g.stroke(); g.restore();
+  cocoaBase = c;
+}
+function maskPoints(word) {
+  const m = document.createElement("canvas"); m.width = W; m.height = H; const g = m.getContext("2d");
+  let fs = 150; g.font = `400 ${fs}px "Great Vibes", cursive`;
+  while (g.measureText(word).width > W * .72 && fs > 50) { fs -= 6; g.font = `400 ${fs}px "Great Vibes", cursive`; }
+  g.textAlign = "center"; g.textBaseline = "middle"; g.fillStyle = "#000"; g.fillText(word, W / 2, H / 2 + fs * .06);
+  const d = g.getImageData(0, 0, W, H).data, pts = [];
+  rnd = 11;
+  for (let y = 0; y < H; y += 2) for (let x = 0; x < W; x += 2) if (d[(y * W + x) * 4 + 3] > 120 && R() < .62) pts.push([x + R() * 2, y + R() * 2]);
+  /* a little stray sugar outside the stencil, like a real sift */
+  for (let i = 0; i < pts.length * .03; i++) { const p = pts[Math.floor(R() * pts.length)]; pts.push([p[0] + (R() - .5) * 18, p[1] + (R() - .5) * 18]); }
+  for (let i = pts.length - 1; i > 0; i--) { const j = Math.floor(R() * (i + 1)); [pts[i], pts[j]] = [pts[j], pts[i]]; }
+  return pts;
+}
+function frame() {
+  raf = 0;
+  cx.drawImage(cocoaBase, 0, 0);
+  cx.save(); ovalPath(cx); cx.clip();
+  const n = grains.length, upto = Math.min(n, shown);
+  cx.fillStyle = "#fbf7f0";
+  for (let i = 0; i < upto; i++) { const p = grains[i]; cx.globalAlpha = .55 + (i % 7) * .06; cx.fillRect(p[0], p[1], 1.9, 1.9); }
+  /* the falling curtain of sugar above the newest grains */
+  if (upto < n) {
+    cx.globalAlpha = .5;
+    for (let k = 0; k < 160; k++) { const p = grains[Math.min(n - 1, upto + Math.floor(Math.random() * 1400))]; cx.fillRect(p[0] + (Math.random() - .5) * 6, p[1] - 10 - Math.random() * 40, 1.4, 1.4); }
+  }
+  cx.restore(); cx.globalAlpha = 1;
+  if (upto < n) { shown += Math.max(260, n / 70); raf = requestAnimationFrame(frame); }
+}
+function sift(word) {
+  word = (word || "").trim() || "Engaged";
+  grains = maskPoints(word); shown = REDUCE ? grains.length : 0;
+  if (raf) cancelAnimationFrame(raf);
+  frame();
+  $("#bWord").value = word; compose();
+}
+$("#ideas").innerHTML = CONFIG.ideas.map(w => `<button type="button">${esc(w)}</button>`).join("");
+$("#ideas").addEventListener("click", e => { const b = e.target.closest("button"); if (b) { $("#word").value = b.textContent; sift(b.textContent); } });
+$("#sift").addEventListener("click", () => sift($("#word").value));
+$("#word").addEventListener("keydown", e => { if (e.key === "Enter") sift($("#word").value); });
+let started = false;
+function startStencil() { if (started) return; started = true; buildCocoa(); sift($("#word").value); }
+const fontsReady = document.fonts ? document.fonts.load('400 120px "Great Vibes"').catch(() => {}) : Promise.resolve();
+if ("IntersectionObserver" in window) {
+  const so = new IntersectionObserver(([e]) => { if (e.isIntersecting) { so.disconnect(); fontsReady.then(startStencil); } }, { threshold: .25 });
+  so.observe(cv);
+} else fontsReady.then(startStencil);
+
+/* ---------- booking note ---------- */
+const msg = $("#msg");
+function compose() {
+  const n = $("#bName").value.trim(), o = $("#bOcc").value, d = $("#bDate").value.trim(), g = $("#bGuests").value.trim(), x = $("#bExp").value, w = $("#bWord").value.trim();
+  let m = `Hi Maison de Crème! ${n ? "I'm " + n + ". " : ""}I'd love tiramisu for my ${o.toLowerCase()}`;
+  m += d ? ` on ${d}` : ""; m += ".";
+  if (g) m += ` We're expecting about ${g} guests.`;
+  m += x === "Not sure yet" ? " I'm not sure which experience fits yet." : ` I'm interested in ${x.charAt(0).toLowerCase() + x.slice(1)}.`;
+  if (w) m += ` Could you stencil "${w}" on top?`;
+  m += " Are you available, and what would it cost?";
+  typeTo(m); return m;
+}
+let typed = "", tt = 0;
+function typeTo(m) {
+  if (REDUCE) { msg.textContent = m; return; }
+  let i = 0; while (i < typed.length && i < m.length && typed[i] === m[i]) i++;
+  typed = typed.slice(0, i); clearInterval(tt);
+  tt = setInterval(() => { typed = m.slice(0, typed.length + 2); msg.innerHTML = esc(typed) + '<span class="caret"></span>'; if (typed.length >= m.length) clearInterval(tt); }, 14);
+}
+["bName", "bOcc", "bDate", "bGuests", "bExp", "bWord"].forEach(id => $("#" + id).addEventListener("input", compose));
+document.addEventListener("click", e => { const b = e.target.closest("[data-exp]"); if (b) { $("#bExp").value = b.dataset.exp; compose(); } });
+$(".js-stencil-book").addEventListener("click", () => { $("#bWord").value = $("#word").value.trim(); compose(); });
+$("#send").addEventListener("click", async () => {
+  const m = compose(); let ok = false;
+  try { await navigator.clipboard.writeText(m); ok = true; } catch (e) { const t = document.createElement("textarea"); t.value = m; document.body.appendChild(t); t.select(); try { ok = document.execCommand("copy"); } catch (e2) {} t.remove(); }
+  $("#sent").textContent = ok ? "Copied. Paste it into the chat that just opened." : "Opening Instagram. Copy your note from this page if it isn't there.";
+  window.open(DM, "_blank", "noopener");
+});
+compose();
+
+/* ---------- reveals, cross-section, dock ---------- */
+if ("IntersectionObserver" in window && !REDUCE) {
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { threshold: .12 });
+  $$(".rv").forEach(el => io.observe(el));
+} else $$(".rv").forEach(el => el.classList.add("in"));
+if ("IntersectionObserver" in window) {
+  const layers = $$(".slice i"), vis = new Map();
+  const lo = new IntersectionObserver(es => { es.forEach(e => vis.set(e.target.id, e.intersectionRatio)); let best = "top", br = 0; vis.forEach((r, id) => { if (r > br) { br = r; best = id; } }); layers.forEach(l => l.classList.toggle("on", l.dataset.for === best)); }, { threshold: [0, .2, .5, .8] });
+  ["top", "stencil", "experiences", "roaming", "seen", "book"].forEach(id => lo.observe(document.getElementById(id)));
+  new IntersectionObserver(([e]) => $(".dock").classList.toggle("off", e.isIntersecting), { threshold: .1 }).observe($("#book"));
+}
+if (!REDUCE) {
+  const pars = $$("[data-par]");
+  addEventListener("scroll", () => pars.forEach(im => { const r = im.parentElement.getBoundingClientRect(); if (r.bottom < 0 || r.top > innerHeight) return; im.style.transform = `translateY(${(-(r.top + r.height / 2 - innerHeight / 2) / innerHeight * 8).toFixed(2)}%)`; }), { passive: true });
+}
+</script>
+</body>
+</html>
