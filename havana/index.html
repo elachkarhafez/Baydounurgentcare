@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noai, noimageai">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Havana Meals | Weekly meal prep in Metro Detroit</title>
+<meta name="description" content="Havana Meals cooks fresh, high-protein meal prep with Cuban soul and delivers weekly across Metro Detroit. Lose weight, maintain or build muscle. Heat and enjoy. DM to pre-order.">
+<meta property="og:title" content="Havana Meals">
+<meta property="og:description" content="Real food. Cuban soul. A better you. Weekly meal prep delivered across Metro Detroit.">
+<meta property="og:image" content="og.jpg">
+<meta name="theme-color" content="#12392b">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Karla:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* Havana Meals. Concept: the page is your week, because they deliver once and you eat Monday to Sunday;
+   their own reel captions the days ("Monday... Wednesday... Thursday... Saturday..."). A week player steps
+   through seven real containers, the order builder fills a fridge shelf. Palette from the logo: palm green,
+   deep green, sunset orange, gold, cream. */
+:root{
+  --deep:#12392b; --palm:#1f5c43; --sun:#e8692b; --gold:#f2b33d; --cream:#fbf3e4; --sand:#f3e5c8;
+  --ink:#10251c; --muted:#5d6b62; --line:#e6d9bd;
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--cream);color:var(--ink);font:400 15px/1.6 "Karla",system-ui,sans-serif;overflow-x:hidden}
+img{display:block;max-width:100%}
+a{color:inherit}
+h1,h2,h3{font-family:"Alfa Slab One",Georgia,serif;font-weight:400;line-height:1.12;margin:0;letter-spacing:.005em}
+h1 em,h2 em{font-style:normal;color:var(--sun)}
+h2{font-size:23px}
+p{margin:0}
+.wrap{width:min(1140px,100% - 32px);margin-inline:auto}
+section{padding:38px 0}
+.kick{font:800 12px/1 "Karla",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--sun)}
+.lead{color:var(--muted);font-size:15px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:12px;padding:13px 18px;font:800 14px/1 "Karla",sans-serif;text-decoration:none;border:2px solid transparent;cursor:pointer;white-space:nowrap;transition:transform .2s var(--ease),background .2s}
+.btn:active{transform:scale(.97)}
+.btn-sun{background:var(--sun);color:#fff}
+.btn-green{background:var(--deep);color:var(--cream)}
+.btn-line{border-color:var(--deep);color:var(--deep);background:transparent}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+
+/* nav */
+header.nav{position:sticky;top:0;z-index:40;background:#fbf3e4f2;border-bottom:1px solid var(--line)}
+header.nav .wrap{height:56px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.brand{display:flex;align-items:center;gap:9px;text-decoration:none}
+.brand img{width:38px;height:38px;border-radius:50%;object-fit:cover;background:#fff}
+.brand b{font:400 17px/1 "Alfa Slab One",serif;color:var(--deep);letter-spacing:.02em;white-space:nowrap}
+.links{display:none}
+header.nav .btn{padding:10px 14px;font-size:13.5px}
+
+/* hero */
+.hero{padding:16px 0 32px;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;right:-120px;top:-140px;width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,#f2b33d55,#e8692b22 50%,transparent 70%);pointer-events:none}
+.hero .wrap{display:grid;gap:18px;position:relative}
+.shot{position:relative;width:min(100%,300px);margin-inline:auto;aspect-ratio:3/4;max-height:42svh;border-radius:20px;overflow:hidden;box-shadow:0 24px 40px -26px #10251c99;transform:rotate(-2deg)}
+.shot img{width:100%;height:100%;object-fit:cover}
+.tag{position:absolute;left:12px;top:12px;background:var(--gold);color:var(--ink);font:800 11px/1 "Karla",sans-serif;letter-spacing:.1em;text-transform:uppercase;border-radius:999px;padding:7px 10px;transform:rotate(2deg)}
+.hero h1{font-size:29px;color:var(--deep);margin-top:10px}
+.hero .lead{margin-top:10px}
+.motto{display:inline-block;margin-top:12px;font:700 italic 14px/1.3 "Karla",sans-serif;color:var(--palm);border-left:3px solid var(--sun);padding-left:10px}
+.cta-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.chips span{font:700 12.5px/1 "Karla",sans-serif;background:#fff;border:1px solid var(--line);color:var(--deep);border-radius:999px;padding:7px 10px}
+
+/* week player */
+.week{background:var(--deep);color:var(--cream);position:relative;overflow:hidden}
+.week::after{content:"";position:absolute;left:-80px;bottom:-120px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,#e8692b33,transparent 70%);pointer-events:none}
+.week h2{color:var(--cream);margin-top:8px}
+.week .kick{color:var(--gold)}
+.days{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-top:16px}
+.days button{border:0;background:none;color:#fbf3e4a6;font:800 12.5px/1 "Karla",sans-serif;letter-spacing:.06em;text-transform:uppercase;padding:0 0 8px;cursor:pointer;text-align:left;position:relative}
+.days button i{display:block;height:4px;border-radius:4px;background:#fbf3e42e;margin-top:8px;overflow:hidden}
+.days button i b{display:block;height:100%;width:0;background:var(--gold)}
+.days button[aria-selected="true"]{color:var(--gold)}
+.days button.done i b{width:100%;background:#fbf3e466}
+.stage{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;margin-top:12px;position:relative;z-index:1}
+.box{position:relative;width:min(44vw,210px);aspect-ratio:3/4;border-radius:16px;overflow:hidden;background:#0b241b;box-shadow:0 20px 36px -22px #000}
+.box img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .55s var(--ease),opacity .55s var(--ease)}
+.box img.out{transform:translateX(-30%) rotate(-6deg);opacity:0}
+.box img.in{transform:translateX(30%) rotate(6deg);opacity:0}
+.box .lid{position:absolute;inset:6px;border-radius:12px;border:2px solid #ffffff38;background:linear-gradient(135deg,#ffffff26,#ffffff05 40%,#ffffff12);pointer-events:none;transition:transform .5s var(--ease)}
+.box.lift .lid{transform:translateY(-110%)}
+.dayname{font:400 25px/1 "Alfa Slab One",serif;white-space:nowrap;color:transparent;-webkit-text-stroke:1.5px var(--gold);letter-spacing:.02em}
+.dish{font:700 16px/1.35 "Karla",sans-serif;margin-top:8px;color:var(--cream)}
+.side{font-size:13.5px;color:#fbf3e4b3;margin-top:6px}
+.wknote{font-size:12.5px;color:#fbf3e499;margin-top:14px;position:relative;z-index:1}
+.ctrl{display:flex;gap:8px;margin-top:12px}
+.ctrl button{width:40px;height:40px;border-radius:50%;border:1.5px solid #fbf3e455;background:none;color:var(--cream);cursor:pointer;display:grid;place-items:center}
+.ctrl svg{width:16px;height:16px}
+
+/* goals */
+.goals h2{color:var(--deep);margin-top:8px}
+.grail{display:grid;grid-auto-flow:column;grid-auto-columns:80%;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:16px;margin:18px -16px 0;padding:0 16px 6px;scrollbar-width:none}
+.grail::-webkit-scrollbar{display:none}
+.goal{scroll-snap-align:start;text-align:left;background:#fff;border:2px solid var(--line);border-radius:18px;padding:16px;cursor:pointer;color:var(--ink);font:inherit;transition:border-color .25s,transform .25s var(--ease),box-shadow .25s}
+.goal svg{width:40px;height:40px;color:var(--palm)}
+.goal h3{font-size:18px;color:var(--deep);margin-top:10px}
+.goal p{font-size:14px;color:var(--muted);margin-top:6px}
+.goal .pick{display:inline-block;margin-top:12px;font:800 12px/1 "Karla",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--sun)}
+.goal[aria-pressed="true"]{border-color:var(--sun);box-shadow:0 14px 26px -18px #e8692b99;transform:translateY(-3px)}
+.goal[aria-pressed="true"] .pick::before{content:"✓ "}
+.dots{display:flex;justify-content:center;gap:6px;margin-top:10px}
+.dots i{width:7px;height:7px;border-radius:9px;background:#12392b33;transition:width .3s,background .3s}
+.dots i.on{width:20px;background:var(--sun)}
+.promises{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:18px}
+.promises span{display:flex;align-items:center;gap:8px;font:700 13.5px/1.25 "Karla",sans-serif;color:var(--deep);background:var(--sand);border-radius:12px;padding:10px 11px}
+.promises span::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--sun);flex:none}
+
+/* how */
+.how{background:var(--sand)}
+.how h2{color:var(--deep);margin-top:8px}
+.steps{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:10px}
+.steps li{display:grid;grid-template-columns:44px 1fr;gap:12px;align-items:center;background:var(--cream);border-radius:14px;padding:12px}
+.steps b{width:44px;height:44px;border-radius:12px;background:var(--deep);color:var(--gold);display:grid;place-items:center;font:400 18px/1 "Alfa Slab One",serif}
+.steps strong{display:block;color:var(--deep);font-size:15px}
+.steps span{font-size:14px;color:var(--muted)}
+
+/* order */
+.order h2{color:var(--deep);margin-top:8px}
+.ob{display:grid;gap:18px;margin-top:16px}
+.fridge{background:linear-gradient(180deg,#e9f1ee,#dfe9e5);border:2px solid #cddcd6;border-radius:20px;padding:12px 12px 14px;position:relative}
+.fridge .top{display:flex;justify-content:space-between;align-items:center;font:800 11px/1 "Karla",sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--palm);padding:2px 2px 10px}
+.fridge .top b{font:400 22px/1 "Alfa Slab One",serif;color:var(--deep);letter-spacing:0}
+.shelf{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;padding:8px 6px;border-bottom:4px solid #b9cdc6;min-height:44px;align-content:end}
+.shelf + .shelf{margin-top:6px}
+.mini{aspect-ratio:4/3;border-radius:5px;background:#16201b;position:relative;overflow:hidden;animation:drop .45s var(--ease) both}
+.mini i{position:absolute;border-radius:50%}
+@keyframes drop{from{transform:translateY(-16px);opacity:0}}
+.q{display:grid;gap:8px}
+.q > b{font:800 11px/1 "Karla",sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opts button{font:700 14px/1 "Karla",sans-serif;border:1.5px solid var(--line);background:#fff;color:var(--deep);border-radius:999px;padding:11px 14px;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.opts button[aria-pressed="true"]{background:var(--deep);border-color:var(--deep);color:var(--cream)}
+.stepper{display:grid;grid-template-columns:48px 1fr 48px;align-items:center;background:#fff;border:1.5px solid var(--line);border-radius:12px;max-width:260px}
+.stepper button{height:46px;border:0;background:none;font:800 20px/1 "Karla",sans-serif;color:var(--deep);cursor:pointer}
+.stepper output{text-align:center;font:400 20px/1 "Alfa Slab One",serif;color:var(--deep)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.two label{display:grid;gap:5px;font:800 11px/1 "Karla",sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.two input{width:100%;font:600 15px/1.2 "Karla",sans-serif;color:var(--ink);background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:11px 12px;min-height:44px}
+.form{display:grid;gap:14px}
+.slip{background:#fff;border-radius:16px;padding:14px 15px;border:1px solid var(--line);box-shadow:0 16px 30px -24px #10251c88}
+.slip .top{display:flex;justify-content:space-between;align-items:center;font:800 11px/1 "Karla",sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.slip .top img{width:34px;height:34px;border-radius:50%}
+#msg{white-space:pre-wrap;font-size:14.5px;line-height:1.55;margin:8px 0 0;min-height:5.4em}
+.caret{display:inline-block;width:2px;height:1em;background:var(--sun);vertical-align:-2px;margin-left:1px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+#send{width:100%;margin-top:12px}
+#sent{font-size:13px;color:var(--muted);text-align:center;margin-top:8px;min-height:1.3em}
+
+/* footer */
+footer{background:var(--deep);color:#fbf3e4b8;text-align:center;padding:32px 0 96px}
+footer img{width:110px;height:110px;border-radius:50%;margin:0 auto;background:#fff}
+footer .motto2{font:400 18px/1.3 "Alfa Slab One",serif;color:var(--cream);margin-top:12px}
+footer .meta{font-size:14px;margin-top:8px}
+footer .meta a{color:var(--gold);font-weight:800;text-decoration:none}
+.studio{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;background:#ffffff14;color:#fff;font:700 11px/1 "Karla",sans-serif;margin-top:14px;text-decoration:none}
+.studio i{width:9px;height:9px;border-radius:3px;background:conic-gradient(from 210deg,#ff5a1f,#ffb03b,#ff5a1f)}
+
+.dock{position:fixed;z-index:45;left:10px;right:10px;bottom:max(10px,env(safe-area-inset-bottom));display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:6px;background:#fffffff5;border:1px solid var(--line);border-radius:16px;box-shadow:0 14px 30px -14px #10251c88;transition:transform .3s var(--ease),opacity .3s}
+.dock .btn{padding:12px 8px}
+.dock.off{transform:translateY(150%);opacity:0;pointer-events:none}
+.rv{opacity:0;transform:translateY(14px);transition:opacity .7s ease,transform .7s var(--ease)}
+.rv.in{opacity:1;transform:none}
+
+@media (min-width:768px){
+  section{padding:60px 0}
+  h2{font-size:32px}
+  .hero{padding:40px 0 56px}
+  .hero .wrap{grid-template-columns:1.1fr .9fr;align-items:center;gap:48px}
+  .hero .copy{order:-1}
+  .hero h1{font-size:42px}
+  .shot{width:min(100%,380px);max-height:none}
+  .cta-row{display:flex}
+  .stage{gap:32px}
+  .box{width:300px}
+  .dayname{font-size:64px}
+  .dish{font-size:20px}
+  .grail{grid-auto-flow:row;grid-template-columns:repeat(3,1fr);overflow:visible;margin:22px 0 0;padding:0}
+  .dots{display:none}
+  .promises{grid-template-columns:repeat(4,1fr)}
+  .steps{grid-template-columns:repeat(3,1fr)}
+  .steps li{grid-template-columns:1fr;align-items:start}
+  .ob{grid-template-columns:1fr 1fr;gap:40px;align-items:start}
+  .dock{display:none}
+  footer{padding-bottom:40px}
+}
+@media (min-width:1024px){
+  .links{display:flex;gap:26px;font-weight:700;font-size:15px}
+  .links a{text-decoration:none;color:var(--deep)}
+  .hero h1{font-size:50px}
+}
+@media (max-width:359px){.brand b{font-size:15px}.hero h1{font-size:26px}.days button{font-size:11px}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.rv{opacity:1;transform:none;transition:none}.box img,.box .lid{transition:none}.mini{animation:none}.caret{animation:none}}
+</style>
+</head>
+<body>
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Havana Meals, back to top"><img src="media/logo.jpg" alt="" width="150" height="150"><b>HAVANA MEALS</b></a>
+    <nav class="links" aria-label="Main"><a href="#week">The week</a><a href="#goals">Goals</a><a href="#how">How it works</a><a href="#order">Order</a></nav>
+    <a class="btn btn-sun" href="#order">DM to order</a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <div class="shot"><img src="media/hero.jpg" alt="A hand holding a Havana Meals salad container with the Havana logo sticker over rows of packed meals" width="600" height="800" fetchpriority="high"><span class="tag">Weekly delivery</span></div>
+      <div class="copy">
+        <p class="kick">Meal prep · Metro Detroit</p>
+        <h1>Your whole week, <em>already cooked.</em></h1>
+        <p class="lead">Fresh, high-protein meals with Cuban flavor. We shop, cook and portion everything, you heat and enjoy. Delivered weekly across Metro Detroit and the surrounding areas.</p>
+        <p class="motto">Real food. Cuban soul. A better you.</p>
+        <div class="cta-row"><a class="btn btn-sun" id="heroCta" href="#order">Plan my week</a><a class="btn btn-line" href="#week">See a week</a></div>
+        <div class="chips"><span>High protein</span><span>Made fresh</span><span>Heat &amp; eat</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="week" id="week">
+    <div class="wrap">
+      <p class="kick">Monday to Sunday</p>
+      <h2>One delivery, <em>seven days handled.</em></h2>
+      <div class="days" id="days" role="tablist" aria-label="Days of the week"></div>
+      <div class="stage">
+        <div class="box" id="box"><img id="dayImg" src="media/mon.jpg" alt="" width="540" height="720"><span class="lid" aria-hidden="true"></span></div>
+        <div aria-live="polite">
+          <div class="dayname" id="dayName">Monday</div>
+          <p class="dish" id="dish"></p>
+          <p class="side" id="side"></p>
+          <div class="ctrl"><button type="button" id="prev" aria-label="Previous day"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg></button><button type="button" id="play" aria-label="Pause the week"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></button><button type="button" id="next" aria-label="Next day"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></button></div>
+        </div>
+      </div>
+      <p class="wknote">Real containers from our recent weeks. The menu changes, so ask us what's cooking this week.</p>
+    </div>
+  </section>
+
+  <section class="goals" id="goals">
+    <div class="wrap">
+      <p class="kick rv">Whatever your goal is</p>
+      <h2 class="rv">Tell us what you're <em>working toward.</em></h2>
+      <p class="lead rv" style="margin-top:8px;max-width:38em">Pick one and we'll build your meals around it. You focus on your goals, we'll handle the cooking.</p>
+      <div class="grail" id="grail"></div>
+      <div class="dots" id="gdots" aria-hidden="true"><i class="on"></i><i></i><i></i></div>
+      <div class="promises rv"><span>Quality protein</span><span>Fresh veggies</span><span>Balanced carbs</span><span>Ready to heat</span></div>
+    </div>
+  </section>
+
+  <section class="how" id="how">
+    <div class="wrap">
+      <p class="kick rv">How it works</p>
+      <h2 class="rv">No shopping, no cooking, <em>no dishes.</em></h2>
+      <ol class="steps">
+        <li class="rv"><b>1</b><div><strong>DM us your goal</strong><span>And how many meals you want for the week.</span></div></li>
+        <li class="rv"><b>2</b><div><strong>We cook and portion</strong><span>Fresh, balanced, packed in containers.</span></div></li>
+        <li class="rv"><b>3</b><div><strong>Weekly delivery</strong><span>Across Metro Detroit and surroundings. Heat and enjoy.</span></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="order" id="order">
+    <div class="wrap">
+      <p class="kick">Pre-order</p>
+      <h2>Fill your <em>fridge.</em></h2>
+      <p class="lead" style="margin-top:8px">Set it up here and we'll write the message. One tap copies it and opens our Instagram DMs.</p>
+      <div class="ob">
+        <div class="fridge" aria-hidden="true">
+          <div class="top"><span>Your week</span><b id="fcount">10 meals</b></div>
+          <div class="shelf" id="s1"></div><div class="shelf" id="s2"></div><div class="shelf" id="s3"></div>
+        </div>
+        <div class="form">
+          <div class="q"><b>Goal</b><div class="opts" id="ogoal"></div></div>
+          <div class="q"><b>Meals for the week</b><div class="stepper"><button type="button" id="minus" aria-label="Fewer meals">−</button><output id="qty" aria-live="polite">10</output><button type="button" id="plus" aria-label="More meals">+</button></div></div>
+          <div class="two"><label>Your name<input id="oName" type="text" placeholder="First name" autocomplete="given-name"></label><label>Your city<input id="oCity" type="text" placeholder="e.g. Dearborn"></label></div>
+          <div class="slip"><div class="top"><span>Your message</span><img src="media/logo.jpg" alt="" width="150" height="150"></div><p id="msg" aria-live="polite"></p><button class="btn btn-sun" id="send" type="button">Copy &amp; open Instagram</button><p id="sent"></p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <img src="media/logo.jpg" alt="Havana Meals logo with palm trees, a domed capitol and a sunset" width="150" height="150" loading="lazy">
+    <p class="motto2">Real food. Cuban soul. A better you.</p>
+    <p class="meta"><a href="https://www.instagram.com/havana_meals/" target="_blank" rel="noopener">@havana_meals</a> · Weekly delivery across Metro Detroit</p>
+    <a class="studio" href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener" aria-label="Site by ElaSystems (opens in a new tab)"><i aria-hidden="true"></i><span>Site by <b>ElaSystems</b></span></a>
+  </div>
+</footer>
+
+<nav class="dock" aria-label="Quick actions">
+  <a class="btn btn-sun" href="#order">Plan my week</a>
+  <a class="btn btn-line" href="#week">See a week</a>
+</nav>
+
+<script>
+const CONFIG = {
+  handle: "havana_meals",
+  week: [
+    { d: "Monday", s: "Mon", img: "media/mon.jpg", dish: "Seared steak and mushrooms", side: "Yellow rice with peas, green beans and a roasted sweet potato wedge", alt: "Steak and mushrooms with yellow rice and green beans" },
+    { d: "Tuesday", s: "Tue", img: "media/tue.jpg", dish: "Salmon over greens", side: "Mixed greens, grilled corn, cherry tomatoes and cheese", alt: "A salmon fillet on mixed greens with corn and tomatoes" },
+    { d: "Wednesday", s: "Wed", img: "media/wed.jpg", dish: "A big loaded salad", side: "Crisp lettuce, cherry tomatoes, corn and cheese", alt: "A loaded salad with cherry tomatoes" },
+    { d: "Thursday", s: "Thu", img: "media/thu.jpg", dish: "Baked penne", side: "Red sauce and melted cheese with asparagus on the side", alt: "Baked penne with cheese and asparagus" },
+    { d: "Friday", s: "Fri", img: "media/fri.jpg", dish: "Sliced steak plate", side: "Roasted potatoes, broccoli, grilled corn and carrots", alt: "Sliced steak with roasted potatoes, broccoli and corn" },
+    { d: "Saturday", s: "Sat", img: "media/sat.jpg", dish: "Chicken in a creamy sauce", side: "Served over green spinach pasta", alt: "Chicken breast with a creamy sauce over green pasta" },
+    { d: "Sunday", s: "Sun", img: "media/sun.jpg", dish: "Chicken and rice bowl", side: "Seasoned rice, roasted sweet potato, broccoli and a sauce cup", alt: "Chicken, rice and sweet potato with a sauce cup" }
+  ],
+  goals: [
+    { id: "lose", t: "Lose weight", p: "Balanced portions and fresh veggies, so eating less never means eating badly.", icon: '<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="9" width="28" height="24" rx="6"/><path d="M14 17a6 6 0 0 1 12 0"/><path d="M20 17l2.5-3"/></svg>' },
+    { id: "maintain", t: "Maintain", p: "Steady, real food all week so you stay where you want to be.", icon: '<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7v26M10 33h20M8 14h24M8 14l-4 9h8zM32 14l-4 9h8z"/></svg>' },
+    { id: "build", t: "Build muscle", p: "High-protein options with quality protein for growth and recovery.", icon: '<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 16v8M10 12v16M30 12v16M34 16v8M10 20h20"/></svg>' }
+  ],
+  minMeals: 5, maxMeals: 21, startMeals: 10
+};
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const REDUCE = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const DM = `https://ig.me/m/${CONFIG.handle}`;
+
+/* ---------- the week player ---------- */
+const W = CONFIG.week, STEP = 3200;
+$("#days").innerHTML = W.map((w, i) => `<button type="button" role="tab" aria-selected="${i === 0}" aria-label="${esc(w.d)}">${esc(w.s)}<i><b></b></i></button>`).join("");
+const tabs = $$("#days button"), img = $("#dayImg"), box = $("#box");
+W.forEach(w => { const im = new Image(); im.src = w.img; });
+let cur = 0, playing = !REDUCE, inView = false, t0 = 0, raf = 0;
+function show(i, dir) {
+  cur = (i + W.length) % W.length; const w = W[cur];
+  tabs.forEach((t, k) => { t.setAttribute("aria-selected", k === cur); t.classList.toggle("done", k < cur); t.querySelector("b").style.width = k < cur ? "100%" : "0"; });
+  $("#dayName").textContent = w.d; $("#dish").textContent = w.dish; $("#side").textContent = w.side;
+  if (REDUCE) { img.src = w.img; img.alt = w.alt; return; }
+  box.classList.add("lift"); img.classList.add("out");
+  setTimeout(() => {
+    img.src = w.img; img.alt = w.alt; img.classList.remove("out"); img.classList.add("in");
+    requestAnimationFrame(() => requestAnimationFrame(() => { img.classList.remove("in"); box.classList.remove("lift"); }));
+  }, 280);
+  t0 = performance.now();
+}
+function loop(t) {
+  raf = 0; if (!playing || !inView) return;
+  const k = Math.min(1, (t - t0) / STEP); tabs[cur].querySelector("b").style.width = (k * 100) + "%";
+  if (k >= 1) show(cur + 1);
+  raf = requestAnimationFrame(loop);
+}
+function setPlaying(on) {
+  playing = on; $("#play").setAttribute("aria-label", on ? "Pause the week" : "Play the week");
+  $("#play").innerHTML = on ? '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>' : '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l12 7-12 7z"/></svg>';
+  if (on) { t0 = performance.now() - (parseFloat(tabs[cur].querySelector("b").style.width) || 0) / 100 * STEP; if (!raf) raf = requestAnimationFrame(loop); }
+}
+tabs.forEach((t, i) => t.addEventListener("click", () => { setPlaying(false); show(i); }));
+$("#prev").addEventListener("click", () => { setPlaying(false); show(cur - 1); });
+$("#next").addEventListener("click", () => { setPlaying(false); show(cur + 1); });
+$("#play").addEventListener("click", () => setPlaying(!playing));
+show(0); if (REDUCE) setPlaying(false);
+if ("IntersectionObserver" in window) new IntersectionObserver(([e]) => { inView = e.isIntersecting; if (inView && playing) { t0 = performance.now(); if (!raf) raf = requestAnimationFrame(loop); } }, { threshold: .4 }).observe($("#week"));
+
+/* ---------- goals ---------- */
+let goal = "";
+$("#grail").innerHTML = CONFIG.goals.map(g => `<button type="button" class="goal rv" data-g="${g.id}" aria-pressed="false">${g.icon}<h3>${esc(g.t)}</h3><p>${esc(g.p)}</p><span class="pick">Pick this goal</span></button>`).join("");
+$("#ogoal").innerHTML = CONFIG.goals.map(g => `<button type="button" data-g="${g.id}" aria-pressed="false">${esc(g.t)}</button>`).join("") + `<button type="button" data-g="" aria-pressed="true">Just eat better</button>`;
+function setGoal(g) { goal = g; $$("[data-g]").forEach(b => b.setAttribute("aria-pressed", b.dataset.g === g)); compose(); }
+$("#grail").addEventListener("click", e => { const b = e.target.closest(".goal"); if (b) setGoal(b.dataset.g); });
+$("#ogoal").addEventListener("click", e => { const b = e.target.closest("button"); if (b) setGoal(b.dataset.g); });
+const grail = $("#grail"), gd = $$("#gdots i");
+grail.addEventListener("scroll", () => { let best = 0, bd = 1e9; [...grail.children].forEach((c, i) => { const d = Math.abs(c.offsetLeft - grail.offsetLeft - grail.scrollLeft); if (d < bd) { bd = d; best = i; } }); gd.forEach((d, i) => d.classList.toggle("on", i === best)); }, { passive: true });
+
+/* ---------- fridge + order message ---------- */
+let qty = CONFIG.startMeals;
+const FOOD = [["#e8a43a", "#7a3d1c", "#3e8a3a"], ["#e3c46b", "#d9572b", "#5aa646"], ["#f0e3c0", "#c94a2c", "#2f7d32"], ["#f2b33d", "#8b5a2b", "#78b04a"]];
+function fill() {
+  const shelves = [$("#s1"), $("#s2"), $("#s3")];
+  shelves.forEach((s, si) => {
+    const want = Math.max(0, Math.min(7, qty - si * 7)), have = s.children.length;
+    for (let i = have; i < want; i++) {
+      const f = FOOD[(si * 7 + i) % FOOD.length], m = document.createElement("span"); m.className = "mini";
+      m.innerHTML = `<i style="left:8%;top:14%;width:44%;height:70%;background:${f[0]}"></i><i style="left:50%;top:12%;width:36%;height:36%;background:${f[1]}"></i><i style="left:52%;top:52%;width:34%;height:34%;background:${f[2]}"></i>`;
+      m.style.animationDelay = ((i - have) * 40) + "ms"; s.appendChild(m);
+    }
+    while (s.children.length > want) s.lastChild.remove();
+  });
+  $("#fcount").textContent = qty + " meals"; $("#qty").textContent = qty;
+}
+function setQty(v) { qty = Math.max(CONFIG.minMeals, Math.min(CONFIG.maxMeals, v)); fill(); compose(); }
+$("#minus").addEventListener("click", () => setQty(qty - 1));
+$("#plus").addEventListener("click", () => setQty(qty + 1));
+const msg = $("#msg");
+function compose() {
+  const n = $("#oName").value.trim(), city = $("#oCity").value.trim(), g = CONFIG.goals.find(x => x.id === goal);
+  let m = `Hi Havana Meals! ${n ? "I'm " + n + ". " : ""}I'd like to pre-order ${qty} meals for this week`;
+  m += g ? `. My goal is to ${g.t.toLowerCase()}.` : ".";
+  if (city) m += ` I'm in ${city}.`;
+  m += " What's on the menu this week, and what's the price?";
+  typeTo(m); return m;
+}
+let typed = "", tt = 0;
+function typeTo(m) {
+  if (REDUCE) { msg.textContent = m; return; }
+  let i = 0; while (i < typed.length && i < m.length && typed[i] === m[i]) i++;
+  typed = typed.slice(0, i); clearInterval(tt);
+  tt = setInterval(() => { typed = m.slice(0, typed.length + 2); msg.innerHTML = esc(typed) + '<span class="caret"></span>'; if (typed.length >= m.length) clearInterval(tt); }, 14);
+}
+["oName", "oCity"].forEach(id => $("#" + id).addEventListener("input", compose));
+$("#send").addEventListener("click", async () => {
+  const m = compose(); let ok = false;
+  try { await navigator.clipboard.writeText(m); ok = true; } catch (e) { const t = document.createElement("textarea"); t.value = m; document.body.appendChild(t); t.select(); try { ok = document.execCommand("copy"); } catch (e2) {} t.remove(); }
+  $("#sent").textContent = ok ? "Copied. Paste it into the chat that just opened." : "Opening Instagram. Copy your message from this page if it isn't there.";
+  window.open(DM, "_blank", "noopener");
+});
+fill(); compose();
+
+/* ---------- reveals and dock ---------- */
+if ("IntersectionObserver" in window && !REDUCE) {
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { threshold: .12 });
+  $$(".rv").forEach(el => io.observe(el));
+} else $$(".rv").forEach(el => el.classList.add("in"));
+if ("IntersectionObserver" in window) new IntersectionObserver(([e]) => $(".dock").classList.toggle("off", e.isIntersecting), { threshold: .08 }).observe($("#order"));
+</script>
+</body>
+</html>
