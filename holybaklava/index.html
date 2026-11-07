@@ -1,0 +1,665 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noai, noimageai">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Holy Baklava | Nutella &amp; Lotus baklava, homemade to order</title>
+<meta name="description" content="Holy Baklava makes rolled baklava drizzled with Nutella or Lotus Biscoff, topped with pistachio and rose, plus stuffed cookies. Homemade to order. Order by Instagram DM.">
+<meta property="og:title" content="Holy Baklava">
+<meta property="og:description" content="Rolled baklava with a Nutella or Lotus drizzle. What's your favorite?">
+<meta property="og:image" content="og.jpg">
+<meta name="theme-color" content="#fdeef5">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Leckerli+One&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700;6..12,800&display=swap" rel="stylesheet">
+<style>
+/* Holy Baklava. Concept: the page gets dressed like their baklava. Their logo is a hand sprinkling pistachio over
+   "holy", so crumbs fall from the top and pile up on the headings; the flavor switch re-pipes the drizzle and
+   re-dresses the section (Nutella: cocoa, pistachio, rose. Lotus: caramel, biscoff crumbs); a pinned tray tour
+   draws one drizzle line across every tray as you scroll; the order box fills as you build the order.
+   Palette: logo pink, blush, Nutella cocoa, Lotus caramel, pistachio, rose. */
+:root{
+  --blush:#fdeef5; --pink:#ec6aa5; --pink-d:#c8417f; --cocoa:#3a2118; --nutella:#5b3220; --caramel:#c98a45;
+  --pastry:#f3dcb4; --pist:#b7c95b; --rose:#b8325f; --gold:#c9a24a; --cream:#fffaf6;
+  --ink:#3a2118; --muted:#86625a; --line:#f2cfe0;
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--blush);color:var(--ink);font:400 15px/1.6 "Nunito Sans",system-ui,sans-serif;overflow-x:hidden}
+img,video{display:block;max-width:100%}
+a{color:inherit}
+h1,h2,h3{font-family:"DM Serif Display",Georgia,serif;font-weight:400;line-height:1.1;margin:0}
+h1 em,h2 em{font-style:italic;color:var(--pink-d)}
+h2{font-size:26px}
+p{margin:0}
+.wrap{width:min(1140px,100% - 32px);margin-inline:auto}
+section{padding:40px 0;position:relative}
+.kick{font:800 12px/1 "Nunito Sans",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--pink-d)}
+.lead{color:var(--muted);font-size:15px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;padding:13px 20px;font:800 14px/1 "Nunito Sans",sans-serif;text-decoration:none;border:2px solid transparent;cursor:pointer;white-space:nowrap;transition:transform .2s var(--ease),background .25s,color .25s}
+.btn:active{transform:scale(.96)}
+.btn-pink{background:var(--pink);color:#fff;box-shadow:0 10px 20px -10px #c8417f99}
+.btn-line{border-color:var(--cocoa);color:var(--cocoa);background:transparent}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+
+/* crumbs canvas: pistachio, rose and biscoff fall and pile on the headings */
+#crumbs{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:30}
+
+/* intro */
+#intro{position:fixed;inset:0;z-index:100;background:var(--blush);display:grid;place-items:center;cursor:pointer}
+#intro .mark{text-align:center;position:relative}
+#intro .holy{font:400 104px/1 "Leckerli One",cursive;color:var(--pink);display:flex;justify-content:center}
+#intro .holy span{display:inline-block}
+#intro .bak{font:800 15px/1 "Nunito Sans",sans-serif;letter-spacing:.5em;color:var(--pink-d);margin-top:6px;padding-left:.5em}
+#intro .rule{height:2px;width:180px;margin:12px auto 0;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+#intro .bits{position:absolute;inset:-60px 0 auto;height:60px}
+#intro .bits i{position:absolute;top:0;width:5px;height:4px;border-radius:1px;background:var(--pist)}
+#intro.gone{display:none}
+
+/* nav */
+header.nav{position:sticky;top:0;z-index:40;background:#fdeef5ee;border-bottom:1px solid var(--line)}
+header.nav .wrap{height:56px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.brand{display:flex;align-items:baseline;gap:7px;text-decoration:none}
+.brand b{font:400 30px/1 "Leckerli One",cursive;color:var(--pink)}
+.brand small{font:800 10px/1 "Nunito Sans",sans-serif;letter-spacing:.32em;color:var(--pink-d)}
+.links{display:none}
+header.nav .btn{padding:10px 16px;font-size:13.5px}
+
+/* hero */
+.hero{padding:16px 0 34px}
+.hero .wrap{display:grid;gap:18px}
+.reel{position:relative;border-radius:22px;overflow:hidden;aspect-ratio:3/4;max-height:40svh;width:auto;margin-inline:auto;background:var(--pastry);box-shadow:0 26px 40px -26px #3a211899}
+.reel video,.reel img{width:100%;height:100%;object-fit:cover}
+.pipe{display:block;width:100%;height:40px;overflow:visible;pointer-events:none}
+.hero .pipe{position:absolute;left:0;bottom:-20px;z-index:2}
+.pipe.in{margin-top:18px;height:36px}
+.reel .badge{position:absolute;left:10px;bottom:10px;background:#fffffff0;color:var(--cocoa);font:800 12px/1 "Nunito Sans",sans-serif;border-radius:999px;padding:8px 11px;display:flex;gap:6px;align-items:center}
+.reel .badge i{width:8px;height:8px;border-radius:50%;background:var(--pink);animation:pulse 1.6s ease-in-out infinite}
+@keyframes pulse{50%{transform:scale(.6);opacity:.5}}
+.hero h1{font-size:30px;color:var(--cocoa);margin-top:10px}
+.hero h1 span{display:inline}
+.hero .lead{margin-top:10px}
+.cta-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.tip{display:inline-flex;align-items:center;gap:8px;margin-top:14px;font:700 13px/1.2 "Nunito Sans",sans-serif;color:var(--pink-d);background:#fff;border:1px dashed var(--pink);border-radius:999px;padding:8px 12px}
+.tip b{display:inline-block;width:8px;height:6px;border-radius:2px;background:var(--pist);box-shadow:6px 3px 0 -1px var(--rose),12px -1px 0 0 var(--pist)}
+.tip b{margin-right:12px}
+
+/* marquee of toppings */
+.belt{background:var(--cocoa);color:var(--pastry);overflow:hidden;white-space:nowrap;padding:12px 0;font:400 22px/1 "DM Serif Display",serif}
+.belt .row{display:inline-flex;gap:28px;padding-right:28px;animation:belt 26s linear infinite}
+.belt .row span{display:inline-flex;align-items:center;gap:28px}
+.belt .row span::after{content:"";width:9px;height:9px;border-radius:50%;background:var(--pink)}
+@keyframes belt{to{transform:translateX(-50%)}}
+
+/* flavor switch */
+.flavors{--bg:#2e1a12;--fg:#fbe9df;--acc:#b7c95b;background:var(--bg);color:var(--fg);transition:background-color .9s var(--ease),color .9s}
+.flavors[data-flavor="lotus"]{--bg:#f6e1bd;--fg:#3a2118;--acc:#a8641f}
+.flavors h2{color:inherit}
+.flavors .kick{color:var(--acc)}
+.switch{position:relative;display:grid;grid-template-columns:1fr 1fr;margin-top:16px;background:#ffffff1f;border-radius:999px;padding:5px;max-width:420px}
+.flavors[data-flavor="lotus"] .switch{background:#3a211814}
+.switch button{position:relative;z-index:1;border:0;background:none;color:inherit;font:800 15px/1 "Nunito Sans",sans-serif;padding:13px 10px;border-radius:999px;cursor:pointer;transition:color .4s}
+.switch button[aria-pressed="true"]{color:#fff}
+.switch .thumb{position:absolute;top:5px;bottom:5px;left:5px;width:calc(50% - 5px);border-radius:999px;background:var(--pink);transition:transform .55s cubic-bezier(.6,-0.3,.3,1.4)}
+.flavors[data-flavor="lotus"] .switch .thumb{transform:translateX(100%)}
+.fl{display:grid;gap:18px;margin-top:20px}
+.plate{position:relative;border-radius:22px;overflow:hidden;aspect-ratio:4/3;background:#00000022}
+.plate img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.plate img.lotus{clip-path:inset(0 0 0 100%)}
+.fname{font:400 34px/1.05 "DM Serif Display",serif;overflow:hidden;padding-bottom:4px}
+.fname .ch{display:inline-block;will-change:transform}
+.fdesc{margin-top:8px;font-size:15px;opacity:.85}
+.tops{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.tops span{font:700 13px/1 "Nunito Sans",sans-serif;border:1.5px solid currentColor;border-radius:999px;padding:8px 11px;opacity:.9}
+.quote{margin-top:16px;font:400 italic 18px/1.35 "DM Serif Display",serif}
+.quote small{display:block;font:700 12px/1.3 "Nunito Sans",sans-serif;font-style:normal;opacity:.75;margin-top:4px}
+
+/* tray tour (pinned, horizontal) */
+.tour{background:var(--cream);padding:0;overflow:hidden}
+.tour .head{padding:36px 0 14px}
+.track{position:relative;display:flex;gap:14px;padding:64px 16px 36px;width:max-content}
+.panel{position:relative;flex:none;width:min(76vw,340px);aspect-ratio:3/4;max-height:55svh;border-radius:20px;overflow:hidden;background:var(--pastry);box-shadow:0 22px 34px -24px #3a211888}
+.panel img{width:100%;height:100%;object-fit:cover}
+.panel figcaption{position:absolute;left:10px;right:10px;bottom:10px;background:#fffffff2;border-radius:12px;padding:9px 11px;font:700 13px/1.3 "Nunito Sans",sans-serif;color:var(--cocoa)}
+.panel figcaption b{display:block;font:400 17px/1.1 "DM Serif Display",serif;color:var(--pink-d);margin-bottom:2px}
+.track svg.dz{position:absolute;left:0;top:14px;height:38px;pointer-events:none;z-index:2;overflow:visible}
+.tour.pinmode{min-height:100svh;display:flex;flex-direction:column;justify-content:center}
+
+/* cookies */
+.cookies{background:var(--blush)}
+.ck{display:grid;gap:14px;margin-top:18px}
+.cookie{background:#fff;border-radius:20px;padding:12px;display:grid;grid-template-columns:96px 1fr;gap:12px;align-items:center;border:1px solid var(--line);transform-style:preserve-3d}
+.cookie .disc{width:96px;height:96px;border-radius:50%;overflow:hidden;background:var(--pastry);box-shadow:inset 0 0 0 4px #fff,0 8px 16px -10px #3a211899}
+.cookie .disc img{width:100%;height:100%;object-fit:cover}
+.cookie h3{font-size:19px;color:var(--cocoa)}
+.cookie p{font-size:13.5px;color:var(--muted);margin-top:4px}
+.prices{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
+.price{background:var(--cocoa);color:var(--pastry);border-radius:16px;padding:14px 10px;text-align:center}
+.price b{display:block;font:400 30px/1 "DM Serif Display",serif;color:#fff}
+.price span{display:block;font:700 12px/1.25 "Nunito Sans",sans-serif;margin-top:6px}
+.note{font-size:12.5px;color:var(--muted);margin-top:10px}
+
+/* review */
+.review{background:var(--pink);color:#fff;overflow:hidden}
+.review .kick{color:#ffe1ee}
+.say{font:400 26px/1.25 "DM Serif Display",serif;margin-top:12px;max-width:20em}
+.say .w{opacity:.18;transition:opacity .2s}
+.say .w.on{opacity:1}
+.who{display:flex;align-items:center;gap:12px;margin-top:16px;font:800 14px/1.3 "Nunito Sans",sans-serif}
+.stamp{width:86px;height:86px;flex:none;border-radius:50%;border:2px dashed #fff;display:grid;place-items:center;text-align:center;font:800 10px/1.2 "Nunito Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;animation:spin 14s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* order */
+.order{background:var(--cream)}
+.order h2{color:var(--cocoa);margin-top:8px}
+.ob{display:grid;gap:18px;margin-top:18px}
+.boxart{background:var(--blush);border-radius:22px;padding:14px;display:grid;place-items:center}
+.boxart svg{width:100%;max-width:420px;height:auto;overflow:visible}
+.q{display:grid;gap:8px}
+.q > b{font:800 11px/1 "Nunito Sans",sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opts button{font:700 14px/1 "Nunito Sans",sans-serif;border:1.5px solid #e8c3d4;background:#fff;color:var(--cocoa);border-radius:999px;padding:11px 14px;cursor:pointer;transition:background .2s,color .2s,border-color .2s,transform .2s}
+.opts button[aria-pressed="true"]{background:var(--cocoa);border-color:var(--cocoa);color:#fff}
+.opts button:active{transform:scale(.95)}
+.form{display:grid;gap:14px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.two label{display:grid;gap:5px;font:800 11px/1 "Nunito Sans",sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.two input{width:100%;font:600 15px/1.2 "Nunito Sans",sans-serif;color:var(--ink);background:#fff;border:1.5px solid #e8c3d4;border-radius:12px;padding:11px 12px;min-height:44px}
+.slip{background:#fff;border-radius:18px;padding:14px 15px;border:1px solid var(--line);box-shadow:0 18px 30px -24px #3a211888}
+.slip .top{display:flex;justify-content:space-between;align-items:center}
+.slip .top b{font:400 26px/1 "Leckerli One",cursive;color:var(--pink)}
+.slip .top span{font:800 11px/1 "Nunito Sans",sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+#msg{white-space:pre-wrap;font-size:14.5px;line-height:1.55;margin:8px 0 0;min-height:5.4em}
+.caret{display:inline-block;width:2px;height:1em;background:var(--pink);vertical-align:-2px;margin-left:1px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+#send{width:100%;margin-top:12px}
+#sent{font-size:13px;color:var(--muted);text-align:center;margin-top:8px;min-height:1.3em}
+
+/* footer */
+footer{background:var(--blush);text-align:center;padding:34px 0 98px;border-top:1px solid var(--line)}
+footer .holy{font:400 64px/1 "Leckerli One",cursive;color:var(--pink);display:inline-block}
+footer .bak{font:800 12px/1 "Nunito Sans",sans-serif;letter-spacing:.5em;color:var(--pink-d);margin-top:4px;padding-left:.5em}
+footer .meta{font-size:14px;color:var(--muted);margin-top:14px}
+footer .meta a{color:var(--pink-d);font-weight:800;text-decoration:none}
+.studio{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;background:#3a21180d;color:var(--ink);font:700 11px/1 "Nunito Sans",sans-serif;margin-top:14px;text-decoration:none}
+.studio i{width:9px;height:9px;border-radius:3px;background:conic-gradient(from 210deg,#ff5a1f,#ffb03b,#ff5a1f)}
+
+.dock{position:fixed;z-index:45;left:10px;right:10px;bottom:max(10px,env(safe-area-inset-bottom));display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:6px;background:#fffffff5;border:1px solid var(--line);border-radius:999px;box-shadow:0 14px 30px -14px #3a211888;transition:transform .3s var(--ease),opacity .3s}
+.dock .btn{padding:12px 8px}
+.dock.off{transform:translateY(150%);opacity:0;pointer-events:none}
+
+@media (min-width:768px){
+  section{padding:64px 0}
+  h2{font-size:36px}
+  .hero{padding:40px 0 60px}
+  .hero .wrap{grid-template-columns:1.1fr .9fr;align-items:center;gap:48px}
+  .hero .copy{order:-1}
+  .hero h1{font-size:46px}
+  .reel{max-height:560px;width:100%}
+  .hero .pipe{height:48px;bottom:-24px}
+  .cta-row{display:flex}
+  .fl{grid-template-columns:1.1fr .9fr;align-items:center;gap:44px}
+  .fname{font-size:48px}
+  .track{gap:22px;padding:72px max(16px,calc(50vw - 570px)) 48px}
+  .panel{width:340px;max-height:none}
+  .tour .head{padding:64px 0 24px}
+  .ck{grid-template-columns:1fr 1fr}
+  .say{font-size:40px}
+  .ob{grid-template-columns:1fr 1fr;gap:40px;align-items:start}
+  .dock{display:none}
+  footer{padding-bottom:40px}
+}
+@media (min-width:1024px){
+  .links{display:flex;gap:26px;font-weight:700;font-size:15px}
+  .links a{text-decoration:none;color:var(--cocoa)}
+  .hero h1{font-size:54px}
+}
+@media (max-width:359px){.brand small{display:none}.hero h1{font-size:27px}}
+@media (prefers-reduced-motion:reduce){.belt .row,.stamp,.reel .badge i,.caret{animation:none}.say .w{opacity:1}}
+</style>
+</head>
+<body>
+<div id="intro" aria-hidden="true"><div class="mark"><div class="bits"></div><div class="holy"><span>h</span><span>o</span><span>l</span><span>y</span></div><div class="bak">BAKLAVA</div><div class="rule"></div></div></div>
+<canvas id="crumbs" aria-hidden="true"></canvas>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Holy Baklava, back to top"><b>holy</b><small>BAKLAVA</small></a>
+    <nav class="links" aria-label="Main"><a href="#flavors">Flavors</a><a href="#tour">The trays</a><a href="#cookies">Cookies</a><a href="#order">Order</a></nav>
+    <a class="btn btn-pink" href="#order">Order a tray</a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero" id="hero">
+    <div class="wrap">
+      <div class="reel" id="reel">
+        <video id="vid" src="media/tray.mp4" poster="media/tray-poster.jpg" muted playsinline loop autoplay preload="metadata" aria-label="A slow pan across a tray of Lotus baklava and a tray of Nutella baklava with pistachio and rose petals"></video>
+        <span class="badge"><i></i>Fresh trays, by order</span>
+      </div>
+      <div class="copy">
+        <p class="kick">Holy Baklava · homemade to order</p>
+        <h1><span data-catch>The baklava with</span> <em data-catch>the drizzle.</em></h1>
+        <p class="lead">Rolled baklava drizzled with Nutella or Lotus Biscoff, finished with pistachio, rose petals or cookie crumbs. Plus stuffed cookies. Made to order in the Dearborn area.</p>
+        <div class="cta-row"><a class="btn btn-pink" id="heroCta" href="#order">Order a tray</a><a class="btn btn-line" href="#flavors">Pick your drizzle</a></div>
+        <p class="tip" id="tip"><b aria-hidden="true"></b><span>Tap anywhere for pistachio</span></p>
+      </div>
+    </div>
+    <svg class="pipe" id="heroPipe" aria-hidden="true"><path class="d1" fill="none" stroke="#5b3220" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/><path class="d2" fill="none" stroke="#9a6a4f" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" transform="translate(-.8 -1.2)"/></svg>
+  </section>
+
+  <div class="belt" aria-hidden="true"><div class="row"><span>Nutella drizzle</span><span>Crushed pistachio</span><span>Rose petals</span><span>Lotus Biscoff</span><span>Cookie crumbs</span><span>Rolled phyllo</span><span>Nutella drizzle</span><span>Crushed pistachio</span><span>Rose petals</span><span>Lotus Biscoff</span><span>Cookie crumbs</span><span>Rolled phyllo</span></div></div>
+
+  <section class="flavors" id="flavors" data-flavor="nutella">
+    <div class="wrap">
+      <p class="kick">Two drizzles</p>
+      <h2>What's your <em style="color:inherit">favorite?</em></h2>
+      <div class="switch" role="group" aria-label="Choose a flavor"><span class="thumb" aria-hidden="true"></span><button type="button" data-f="nutella" aria-pressed="true">Nutella</button><button type="button" data-f="lotus" aria-pressed="false">Lotus Biscoff</button></div>
+      <svg class="pipe in" id="platePipe" aria-hidden="true"><path class="d1" fill="none" stroke="#4a2617" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/><path class="d2" fill="none" stroke="#8a5a40" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" transform="translate(-.8 -1.2)"/></svg>
+      <div class="fl">
+        <div class="plate" id="plate">
+          <img class="nutella" src="media/nutella.jpg" alt="Rolled Nutella baklava with a thick chocolate drizzle and crushed pistachio" width="800" height="600" loading="lazy">
+          <img class="lotus" src="media/lotus.jpg" alt="Lotus Biscoff baklava with caramel drizzle, cookie crumbs and a Lotus biscuit on top" width="800" height="600" loading="lazy">
+        </div>
+        <div>
+          <div class="fname" id="fname" data-catch>Nutella Baklava</div>
+          <p class="fdesc" id="fdesc"></p>
+          <div class="tops" id="tops"></div>
+          <p class="quote" id="fquote"></p>
+          <a class="btn btn-pink" href="#order" id="flOrder" style="margin-top:18px">Order this one</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="tour" id="tour">
+    <div class="wrap head">
+      <p class="kick">The trays</p>
+      <h2>End to end, <em>no bare spots.</em></h2>
+    </div>
+    <div class="track" id="track">
+      <svg class="dz" id="trackSvg" aria-hidden="true"><path class="d1" id="trackDz" fill="none" stroke="#5b3220" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/><path class="d2" id="trackDz2" fill="none" stroke="#9a6a4f" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" transform="translate(-.8 -1.2)"/></svg>
+      <figure class="panel" style="margin:0"><img src="media/p-nutella.jpg" alt="Two rows of Nutella baklava with pistachio" width="600" height="800" loading="lazy"><figcaption><b>Nutella</b>Thick drizzle, crushed pistachio down the middle</figcaption></figure>
+      <figure class="panel" style="margin:0"><img src="media/p-both.jpg" alt="Nutella baklava above Lotus baklava with a Lotus biscuit" width="600" height="800" loading="lazy"><figcaption><b>Half and half</b>Can't pick? Get both in one tray</figcaption></figure>
+      <figure class="panel" style="margin:0"><img src="media/p-tray.jpg" alt="Lotus baklava pieces in a row above Nutella baklava with rose petals" width="600" height="800" loading="lazy"><figcaption><b>Lotus</b>Caramel drizzle and biscuit crumbs</figcaption></figure>
+      <figure class="panel" style="margin:0"><img src="media/p-pan.jpg" alt="A boxed tray with a row of Lotus baklava above a row of Nutella baklava with pistachio and rose" width="600" height="800" loading="lazy"><figcaption><b>Boxed up</b>Both rows, packed and ready to pick up</figcaption></figure>
+      <figure class="panel" style="margin:0"><img src="media/p-cookies.jpg" alt="Biscoff stuffed cookies and brown butter chocolate chip cookies in a box" width="600" height="800" loading="lazy"><figcaption><b>Cookies too</b>Biscoff stuffed and brown butter</figcaption></figure>
+    </div>
+  </section>
+
+  <section class="cookies" id="cookies">
+    <div class="wrap">
+      <p class="kick">Also on the menu</p>
+      <h2 data-catch>Cookies, <em>stuffed.</em></h2>
+      <div class="ck">
+        <div class="cookie"><div class="disc"><img src="media/ck-biscoff.jpg" alt="A white chocolate chip Biscoff stuffed cookie with a Biscoff drizzle" width="240" height="240" loading="lazy"></div><div><h3>White Chocolate Chip Biscoff Stuffed</h3><p>Biscoff in the middle, a drizzle on top.</p></div></div>
+        <div class="cookie"><div class="disc"><img src="media/ck-brown.jpg" alt="Brown butter sea salt chocolate chip cookies with big chocolate chunks" width="240" height="240" loading="lazy"></div><div><h3>Brown Butter Sea Salt Chocolate Chip</h3><p>Big chocolate chunks and a little salt.</p></div></div>
+      </div>
+      <div class="prices">
+        <div class="price"><b data-count="15">$15</b><span>Half dozen</span></div>
+        <div class="price"><b data-count="20">$20</b><span>Dozen</span></div>
+        <div class="price"><b data-count="15" data-plus>+$15</b><span>For mixed</span></div>
+      </div>
+      <p class="note">Cookie prices as posted on our page. Baklava trays are priced by size, so send us a message.</p>
+    </div>
+  </section>
+
+  <section class="review" id="review">
+    <div class="wrap">
+      <p class="kick">#bighamzzzapproved</p>
+      <p class="say" id="say">Absolutely love her products. Please go check her out and show her some love, she deserves it.</p>
+      <div class="who"><span class="stamp" aria-hidden="true">Big Hamzzz<br>approved</span><span>@bighamzzz, Dearborn food reviewer<br><span style="font-weight:600;opacity:.85">"The Nutella is the best."</span></span></div>
+    </div>
+  </section>
+
+  <section class="order" id="order">
+    <div class="wrap">
+      <p class="kick">Order</p>
+      <h2>Build your <em>box.</em></h2>
+      <p class="lead" style="margin-top:8px">Pick what goes in and we'll write the message. One tap copies it and opens our Instagram DMs.</p>
+      <div class="ob">
+        <div class="boxart" aria-hidden="true">
+          <svg viewBox="0 0 340 250" id="box">
+            <rect x="10" y="30" width="320" height="200" rx="18" fill="#fff" stroke="#f2cfe0" stroke-width="3"/>
+            <text x="170" y="22" text-anchor="middle" font-family="Leckerli One" font-size="22" fill="#ec6aa5">holy</text>
+            <g id="trayL"><rect x="28" y="48" width="138" height="112" rx="10" fill="#5b3220"/><path class="dzl" fill="none" stroke="#3a1a10" stroke-width="4" stroke-linecap="round"/></g>
+            <g id="trayR"><rect x="174" y="48" width="138" height="112" rx="10" fill="#5b3220"/><path class="dzl" fill="none" stroke="#3a1a10" stroke-width="4" stroke-linecap="round"/></g>
+            <g id="cks"></g>
+          </svg>
+        </div>
+        <div class="form">
+          <div class="q"><b>Baklava</b><div class="opts" data-q="tray"><button type="button" data-v="nutella" aria-pressed="true">Nutella</button><button type="button" data-v="lotus" aria-pressed="false">Lotus</button><button type="button" data-v="half" aria-pressed="false">Half &amp; half</button><button type="button" data-v="none" aria-pressed="false">No tray</button></div></div>
+          <div class="q"><b>Cookies</b><div class="opts" data-q="ck"><button type="button" data-v="0" aria-pressed="true">None</button><button type="button" data-v="6" aria-pressed="false">Half dozen</button><button type="button" data-v="12" aria-pressed="false">Dozen</button></div></div>
+          <div class="q" id="ckFlavorQ" hidden><b>Cookie flavor</b><div class="opts" data-q="ckf"><button type="button" data-v="biscoff" aria-pressed="true">Biscoff stuffed</button><button type="button" data-v="brown" aria-pressed="false">Brown butter</button><button type="button" data-v="mixed" aria-pressed="false">Mixed</button></div></div>
+          <div class="two"><label>Your name<input id="oName" type="text" placeholder="First name" autocomplete="given-name"></label><label>For when<input id="oWhen" type="text" placeholder="e.g. Saturday"></label></div>
+          <div class="slip"><div class="top"><b>holy</b><span>Your message</span></div><p id="msg" aria-live="polite"></p><button class="btn btn-pink" id="send" type="button">Copy &amp; open Instagram</button><p id="sent"></p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="holy" data-catch>holy</div>
+    <div class="bak">BAKLAVA</div>
+    <p class="meta"><a href="https://www.instagram.com/holybaklava/" target="_blank" rel="noopener">@holybaklava</a> · Homemade to order · Dearborn area</p>
+    <a class="studio" href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener" aria-label="Site by ElaSystems (opens in a new tab)"><i aria-hidden="true"></i><span>Site by <b>ElaSystems</b></span></a>
+  </div>
+</footer>
+
+<nav class="dock" aria-label="Quick actions">
+  <a class="btn btn-pink" href="#order">Order a tray</a>
+  <a class="btn btn-line" href="#flavors">Flavors</a>
+</nav>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+const CONFIG = {
+  handle: "holybaklava",
+  flavors: {
+    nutella: { name: "Nutella Baklava", desc: "Rolled phyllo with a heavy Nutella drizzle, crushed pistachio down the middle and dried rose petals.", tops: ["Nutella drizzle", "Crushed pistachio", "Rose petals"], quote: '"The Nutella is the best."<small>@bighamzzz, after trying both</small>', drizzle: "#4a2617", gloss: "#8a5a40", crumbs: ["#b7c95b", "#a3b84a", "#cfd97a", "#b7c95b", "#a3b84a", "#cfd97a", "#b8325f"] },
+    lotus: { name: "Lotus Baklava", desc: "Rolled phyllo with a Lotus Biscoff drizzle, a snow of cookie crumbs and a whole Lotus biscuit on top.", tops: ["Biscoff drizzle", "Cookie crumbs", "A whole Lotus biscuit"], quote: "", drizzle: "#b8732f", gloss: "#e8b878", crumbs: ["#b8732f", "#d39a52", "#8f5a24", "#e0b071"] }
+  },
+  cookieNames: { biscoff: "white chocolate chip Biscoff stuffed", brown: "brown butter sea salt chocolate chip", mixed: "mixed" }
+};
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const REDUCE = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const FINE = matchMedia("(hover: hover) and (pointer: fine)").matches;
+const G = window.gsap, ST = window.ScrollTrigger;
+if (G && ST) G.registerPlugin(ST);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const DM = `https://ig.me/m/${CONFIG.handle}`;
+if (FINE) $("#tip span").textContent = "Move over the tray, or click anywhere";
+
+/* ---------- drizzle paths: a piped zigzag with rounded turns ---------- */
+function zig(w, h, n, slant, pad) {
+  pad = pad || 0; let d = "", x0 = pad, step = (w - pad * 2) / n;
+  for (let i = 0; i <= n; i++) {
+    const x = x0 + i * step, top = i % 2 === 0;
+    const y = top ? h * .12 + slant * i : h * .88 + slant * i;
+    if (i === 0) { d = `M${x.toFixed(1)},${y.toFixed(1)}`; continue; }
+    const px = x0 + (i - 1) * step, py = top ? h * .88 + slant * (i - 1) : h * .12 + slant * (i - 1);
+    d += ` C${(px + step * .15).toFixed(1)},${(py + (top ? 10 : -10)).toFixed(1)} ${(x - step * .15).toFixed(1)},${(y + (top ? 16 : -16)).toFixed(1)} ${x.toFixed(1)},${y.toFixed(1)}`;
+  }
+  return d;
+}
+function drawPath(p, dur, delay) {
+  const L = p.getTotalLength(); p.style.strokeDasharray = L; p.style.strokeDashoffset = L;
+  if (!G || REDUCE) { p.style.strokeDashoffset = 0; return; }
+  G.to(p, { strokeDashoffset: 0, duration: dur, delay: delay || 0, ease: "power2.inOut" });
+}
+/* piped drizzle: a prolate cycloid gives the little loops a piping bag leaves */
+function loops(w, h, pad, dy) {
+  dy = dy || 0;
+  pad = pad || 0; const r = h * .34, b = r * .62, n = Math.max(4, Math.round((w - pad * 2) / (Math.PI * 2 * b * .42)));
+  const a = (w - pad * 2 - 2 * b) / (Math.PI * 2 * n), T = Math.PI * 2 * n, steps = n * 28; let d = "";
+  for (let i = 0; i <= steps; i++) {
+    const t = i / steps * T, x = pad + b + a * t - b * Math.sin(t), y = h / 2 + r * Math.cos(t) + Math.sin(t * .37) * h * .06;
+    d += (i ? " L" : "M") + x.toFixed(1) + "," + (y + dy).toFixed(1);
+  }
+  return d;
+}
+function pipe(svg, pad) {
+  const w = svg.clientWidth || svg.getBoundingClientRect().width, h = svg.clientHeight || 56;
+  svg.setAttribute("viewBox", `0 0 ${w} ${h}`); const d = loops(w, h, pad);
+  svg.querySelectorAll("path").forEach(p => p.setAttribute("d", d));
+  return [...svg.querySelectorAll("path")];
+}
+function drawPipe(svg, dur, delay, pad) { pipe(svg, pad).forEach(p => drawPath(p, dur, delay)); }
+
+/* ---------- crumbs: fall, then pile on the top edge of [data-catch] text ---------- */
+const cv = $("#crumbs"), cx = cv.getContext("2d");
+let W = 0, H = 0, DPR = 1, parts = [], settled = [], catchers = [], raf = 0, lastMeasure = 0;
+const BIN = 4;
+function size() { DPR = Math.min(2, devicePixelRatio || 1); W = innerWidth; H = innerHeight; cv.width = W * DPR; cv.height = H * DPR; cx.setTransform(DPR, 0, 0, DPR, 0, 0); measure(true); kick(); }
+function measure(reset) {
+  catchers = $$("[data-catch]").map(el => {
+    const r = el.getBoundingClientRect(), fs = parseFloat(getComputedStyle(el).fontSize) || 20;
+    const c = el._c || (el._c = { el });
+    const w = Math.max(4, r.width);
+    if (reset || !c.bins || c.w !== Math.round(w)) { c.bins = new Float32Array(Math.ceil(w / BIN) + 1); c.w = Math.round(w); settled = settled.filter(s => s.c !== c); }
+    c.left = r.left + scrollX; c.right = c.left + w; c.top = r.top + scrollY + fs * .2; c.vis = r.width > 0 && r.height > 0;
+    return c;
+  }).filter(c => c.vis);
+  lastMeasure = performance.now();
+}
+function spawn(x, y, n, palette, spread) {
+  if (REDUCE) return;
+  palette = palette || CONFIG.flavors.nutella.crumbs; spread = spread || 18;
+  for (let i = 0; i < n; i++) {
+    if (parts.length > 420) break;
+    const col = palette[(Math.random() * palette.length) | 0], petal = col === "#b8325f" || col === "#d4587e";
+    parts.push({ x: x + (Math.random() - .5) * spread, y: y + (Math.random() - .5) * 8, vx: (Math.random() - .5) * 1.4, vy: Math.random() * 1.2, r: petal ? 3 + Math.random() * 2 : 1.4 + Math.random() * 2.2, col, petal, a: Math.random() * 6.28, va: (Math.random() - .5) * .3 });
+  }
+  kick();
+}
+function kick() { if (!raf) raf = requestAnimationFrame(tick); }
+function tick() {
+  raf = 0;
+  if (performance.now() - lastMeasure > 500) measure(false);
+  const sy = scrollY, sx = scrollX;
+  cx.clearRect(0, 0, W, H);
+  for (let i = parts.length - 1; i >= 0; i--) {
+    const p = parts[i], py = p.y;
+    p.vy = Math.min(p.vy + (p.petal ? .09 : .2), p.petal ? 2.4 : 7); p.vx *= .985; if (p.petal) p.vx += Math.sin(p.a) * .05;
+    p.x += p.vx; p.y += p.vy; p.a += p.va;
+    let landed = false;
+    for (const c of catchers) {
+      if (p.x < c.left || p.x > c.right) continue;
+      const bi = ((p.x - c.left) / BIN) | 0, surf = c.top - c.bins[bi];
+      if (py <= surf && p.y >= surf) {
+        c.bins[bi] = Math.min(16, c.bins[bi] + p.r * .7);
+        if (bi > 0) c.bins[bi - 1] = Math.min(16, c.bins[bi - 1] + p.r * .25);
+        if (bi < c.bins.length - 1) c.bins[bi + 1] = Math.min(16, c.bins[bi + 1] + p.r * .25);
+        settled.push({ c, rx: p.x - c.left, ry: surf - c.top - p.r * .5, r: p.r, col: p.col, petal: p.petal, a: p.a });
+        if (settled.length > 1400) settled.shift();
+        landed = true; break;
+      }
+    }
+    if (landed || p.y > sy + H + 40) { parts.splice(i, 1); continue; }
+    draw(p.x - sx, p.y - sy, p.r, p.col, p.petal, p.a);
+  }
+  for (const s of settled) {
+    const x = s.c.left + s.rx - sx, y = s.c.top + s.ry - sy;
+    if (y < -10 || y > H + 10) continue;
+    draw(x, y, s.r, s.col, s.petal, s.a);
+  }
+  if (parts.length) kick();
+}
+function draw(x, y, r, col, petal, a) {
+  cx.fillStyle = col;
+  if (petal) { cx.beginPath(); cx.ellipse(x, y, r, r * .55, a, 0, 6.283); cx.fill(); }
+  else cx.fillRect(x - r / 2, y - r / 2, r, r * .8);
+}
+addEventListener("resize", () => { clearTimeout(size.t); size.t = setTimeout(() => { size(); ["#heroPipe", "#platePipe"].forEach(s => pipe($(s), s === "#heroPipe" ? 10 : 4).forEach(p => { const L = p.getTotalLength(); p.style.strokeDasharray = L; p.style.strokeDashoffset = 0; })); }, 150); });
+addEventListener("scroll", kick, { passive: true });
+size();
+
+/* sprinkles: pointer over the hero on desktop, a tap anywhere on any device */
+let mode = "nutella", lastSp = 0;
+if (FINE) $("#hero").addEventListener("pointermove", e => {
+  const t = performance.now(); if (t - lastSp < 28) return; lastSp = t;
+  spawn(e.clientX + scrollX, e.clientY + scrollY - 6, 2, CONFIG.flavors.nutella.crumbs, 6);
+});
+document.addEventListener("pointerdown", e => {
+  if (e.target.closest("a,button,input,select,label,textarea,.switch,.opts")) return;
+  const pal = e.target.closest("#flavors") ? CONFIG.flavors[mode].crumbs : CONFIG.flavors.nutella.crumbs;
+  spawn(e.clientX + scrollX, e.clientY + scrollY - 10, 22, pal, 26);
+});
+function rainOver(el, n, pal, dur) {
+  const r = el.getBoundingClientRect(); let k = 0;
+  const id = setInterval(() => {
+    for (let i = 0; i < 6; i++) spawn(r.left + scrollX + Math.random() * r.width, r.top + scrollY - 120 - Math.random() * 60, 1, pal, 2);
+    if ((k += 6) >= n) clearInterval(id);
+  }, dur / (n / 6));
+}
+
+/* ---------- intro: holy drops in, gets a pinch of pistachio, then hands over ---------- */
+let seen = false; try { seen = sessionStorage.getItem("hb-intro") === "1"; } catch (e) {}
+function afterIntro() {
+  drawPipe($("#heroPipe"), 1.8, .1, 10);
+  setTimeout(() => rainOver($("#hero h1"), 120, CONFIG.flavors.nutella.crumbs, 1300), 250);
+  if (G && !REDUCE) G.from(".hero .copy > *", { y: 22, opacity: 0, stagger: .07, duration: .7, ease: "power3.out" });
+}
+const intro = $("#intro");
+if (seen || REDUCE || !G) { intro.classList.add("gone"); afterIntro(); }
+else {
+  try { sessionStorage.setItem("hb-intro", "1"); } catch (e) {}
+  const bits = $("#intro .bits");
+  bits.innerHTML = Array.from({ length: 26 }, () => `<i style="left:${20 + Math.random() * 60}%;background:${Math.random() < .25 ? "#b8325f" : "#b7c95b"}"></i>`).join("");
+  const tl = G.timeline({ onComplete: () => { intro.classList.add("gone"); afterIntro(); } });
+  tl.from("#intro .holy span", { yPercent: -160, opacity: 0, rotate: -14, stagger: .08, duration: .55, ease: "back.out(2.2)" })
+    .from("#intro .bak", { letterSpacing: "1.2em", opacity: 0, duration: .45, ease: "power2.out" }, "-=.25")
+    .from("#intro .rule", { scaleX: 0, duration: .35 }, "-=.3")
+    .to("#intro .bits i", { y: () => 70 + Math.random() * 40, x: () => (Math.random() - .5) * 30, rotate: () => Math.random() * 180, duration: .55, stagger: .012, ease: "power2.in" }, "-=.35")
+    .to("#intro", { clipPath: "circle(0% at 12% 3%)", duration: .55, ease: "power3.in" }, "+=.08");
+  G.set("#intro", { clipPath: "circle(150% at 12% 3%)" });
+  intro.addEventListener("click", () => tl.progress(1));
+}
+
+/* ---------- flavor switch ---------- */
+const flSec = $("#flavors");
+function chars(el, text) { el.innerHTML = [...text].map(c => c === " " ? " " : `<span class="ch">${esc(c)}</span>`).join(""); return $$("#" + el.id + " .ch"); }
+function fillFlavor(f, animate) {
+  const F = CONFIG.flavors[f];
+  const cs = chars($("#fname"), F.name);
+  $("#fdesc").textContent = F.desc;
+  $("#tops").innerHTML = F.tops.map(t => `<span>${esc(t)}</span>`).join("");
+  $("#fquote").innerHTML = F.quote;
+  const pp = $$("#platePipe path"); pp[0].setAttribute("stroke", F.drizzle); pp[1].setAttribute("stroke", F.gloss);
+  if (animate && G && !REDUCE) {
+    G.from(cs, { yPercent: 115, rotate: 10, opacity: 0, stagger: .03, duration: .6, ease: "back.out(1.8)" });
+    G.from(["#fdesc", "#tops span", "#fquote"], { y: 14, opacity: 0, stagger: .06, duration: .5, delay: .15, ease: "power2.out" });
+  }
+}
+function setFlavor(f) {
+  if (f === mode) return; mode = f;
+  flSec.dataset.flavor = f;
+  $$(".switch button").forEach(b => b.setAttribute("aria-pressed", b.dataset.f === f));
+  const lot = $(".plate img.lotus");
+  if (G && !REDUCE) G.to(lot, { clipPath: f === "lotus" ? "inset(0 0 0 0%)" : "inset(0 0 0 100%)", duration: .9, ease: "power3.inOut" });
+  else lot.style.clipPath = f === "lotus" ? "inset(0 0 0 0%)" : "inset(0 0 0 100%)";
+  fillFlavor(f, true);
+  drawPipe($("#platePipe"), 1.3, .2, 4);
+  setTimeout(() => { measure(true); rainOver($("#fname"), 70, CONFIG.flavors[f].crumbs, 900); }, 450);
+  pickTray(f);
+}
+$$(".switch button").forEach(b => b.addEventListener("click", () => setFlavor(b.dataset.f)));
+$("#flOrder").addEventListener("click", () => pickTray(mode));
+fillFlavor("nutella", false);
+if (G && ST && !REDUCE) {
+  ST.create({ trigger: "#plate", start: "top 75%", once: true, onEnter: () => { drawPipe($("#platePipe"), 1.4, .1, 4); rainOver($("#fname"), 60, CONFIG.flavors.nutella.crumbs, 900); } });
+  G.from("#plate", { scale: .9, rotate: -2, opacity: 0, duration: 1, ease: "power3.out", scrollTrigger: { trigger: "#plate", start: "top 85%" } });
+} else drawPipe($("#platePipe"), 0, 0, 4);
+
+/* ---------- tray tour: pinned, horizontal, one drizzle across every tray ---------- */
+const track = $("#track"), tsvg = $("#trackSvg"), tdz = $("#trackDz");
+function layTrack() {
+  const w = track.scrollWidth, h = tsvg.getBoundingClientRect().height || 120;
+  tsvg.setAttribute("width", w); tsvg.setAttribute("viewBox", `0 0 ${w} ${h}`);
+  const d = loops(w, h, 30); tdz.setAttribute("d", d); $("#trackDz2").setAttribute("d", d);
+  const L = tdz.getTotalLength(); [tdz, $("#trackDz2")].forEach(p => p.style.strokeDasharray = L); return L;
+}
+let trackLen = layTrack();
+if (G && ST && !REDUCE) {
+  const dist = () => Math.max(0, track.scrollWidth - innerWidth);
+  $("#tour").classList.add("pinmode");
+  trackLen = layTrack(); [tdz, $("#trackDz2")].forEach(p => p.style.strokeDashoffset = trackLen);
+  const tl = G.timeline({ scrollTrigger: { trigger: "#tour", start: "top top", end: () => "+=" + (dist() + innerHeight * .25), pin: true, scrub: .6, invalidateOnRefresh: true, onRefresh: () => { trackLen = layTrack(); measure(true); } } });
+  tl.to(track, { x: () => -dist(), ease: "none" }, 0).fromTo([tdz, "#trackDz2"], { strokeDashoffset: () => trackLen }, { strokeDashoffset: 0, ease: "none" }, 0);
+  $$(".panel").forEach((p, i) => G.from(p, { rotate: i % 2 ? 3 : -3, y: 30, duration: 1, ease: "power2.out", scrollTrigger: { trigger: "#tour", start: "top 80%" } }));
+} else { track.style.overflowX = "auto"; track.style.width = "auto"; [tdz, $("#trackDz2")].forEach(p => p.style.strokeDashoffset = 0); }
+
+/* ---------- cookies: flip in, prices count up ---------- */
+if (G && ST && !REDUCE) {
+  G.from(".cookie", { rotateY: -80, opacity: 0, transformOrigin: "left center", stagger: .15, duration: .9, ease: "power3.out", scrollTrigger: { trigger: ".ck", start: "top 85%" } });
+  $$("[data-count]").forEach(el => {
+    const o = { v: 0 }, n = +el.dataset.count, pre = el.hasAttribute("data-plus") ? "+$" : "$";
+    G.to(o, { v: n, duration: 1.1, ease: "power2.out", scrollTrigger: { trigger: el, start: "top 90%" }, onUpdate: () => el.textContent = pre + Math.round(o.v) });
+  });
+  G.from(".price", { y: 30, opacity: 0, stagger: .1, duration: .6, ease: "back.out(1.6)", scrollTrigger: { trigger: ".prices", start: "top 90%" } });
+}
+
+/* ---------- review: the quote reads itself in as you scroll ---------- */
+const say = $("#say");
+say.innerHTML = say.textContent.split(" ").map(w => `<span class="w">${esc(w)}</span>`).join(" ");
+const ws = $$("#say .w");
+if (G && ST && !REDUCE) ST.create({ trigger: "#review", start: "top 75%", end: "bottom 60%", scrub: true, onUpdate: s => { const k = Math.round(s.progress * ws.length * 1.15); ws.forEach((w, i) => w.classList.toggle("on", i < k)); } });
+else ws.forEach(w => w.classList.add("on"));
+
+/* ---------- order box ---------- */
+const state = { tray: "nutella", ck: "0", ckf: "biscoff" };
+const TRAY = { nutella: { fill: "#5b3220", dz: "#2e140a" }, lotus: { fill: "#f0d3a2", dz: "#b8732f" } };
+$$("#box .dzl").forEach((p, i) => { p.setAttribute("d", [0, 1, 2, 3].map(k => loops(124, 18, 2, 4 + k * 24)).join(" ")); p.setAttribute("transform", `translate(${i ? 181 : 35} 54)`); p.setAttribute("stroke-width", "3"); });
+function paintTray() {
+  const L = $("#trayL"), R = $("#trayR"), t = state.tray;
+  const left = t === "none" ? null : TRAY[t === "half" ? "nutella" : t], right = t === "none" ? null : TRAY[t === "half" ? "lotus" : t];
+  [[L, left], [R, right]].forEach(([g, c]) => {
+    const rect = g.querySelector("rect"), dz = g.querySelector(".dzl");
+    rect.setAttribute("fill", c ? c.fill : "#f6e7ee"); dz.setAttribute("stroke", c ? c.dz : "transparent");
+    if (c) drawPath(dz, .9, .05);
+    if (G && !REDUCE) G.fromTo(rect, { scaleY: .85, transformOrigin: "50% 100%" }, { scaleY: 1, duration: .5, ease: "back.out(2)" });
+  });
+}
+function paintCookies() {
+  const n = +state.ck, g = $("#cks"), col = { biscoff: ["#e3b878"], brown: ["#a8743f"], mixed: ["#e3b878", "#a8743f"] }[state.ckf];
+  g.innerHTML = Array.from({ length: n }, (_, i) => { const x = 40 + (i % 12) * 24 + (n === 6 ? 72 : 0), y = 196; return `<g class="cki" transform="translate(${x} ${y})"><circle r="10.5" fill="${col[i % col.length]}" stroke="#fff" stroke-width="2"/><circle cx="-3" cy="-2" r="1.8" fill="#3a2118"/><circle cx="3" cy="3" r="1.6" fill="#3a2118"/></g>`; }).join("");
+  if (G && !REDUCE && n) G.from("#cks .cki", { scale: 0, transformOrigin: "50% 50%", stagger: .04, duration: .4, ease: "back.out(2.5)" });
+  $("#ckFlavorQ").hidden = !n;
+}
+function pickTray(v) { state.tray = v; $$('[data-q="tray"] button').forEach(b => b.setAttribute("aria-pressed", b.dataset.v === v)); paintTray(); compose(); }
+$$(".opts").forEach(g => g.addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return; const q = g.dataset.q;
+  state[q] = b.dataset.v; [...g.children].forEach(x => x.setAttribute("aria-pressed", x === b));
+  if (q === "tray") paintTray(); else paintCookies();
+  compose();
+}));
+const msg = $("#msg");
+function compose() {
+  const n = $("#oName").value.trim(), when = $("#oWhen").value.trim(), ck = +state.ck;
+  const trayTxt = { nutella: "a tray of the Nutella baklava", lotus: "a tray of the Lotus baklava", half: "a half Nutella, half Lotus baklava tray", none: "" }[state.tray];
+  const ckTxt = ck ? `${ck === 6 ? "a half dozen" : "a dozen"} ${CONFIG.cookieNames[state.ckf]} cookies` : "";
+  const items = [trayTxt, ckTxt].filter(Boolean);
+  let m = `Hi Holy Baklava! ${n ? "I'm " + n + ". " : ""}`;
+  m += items.length ? `I'd love to order ${items.join(" and ")}` : "I'd love to order";
+  m += when ? ` for ${when}.` : ".";
+  m += state.tray !== "none" ? " What tray sizes do you have and how much are they?" : " How much will it be?";
+  typeTo(m); return m;
+}
+let typed = "", tt = 0;
+function typeTo(m) {
+  if (REDUCE) { msg.textContent = m; return; }
+  let i = 0; while (i < typed.length && i < m.length && typed[i] === m[i]) i++;
+  typed = typed.slice(0, i); clearInterval(tt);
+  tt = setInterval(() => { typed = m.slice(0, typed.length + 2); msg.innerHTML = esc(typed) + '<span class="caret"></span>'; if (typed.length >= m.length) clearInterval(tt); }, 14);
+}
+["oName", "oWhen"].forEach(id => $("#" + id).addEventListener("input", compose));
+$("#send").addEventListener("click", async () => {
+  const m = compose(); let ok = false;
+  try { await navigator.clipboard.writeText(m); ok = true; } catch (e) { const t = document.createElement("textarea"); t.value = m; document.body.appendChild(t); t.select(); try { ok = document.execCommand("copy"); } catch (e2) {} t.remove(); }
+  $("#sent").textContent = ok ? "Copied. Paste it into the chat that just opened." : "Opening Instagram. Copy your message from this page if it isn't there.";
+  window.open(DM, "_blank", "noopener");
+  const r = $("#send").getBoundingClientRect(); spawn(r.left + r.width / 2 + scrollX, r.top + scrollY - 20, 40, CONFIG.flavors.nutella.crumbs, 120);
+});
+paintTray(); paintCookies(); compose();
+
+/* ---------- section reveals and dock ---------- */
+if (G && ST && !REDUCE) {
+  $$("section h2, .kick").forEach(el => { if (el.closest("#hero")) return; G.from(el, { y: 26, opacity: 0, duration: .8, ease: "power3.out", scrollTrigger: { trigger: el, start: "top 88%" } }); });
+  G.from(".boxart svg", { rotate: -6, scale: .85, opacity: 0, duration: .9, ease: "back.out(1.6)", scrollTrigger: { trigger: ".boxart", start: "top 85%" } });
+  ST.addEventListener("refresh", () => measure(true));
+}
+const vid = $("#vid");
+if ("IntersectionObserver" in window) {
+  new IntersectionObserver(([e]) => { if (REDUCE) return; e.isIntersecting ? vid.play().catch(() => {}) : vid.pause(); }, { threshold: .1 }).observe(vid);
+  new IntersectionObserver(([e]) => $(".dock").classList.toggle("off", e.isIntersecting), { threshold: .08 }).observe($("#order"));
+}
+if (REDUCE) vid.removeAttribute("autoplay");
+</script>
+</body>
+</html>
