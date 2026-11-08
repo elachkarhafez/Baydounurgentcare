@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noai, noimageai">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mochi Cafe | Boba and mochi donuts in Corpus Christi</title>
+<meta name="description" content="Mochi Cafe on Saratoga in Corpus Christi: mochi donuts, boba and fruit teas, sweet treats and savory bites. Open every day, 11AM to 9PM Monday to Thursday and 11AM to 9:30PM Friday to Sunday.">
+<meta property="og:title" content="Mochi Cafe · Boba and mochi donuts">
+<meta property="og:description" content="Sweet treats and savory bites, open every day in Corpus Christi.">
+<meta property="og:image" content="og.jpg">
+<meta name="theme-color" content="#fdf0f4">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="media/r-straw.webp">
+<style>
+/* Mochi Cafe · the Big Wiss layout in Mochi Cafe's own colours. The cups are Cycles renders of the reused cup scene
+   (render/cup.py) with their flower sticker on the cup and the drink colour swapped through MOCHI_LIQ. Photos are theirs.
+   Brand: the pink scalloped mochi-donut flower with chocolate-brown lettering (Lilita One stands in for their type).
+   Mobile first; light motion: the hero rises in, sections fade up, cups lift on hover, the flower spins slowly. */
+:root{
+  --bg:#fdf0f4; --bg2:#fbe2ea; --bg3:#f7cfdc; --line:rgba(59,29,20,.12);
+  --ivory:#3b1d14; --soft:#86584a; --mint:#e0628f; --mint2:#ffd9e6; --tan:#3b1d14; --tan2:#24110b; --ink:#2a140d;
+  --cream:#fff3ea; --pink:#f8cddb; --light:#fff8f6; --matcha:#9cc06a;
+  --f:'Plus Jakarta Sans', system-ui, -apple-system, sans-serif; --a:'Lilita One', 'Plus Jakarta Sans', sans-serif;
+  --pad:18px; --sec:36px; --nav:56px;
+  --ease:cubic-bezier(.22,.61,.36,1); --out:cubic-bezier(.16,1,.3,1);
+}
+*{box-sizing:border-box;margin:0}
+html{-webkit-text-size-adjust:100%;overflow-x:clip;background:var(--bg);scroll-padding-top:calc(var(--nav) + 12px)}
+body{background:var(--bg);color:var(--ivory);font:400 .9375rem/1.6 var(--f);overflow-x:clip;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%;height:auto}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--mint);outline-offset:3px;border-radius:8px}
+.wrap{max-width:1140px;margin:0 auto;padding:0 var(--pad)}
+h1,h2{font-family:var(--f);font-weight:800;letter-spacing:-.035em;line-height:1.04}
+h1{font-size:1.875rem}
+h2{font-size:1.5rem}
+h1 em,h2 em{font:400 1.06em/1 var(--a);letter-spacing:.005em;color:var(--mint);font-style:normal}
+h3{font:700 1rem/1.3 var(--f)}
+.sub{color:var(--soft)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 18px;border-radius:999px;background:var(--tan);color:var(--light);text-decoration:none;font:800 .875rem/1 var(--f);letter-spacing:.04em;text-transform:uppercase;border:0;white-space:nowrap;transition:transform .15s,background .2s}
+.btn:active{transform:scale(.97)}
+.btn.ghost{background:transparent;color:var(--ivory);box-shadow:inset 0 0 0 1.5px rgba(59,29,20,.3)}
+.btn.pink{background:var(--mint);color:#fff}
+.btn svg{width:16px;height:16px;flex:0 0 auto}
+@media (hover:hover) and (pointer:fine){ .btn:hover{background:var(--tan2)} .btn.ghost:hover{background:rgba(59,29,20,.05)} .btn.pink:hover{background:#c94c79} }
+.row{display:flex;flex-wrap:wrap;gap:8px}
+.wm{display:inline-flex;align-items:center;gap:.4em;text-decoration:none;line-height:1;color:var(--ivory)}
+.wm svg{width:1.5em;height:1.5em;flex:0 0 auto}
+.wm b{display:block;font:400 1em/1 var(--a);letter-spacing:.06em}
+.flower{animation:spin 24s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.lockup{display:inline-flex;flex-direction:column;align-items:center;color:var(--ivory)}
+.lockup svg{width:4.2rem;height:4.2rem}
+.lockup b{margin-top:10px;font:400 2.5rem/1 var(--a);letter-spacing:.06em}
+.menu{display:grid;gap:10px}
+.mg{border-radius:18px;background:var(--light);box-shadow:inset 0 0 0 1px var(--line);padding:14px 16px}
+.mg h3{font:400 1.25rem/1.1 var(--a);color:var(--mint);letter-spacing:.02em}
+.mg ul{list-style:none;padding:0;margin-top:6px}
+.mg li{padding:9px 0;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:10px}
+.mg li:first-child{border-top:0}
+.mg li b{display:block;font:700 .9375rem/1.3 var(--f)}
+.mg li span{display:block;margin-top:2px;color:var(--soft);font-size:.8125rem;line-height:1.45}
+.mg li em{font:800 .875rem/1.3 var(--f);font-style:normal;white-space:nowrap}
+.note{margin-top:10px;color:var(--soft);font-size:.8125rem}
+
+/* nav */
+.nav{position:fixed;top:0;left:0;right:0;z-index:40;height:var(--nav);background:rgba(253,240,244,.94);box-shadow:0 1px 0 var(--line)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:100%}
+.nav .wm{font-size:1.375rem}
+.nav .links{display:none}
+.nav .btn{min-height:36px;padding:0 14px;font-size:.75rem}
+
+/* hero */
+.hero{padding:calc(var(--nav) + 20px) 0 var(--sec);background:radial-gradient(120% 80% at 80% 10%,var(--bg3),var(--bg2) 45%,var(--bg) 100%)}
+.hero .wrap{display:grid;gap:18px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:6px 11px;border-radius:999px;background:rgba(255,255,255,.6);box-shadow:inset 0 0 0 1px var(--line);font:600 .75rem/1 var(--f)}
+.chip i{width:7px;height:7px;border-radius:50%;background:var(--matcha);box-shadow:0 0 0 3px rgba(156,192,106,.25)}
+.chip.closed i{background:#c9a3ad;box-shadow:0 0 0 3px rgba(201,163,173,.25)}
+.hero p{margin-top:12px;color:var(--soft);max-width:40ch}
+.hero .row{margin-top:18px}
+.cupcard{position:relative;border-radius:22px;overflow:hidden}
+.cupcard.shot{display:block;aspect-ratio:1;max-height:46svh;margin-inline:auto;width:100%;background:#f6e2e7}
+.cupcard.shot>img{width:100%;height:100%;object-fit:cover}
+.cupcard .lab{position:absolute;left:12px;top:12px;padding:8px 12px;border-radius:12px;background:rgba(255,255,255,.88);box-shadow:0 2px 10px rgba(0,0,0,.06)}
+.cupcard .lab b{display:block;font:400 1.25rem/1 var(--a);letter-spacing:.02em}
+.cupcard .lab span{display:block;margin-top:3px;font-size:.75rem;color:var(--soft)}
+.cupcard .tag{position:absolute;right:12px;top:12px;z-index:2;display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:var(--tan);color:var(--light);font:800 .75rem/1 var(--f);letter-spacing:.06em;text-transform:uppercase}
+.cupcard .tag i{width:6px;height:6px;border-radius:50%;background:var(--mint2)}
+.up{animation:up .8s var(--out) both}
+.up.d1{animation-delay:.08s}.up.d2{animation-delay:.16s}.up.d3{animation-delay:.24s}
+@keyframes up{from{opacity:0;transform:translateY(14px)}}
+
+/* marquee */
+.marq{overflow:hidden;padding:16px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--bg)}
+.marq .tr{display:flex;width:max-content;animation:marq 38s linear infinite}
+.marq .tr.slow{animation-duration:52s;animation-direction:reverse;margin-top:6px}
+.marq span{padding-right:22px;white-space:nowrap;font:800 1.375rem/1.1 var(--f);letter-spacing:-.03em}
+.marq .tr.slow span{font:400 1.375rem/1.1 var(--a);color:var(--mint);letter-spacing:.02em}
+.marq span i{font-style:normal;color:var(--matcha);margin-left:22px}
+@keyframes marq{to{transform:translateX(-50%)}}
+
+/* sections */
+.sec{padding:var(--sec) 0}
+.head{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:10px;margin-bottom:14px}
+.head .sub{margin-top:6px;max-width:44ch}
+.rail{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 calc(var(--pad) * -1);padding:0 var(--pad) 4px;scrollbar-width:none;list-style:none}
+.rail::-webkit-scrollbar{display:none}
+.dots{display:flex;justify-content:center;gap:6px;margin-top:10px}
+.dots i{width:6px;height:6px;border-radius:50%;background:rgba(59,29,20,.2);transition:background .2s,width .2s}
+.dots i.on{background:var(--tan);width:16px;border-radius:3px}
+
+.lineup .card,.case .card{flex:0 0 74%;scroll-snap-align:start;position:relative;border-radius:22px;overflow:hidden;color:var(--ink);display:flex;flex-direction:column}
+.card.cream{background:linear-gradient(180deg,#fff8f2,var(--cream))}
+.card.pink{background:linear-gradient(180deg,#fff0f5,var(--pink))}
+.card.choc{background:var(--tan);color:var(--light);justify-content:space-between;padding:18px;text-decoration:none;min-height:300px}
+.card .pill{position:absolute;left:12px;top:12px;z-index:2;display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:var(--tan);color:var(--light);font:800 .75rem/1 var(--f);letter-spacing:.06em;text-transform:uppercase}
+.card .pill.price{left:auto;right:12px;background:#fff;color:var(--ink)}
+.card .pic{aspect-ratio:1;overflow:hidden;background:#f6e2e7}
+.card .pic img{width:100%;height:100%;object-fit:cover;transition:transform .6s var(--out)}
+.card .tx{padding:12px 16px 16px}
+.card .tx b{display:block;font:400 1.5rem/1.05 var(--a);letter-spacing:.01em}
+.card .tx p{margin-top:4px;font-size:.8125rem;color:var(--soft)}
+.card .tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
+.card .tags span{padding:5px 9px;border-radius:999px;background:rgba(255,255,255,.75);font:700 .75rem/1 var(--f)}
+.card.choc b{font:400 1.75rem/1.05 var(--a);letter-spacing:.01em}
+.card.choc p{margin-top:6px;font-size:.875rem;opacity:.85}
+.card.choc .btn{background:var(--mint);color:#fff;align-self:flex-start}
+.case .card{flex-basis:64%;background:var(--light);box-shadow:inset 0 0 0 1px var(--line)}
+@media (hover:hover) and (pointer:fine){ .card:hover .pic img{transform:scale(1.035)} }
+
+.bento{display:grid;gap:10px}
+.b{border-radius:22px;overflow:hidden;position:relative}
+.b.green{background:var(--light);box-shadow:inset 0 0 0 1px var(--line);padding:18px}
+.b.green small{display:inline-flex;align-items:center;gap:6px;font:800 .75rem/1 var(--f);letter-spacing:.1em;text-transform:uppercase;color:var(--mint)}
+.b.green h3{margin-top:10px;font:800 1.5rem/1.05 var(--f);letter-spacing:-.03em}
+.hours{list-style:none;padding:0;margin-top:10px}
+.hours li{display:flex;justify-content:space-between;padding:9px 0;border-top:1px solid var(--line);font:600 .9375rem/1.3 var(--f)}
+.hours li:first-child{border-top:0}
+.hours li.today{color:var(--mint)}
+.hours li.today b::after{content:" · today";font-weight:800}
+.b.photo{aspect-ratio:4/3}
+.b.photo img{width:100%;height:100%;object-fit:cover}
+.b.photo::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(42,20,13,.82))}
+.b.photo .cap{position:absolute;left:16px;right:16px;bottom:14px;z-index:1;color:#fff}
+.b.photo .cap small{font:800 .75rem/1 var(--f);letter-spacing:.1em;text-transform:uppercase;color:var(--mint2)}
+.b.photo .cap b{display:block;margin-top:6px;font:800 1.375rem/1.05 var(--f);letter-spacing:-.03em}
+.b.ig{background:var(--mint);color:#fff;padding:18px;display:flex;flex-direction:column;justify-content:space-between;gap:16px;text-decoration:none}
+.b.ig small{font:800 .75rem/1 var(--f);letter-spacing:.1em;text-transform:uppercase}
+.b.ig b{font:400 1.5rem/1.1 var(--a);letter-spacing:.02em}
+.b.ig span{font-size:.8125rem}
+
+.close{padding:48px 0 44px;text-align:center;background:radial-gradient(90% 90% at 50% 0%,var(--bg3),var(--bg))}
+.close .lockup{margin-bottom:16px}
+.close p{margin:8px auto 0;max-width:34ch;color:var(--soft)}
+.close .row{justify-content:center;margin-top:16px}
+footer.foot{padding:22px 0 calc(96px + env(safe-area-inset-bottom));background:var(--bg2);color:var(--soft);font-size:.8125rem;border-top:1px solid var(--line)}
+footer.foot b{color:var(--ivory);font-weight:700}
+footer.foot a{text-decoration:none}
+footer.foot p+p{margin-top:4px}
+.rv{opacity:0;transform:translateY(14px);transition:opacity .7s var(--ease),transform .8s var(--out)}
+.rv.on{opacity:1;transform:none}
+.dock{position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom));z-index:45;display:grid;grid-template-columns:1fr 1.25fr;gap:6px;padding:6px;border-radius:999px;background:rgba(253,240,244,.97);box-shadow:0 12px 30px rgba(59,29,20,.2);border:1px solid var(--line);transform:translateY(150%);transition:transform .35s var(--out)}
+.dock.on{transform:none}
+.dock .btn{min-height:42px;padding:0 10px;font-size:.8125rem}
+
+@media (min-width:760px){
+  :root{--pad:32px;--sec:72px;--nav:64px}
+  body{font-size:1rem}
+  h1{font-size:3.25rem}
+  h2{font-size:2.5rem}
+  .nav .wm{font-size:1.625rem}
+  .nav .links{display:flex;gap:26px;font:800 .6875rem/1 var(--f);letter-spacing:.12em;text-transform:uppercase;color:var(--soft)}
+  .nav .links a{text-decoration:none}.nav .links a:hover{color:var(--ivory)}
+  .hero{padding-top:calc(var(--nav) + 44px)}
+  .hero p{font-size:1.0625rem}
+  .cupcard.shot{max-height:none}
+  .marq span,.marq .tr.slow span{font-size:2rem}
+  .rail{display:grid;overflow:visible;margin:0;padding:0}
+  .lineup .card,.case .card{flex:none}
+  .lineup{grid-template-columns:repeat(3,1fr)}
+  .case{grid-template-columns:repeat(4,1fr)}
+  .dots{display:none}
+  .bento{grid-template-columns:1fr 1.3fr .8fr;align-items:stretch}
+  .b.photo{aspect-ratio:auto;min-height:300px}
+  .close{padding:80px 0}
+  .close .lockup b{font-size:3.25rem}
+  .menu{grid-template-columns:1.2fr 1fr}
+  .dock{display:none}
+  footer.foot{padding-bottom:28px}
+}
+@media (min-width:1100px){
+  .hero .wrap{grid-template-columns:1fr minmax(0,440px);gap:64px;align-items:center}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .rv{opacity:1!important;transform:none!important}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-pin" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.4" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-ig" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6" fill="currentColor"/></g></symbol>
+  <symbol id="i-flower" viewBox="0 0 100 100"><path id="fl" fill="#f4a9c4" stroke="#3b1d14" stroke-width="5" stroke-linejoin="round" d=""/><path id="fl2" fill="#f4a9c4" stroke="#3b1d14" stroke-width="4" d=""/><path id="fl3" fill="#fff6f0" stroke="#3b1d14" stroke-width="3.5" d=""/></symbol>
+</svg>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="wm" href="#top" aria-label="Mochi Cafe, back to the top"><svg class="flower" viewBox="0 0 100 100" aria-hidden="true"><use href="#i-flower"/></svg><b>MOCHI CAFE</b></a>
+    <nav class="links" aria-label="Sections"><a href="#lineup">Drinks</a><a href="#case">Mochi donuts</a><a href="#menu">Menu</a><a href="#visit">Visit</a></nav>
+    <a class="btn" data-map href="#visit"><svg aria-hidden="true"><use href="#i-pin"/></svg>Find us</a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero" id="hero">
+    <div class="wrap">
+      <div>
+        <div class="chips up"><span class="chip" id="openChip"><i></i><span>Open every day</span></span><span class="chip">Corpus Christi, TX</span></div>
+        <h1 class="up d1">Boba and mochi donuts, <em>made fresh.</em></h1>
+        <p class="up d2">Sweet treats and savory bites on Saratoga. Chewy mochi donuts in the case, fruit teas and boba at the counter, and something new for the holidays.</p>
+        <div class="row up d2" id="heroCta"><a class="btn" data-map href="#visit"><svg aria-hidden="true"><use href="#i-pin"/></svg>Get directions</a><a class="btn ghost" href="#menu">See the menu</a></div>
+      </div>
+      <div class="cupcard shot up d3">
+        <div class="lab"><b>Strawberry Yogurt</b><span>Strawberry cloud and yogurt</span></div>
+        <span class="tag"><i></i>New</span>
+        <img src="media/r-straw.webp" alt="A Mochi Cafe strawberry drink in a clear cup with a cream top and the Mochi Cafe flower sticker" width="760" height="760" fetchpriority="high">
+      </div>
+    </div>
+  </section>
+
+  <div class="marq" aria-hidden="true">
+    <div class="tr"><span>Mochi donuts<i>✿</i></span><span>Boba tea<i>✿</i></span><span>Open every day<i>✿</i></span><span>Mochi donuts<i>✿</i></span><span>Boba tea<i>✿</i></span><span>Open every day<i>✿</i></span></div>
+    <div class="tr slow"><span>Cream Brûlée<i>✿</i></span><span>Chocolate Reindeer<i>✿</i></span><span>Berry Burst<i>✿</i></span><span>Strawberry Yogurt<i>✿</i></span><span>Strawberry Dream<i>✿</i></span><span>Cream Brûlée<i>✿</i></span><span>Chocolate Reindeer<i>✿</i></span><span>Berry Burst<i>✿</i></span><span>Strawberry Yogurt<i>✿</i></span><span>Strawberry Dream<i>✿</i></span></div>
+  </div>
+
+  <section class="sec" id="lineup">
+    <div class="wrap">
+      <div class="head rv"><div><h2>What we <em>pour.</em></h2><p class="sub">New drinks for our first Christmas together. Same vibes.</p></div><a class="btn ghost" href="#menu">Full menu</a></div>
+      <div class="rail lineup" data-rail>
+        <article class="card pink"><span class="pill">Holiday</span><div class="pic"><img src="media/r-straw.webp" alt="A strawberry drink with a cream top and the Mochi Cafe sticker" width="760" height="760" loading="lazy"></div><div class="tx"><b>Strawberry Yogurt</b><p>Strawberry cloud and yogurt.</p><div class="tags"><span>Strawberry</span><span>Yogurt</span><span>Iced</span></div></div></article>
+        <article class="card cream"><span class="pill">Boba</span><div class="pic"><img src="media/r-tea.webp" alt="An iced milk tea with a cream top and the Mochi Cafe sticker" width="760" height="760" loading="lazy"></div><div class="tx"><b>Milk tea</b><p>Iced, creamy and made to order. Add boba.</p><div class="tags"><span>Boba</span><span>Iced</span></div></div></article>
+        <article class="card pink"><span class="pill">Holiday lineup</span><div class="pic"><img src="media/xmas.webp" alt="Mochi Cafe's holiday drinks: Berry Burst, Strawberry Yogurt and Strawberry Dream" width="600" height="600" loading="lazy"></div><div class="tx"><b>Three new drinks</b><p>Berry Burst, Strawberry Yogurt and Strawberry Dream with boba.</p></div></article>
+      </div>
+      <div class="dots" data-dots></div>
+    </div>
+  </section>
+
+  <section class="sec" id="case" style="padding-top:0">
+    <div class="wrap">
+      <div class="head rv"><div><h2>In the <em>case.</em></h2><p class="sub">Mochi donuts, the chewy kind, pulled apart one ball at a time.</p></div></div>
+      <div class="rail case" data-rail>
+        <article class="card"><span class="pill price">$4.95</span><div class="pic"><img src="media/brulee.webp" alt="A Cream Brûlée mochi donut with a white drizzle and strawberries" width="600" height="600" loading="lazy"></div><div class="tx"><b>Cream Brûlée</b><p>Torched top, white drizzle, fresh strawberry.</p></div></article>
+        <article class="card"><span class="pill">Holiday</span><div class="pic"><img src="media/reindeer.webp" alt="Chocolate Reindeer mochi donuts with pretzel antlers and red noses" width="600" height="600" loading="lazy"></div><div class="tx"><b>Chocolate Reindeer</b><p>Chocolate dip, pretzel antlers, a red nose.</p></div></article>
+        <article class="card"><div class="pic"><img src="media/box.webp" alt="A box of mochi donuts: chocolate, Oreo, ube, glazed and sprinkle" width="600" height="600" loading="lazy"></div><div class="tx"><b>Get a box</b><p>Mix and match whatever's in the case.</p></div></article>
+        <article class="card"><div class="pic"><img src="media/cat.webp" alt="A drink in a lucky cat shaped bottle held up in the cafe" width="500" height="500" loading="lazy"></div><div class="tx"><b>The lucky cat</b><p>Spotted at the counter: a drink in a lucky cat bottle.</p></div></article>
+      </div>
+      <div class="dots" data-dots></div>
+    </div>
+  </section>
+
+  <section class="sec" id="menu" style="padding-top:0">
+    <div class="wrap">
+      <div class="head rv"><div><h2>The <em>menu.</em></h2><p class="sub">What we've been posting lately. Come see the full board in the cafe.</p></div></div>
+      <div class="menu rv">
+        <div class="mg"><h3>Holiday drinks</h3><ul>
+          <li><div><b>Berry Burst</b><span>Strawberry blueberry refresher</span></div></li>
+          <li><div><b>Strawberry Yogurt</b><span>Strawberry cloud and yogurt</span></div></li>
+          <li><div><b>Strawberry Dream</b><span>Strawberry fruit tea and boba</span></div></li></ul></div>
+        <div class="mg"><h3>Mochi donuts</h3><ul>
+          <li><div><b>Cream Brûlée</b><span>Torched top, drizzle and strawberry</span></div><em>$4.95</em></li>
+          <li><div><b>Chocolate Reindeer</b><span>For the holidays</span></div></li>
+          <li><div><b>And more in the case</b><span>Flavors change, so come see what's out</span></div></li></ul></div>
+      </div>
+      <p class="note rv">Boba tea, sweet treats and savory bites too. Prices we haven't posted are on the board in the cafe.</p>
+    </div>
+  </section>
+
+  <section class="sec" id="visit" style="padding-top:0">
+    <div class="wrap">
+      <div class="head rv"><h2>Come <em>visit.</em></h2></div>
+      <div class="bento">
+        <div class="b green rv"><small>✿ Open every day</small><h3>Hours</h3>
+          <ul class="hours" id="hours"><li data-d="1,2,3,4"><b>Monday to Thursday</b><span>11AM – 9PM</span></li><li data-d="5,6,0"><b>Friday to Sunday</b><span>11AM – 9:30PM</span></li></ul></div>
+        <div class="b photo rv"><img src="media/donut.webp" alt="A green mochi donut with pink drizzle and sprinkles from a Mochi Cafe post" width="700" height="520" loading="lazy"><div class="cap"><small>On Saratoga</small><b>Corpus Christi, TX</b></div></div>
+        <a class="b ig rv" data-ig href="#visit"><small>Follow along</small><div><b>@mochicafesaratoga</b><span> New flavors and drinks, posted first on Instagram</span></div></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="close" id="closer">
+    <div class="wrap">
+      <span class="lockup rv" aria-hidden="true"><svg class="flower" viewBox="0 0 100 100"><use href="#i-flower"/></svg><b>MOCHI CAFE</b></span>
+      <h2>Come grab <em>something sweet.</em></h2>
+      <p>Open every day from 11. Mochi Cafe fam, come visit us!</p>
+      <div class="row"><a class="btn" data-map href="#visit"><svg aria-hidden="true"><use href="#i-pin"/></svg>Get directions</a><a class="btn pink" data-ig href="#visit"><svg aria-hidden="true"><use href="#i-ig"/></svg>Instagram</a></div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <p><b>Mochi Cafe</b> · Boba, mochi donuts, sweet treats and savory bites · Corpus Christi, TX</p>
+    <p><a data-ig href="#visit">@mochicafesaratoga</a> · © <span id="yr"></span></p>
+  </div>
+</footer>
+
+<div class="dock" id="dock"><a class="btn ghost" href="#menu">Menu</a><a class="btn" data-map href="#visit"><svg aria-hidden="true"><use href="#i-pin"/></svg>Directions</a></div>
+
+<script>
+const CONFIG = {
+  instagram: 'https://www.instagram.com/mochicafesaratoga/',
+  map: 'https://www.google.com/maps/search/?api=1&query=Mochi+Cafe+Saratoga+Blvd+Corpus+Christi+TX',
+  tz: 'America/Chicago',
+  hours: { 0: [11, 21.5], 1: [11, 21], 2: [11, 21], 3: [11, 21], 4: [11, 21], 5: [11, 21.5], 6: [11, 21.5] }
+};
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+$$('[data-ig]').forEach(a => { a.href = CONFIG.instagram; a.target = '_blank'; a.rel = 'noopener'; });
+$$('[data-map]').forEach(a => { a.href = CONFIG.map; a.target = '_blank'; a.rel = 'noopener'; });
+$('#yr').textContent = new Date().getFullYear();
+
+/* the flower mark, drawn once: 8 scalloped petals, an inner ring and the hole */
+function flower(r, petals, bump) { let d = ''; for (let i = 0; i <= 240; i++) { const a = i / 240 * Math.PI * 2 - Math.PI / 2; const rr = r * (1 - bump + bump * 2 * Math.pow(Math.abs(Math.cos(a * petals / 2)), .7)); d += (i ? 'L' : 'M') + (50 + rr * Math.cos(a)).toFixed(2) + ',' + (50 + rr * Math.sin(a)).toFixed(2); } return d + 'Z'; }
+$('#fl').setAttribute('d', flower(44, 8, .07)); $('#fl2').setAttribute('d', flower(20, 8, .1)); $('#fl3').setAttribute('d', flower(9, 8, .14));
+
+/* open now, in Corpus Christi time */
+(function () {
+  try {
+    const p = Object.fromEntries(new Intl.DateTimeFormat('en-US', { timeZone: CONFIG.tz, weekday: 'short', hour: 'numeric', minute: 'numeric', hourCycle: 'h23' }).formatToParts(new Date()).map(x => [x.type, x.value]));
+    const day = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(p.weekday), h = +p.hour + +p.minute / 60, [o, c] = CONFIG.hours[day];
+    const open = h >= o && h < c, chip = $('#openChip');
+    chip.querySelector('span').textContent = open ? `Open now · till ${c % 1 ? Math.floor(c) - 12 + ':30' : c - 12}PM` : (h < o ? 'Opens today at 11AM' : 'Closed now · opens 11AM');
+    chip.classList.toggle('closed', !open);
+    $$('#hours li').forEach(li => li.classList.toggle('today', li.dataset.d.split(',').includes(String(day))));
+  } catch (e) {}
+})();
+
+$$('[data-rail]').forEach(rail => {
+  const dots = rail.nextElementSibling; dots.innerHTML = [...rail.children].map(() => '<i></i>').join('');
+  const paint = () => { const w = rail.firstElementChild.getBoundingClientRect().width + 10; const k = Math.round(rail.scrollLeft / w); [...dots.children].forEach((d, i) => d.classList.toggle('on', i === k)); };
+  rail.addEventListener('scroll', () => requestAnimationFrame(paint), { passive: true }); paint();
+});
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -10% 0px' });
+$$('.rv').forEach(el => io.observe(el));
+
+const dock = $('#dock'); let atClose = false, inHero = true;
+const syncDock = () => dock.classList.toggle('on', !inHero && !atClose);
+new IntersectionObserver(es => { atClose = es[0].isIntersecting; syncDock(); }).observe($('#closer'));
+new IntersectionObserver(es => { inHero = es[0].isIntersecting; syncDock(); }).observe($('#heroCta'));
+</script>
+<a class="studio" href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener" aria-label="Site by ElaSystems (opens in a new tab)"><i aria-hidden="true"></i><span>Site by <b>ElaSystems</b></span></a>
+<style>
+  .studio{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;background:#2a140d;color:#fff;font:500 11px/1 var(--f);text-decoration:none}
+  .studio i{width:9px;height:9px;border-radius:3px;background:conic-gradient(from 210deg,#ff5a1f,#ffb03b,#ff5a1f)}
+  .eb-foot{display:flex;width:max-content;margin:12px auto 0}
+</style>
+<script>
+(function () { const b = document.querySelector('.studio'), f = document.querySelector('footer .wrap'); if (b && f) { f.appendChild(b); b.classList.add('eb-foot'); } })();
+</script>
+</body>
+</html>
