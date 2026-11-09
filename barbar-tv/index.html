@@ -7,7 +7,7 @@
 <title>Barbar Subs · TV menu</title>
 <style>
 /* Barbar Subs TV menu: four portrait screens (1080 x 1920), one per TV, rendered to looping MP4s for a USB stick.
-   ?tv=1..4 picks the screen; ?t=12 starts the live preview at 12 s. Everything that moves is a function of t (0..LOOP)
+   ?tv=1..4 picks the screen (?set=3&tv=1..3 for the three-TV store); ?t=12 starts the live preview at 12 s. Everything that moves is a function of t (0..LOOP)
    in render(), so render.js steps frames exactly and the last frame flows into the first.
    The 60 s loop:
    0-3 s    a red curtain; their badge builds itself (plate pops, ring draws, chef stamps on, BARBAR drops in), the
@@ -35,6 +35,7 @@ body.cap .stage{left:0;top:0;transform:none!important}
 .hd .kick b{color:var(--red)}
 .hd h1{position:absolute;left:52px;top:150px;font:900 104px/.86 'Rubik';letter-spacing:-.03em;text-transform:uppercase;color:var(--red);white-space:nowrap;z-index:3}
 .hd h1 .ln{display:block}
+.hd h1.one{font-size:190px;top:132px}
 .hd h1 .ch{display:inline-block;transform-origin:50% 100%}
 .counter{position:absolute;left:0;right:0;top:420px;height:40px;background:var(--red);box-shadow:0 8px 0 var(--red2);z-index:6;transform-origin:0 50%}
 
@@ -76,6 +77,8 @@ body.cap .stage{left:0;top:0;transform:none!important}
 .row p{font:400 23px/1.25 'Rubik';color:var(--muted);margin-top:4px}
 .row .pr{display:flex;flex:none}
 .row .pr > span{width:172px;text-align:right;font:800 40px/1 'Rubik';color:var(--red);transform-origin:100% 50%}
+.rows2{display:grid;grid-template-columns:1fr 1fr;column-gap:56px}
+.rows2 .row{align-items:flex-start}
 .pair{display:flex;gap:56px;position:relative;z-index:1;margin-top:26px}
 .pair > .grp{margin-top:0}
 .pair > .grp{flex:1;min-width:0}
@@ -198,7 +201,17 @@ const SCREENS = {
 const META = {"torso": [138.5, 339.0, 690.0, 440.0], "arm": [102.0, 453.0, 243.5, 326.0], "hand": [14.0, 321.0, 253.5, 149.5], "head": [298.0, 196.5, 471.0, 424.0], "mst": [345.0, 405.0, 225.5, 100.5], "hat": [382.5, 61.5, 392.5, 317.0]};
 
 const LOOP = 60, FPS = 30;
-const qs = new URLSearchParams(location.search), TV = +(qs.get('tv') || 1), S = SCREENS[TV] || SCREENS[1];
+/* the 3-TV set (?set=3): same blocks, regrouped, with the long lists in two columns */
+const B = (tv, title) => { const f = bs => { for (const b of bs) { if (b.title === title) return b; if (b.blocks) { const r = f(b.blocks); if (r) return r; } } }; return f(SCREENS[tv].blocks); };
+const c2 = b => ({ ...b, cols2: 1 });
+const SCREENS3 = {
+  1: { kick: 'Subs', title: 'Subs', item: 'art-sub.svg', itemW: 430,
+    blocks: [c2(B(1, 'Grilled chicken')), c2(B(1, 'Crispy chicken')), c2(B(2, 'Steak subs')), B(2, 'More subs')] },
+  2: { kick: 'Burgers', title: 'Burgers<br>&amp; wraps', item: 'art-wrap.svg', itemW: 360,
+    blocks: [c2(B(3, 'Grilled chicken breast')), c2(B(3, 'Fried chicken breast')), c2(B(3, 'Beef')), c2(B(2, 'Chicken wraps')), c2(B(2, 'Special wraps'))] },
+  3: { ...SCREENS[4], kick: 'Sides' },
+};
+const qs = new URLSearchParams(location.search), SET = qs.get('set') === '3' ? SCREENS3 : SCREENS, TV = +(qs.get('tv') || 1), S = SET[TV] || SET[1];
 const $ = s => document.getElementById(s);
 const chili = '<svg class="chili"><use href="#i-chili"/></svg>';
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -210,6 +223,7 @@ const odo = n => '<span class="odo">' + [...('$' + n.toFixed(2))].map(c => /\d/.
 
 /* ---------- menu */
 $('kick').innerHTML = '<b>Barbar</b> · ' + esc(S.kick);
+if (!S.title.includes('<br>')) $('h1').classList.add('one');
 $('h1').innerHTML = S.title.split('<br>').map(l => '<span class="ln">' + [...l.replace('&amp;', '&')].map(c => c === ' ' ? ' ' : `<span class="ch">${esc(c)}</span>`).join('') + '</span>').join('');
 const block = b => {
   if (b.t === 'pair') return `<div class="pair">${b.blocks.map(block).join('')}</div>`;
@@ -218,7 +232,7 @@ const block = b => {
   const gh = `<div class="gh"><h2>${esc(b.title)}${b.note ? `<span class="nt">${esc(b.note)}</span>` : ''}</h2>${tag}${cols}</div>`;
   if (b.t === 'chips') return `<section class="grp blk u">${gh}<div class="chips">${b.items.map(x => { const [n, h] = Array.isArray(x) ? x : [x, 0]; return `<span>${esc(n)}${h ? chili : ''}</span>`; }).join('')}</div></section>`;
   const rows = b.items.map(([n, d, h, pr]) => `<div class="row u"><div class="nm"><b>${esc(n)}${h ? chili : ''}</b>${d ? `<p>${esc(d)}</p>` : ''}</div>${pr ? `<div class="pr">${pr.map(p => `<span>${p == null ? '' : odo(p)}</span>`).join('')}</div>` : ''}</div>`).join('');
-  return `<section class="grp">${gh}${rows}</section>`;
+  return `<section class="grp">${gh}${b.cols2 ? `<div class="rows2">${rows}</div>` : rows}</section>`;
 };
 $('menu').innerHTML = S.blocks.map(block).join('');
 
@@ -409,14 +423,23 @@ function layout() {
     const m = document.createElement('span'); m.textContent = d.dataset.d; m.style.cssText = 'position:absolute;visibility:hidden;white-space:pre';
     d.parentElement.appendChild(m); d.style.width = m.offsetWidth + 'px'; m.remove();
   });
+  /* a smaller scale means a wider column and less wrapping, so re-measure until it settles */
   fit.style.transform = ''; fit.style.width = box.clientWidth + 'px';
-  const sc = Math.min(1, box.clientHeight / fit.scrollHeight);
-  fit.style.transform = `scale(${sc})`; fit.style.width = (box.clientWidth / sc) + 'px';
+  let sc = Math.min(1, box.clientHeight / fit.scrollHeight);
+  for (let i = 0; i < 8; i++) {
+    fit.style.width = (box.clientWidth / sc) + 'px';
+    const next = Math.min(1, box.clientHeight / fit.scrollHeight);
+    if (Math.abs(next - sc) < .002) { sc = Math.min(sc, next); break; }
+    sc = next;
+  }
+  fit.style.width = (box.clientWidth / sc) + 'px';
+  while (fit.scrollHeight * sc > box.clientHeight && sc > .3) { sc -= .005; fit.style.width = (box.clientWidth / sc) + 'px'; }
+  fit.style.transform = `scale(${sc})`;
   units = [...document.querySelectorAll('.u')];
   const full = fit.offsetWidth;
   boxes = units.map(u => {
     let y = 0, x = 0, e = u; while (e && e !== fit) { y += e.offsetTop; x += e.offsetLeft; e = e.offsetParent; }
-    return u.closest('.pair') ? [x - 14, y, u.offsetWidth + 28, u.offsetHeight] : [-22, y, full + 44, u.offsetHeight];
+    return u.closest('.pair') || u.closest('.rows2') ? [x - 14, y, u.offsetWidth + 28, u.offsetHeight] : [-22, y, full + 44, u.offsetHeight];
   });
   /* the cascade order is top to bottom */
   const all = [...document.querySelectorAll('#menu .gh, #menu .row, #menu .chips')];

@@ -1,10 +1,10 @@
 // Renders one TV screen to a seamless 60 s MP4 loop. Serve the repo root on :8766 first (python3 -m http.server 8766),
-// then: node barbar-tv/render.js <tv 1-4> <out.mp4>. Needs Playwright + ffmpeg.
+// then: node barbar-tv/render.js <tv> <out.mp4> [set: 3 for the three-TV store]. Needs Playwright + ffmpeg.
 const { chromium } = require('playwright'); const { spawn } = require('child_process');
 (async () => {
-  const tv = process.argv[2], out = process.argv[3], LOOP = 60, FPS = 30, N = LOOP * FPS;
+  const tv = process.argv[2], out = process.argv[3], set = process.argv[4] ? `&set=${process.argv[4]}` : "", LOOP = 60, FPS = 30, N = LOOP * FPS;
   const b = await chromium.launch(); const p = await b.newPage({ viewport:{ width:1080, height:1920 } });
-  await p.goto(`http://localhost:8766/barbar-tv/?tv=${tv}&cap=1`);
+  await p.goto(`http://localhost:8766/barbar-tv/?tv=${tv}${set}&cap=1`);
   await p.waitForFunction(() => window.__ready);
   const ff = spawn('ffmpeg', ['-y','-loglevel','error','-f','image2pipe','-framerate',String(FPS),'-c:v','mjpeg','-i','-','-c:v','libx264','-preset','slow','-crf','18','-pix_fmt','yuv420p','-profile:v','high','-level','4.1','-g',String(FPS*2),'-movflags','+faststart', out]);
   ff.stderr.on('data', d => process.stderr.write(d));
