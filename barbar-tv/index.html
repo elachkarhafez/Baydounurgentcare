@@ -129,15 +129,24 @@ body.big .tagp small{font-size:24px}
 body.big .row{padding:5px 0;min-height:0;gap:14px}
 body.big .row b{font-size:52px;line-height:1}
 body.big .row p{font-size:31px;line-height:1.08;margin-top:2px;color:#4e423a}
-body.big .row .pr > span{font-size:52px;width:196px}
+body.big .row .pr > span{font-size:52px;width:222px}
 body.big .pair .row .pr > span{width:150px}
 body.big .pair{gap:40px}
 body.big .pair .row b{white-space:nowrap}
-body.big .cols span{font-size:28px;width:196px}
+body.big .cols span{font-size:28px;width:222px}
 body.big .rows2{column-gap:34px}
 body.big .chips span{font-size:40px;padding:10px 20px}
 body.big .chili{width:42px;height:42px}
-body.big .bub{font-size:32px;top:30px!important}
+body.big .bub{display:none}
+body.big .hd .kick{font-weight:900}
+body.big .gh h2{font-weight:900}
+body.big .gh .nt{font-weight:600;color:#3a302a}
+body.big .tagp span.pill{font-weight:900}
+body.big .row b{font-weight:800;color:#17110e}
+body.big .row p{font-weight:500;color:#2e2520}
+body.big .row .pr > span{font-weight:900}
+body.big .cols span{font-weight:800;color:#3a302a}
+body.big .chips span{font-weight:800}
 </style>
 </head>
 <body>
@@ -242,10 +251,10 @@ const SCREENS3 = {
    screen he tosses the wrap up and catches the fries (item2). */
 const SL4 = (a, b) => [['Small', a], ['Large', b]];
 const SCREENS4 = {
-  1: { ...SCREENS3[1], hold: 1 },
-  2: { kick: 'Burgers', title: 'Burgers', item: 'art-burger.svg', itemW: 300, hold: 1, titleSize: 118,
+  1: { ...SCREENS3[1], item: 'hold-sub.png', itemW: 330, sink: 22, hold: 1 },
+  2: { kick: 'Burgers', title: 'Burgers', item: 'hold-burger.png', itemW: 250, hold: 1, titleSize: 118,
     blocks: [c2(B(3, 'Grilled chicken breast')), c2(B(3, 'Fried chicken breast')), c2(B(3, 'Beef'))] },
-  3: { kick: 'Bowls', title: 'Bowls', item: 'art-bowl.svg', itemW: 290, hold: 1, titleSize: 150,
+  3: { kick: 'Bowls', title: 'Bowls', item: 'hold-bowl.png', itemW: 280, hold: 1, titleSize: 150,
     blocks: [
       { t: 'group', title: 'Crispy chicken bowls', note: 'Choose yellow rice, fries or lettuce as your base', price: SL4(10.99, 14.99), cols2: 1, items: [
         ['Classic', 'Crispy chicken, mayo, tomato, lettuce, pickles'], ['Lebanese', 'Crispy chicken, garlic, fries, ketchup, pickles, coleslaw'], ['Spicy Crispy', 'Crispy chicken, mayo, spicy sauce, pickles, coleslaw', 1],
@@ -260,7 +269,7 @@ const SCREENS4 = {
         ['Beef Shawarma', 'Beef, tomato, onions, tahini, pickles, parsley'], ['Sojok', 'Steak, mayo, garlic mustard sauce, tomato, pickles']] },
       { t: 'group', title: 'Veggie bowl', price: SL4(9.99, 11.99), items: [['Veggie Bowl', 'Mayo, bell peppers, onions, corn, banana peppers, black olives, lettuce, pickles, tomatoes, honey mustard']] },
     ] },
-  4: { kick: 'Wraps & sides', title: 'Wraps<br>&amp; sides', item: 'art-wrap.svg', itemW: 290, item2: 'art-fries.svg', itemW2: 260, hold: 1, titleSize: 88,
+  4: { kick: 'Wraps & sides', title: 'Wraps<br>&amp; sides', item: 'hold-wrap.png', itemW: 300, sink: 30, item2: 'hold-fries.png', itemW2: 190, hold: 1, titleSize: 88,
     blocks: [c2(B(2, 'Chicken wraps')), c2(B(2, 'Special wraps')), B(4, 'Chicken strips'), B(4, 'Wing dings'), B(4, 'Fries'), B(4, 'More sides'), B(4, 'Drinks')] },
 };
 const qs = new URLSearchParams(location.search), SET = qs.get('set') === '4' ? SCREENS4 : qs.get('set') === '3' ? SCREENS3 : SCREENS, TV = +(qs.get('tv') || 1), S = SET[TV] || SET[1];
@@ -302,7 +311,7 @@ function makeChef(wrap, item) {
       ${im('torso')}
       <div class="cg arm" style="transform-origin:200px 730px">${im('arm')}
         <div class="cg hand" style="transform-origin:195px 455px">${im('hand')}
-          <div class="item">${item ? `<img src="media/${item}" alt="">` + (S.item2 && wrap.id === 'wrapTop' ? `<img class="i2" src="media/${S.item2}" alt="">` : '') + [0, 1, 2, 3, 4, 5].map(i => star(i % 2 ? '#ffcf24' : '#e31e26')).join('') : ''}</div>
+          <div class="item">${item ? `<img src="media/${item}" alt="">` + (S.item2 && wrap.id === 'wrapTop' ? `<img class="i2" src="media/${S.item2}" alt="">` : '') + (S.hold ? `<img class="thumb" src="media/chef/thumb.png" alt="" style="left:${META.hand[0]}px;top:${META.hand[1]}px;width:${META.hand[2]}px;height:${META.hand[3]}px">` : '') + [0, 1, 2, 3, 4, 5].map(i => star(i % 2 ? '#ffcf24' : '#e31e26')).join('') : ''}</div>
         </div>
       </div>
       <div class="cg head" style="transform-origin:480px 610px">${im('head')}
@@ -321,7 +330,7 @@ function makeChef(wrap, item) {
     item: q('.item img'), item2: q('.item img.i2'), sparks: [...el.querySelectorAll('.item .spark')], wink: q('.spark.wink'), itemW: S.itemW };
 }
 /* the palm sits around (140, 352) in badge units; the item rests just above it */
-const PALM = [140, 352];
+const PALM = [140, 352], SEAT = [150, 372];
 function pose(c, p) {
   const o = p.origin || [430, 766];
   c.el.style.transform = `translate(${p.x}px,${p.y}px) scale(${p.s * (p.flip || 1)},${p.s})`;
@@ -335,11 +344,12 @@ function pose(c, p) {
   c.lidL.setAttribute('opacity', p.blinkL ? 1 : 0); c.lidR.setAttribute('opacity', p.blinkR ? 1 : 0);
   if (c.item) {
     /* item2 (burger screen's wrap) takes over after the big toss */
-    const imgs = [[c.item, c.itemW, !p.swap], [c.item2, S.itemW2, !!p.swap]].filter(x => x[0]);
+    const imgs = [[c.item, c.itemW, !p.swap, S.sink || 0], [c.item2, S.itemW2, !!p.swap, S.sink2 || 0]].filter(x => x[0]);
     let h = 0;
-    for (const [img, w, on] of imgs) {
+    for (const [img, w, on, sink] of imgs) {
       const k = p.itemS || 0, r = img.naturalHeight / img.naturalWidth || .7, hh = w * r; if (on) h = hh;
-      Object.assign(img.style, { width: w + 'px', left: (PALM[0] - w / 2 + (p.itemX || 0)) + 'px', top: (PALM[1] - hh + 12 + (p.itemY || 0)) + 'px',
+      const P = S.hold ? SEAT : [PALM[0], PALM[1] + 12];
+      Object.assign(img.style, { width: w + 'px', left: (P[0] - w / 2 + (p.itemX || 0)) + 'px', top: (P[1] - hh + (S.hold ? sink : 0) + (p.itemY || 0)) + 'px',
         transformOrigin: '50% 100%', transform: `rotate(${p.itemR || 0}deg) scale(${k})`, opacity: on && k > .01 ? (p.itemO ?? 1) : 0 });
     }
     c.sparks.forEach((s, i) => {
@@ -425,13 +435,13 @@ function coreTop(t) {
   if (S.hold) {
     /* in his hand from the moment he pops up: shows it to the camera, tosses it, spins it on his palm, points it at the
        menu, and near the end throws it high (the burger comes down as a wrap on the burger screen) */
+    /* it stays seated in his hand: grows when he shows it off, rocks on the palm, tilts toward the menu,
+       and on the wraps screen pops into fries without leaving his hand */
     const present = win(t, 11.4, 12.9, .3);
-    p.itemS = kf(t, [[3.25, 0, 'back'], [3.85, 1]]) * (1 + .3 * E.io(present));
-    p.itemY = kf(t, [[13.6, 0, 'out'], [13.95, -110, 'in'], [14.3, 0]]) - 40 * E.io(win(t, 16.0, 17.4, .25))
-      + kf(t, [[46.8, 0, 'out'], [47.25, -110, 'in'], [47.7, 0]]) - Math.abs(Math.sin(t / 1.25 * Math.PI)) * 8 * (1 - present);
-    p.itemX = 0;
-    p.itemR = kf(t, [[13.6, 0, 'io'], [14.3, 360]]) % 360 + kf(t, [[16.05, 0, 'io'], [17.3, 720]]) % 360 - 16 * E.io(win(t, 39.7, 43.4, .4))
-      - kf(t, [[46.8, 0, 'io'], [47.7, 720]]) % 360 + Math.sin(t / 2.5 * TAU) * 4 + Math.sin((t - 22.4) / .5 * TAU) * 8 * dz;
+    p.itemS = kf(t, [[3.25, 0, 'back'], [3.85, 1]]) * (1 + .25 * E.io(present)) * kf(t, [[46.95, 1, 'in'], [47.25, .05, 'back'], [47.7, 1]]);
+    p.itemY = 0; p.itemX = 0;
+    p.itemR = Math.sin((t - 13.6) * 9) * 9 * win(t, 13.6, 14.6, .15) + Math.sin((t - 16.0) * 7) * 6 * win(t, 16.0, 17.4, .2)
+      - 8 * E.io(win(t, 39.7, 43.4, .4)) + Math.sin(t / 2.5 * TAU) * 2 + Math.sin((t - 22.4) / .5 * TAU) * 4 * dz;
     p.itemO = 1;
     p.swap = S.item2 && t >= 47.25 && t < 59;
     p.burst = [[3.85, .8], [11.5, .85], [14.3, .6], [17.3, .6], [47.7, .8]].reduce((b, [a, d]) => t >= a && t < a + d ? (t - a) / d : b, 0);
@@ -467,7 +477,7 @@ function routineBig(t) {
   p.hatY = kf(t, [[27.8, 0, 'out'], [28.05, -70], [28.4, -70, 'in'], [28.65, 0]]);
   p.hatR = kf(t, [[27.8, 0, 'out'], [28.05, -14], [28.4, -14, 'in'], [28.65, 0]]) + clamp(-(p.head - Math.sin((t - 1 / 60 - 26.3) / 1.1 * TAU) * 3 * wv) * 60 * .05, -8, 8);
   p.mstR = Math.sin((t - 26.6) * 50) * 5 * win(t, 26.6, 27.0, .05);
-  if (S.hold) { p.itemS = 1; p.itemR = Math.sin((t - 26.3) / 1.1 * TAU) * 6; p.itemY = -Math.abs(Math.sin(t / .9 * Math.PI)) * 10; }
+  if (S.hold) { p.itemS = 1; p.itemR = Math.sin((t - 26.3) / 1.1 * TAU) * 3; p.itemY = 0; }
   return p;
 }
 /* ---------- mirrored, he pops up from the bottom-left corner, 30-33.6 s */
@@ -484,7 +494,7 @@ function routinePeek(t) {
   p.hatR = kf(t, [[30.7, 0], [31.1, 6], [31.9, 6], [32.3, -5], [33.0, -5], [33.3, 0]]);
   p.hatY = -hit(t, 30.7, 14, 26, 8);
   p.mstR = Math.sin((t - 31.0) * 50) * 4 * win(t, 31.0, 31.4, .05);
-  if (S.hold) { p.itemS = 1; p.itemR = Math.sin((t - 30.7) / 1.1 * TAU) * 6; }
+  if (S.hold) { p.itemS = 1; p.itemR = Math.sin((t - 30.7) / 1.1 * TAU) * 3; }
   return p;
 }
 
