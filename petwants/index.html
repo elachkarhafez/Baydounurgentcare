@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="robots" content="noai, noimageai">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pet Wants Lincoln | Fresh pet food, chew bar & delivery</title>
+  <meta name="description" content="Pet Wants Lincoln: fresh, slow-cooked dog and cat food, a local chew bar, treats and supplements, with home delivery across the Lincoln metro. 5200 South 48th Street, Lincoln NE. (531) 500-5133.">
+  <meta property="og:title" content="Pet Wants Lincoln · Fresh. Local. Delivered.">
+  <meta property="og:description" content="Fresh pet food, a chew bar dogs lose their minds over, and delivery across Lincoln.">
+  <meta property="og:image" content="og.jpg">
+  <meta name="theme-color" content="#8dc63f">
+  <link rel="icon" href="media/logo.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    /* Pet Wants Lincoln
+       Concept: "nose therapy" (their own caption). A cartoon dog sniffs its way down the page: their stamp logo
+       thunks onto a real photo of the shop, the fresh-food bowl fills as ingredients drop in, the chew bar is their
+       real "pick six, the 6th is free" deal played by dropping chews in a kraft bag, and a delivery van drives a road
+       across Lincoln as you scroll. Colours from the shop: lime-green walls, kraft, cream, promo orange. */
+    :root {
+      --lime: #8dc63f; --leaf: #4f7d2b; --forest: #1e3318; --kraft: #c89f6a; --kraft-d: #a87f4c; --cream: #fbf6e9; --paper: #fffdf6;
+      --orange: #ec6a1f; --ink: #1c2416; --muted: #5d6656; --line: rgba(30,51,24,.14);
+      --disp: "Lilita One", "Arial Rounded MT Bold", system-ui, sans-serif; --sans: "Rubik", system-ui, sans-serif;
+      --pad: clamp(16px, 4vw, 44px); --sec: clamp(36px, 8vw, 96px);
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+    body { margin: 0; background: var(--cream); color: var(--ink); font: 400 15px/1.55 var(--sans); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+    @media (min-width: 900px) { body { font-size: 16px; } }
+    a { color: inherit; text-decoration: none; }
+    img, svg { display: block; max-width: 100%; }
+    button { font: inherit; color: inherit; }
+    h1, h2, h3 { font-family: var(--disp); font-weight: 400; line-height: 1; margin: 0; color: var(--forest); letter-spacing: .005em; }
+    h1 { font-size: clamp(2.1rem, 1.4rem + 3.4vw, 4.6rem); }
+    h2 { font-size: clamp(1.7rem, 1.2rem + 2.2vw, 3.2rem); }
+    h3 { font-size: clamp(1.15rem, 1rem + .6vw, 1.5rem); }
+    p { margin: 0; }
+    .wrap { max-width: 1180px; margin: 0 auto; padding: 0 var(--pad); }
+    .sec { padding: var(--sec) 0; }
+    .lead { color: var(--muted); max-width: 34em; margin-top: 12px; }
+    .hi { color: var(--orange); }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 20px; border-radius: 16px; font: 700 .9rem/1 var(--sans); white-space: nowrap; border: 3px solid var(--forest); color: var(--forest); background: var(--paper); cursor: pointer; box-shadow: 0 4px 0 var(--forest); transition: transform .15s, box-shadow .15s; }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 0 var(--forest); }
+    .btn:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--forest); }
+    .btn.go { background: var(--orange); color: #fff; }
+    .btn.lime { background: var(--lime); }
+    .btn svg { width: 18px; height: 18px; flex: none; }
+    :focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
+
+    /* paw trail */
+    .paw { position: fixed; z-index: 70; width: 22px; height: 22px; pointer-events: none; color: var(--leaf); opacity: .5; }
+
+    /* nav */
+    .nav { position: sticky; top: 0; z-index: 50; height: 60px; background: rgba(251,246,233,.95); border-bottom: 3px solid var(--forest); }
+    .nav .wrap { height: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .brand { display: flex; align-items: center; gap: 10px; font: 1.15rem/1 var(--disp); color: var(--forest); }
+    .brand svg { width: 42px; height: 42px; }
+    .nav-links { display: none; gap: 24px; font-weight: 700; font-size: .9rem; }
+    .nav-links a:hover { color: var(--orange); }
+    .nav .btn { padding: 10px 14px; box-shadow: 0 3px 0 var(--forest); font-size: .85rem; }
+    @media (min-width: 960px) { .nav { height: 72px; } .nav-links { display: flex; } .brand svg { width: 50px; height: 50px; } }
+
+    /* hero */
+    .hero { padding: 18px 0 var(--sec); }
+    .hero-grid { display: grid; gap: 20px; }
+    .hero h1 .wig { display: inline-block; }
+    .hero p.lead { font-size: 1rem; }
+    .hero .ctas { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 18px; }
+    @media (min-width: 440px) { .hero .ctas { grid-template-columns: 1fr 1fr; } }
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+    .chips span { font-weight: 700; font-size: .78rem; padding: 6px 10px; border-radius: 999px; background: var(--paper); border: 2px solid var(--line); }
+    .stage { position: relative; border-radius: 28px; background: var(--lime); border: 3px solid var(--forest); overflow: hidden; height: min(92vw, 430px); }
+    .stage::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 20% 15%, rgba(255,255,255,.35) 0 12%, transparent 13%), radial-gradient(circle at 85% 30%, rgba(255,255,255,.25) 0 8%, transparent 9%); }
+    .polaroid { position: absolute; left: 7%; top: 7%; width: 62%; background: #fff; padding: 8px 8px 30px; border-radius: 6px; box-shadow: 0 14px 24px -10px rgba(0,0,0,.45); transform: rotate(-5deg); }
+    .polaroid img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 3px; }
+    .polaroid span { position: absolute; left: 0; right: 0; bottom: 7px; text-align: center; font: .95rem/1 var(--disp); color: var(--forest); }
+    .stamp { position: absolute; right: 6%; top: 8%; width: 34%; max-width: 160px; color: var(--leaf); filter: drop-shadow(0 4px 0 rgba(0,0,0,.12)); }
+    .sticker { position: absolute; right: 7%; top: 47%; width: 30%; max-width: 140px; aspect-ratio: 1; border-radius: 50%; background: var(--orange); color: #fff; display: grid; place-items: center; text-align: center; font: clamp(.85rem, 2.6vw, 1.15rem)/1 var(--disp); border: 3px solid var(--forest); transform: rotate(10deg); padding: 10px; }
+    .dog { position: absolute; left: 50%; bottom: -8px; width: min(48%, 230px); transform: translateX(-50%); }
+    .dog .pupil { transition: transform .12s; }
+    .dog .nose { transform-box: fill-box; transform-origin: center; animation: sniff 2.6s infinite; }
+    @keyframes sniff { 0%, 70%, 100% { transform: scale(1); } 74% { transform: scale(1.12, .9); } 78% { transform: scale(1); } 82% { transform: scale(1.12, .9); } 86% { transform: scale(1); } }
+    .dog .ear-l { transform-box: fill-box; transform-origin: 80% 10%; animation: earL 3.4s ease-in-out infinite; }
+    .dog .ear-r { transform-box: fill-box; transform-origin: 20% 10%; animation: earR 3.4s ease-in-out infinite; }
+    @keyframes earL { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(6deg); } }
+    @keyframes earR { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(-6deg); } }
+    .bone-f { position: absolute; width: 38px; color: #fff; opacity: .7; }
+    @media (min-width: 900px) {
+      .hero { padding-top: 34px; }
+      .hero-grid { grid-template-columns: 1fr 1.05fr; align-items: center; gap: 48px; }
+      .hero .ctas { display: flex; flex-wrap: wrap; }
+      .stage { height: clamp(380px, 62vh, 520px); }
+    }
+
+    /* ribbon */
+    .ribbon-clip { overflow: hidden; padding: 14px 0; margin: -14px 0; }
+    .ribbon { background: var(--orange); border-block: 3px solid var(--forest); transform: rotate(-1.6deg); margin: 0 -20px; overflow: hidden; padding: 12px 0; position: relative; z-index: 2; }
+    .rtrack { display: flex; width: max-content; animation: slide 34s linear infinite; }
+    .rtrack span { font: clamp(1.1rem, .9rem + 1.2vw, 1.8rem)/1 var(--disp); color: #fff; white-space: nowrap; padding-right: 26px; display: inline-flex; align-items: center; gap: 26px; }
+    .rtrack span::after { content: ""; width: 22px; height: 22px; background: currentColor; -webkit-mask: var(--pawmask) center/contain no-repeat; mask: var(--pawmask) center/contain no-repeat; }
+    :root { --pawmask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cellipse cx='12' cy='16.5' rx='5.2' ry='4.4'/%3E%3Cellipse cx='5.2' cy='10.5' rx='2.2' ry='2.8'/%3E%3Cellipse cx='9.4' cy='6.6' rx='2.2' ry='2.9'/%3E%3Cellipse cx='14.6' cy='6.6' rx='2.2' ry='2.9'/%3E%3Cellipse cx='18.8' cy='10.5' rx='2.2' ry='2.8'/%3E%3C/svg%3E"); }
+    @keyframes slide { to { transform: translateX(-50%); } }
+
+    /* fresh bowl */
+    .fresh-grid { display: grid; gap: 24px; align-items: center; }
+    .bowlbox { position: relative; width: min(100%, 420px); margin: 0 auto; aspect-ratio: 1 / .9; overflow-x: clip; }
+    .bowlbox svg.bowl { position: absolute; left: 0; right: 0; bottom: 0; width: 100%; }
+    .drop { position: absolute; left: 50%; top: 0; transform: translateX(-50%); padding: 8px 12px; border-radius: 999px; font: .95rem/1 var(--disp); color: #fff; border: 3px solid var(--forest); white-space: nowrap; opacity: 0; }
+    .facts { display: grid; gap: 10px; margin-top: 18px; }
+    .fact { display: grid; grid-template-columns: 44px 1fr; gap: 12px; align-items: center; background: var(--paper); border: 3px solid var(--forest); border-radius: 18px; padding: 12px; box-shadow: 0 4px 0 var(--forest); }
+    .fact i { width: 44px; height: 44px; border-radius: 12px; background: var(--lime); display: grid; place-items: center; font: 1.3rem/1 var(--disp); font-style: normal; color: var(--forest); }
+    .fact b { display: block; font-size: .95rem; }
+    .fact small { color: var(--muted); font-size: .82rem; }
+    .src { font-size: .74rem; color: var(--muted); margin-top: 10px; }
+    @media (min-width: 900px) { .fresh-grid { grid-template-columns: 1fr 1fr; gap: 60px; } }
+
+    /* chew bar */
+    .chew { background: var(--forest); color: var(--cream); }
+    .chew h2 { color: var(--cream); }
+    .chew .lead { color: rgba(251,246,233,.78); }
+    .chew-grid { display: grid; gap: 22px; margin-top: 22px; }
+    .chew-grid > * { min-width: 0; }
+    .bins { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .bin { position: relative; background: #f3e7cf; border: 3px solid #0f1c0c; border-radius: 16px 16px 10px 10px; padding: 10px 6px 8px; display: grid; justify-items: center; gap: 4px; cursor: pointer; color: var(--forest); transition: transform .15s; }
+    .bin:hover { transform: translateY(-3px) rotate(-1deg); }
+    .bin:active { transform: translateY(2px); }
+    .bin svg { width: 54px; height: 40px; }
+    .bin b { font: .95rem/1 var(--disp); }
+    .bin small { font-size: .66rem; font-weight: 700; color: var(--kraft-d); text-transform: uppercase; letter-spacing: .06em; }
+    .bagbox { background: rgba(255,255,255,.06); border: 2px dashed rgba(251,246,233,.3); border-radius: 22px; padding: 14px; display: grid; justify-items: center; gap: 10px; position: relative; }
+    .bag { position: relative; width: min(64%, 230px); }
+    .bag svg { width: 100%; }
+    .count { display: flex; gap: 6px; }
+    .count i { width: 26px; height: 26px; border-radius: 50%; border: 3px solid var(--cream); display: grid; place-items: center; font: .75rem/1 var(--disp); font-style: normal; }
+    .count i.on { background: var(--lime); border-color: var(--lime); color: var(--forest); }
+    .count i.free { background: var(--orange); border-color: var(--orange); color: #fff; }
+    .free-stamp { position: absolute; left: 50%; top: 42%; transform: translate(-50%, -50%) rotate(-12deg) scale(0); font: clamp(1.3rem, 4vw, 1.9rem)/1 var(--disp); color: #fff; background: var(--orange); border: 3px solid var(--forest); border-radius: 12px; padding: 8px 12px; white-space: nowrap; pointer-events: none; }
+    .bagmsg { font-weight: 700; text-align: center; min-height: 2.6em; }
+    .bagbtns { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .bagbtns .btn { box-shadow: 0 4px 0 #0b1409; border-color: #0b1409; padding: 12px 16px; }
+    .chew .fine { font-size: .78rem; color: rgba(251,246,233,.65); margin-top: 12px; }
+    .chewphoto { border-radius: 20px; overflow: hidden; border: 3px solid #0b1409; margin-top: 16px; aspect-ratio: 4 / 3; max-height: 44vh; }
+    .chewphoto img { width: 100%; height: 100%; object-fit: cover; }
+    .flyer { position: fixed; z-index: 75; width: 50px; height: 38px; pointer-events: none; }
+    @media (min-width: 900px) { .chew-grid { grid-template-columns: 1.1fr .9fr; gap: 40px; align-items: start; } .bins { gap: 12px; } .bin svg { width: 70px; height: 50px; } }
+
+    /* delivery */
+    .deliver .head { text-align: center; max-width: 660px; margin: 0 auto; }
+    .deliver .head .lead { margin-inline: auto; }
+    .road { margin-top: 16px; position: relative; }
+    .road svg { width: 100%; height: auto; overflow: visible; }
+    .deliver .ctas { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 10px; }
+
+    /* story */
+    .story-grid { display: grid; gap: 22px; align-items: center; }
+    .story .ph { position: relative; width: min(100%, 440px); margin: 0 auto; }
+    .story .ph img { width: 100%; aspect-ratio: 1; max-height: 52vh; object-fit: cover; border-radius: 24px; border: 3px solid var(--forest); transform: rotate(2deg); }
+    .story .ph .tape { position: absolute; top: -12px; left: 50%; width: 110px; height: 30px; background: rgba(200,159,106,.75); transform: translateX(-50%) rotate(-4deg); }
+    blockquote { margin: 16px 0 0; font: clamp(1.2rem, 1rem + 1vw, 1.7rem)/1.25 var(--disp); color: var(--forest); }
+    blockquote::before { content: "“"; color: var(--orange); }
+    blockquote::after { content: "”"; color: var(--orange); }
+    .story .by { margin-top: 12px; font-weight: 700; color: var(--muted); }
+    @media (min-width: 900px) { .story-grid { grid-template-columns: .9fr 1.1fr; gap: 60px; } }
+
+    /* visit */
+    .visit-grid { display: grid; border: 3px solid var(--forest); border-radius: 26px; overflow: hidden; background: var(--paper); box-shadow: 0 6px 0 var(--forest); }
+    .visit-info { padding: clamp(20px, 4vw, 40px); display: grid; gap: 16px; align-content: start; }
+    .visit-info dl { display: grid; gap: 14px; margin: 0; }
+    .visit-info dt { font: .9rem/1 var(--disp); color: var(--leaf); margin-bottom: 4px; letter-spacing: .02em; }
+    .visit-info dd { margin: 0; font-weight: 500; }
+    .visit-info .tel { font: clamp(1.4rem, 1.1rem + 1.2vw, 2rem)/1 var(--disp); color: var(--forest); }
+    .socials { display: flex; flex-wrap: wrap; gap: 8px; }
+    .socials a { font-weight: 700; font-size: .85rem; padding: 8px 12px; border-radius: 999px; border: 2px solid var(--forest); }
+    .socials a:hover { background: var(--lime); }
+    .map { min-height: 300px; position: relative; border-top: 3px solid var(--forest); }
+    .map iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; filter: saturate(.7) hue-rotate(-10deg); }
+    @media (min-width: 900px) { .visit-grid { grid-template-columns: 1fr 1.2fr; } .map { border-top: 0; border-left: 3px solid var(--forest); min-height: 420px; } }
+
+    /* closer */
+    .closer { position: relative; overflow: hidden; background: var(--lime); border: 3px solid var(--forest); border-radius: 30px; text-align: center; padding: clamp(28px, 6vw, 64px) 18px 0; }
+    .closer p { color: var(--forest); max-width: 30em; margin: 10px auto 0; font-weight: 500; }
+    .closer .ctas { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 18px; }
+    .closer .dog2 { width: min(46%, 210px); margin: 22px auto -6px; }
+    footer { padding: 28px 0 100px; font-size: .86rem; color: var(--muted); }
+    footer .wrap { display: flex; flex-wrap: wrap; gap: 12px 24px; justify-content: space-between; align-items: center; }
+    footer a:hover { color: var(--orange); }
+    .studio { display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px; border-radius: 999px; background: var(--forest); color: #fff; font-size: 11px; }
+    .studio i { width: 9px; height: 9px; border-radius: 3px; background: conic-gradient(from 210deg, #ff5a1f, #ffb03b, #ff5a1f); }
+    @media (min-width: 760px) { footer { padding-bottom: 30px; } }
+
+    .dock { position: fixed; z-index: 60; left: 12px; right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 8px; border-radius: 22px; background: var(--forest); transition: transform .3s, opacity .3s; }
+    .dock .btn { padding: 12px 8px; box-shadow: none; border-color: var(--cream); }
+    .dock.off { transform: translateY(150%); opacity: 0; pointer-events: none; }
+    @media (min-width: 760px) { .dock { display: none; } }
+
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .rtrack, .dog .nose, .dog .ear-l, .dog .ear-r { animation: none; } }
+  </style>
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="stamp" viewBox="0 0 200 200">
+        <circle cx="100" cy="100" r="92" fill="none" stroke="currentColor" stroke-width="7" stroke-dasharray="60 4 30 3 80 5" />
+        <circle cx="100" cy="100" r="72" fill="none" stroke="currentColor" stroke-width="3" />
+        <path id="arcTop" d="M30 100 A70 70 0 0 1 170 100" fill="none" />
+        <path id="arcBot" d="M38 112 A64 64 0 0 0 162 112" fill="none" />
+        <text font-family="Rubik, sans-serif" font-weight="700" font-size="17" fill="currentColor" letter-spacing="3"><textPath href="#arcTop" startOffset="50%" text-anchor="middle">FRESH · LOCAL</textPath></text>
+        <text font-family="Rubik, sans-serif" font-weight="700" font-size="17" fill="currentColor" letter-spacing="3"><textPath href="#arcBot" startOffset="50%" text-anchor="middle">DELIVERED</textPath></text>
+        <g transform="rotate(-8 100 100)"><rect x="8" y="78" width="184" height="46" rx="6" fill="#1e3318" /><text x="100" y="112" text-anchor="middle" font-family="Lilita One, sans-serif" font-size="34" fill="#fbf6e9" letter-spacing="1">PET WANTS</text></g>
+      </symbol>
+      <symbol id="bone" viewBox="0 0 60 30"><path d="M12 4a7 7 0 0 1 7 7v1h22v-1a7 7 0 1 1 7 9 7 7 0 1 1-7 9v-1H19v1a7 7 0 1 1-7-9 7 7 0 1 1 0-16z" fill="currentColor"/></symbol>
+      <symbol id="paw" viewBox="0 0 24 24"><ellipse cx="12" cy="16.5" rx="5.2" ry="4.4" fill="currentColor"/><ellipse cx="5.2" cy="10.5" rx="2.2" ry="2.8" fill="currentColor"/><ellipse cx="9.4" cy="6.6" rx="2.2" ry="2.9" fill="currentColor"/><ellipse cx="14.6" cy="6.6" rx="2.2" ry="2.9" fill="currentColor"/><ellipse cx="18.8" cy="10.5" rx="2.2" ry="2.8" fill="currentColor"/></symbol>
+      <symbol id="dog" viewBox="0 0 240 200">
+        <path class="ear-l" d="M58 46c-30-6-50 22-46 60 3 26 20 34 30 30 10-4 14-30 22-54 4-14 6-32-6-36z" fill="#8a5a33" />
+        <path class="ear-r" d="M182 46c30-6 50 22 46 60-3 26-20 34-30 30-10-4-14-30-22-54-4-14-6-32 6-36z" fill="#8a5a33" />
+        <path d="M120 22c52 0 78 40 78 92 0 50-36 86-78 86s-78-36-78-86c0-52 26-92 78-92z" fill="#d9a066" />
+        <path d="M120 22c18 0 30 6 30 6-8 22-8 44 0 62h-60c8-18 8-40 0-62 0 0 12-6 30-6z" fill="#f2d3a4" opacity=".55" />
+        <ellipse cx="120" cy="150" rx="50" ry="40" fill="#f6dfb7" />
+        <g class="eye"><circle cx="90" cy="98" r="15" fill="#fff" /><circle class="pupil" cx="92" cy="100" r="8" fill="#1c2416" /><circle cx="95" cy="96" r="2.6" fill="#fff" /></g>
+        <g class="eye"><circle cx="150" cy="98" r="15" fill="#fff" /><circle class="pupil" cx="152" cy="100" r="8" fill="#1c2416" /><circle cx="155" cy="96" r="2.6" fill="#fff" /></g>
+        <path class="nose" d="M106 130c0-8 28-8 28 0 0 9-8 16-14 16s-14-7-14-16z" fill="#1c2416" />
+        <path d="M120 146v10M106 160c6 6 22 6 28 0" fill="none" stroke="#1c2416" stroke-width="4" stroke-linecap="round" />
+        <path class="tongue" d="M112 162c0 14 16 14 16 0z" fill="#ef7f8f" opacity="0" />
+      </symbol>
+    </defs>
+  </svg>
+
+  <header class="nav">
+    <div class="wrap">
+      <a class="brand" href="#top" aria-label="Pet Wants Lincoln, back to top"><svg viewBox="0 0 200 200" aria-hidden="true" style="color:#4f7d2b"><use href="#stamp"/></svg>Pet Wants Lincoln</a>
+      <nav class="nav-links" aria-label="Main"><a href="#fresh">Fresh food</a><a href="#chews">Chew bar</a><a href="#delivery">Delivery</a><a href="#visit">Visit</a></nav>
+      <a class="btn go" href="https://petwantslincoln.com/shop/_" target="_blank" rel="noopener">Shop online</a>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero" aria-label="Intro">
+      <div class="wrap hero-grid">
+        <div>
+          <h1>Fresh food your pets <span class="wig hi">actually want.</span></h1>
+          <p class="lead">Slow-cooked fresh dog and cat food, a local chew bar, treats and supplements, right here in Lincoln. Come sniff around, or let us bring it to your door.</p>
+          <div class="ctas"><a class="btn go" id="heroCta" href="https://petwantslincoln.com/shop/_" target="_blank" rel="noopener">Shop fresh food</a><a class="btn" href="tel:+15315005133"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>(531) 500-5133</a></div>
+          <div class="chips"><span>Fresh dog &amp; cat food</span><span>Local chew bar</span><span>Delivery around Lincoln</span></div>
+        </div>
+        <div class="stage" id="stage" aria-label="Inside Pet Wants Lincoln">
+          <svg class="bone-f" viewBox="0 0 60 30" style="left:72%;top:78%" aria-hidden="true"><use href="#bone"/></svg>
+          <svg class="bone-f" viewBox="0 0 60 30" style="left:6%;top:80%;width:28px" aria-hidden="true"><use href="#bone"/></svg>
+          <div class="polaroid" id="pol"><img src="media/store.webp" alt="Inside Pet Wants Lincoln: green walls, shelves of treats and the chew bar tables" width="720" height="720"><span>Our shop on S 48th St</span></div>
+          <svg class="stamp" id="heroStamp" viewBox="0 0 200 200" aria-hidden="true"><use href="#stamp"/></svg>
+          <div class="sticker" id="sticker">Nose therapy inside!</div>
+          <svg class="dog" id="heroDog" viewBox="0 0 240 200" aria-hidden="true"><use href="#dog"/></svg>
+        </div>
+      </div>
+    </section>
+
+    <div class="ribbon-clip"><div class="ribbon" aria-hidden="true"><div class="rtrack"><span>Fresh dog food</span><span>Fresh cat food</span><span>Bully sticks</span><span>Ears, feet &amp; noses</span><span>Treats</span><span>Supplements</span><span>Delivered in Lincoln</span><span>Fresh dog food</span><span>Fresh cat food</span><span>Bully sticks</span><span>Ears, feet &amp; noses</span><span>Treats</span><span>Supplements</span><span>Delivered in Lincoln</span></div></div></div>
+
+    <section class="sec" id="fresh" aria-label="Fresh food">
+      <div class="wrap fresh-grid">
+        <div class="bowlbox" id="bowlbox" aria-hidden="true">
+          <svg class="bowl" viewBox="0 0 400 230">
+            <g id="fill"></g>
+            <path d="M20 90h360c-10 80-70 128-180 128S30 170 20 90z" fill="#4f7d2b" stroke="#1e3318" stroke-width="6" />
+            <path d="M10 90h380" stroke="#1e3318" stroke-width="10" stroke-linecap="round" />
+            <text x="200" y="168" text-anchor="middle" font-family="Lilita One, sans-serif" font-size="34" fill="#fbf6e9">PET WANTS</text>
+          </svg>
+        </div>
+        <div>
+          <h2>Fresh is better. <span class="hi">Your dog can tell.</span></h2>
+          <p class="lead">Pet Wants food is made fresh in small batches, not sitting in a warehouse for months. Pick it up at the shop or have it delivered.</p>
+          <div class="facts">
+            <div class="fact"><i>1</i><div><b>Slow-cooked in small batches</b><small>At lower temperatures, to keep the flavor and nutrition in.</small></div></div>
+            <div class="fact"><i>2</i><div><b>Fresh, natural ingredients</b><small>Think salmon, duck, whitefish, chicken and lamb, plus vitamins and minerals.</small></div></div>
+            <div class="fact"><i>3</i><div><b>No fillers or animal byproducts</b><small>Just the good stuff, for dogs and cats.</small></div></div>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:18px"><a class="btn lime" href="https://petwantslincoln.com/shop/475897666-Fresh_Dog_Food" target="_blank" rel="noopener">Shop fresh dog food</a><a class="btn" href="tel:+15315005133">Ask us what to feed</a></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="chew sec" id="chews" aria-label="Chew bar">
+      <div class="wrap">
+        <h2>Our famous local chew bar. <span style="color:var(--lime)">Pick six.</span></h2>
+        <p class="lead">Buy any five bones or chews and the sixth one's free. Mix and match, and the least expensive one comes off. Tap the bins and fill your bag.</p>
+        <div class="chew-grid">
+          <div>
+            <div class="bins" id="bins" role="group" aria-label="Chew bar bins"></div>
+            <div class="chewphoto"><img src="media/chewbar.webp" alt="The chew bar tables at Pet Wants Lincoln, filled with baskets of bones and chews" width="720" height="540" loading="lazy"></div>
+          </div>
+          <div class="bagbox">
+            <div class="count" id="count" aria-hidden="true"></div>
+            <div class="bag" id="bag">
+              <svg viewBox="0 0 220 240" aria-hidden="true"><path d="M20 40h180l14 196H6z" fill="#c89f6a" stroke="#0f1c0c" stroke-width="5" stroke-linejoin="round"/><path d="M20 40l-14 196" stroke="#a87f4c" stroke-width="4"/><path d="M28 40 14 14h192l-14 26" fill="#d9b483" stroke="#0f1c0c" stroke-width="5" stroke-linejoin="round"/><use href="#stamp" x="55" y="95" width="110" height="110" style="color:#5e4122"/></svg>
+              <div class="free-stamp" id="freeStamp">6th one FREE!</div>
+            </div>
+            <p class="bagmsg" id="bagMsg" aria-live="polite">Your bag is empty. Start sniffing.</p>
+            <div class="bagbtns"><a class="btn go" href="https://petwantslincoln.com/203174/shop/Bone-Bones_Natural_Chews" target="_blank" rel="noopener">Shop chews online</a><button class="btn" type="button" id="reset">Empty the bag</button></div>
+          </div>
+        </div>
+        <p class="fine">Size the chew to your dog and stay in the room while they work on it. Ask in the shop what's on the chew bar this week.</p>
+      </div>
+    </section>
+
+    <section class="deliver sec" id="delivery" aria-label="Delivery">
+      <div class="wrap">
+        <div class="head"><h2>We deliver. <span class="hi">Tails wag.</span></h2><p class="lead">Home delivery across the greater Lincoln metro. Order online, and we'll bring the fresh food to your door.</p></div>
+        <div class="road" id="road">
+          <svg viewBox="0 0 1200 300" aria-hidden="true">
+            <path d="M0 270 H1200" stroke="#c89f6a" stroke-width="3" stroke-dasharray="2 12" stroke-linecap="round"/>
+            <g fill="#8dc63f" opacity=".5"><circle cx="160" cy="60" r="40"/><circle cx="520" cy="40" r="28"/><circle cx="830" cy="70" r="34"/></g>
+            <path id="route" d="M20 230 C 200 230, 230 130, 400 140 S 640 250, 780 200 S 960 110, 1080 150" fill="none" stroke="#1e3318" stroke-width="34" stroke-linecap="round"/>
+            <path d="M20 230 C 200 230, 230 130, 400 140 S 640 250, 780 200 S 960 110, 1080 150" fill="none" stroke="#fbf6e9" stroke-width="3" stroke-dasharray="18 16"/>
+            <g transform="translate(1060 60)"><path d="M0 90V40L50 0l50 40v50z" fill="#ec6a1f" stroke="#1e3318" stroke-width="5" stroke-linejoin="round"/><rect x="38" y="52" width="24" height="38" fill="#fbf6e9" stroke="#1e3318" stroke-width="4"/><text x="50" y="-12" text-anchor="middle" font-family="Lilita One, sans-serif" font-size="26" fill="#1e3318">Your place</text></g>
+            <g transform="translate(14 176)"><rect width="74" height="44" rx="8" fill="#fbf6e9" stroke="#1e3318" stroke-width="4"/><text x="37" y="29" text-anchor="middle" font-family="Lilita One, sans-serif" font-size="18" fill="#1e3318">S 48th</text></g>
+            <g id="van" transform="translate(70 226)">
+              <g transform="translate(-55 -52)">
+                <path d="M6 20h70l22 22v30H6z" fill="#8dc63f" stroke="#1e3318" stroke-width="5" stroke-linejoin="round"/>
+                <path d="M76 22v20h20" fill="#cfe8f4" stroke="#1e3318" stroke-width="4" stroke-linejoin="round"/>
+                <use href="#stamp" x="20" y="22" width="44" height="44" style="color:#1e3318"/>
+                <circle cx="28" cy="74" r="11" fill="#1e3318"/><circle cx="28" cy="74" r="4" fill="#fbf6e9"/>
+                <circle cx="80" cy="74" r="11" fill="#1e3318"/><circle cx="80" cy="74" r="4" fill="#fbf6e9"/>
+              </g>
+            </g>
+          </svg>
+        </div>
+        <div class="ctas"><a class="btn go" href="https://petwantslincoln.com/shop/_" target="_blank" rel="noopener">Order for delivery</a><a class="btn" href="tel:+15315005133">Call to ask</a></div>
+      </div>
+    </section>
+
+    <section class="story sec" style="padding-top:0" aria-label="Our story">
+      <div class="wrap story-grid">
+        <div class="ph"><span class="tape" aria-hidden="true"></span><img src="media/chewbar.webp" alt="Baskets of chews on the Pet Wants Lincoln chew bar" width="720" height="540" loading="lazy"></div>
+        <div>
+          <h2>Local owners, <span class="hi">real reasons.</span></h2>
+          <blockquote>When we introduced Pet Wants custom-crafted, slow-cooked recipes, our pets instantly loved the taste.</blockquote>
+          <p class="lead">Troy and Jennifer Post opened Pet Wants Lincoln after a personal loss, to help Lancaster County pet parents get away from mass-produced food. Within a few months their own pets, especially their senior dog, were doing noticeably better.</p>
+          <p class="by">Troy &amp; Jennifer Post, owners</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" id="visit" style="padding-top:0" aria-label="Visit">
+      <div class="wrap">
+        <div class="visit-grid">
+          <div class="visit-info">
+            <h2>Come sniff around.</h2>
+            <dl>
+              <div><dt>Shop</dt><dd>5200 South 48th Street<br>Lincoln, NE 68516 · just north of Highway 2</dd></div>
+              <div><dt>Call</dt><dd><a class="tel" href="tel:+15315005133">(531) 500-5133</a><br><span style="color:var(--muted);font-size:.9rem">Call for today's hours</span></dd></div>
+              <div><dt>Follow</dt><dd class="socials"><a href="https://www.instagram.com/petwantslincoln/" target="_blank" rel="noopener">Instagram</a><a href="https://www.facebook.com/PetWantsLincoln" target="_blank" rel="noopener">Facebook</a><a href="https://tiktok.com/@petwantslincoln" target="_blank" rel="noopener">TikTok</a></dd></div>
+            </dl>
+            <div style="display:flex;flex-wrap:wrap;gap:10px"><a class="btn go" href="https://www.google.com/maps/dir/?api=1&amp;destination=5200+South+48th+Street+Lincoln+NE+68516" target="_blank" rel="noopener">Get directions</a><a class="btn" href="https://petwantslincoln.com/shop/_" target="_blank" rel="noopener">Shop online</a></div>
+          </div>
+          <div class="map"><iframe title="Map to Pet Wants Lincoln, 5200 South 48th Street" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=5200+South+48th+Street+Lincoln+NE+68516&amp;output=embed"></iframe></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" style="padding-top:0" aria-label="Visit us">
+      <div class="wrap">
+        <div class="closer" id="closer">
+          <h2>Bring your pup in for some nose therapy.</h2>
+          <p>Treats, fresh food and of course our local chew bar. Dogs are always welcome.</p>
+          <div class="ctas"><a class="btn go" href="https://www.google.com/maps/dir/?api=1&amp;destination=5200+South+48th+Street+Lincoln+NE+68516" target="_blank" rel="noopener">Get directions</a><a class="btn" href="tel:+15315005133">(531) 500-5133</a></div>
+          <svg class="dog dog2" id="dog2" viewBox="0 0 240 200" style="position:static;transform:none" aria-hidden="true"><use href="#dog"/></svg>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <a class="brand" href="#top"><svg viewBox="0 0 200 200" aria-hidden="true" style="color:#4f7d2b"><use href="#stamp"/></svg>Pet Wants Lincoln</a>
+      <span>5200 South 48th Street, Lincoln NE · <a href="tel:+15315005133">(531) 500-5133</a> · Each Pet Wants store is independently owned and operated.</span>
+      <a class="studio" href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener" aria-label="Site by ElaSystems (opens in a new tab)"><i aria-hidden="true"></i><span>Site by <b>ElaSystems</b></span></a>
+    </div>
+  </footer>
+
+  <nav class="dock off" aria-label="Quick actions"><a class="btn go" href="https://petwantslincoln.com/shop/_" target="_blank" rel="noopener">Shop online</a><a class="btn" href="tel:+15315005133">Call</a></nav>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/MotionPathPlugin.min.js"></script>
+  <script>
+    const CONFIG = {
+      chews: [
+        { n: "Bully sticks", t: "Classic", c: "#8a4b2a", s: '<path d="M6 28 C20 12, 40 12, 64 8" stroke="#8a4b2a" stroke-width="9" stroke-linecap="round" fill="none"/><path d="M8 34 C24 20, 44 20, 66 18" stroke="#6e3a20" stroke-width="7" stroke-linecap="round" fill="none"/>' },
+        { n: "Ears", t: "Crunchy", c: "#c88a52", s: '<path d="M14 40 C4 20, 20 2, 38 6 C60 10, 66 34, 50 44 C38 50, 22 50, 14 40z" fill="#c88a52" stroke="#5e4122" stroke-width="3"/><path d="M24 34 C22 22, 30 14, 40 16" stroke="#9c6236" stroke-width="3" fill="none"/>' },
+        { n: "Feet", t: "Crunchy", c: "#d39a5b", s: '<path d="M30 46 V22 M30 22 L14 6 M30 22 L30 2 M30 22 L46 6" stroke="#d39a5b" stroke-width="7" stroke-linecap="round" fill="none"/>' },
+        { n: "Noses", t: "Chewy", c: "#b36b3f", s: '<ellipse cx="34" cy="26" rx="26" ry="18" fill="#b36b3f" stroke="#5e4122" stroke-width="3"/><ellipse cx="25" cy="26" rx="5" ry="7" fill="#5e2f18"/><ellipse cx="43" cy="26" rx="5" ry="7" fill="#5e2f18"/>' },
+        { n: "Bones", t: "Long-lasting", c: "#efe3c8", s: '<use href="#bone" x="4" y="8" width="62" height="32" style="color:#d9bf8a"/><path d="M16 23 H54" stroke="#a88a55" stroke-width="2" stroke-linecap="round" fill="none"/>' },
+        { n: "Braids", t: "Twisty", c: "#9a5631", s: '<path d="M6 34 C16 14, 26 34, 36 14 S56 34, 66 14" stroke="#9a5631" stroke-width="8" stroke-linecap="round" fill="none"/><path d="M6 22 C16 42, 26 22, 36 42 S56 22, 66 42" stroke="#7a4021" stroke-width="6" stroke-linecap="round" fill="none" opacity=".8"/>' }
+      ],
+      ingredients: [ { n: "Salmon", c: "#ef8a6b" }, { n: "Duck", c: "#a8743e" }, { n: "Whitefish", c: "#9bb7c9" }, { n: "Chicken", c: "#e8b04a" }, { n: "Lamb", c: "#c25b4f" }, { n: "Veggies", c: "#6aa33a" } ]
+    };
+    const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+    const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const G = !!(window.gsap && !still);
+    if (window.gsap) gsap.registerPlugin(...[window.ScrollTrigger, window.MotionPathPlugin].filter(Boolean));
+
+    /* eyes follow the pointer (or drift on their own on phones) */
+    const look = (x, y) => $$(".dog").forEach(d => { const r = d.getBoundingClientRect(); if (!r.width) return; const cx = r.left + r.width / 2, cy = r.top + r.height * .5, dx = Math.max(-1, Math.min(1, (x - cx) / 300)), dy = Math.max(-1, Math.min(1, (y - cy) / 300)); d.querySelectorAll(".pupil").forEach(p => p.style.transform = `translate(${dx * 5}px, ${dy * 5}px)`); });
+    addEventListener("pointermove", e => look(e.clientX, e.clientY), { passive: true });
+    if (!matchMedia("(hover: hover)").matches && !still) { let a = 0; setInterval(() => { a += 1.3; look(innerWidth / 2 + Math.cos(a) * 400, innerHeight / 2 + Math.sin(a * .7) * 300); }, 900); }
+
+    /* paw trail on fine pointers */
+    if (matchMedia("(hover: hover) and (pointer: fine)").matches && !still) {
+      let lx = 0, ly = 0, flip = false;
+      addEventListener("pointermove", e => {
+        if (Math.hypot(e.clientX - lx, e.clientY - ly) < 70) return;
+        const ang = Math.atan2(e.clientY - ly, e.clientX - lx) * 180 / Math.PI + 90; lx = e.clientX; ly = e.clientY; flip = !flip;
+        const p = document.createElementNS("http://www.w3.org/2000/svg", "svg"); p.setAttribute("class", "paw"); p.innerHTML = '<use href="#paw"/>';
+        const off = flip ? 8 : -8; p.style.left = (e.clientX - 11 + off) + "px"; p.style.top = (e.clientY - 11) + "px"; p.style.transform = `rotate(${ang}deg)`;
+        document.body.appendChild(p);
+        p.animate([{ opacity: .5 }, { opacity: 0 }], { duration: 1400, easing: "ease-in" }).onfinish = () => p.remove();
+      }, { passive: true });
+    }
+
+    /* chew bar: pick six */
+    const bag = [];
+    $("#bins").innerHTML = CONFIG.chews.map((c, i) => `<button type="button" class="bin" data-i="${i}" aria-label="Add ${esc(c.n)} to the bag"><svg viewBox="0 0 70 50" aria-hidden="true">${c.s}</svg><b>${esc(c.n)}</b><small>${esc(c.t)}</small></button>`).join("");
+    const drawCount = () => { $("#count").innerHTML = Array.from({ length: 6 }, (_, i) => `<i class="${i < bag.length ? (i === 5 ? "free" : "on") : ""}">${i === 5 ? "★" : i + 1}</i>`).join(""); };
+    function msg() {
+      const n = bag.length;
+      if (!n) return "Your bag is empty. Start sniffing.";
+      if (n < 5) return `${n} in the bag: ${bag.join(", ")}. ${6 - n} more to go.`;
+      if (n === 5) return "Five in! The next one's on us.";
+      return "Six chews, and the least expensive one is free. Bring this bag to the chew bar!";
+    }
+    function addChew(i, from) {
+      if (bag.length >= 6) { if (G) gsap.fromTo("#bag", { x: -6 }, { x: 0, duration: .4, ease: "elastic.out(1,.3)" }); return; }
+      const c = CONFIG.chews[i]; bag.push(c.n);
+      const done = () => { drawCount(); $("#bagMsg").textContent = msg(); if (bag.length === 6) celebrate(); else if (G) gsap.fromTo("#bag", { scaleY: .92, scaleX: 1.05 }, { scaleY: 1, scaleX: 1, duration: .5, ease: "elastic.out(1,.4)", transformOrigin: "50% 100%" }); };
+      if (!G) return done();
+      const a = from.getBoundingClientRect(), b = $("#bag").getBoundingClientRect();
+      const fl = document.createElementNS("http://www.w3.org/2000/svg", "svg"); fl.setAttribute("class", "flyer"); fl.setAttribute("viewBox", "0 0 70 50"); fl.innerHTML = c.s; document.body.appendChild(fl);
+      const sx = a.left + a.width / 2 - 25, sy = a.top + 10, ex = b.left + b.width / 2 - 25, ey = b.top + b.height * .2;
+      gsap.timeline({ onComplete: () => { fl.remove(); done(); } })
+        .set(fl, { x: sx, y: sy, rotate: 0 })
+        .to(fl, { duration: .7, ease: "none", motionPath: { path: [{ x: sx, y: sy }, { x: (sx + ex) / 2, y: Math.min(sy, ey) - 140 }, { x: ex, y: ey }], curviness: 1.4 }, rotate: 540 })
+        .to(fl, { scale: .3, opacity: 0, duration: .15 });
+    }
+    function celebrate() {
+      $("#freeStamp").style.transform = "";
+      $$(".dog .tongue").forEach(t => t.setAttribute("opacity", "1"));
+      if (!G) { $("#freeStamp").style.transform = "translate(-50%,-50%) rotate(-12deg) scale(1)"; return; }
+      gsap.fromTo("#freeStamp", { scale: 3, rotate: -30, xPercent: -50, yPercent: -50, opacity: 0 }, { scale: 1, rotate: -12, opacity: 1, duration: .5, ease: "back.out(2.4)" });
+      const b = $("#bag").getBoundingClientRect();
+      for (let k = 0; k < 14; k++) {
+        const p = document.createElementNS("http://www.w3.org/2000/svg", "svg"); p.setAttribute("class", "paw"); p.innerHTML = '<use href="#paw"/>'; p.style.color = ["#8dc63f", "#ec6a1f", "#fbf6e9"][k % 3]; p.style.opacity = 1; p.style.left = (b.left + b.width / 2) + "px"; p.style.top = (b.top + b.height / 2) + "px"; document.body.appendChild(p);
+        gsap.to(p, { x: (Math.random() - .5) * 340, y: -120 - Math.random() * 220, rotate: Math.random() * 360, duration: 1.1, ease: "power2.out", onComplete: () => gsap.to(p, { opacity: 0, y: "+=60", duration: .5, onComplete: () => p.remove() }) });
+      }
+    }
+    $("#bins").addEventListener("click", e => { const b = e.target.closest(".bin"); if (b) addChew(+b.dataset.i, b); });
+    $("#reset").addEventListener("click", () => { bag.length = 0; drawCount(); $("#bagMsg").textContent = msg(); $("#freeStamp").style.transform = ""; if (G) gsap.set("#freeStamp", { clearProps: "all" }); $$(".dog .tongue").forEach(t => t.setAttribute("opacity", "0")); });
+    drawCount();
+
+    /* bowl ingredients */
+    const box = $("#bowlbox");
+    box.insertAdjacentHTML("beforeend", CONFIG.ingredients.map(g => `<span class="drop" style="background:${g.c}">${esc(g.n)}</span>`).join(""));
+    const fillG = $("#fill");
+    function fillBowl(final) {
+      const chips = $$(".drop"), W = box.clientWidth, H = box.clientHeight;
+      chips.forEach((ch, i) => {
+        const col = i % 3, row = Math.floor(i / 3);
+        const tx = (col - 1) * W * .22 + (row ? W * .08 : 0), ty = H * .52 - row * 42;
+        if (final || !G) { ch.style.opacity = 1; ch.style.transform = `translate(calc(-50% + ${tx}px), ${ty}px) rotate(${(i % 2 ? 6 : -6)}deg)`; return; }
+        gsap.fromTo(ch, { x: tx, xPercent: -50, y: -60, opacity: 0, rotate: 0 }, { y: ty, opacity: 1, rotate: i % 2 ? 6 : -6, duration: .9, delay: i * .16, ease: "bounce.out" });
+      });
+      fillG.innerHTML = '<ellipse cx="200" cy="92" rx="176" ry="26" fill="#a8743e"/>';
+      if (G) gsap.from("#fill ellipse", { scaleY: 0, transformOrigin: "50% 100%", duration: .8, delay: .4, ease: "back.out(2)" });
+    }
+
+    if (!G || !window.ScrollTrigger) {
+      fillBowl(true);
+    } else {
+      /* hero: polaroid drops, stamp thunks, sticker pops, dog peeks */
+      gsap.timeline({ delay: .15 })
+        .from(".hero h1", { y: 30, opacity: 0, duration: .7, ease: "back.out(1.6)" })
+        .from(".hero .lead, .hero .ctas, .hero .chips", { y: 20, opacity: 0, duration: .5, stagger: .08, ease: "power2.out" }, "-=.35")
+        .from("#pol", { y: -260, rotate: 14, duration: .9, ease: "bounce.out" }, .2)
+        .from("#heroStamp", { scale: 2.6, rotate: -40, opacity: 0, duration: .45, ease: "power4.in" }, .95)
+        .to("#stage", { x: 6, duration: .05, yoyo: true, repeat: 5 }, 1.4)
+        .from("#sticker", { scale: 0, rotate: -90, duration: .6, ease: "back.out(2.2)" }, 1.55)
+        .from("#heroDog", { yPercent: 70, duration: .8, ease: "back.out(1.8)" }, 1.75)
+        .fromTo(".hero .wig", { rotate: 0 }, { rotate: -3, duration: .12, yoyo: true, repeat: 5, transformOrigin: "50% 80%" }, 2.1);
+      gsap.to(".bone-f", { y: -14, rotate: 20, duration: 1.8, yoyo: true, repeat: -1, ease: "sine.inOut", stagger: .4 });
+
+      /* bowl fills when it comes into view */
+      ScrollTrigger.create({ trigger: box, start: "top 75%", once: true, onEnter: () => fillBowl(false) });
+      gsap.from(".fact", { y: 30, opacity: 0, duration: .6, stagger: .12, ease: "back.out(1.6)", scrollTrigger: { trigger: ".facts", start: "top 85%" } });
+
+      /* chew bins pop in */
+      gsap.from(".bin", { y: 40, scale: .8, opacity: 0, duration: .6, stagger: .06, ease: "back.out(2)", clearProps: "transform,opacity", scrollTrigger: { trigger: "#bins", start: "top 88%" } });
+
+      /* delivery van drives the route with scroll */
+      if (window.MotionPathPlugin) {
+        gsap.to("#van", { ease: "none", immediateRender: true, motionPath: { path: "#route", align: "#route", alignOrigin: [.5, .5], autoRotate: true }, scrollTrigger: { trigger: "#road", start: "top 85%", end: "bottom 35%", scrub: .6 } });
+      }
+
+      /* section heads bounce in */
+      $$("h2").forEach(h => { if (h.closest(".hero")) return; gsap.from(h, { y: 30, opacity: 0, rotate: -2, duration: .7, ease: "back.out(1.8)", scrollTrigger: { trigger: h, start: "top 88%" } }); });
+      gsap.from("#dog2", { yPercent: 60, duration: .8, ease: "back.out(1.8)", scrollTrigger: { trigger: "#closer", start: "top 70%" } });
+      addEventListener("load", () => ScrollTrigger.refresh());
+    }
+
+    /* phone dock */
+    if ("IntersectionObserver" in window) {
+      const dock = $(".dock"), seen = new Set();
+      const io = new IntersectionObserver(es => { es.forEach(e => e.isIntersecting ? seen.add(e.target) : seen.delete(e.target)); dock.classList.toggle("off", seen.size > 0); }, { threshold: .05 });
+      ["#heroCta", "#closer"].forEach(s => io.observe($(s)));
+    } else $(".dock").classList.remove("off");
+  </script>
+</body>
+</html>
