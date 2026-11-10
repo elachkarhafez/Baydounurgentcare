@@ -128,7 +128,7 @@ body.big .tagp span.pill{font-size:44px;padding:8px 18px}
 body.big .tagp small{font-size:24px}
 body.big .row{padding:5px 0;min-height:0;gap:14px}
 body.big .row b{font-size:52px;line-height:1}
-body.big .row p{font-size:31px;line-height:1.08;margin-top:2px;color:#4e423a}
+body.big .row p{font-size:33px;line-height:1.08;margin-top:2px;color:#4e423a}
 body.big .row .pr > span{font-size:52px;width:222px}
 body.big .pair .row .pr > span{width:150px}
 body.big .pair{gap:40px}
@@ -138,12 +138,15 @@ body.big .rows2{column-gap:34px}
 body.big .chips span{font-size:40px;padding:10px 20px}
 body.big .chili{width:42px;height:42px}
 body.big .bub{display:none}
+/* calm highlight: a soft butter band with a red edge; the text under it never changes colour */
+body.big .hl{background:#ffe9a8;box-shadow:none;border-radius:14px;border-left:12px solid var(--red)}
+body.big .spark{display:none}
 body.big .hd .kick{font-weight:900}
 body.big .gh h2{font-weight:900}
 body.big .gh .nt{font-weight:600;color:#3a302a}
 body.big .tagp span.pill{font-weight:900}
-body.big .row b{font-weight:800;color:#17110e}
-body.big .row p{font-weight:500;color:#2e2520}
+body.big .row b{font-weight:800;color:#100b08}
+body.big .row p{font-weight:500;color:#211a16}
 body.big .row .pr > span{font-weight:900}
 body.big .cols span{font-weight:800;color:#3a302a}
 body.big .chips span{font-weight:800}
@@ -524,7 +527,8 @@ function layout() {
   const full = fit.offsetWidth;
   boxes = units.map(u => {
     let y = 0, x = 0, e = u; while (e && e !== fit) { y += e.offsetTop; x += e.offsetLeft; e = e.offsetParent; }
-    return u.closest('.pair') || u.closest('.rows2') ? [x - 14, y, u.offsetWidth + 28, u.offsetHeight] : [-22, y, full + 44, u.offsetHeight];
+    const big = document.body.classList.contains('big');
+    return u.closest('.pair') || u.closest('.rows2') ? (big ? [x - 28, y, u.offsetWidth + 40, u.offsetHeight] : [x - 14, y, u.offsetWidth + 28, u.offsetHeight]) : [big ? -30 : -22, y, full + (big ? 46 : 44), u.offsetHeight];
   });
   /* the cascade order is top to bottom */
   const all = [...document.querySelectorAll('#menu .gh, #menu .row, #menu .chips')];
@@ -603,13 +607,14 @@ function render(t) {
   const n = units.length, start = 4.2, step = (56.2 - start) / n, hl = $('hl');
   if (n) {
     const q = clamp((t - start) / step, 0, n - 1e-6), i = Math.floor(q), fr = q - i;
-    const g = i < n - 1 ? E.io(clamp((fr - .74) / .26)) : 0, j = Math.min(i + 1, n - 1);
+    const BIG = document.body.classList.contains('big');
+    const g = i < n - 1 ? (BIG ? E.io(clamp((fr - .6) / .4)) : E.io(clamp((fr - .74) / .26))) : 0, j = Math.min(i + 1, n - 1);
     const B = [0, 1, 2, 3].map(k => lerp(boxes[i][k], boxes[j][k], g));
     const op = clamp((t - start) / .5) * (1 - clamp((t - 56.6) / .8));
-    const pad = document.body.classList.contains('big') ? 1 : 4;
+    const pad = BIG ? 1 : 4;
     Object.assign(hl.style, { transform: `translate(${B[0]}px,${B[1] - pad}px)`, width: B[2] + 'px', height: (B[3] + pad * 2) + 'px', opacity: op });
     /* each unit lights up by how much of the bar covers it */
-    units.forEach((u, idx) => {
+    if (!BIG) units.forEach((u, idx) => {
       const ub = boxes[idx], ov = clamp((Math.min(B[1] + B[3], ub[1] + ub[3]) - Math.max(B[1], ub[1])) / ub[3]) * op;
       const sameCol = Math.abs(ub[0] - B[0]) < 40;
       const a = sameCol ? E.io(ov) : 0;
@@ -629,12 +634,12 @@ function render(t) {
       }
     });
     /* the group's price pill bumps when the bar enters its group */
-    pills.forEach(pl => {
+    if (!BIG) pills.forEach(pl => {
       const gb = pl.g; let y = 0, e = gb; while (e && e !== $('fit')) { y += e.offsetTop; e = e.offsetParent; }
       const inG = B[1] >= y - 10 && B[1] <= y + gb.offsetHeight;
       pl.e.style.transform = `scale(${1 + (inG ? .06 : 0)})`;
     });
-    document.querySelectorAll('.chili').forEach(c => c.style.rotate = `${Math.sin(t / 2 * TAU) * 10}deg`);
+    if (!BIG) document.querySelectorAll('.chili').forEach(c => c.style.rotate = `${Math.sin(t / 2 * TAU) * 10}deg`);
   }
 }
 
