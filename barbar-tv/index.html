@@ -237,13 +237,14 @@ const SCREENS3 = {
     blocks: [c2(B(3, 'Grilled chicken breast')), c2(B(3, 'Fried chicken breast')), c2(B(3, 'Beef')), c2(B(2, 'Chicken wraps')), c2(B(2, 'Special wraps'))] },
   3: { ...SCREENS[4], kick: 'Sides' },
 };
-/* the 4-TV set (?set=4), what the owner asked for: subs, burgers & wraps, bowls on their own with every ingredient,
-   sides on their own. The chef holds that screen's food the whole loop (hold) and plays with it; on the burger
-   screen he tosses the burger up and catches a wrap (item2). */
+/* the 4-TV set (?set=4), matching the owner's boards: subs, burgers, bowls on their own with every ingredient,
+   wraps with strips, wing dings, sides and drinks. The chef holds that screen's food the whole loop (hold) and plays with it; on the burger
+   screen he tosses the wrap up and catches the fries (item2). */
 const SL4 = (a, b) => [['Small', a], ['Large', b]];
 const SCREENS4 = {
   1: { ...SCREENS3[1], hold: 1 },
-  2: { ...SCREENS3[2], item: 'art-burger.svg', itemW: 330, item2: 'art-wrap.svg', itemW2: 360, hold: 1 },
+  2: { kick: 'Burgers', title: 'Burgers', item: 'art-burger.svg', itemW: 300, hold: 1, titleSize: 118,
+    blocks: [c2(B(3, 'Grilled chicken breast')), c2(B(3, 'Fried chicken breast')), c2(B(3, 'Beef'))] },
   3: { kick: 'Bowls', title: 'Bowls', item: 'art-bowl.svg', itemW: 290, hold: 1, titleSize: 150,
     blocks: [
       { t: 'group', title: 'Crispy chicken bowls', note: 'Choose yellow rice, fries or lettuce as your base', price: SL4(10.99, 14.99), cols2: 1, items: [
@@ -256,11 +257,11 @@ const SCREENS4 = {
       { t: 'group', title: 'Steak bowls', price: SL4(13.99, 16.99), cols2: 1, items: [
         ['Classic', 'Steak, mayo, onions, mushrooms, lettuce, tomato, pickles, cheese'], ['Steak Fajita', 'Steak, mayo, avocado, onion, bell peppers, corn, mushrooms, mixed cheese'],
         ['Philadelphia', 'Steak, mayo, onion, bell peppers, mushrooms, corn, cheese, pickles, lettuce'], ['Steak BBQ', 'Steak, onions, mayo, BBQ sauce, pickles, coleslaw, jalapeños'],
-        ['Beef Shawarma', 'Beef, tomato, onions, tahini, pickles, parsley'], ['Sojok', 'Steak, mayo, special sauce, tomato, pickles']] },
+        ['Beef Shawarma', 'Beef, tomato, onions, tahini, pickles, parsley'], ['Sojok', 'Steak, mayo, garlic mustard sauce, tomato, pickles']] },
       { t: 'group', title: 'Veggie bowl', price: SL4(9.99, 11.99), items: [['Veggie Bowl', 'Mayo, bell peppers, onions, corn, banana peppers, black olives, lettuce, pickles, tomatoes, honey mustard']] },
     ] },
-  4: { kick: 'Sides', title: 'Sides', item: 'art-fries.svg', itemW: 270, hold: 1,
-    blocks: [B(4, 'Chicken strips'), B(4, 'Fries'), B(4, 'More sides'), B(4, 'Wing dings'), B(4, 'Drinks')] },
+  4: { kick: 'Wraps & sides', title: 'Wraps<br>&amp; sides', item: 'art-wrap.svg', itemW: 290, item2: 'art-fries.svg', itemW2: 260, hold: 1, titleSize: 88,
+    blocks: [c2(B(2, 'Chicken wraps')), c2(B(2, 'Special wraps')), B(4, 'Chicken strips'), B(4, 'Wing dings'), B(4, 'Fries'), B(4, 'More sides'), B(4, 'Drinks')] },
 };
 const qs = new URLSearchParams(location.search), SET = qs.get('set') === '4' ? SCREENS4 : qs.get('set') === '3' ? SCREENS3 : SCREENS, TV = +(qs.get('tv') || 1), S = SET[TV] || SET[1];
 const $ = s => document.getElementById(s);
