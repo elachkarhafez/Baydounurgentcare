@@ -1,0 +1,568 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="robots" content="noai, noimageai">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Habibi · Ring for a Cookie | The cookie wall for your event</title>
+  <meta name="description" content="Habibi Ring for a Cookie: a cookie wall for weddings, engagements, showers, graduations, birthdays and holiday parties. Guests ring the bell, the little door opens and a cookie comes out. DM to book.">
+  <meta property="og:title" content="Habibi · Ring the bell. Get a cookie.">
+  <meta property="og:description" content="The cookie wall your guests will line up for. 10% off December bookings.">
+  <meta property="og:image" content="og.jpg">
+  <meta name="theme-color" content="#4a1622">
+  <link rel="icon" href="media/logo.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Hanken+Grotesk:wght@400;500;600&family=Pinyon+Script&display=swap" rel="stylesheet">
+  <style>
+    /* Habibi · Ring for a Cookie
+       Concept, straight from their activation: the page is their cookie wall. A cream panelled wall with a picture light,
+       a brass bell and a round little door. Ring the bell (it really swings, and dings if sound is on), the door
+       swings open and a cookie comes out; tap the cookie to take a bite. Branding from their posts: oxblood and
+       burgundy, champagne gold, cream, the notched gold frame from "Ring the bell. Get a cookie.", script wordmark. */
+    :root {
+      --ox: #2e0a12; --burg: #4a1622; --burg-2: #5b1f2b; --gold: #c9a36a; --gold-l: #e6c993; --gold-d: #9c7a45;
+      --cream: #f4ead7; --wall: #efe4cf; --paper: #fbf6ec; --ink: #2b1016; --muted: #7d6460; --line: rgba(74,22,34,.16);
+      --script: "Pinyon Script", "Snell Roundhand", cursive; --serif: "Fraunces", Georgia, serif; --sans: "Hanken Grotesk", system-ui, sans-serif;
+      --pad: clamp(16px, 4vw, 48px); --sec: clamp(44px, 9vw, 120px);
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    html.lenis, html.lenis body { height: auto; }
+    .lenis.lenis-smooth { scroll-behavior: auto !important; }
+    body { margin: 0; background: var(--burg); color: var(--cream); font: 400 15px/1.6 var(--sans); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+    @media (min-width: 900px) { body { font-size: 16px; } }
+    a { color: inherit; text-decoration: none; }
+    img, svg, video { display: block; max-width: 100%; }
+    button, input, select { font: inherit; color: inherit; }
+    h1, h2, h3 { font-family: var(--serif); font-weight: 600; line-height: 1.04; margin: 0; letter-spacing: -.01em; }
+    h1 { font-size: clamp(2.1rem, 1.5rem + 2.8vw, 4.4rem); color: var(--cream); }
+    h2 { font-size: clamp(1.7rem, 1.25rem + 2vw, 3.1rem); }
+    h3 { font-size: clamp(1.05rem, .95rem + .5vw, 1.3rem); }
+    p { margin: 0; }
+    .wrap { max-width: 1180px; margin: 0 auto; padding: 0 var(--pad); }
+    .sec { padding: var(--sec) 0; }
+    .caps { font: 600 .7rem/1 var(--serif); letter-spacing: .3em; text-transform: uppercase; color: var(--gold); display: inline-flex; align-items: center; gap: 14px; }
+    .caps::before, .caps::after { content: ""; width: 26px; height: 1px; background: currentColor; opacity: .7; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; padding: 15px 24px; border-radius: 2px; font: 600 .82rem/1 var(--sans); letter-spacing: .12em; text-transform: uppercase; white-space: nowrap; border: 1px solid var(--gold); color: var(--gold-l); background: transparent; cursor: pointer; position: relative; transition: background .3s, color .3s; }
+    .btn::after { content: ""; position: absolute; inset: 3px; border: 1px solid rgba(201,163,106,.35); pointer-events: none; }
+    .btn:hover { background: rgba(201,163,106,.12); }
+    .btn.gold { background: linear-gradient(135deg, #e6c993, #c9a36a 45%, #b38b52); color: var(--ox); border-color: #e6c993; }
+    .btn.gold::after { border-color: rgba(46,10,18,.25); }
+    .btn.gold:hover { background: linear-gradient(135deg, #f0d7a6, #d3ad74 45%, #bf9660); }
+    .btn svg { width: 18px; height: 18px; flex: none; }
+    :focus-visible { outline: 2px solid var(--gold-l); outline-offset: 4px; }
+
+    /* gold notched frame, their signature */
+    .frame { position: relative; }
+    .frame > svg.fr { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+    .frame > svg.fr path { fill: none; stroke: var(--gold); stroke-width: 1.2; vector-effect: non-scaling-stroke; }
+
+    /* loader */
+    .loader { position: fixed; inset: 0; z-index: 100; background: var(--ox); display: grid; place-items: center; }
+    .loader .mark { display: grid; justify-items: center; gap: 6px; }
+    .loader .word { font: 4.2rem/1 var(--script); color: var(--gold-l); }
+    .loader svg { width: 46px; height: 46px; color: var(--gold); transform-origin: 50% 8%; }
+    .loader .sub { font: 600 .66rem/1 var(--serif); letter-spacing: .32em; color: var(--gold); text-transform: uppercase; }
+    html.still .loader, html.loaded .loader { display: none; }
+
+    /* nav */
+    .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 50; height: 60px; transition: background .4s, border-color .4s; border-bottom: 1px solid transparent; }
+    .nav.solid { background: rgba(46,10,18,.94); border-color: rgba(201,163,106,.25); }
+    .nav .wrap { height: 100%; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .brand { display: flex; align-items: baseline; gap: 10px; color: var(--gold-l); }
+    .brand b { font: 400 2rem/1 var(--script); font-weight: 400; }
+    .brand small { display: none; font: 600 .6rem/1 var(--serif); letter-spacing: .28em; text-transform: uppercase; color: var(--gold); }
+    .nav-links { display: none; gap: 30px; font: 600 .72rem/1 var(--sans); letter-spacing: .18em; text-transform: uppercase; color: rgba(244,234,215,.78); }
+    .nav-links a:hover { color: var(--gold-l); }
+    .nav .btn { padding: 11px 16px; font-size: .72rem; }
+    @media (min-width: 960px) { .nav { height: 76px; } .nav-links { display: flex; } .brand small { display: inline; } .brand b { font-size: 2.4rem; } }
+
+    /* hero */
+    .hero { position: relative; padding: 76px 0 clamp(30px, 6vw, 70px); background: radial-gradient(80% 70% at 30% 40%, #5e2230, var(--burg) 55%, var(--ox)); overflow: hidden; }
+    .hero-frame { position: absolute; top: 66px; left: 10px; width: calc(100% - 20px); height: calc(100% - 76px); pointer-events: none; }
+    .hero-grid { position: relative; display: grid; gap: 22px; }
+    .hero-copy { text-align: center; }
+    .hero-copy .caps { justify-content: center; }
+    .hero-copy h1 { margin-top: 14px; }
+    .hero-copy p { color: rgba(244,234,215,.82); max-width: 30em; margin: 12px auto 0; }
+    .hero-copy .ctas { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 18px; }
+    .hero-copy .ctas .btn { padding: 15px 10px; }
+    .offer { display: inline-flex; align-items: center; gap: 10px; margin-top: 16px; font-size: .86rem; color: var(--gold-l); }
+    .offer i { font: 600 .66rem/1 var(--serif); font-style: normal; letter-spacing: .2em; text-transform: uppercase; background: var(--gold); color: var(--ox); padding: 6px 8px; }
+
+    .stagebox { position: relative; display: grid; justify-items: center; }
+    .wallwrap { position: relative; width: min(74vw, 330px); filter: drop-shadow(0 30px 40px rgba(0,0,0,.45)); }
+    .wallwrap svg.wall { width: 100%; height: auto; }
+    .bellhit { position: absolute; left: 50%; top: 28%; width: 34%; height: 18%; transform: translateX(-50%); border: 0; background: transparent; cursor: pointer; border-radius: 50%; }
+    .hint { margin-top: 14px; display: flex; align-items: center; gap: 12px; font: 400 1.5rem/1 var(--script); color: var(--gold-l); }
+    .hint .snd { font: 600 .66rem/1 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--gold); border: 1px solid rgba(201,163,106,.5); background: transparent; padding: 7px 10px; cursor: pointer; border-radius: 999px; }
+    .cookie { position: absolute; left: 50%; top: 71.4%; width: 22%; aspect-ratio: 1; transform: translate(-50%, -50%) scale(.2); opacity: 0; pointer-events: none; cursor: pointer; }
+    .cookie.out { pointer-events: auto; }
+    .cookie svg { width: 100%; height: 100%; filter: drop-shadow(0 10px 12px rgba(0,0,0,.35)); }
+    .note { position: relative; width: min(100%, 380px); margin-top: 14px; background: var(--paper); color: var(--ink); padding: 16px 18px 18px; text-align: center; display: none; box-shadow: 0 20px 40px -18px rgba(0,0,0,.55); }
+    .note.show { display: block; animation: noteIn .45s cubic-bezier(.2,.9,.3,1.3) both; }
+    @keyframes noteIn { from { opacity: 0; transform: translateY(12px) scale(.97); } to { opacity: 1; transform: none; } }
+    .note::before { content: ""; position: absolute; inset: 5px; border: 1px solid var(--gold); pointer-events: none; }
+    .note b { display: block; font: 400 1.7rem/1 var(--script); color: var(--burg-2); }
+    .note p { margin-top: 6px; font-size: .92rem; color: #4d2f2f; }
+    .note .row { display: flex; gap: 8px; justify-content: center; margin-top: 12px; flex-wrap: wrap; }
+    .note .btn { padding: 11px 14px; font-size: .7rem; color: var(--burg); border-color: var(--burg); }
+    .note .btn::after { border-color: rgba(74,22,34,.25); }
+    .note .btn.gold { color: var(--ox); border-color: #e6c993; }
+    @media (min-width: 900px) {
+      .hero { padding-top: 100px; }
+      .hero-frame { top: 86px; left: 22px; width: calc(100% - 44px); height: calc(100% - 108px); }
+      .hero-grid { grid-template-columns: .95fr 1.05fr; align-items: center; gap: 40px; }
+      .hero-copy { text-align: left; order: 2; }
+      .hero-copy .caps { justify-content: flex-start; }
+      .hero-copy p { margin-left: 0; }
+      .hero-copy .ctas { display: flex; flex-wrap: wrap; }
+      .hero-copy .ctas .btn { padding: 15px 24px; }
+      .wallwrap { width: clamp(280px, min(30vw, 58vh), 420px); }
+    }
+
+    /* real wall */
+    .real { background: var(--cream); color: var(--ink); }
+    .real h2, .real h3 { color: var(--burg); }
+    .real .caps { color: var(--gold-d); }
+    .real-grid { display: grid; gap: 26px; align-items: center; }
+    .film { width: min(76vw, 360px); margin: 0 auto; padding: 12px; }
+    .film video { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; background: #000 center/cover; }
+    .film .fr path { stroke: var(--gold-d) !important; }
+    .steps { list-style: none; margin: 20px 0 0; padding: 0; display: grid; gap: 0; }
+    .steps li { display: grid; grid-template-columns: 52px 1fr; gap: 14px; align-items: center; padding: 16px 0; border-top: 1px solid var(--line); }
+    .steps li:last-child { border-bottom: 1px solid var(--line); }
+    .steps .ic { width: 52px; height: 52px; border: 1px solid var(--gold-d); border-radius: 50%; display: grid; place-items: center; color: var(--gold-d); }
+    .steps .ic svg { width: 26px; height: 26px; }
+    .steps p { color: var(--muted); font-size: .92rem; margin-top: 2px; }
+    .strip { display: grid; grid-auto-flow: column; grid-auto-columns: 62%; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; margin: 30px calc(-1 * var(--pad)) 0; padding: 0 var(--pad); scroll-padding-inline: var(--pad); }
+    .strip::-webkit-scrollbar { display: none; }
+    .strip figure { margin: 0; scroll-snap-align: start; }
+    .strip img { width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; }
+    .strip figcaption { font-size: .8rem; color: var(--muted); margin-top: 8px; }
+    @media (min-width: 900px) { .real-grid { grid-template-columns: .85fr 1.15fr; gap: 70px; } .strip { grid-auto-flow: row; grid-template-columns: repeat(4, 1fr); margin: 46px 0 0; padding: 0; overflow: visible; } }
+
+    /* events */
+    .events { background: var(--paper); color: var(--ink); }
+    .events h2 { color: var(--burg); }
+    .events .caps { color: var(--gold-d); }
+    .ev-head { text-align: center; max-width: 640px; margin: 0 auto; }
+    .ev-head .caps { justify-content: center; }
+    .ev-head h2 { margin-top: 14px; }
+    .ev-head p { color: var(--muted); margin-top: 10px; }
+    .ev-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 26px; }
+    .ev { background: var(--cream); padding: 18px 12px 16px; text-align: center; display: grid; justify-items: center; gap: 8px; color: var(--burg); }
+    .ev svg { width: 40px; height: 40px; color: var(--gold-d); }
+    .ev b { font: 600 1rem/1.15 var(--serif); }
+    @media (min-width: 760px) { .ev-grid { grid-template-columns: repeat(3, 1fr); gap: 14px; } }
+    @media (min-width: 1000px) { .ev-grid { grid-template-columns: repeat(6, 1fr); } }
+
+    /* december */
+    .dec { padding: var(--sec) 0; background: radial-gradient(70% 80% at 50% 40%, #5e2230, var(--burg) 60%, var(--ox)); }
+    .dec-card { max-width: 640px; margin: 0 auto; padding: clamp(40px, 8vw, 80px) 24px; text-align: center; }
+    .dec-card svg.bellic { width: 44px; height: 44px; margin: 0 auto 18px; color: var(--gold); }
+    .dec-card .pct { font: 600 clamp(3.4rem, 2.4rem + 5vw, 6.4rem)/.9 var(--serif); color: var(--gold-l); }
+    .dec-card h2 { color: var(--cream); margin-top: 8px; }
+    .dec-card p { color: rgba(244,234,215,.82); margin: 14px auto 0; max-width: 28em; }
+    .dec-card .tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 14px; margin-top: 16px; font-size: .84rem; color: var(--gold-l); }
+    .dec-card .tags span::before { content: "♥"; font-size: .7em; margin-right: 8px; color: var(--gold); }
+    .dec-card .btn { margin-top: 24px; }
+
+    /* book */
+    .book { background: var(--cream); color: var(--ink); }
+    .book h2 { color: var(--burg); }
+    .book .caps { color: var(--gold-d); }
+    .book-grid { display: grid; gap: 26px; }
+    .book-grid > * { min-width: 0; }
+    .book-grid .intro p { color: var(--muted); margin-top: 12px; max-width: 26em; }
+    .fields { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 18px; }
+    .fields label { display: grid; gap: 6px; font: 600 .66rem/1 var(--sans); letter-spacing: .18em; text-transform: uppercase; color: var(--muted); }
+    .fields .full { grid-column: 1 / -1; }
+    .fields input, .fields select { width: 100%; font: 500 1.1rem/1.2 var(--serif); color: var(--burg); background: transparent; border: 0; border-bottom: 1px solid rgba(74,22,34,.3); border-radius: 0; padding: 8px 0 10px; min-height: 44px; -webkit-appearance: none; appearance: none; }
+    .fields select { background-image: linear-gradient(45deg, transparent 50%, var(--gold-d) 50%), linear-gradient(135deg, var(--gold-d) 50%, transparent 50%); background-position: calc(100% - 10px) 55%, calc(100% - 5px) 55%; background-size: 5px 5px; background-repeat: no-repeat; }
+    .fields input:focus, .fields select:focus { outline: none; border-bottom-color: var(--gold-d); }
+    .sendrow { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin-top: 22px; }
+    .ringsend { display: inline-flex; align-items: center; gap: 12px; background: var(--burg); color: var(--gold-l); border: 0; padding: 14px 22px 14px 14px; border-radius: 999px; cursor: pointer; font: 600 .82rem/1 var(--sans); letter-spacing: .12em; text-transform: uppercase; transition: background .3s; }
+    .ringsend:hover { background: var(--ox); }
+    .ringsend svg { width: 34px; height: 34px; color: var(--gold); transform-origin: 50% 10%; }
+    .fine { font-size: .82rem; color: var(--muted); }
+    @media (min-width: 900px) { .book-grid { grid-template-columns: .8fr 1.2fr; gap: 70px; align-items: start; } }
+
+    /* footer */
+    footer { background: var(--ox); padding: 40px 0 110px; text-align: center; color: rgba(244,234,215,.7); font-size: .86rem; }
+    footer .word { font: 3rem/1 var(--script); color: var(--gold-l); }
+    footer .sub { font: 600 .62rem/1 var(--serif); letter-spacing: .3em; text-transform: uppercase; color: var(--gold); margin: 6px 0 18px; }
+    footer a:hover { color: var(--gold-l); }
+    .studio { display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px; border-radius: 999px; background: rgba(255,255,255,.08); color: #fff; font-size: 11px; margin-top: 16px; }
+    .studio i { width: 9px; height: 9px; border-radius: 3px; background: conic-gradient(from 210deg, #ff5a1f, #ffb03b, #ff5a1f); }
+    @media (min-width: 760px) { footer { padding-bottom: 40px; } }
+
+    .dock { position: fixed; z-index: 60; left: 12px; right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); display: grid; grid-template-columns: 1fr 1fr; gap: 6px; padding: 6px; background: rgba(46,10,18,.95); border: 1px solid rgba(201,163,106,.4); transition: transform .35s, opacity .35s; }
+    .dock .btn { padding: 13px 8px; font-size: .7rem; }
+    .dock.off { transform: translateY(150%); opacity: 0; pointer-events: none; }
+    @media (min-width: 760px) { .dock { display: none; } }
+    @media (prefers-reduced-motion: reduce) { .note.show { animation: none; } }
+  </style>
+</head>
+<body>
+  <script>document.documentElement.classList.add(matchMedia('(prefers-reduced-motion: reduce)').matches ? 'still' : 'motion');</script>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="bellLine" viewBox="0 0 48 48"><circle cx="24" cy="6" r="3" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M14 34c0-12 2-24 10-24s10 12 10 24" fill="none" stroke="currentColor" stroke-width="1.6"/><ellipse cx="24" cy="35" rx="14" ry="3" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="24" cy="41" r="2.6" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+      <symbol id="cookieLine" viewBox="0 0 48 48"><circle cx="24" cy="24" r="17" fill="none" stroke="currentColor" stroke-width="1.6"/><g fill="currentColor"><circle cx="18" cy="18" r="1.8"/><circle cx="28" cy="16" r="1.5"/><circle cx="30" cy="27" r="1.9"/><circle cx="20" cy="29" r="1.6"/><circle cx="25" cy="23" r="1.1"/></g></symbol>
+      <symbol id="doorLine" viewBox="0 0 48 48"><rect x="10" y="6" width="28" height="38" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="24" cy="30" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M17 30a7 7 0 0 1 7-7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-dasharray="2 3"/></symbol>
+      <symbol id="cookieArt" viewBox="0 0 200 200">
+        <defs>
+          <radialGradient id="ck" cx=".42" cy=".38" r=".7"><stop offset="0" stop-color="#e9b877"/><stop offset=".55" stop-color="#d39a55"/><stop offset=".86" stop-color="#b9783a"/><stop offset="1" stop-color="#9a5e2b"/></radialGradient>
+          <radialGradient id="ch" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#6b3a22"/><stop offset=".7" stop-color="#3b1d10"/><stop offset="1" stop-color="#2a130a"/></radialGradient>
+          <mask id="bite"><rect width="200" height="200" fill="#fff"/><g id="bites" fill="#000"></g></mask>
+        </defs>
+        <g mask="url(#bite)">
+          <path d="M100 10c16 0 22 6 34 9s22 4 30 14 8 22 12 33 12 20 10 34-10 20-14 32-6 22-17 30-24 4-37 9-22 10-36 6-20-12-31-20-20-12-26-26-2-24-6-36-10-22-4-34 16-16 24-26 14-18 28-22 22-3 33-3z" fill="url(#ck)"/>
+          <path d="M40 70c10-6 18-2 26-6M120 46c8 4 18 2 24 8M60 140c8 2 14-4 22-2M130 150c6-6 16-4 22-10M86 100c6 4 12 2 18 6" stroke="#a8692f" stroke-width="3" stroke-linecap="round" fill="none" opacity=".55"/>
+          <g fill="url(#ch)"><path d="M62 52l16-4 6 14-12 10-12-6z"/><path d="M118 70l18 2 2 16-16 6-8-12z"/><path d="M82 112l14-6 10 12-8 14-16-4z"/><path d="M136 120l14 4-2 16-14 2-6-10z"/><path d="M48 110l12 2 2 14-12 4-6-10z"/><path d="M100 150l12-2 6 12-10 8-10-6z"/><path d="M96 34l10 2 0 10-10 2-4-8z"/></g>
+          <g fill="#fff" opacity=".9"><rect x="70" y="86" width="3" height="3" transform="rotate(20 70 86)"/><rect x="112" y="104" width="3.4" height="3.4" transform="rotate(35 112 104)"/><rect x="128" y="58" width="2.6" height="2.6"/><rect x="90" y="142" width="3" height="3" transform="rotate(12 90 142)"/><rect x="58" y="134" width="2.6" height="2.6" transform="rotate(40 58 134)"/><rect x="150" y="96" width="3" height="3"/></g>
+          <ellipse cx="78" cy="66" rx="30" ry="18" fill="#fff" opacity=".12"/>
+        </g>
+      </symbol>
+    </defs>
+  </svg>
+
+  <div class="loader" aria-hidden="true"><div class="mark"><svg id="ldBell"><use href="#bellLine"/></svg><span class="word">Habibi</span><span class="sub">Ring for a cookie</span></div></div>
+
+  <header class="nav">
+    <div class="wrap">
+      <a class="brand" href="#top" aria-label="Habibi Ring for a Cookie, back to top"><b>Habibi</b><small>Ring for a cookie</small></a>
+      <nav class="nav-links" aria-label="Main"><a href="#real">The wall</a><a href="#events">Events</a><a href="#december">December</a><a href="#book">Book</a></nav>
+      <a class="btn gold" href="#book">Book the wall</a>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero" aria-label="Ring the bell">
+      <svg class="hero-frame frame-path" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path d="M4 0 H96 A4 4 0 0 0 100 4 V96 A4 4 0 0 0 96 100 H4 A4 4 0 0 0 0 96 V4 A4 4 0 0 0 4 0 Z" fill="none" stroke="#c9a36a" stroke-width=".8" vector-effect="non-scaling-stroke" opacity=".6"/></svg>
+      <div class="wrap hero-grid">
+        <div class="hero-copy">
+          <span class="caps">Habibi · Ring for a cookie</span>
+          <h1>Ring the bell.<br>Get a cookie.</h1>
+          <p>Habibi is a cookie wall for your event. Guests ring the brass bell, the little door opens, and a cookie comes out. Try it right here.</p>
+          <div class="ctas"><a class="btn gold" id="heroCta" href="#book">Book the wall</a><a class="btn" href="https://ig.me/m/habibiringforacookie" target="_blank" rel="noopener">DM us</a></div>
+          <a class="offer" href="#december"><i>10% off</i>All December bookings</a>
+        </div>
+        <div class="stagebox">
+          <div class="wallwrap" id="wallwrap">
+            <svg class="wall" viewBox="0 0 400 560" role="img" aria-label="The Habibi cookie wall: a cream panelled wall with a picture light, a brass bell and a small round door">
+              <defs>
+                <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f3e9d6"/><stop offset=".5" stop-color="#ece0c8"/><stop offset="1" stop-color="#e2d3b6"/></linearGradient>
+                <radialGradient id="glow" cx=".5" cy="0" r="1"><stop offset="0" stop-color="#fff7e2" stop-opacity=".95"/><stop offset=".45" stop-color="#fff2d6" stop-opacity=".35"/><stop offset="1" stop-color="#fff2d6" stop-opacity="0"/></radialGradient>
+                <linearGradient id="brass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f3d9a0"/><stop offset=".3" stop-color="#c99a52"/><stop offset=".55" stop-color="#f6e2b0"/><stop offset=".8" stop-color="#a77a3a"/><stop offset="1" stop-color="#d9b06c"/></linearGradient>
+                <linearGradient id="bellG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8c6128"/><stop offset=".22" stop-color="#d8ac5f"/><stop offset=".42" stop-color="#fbe8b9"/><stop offset=".62" stop-color="#c8964d"/><stop offset="1" stop-color="#7a5322"/></linearGradient>
+                <radialGradient id="door" cx=".38" cy=".35" r=".75"><stop offset="0" stop-color="#f7efe0"/><stop offset=".7" stop-color="#e9dcc2"/><stop offset="1" stop-color="#d6c5a4"/></radialGradient>
+                <radialGradient id="inside" cx=".5" cy=".55" r=".6"><stop offset="0" stop-color="#ffcf87"/><stop offset=".45" stop-color="#8a4a22"/><stop offset="1" stop-color="#2a1008"/></radialGradient>
+                <filter id="soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="6"/></filter>
+                <clipPath id="holeClip"><circle cx="200" cy="400" r="46"/></clipPath>
+              </defs>
+              <rect width="400" height="560" rx="6" fill="url(#wallG)"/>
+              <rect x="10" y="10" width="380" height="540" rx="3" fill="none" stroke="#fffaf0" stroke-width="2" opacity=".7"/>
+              <rect x="12" y="12" width="380" height="540" rx="3" fill="none" stroke="#cdbb97" stroke-width="1.5" opacity=".6"/>
+              <!-- picture light -->
+              <path d="M110 70 L290 70 L360 330 L40 330 Z" fill="url(#glow)" opacity=".75" class="lightcone"/>
+              <rect x="186" y="44" width="28" height="8" rx="2" fill="url(#brass)"/>
+              <path d="M200 52 v10" stroke="#a77a3a" stroke-width="3"/>
+              <rect x="140" y="60" width="120" height="10" rx="5" fill="url(#brass)"/>
+              <!-- wall lettering -->
+              <text x="200" y="118" text-anchor="middle" font-family="Pinyon Script, cursive" font-size="44" fill="#a48a62">Habibi</text>
+              <text x="200" y="138" text-anchor="middle" font-family="Fraunces, serif" font-size="10.5" letter-spacing="3.5" fill="#a48a62">RING FOR A COOKIE</text>
+              <!-- moulded panel -->
+              <rect x="66" y="160" width="268" height="360" rx="4" fill="none" stroke="#fffaf0" stroke-width="3"/>
+              <rect x="69" y="163" width="268" height="360" rx="4" fill="none" stroke="#cbb791" stroke-width="2.5"/>
+              <rect x="82" y="176" width="236" height="328" rx="2" fill="none" stroke="#d9c9a8" stroke-width="1"/>
+              <!-- bell bracket -->
+              <rect x="186" y="186" width="28" height="44" rx="4" fill="url(#brass)"/>
+              <circle cx="200" cy="196" r="2.4" fill="#7a5322"/><circle cx="200" cy="220" r="2.4" fill="#7a5322"/>
+              <path d="M200 208 q0 -18 0 -18" stroke="none"/>
+              <path d="M214 204 C 236 204, 238 214, 238 222" fill="none" stroke="url(#brass)" stroke-width="6" stroke-linecap="round"/>
+              <!-- bell (pivot at 238,222) -->
+              <g id="bell">
+                <path d="M238 222 v8" stroke="#8c6128" stroke-width="3"/>
+                <g id="clapper"><path d="M238 232 v34" stroke="#6b4a1c" stroke-width="2.4"/><circle cx="238" cy="268" r="5.5" fill="url(#brass)" stroke="#6b4a1c" stroke-width="1"/></g>
+                <path d="M238 230 c-22 0 -26 18 -27 30 c-1 8 -4 12 -8 14 h70 c-4 -2 -7 -6 -8 -14 c-1 -12 -5 -30 -27 -30z" fill="url(#bellG)" stroke="#6b4a1c" stroke-width="1.2"/>
+                <rect x="199" y="273" width="78" height="6" rx="3" fill="url(#brass)" stroke="#6b4a1c" stroke-width="1"/>
+                <path d="M224 240 c-4 6 -6 14 -6 22" stroke="#fff4d2" stroke-width="3" stroke-linecap="round" fill="none" opacity=".8"/>
+              </g>
+              <ellipse cx="238" cy="296" rx="34" ry="5" fill="#000" opacity=".08" filter="url(#soft)"/>
+              <!-- little door -->
+              <circle cx="200" cy="400" r="56" fill="none" stroke="#cbb791" stroke-width="3"/>
+              <circle cx="200" cy="400" r="46" fill="url(#inside)"/>
+              <g clip-path="url(#holeClip)"><ellipse cx="200" cy="440" rx="40" ry="10" fill="#ffd89a" opacity=".35" filter="url(#soft)"/></g>
+              <g id="doorG"><circle cx="200" cy="400" r="46" fill="url(#door)" stroke="#c8b48c" stroke-width="1.2"/><circle cx="226" cy="400" r="4.5" fill="url(#brass)" stroke="#8c6128" stroke-width=".8"/><circle cx="196" cy="394" r="30" fill="none" stroke="#fffaf0" stroke-width="1.5" opacity=".7"/></g>
+              <circle cx="200" cy="400" r="50" fill="none" stroke="url(#brass)" stroke-width="7"/>
+              <circle cx="200" cy="400" r="53.5" fill="none" stroke="#7a5322" stroke-width=".8" opacity=".6"/>
+            </svg>
+            <button class="bellhit" id="bellHit" type="button" aria-label="Ring the bell for a cookie"></button>
+            <div class="cookie" id="cookie" role="button" tabindex="-1" aria-label="Take a bite of the cookie"><svg viewBox="0 0 200 200" aria-hidden="true"><use href="#cookieArt"/></svg></div>
+          </div>
+          <div class="hint"><span id="hintT">Ring the bell</span><button class="snd" type="button" id="snd" aria-pressed="true">Sound on</button></div>
+          <div class="note" id="note" aria-live="polite"><b id="noteT">There it is.</b><p id="noteP">Now picture a line of your guests doing that.</p><div class="row"><a class="btn gold" href="#book">Book the wall</a><button class="btn" type="button" id="again">Ring again</button></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="real sec" id="real" aria-label="The real wall">
+      <div class="wrap">
+        <div class="real-grid">
+          <div class="film frame" id="filmBox"><svg class="fr" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path d="M5 0 H95 A5 5 0 0 0 100 5 V95 A5 5 0 0 0 95 100 H5 A5 5 0 0 0 0 95 V5 A5 5 0 0 0 5 0 Z"/></svg><video id="film" src="media/wall.mp4" poster="media/wall-poster.webp" muted loop playsinline preload="metadata" aria-label="Guests ringing the Habibi bell and getting a cookie at an event"></video></div>
+          <div>
+            <span class="caps">The real thing</span>
+            <h2 style="margin-top:14px">This is the wall we bring to your event.</h2>
+            <ol class="steps">
+              <li><span class="ic"><svg><use href="#bellLine"/></svg></span><div><h3>Ring the bell</h3><p>A brass bell on a cream panelled wall, lit like a little shopfront.</p></div></li>
+              <li><span class="ic"><svg><use href="#doorLine"/></svg></span><div><h3>The little door opens</h3><p>Nobody can see what's behind it, which is half the fun.</p></div></li>
+              <li><span class="ic"><svg><use href="#cookieLine"/></svg></span><div><h3>A cookie comes out</h3><p>Handed through the door, one guest at a time. Then they ring it again.</p></div></li>
+            </ol>
+          </div>
+        </div>
+        <div class="strip" id="strip">
+          <figure><img src="media/ring.webp" alt="A guest ringing the brass bell on the Habibi wall" width="720" height="720" loading="lazy"><figcaption>Ring, ring</figcaption></figure>
+          <figure><img src="media/wall-full.webp" alt="The full Habibi wall with its mirror, picture lights and little door" width="720" height="720" loading="lazy"><figcaption>The full wall</figcaption></figure>
+          <figure><img src="media/guests.webp" alt="Guests lining up at the Habibi wall at an evening event" width="720" height="720" loading="lazy"><figcaption>The line forms fast</figcaption></figure>
+          <figure><img src="media/hall.webp" alt="The grand hall where the Habibi wall was set up for a runway show" width="720" height="720" loading="lazy"><figcaption>Tonight's event: a runway show</figcaption></figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="events sec" id="events" aria-label="Events">
+      <div class="wrap">
+        <div class="ev-head"><span class="caps">For your celebration</span><h2>From intimate dinners to grand events.</h2><p>The bell works at every kind of party. Here's where it shines.</p></div>
+        <div class="ev-grid" id="evGrid"></div>
+      </div>
+    </section>
+
+    <section class="dec" id="december" aria-label="December offer">
+      <div class="wrap">
+        <div class="dec-card frame"><svg class="fr" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path d="M5 0 H95 A5 5 0 0 0 100 5 V95 A5 5 0 0 0 95 100 H5 A5 5 0 0 0 0 95 V5 A5 5 0 0 0 5 0 Z"/></svg>
+          <svg class="bellic" aria-hidden="true"><use href="#bellLine"/></svg>
+          <span class="caps">Special offer</span>
+          <div class="pct" style="margin-top:16px">10% off</div>
+          <h2>All December bookings</h2>
+          <p>A little something sweet for the holiday season. DM us to lock in your date and the discount.</p>
+          <div class="tags"><span>Christmas parties</span><span>Weddings</span><span>Engagements</span><span>Baby showers</span><span>Graduations</span><span>Birthdays</span></div>
+          <a class="btn gold" href="#book">Secure your date</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="book sec" id="book" aria-label="Book the wall">
+      <div class="wrap book-grid">
+        <div class="intro"><span class="caps">Book the wall</span><h2 style="margin-top:14px">Tell us about your event.</h2><p>Fill this in and ring the bell. We'll copy your details and open a DM with us on Instagram, so you just paste and send.</p></div>
+        <div id="formBox">
+          <div class="fields">
+            <label>Occasion<select id="occ"><option>Wedding</option><option>Engagement</option><option>Baby shower</option><option>Bridal shower</option><option>Graduation</option><option>Birthday</option><option>Christmas party</option><option>Corporate event</option><option>Other</option></select></label>
+            <label>Date<input type="date" id="date"></label>
+            <label>Guests<select id="guests"><option>Under 50</option><option selected>50 to 100</option><option>100 to 200</option><option>200 to 400</option><option>400+</option></select></label>
+            <label>City or venue<input id="venue" placeholder="Where's the party?" autocomplete="off"></label>
+            <label class="full">Your name<input id="name" autocomplete="name" placeholder="Optional"></label>
+          </div>
+          <div class="sendrow"><button class="ringsend" type="button" id="ringSend"><svg id="sendBell" aria-hidden="true"><use href="#bellLine"/></svg>Ring to send</button><a class="btn" style="color:var(--burg);border-color:var(--burg)" href="https://ig.me/m/habibiringforacookie" target="_blank" rel="noopener">Just DM us</a></div>
+          <p class="fine" id="fine" style="margin-top:12px">December dates get 10% off. Mention it in your message.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer id="closer">
+    <div class="wrap">
+      <div class="word">Habibi</div>
+      <div class="sub">Ring for a cookie</div>
+      <p><a href="https://www.instagram.com/habibiringforacookie/" target="_blank" rel="noopener">@habibiringforacookie</a> · DM us to book</p>
+      <a class="studio" href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener" aria-label="Site by ElaSystems (opens in a new tab)"><i aria-hidden="true"></i><span>Site by <b>ElaSystems</b></span></a>
+    </div>
+  </footer>
+
+  <nav class="dock off" aria-label="Quick actions"><a class="btn gold" href="#book">Book the wall</a><a class="btn" href="https://ig.me/m/habibiringforacookie" target="_blank" rel="noopener">DM us</a></nav>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+  <script>
+    const CONFIG = {
+      ig: "habibiringforacookie",
+      events: [
+        { n: "Weddings", i: '<circle cx="18" cy="28" r="10" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="30" cy="28" r="10" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M15 14l3-5 3 5" fill="none" stroke="currentColor" stroke-width="1.6"/>' },
+        { n: "Engagements", i: '<circle cx="24" cy="30" r="11" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M18 14l6-7 6 7-6 5z" fill="none" stroke="currentColor" stroke-width="1.6"/>' },
+        { n: "Baby showers", i: '<path d="M12 22h24a12 12 0 0 1-24 0z" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M24 22V10a8 8 0 0 1 8 8" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="17" cy="38" r="3" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="31" cy="38" r="3" fill="none" stroke="currentColor" stroke-width="1.6"/>' },
+        { n: "Graduations", i: '<path d="M4 18l20-9 20 9-20 9z" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 22v9c6 5 18 5 24 0v-9M40 20v12" fill="none" stroke="currentColor" stroke-width="1.6"/>' },
+        { n: "Birthdays", i: '<rect x="10" y="24" width="28" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M10 31c5 3 9-3 14 0s9 3 14 0M18 24v-6M24 24v-6M30 24v-6" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M18 14c-1-2 0-4 0-4s1 2 0 4zM24 14c-1-2 0-4 0-4s1 2 0 4zM30 14c-1-2 0-4 0-4s1 2 0 4z" fill="currentColor"/>' },
+        { n: "Christmas parties", i: '<path d="M24 6l10 14h-6l9 12h-7l8 10H10l8-10h-7l9-12h-6z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>' }
+      ],
+      notes: [
+        ["There it is.", "Now picture a line of your guests doing exactly that."],
+        ["Again? Fair.", "Everyone rings it twice. We plan for it."],
+        ["Still ringing?", "Weddings, showers, birthdays, office parties. The bell works everywhere."],
+        ["One more.", "December bookings are 10% off, by the way."]
+      ]
+    };
+    const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+    const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    const still = document.documentElement.classList.contains("still");
+
+    /* nav */
+    const nav = $(".nav"), onScroll = () => nav.classList.toggle("solid", scrollY > 40);
+    addEventListener("scroll", onScroll, { passive: true }); onScroll();
+
+    /* events */
+    $("#evGrid").innerHTML = CONFIG.events.map(e => `<div class="ev"><svg viewBox="0 0 48 48" aria-hidden="true">${e.i}</svg><b>${esc(e.n)}</b></div>`).join("");
+
+    /* ---------- the bell: a damped pendulum, plus a synthesized desk-bell ding ---------- */
+    let soundOn = true, actx = null;
+    $("#snd").addEventListener("click", () => { soundOn = !soundOn; $("#snd").textContent = soundOn ? "Sound on" : "Sound off"; $("#snd").setAttribute("aria-pressed", soundOn); });
+    function ding() {
+      if (!soundOn) return;
+      try {
+        actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+        const t = actx.currentTime, out = actx.createGain(); out.gain.value = .22; out.connect(actx.destination);
+        [[1, 2.2, 1], [2.76, 1.2, .5], [5.4, .6, .25], [8.93, .35, .12]].forEach(([m, d, a]) => {
+          const o = actx.createOscillator(), g = actx.createGain();
+          o.type = "sine"; o.frequency.value = 1480 * m; g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(a, t + .004); g.gain.exponentialRampToValueAtTime(.0001, t + d);
+          o.connect(g).connect(out); o.start(t); o.stop(t + d + .05);
+        });
+      } catch (e) {}
+    }
+    const bell = $("#bell"), clap = $("#clapper");
+    let th = 0, w = 0, swinging = false;
+    function swing(kick) {
+      w += kick; if (swinging) return; swinging = true;
+      let last = performance.now();
+      const step = now => {
+        const dt = Math.min(.033, (now - last) / 1000); last = now;
+        w += (-90 * th - 3.2 * w) * dt; th += w * dt;
+        bell.setAttribute("transform", `rotate(${th} 238 222)`);
+        clap.setAttribute("transform", `rotate(${-th * .6} 238 232)`);
+        if (Math.abs(th) < .05 && Math.abs(w) < .3) { swinging = false; th = 0; w = 0; bell.removeAttribute("transform"); clap.removeAttribute("transform"); return; }
+        requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    }
+    function swingIcon(el) { if (!window.gsap || still) return; gsap.fromTo(el, { rotate: 0 }, { keyframes: [{ rotate: 18, duration: .12 }, { rotate: -14, duration: .16 }, { rotate: 9, duration: .16 }, { rotate: -5, duration: .16 }, { rotate: 0, duration: .2 }], transformOrigin: "50% 10%" }); }
+
+    /* ---------- the little door + the cookie ---------- */
+    const door = $("#doorG"), cookie = $("#cookie"), note = $("#note");
+    let busy = false, open = false, rings = 0, bites = 0;
+    const setDoor = k => door.setAttribute("transform", `translate(154 0) scale(${k} 1) translate(-154 0)`); // hinge on the left edge
+    function ring() {
+      if (busy) return;
+      ding(); swing(still ? 0 : 140 + Math.random() * 40);
+      if (open) { closeDoor(() => ring()); return; }
+      busy = true; rings++;
+      const [t, p] = CONFIG.notes[(rings - 1) % CONFIG.notes.length];
+      $("#noteT").textContent = t; $("#noteP").textContent = p;
+      bites = 0; $("#bites").innerHTML = "";
+      $("#hintT").textContent = "Tap the cookie";
+      if (!window.gsap || still) { setDoor(.08); cookie.style.opacity = 1; cookie.style.transform = "translate(-50%, -50%) scale(1.1)"; cookie.classList.add("out"); note.classList.add("show"); open = true; busy = false; return; }
+      const o = { k: 1 };
+      gsap.timeline({ onComplete: () => { busy = false; open = true; cookie.classList.add("out"); note.classList.add("show"); gsap.to(cookie, { y: 26, rotate: 0, duration: 1.6, ease: "sine.inOut", yoyo: true, repeat: -1 }); } })
+        .to(o, { k: .06, duration: .7, delay: .35, ease: "power3.inOut", onUpdate: () => setDoor(o.k) })
+        .fromTo(cookie, { opacity: 0, scale: .2, xPercent: -50, yPercent: -50, y: 0, rotate: -30 }, { opacity: 1, scale: 1.25, y: 34, rotate: 8, duration: .8, ease: "back.out(1.7)" }, "-=.25");
+    }
+    function closeDoor(done) {
+      busy = true; note.classList.remove("show"); cookie.classList.remove("out");
+      if (!window.gsap || still) { cookie.style.opacity = 0; setDoor(1); open = false; busy = false; done && done(); return; }
+      gsap.killTweensOf(cookie);
+      const o = { k: .06 };
+      gsap.timeline({ onComplete: () => { open = false; busy = false; done && done(); } })
+        .to(cookie, { opacity: 0, scale: .2, y: 0, duration: .35, ease: "power2.in" })
+        .to(o, { k: 1, duration: .45, ease: "power2.inOut", onUpdate: () => setDoor(o.k) });
+    }
+    function bite() {
+      if (!open) return;
+      const spots = [[176, 26], [192, 70], [170, 120], [130, 176]];
+      if (bites >= spots.length) { closeDoor(); $("#hintT").textContent = "Ring the bell"; return; }
+      const [cx, cy] = spots[bites++], g = $("#bites");
+      g.insertAdjacentHTML("beforeend", `<circle cx="${cx}" cy="${cy}" r="26"/><circle cx="${cx - 22}" cy="${cy + 14}" r="18"/><circle cx="${cx + 14}" cy="${cy - 22}" r="18"/>`);
+      if (window.gsap && !still) {
+        gsap.fromTo(cookie.querySelector("svg"), { scale: .92 }, { scale: 1, duration: .35, ease: "back.out(3)" });
+        const r = cookie.getBoundingClientRect();
+        for (let k = 0; k < 7; k++) {
+          const c = document.createElement("span");
+          c.style.cssText = `position:fixed;z-index:80;left:${r.left + r.width * .7}px;top:${r.top + r.height * .35}px;width:${4 + Math.random() * 5}px;height:${4 + Math.random() * 5}px;background:${k % 3 ? "#c98a48" : "#3b1d10"};border-radius:2px;pointer-events:none`;
+          document.body.appendChild(c);
+          gsap.to(c, { x: (Math.random() - .3) * 90, y: 60 + Math.random() * 80, rotate: Math.random() * 300, opacity: 0, duration: .9, ease: "power2.in", onComplete: () => c.remove() });
+        }
+      }
+      $("#hintT").textContent = bites >= spots.length ? "All gone. Ring again?" : "Another bite?";
+    }
+    $("#bellHit").addEventListener("click", ring);
+    cookie.addEventListener("click", bite);
+    $("#again").addEventListener("click", ring);
+
+    /* ---------- booking: ring to send ---------- */
+    function niceDate() { const d = $("#date").value; if (!d) return ""; const [y, m, dd] = d.split("-").map(Number); return new Date(y, m - 1, dd).toLocaleDateString("en-US", { weekday: "short", month: "long", day: "numeric", year: "numeric" }); }
+    function message() {
+      const d = niceDate(), isDec = /^\d{4}-12-/.test($("#date").value), nm = $("#name").value.trim();
+      return ["Hi Habibi! I'd like to book the Ring for a Cookie wall.", `Occasion: ${$("#occ").value}`, `Date: ${d || "not set yet"}${isDec ? " (December, 10% off)" : ""}`, `Guests: ${$("#guests").value}`, `Where: ${$("#venue").value.trim() || "not sure yet"}`, nm ? `Name: ${nm}` : "", "Can you send me pricing and availability?"].filter(Boolean).join("\n");
+    }
+    $("#ringSend").addEventListener("click", () => {
+      ding(); swingIcon($("#sendBell"));
+      const m = message();
+      (navigator.clipboard ? navigator.clipboard.writeText(m) : Promise.reject()).then(() => { $("#fine").textContent = "Copied! Paste it into the Instagram chat that just opened and hit send."; }).catch(() => { $("#fine").textContent = "Copy this into your DM: " + m.replace(/\n/g, " · "); });
+      window.open("https://ig.me/m/" + CONFIG.ig, "_blank", "noopener");
+    });
+    $("#date").addEventListener("change", () => { $("#fine").textContent = /^\d{4}-12-/.test($("#date").value) ? "A December date. You get 10% off, it's already in your message." : "December dates get 10% off. Mention it in your message."; });
+    try { const t = new Date(); t.setDate(t.getDate() + 3); $("#date").min = t.toISOString().slice(0, 10); } catch (e) {}
+
+    /* film plays only while visible */
+    const film = $("#film");
+    if (!still) new IntersectionObserver(([e]) => { if (e.isIntersecting) { film.preload = "auto"; film.play().catch(() => {}); } else film.pause(); }, { threshold: .3 }).observe(film);
+
+    /* phone dock */
+    if ("IntersectionObserver" in window) {
+      const dock = $(".dock"), seen = new Set();
+      const io = new IntersectionObserver(es => { es.forEach(e => e.isIntersecting ? seen.add(e.target) : seen.delete(e.target)); dock.classList.toggle("off", seen.size > 0); }, { threshold: .05 });
+      ["#heroCta", "#formBox", "#closer"].forEach(s => io.observe($(s)));
+    } else $(".dock").classList.remove("off");
+
+    /* ---------- motion ---------- */
+    if (still || !window.gsap || !window.ScrollTrigger) {
+      document.documentElement.classList.add("loaded");
+    } else {
+      gsap.registerPlugin(ScrollTrigger);
+      let lenis = null;
+      if (window.Lenis) { lenis = new Lenis({ lerp: .09, smoothWheel: true }); lenis.on("scroll", ScrollTrigger.update); gsap.ticker.add(t => lenis.raf(t * 1000)); gsap.ticker.lagSmoothing(0); }
+      document.addEventListener("click", e => { const a = e.target.closest('a[href^="#"]'); if (!a) return; const t = $(a.getAttribute("href")); if (!t) return; e.preventDefault(); lenis ? lenis.scrollTo(t, { duration: 1.4, offset: -50 }) : t.scrollIntoView({ behavior: "smooth" }); });
+
+      /* intro: the bell rings, the wordmark settles, the curtain lifts, then the wall rings itself once */
+      gsap.set(".hero-copy > *", { autoAlpha: 0, y: 18 });
+      gsap.set("#wallwrap", { autoAlpha: 0, y: 40, scale: .96 });
+      const intro = gsap.timeline({ onComplete: () => document.documentElement.classList.add("loaded") })
+        .from(".loader .word", { autoAlpha: 0, y: 12, duration: .6, ease: "power2.out" })
+        .from(".loader .sub", { autoAlpha: 0, duration: .5 }, .2)
+        .fromTo("#ldBell", { rotate: 0 }, { keyframes: [{ rotate: 22, duration: .14 }, { rotate: -16, duration: .18 }, { rotate: 10, duration: .18 }, { rotate: -5, duration: .18 }, { rotate: 0, duration: .2 }], transformOrigin: "50% 8%" }, .1)
+        .to(".loader", { yPercent: -100, duration: .9, ease: "expo.inOut" }, 1.05)
+        .to("#wallwrap", { autoAlpha: 1, y: 0, scale: 1, duration: 1.2, ease: "expo.out" }, 1.4)
+        .to(".hero-copy > *", { autoAlpha: 1, y: 0, duration: .9, stagger: .08, ease: "power3.out" }, 1.55)
+        .from(".hero-frame", { autoAlpha: 0, duration: 1.2 }, 1.5);
+      const skip = () => { if (intro.progress() < 1) intro.progress(1); };
+      ["pointerdown", "keydown", "wheel", "touchstart"].forEach(ev => addEventListener(ev, skip, { once: true, passive: true }));
+      /* a little nudge so people know the bell is the button */
+      let nudged = false;
+      setTimeout(() => { if (!rings && !nudged) { nudged = true; swing(60); gsap.fromTo(".hint", { scale: 1 }, { scale: 1.08, yoyo: true, repeat: 3, duration: .25 }); } }, 3600);
+      setInterval(() => { if (!rings && !swinging && !document.hidden) swing(40); }, 7000);
+      gsap.to(".lightcone", { opacity: .55, duration: 2.4, yoyo: true, repeat: -1, ease: "sine.inOut" });
+
+      /* gold frames draw themselves */
+      $$(".frame > svg.fr path").forEach(p => { const L = 400; p.style.strokeDasharray = L; gsap.fromTo(p, { strokeDashoffset: L }, { strokeDashoffset: 0, duration: 2, ease: "power2.inOut", scrollTrigger: { trigger: p.closest(".frame"), start: "top 80%" } }); });
+
+      /* reveals */
+      $$(".real-grid > div:last-child > *, .ev-head > *, .book-grid .intro > *, .dec-card > :not(svg.fr)").forEach(el => gsap.from(el, { y: 30, autoAlpha: 0, duration: 1, ease: "power3.out", scrollTrigger: { trigger: el, start: "top 88%" } }));
+      gsap.from(".steps li", { y: 20, autoAlpha: 0, duration: .8, stagger: .12, ease: "power3.out", clearProps: "transform", scrollTrigger: { trigger: ".steps", start: "top 85%" } });
+      gsap.from(".strip figure", { y: 40, autoAlpha: 0, duration: 1, stagger: .1, ease: "power3.out", scrollTrigger: { trigger: ".strip", start: "top 90%" } });
+      gsap.from(".ev", { y: 30, autoAlpha: 0, duration: .8, stagger: .07, ease: "back.out(1.6)", scrollTrigger: { trigger: "#evGrid", start: "top 88%" } });
+      gsap.from(".dec-card .pct", { scale: .7, duration: 1.2, ease: "elastic.out(1, .5)", scrollTrigger: { trigger: ".dec-card", start: "top 70%" } });
+      ScrollTrigger.create({ trigger: ".dec-card", start: "top 70%", once: true, onEnter: () => swingIcon($(".dec-card .bellic")) });
+      addEventListener("load", () => ScrollTrigger.refresh());
+    }
+  </script>
+</body>
+</html>
