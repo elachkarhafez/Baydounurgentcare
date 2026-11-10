@@ -112,6 +112,32 @@ body.cap .stage{left:0;top:0;transform:none!important}
 .fly .b-sil{fill:#fff}.fly .b-ring,.fly .b-word path,.fly .b-plate,.fly .b-sub{fill:var(--red)}.fly .b-ink{fill:var(--ink)}
 .fly .b-ring{stroke:var(--red);stroke-width:6}
 .fly path,.fly g{transform-box:fill-box;transform-origin:50% 50%}
+/* big type for the four-TV set (?set=4): shorter header, larger text, tighter rows, so the menu reads across the room */
+body.big .counter{top:330px}
+body.big .cwrap.top{height:330px}
+body.big .body{top:376px;left:30px;right:30px;bottom:122px}
+body.big .hd .kick{top:56px}
+body.big .hd h1{top:112px;font-size:96px}
+body.big .hd h1.one{font-size:150px;top:104px}
+body.big .grp{margin-top:12px}
+body.big .grp:first-child{margin-top:0}
+body.big .gh{padding-bottom:8px;margin-bottom:2px;border-bottom-width:5px}
+body.big .gh h2{font-size:56px}
+body.big .gh .nt{font-size:30px;margin-top:4px}
+body.big .tagp span.pill{font-size:44px;padding:8px 18px}
+body.big .tagp small{font-size:24px}
+body.big .row{padding:5px 0;min-height:0;gap:14px}
+body.big .row b{font-size:52px;line-height:1}
+body.big .row p{font-size:31px;line-height:1.08;margin-top:2px;color:#4e423a}
+body.big .row .pr > span{font-size:52px;width:196px}
+body.big .pair .row .pr > span{width:150px}
+body.big .pair{gap:40px}
+body.big .pair .row b{white-space:nowrap}
+body.big .cols span{font-size:28px;width:196px}
+body.big .rows2{column-gap:34px}
+body.big .chips span{font-size:40px;padding:10px 20px}
+body.big .chili{width:42px;height:42px}
+body.big .bub{font-size:32px;top:30px!important}
 </style>
 </head>
 <body>
@@ -234,7 +260,7 @@ const SCREENS4 = {
       { t: 'group', title: 'Veggie bowl', price: SL4(9.99, 11.99), items: [['Veggie Bowl', 'Mayo, bell peppers, onions, corn, banana peppers, black olives, lettuce, pickles, tomatoes, honey mustard']] },
     ] },
   4: { kick: 'Sides', title: 'Sides', item: 'art-fries.svg', itemW: 270, hold: 1,
-    blocks: [B(4, 'Chicken strips'), B(4, 'Fries'), B(4, 'More sides'), SCREENS[4].blocks.find(b => b.t === 'pair')] },
+    blocks: [B(4, 'Chicken strips'), B(4, 'Fries'), B(4, 'More sides'), B(4, 'Wing dings'), B(4, 'Drinks')] },
 };
 const qs = new URLSearchParams(location.search), SET = qs.get('set') === '4' ? SCREENS4 : qs.get('set') === '3' ? SCREENS3 : SCREENS, TV = +(qs.get('tv') || 1), S = SET[TV] || SET[1];
 const $ = s => document.getElementById(s);
@@ -413,7 +439,7 @@ function coreTop(t) {
 }
 function routineTop(t) {
   const h = 1 / 60, p = coreTop(t), q = coreTop(t - h);
-  Object.assign(p, { x: 608, y: 22, s: .52 });
+  Object.assign(p, SET === SCREENS4 ? { x: 650, y: 0, s: .42 } : { x: 608, y: 22, s: .52 });
   /* stretch on the way up, squash on landings */
   const v = (kf(t + .02, p.up) - kf(t - .02, p.up)) / .04, st = clamp(-v / 9000, 0, .1) - clamp(v / 9000, 0, .06);
   const sq = hit(t, 3.9, .07) + hit(t, 34.85, .07) + hit(t, 8.7, .045) + hit(t, 50.3, .05) + hit(t, 14.3, .025);
@@ -472,10 +498,11 @@ function layout() {
   });
   /* a smaller scale means a wider column and less wrapping, so re-measure until it settles */
   fit.style.transform = ''; fit.style.width = box.clientWidth + 'px';
-  let sc = Math.min(1, box.clientHeight / fit.scrollHeight);
+  const CAP = document.body.classList.contains('big') ? 1.4 : 1;
+  let sc = Math.min(CAP, box.clientHeight / fit.scrollHeight);
   for (let i = 0; i < 8; i++) {
     fit.style.width = (box.clientWidth / sc) + 'px';
-    const next = Math.min(1, box.clientHeight / fit.scrollHeight);
+    const next = Math.min(CAP, box.clientHeight / fit.scrollHeight);
     if (Math.abs(next - sc) < .002) { sc = Math.min(sc, next); break; }
     sc = next;
   }
@@ -568,7 +595,8 @@ function render(t) {
     const g = i < n - 1 ? E.io(clamp((fr - .74) / .26)) : 0, j = Math.min(i + 1, n - 1);
     const B = [0, 1, 2, 3].map(k => lerp(boxes[i][k], boxes[j][k], g));
     const op = clamp((t - start) / .5) * (1 - clamp((t - 56.6) / .8));
-    Object.assign(hl.style, { transform: `translate(${B[0]}px,${B[1] - 4}px)`, width: B[2] + 'px', height: (B[3] + 8) + 'px', opacity: op });
+    const pad = document.body.classList.contains('big') ? 1 : 4;
+    Object.assign(hl.style, { transform: `translate(${B[0]}px,${B[1] - pad}px)`, width: B[2] + 'px', height: (B[3] + pad * 2) + 'px', opacity: op });
     /* each unit lights up by how much of the bar covers it */
     units.forEach((u, idx) => {
       const ub = boxes[idx], ov = clamp((Math.min(B[1] + B[3], ub[1] + ub[3]) - Math.max(B[1], ub[1])) / ub[3]) * op;
@@ -607,6 +635,7 @@ window.renderAt = render;
 const ready = () => { layout(); $('fly').querySelectorAll('.b-ring').forEach(r => r.setAttribute('pathLength', '1')); render(0); window.__ready = window.__artReady = true; };
 document.fonts.ready.then(() => Promise.all([...document.images].map(i => i.complete ? 0 : new Promise(r => { i.onload = i.onerror = r; })))).then(ready);
 if (qs.has('cap')) document.body.classList.add('cap');
+if (SET === SCREENS4) document.body.classList.add('big');
 else {
   const fitStage = () => { const sc = Math.min(innerWidth / 1080, innerHeight / 1920); $('stage').style.transform = `translate(-50%,-50%) scale(${sc})`; };
   fitStage(); addEventListener('resize', fitStage);
