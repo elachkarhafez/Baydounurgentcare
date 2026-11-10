@@ -20,6 +20,7 @@
    57-60 s  he ducks, the curtain drops back down, ready for the next loop.
    Prices are word for word from barbarsub.com/menu. */
 @font-face{font-family:'Rubik';src:url(media/rubik.woff2) format('woff2');font-weight:300 900;font-display:block}
+@font-face{font-family:'Archivo';src:url(media/archivo.woff2) format('woff2');font-weight:100 900;font-stretch:62% 125%;font-display:block}
 :root{--paper:#fbf1e1;--paper2:#f3e3c7;--ink:#231f20;--muted:#6c5f55;--red:#e31e26;--red2:#b8141b;--yel:#ffcf24}
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{background:#111;height:100%;overflow:hidden}
@@ -128,13 +129,16 @@ body.big .tagp span.pill{font-size:44px;padding:8px 18px}
 body.big .tagp small{font-size:24px}
 body.big .row{padding:5px 0;min-height:0;gap:14px}
 body.big .row b{font-size:52px;line-height:1}
-body.big .row p{font-size:33px;line-height:1.08;margin-top:2px;color:#4e423a}
+body.big .row p{font-family:'Archivo',sans-serif;font-stretch:84%;font-size:44px;line-height:1.02;letter-spacing:0;margin-top:3px;color:#4e423a}
 body.big .row .pr > span{font-size:52px;width:222px}
-body.big .pair .row .pr > span{width:150px}
-body.big .pair{gap:40px}
+body.big .pair .row .pr > span{width:186px}
+body.big .pair{gap:120px}
+body.big .pair > .grp + .grp::before{content:"";position:absolute;left:-60px;top:8px;bottom:8px;width:4px;border-radius:2px;background:rgba(35,31,32,.18)}
 body.big .pair .row b{white-space:nowrap}
+body.big .pair .row{padding-left:0;padding-right:0;margin:0}
 body.big .cols span{font-size:28px;width:222px}
-body.big .rows2{column-gap:34px}
+body.big .rows2{display:block;column-count:2;column-gap:34px;column-fill:balance}
+body.big .rows2 .row{break-inside:avoid}
 body.big .chips span{font-size:40px;padding:10px 20px}
 body.big .chili{width:42px;height:42px}
 body.big .bub{display:none}
@@ -146,7 +150,7 @@ body.big .gh h2{font-weight:900}
 body.big .gh .nt{font-weight:600;color:#3a302a}
 body.big .tagp span.pill{font-weight:900}
 body.big .row b{font-weight:800;color:#100b08}
-body.big .row p{font-weight:500;color:#211a16}
+body.big .row p{font-weight:600;color:#1c1512}
 body.big .row .pr > span{font-weight:900}
 body.big .cols span{font-weight:800;color:#3a302a}
 body.big .chips span{font-weight:800}
@@ -273,7 +277,7 @@ const SCREENS4 = {
       { t: 'group', title: 'Veggie bowl', price: SL4(9.99, 11.99), items: [['Veggie Bowl', 'Mayo, bell peppers, onions, corn, banana peppers, black olives, lettuce, pickles, tomatoes, honey mustard']] },
     ] },
   4: { kick: 'Wraps & sides', title: 'Wraps<br>&amp; sides', item: 'hold-wrap.png', itemW: 300, sink: 30, item2: 'hold-fries.png', itemW2: 190, hold: 1, titleSize: 88,
-    blocks: [c2(B(2, 'Chicken wraps')), c2(B(2, 'Special wraps')), B(4, 'Chicken strips'), B(4, 'Wing dings'), B(4, 'Fries'), B(4, 'More sides'), B(4, 'Drinks')] },
+    blocks: [c2(B(2, 'Chicken wraps')), c2(B(2, 'Special wraps')), B(4, 'Chicken strips'), { t: 'pair', blocks: [B(4, 'Wing dings'), B(4, 'Drinks')] }, B(4, 'Fries'), B(4, 'More sides')] },
 };
 const qs = new URLSearchParams(location.search), SET = qs.get('set') === '4' ? SCREENS4 : qs.get('set') === '3' ? SCREENS3 : SCREENS, TV = +(qs.get('tv') || 1), S = SET[TV] || SET[1];
 const $ = s => document.getElementById(s);
@@ -510,23 +514,19 @@ function layout() {
     const m = document.createElement('span'); m.textContent = d.dataset.d; m.style.cssText = 'position:absolute;visibility:hidden;white-space:pre';
     d.parentElement.appendChild(m); d.style.width = m.offsetWidth + 'px'; m.remove();
   });
-  /* a smaller scale means a wider column and less wrapping, so re-measure until it settles */
-  fit.style.transform = ''; fit.style.width = box.clientWidth + 'px';
-  const CAP = document.body.classList.contains('big') ? 1.4 : 1;
-  let sc = Math.min(CAP, box.clientHeight / fit.scrollHeight);
-  for (let i = 0; i < 8; i++) {
-    fit.style.width = (box.clientWidth / sc) + 'px';
-    const next = Math.min(CAP, box.clientHeight / fit.scrollHeight);
-    if (Math.abs(next - sc) < .002) { sc = Math.min(sc, next); break; }
-    sc = next;
-  }
-  fit.style.width = (box.clientWidth / sc) + 'px';
-  while (fit.scrollHeight * sc > box.clientHeight && sc > .3) { sc -= .005; fit.style.width = (box.clientWidth / sc) + 'px'; }
+  /* a smaller scale means a wider column and less wrapping, so search for the largest scale that still fits the box */
+  const CAP = document.body.classList.contains('big') ? 1.4 : 1, H = box.clientHeight;
+  const fits = k => { fit.style.width = (box.clientWidth / k) + 'px'; return fit.scrollHeight * k <= H; };
+  let lo = .3, hi = CAP;
+  if (fits(hi)) lo = hi; else for (let it = 0; it < 22; it++) { const mid = (lo + hi) / 2; if (fits(mid)) lo = mid; else hi = mid; }
+  const sc = lo; fits(sc);
   fit.style.transform = `scale(${sc})`;
   units = [...document.querySelectorAll('.u')];
   const full = fit.offsetWidth;
   boxes = units.map(u => {
     let y = 0, x = 0, e = u; while (e && e !== fit) { y += e.offsetTop; x += e.offsetLeft; e = e.offsetParent; }
+    /* rows inside CSS columns report their column position only through their client rect */
+    if (u.closest('.rows2') && document.body.classList.contains('big')) { const r = u.getBoundingClientRect(), f = fit.getBoundingClientRect(); x = (r.left - f.left) / sc; y = (r.top - f.top) / sc; }
     const big = document.body.classList.contains('big');
     return u.closest('.pair') || u.closest('.rows2') ? (big ? [x - 28, y, u.offsetWidth + 40, u.offsetHeight] : [x - 14, y, u.offsetWidth + 28, u.offsetHeight]) : [big ? -30 : -22, y, full + (big ? 46 : 44), u.offsetHeight];
   });
