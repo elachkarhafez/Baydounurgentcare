@@ -573,18 +573,29 @@
     }
     @media (max-width: 760px) { .ff { --s: 38px !important; } .guide { left: 10px; bottom: 74px; } .g-bot { width: 52px; } .g-bub { max-width: 190px; font-size: 12px; margin-bottom: 40px; } }
 
-    /* ---------- the other opening: a fridge on a sunny morning, frosty bottles, you pick one ---------- */
-    html.fz-lock, html.fz-lock body { overflow: hidden; }
-    .fz { position: fixed; inset: 0; z-index: 500; overflow: hidden; display: grid; place-items: center; background: linear-gradient(160deg, #fff4dc 0%, #f7e3be 48%, #ead2aa 100%); }
+    /* ---------- the fridge, under Meet the problem: it opens as you scroll to it, tap a frosty bottle ---------- */
+    .fridge-sec { position: relative; padding: clamp(70px, 9vw, 130px) 0; background: linear-gradient(160deg, #fff4dc 0%, #f7e3be 55%, #ead2aa 100%); overflow: hidden; overflow: clip; }
+    .fs-grid { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "copy stage" "card stage"; column-gap: clamp(30px, 6vw, 100px); row-gap: 24px; align-items: center; }
+    .fs-copy { grid-area: copy; align-self: end; } .fs-copy .lede { max-width: 38ch; }
+    .fs-stage { grid-area: stage; position: relative; padding-bottom: 18px; }
+    .fs-stage.opened .fz-door, .fs-stage.opened .fz-dark { display: none; }
+    .fs-stage .fz-disp { font-size: 18px; min-width: 104px; } .fs-stage .fz-note { font-size: 13px; } .fs-stage .fz-magnet { width: 52px; height: 52px; }
+    .fs-card { grid-area: card; align-self: start; max-width: 420px; padding: 20px 20px 22px; border-radius: 18px; background: #fffaf0; border: 2px solid var(--ink); box-shadow: 6px 6px 0 var(--ink); }
+    .fs-card b { display: block; font: 400 clamp(28px, 3.6vw, 42px)/1 var(--display); text-transform: uppercase; }
+    .fs-card > span { display: block; margin-top: 7px; font: 700 11px/1.3 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+    .fs-ings { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; } .fs-ings:empty { display: none; }
+    .fs-ings span { display: inline-flex; align-items: center; gap: 6px; padding: 5px 11px 5px 5px; border-radius: 999px; background: var(--cream); border: 1.5px solid var(--line); font: 600 13px/1 var(--sans); }
+    .fs-ings svg { width: 22px; height: 22px; }
+    .fs-acts { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; } .fs-acts[hidden] { display: none; }
+    @media (max-width: 760px) { .fs-grid { grid-template-columns: 1fr; grid-template-areas: "copy" "stage" "card"; text-align: center; } .fs-copy .lede { margin-left: auto; margin-right: auto; } .fs-stage { justify-self: center; } .fs-card { justify-self: center; width: 100%; text-align: left; } }
     .fz-sun { position: absolute; inset: -30% -40%; background: repeating-linear-gradient(118deg, rgba(255,255,255,0) 0 7%, rgba(255,251,238,.6) 7% 12%, rgba(255,255,255,0) 12% 19%); opacity: .7; pointer-events: none; }
-    .fz-floor { position: absolute; left: 0; right: 0; bottom: 0; height: 13%; background: linear-gradient(#dcc195, #c9aa7c); box-shadow: 0 -1px 0 rgba(255,255,255,.4); }
-    .fz-box { position: relative; width: min(86vw, 440px); height: min(78vh, 700px); height: min(78svh, 700px); perspective: 1700px; }
+    .fz-box { position: relative; width: min(72vw, 380px); aspect-ratio: .63; perspective: 1700px; }
     .fz-shadow { position: absolute; left: 2%; right: -8%; bottom: -4%; height: 9%; border-radius: 50%; background: radial-gradient(closest-side, rgba(70,45,10,.38), transparent); }
     .fz-in { position: absolute; inset: 0; border-radius: 24px; background: linear-gradient(#f5fafc, #dfeaf0 62%, #c9dae3); box-shadow: inset 0 0 0 9px #edf1f2, inset 0 0 0 11px #ccd7dc, inset 0 40px 70px rgba(120,150,165,.3), inset 0 -30px 50px rgba(90,120,140,.25); }
     .fz-led { position: absolute; left: 14%; right: 14%; top: 15px; height: 5px; border-radius: 5px; background: #fff; box-shadow: 0 0 22px 8px rgba(220,240,255,.95), 0 0 90px 34px rgba(210,236,255,.55); }
     .fz-ask { position: absolute; left: 0; right: 0; top: 8%; margin: 0; text-align: center; color: var(--ink); z-index: 2; }
     .fz-ask small { display: block; font: 700 11px/1 var(--mono); letter-spacing: .22em; text-transform: uppercase; color: #557080; }
-    .fz-ask b { display: block; margin-top: 10px; font: 400 clamp(30px, 8.4vw, 44px)/1 var(--display); text-transform: uppercase; }
+    .fz-ask b { display: block; margin-top: 8px; font: 400 clamp(22px, 6vw, 32px)/1 var(--display); text-transform: uppercase; }
     .fz-row { position: absolute; left: 8%; right: 8%; display: flex; justify-content: space-around; align-items: flex-end; }
     .fz-row.back { bottom: 45.5%; left: 13%; right: 13%; }
     .fz-row.front { bottom: 40%; }
@@ -612,8 +623,6 @@
     .fz-magnet svg { width: 25px; height: 34px; fill: var(--juice); }
     .fz-note { position: absolute; left: 30%; top: 56%; width: 42%; margin: 0; padding: 16px 14px 20px; background: #ffe866; color: var(--ink); font: 700 15px/1.3 var(--sans); transform: rotate(4deg); box-shadow: 0 12px 20px rgba(80,60,0,.18); }
     .fz-note::before { content: ""; position: absolute; left: 50%; top: -9px; width: 46px; height: 18px; margin-left: -23px; background: rgba(255,255,255,.55); transform: rotate(-3deg); }
-    .fz-skip { position: absolute; right: 16px; bottom: 16px; z-index: 9; padding: 10px 15px; border-radius: 999px; background: rgba(18,17,16,.1); color: var(--ink); font: 700 11px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; }
-    @media (min-width: 761px) { .fz-skip { right: 28px; bottom: 26px; } }
 
     /* ---------- juice between sections: the colour above drips into the next one ---------- */
     .drip { position: relative; z-index: 6; height: 0; pointer-events: none; }
@@ -633,6 +642,13 @@
     .ce-card canvas { display: block; width: 100%; height: 100%; }
     .ce-ok { min-height: 1.3em; margin: 12px 0 0; font: 700 12px/1.4 var(--mono); color: var(--muted); }
     @media (max-width: 760px) { .ce-grid { grid-template-columns: 1fr; text-align: center; } .ce-copy .lede { margin-left: auto; margin-right: auto; } .ce-picks { justify-content: center; } .ce-card { width: min(60vw, 236px); margin: 0 auto; } }
+
+    /* ---------- footer: mini shots keep falling past the logo ---------- */
+    .f-rain { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
+    .f-rain svg { position: absolute; top: -80px; animation: shotFall linear infinite; animation-play-state: paused; will-change: transform; filter: drop-shadow(0 6px 6px rgba(0,0,0,.35)); }
+    .f-rain.on svg { animation-play-state: running; }
+    @keyframes shotFall { from { transform: translate3d(0, 0, 0) rotate(var(--r0)); } to { transform: translate3d(var(--dx), var(--fall, 900px), 0) rotate(var(--r1)); } }
+    footer > .wrap { position: relative; z-index: 1; }
 
     /* ---------- scroll cues ---------- */
     .scroll-cue { position: absolute; left: 50%; bottom: 22px; z-index: 5; display: inline-flex; align-items: center; gap: 9px; padding: 9px 15px 9px 11px; translate: -50% 0; border-radius: 999px; background: var(--cream); color: var(--ink); font: 700 11px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; pointer-events: none; }
@@ -864,15 +880,26 @@
         <div class="board" data-board>
           <svg class="strings" data-strings aria-hidden="true"><path data-str/><path data-str/></svg>
           <figure class="ex ex-a" data-ex data-r="-3" data-sign><i class="pin" aria-hidden="true"></i><div class="ex-img"><img src="img/noor-sign2.webp" alt="The owner of Elevated Shots holding her I Have A Shot Problem sign" width="900" height="1200" loading="lazy"><svg class="pr-arrow" data-prarrow viewBox="0 0 100 80" aria-hidden="true"><path d="M94 76 C72 74 44 60 14 16 M14 16 L9 39 M14 16 L35 23"/></svg><span class="pr-sticker" data-prsticker>The problem</span></div><figcaption>Exhibit A</figcaption></figure>
-          <figure class="ex ex-b" data-ex data-r="4"><i class="pin" aria-hidden="true"></i><div class="ex-img"><img src="img/posts/p3.webp" alt="Arms out at the Pink for a Purpose market" width="540" height="960" loading="lazy" style="object-position:50% 62%"></div><figcaption>Exhibit B</figcaption></figure>
+          <figure class="ex ex-b" data-ex data-r="4"><i class="pin" aria-hidden="true"></i><div class="ex-img"><img src="img/noor-sign4.webp" alt="Standing next to the I Have A Shot Problem sign at the Elevated Shots booth" width="900" height="1200" loading="lazy" style="object-position:50% 30%"></div><figcaption>Exhibit B</figcaption></figure>
           <figure class="ex ex-c" data-ex data-r="-2"><i class="pin" aria-hidden="true"></i><div class="ex-img"><img src="img/noor-sign.webp" alt="At the Elevated Shots booth next to the bottle sign" width="900" height="1200" loading="lazy"></div><figcaption>Exhibit C</figcaption></figure>
           <div class="stamp" data-stamp aria-hidden="true"><small>Confirmed</small><b>Shot problem</b></div>
         </div>
       </div>
     </section>
 
-    <!-- CHEERS WALL -->
+    <!-- THE FRIDGE -->
     <div class="drip" data-drip="#ffc61a" aria-hidden="true"></div>
+    <section class="fridge-sec" id="fridge" data-fridge>
+      <div class="fz-sun" aria-hidden="true"></div>
+      <div class="wrap fs-grid">
+        <div class="fs-copy"><span class="tag"><i></i>Every morning</span><h2 style="margin-top:16px" data-split>Open the fridge.</h2><p class="lede">They stay cold until you need one. Tap the one you want today.</p></div>
+        <div class="fs-stage" data-fstage></div>
+        <div class="fs-card" data-fscard aria-live="polite"><b data-fsname>Tap a bottle</b><span data-fskick>See what's in it</span><div class="fs-ings" data-fsings></div><div class="fs-acts" data-fsacts hidden><button class="btn ink" type="button" data-fsadd>Add to my pack</button><button class="btn" type="button" data-fsback>Put it back</button></div></div>
+      </div>
+    </section>
+
+    <!-- CHEERS WALL -->
+    <div class="drip" data-drip="#ead2aa" aria-hidden="true"></div>
     <section class="cheers" data-cheers>
       <div class="wrap">
         <div class="ch-head"><div><span class="tag"><i></i>Straight from the reels</span><h2 style="margin-top:16px" data-split>Cheers, Detroit.</h2></div><div class="ch-count">Tap a clip to clink<b data-clinks>0</b></div></div>
@@ -986,7 +1013,6 @@
     </section>
   </main>
 
-  <div class="drip" data-drip="#fdf0cc" aria-hidden="true"></div>
   <footer>
     <div class="wrap">
       <div class="f-stage" data-fstage aria-hidden="true">
@@ -1318,6 +1344,7 @@
   const CAP_EDGE = '<rect x="62" y="6" width="76" height="44" rx="5" fill="none" stroke="#fff8e7" stroke-opacity=".5" stroke-width="5"/>';
   ICONS.shot = `<g transform="translate(14.4 2) scale(.1667)">${strip(bottle(MASCOT, { sw: 7 }))}${CAP_EDGE}</g>`;
   $('#i-shot').innerHTML = ICONS.shot;
+  $('[data-symbols]').insertAdjacentHTML('beforeend', FL.map(f => `<symbol id="i-shot-${f.k}" viewBox="0 0 64 64"><g transform="translate(14.4 2) scale(.1667)">${strip(bottle(f, { sw: 7 }))}${CAP_EDGE}</g></symbol>`).join(''));
   { const t = document.createElement('div'); t.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><defs>${SHARED}</defs><g transform="translate(14.4 2) scale(.1667)">${strip(bottle(MASCOT, { sw: 7, standalone: true })).replace(/<defs>[\s\S]*?<\/defs>/, '')}${CAP_EDGE}</g></svg>`; const sv = t.firstElementChild; sv.setAttribute('xmlns', 'http://www.w3.org/2000/svg'); const im = new Image(); im.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(new XMLSerializer().serializeToString(sv)); SPRITES.shot = im; }
 
   /* ---------- split headings into letters ---------- */
@@ -1822,6 +1849,39 @@
   }
 
   /* =============================================================
+     THE FRIDGE, under Meet the problem. Scroll to it and the display
+     cools to 34°F, the door swings open, cold air rolls out and the
+     bottles sit frosted on the shelf. Tap one: it comes forward, a
+     thumb wipes the frost off her logo, and the card beside it says
+     what's inside. Add it to the pack or put it back.
+     ============================================================= */
+  const FZS = $('[data-fstage]');
+  {
+    const frost = k => { let r = 101 + k * 977; const rnd = () => (r = (r * 9301 + 49297) % 233280) / 233280; const id = 'fz' + (++uid);
+      let sp = ''; for (let i = 0; i < 170; i++) { const y = 44 + Math.pow(rnd(), 1.6) * 300, x = 32 + rnd() * 136; sp += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(.5 + rnd() * 1.4).toFixed(2)}" opacity="${(.35 + rnd() * .6).toFixed(2)}"/>`; }
+      let dr = ''; for (let i = 0; i < 22; i++) { const x = 40 + rnd() * 120, y = 120 + rnd() * 210, q = 1.8 + rnd() * 3; dr += `<g data-fzdrop transform="translate(${x.toFixed(1)} ${y.toFixed(1)})"><ellipse rx="${q.toFixed(1)}" ry="${(q * 1.18).toFixed(1)}" fill="rgba(255,255,255,.16)" stroke="rgba(255,255,255,.85)" stroke-width=".9"/><circle cx="${(-q * .35).toFixed(1)}" cy="${(-q * .42).toFixed(1)}" r="${(q * .3).toFixed(1)}" fill="#fff"/></g>`; }
+      let cp = ''; for (let i = 0; i < 40; i++) cp += `<circle cx="${(64 + rnd() * 72).toFixed(1)}" cy="${(8 + rnd() * 12).toFixed(1)}" r="${(.5 + rnd() * 1.1).toFixed(2)}"/>`;
+      return `<svg class="fz-frost" viewBox="0 0 200 360" aria-hidden="true"><defs><clipPath id="${id}c"><path d="${BODY}"/></clipPath><linearGradient id="${id}g" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".8"/><stop offset=".32" stop-color="#fff" stop-opacity=".44"/><stop offset=".62" stop-color="#fff" stop-opacity=".24"/><stop offset="1" stop-color="#fff" stop-opacity=".58"/></linearGradient><mask id="${id}m" maskUnits="userSpaceOnUse" x="0" y="0" width="200" height="360"><rect width="200" height="360" fill="#fff"/><path data-fzwipe d="M26 190 C70 206 124 238 176 262" stroke="#000" stroke-width="62" stroke-linecap="round" fill="none"/></mask></defs><g clip-path="url(#${id}c)"><g mask="url(#${id}m)"><rect width="200" height="360" fill="url(#${id}g)"/><g fill="#fff">${sp}</g></g></g><g fill="#fff" opacity=".85">${cp}</g><g>${dr}</g></svg>`; };
+    const fb = (f, i) => `<button type="button" class="fz-b" data-fzb="${i}" aria-label="${esc(f.n)}">${bottle(f, { drops: true, sw: 3 })}${frost(i)}<em>${esc(f.short)}</em></button>`;
+    const deco = (f, k) => `<span class="fz-b deco" aria-hidden="true">${bottle(f, { sw: 3 })}${frost(10 + k)}</span>`;
+    const fruit = (k, x, r) => `<span class="fruit" style="left:${x}%;transform:rotate(${r}deg)">${ico(k)}</span>`;
+    FZS.innerHTML = `<div class="fz-box"><div class="fz-shadow"></div>
+        <div class="fz-in"><div class="fz-led"></div>
+          <p class="fz-ask"><small>Good morning</small><b>Which one today?</b></p>
+          <div class="fz-row back">${[1, 2, 0, 1, 2].map((x, k) => deco(FL[x], k)).join('')}</div>
+          <div class="fz-shelf"></div>
+          <div class="fz-row front">${FL.map(fb).join('')}</div>
+          <span class="fz-hint" data-fzhint>Tap a bottle</span>
+          <div class="fz-drawer" aria-hidden="true">${fruit('pineapple', 6, -12)}${fruit('lemon', 27, 8)}${fruit('ginger', 46, -6)}${fruit('orange', 66, 14)}${fruit('lemon', 80, -20)}</div>
+          <div class="fz-dark"></div>
+        </div>
+        <div class="fz-mist" aria-hidden="true">${[[18, 46], [52, 40], [34, 62], [64, 58], [10, 74], [48, 80], [72, 86]].map(([x, y]) => `<i style="left:${x}%;top:${y}%"></i>`).join('')}</div>
+        <div class="fz-door" aria-hidden="true"><div class="fz-disp"><span data-fzpct>41°F</span><small data-fzlab>Cooling</small></div><div class="fz-magnet"><svg viewBox="0 0 292 400"><use href="#i-mark"/></svg></div><p class="fz-note">Don’t forget your shot</p><div class="fz-handle"></div></div>
+      </div>`;
+    if (!ANIM) FZS.classList.add('opened');
+  }
+
+  /* =============================================================
      STATIC FALLBACK STOPS HERE (reduced motion or no GSAP)
      ============================================================= */
   if (!ANIM) { const l = $('[data-loader]'); if (l) l.remove(); hCall.remove(); const c = $('[data-lcall]'); if (c) c.remove(); $$('[data-bitem]').forEach(b => b.classList.add('on')); $('[data-bline]').style.transform = 'scaleY(1)'; drawProg(0); drawLT(1); liqEl.style.setProperty('--wyp', '10px'); $('[data-ffill]').style.height = '100%'; guide.remove(); return; }
@@ -1865,10 +1925,6 @@
     .to(hCall, { opacity: 1, y: 0, duration: .5, ease: 'back.out(2)' }, 1.3);
   // the opening: the bottle fills, the cap twists off, the bottle tips and the juice pours out of
   // the mouth into a shot glass, then the three flavors flood the screen from that glass
-  // two openings: half of visitors get the pour, half get the fridge (?open=fridge or ?open=classic to pick one)
-  const qOpen = (location.search.match(/[?&]open=(fridge|classic)/) || [])[1];
-  const OPEN = qOpen || (Math.random() < .5 ? 'fridge' : 'classic');
-  if (OPEN === 'classic') {
   const LR = makeRig($('[data-lrig]'), FL[0], { pivot: [100, 200], label: 'mark', fill: 0, dark: true, rate: .1 });
   const LG = { cx: 270, top: 330 }, lgPos = $('[data-lgpos]'), LGS = makeGlass($('[data-lglassin]'), FL[0].c, FL[0].c2, { dark: true });
   const lTick = (t, dms) => { const dt = Math.min(dms, 40) / 1000; LR.step(dt, x => Math.abs(x - LG.cx) < LGS.inner() + 2.6 ? LG.top + LGS.level() : 520, pt => { LGS.G.fill = Math.min(1, LGS.G.fill + pt.vol * 1.25); LGS.impact(pt.x - LG.cx); }); if (LR.S.open && LR.S.a > 60) LG.cx = lerp(LG.cx, clamp(LR.predict(LR.S.a, LG.top + LGS.level()), 200, 330), .3); lgPos.setAttribute('transform', `translate(${LG.cx.toFixed(1)} ${LG.top})`); LR.draw(); LGS.step(dt); LGS.draw(); };
@@ -1889,97 +1945,7 @@
     .to(floods.slice().reverse(), { y: '-=' + (innerHeight * 1.6 + innerWidth), duration: .75, ease: 'power3.inOut', stagger: .08 })
     .add(() => intro.play(), '-=.55');
   loader.addEventListener('click', () => lt.progress(1));
-  } else fridgeOpen();
 
-  /* =============================================================
-     THE OTHER OPENING: a fridge on a sunny morning. The display
-     counts up while the page loads, the door swings open, cold air
-     rolls out, and you pick which frosty bottle you want today.
-     It comes forward, a thumb wipes the frost off the logo, and the
-     page floods in that flavor. The hero bottle becomes your pick.
-     ============================================================= */
-  function fridgeOpen() {
-    loader.remove();
-    const root = document.documentElement; root.classList.add('fz-lock'); if (lenis) lenis.stop();
-    const frost = k => { let r = 101 + k * 977; const rnd = () => (r = (r * 9301 + 49297) % 233280) / 233280; const id = 'fz' + (++uid);
-      let sp = ''; for (let i = 0; i < 170; i++) { const y = 44 + Math.pow(rnd(), 1.6) * 300, x = 32 + rnd() * 136; sp += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(.5 + rnd() * 1.4).toFixed(2)}" opacity="${(.35 + rnd() * .6).toFixed(2)}"/>`; }
-      let dr = ''; for (let i = 0; i < 22; i++) { const x = 40 + rnd() * 120, y = 120 + rnd() * 210, q = 1.8 + rnd() * 3; dr += `<g data-fzdrop transform="translate(${x.toFixed(1)} ${y.toFixed(1)})"><ellipse rx="${q.toFixed(1)}" ry="${(q * 1.18).toFixed(1)}" fill="rgba(255,255,255,.16)" stroke="rgba(255,255,255,.85)" stroke-width=".9"/><circle cx="${(-q * .35).toFixed(1)}" cy="${(-q * .42).toFixed(1)}" r="${(q * .3).toFixed(1)}" fill="#fff"/></g>`; }
-      let cp = ''; for (let i = 0; i < 40; i++) cp += `<circle cx="${(64 + rnd() * 72).toFixed(1)}" cy="${(8 + rnd() * 12).toFixed(1)}" r="${(.5 + rnd() * 1.1).toFixed(2)}"/>`;
-      return `<svg class="fz-frost" viewBox="0 0 200 360" aria-hidden="true"><defs><clipPath id="${id}c"><path d="${BODY}"/></clipPath><linearGradient id="${id}g" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".8"/><stop offset=".32" stop-color="#fff" stop-opacity=".44"/><stop offset=".62" stop-color="#fff" stop-opacity=".24"/><stop offset="1" stop-color="#fff" stop-opacity=".58"/></linearGradient><mask id="${id}m" maskUnits="userSpaceOnUse" x="0" y="0" width="200" height="360"><rect width="200" height="360" fill="#fff"/><path data-fzwipe d="M26 190 C70 206 124 238 176 262" stroke="#000" stroke-width="62" stroke-linecap="round" fill="none"/></mask></defs><g clip-path="url(#${id}c)"><g mask="url(#${id}m)"><rect width="200" height="360" fill="url(#${id}g)"/><g fill="#fff">${sp}</g></g></g><g fill="#fff" opacity=".85">${cp}</g><g>${dr}</g></svg>`; };
-    const fb = (f, i) => `<button type="button" class="fz-b" data-fzb="${i}" aria-label="${esc(f.n)}">${bottle(f, { drops: true, sw: 3 })}${frost(i)}<em>${esc(f.short)}</em></button>`;
-    const deco = (f, k) => `<span class="fz-b deco" aria-hidden="true">${bottle(f, { sw: 3 })}${frost(10 + k)}</span>`;
-    const fruit = (k, x, r) => `<span class="fruit" style="left:${x}%;transform:rotate(${r}deg)">${ico(k)}</span>`;
-    const fz = document.createElement('div'); fz.className = 'fz'; fz.setAttribute('role', 'dialog'); fz.setAttribute('aria-label', 'Pick your shot');
-    fz.innerHTML = `<div class="fz-sun" aria-hidden="true"></div><div class="fz-floor" aria-hidden="true"></div>
-      <div class="fz-box"><div class="fz-shadow"></div>
-        <div class="fz-in"><div class="fz-led"></div>
-          <p class="fz-ask"><small>Good morning</small><b>Which one today?</b></p>
-          <div class="fz-row back">${[1, 2, 0, 1, 2].map((x, k) => deco(FL[x], k)).join('')}</div>
-          <div class="fz-shelf"></div>
-          <div class="fz-row front">${FL.map(fb).join('')}</div>
-          <span class="fz-hint" data-fzhint>Tap a bottle</span>
-          <div class="fz-drawer" aria-hidden="true">${fruit('pineapple', 6, -12)}${fruit('lemon', 27, 8)}${fruit('ginger', 46, -6)}${fruit('orange', 66, 14)}${fruit('lemon', 80, -20)}</div>
-          <div class="fz-dark"></div>
-        </div>
-        <div class="fz-mist" aria-hidden="true">${[[18, 46], [52, 40], [34, 62], [64, 58], [10, 74], [48, 80], [72, 86]].map(([x, y]) => `<i style="left:${x}%;top:${y}%"></i>`).join('')}</div>
-        <div class="fz-door"><div class="fz-disp"><span data-fzpct>0%</span><small data-fzlab>Chilling</small></div><div class="fz-magnet"><svg viewBox="0 0 292 400" aria-hidden="true"><use href="#i-mark"/></svg></div><p class="fz-note">Don’t forget your shot</p><div class="fz-handle"></div></div>
-      </div>
-      <button type="button" class="fz-skip" data-fzskip>Skip</button>`;
-    document.body.appendChild(fz);
-    const q = s => fz.querySelector(s), qa = s => [...fz.querySelectorAll(s)];
-    const door = q('.fz-door'), dark = q('.fz-dark'), led = q('.fz-led'), mist = qa('.fz-mist i'), fronts = qa('[data-fzb]'), ask = q('.fz-ask'), hint = q('[data-fzhint]'), pct = q('[data-fzpct]');
-    gsap.set([ask, hint, led], { opacity: 0 });
-    let ready = false, done = false, idle = null;
-    const mistOut = () => mist.forEach((m, i) => { const side = i % 2 ? 1 : -1;
-      gsap.fromTo(m, { x: 0, y: 0 }, { x: side * (50 + i * 16), y: 90 + i * 22, duration: 3.2, ease: 'power1.out', delay: i * .07 });
-      gsap.fromTo(m, { opacity: 0, scale: .35 }, { keyframes: [{ opacity: .95, scale: 1, duration: 1, ease: 'power2.out' }, { opacity: 0, scale: 1.7, duration: 2, ease: 'power1.in' }], delay: i * .07 }); });
-    const P = { p: 0 };
-    const open = gsap.timeline()
-      .to(P, { p: 100, duration: 1, ease: 'power2.inOut', onUpdate: () => { pct.textContent = Math.round(P.p) + '%'; } })
-      .add(() => { pct.textContent = '34°F'; q('[data-fzlab]').textContent = 'Cold and ready'; })
-      .to(door, { rotationY: -7, duration: .22, ease: 'power2.out' }, '+=.3')
-      .to(door, { rotationY: -118, duration: 1.25, ease: 'power3.inOut', onStart: () => door.classList.add('open') })
-      .to(dark, { opacity: 0, duration: .55, ease: 'power1.in' }, '<.1')
-      .to(led, { keyframes: [{ opacity: .7, duration: .05 }, { opacity: .1, duration: .06 }, { opacity: 1, duration: .12 }] }, '<.05')
-      .add(mistOut, '<.05')
-      .fromTo(fronts, { y: 10 }, { y: 0, duration: .6, ease: 'back.out(2.4)', stagger: .07 }, '<.3')
-      .fromTo(ask, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: .6, ease: 'expo.out' }, '-=.4')
-      .fromTo(hint, { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: .5, ease: 'back.out(2)' }, '-=.3')
-      .add(() => { ready = true; gsap.to(hint, { y: -4, duration: .8, ease: 'sine.inOut', yoyo: true, repeat: -1 }); idle = setTimeout(() => pick(Math.floor(Math.random() * FL.length)), 14000); });
-    const finish = (f, el) => {
-      H.flav = FL.indexOf(f); R.setFlavor(f); PICK = f.k;
-      const r = el ? el.getBoundingClientRect() : { left: innerWidth / 2, top: innerHeight / 2, width: 0, height: 0 };
-      const fl = [f.c, f.c2].map(c => { const d = document.createElement('div'); d.className = 'l-flood'; d.style.cssText = `--c:${c};z-index:520`; document.body.appendChild(d); return d; });
-      gsap.set(fl, { x: r.left + r.width / 2, y: r.top + r.height * .45 });
-      gsap.timeline()
-        .to(fl, { scale: 1, duration: .7, ease: 'power3.in', stagger: .1 })
-        .add(() => { clearTimeout(idle); open.kill(); fz.remove(); root.classList.remove('fz-lock'); if (lenis) lenis.start(); })
-        .to(fl.slice().reverse(), { y: '-=' + (innerHeight * 1.6 + innerWidth), duration: .75, ease: 'power3.inOut', stagger: .08 })
-        .add(() => intro.play(), '-=.55')
-        .add(() => fl.forEach(d => d.remove()));
-    };
-    const pick = i => { if (!ready || done) return; ready = false; done = true; clearTimeout(idle);
-      const b = fronts[i], f = FL[i], others = fronts.filter(x => x !== b);
-      const br = b.getBoundingClientRect(), dx = innerWidth / 2 - (br.left + br.width / 2), dy = innerHeight * .5 - (br.top + br.height / 2);
-      const sc = Math.min(2.6, innerHeight * .6 / br.height);
-      b.style.zIndex = 9; b.parentElement.style.zIndex = 9; b.style.transition = 'none';
-      const wipe = b.querySelector('[data-fzwipe]'), WL = wipe.getTotalLength(); gsap.set(wipe, { strokeDasharray: WL, strokeDashoffset: WL });
-      gsap.timeline()
-        .to([ask, hint, b.querySelector('em')], { opacity: 0, duration: .25 }, 0)
-        .to(others, { opacity: .2, scale: .9, y: 6, duration: .5, ease: 'power2.out' }, 0)
-        .to(qa('.fz-b.deco, .fz-drawer'), { opacity: .2, duration: .5 }, 0)
-        .to(b, { y: -16, duration: .22, ease: 'power2.out' }, 0)
-        .to(b, { x: dx, y: dy, scale: sc, rotation: -5, duration: .95, ease: 'power3.inOut' }, .18)
-        .to(b, { rotation: 0, duration: .55, ease: 'back.out(2)' }, 1.1)
-        .to(wipe, { strokeDashoffset: 0, duration: .5, ease: 'power2.inOut' }, .85)
-        .add(() => [...b.querySelectorAll('[data-fzdrop]')].slice(0, 8).forEach((d, k) => gsap.to(d, { y: `+=${50 + k * 14}`, duration: 1 + k * .1, ease: 'power2.in', delay: k * .06 })), .9)
-        .add(() => finish(f, b), 1.8);
-    };
-    fz.addEventListener('click', e => { const b = e.target.closest('[data-fzb]'); if (b) pick(+b.dataset.fzb); });
-    q('[data-fzskip]').addEventListener('click', () => { if (done) return; done = true; ready = false; finish(FL[H.flav] || FL[0], null); });
-    if (FINE) fz.addEventListener('pointermove', e => { const nx = e.clientX / innerWidth - .5, ny = e.clientY / innerHeight - .5;
-      gsap.to(q('.fz-row.back'), { x: nx * -10, y: ny * -4, duration: .7, overwrite: 'auto' }); gsap.to(q('.fz-drawer'), { x: nx * 8, duration: .7, overwrite: 'auto' }); });
-  }
 
   /* ambient hero motion */
   gsap.to('[data-ring]', { rotation: 360, duration: 40, ease: 'none', repeat: -1 });
@@ -2082,6 +2048,73 @@
     el.style.setProperty('--dc', el.dataset.drip);
     el.innerHTML = '<b></b>' + Array.from({ length: n }, (_, i) => { const w = 14 + rnd() * (PHONE ? 20 : 30), x = (i + .2 + rnd() * .6) / n * 100, h = 30 + rnd() * (PHONE ? 50 : 96); return `<i style="left:${x.toFixed(1)}%;width:${w.toFixed(0)}px;height:${h.toFixed(0)}px;margin-left:${(-w / 2).toFixed(0)}px"></i>`; }).join('');
     gsap.fromTo($$('i', el), { scaleY: .06 }, { scaleY: 1, ease: 'none', stagger: { each: .05, from: 'random' }, scrollTrigger: { trigger: el, start: 'top 96%', end: 'top 30%', scrub: .5 } }); });
+
+  /* the fridge: opens when you get to it, then you pick a bottle */
+  {
+    const q = x => FZS.querySelector(x), qa = x => [...FZS.querySelectorAll(x)];
+    const door = q('.fz-door'), dark = q('.fz-dark'), led = q('.fz-led'), mist = qa('.fz-mist i'), fronts = qa('[data-fzb]'), ask = q('.fz-ask'), hint = q('[data-fzhint]'), disp = q('[data-fzpct]'), lab = q('[data-fzlab]'), inside = q('.fz-in');
+    const card = $('[data-fscard]'), acts = $('[data-fsacts]');
+    gsap.set([ask, hint, led], { opacity: 0 });
+    let ready = false, busy = false, chosen = null;
+    const mistOut = () => mist.forEach((m, i) => { const side = i % 2 ? 1 : -1;
+      gsap.fromTo(m, { x: 0, y: 0 }, { x: side * (36 + i * 12), y: 60 + i * 16, duration: 3.2, ease: 'power1.out', delay: i * .07 });
+      gsap.fromTo(m, { opacity: 0, scale: .35 }, { keyframes: [{ opacity: .95, scale: 1, duration: 1, ease: 'power2.out' }, { opacity: 0, scale: 1.7, duration: 2, ease: 'power1.in' }], delay: i * .07 }); });
+    const T = { t: 41 };
+    const open = gsap.timeline({ paused: true })
+      .to(T, { t: 34, duration: 1.1, ease: 'power2.out', onUpdate: () => { disp.textContent = Math.round(T.t) + '°F'; } })
+      .add(() => { lab.textContent = 'Cold and ready'; })
+      .to(door, { rotationY: -7, duration: .22, ease: 'power2.out' }, '+=.15')
+      .to(door, { rotationY: -118, duration: 1.25, ease: 'power3.inOut', onStart: () => door.classList.add('open') })
+      .to(dark, { opacity: 0, duration: .55, ease: 'power1.in' }, '<.1')
+      .to(led, { keyframes: [{ opacity: .7, duration: .05 }, { opacity: .1, duration: .06 }, { opacity: 1, duration: .12 }] }, '<.05')
+      .add(mistOut, '<.05')
+      .fromTo(fronts, { y: 10 }, { y: 0, duration: .6, ease: 'back.out(2.4)', stagger: .07 }, '<.3')
+      .fromTo(ask, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: .6, ease: 'expo.out' }, '-=.4')
+      .fromTo(hint, { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: .5, ease: 'back.out(2)' }, '-=.3')
+      .add(() => { ready = true; gsap.to(hint, { y: -4, duration: .8, ease: 'sine.inOut', yoyo: true, repeat: -1 }); });
+    ScrollTrigger.create({ trigger: FZS, start: 'top 62%', once: true, onEnter: () => open.play() });
+    const fill = f => { $('[data-fsname]').textContent = f ? f.n : 'Tap a bottle'; $('[data-fskick]').textContent = f ? `${f.ben} · ${f.kick}` : "See what's in it";
+      $('[data-fsings]').innerHTML = f ? f.ing.map(k => `<span data-poppable data-fruit="${k}">${ico(k)}${esc(CONFIG.ingredients[k])}</span>`).join('') : ''; acts.hidden = !f; };
+    const pick = i => { if (!ready || busy || chosen != null) return; busy = true; chosen = i; const b = fronts[i], f = FL[i]; PICK = f.k;
+      const ir = inside.getBoundingClientRect(), br = b.getBoundingClientRect();
+      const sc = Math.min(2.1, ir.height * .6 / br.height), dx = ir.left + ir.width / 2 - (br.left + br.width / 2), dy = ir.top + ir.height * .52 - (br.top + br.height / 2);
+      b.style.zIndex = 9; b.parentElement.style.zIndex = 9; b.style.transition = 'none';
+      const wipe = b.querySelector('[data-fzwipe]'), WL = wipe.getTotalLength(); gsap.set(wipe, { strokeDasharray: WL, strokeDashoffset: WL });
+      const drops = [...b.querySelectorAll('[data-fzdrop]')].slice(0, 8); drops.forEach(d => { d._y0 = gsap.getProperty(d, 'y'); });
+      gsap.timeline({ onComplete: () => { busy = false; } })
+        .to([ask, hint, b.querySelector('em')], { opacity: 0, duration: .25 }, 0)
+        .to(fronts.filter(x => x !== b), { opacity: .2, scale: .9, duration: .5, ease: 'power2.out' }, 0)
+        .to(qa('.fz-b.deco, .fz-drawer'), { opacity: .2, duration: .5 }, 0)
+        .to(b, { y: -16, duration: .22, ease: 'power2.out' }, 0)
+        .to(b, { x: dx, y: dy, scale: sc, rotation: -5, duration: .9, ease: 'power3.inOut' }, .18)
+        .to(b, { rotation: 0, duration: .55, ease: 'back.out(2)' }, 1.05)
+        .to(wipe, { strokeDashoffset: 0, duration: .5, ease: 'power2.inOut' }, .8)
+        .add(() => drops.forEach((d, k) => gsap.to(d, { y: d._y0 + 50 + k * 14, duration: 1 + k * .1, ease: 'power2.in', delay: k * .06 })), .85)
+        .add(() => { fill(f); gsap.fromTo(card, { y: 14, scale: .97 }, { y: 0, scale: 1, duration: .5, ease: 'back.out(2.2)' }); gsap.fromTo('[data-fsings] span', { y: 10, opacity: 0 }, { y: 0, opacity: 1, duration: .35, stagger: .05, ease: 'back.out(2)' }); }, 1.0);
+    };
+    const putBack = () => { if (busy || chosen == null) return; busy = true; const b = fronts[chosen], wipe = b.querySelector('[data-fzwipe]'), drops = [...b.querySelectorAll('[data-fzdrop]')].slice(0, 8);
+      fill(null);
+      gsap.timeline({ onComplete: () => { b.style.zIndex = ''; b.parentElement.style.zIndex = ''; b.style.transition = ''; chosen = null; busy = false; } })
+        .to(b, { x: 0, y: 0, scale: 1, rotation: 0, duration: .8, ease: 'power3.inOut' }, 0)
+        .to(wipe, { strokeDashoffset: wipe.getTotalLength(), duration: .7, ease: 'power1.inOut' }, .2)
+        .add(() => drops.forEach(d => gsap.to(d, { y: d._y0, duration: .4 })), .3)
+        .to(fronts, { opacity: 1, scale: 1, duration: .5 }, .4)
+        .to(qa('.fz-b.deco'), { opacity: .62, duration: .5 }, .4).to(q('.fz-drawer'), { opacity: 1, duration: .5 }, .4)
+        .to([ask, hint, b.querySelector('em')], { opacity: 1, duration: .3 }, .7);
+    };
+    FZS.addEventListener('click', e => { const b = e.target.closest('[data-fzb]'); if (!b) return; if (chosen != null && +b.dataset.fzb === chosen) putBack(); else pick(+b.dataset.fzb); });
+    $('[data-fsback]').addEventListener('click', putBack);
+    $('[data-fsadd]').addEventListener('click', () => { if (chosen == null) return; const f = FL[chosen]; addToPack(f.k, 1); toast(`${f.n} is in your pack.`); });
+    if (FINE) FZS.addEventListener('pointermove', e => { const r = FZS.getBoundingClientRect(), nx = (e.clientX - r.left) / r.width - .5; gsap.to(q('.fz-row.back'), { x: nx * -10, duration: .7, overwrite: 'auto' }); gsap.to(q('.fz-drawer'), { x: nx * 8, duration: .7, overwrite: 'auto' }); });
+  }
+
+  /* footer: a steady fall of mini shots in all three flavors */
+  { const ft = $('footer'), n = PHONE ? 22 : 42, rain = document.createElement('div'); rain.className = 'f-rain'; rain.setAttribute('aria-hidden', 'true');
+    let r = 9; const rnd = () => (r = (r * 9301 + 49297) % 233280) / 233280;
+    rain.innerHTML = Array.from({ length: n }, (_, i) => { const sz = (PHONE ? 40 : 46) + rnd() * (PHONE ? 34 : 44), x = rnd() * 100, d = 4.5 + rnd() * 5, dl = -rnd() * d, r0 = (rnd() - .5) * 60, r1 = r0 + (rnd() - .5) * 360, dx = (rnd() - .5) * 60;
+      return `<svg viewBox="0 0 64 64" style="left:${x.toFixed(1)}%;width:${sz.toFixed(0)}px;height:${sz.toFixed(0)}px;animation-duration:${d.toFixed(2)}s;animation-delay:${dl.toFixed(2)}s;--r0:${r0.toFixed(0)}deg;--r1:${r1.toFixed(0)}deg;--dx:${dx.toFixed(0)}px"><use href="#i-shot-${FL[i % 3].k}"/></svg>`; }).join('');
+    ft.prepend(rain); const size = () => ft.style.setProperty('--fall', (ft.offsetHeight + 170) + 'px'); size(); addEventListener('resize', size); ScrollTrigger.addEventListener('refresh', size);
+    new IntersectionObserver(es => es.forEach(e => rain.classList.toggle('on', e.isIntersecting))).observe(ft); }
 
   /* cheers wall: columns drift at different speeds */
   if (!PHONE) $$('[data-chcol]').forEach((c, i) => gsap.fromTo(c, { y: [60, -40, 90, -20][i] }, { y: [-60, 40, -90, 20][i], ease: 'none', scrollTrigger: { trigger: '[data-chgrid]', start: 'top bottom', end: 'bottom top', scrub: true } }));
