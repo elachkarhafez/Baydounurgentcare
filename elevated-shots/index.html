@@ -902,7 +902,7 @@
     <div class="drip" data-drip="#ead2aa" aria-hidden="true"></div>
     <section class="cheers" data-cheers>
       <div class="wrap">
-        <div class="ch-head"><div><span class="tag"><i></i>Straight from the reels</span><h2 style="margin-top:16px" data-split>At the sips.</h2></div></div>
+        <div class="ch-head"><div><span class="tag"><i></i>Straight from the reels</span><h2 style="margin-top:16px" data-split>Cheers, Detroit.</h2></div><div class="ch-count">Tap a clip to clink<b data-clinks>0</b></div></div>
         <div class="ch-grid" data-chgrid></div>
       </div>
     </section>
@@ -1572,10 +1572,11 @@
   $('[data-pillars]').addEventListener('click', e => { const b = e.target.closest('[data-pill]'); if (!b) return; luTouch(); setLineup(b.dataset.pill, null); goTo($('#shots')); });
 
   /* =============================================================
-     CHEERS WALL: their reels, playing while on screen.
+     CHEERS WALL: their reels, playing while on screen. Tap = clink.
      ============================================================= */
   const cols = [[], [], [], []]; CONFIG.clips.forEach((c, i) => cols[i % 4].push(c));
-  $('[data-chgrid]').innerHTML = cols.map((col, ci) => `<div class="ch-col" data-chcol="${ci}">${col.map(c => `<figure class="clip" data-clip style="margin:0"><img src="${c.v}.jpg" alt="" loading="lazy" width="360" height="640"><video muted playsinline loop autoplay preload="none" poster="${c.v}.jpg" data-src="${c.v}.mp4"></video></figure>`).join('')}</div>`).join('');
+  $('[data-chgrid]').innerHTML = cols.map((col, ci) => `<div class="ch-col" data-chcol="${ci}">${col.map(c => `<figure class="clip" data-clip style="margin:0"><img src="${c.v}.jpg" alt="" loading="lazy" width="360" height="640"><video muted playsinline loop autoplay preload="none" poster="${c.v}.jpg" data-src="${c.v}.mp4"></video><span class="cb">Clink</span><span class="burst">Cheers!</span><figcaption>${esc(c.t)}</figcaption></figure>`).join('')}</div>`).join('');
+  let clinks = store.get('es-clinks', 0); $('[data-clinks]').textContent = clinks;
   /* every video autoplays: muted + inline (what phones require), loaded just before it scrolls in,
      paused when it's off screen. If the phone still blocks it (Low Power Mode), the first tap or
      scroll starts whatever is on screen. */
@@ -1586,6 +1587,8 @@
   ['touchstart', 'pointerdown', 'scroll', 'keydown'].forEach(ev => addEventListener(ev, kick, { passive: true }));
   document.addEventListener('visibilitychange', () => { if (!document.hidden) kick(); });
   $$('[data-clip] video').forEach(prepV);
+  $('[data-chgrid]').addEventListener('click', e => { const c = e.target.closest('[data-clip]'); if (!c) return; clinks++; store.set('es-clinks', clinks); $('[data-clinks]').textContent = clinks;
+    if (ANIM) { gsap.fromTo(c, { rotation: 0 }, { keyframes: [{ rotation: -5, duration: .08 }, { rotation: 5, duration: .1 }, { rotation: -3, duration: .1 }, { rotation: 0, duration: .2 }] }); gsap.fromTo($('.burst', c), { scale: .4, opacity: 1, rotation: -12 }, { scale: 1.2, opacity: 0, rotation: 6, duration: .9, ease: 'power2.out' }); gsap.fromTo('[data-clinks]', { scale: 1.6 }, { scale: 1, duration: .5, ease: 'back.out(3)' }); } });
 
   /* =============================================================
      POP-UPS: bottle-cap pins drop onto a map of Metro Detroit, a
