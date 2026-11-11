@@ -624,7 +624,9 @@
     .cert { position: relative; padding: clamp(70px, 9vw, 140px) 0; background: var(--paper); overflow: hidden; overflow: clip; }
     .ce-grid { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: clamp(28px, 5vw, 80px); align-items: center; }
     .ce-copy .lede { max-width: 40ch; }
-    .ce-picks { display: flex; gap: 8px; flex-wrap: wrap; margin: 22px 0 18px; }
+    .ce-name { display: grid; gap: 7px; max-width: 300px; margin-top: 22px; font: 700 11px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; }
+    .ce-name input { height: 46px; padding: 0 16px; border: 2px solid var(--ink); border-radius: 12px; background: #fffaf0; color: var(--ink); font: 600 16px/1 var(--sans); letter-spacing: 0; text-transform: none; }
+    .ce-picks { display: flex; gap: 8px; flex-wrap: wrap; margin: 16px 0 18px; }
     .ce-picks button { padding: 11px 16px; border-radius: 999px; border: 2px solid var(--ink); background: transparent; color: var(--ink); font: 700 12px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
     .ce-picks button[aria-pressed="true"] { background: var(--ink); color: var(--cream); }
     .ce-card { width: clamp(220px, 24vw, 320px); aspect-ratio: 9 / 16; border-radius: 18px; overflow: hidden; box-shadow: 0 30px 60px rgba(18,17,16,.3); transform: rotate(3deg); background: var(--juice); }
@@ -975,6 +977,7 @@
           <span class="tag"><i></i>For your story</span>
           <h2 style="margin-top:16px" data-split>Make it official.</h2>
           <p class="lede">Pick your shot, save the card and post it. Tag @_elevatedshots so we see it.</p>
+          <label class="ce-name">Your name<input type="text" data-cename maxlength="16" autocomplete="given-name" placeholder="e.g. Sara" enterkeyhint="done"></label>
           <div class="ce-picks" data-cepicks role="group" aria-label="Pick your shot"></div>
           <button class="btn ink" type="button" data-cesave>Save for your story</button>
           <p class="ce-ok" data-ceok aria-live="polite"></p>
@@ -1770,15 +1773,15 @@
      ============================================================= */
   {
     const cv = $('[data-cecanvas]'), cc = cv.getContext('2d'), okEl = $('[data-ceok]'), MARKP = new Path2D(MARK_D);
-    let cur = null, file = null, touched = false; const IMG = {};
-    const bImg = f => IMG[f.k] || (IMG[f.k] = new Promise(res => { const t = document.createElement('div'); t.innerHTML = bottle(f, { label: 'flavor', standalone: true, drops: true, sw: 3 }); const sv = t.firstElementChild; sv.setAttribute('xmlns', SVGNS); sv.setAttribute('width', '600'); sv.setAttribute('height', '1080'); const im = new Image(); im.onload = () => res(im); im.onerror = () => res(null); im.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(new XMLSerializer().serializeToString(sv)); }));
+    let cur = null, file = null, touched = false, drawN = 0; const IMG = {}, nameEl = $('[data-cename]');
+    const bImg = f => IMG[f.k] || (IMG[f.k] = new Promise(res => { const t = document.createElement('div'); t.innerHTML = bottle(f, { label: false, standalone: true, drops: true, sw: 3 }); const sv = t.firstElementChild; sv.setAttribute('xmlns', SVGNS); sv.setAttribute('width', '600'); sv.setAttribute('height', '1080'); const im = new Image(); im.onload = () => res(im); im.onerror = () => res(null); im.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(new XMLSerializer().serializeToString(sv)); }));
     const spaced = (txt, x, y, sp) => { if ('letterSpacing' in cc) { cc.letterSpacing = sp + 'px'; cc.fillText(txt, x + sp / 2, y); cc.letterSpacing = '0px'; } else cc.fillText(txt, x, y); };
     const rrect = (x, y, w, h, r) => { cc.beginPath(); cc.moveTo(x + r, y); cc.arcTo(x + w, y, x + w, y + h, r); cc.arcTo(x + w, y + h, x, y + h, r); cc.arcTo(x, y + h, x, y, r); cc.arcTo(x, y, x + w, y, r); cc.closePath(); };
     const mark = (x, y, w, col, a = 1) => { cc.save(); cc.globalAlpha = a; cc.translate(x, y); cc.scale(w / 292, w / 292); cc.fillStyle = col; cc.fill(MARKP); cc.restore(); };
     const draw = async f => {
-      cur = f.k; file = null; $$('[data-cepick]').forEach(b => b.setAttribute('aria-pressed', b.dataset.cepick === f.k));
+      cur = f.k; file = null; const tok = ++drawN, who = nameEl.value.trim().toUpperCase(); $$('[data-cepick]').forEach(b => b.setAttribute('aria-pressed', b.dataset.cepick === f.k));
       try { await Promise.all(['400 100px Anton', '500 60px Oswald', '300 24px Oswald', '700 30px "Space Mono"'].map(q => document.fonts.load(q))); } catch (e) {}
-      const im = await bImg(f); if (cur !== f.k) return;
+      const im = await bImg(f); if (tok !== drawN) return;
       const W = 1080, Hh = 1920; cc.setTransform(1, 0, 0, 1, 0, 0);
       const g = cc.createLinearGradient(0, 0, 0, Hh); g.addColorStop(0, f.bg); g.addColorStop(.55, f.c); g.addColorStop(1, f.c2); cc.fillStyle = g; cc.fillRect(0, 0, W, Hh);
       mark(130, 470, 820, '#121110', .07);
@@ -1786,8 +1789,18 @@
       cc.fillStyle = '#121110'; cc.textAlign = 'center'; cc.textBaseline = 'alphabetic';
       cc.font = '500 60px Oswald, "Arial Narrow", sans-serif'; spaced('ELEVATED SHOTS', W / 2, 310, 5);
       cc.font = '300 24px Oswald, "Arial Narrow", sans-serif'; spaced('ELEVATE YOUR WELLNESS', W / 2, 356, 9);
-      cc.fillStyle = 'rgba(18,17,16,.2)'; cc.beginPath(); cc.ellipse(W / 2, 1372, 210, 30, 0, 0, Math.PI * 2); cc.fill();
-      if (im) cc.drawImage(im, 280, 430, 520, 936);
+      // their name sits above the bottle, shrunk to fit if it's long
+      const by = who ? 520 : 430, bw = who ? 480 : 520, bh = bw * 1.8;
+      if (who) { let fs = 104; cc.font = `400 ${fs}px Anton, Impact, sans-serif`; while (cc.measureText(who).width > 900 && fs > 50) { fs -= 4; cc.font = `400 ${fs}px Anton, Impact, sans-serif`; } cc.fillStyle = '#121110'; cc.fillText(who, W / 2, 490); }
+      cc.fillStyle = 'rgba(18,17,16,.2)'; cc.beginPath(); cc.ellipse(W / 2, by + bh - 6, 210, 30, 0, 0, Math.PI * 2); cc.fill();
+      if (im) cc.drawImage(im, (W - bw) / 2, by, bw, bh);
+      // the flavor label, drawn here so it gets the real font (an SVG drawn as an image can't use the page's fonts)
+      { const kx = bw / 200, ls = f.ing.map(x => CONFIG.ingredients[x].toUpperCase()), y0 = 194, hh = 15.4, bot = Math.max(300, y0 + (ls.length - 1) * hh + 34), gap = f.label.length * 5.3 + 6;
+        cc.save(); cc.translate((W - bw) / 2, by); cc.scale(kx, kx); cc.strokeStyle = '#141414'; cc.lineWidth = 1.6; cc.beginPath();
+        cc.moveTo(100 - gap, 168); cc.lineTo(40, 168); cc.lineTo(40, bot); cc.lineTo(86, bot); cc.moveTo(114, bot); cc.lineTo(160, bot); cc.lineTo(160, 168); cc.lineTo(100 + gap, 168); cc.stroke();
+        cc.fillStyle = '#141414'; cc.textAlign = 'center'; cc.font = '400 22px Anton, Impact, sans-serif'; cc.fillText(f.label, 100, 176);
+        cc.font = '400 13.5px Anton, Impact, sans-serif'; ls.forEach((l, i) => cc.fillText(l, 100, y0 + i * hh));
+        cc.translate(89.5, bot - 14); cc.scale(21 / 292, 21 / 292); cc.fill(MARKP); cc.restore(); }
       cc.save(); cc.translate(W / 2, 1210); cc.rotate(-.15); cc.globalAlpha = .94; cc.strokeStyle = '#c8261c'; cc.fillStyle = '#c8261c';
       rrect(-410, -125, 820, 250, 26); cc.lineWidth = 11; cc.stroke(); rrect(-388, -103, 776, 206, 14); cc.lineWidth = 4; cc.stroke();
       cc.font = '700 34px "Space Mono", monospace'; spaced('CERTIFIED', 0, -36, 14);
@@ -1795,9 +1808,11 @@
       cc.fillStyle = '#121110'; cc.font = '700 30px "Space Mono", monospace'; spaced('MY SHOT', W / 2, 1540, 12);
       cc.font = '400 132px Anton, Impact, sans-serif'; cc.fillText(f.n.toUpperCase(), W / 2, 1688);
       cc.font = '700 34px "Space Mono", monospace'; spaced('@_ELEVATEDSHOTS', W / 2, 1800, 4);
-      cv.toBlob(b => { if (b && cur === f.k) file = new File([b], `elevated-shots-${f.k}.png`, { type: 'image/png' }); }, 'image/png');
+      cv.toBlob(b => { if (b && tok === drawN) file = new File([b], `elevated-shots-${f.k}.png`, { type: 'image/png' }); }, 'image/png');
     };
     $('[data-cepicks]').innerHTML = FL.map(f => `<button type="button" data-cepick="${f.k}" aria-pressed="false">${esc(f.short)}</button>`).join('');
+    let nameT = null; nameEl.addEventListener('input', () => { clearTimeout(nameT); nameT = setTimeout(() => draw(FK[cur] || FL[0]), 220); });
+    nameEl.addEventListener('keydown', e => { if (e.key === 'Enter') nameEl.blur(); });
     $('[data-cepicks]').addEventListener('click', e => { const b = e.target.closest('[data-cepick]'); if (!b) return; touched = true; draw(FK[b.dataset.cepick]); okEl.textContent = '';
       if (ANIM) gsap.fromTo('[data-cecard]', { rotation: -4, scale: .94 }, { rotation: 3, scale: 1, duration: .6, ease: 'back.out(2.4)' }); });
     $('[data-cesave]').addEventListener('click', () => { if (!file) { okEl.textContent = 'One sec, still making it.'; return; }
