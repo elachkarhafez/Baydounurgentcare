@@ -1066,12 +1066,16 @@
   // her logo on the glass: 60 wide out of a 140 wide body, centred on the body, kept at its real 292:400 shape
   const MARK_D = document.querySelector('#i-mark path').getAttribute('d');
   const markLabel = (solo) => solo ? `<path transform="translate(70 178) scale(.2055)" d="${MARK_D}" fill="#141414"/>` : '<use href="#i-mark" x="70" y="178" width="60" height="82" fill="#141414"/>';
+  // the big bottles carry the flavor label from the real bottle: name in a frame, every ingredient, her logo under it
+  const flavorLabel = (f, solo) => { const ls = f.ing.map(k => CONFIG.ingredients[k].toUpperCase()), y0 = 194, h = 15.4, bot = Math.max(300, y0 + (ls.length - 1) * h + 34), gap = f.label.length * 5.3 + 6;
+    const mk = solo ? `<path transform="translate(93 ${bot - 9}) scale(${(14 / 292).toFixed(4)})" d="${MARK_D}"/>` : `<use href="#i-mark" x="93" y="${bot - 9}" width="14" height="19.2"/>`;
+    return `<g fill="#141414" style="font-family:Anton,Impact,sans-serif;font-weight:400" text-anchor="middle"><path d="M${(100 - gap).toFixed(1)} 168 H40 V${bot} H89 M111 ${bot} H160 V168 H${(100 + gap).toFixed(1)}" fill="none" stroke="#141414" stroke-width="1.6"/><text x="100" y="176" style="font-size:22px;letter-spacing:.3px">${esc(f.label)}</text>${ls.map((l, k) => `<text x="100" y="${(y0 + k * h).toFixed(1)}" style="font-size:13.5px;letter-spacing:.4px">${esc(l)}</text>`).join('')}${mk}</g>`; };
   // glass in front of the juice: thin edge, inner wall, thick base, highlights, the threads under the cap
   const GLASS_FRONT = (sw = 2.2, dark = false) => `<path d="M69 43 H131 M69 47.5 H131" stroke="#fff" stroke-opacity=".55" stroke-width="2"/><ellipse cx="100" cy="40" rx="31.5" ry="5" fill="${dark ? 'rgba(255,248,231,.12)' : 'rgba(255,255,255,.35)'}" stroke="${dark ? 'rgba(255,248,231,.7)' : 'rgba(70,46,0,.5)'}" stroke-width="1.4"/><ellipse cx="100" cy="40.6" rx="27.5" ry="3.8" fill="${dark ? 'rgba(0,0,0,.5)' : 'rgba(60,40,0,.28)'}" stroke="#fff" stroke-opacity=".55" stroke-width="1"/><path d="${BODY}" fill="none" stroke="${dark ? 'rgba(255,248,231,.6)' : 'rgba(70,46,0,.42)'}" stroke-width="${sw * .7}"/><path d="${BODY_IN}" fill="none" stroke="#fff" stroke-opacity=".28" stroke-width="1.3"/><path d="M34 340 Q100 352 166 340" stroke="#fff" stroke-opacity=".55" stroke-width="2.4" fill="none"/><path d="M41 138 C38 200 38 280 42 330" stroke="#fff" stroke-opacity=".22" stroke-width="12" stroke-linecap="round" fill="none"/><path d="M42 140 C40 200 40 280 43 328" stroke="#fff" stroke-opacity=".85" stroke-width="3.2" stroke-linecap="round" fill="none"/><path d="M158 150 C160 200 160 270 158 318" stroke="#fff" stroke-opacity=".38" stroke-width="3" stroke-linecap="round" fill="none"/><path d="M46 108 Q54 96 70 91" stroke="#fff" stroke-opacity=".75" stroke-width="3.4" stroke-linecap="round" fill="none"/><path d="M74 52 V72" stroke="#fff" stroke-opacity=".5" stroke-width="3" stroke-linecap="round"/>`;
   const SPECKS = (() => { let r = 7, d = ''; const rnd = () => (r = (r * 9301 + 49297) % 233280) / 233280; for (let k = 0; k < 26; k++) d += `<circle cx="${(40 + rnd() * 120).toFixed(0)}" cy="${(250 + rnd() * 92).toFixed(0)}" r="${(.7 + rnd() * 1.3).toFixed(1)}"/>`; return `<g fill="#3a2608" opacity=".55">${d}</g>`; })();
   const bottle = (f, opt = {}) => { const id = 'b' + (++uid), lv = opt.level == null ? 58 : opt.level, lab = opt.label === undefined ? 'mark' : opt.label;
     let drops = ''; if (opt.drops) { let r = (uid * 7919) % 233280; const rnd = () => (r = (r * 9301 + 49297) % 233280) / 233280; for (let k = 0; k < 18; k++) drops += `<circle cx="${(40 + rnd() * 120).toFixed(0)}" cy="${(130 + rnd() * 210).toFixed(0)}" r="${(1.2 + rnd() * 2.4).toFixed(1)}"/>`; }
-    const inner = lab === false ? '' : markLabel(opt.standalone);
+    const inner = lab === false ? '' : lab === 'flavor' ? flavorLabel(f, opt.standalone) : markLabel(opt.standalone);
     return `<svg ${opt.standalone ? 'xmlns="http://www.w3.org/2000/svg" ' : ''}viewBox="0 0 200 360" aria-hidden="true">${opt.standalone ? '<defs>' + SHARED + '</defs>' : ''}<defs><clipPath id="${id}"><path d="${BODY_IN}"/></clipPath><linearGradient id="${id}g" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="${f.c}"/><stop offset="1" stop-color="${f.c2}"/></linearGradient></defs>
       <path d="${BODY}" fill="rgba(255,255,255,.4)"/>
       <g clip-path="url(#${id})"><path d="M0 ${lv} Q50 ${lv - 3} 100 ${lv} T200 ${lv} V360 H0Z" fill="url(#${id}g)" data-bliq/><path d="M0 ${lv} Q50 ${lv - 3} 100 ${lv} T200 ${lv}" fill="none" stroke="#fff6c8" stroke-opacity=".7" stroke-width="2.5"/>${SPECKS}<rect x="30" y="30" width="140" height="330" fill="url(#gShade)"/><g fill="#fff" opacity=".42">${drops}</g></g>
@@ -1106,7 +1110,7 @@
     const hs = new Float32Array(NS), vs = new Float32Array(NS), parts = [], spl = []; let seg = 0, cut = 1e6, flowing = false, surf = 0, drips = [], lastLip = null, cacheA = null, cacheF = null, dirty = true;
     const pulp = Array.from({ length: 14 }, () => ({ x: 40 + Math.random() * 120, y: 200 + Math.random() * 140, r: .8 + Math.random() * 1.6, v: 8 + Math.random() * 20 }));
     q('[data-pulp]').innerHTML = pulp.map(() => '<circle/>').join(''); const pulpEls = [...q('[data-pulp]').children];
-    const setFlavor = nf => { S.f = nf; q('[data-c1]').setAttribute('stop-color', nf.c); q('[data-c2]').setAttribute('stop-color', nf.c2); streamEl.setAttribute('fill', nf.c2); splEl.setAttribute('fill', nf.c2); label.innerHTML = o.label === false ? '' : markLabel(); };
+    const setFlavor = nf => { S.f = nf; q('[data-c1]').setAttribute('stop-color', nf.c); q('[data-c2]').setAttribute('stop-color', nf.c2); streamEl.setAttribute('fill', nf.c2); splEl.setAttribute('fill', nf.c2); label.innerHTML = o.label === false ? '' : o.label === 'flavor' ? flavorLabel(nf) : markLabel(); };
     setFlavor(f);
     const mouth = () => { const m = rotPt(MOUTH[0], MOUTH[1], S.a, P[0], P[1]); return [m[0] + S.tx, m[1] + S.ty]; };
     const splash = (amt = 14) => { for (let i = 0; i < NS; i++) vs[i] += (Math.random() - .5) * amt; };
@@ -1251,7 +1255,7 @@
   const CX = 100, CY = 210;
   const H = { a: 0, va: 0, aim: 0, lift: 0, hold: 0, holding: false, drinking: false, manual: false, flav: 0, t: 0, px: null, touched: false };
   let shots = store.get('es-shots', 0); hCount.textContent = shots;
-  const R = makeRig($('[data-hbrig]'), FL[0], { pivot: [CX, CY], fill: .95, rate: .13 });
+  const R = makeRig($('[data-hbrig]'), FL[0], { pivot: [CX, CY], label: 'flavor', fill: .95, rate: .13 });
   const splash = a => R.splash(a);
   // condensation on the glass: drops bead up, get heavy and run down
   const cdrops = Array.from({ length: 18 }, () => ({ x: 38 + Math.random() * 124, y: 130 + Math.random() * 200, r: 1.2 + Math.random() * 2.4, v: 0 }));
@@ -1356,11 +1360,11 @@
   const setLineup = (k, src) => {
     if (k === luCur) return; const f = FK[k], first = luCur == null; luCur = k;
     $$('[data-pick]').forEach(b => b.setAttribute('aria-pressed', b.dataset.pick === k));
-    if (!ANIM || first) { lu.style.setProperty('--fbg', f.bg); luB.innerHTML = bottle(f, { drops: true }); fillLineup(f); return; }
+    if (!ANIM || first) { lu.style.setProperty('--fbg', f.bg); luB.innerHTML = bottle(f, { label: 'flavor', drops: true }); fillLineup(f); return; }
     const lr = lu.getBoundingClientRect(), br = src ? src.getBoundingClientRect() : luB.getBoundingClientRect(), cx = br.left + br.width / 2 - lr.left, cy = br.top + br.height / 2 - lr.top;
     const dot = lReveal.firstElementChild; dot.style.background = f.bg;
     gsap.fromTo(dot, { x: cx, y: cy, scale: 0 }, { scale: Math.hypot(lr.width, lr.height) / 100 + .2, duration: .9, ease: 'power3.inOut', onComplete: () => { lu.style.setProperty('--fbg', f.bg); gsap.set(dot, { scale: 0 }); } });
-    gsap.timeline().to(luB, { scaleX: 0, rotation: -8, duration: .25, ease: 'power2.in', onComplete: () => { luB.innerHTML = bottle(f, { drops: true }); fillLineup(f); animIn(); } }).to(luB, { scaleX: 1, rotation: 0, duration: .55, ease: 'back.out(2)' });
+    gsap.timeline().to(luB, { scaleX: 0, rotation: -8, duration: .25, ease: 'power2.in', onComplete: () => { luB.innerHTML = bottle(f, { label: 'flavor', drops: true }); fillLineup(f); animIn(); } }).to(luB, { scaleX: 1, rotation: 0, duration: .55, ease: 'back.out(2)' });
     if (src) gsap.fromTo(src.querySelector('svg'), { y: 0, scaleY: 1 }, { keyframes: [{ y: 6, scaleY: .88, duration: .12 }, { y: -38, scaleY: 1.06, duration: .28, ease: 'power2.out' }, { y: 0, scaleY: 1, duration: .45, ease: 'bounce.out' }], transformOrigin: '50% 100%' });
   };
   const animIn = () => { if (!ANIM) return;
@@ -1389,7 +1393,7 @@
     if (ANIM) gsap.timeline().set('[data-arm]', { rotation: 0, svgOrigin: '25 170' }).to('[data-arm]', { rotation: 160, duration: .22, ease: 'power2.in' }).to('[data-arm]', { rotation: 0, duration: .6, ease: 'elastic.out(1, .4)' });
     $('[data-sladd]').hidden = true; $('[data-slname]').textContent = 'Spinning…'; $('[data-sldesc]').textContent = '';
     const s = RS(), L = reelKeys.length;
-    const done = () => { spinning = false; slFlav = fk; $('[data-slbottle]').innerHTML = bottle(f); $('[data-slname]').textContent = f.n + '!'; $('[data-sldesc]').textContent = m.s === '?' ? f.d : m.why; $('[data-sladd]').hidden = false;
+    const done = () => { spinning = false; slFlav = fk; $('[data-slbottle]').innerHTML = bottle(f, { label: 'flavor' }); $('[data-slname]').textContent = f.n + '!'; $('[data-sldesc]').textContent = m.s === '?' ? f.d : m.why; $('[data-sladd]').hidden = false;
       if (ANIM) { gsap.fromTo('[data-slbottle] svg', { y: 80, rotation: -20, opacity: 0 }, { y: 0, rotation: 0, opacity: 1, duration: .7, ease: 'back.out(2)' }); gsap.fromTo('[data-slres]', { scale: .96 }, { scale: 1, duration: .5, ease: 'back.out(3)' }); rainBurst(f.reels, innerWidth * .7, innerHeight * .4); } };
     $$('.strip').forEach((st, r) => { const target = reelKeys.indexOf(f.reels[r]), start = reelPos[r] % L, loops = 2 + r;
       const end = loops * L + target; reelPos[r] = target;
