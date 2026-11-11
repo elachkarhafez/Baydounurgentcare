@@ -92,7 +92,7 @@ h2{font-size:1.5rem}
 .hero .wrap{display:grid;justify-items:center;text-align:center}
 .stage{--w:min(80vw,316px);z-index:2;position:relative;width:var(--w);height:calc(var(--w) * .8);margin-top:0}
 .plate{position:absolute;left:50%;top:44%;width:var(--w);height:var(--w);margin:calc(var(--w) / -2) 0 0 calc(var(--w) / -2);perspective:900px;perspective-origin:50% 0%}
-.tilt{position:absolute;inset:0;transform-style:preserve-3d;transform:rotateX(var(--tx,56deg)) rotateY(var(--ry,0deg)) rotateZ(var(--rz,0deg));will-change:transform}
+.tilt{position:absolute;inset:0;transform-style:preserve-3d;transform:rotateX(56deg);will-change:transform}
 .tilt .edge{position:absolute;inset:0;border-radius:50%;background:#0b0b0c;transform:translateZ(calc(var(--z) * -1px))}
 .tilt .edge:last-of-type{background:#050505;box-shadow:0 0 40px 10px rgba(0,0,0,.6)}
 .iron{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 42% 36%,#4a4a4e,#1f1f22 55%,#101012 80%);box-shadow:inset 0 0 0 5px #8f887b,inset 0 0 0 7px #3a3833,inset 0 0 30px rgba(0,0,0,.7)}
@@ -100,9 +100,10 @@ h2{font-size:1.5rem}
 .shadow{position:absolute;left:8%;right:8%;bottom:-6%;height:26%;border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.6),transparent);filter:none;z-index:-1}
 .glow{position:absolute;left:50%;top:40%;width:120%;aspect-ratio:2;transform:translate(-50%,-50%);background:radial-gradient(closest-side,rgba(255,190,110,.16),transparent);z-index:-1;pointer-events:none}
 .steam{position:absolute;left:0;right:0;top:-8%;height:60%;width:100%;pointer-events:none;overflow:visible}
-.steam path{fill:none;stroke:rgba(255,236,200,.22);stroke-width:3;stroke-linecap:round;stroke-dasharray:60;stroke-dashoffset:60;opacity:0;animation:steam 3.4s ease-in-out infinite}
-.steam path:nth-child(2){animation-delay:1.1s}.steam path:nth-child(3){animation-delay:2.2s}
-@keyframes steam{15%{opacity:1}60%{stroke-dashoffset:0;opacity:.8}100%{stroke-dashoffset:-60;opacity:0}}
+.steam path{fill:none;stroke:rgba(255,236,200,.2);stroke-width:3;stroke-linecap:round}
+.steam{animation:steam 3.4s ease-in-out infinite;will-change:transform,opacity}
+@keyframes steam{0%{opacity:0;transform:translateY(14px)}35%{opacity:1}100%{opacity:0;transform:translateY(-26px)}}
+.hero.off .steam{animation-play-state:paused}
 
 
 /* drizzle it yourself */
@@ -623,7 +624,7 @@ const seams = $$('[data-seam]').map(box => {
         if (k % 2 === 0) el('circle', { class: 'bead', cx: x, cy: bot + len + 6, r: 2.6, fill: cols[1], style: `--bd:${(1 + k * .9 + li * .5).toFixed(1)}s` }, g); });
       S.groups.push(paths); });
     S.paint(true); };
-  S.paint = force => { const r = box.getBoundingClientRect(), vh = innerHeight; const p = reduce ? 1 : Math.min(1, Math.max(0, (vh * .95 - r.top) / (vh * .45)));
+  S.paint = (force, r = box.getBoundingClientRect()) => { const vh = innerHeight; const p = reduce ? 1 : Math.min(1, Math.max(0, (vh * .95 - r.top) / (vh * .45)));
     if (!force && Math.abs(p - S.p) < .002) return; S.p = p;
     S.groups.forEach((paths, li) => { const q = Math.min(1, Math.max(0, p * 1.15 - li * .15)); paths.forEach(pa => pa.style.strokeDashoffset = 1 - q); });
     box.classList.toggle('done', p >= .999); };
@@ -632,30 +633,32 @@ const buildAll = () => seams.forEach(s => s.build());
 buildAll(); let rw = innerWidth; addEventListener('resize', () => { if (innerWidth !== rw) { rw = innerWidth; buildAll(); } });
 
 /* ---- scroll: seams + hero tilt + nav ---- */
-const tilt = $('#tilt'), hero = $('.hero'), nav = $('#nav'); let ticking = false, scrollK = 0;
+const tilt = $('#tilt'), hero = $('.hero'), nav = $('#nav'); let ticking = false, scrollK = 0, heroOn = true, looping = false;
 const onScroll = () => { ticking = false; const y = scrollY;
-  seams.forEach(s => { const r = s.box.getBoundingClientRect(); if (r.bottom > -100 && r.top < innerHeight + 100) s.paint(); });
-  scrollK = Math.min(1, y / hero.offsetHeight);
-  nav.classList.toggle('solid', y > hero.offsetHeight - 80); };
+  const rects = seams.map(s => s.box.getBoundingClientRect());
+  seams.forEach((s, i) => { const r = rects[i]; if (r.bottom > -100 && r.top < innerHeight + 100) s.paint(false, r); });
+  if (y < heroH + 50) { scrollK = Math.min(1, y / heroH); kick(); }
+  nav.classList.toggle('solid', y > heroH - 80); };
+let heroH = hero.offsetHeight; addEventListener('resize', () => { heroH = hero.offsetHeight; });
 addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true }); onScroll();
 /* ---- the griddle: one loop for tilt, sway, pointer lean and play mode ---- */
 const G = { tx: 56, ry: 0, rz: 0, px: 0, py: 0, play: false, az: 235 };
 const plate = $('.plate'), light = document.querySelector('#gloss feDistantLight'), fine = matchMedia('(hover:hover) and (pointer:fine)').matches;
-let heroOn = true, sw0 = performance.now();
-function loop (t) {
-  if (!heroOn) return;
-  const sway = reduce || G.play ? 0 : Math.sin((t - sw0) / 2600) * 7;
+
+function kick () { if (!looping && heroOn) { looping = true; requestAnimationFrame(loop); } }
+function loop () {
   const ttx = G.play ? 34 : 56 + scrollK * 14 + (reduce ? 0 : G.py * -5), try_ = G.play ? 0 : G.px * 7;
-  G.tx += (ttx - G.tx) * .09; G.ry += (try_ - G.ry) * .09; G.rz += (sway - G.rz) * (G.play ? .09 : 1);
-  tilt.style.setProperty('--tx', G.tx.toFixed(2) + 'deg'); tilt.style.setProperty('--ry', G.ry.toFixed(2) + 'deg'); tilt.style.setProperty('--rz', G.rz.toFixed(2) + 'deg');
-  requestAnimationFrame(loop); }
-new IntersectionObserver(e => { heroOn = e[0].isIntersecting; hero.classList.toggle('off', !heroOn); if (heroOn) requestAnimationFrame(loop); else if (G.play) setPlay(false); }).observe(hero);
-requestAnimationFrame(loop);
+  const dx = ttx - G.tx, dy = try_ - G.ry, dz = 0 - G.rz;
+  G.tx += dx * .12; G.ry += dy * .12; G.rz += dz * .12;
+  tilt.style.transform = `rotateX(${G.tx.toFixed(2)}deg) rotateY(${G.ry.toFixed(2)}deg) rotateZ(${G.rz.toFixed(2)}deg)`;
+  if (heroOn && (Math.abs(dx) > .02 || Math.abs(dy) > .02 || Math.abs(dz) > .02)) requestAnimationFrame(loop); else looping = false; }
+new IntersectionObserver(e => { heroOn = e[0].isIntersecting; hero.classList.toggle('off', !heroOn); if (heroOn) kick(); else if (G.play) setPlay(false); }).observe(hero);
+kick();
 if (fine && !reduce) { let raf = 0; hero.addEventListener('pointermove', e => { if (G.play) return; const r = plate.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2;
-    G.px = Math.max(-1, Math.min(1, (e.clientX - cx) / (innerWidth / 2))); G.py = Math.max(-1, Math.min(1, (e.clientY - cy) / (innerHeight / 2)));
+    kick(); G.px = Math.max(-1, Math.min(1, (e.clientX - cx) / (innerWidth / 2))); G.py = Math.max(-1, Math.min(1, (e.clientY - cy) / (innerHeight / 2)));
     const az = (Math.atan2(e.clientY - cy, e.clientX - cx) * 180 / Math.PI + 360) % 360;
     if (!raf) raf = requestAnimationFrame(() => { raf = 0; if (Math.abs(az - G.az) > 3) { G.az = az; light.setAttribute('azimuth', az.toFixed(0)); } }); });
-  hero.addEventListener('pointerleave', () => { G.px = G.py = 0; }); }
+  hero.addEventListener('pointerleave', () => { G.px = G.py = 0; kick(); }); }
 
 /* ---- drizzle it yourself ---- */
 const SAUCE = { choc: ['#2a150b', '#4d2a17', '#b08060'], pist: ['#7f9440', '#a8bd5c', '#eef5cf'], caramel: ['#8e5214', '#c98a3a', '#ffe3ae'], white: ['#cbbd9f', '#f3ebdb', '#ffffff'] };
@@ -685,7 +688,7 @@ liveC.addEventListener('pointermove', e => { if (!cur) return; const p = toPlane
 const endStroke = () => { if (!cur) return; stroke(pctx, cur, SAUCE[sauce]); lctx.clearRect(0, 0, liveC.width, liveC.height); cur = null; };
 liveC.addEventListener('pointerup', endStroke); liveC.addEventListener('pointercancel', endStroke);
 function drawLive () { liveRaf = 0; if (!cur) return; lctx.clearRect(0, 0, liveC.width, liveC.height); stroke(lctx, cur, SAUCE[sauce]); }
-function setPlay (on) { G.play = on; hero.classList.toggle('play', on); if (on) { sizeCanvas(); $$('[data-sauce]')[0].focus({ preventScroll: true }); } else $('#try').focus({ preventScroll: true }); }
+function setPlay (on) { G.play = on; kick(); hero.classList.toggle('play', on); if (on) { sizeCanvas(); $$('[data-sauce]')[0].focus({ preventScroll: true }); } else $('#try').focus({ preventScroll: true }); }
 $('#try').addEventListener('click', () => setPlay(true));
 $('#doneBtn').addEventListener('click', () => setPlay(false));
 $$('[data-sauce]').forEach(b => b.addEventListener('click', () => { sauce = b.dataset.sauce; $$('[data-sauce]').forEach(x => x.setAttribute('aria-pressed', x === b)); }));
@@ -701,7 +704,8 @@ const phone = matchMedia('(max-width: 759px)'), rings = $$('.ring');
 $$('[data-rail]').forEach(rail => { const dots = rail.nextElementSibling, kids = [...rail.children], isBar = rail.classList.contains('stations'); dots.innerHTML = kids.map(() => '<i></i>').join('');
   let last = -1;
   const paint = () => { const rr = rail.getBoundingClientRect(), mid = rr.left + rr.width / 2; let k = 0, best = 1e9;
-    kids.forEach((c, i) => { const r = c.getBoundingClientRect(), off = (r.left + r.width / 2 - mid) / (r.width + 12);
+    const offs = kids.map(c => { const r = c.getBoundingClientRect(); return (r.left + r.width / 2 - mid) / (r.width + 12); });
+    kids.forEach((c, i) => { const off = offs[i];
       if (Math.abs(off) < best) { best = Math.abs(off); k = i; }
       if (isBar) c.style.transform = phone.matches && !reduce ? `perspective(900px) rotateY(${(Math.max(-1.4, Math.min(1.4, off)) * -22).toFixed(2)}deg) scale(${(1 - Math.min(1, Math.abs(off)) * .1).toFixed(3)})` : ''; });
     if (k !== last) { last = k; [...dots.children].forEach((d, i) => d.classList.toggle('on', i === k)); kids.forEach((c, i) => c.classList.toggle('on', i === k));
@@ -766,7 +770,7 @@ const FX = (() => { const c = $('#fx'), x = c.getContext('2d'), P = [], COL = ['
 const at = (n, dy = .5) => { const r = n.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height * dy]; };
 setTimeout(() => FX.burst(...at($('.plate'), .45), 90, 13), 3150);
 document.addEventListener('pointerdown', e => { if (e.target.closest('a,button,input,label,canvas,.chips,form')) return; FX.burst(e.clientX, e.clientY, 34, 8); });
-let lastY = scrollY, lastT = performance.now(); addEventListener('scroll', () => { const t = performance.now(), v = Math.abs(scrollY - lastY) / Math.max(1, t - lastT); lastY = scrollY; lastT = t; if (v > 2.2) FX.rain(Math.min(6, v * 1.5 | 0)); }, { passive: true });
+let lastY = scrollY, lastT = performance.now(); addEventListener('scroll', () => { const t = performance.now(), v = Math.abs(scrollY - lastY) / Math.max(1, t - lastT); lastY = scrollY; lastT = t; if (v > 2.2 && fine) FX.rain(Math.min(6, v * 1.5 | 0)); }, { passive: true });
 new IntersectionObserver((es, o) => { if (es[0].isIntersecting) { $('#reel').classList.add('toss'); o.disconnect(); } }, { threshold: .25 }).observe($('#reel'));
 $$('#reel figure').forEach((f, i) => f.style.setProperty('--i', i));
 
