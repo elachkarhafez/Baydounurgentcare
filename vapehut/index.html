@@ -5,101 +5,125 @@
   <meta name="robots" content="noai, noimageai">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Vape Hut Allen Park | Vape shop on Allen Rd</title>
-  <meta name="description" content="Vape Hut, 7805 Allen Rd, Allen Park MI: disposables, devices, e-liquid, glass, water pipes and accessories. Adults 21+ only. Call (313) 429-3132.">
+  <meta name="description" content="Vape Hut, 7805 Allen Rd, Allen Park MI: disposables, pods, e-liquid, glass, water pipes and accessories. Adults 21+ only. Call (313) 429-3132.">
   <meta property="og:title" content="Vape Hut · Allen Park">
   <meta property="og:description" content="Allen Park's vape shop on Allen Rd. Adults 21+ only.">
-  <meta name="theme-color" content="#07080c">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%2307080c'/%3E%3Cpath d='M20 44c-6-6 2-10-2-18M32 46c-6-8 4-12 0-24M44 44c-6-6 2-10-2-18' stroke='%235ef2d6' stroke-width='4' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+  <meta name="theme-color" content="#040806">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23040806'/%3E%3Cpath d='M10 34 32 14l22 20M18 28v22h28V28' stroke='%232bff88' stroke-width='4.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M32 50V38' stroke='%232bff88' stroke-width='4.5' stroke-linecap='round'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Tilt+Neon&family=Unbounded:wght@600;700;800;900&display=swap" rel="stylesheet">
   <style>
-    /* Vape Hut, Allen Park
-       Concept: the page is vapor. The hero is a live vapor simulation (curl-noise advection in WebGL) that rises on
-       its own and swirls wherever you move or drag. The shelf is lit like a glass case at night: each category is a
-       glowing glass-line object. Everything sits behind a 21+ age gate, and the footer carries the nicotine warning.
-       Palette: midnight ink, vapor white, an iridescent teal to violet glow. */
+    /* Vape Hut, Allen Park (v2, green)
+       Concept: a green neon sign in a room full of vapor. The hero is a live green vapor simulation (curl-noise
+       advection in WebGL) that rises on its own and swirls wherever you move or drag; the "VAPE HUT" sign and its hut
+       mark flicker on like real neon tubes. Below: a green ticker, glowing glass-line shelf, review themes, the shop.
+       Everything sits behind a 21+ age gate and the footer carries the nicotine warning.
+       Palette: black-green, neon green, emerald, lime, mint vapor. */
     :root {
-      --ink: #07080c; --ink-2: #0e1017; --ink-3: #151824; --fog: #eef1f6; --muted: #8b90a3; --line: rgba(238,241,246,.1);
-      --teal: #5ef2d6; --violet: #8b7bff; --pink: #ff7ac8; --grad: linear-gradient(100deg, #5ef2d6, #8b7bff 55%, #ff7ac8);
-      --disp: "Syne", system-ui, sans-serif; --sans: "Manrope", system-ui, sans-serif;
-      --pad: clamp(16px, 4vw, 56px); --sec: clamp(48px, 10vw, 140px);
+      --bg: #040806; --bg-2: #08110c; --card: #0b1610; --fog: #eafff2; --muted: #8aa597; --line: rgba(160,255,200,.12);
+      --neon: #2bff88; --emerald: #14c46b; --lime: #b6ff4a; --mint: #c8ffe0; --deep: #0b3d24;
+      --grad: linear-gradient(100deg, #b6ff4a, #2bff88 45%, #14c46b);
+      --glow: 0 0 6px rgba(43,255,136,.9), 0 0 16px rgba(43,255,136,.7), 0 0 38px rgba(43,255,136,.45), 0 0 80px rgba(20,196,107,.35);
+      --neonf: "Tilt Neon", system-ui, sans-serif; --disp: "Unbounded", system-ui, sans-serif; --sans: "Manrope", system-ui, sans-serif;
+      --pad: clamp(16px, 4vw, 56px); --sec: clamp(52px, 10vw, 140px);
     }
     *, *::before, *::after { box-sizing: border-box; }
     html { -webkit-text-size-adjust: 100%; }
     html.lenis, html.lenis body { height: auto; }
     .lenis.lenis-smooth { scroll-behavior: auto !important; }
-    body { margin: 0; background: var(--ink); color: var(--fog); font: 400 15px/1.6 var(--sans); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+    body { margin: 0; background: var(--bg); color: var(--fog); font: 400 15px/1.6 var(--sans); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
     body.locked { overflow: hidden; }
     @media (min-width: 900px) { body { font-size: 16px; } }
     a { color: inherit; text-decoration: none; }
     img, svg, canvas { display: block; max-width: 100%; }
     button { font: inherit; color: inherit; }
-    h1, h2, h3 { font-family: var(--disp); font-weight: 700; line-height: .98; margin: 0; letter-spacing: -.02em; }
-    h1 { font-size: clamp(2.2rem, 1.4rem + 4vw, 5.6rem); }
-    h2 { font-size: clamp(1.8rem, 1.2rem + 2.6vw, 3.8rem); }
-    h3 { font-size: clamp(1.05rem, 1rem + .4vw, 1.3rem); letter-spacing: 0; }
+    h1, h2, h3 { font-family: var(--disp); font-weight: 800; line-height: .98; margin: 0; letter-spacing: -.02em; text-transform: uppercase; }
+    h2 { font-size: clamp(1.7rem, 1.1rem + 2.8vw, 3.8rem); }
+    h3 { font-size: clamp(1rem, .95rem + .35vw, 1.2rem); letter-spacing: 0; }
     .g { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
     p { margin: 0; }
     .wrap { max-width: 1240px; margin: 0 auto; padding: 0 var(--pad); }
     .sec { padding: var(--sec) 0; }
     .lead { color: var(--muted); max-width: 34em; margin-top: 14px; font-size: 1.02rem; }
-    .tag { display: inline-flex; align-items: center; gap: 10px; font: 600 .72rem/1 var(--sans); letter-spacing: .22em; text-transform: uppercase; color: var(--muted); }
-    .tag::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--grad); box-shadow: 0 0 12px var(--teal); }
-    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; padding: 15px 22px; border-radius: 999px; font: 700 .88rem/1 var(--sans); white-space: nowrap; border: 1px solid rgba(238,241,246,.22); color: var(--fog); background: rgba(14,16,23,.5); cursor: pointer; transition: border-color .3s, transform .3s, box-shadow .3s; position: relative; }
-    .btn:hover { border-color: var(--teal); transform: translateY(-2px); box-shadow: 0 10px 30px -12px rgba(94,242,214,.6); }
-    .btn.glow { border: 0; color: #06110f; background: var(--grad); box-shadow: 0 10px 34px -10px rgba(139,123,255,.8); }
+    .tag { display: inline-flex; align-items: center; gap: 10px; font: 700 .7rem/1 var(--sans); letter-spacing: .24em; text-transform: uppercase; color: var(--neon); }
+    .tag::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--neon); box-shadow: 0 0 10px var(--neon); }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; padding: 16px 24px; border-radius: 999px; font: 700 .88rem/1 var(--sans); white-space: nowrap; border: 1px solid rgba(43,255,136,.45); color: var(--fog); background: rgba(8,17,12,.55); cursor: pointer; transition: border-color .3s, transform .3s, box-shadow .3s, background .3s; }
+    .btn:hover { border-color: var(--neon); transform: translateY(-2px); box-shadow: 0 0 0 1px var(--neon), 0 0 26px -4px rgba(43,255,136,.7); }
+    .btn.glow { border: 0; color: #03140a; background: var(--neon); box-shadow: 0 0 24px -2px rgba(43,255,136,.75), inset 0 -2px 0 rgba(0,0,0,.15); }
+    .btn.glow:hover { background: var(--lime); box-shadow: 0 0 36px 0 rgba(182,255,74,.7); }
     .btn svg { width: 18px; height: 18px; flex: none; }
-    :focus-visible { outline: 2px solid var(--teal); outline-offset: 3px; }
+    :focus-visible { outline: 2px solid var(--neon); outline-offset: 3px; }
+
+    /* neon */
+    .neon { font-family: var(--neonf); font-weight: 400; color: #f2fff7; text-shadow: var(--glow); letter-spacing: .04em; line-height: .9; white-space: nowrap; }
+    .neon.off { color: rgba(43,255,136,.18); text-shadow: none; }
+    .hutmark { overflow: visible; }
+    .hutmark { fill: none; stroke: #f2fff7; stroke-width: 3.4; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 0 3px #2bff88) drop-shadow(0 0 10px #2bff88) drop-shadow(0 0 24px rgba(43,255,136,.6)); }
+    .hutmark.off { stroke: rgba(43,255,136,.2); filter: none; }
 
     /* age gate */
-    .gate { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; padding: 20px; background: radial-gradient(80% 60% at 50% 40%, rgba(139,123,255,.18), transparent 70%), rgba(7,8,12,.97); }
+    .gate { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; padding: 20px; background: radial-gradient(70% 55% at 50% 40%, rgba(20,196,107,.2), transparent 70%), rgba(4,8,6,.97); }
     .gate[hidden] { display: none; }
-    .gate .box { width: min(100%, 420px); text-align: center; border: 1px solid var(--line); border-radius: 26px; padding: 34px 24px; background: rgba(14,16,23,.9); }
-    .gate .mark { font: 800 1.7rem/1 var(--disp); letter-spacing: .04em; }
-    .gate .mark span { display: block; font: 600 .7rem/1 var(--sans); letter-spacing: .3em; color: var(--muted); margin-top: 8px; }
-    .gate h2 { font-size: 1.5rem; margin-top: 26px; }
+    .gate .box { width: min(100%, 420px); text-align: center; border: 1px solid var(--line); border-radius: 26px; padding: 34px 24px; background: rgba(8,17,12,.92); box-shadow: 0 0 60px -20px rgba(43,255,136,.4); }
+    .gate .hutmark { width: 64px; height: 64px; margin: 0 auto; }
+    .gate .neon { font-size: 2.6rem; margin-top: 10px; }
+    .gate small { display: block; font: 700 .66rem/1 var(--sans); letter-spacing: .32em; color: var(--muted); margin-top: 10px; text-transform: uppercase; }
+    .gate h2 { font-size: 1.25rem; margin-top: 24px; }
     .gate p { color: var(--muted); margin-top: 10px; font-size: .92rem; }
     .gate .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 22px; }
-    .gate .no { margin-top: 16px; color: var(--pink); font-weight: 600; min-height: 1.4em; }
+    .gate .no { margin-top: 16px; color: #ff8a8a; font-weight: 600; min-height: 1.4em; }
 
     /* nav */
-    .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 50; height: 62px; transition: background .4s, border-color .4s; border-bottom: 1px solid transparent; }
-    .nav.solid { background: rgba(7,8,12,.86); border-color: var(--line); }
+    .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 50; height: 64px; transition: background .4s, border-color .4s; border-bottom: 1px solid transparent; }
+    .nav.solid { background: rgba(4,8,6,.88); border-color: var(--line); }
     .nav .wrap { height: 100%; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-    .brand { display: flex; align-items: baseline; gap: 10px; font: 800 1.2rem/1 var(--disp); letter-spacing: .04em; white-space: nowrap; }
-    .brand small { display: none; font: 600 .62rem/1 var(--sans); letter-spacing: .28em; color: var(--muted); text-transform: uppercase; }
+    .brand { display: flex; align-items: center; gap: 10px; white-space: nowrap; }
+    .brand .hutmark { width: 30px; height: 30px; }
+    .brand .hutmark { stroke-width: 5; filter: drop-shadow(0 0 4px rgba(43,255,136,.8)); }
+    .brand b { font: 900 1rem/1 var(--disp); letter-spacing: .02em; }
+    .brand small { display: none; font: 700 .58rem/1 var(--sans); letter-spacing: .26em; color: var(--neon); text-transform: uppercase; }
     @media (min-width: 480px) { .brand small { display: inline; } }
     .nav-links { display: none; gap: 30px; font-size: .9rem; color: var(--muted); }
-    .nav-links a:hover { color: var(--fog); }
+    .nav-links a:hover { color: var(--neon); }
     .nav .btn { padding: 11px 16px; font-size: .8rem; }
-    @media (min-width: 960px) { .nav { height: 76px; } .nav-links { display: flex; } }
+    @media (min-width: 960px) { .nav { height: 78px; } .nav-links { display: flex; } }
 
     /* hero */
-    .hero { position: relative; height: 100svh; min-height: 600px; max-height: 960px; overflow: hidden; }
+    .hero { position: relative; height: 100svh; min-height: 620px; max-height: 980px; overflow: hidden; }
     #vapor { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: pan-y; }
-    .vfallback { position: absolute; inset: 0; background: radial-gradient(40% 50% at 30% 70%, rgba(94,242,214,.22), transparent 70%), radial-gradient(40% 50% at 70% 60%, rgba(139,123,255,.25), transparent 70%), var(--ink); filter: blur(10px); animation: drift 14s ease-in-out infinite alternate; }
+    .vfallback { position: absolute; inset: 0; background: radial-gradient(40% 50% at 30% 70%, rgba(43,255,136,.22), transparent 70%), radial-gradient(40% 50% at 70% 60%, rgba(20,196,107,.25), transparent 70%), var(--bg); filter: blur(10px); animation: drift 14s ease-in-out infinite alternate; }
     @keyframes drift { to { transform: translate(-3%, -4%) scale(1.08); } }
-    .hero::after { content: ""; position: absolute; inset: 0; background: radial-gradient(46% 34% at 50% 48%, rgba(7,8,12,.62), transparent 100%), linear-gradient(180deg, rgba(7,8,12,.55), transparent 30%, transparent 62%, var(--ink)); pointer-events: none; }
-    .hero-in { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 70px var(--pad) 40px; pointer-events: none; }
+    .hero::after { content: ""; position: absolute; inset: 0; background: radial-gradient(42% 30% at 50% 46%, rgba(4,8,6,.6), transparent 100%), linear-gradient(180deg, rgba(4,8,6,.6), transparent 28%, transparent 62%, var(--bg)); pointer-events: none; }
+    .hero-in { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 76px var(--pad) 46px; pointer-events: none; }
     .hero-in > * { pointer-events: auto; }
-    .hero h1 { max-width: 15ch; margin-top: 18px; }
-    .hero .lead { margin-left: auto; margin-right: auto; color: #b6bbcc; }
+    .sign { display: grid; justify-items: center; gap: 4px; }
+    .sign .hutmark { width: clamp(64px, 9vw, 108px); height: auto; }
+    .sign .neon { font-size: clamp(3.4rem, 1.6rem + 9vw, 10rem); }
+    .sign .loc { font: 700 clamp(.7rem, .62rem + .3vw, .86rem)/1 var(--sans); letter-spacing: .42em; text-transform: uppercase; color: var(--neon); margin-top: 6px; padding-left: .42em; }
+    .hero h1 { font: 700 clamp(1rem, .9rem + .7vw, 1.4rem)/1.35 var(--sans); text-transform: none; letter-spacing: 0; max-width: 30em; margin-top: 22px; color: #cfe8db; }
     .hero .ctas { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 22px; width: min(100%, 360px); }
     @media (min-width: 520px) { .hero .ctas { display: flex; width: auto; } }
-    .status { display: inline-flex; align-items: center; gap: 10px; padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line); background: rgba(14,16,23,.55); font-weight: 600; font-size: .84rem; }
+    .status { display: inline-flex; align-items: center; gap: 10px; padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line); background: rgba(8,17,12,.6); font-weight: 600; font-size: .84rem; margin-top: 18px; }
     .status i { width: 8px; height: 8px; border-radius: 50%; background: #ff6b6b; box-shadow: 0 0 10px #ff6b6b; }
-    .status.open i { background: var(--teal); box-shadow: 0 0 10px var(--teal); }
-    .stir { position: absolute; z-index: 2; left: 50%; bottom: 26px; transform: translateX(-50%); white-space: nowrap; font-size: .72rem; letter-spacing: .24em; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; gap: 10px; pointer-events: none; }
-    .stir i { width: 26px; height: 1px; background: var(--grad); }
+    .status.open i { background: var(--neon); box-shadow: 0 0 10px var(--neon); }
+    .stir { position: absolute; z-index: 2; left: 50%; bottom: 24px; transform: translateX(-50%); white-space: nowrap; font-size: .7rem; letter-spacing: .24em; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; gap: 10px; pointer-events: none; }
+    .stir i { width: 26px; height: 1px; background: var(--neon); box-shadow: 0 0 6px var(--neon); }
+
+    /* ticker */
+    .ticker { background: var(--neon); color: #03140a; overflow: hidden; padding: 14px 0; box-shadow: 0 0 40px -6px rgba(43,255,136,.6); position: relative; z-index: 3; }
+    .ttrack { display: flex; width: max-content; animation: slide 30s linear infinite; }
+    .ttrack span { font: 900 clamp(1rem, .85rem + .9vw, 1.6rem)/1 var(--disp); text-transform: uppercase; white-space: nowrap; padding-right: 24px; display: inline-flex; align-items: center; gap: 24px; }
+    .ttrack span::after { content: "✦"; font-size: .7em; }
+    @keyframes slide { to { transform: translateX(-50%); } }
 
     /* stats */
-    .stats { border-block: 1px solid var(--line); }
+    .stats { border-bottom: 1px solid var(--line); background: var(--bg-2); }
     .stats .wrap { display: grid; grid-template-columns: 1fr 1fr; }
-    .stat { padding: 22px 8px; text-align: center; border-right: 1px solid var(--line); }
+    .stat { padding: 24px 8px; text-align: center; border-right: 1px solid var(--line); }
     .stat:nth-child(2n) { border-right: 0; }
     .stat:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
-    .stat b { display: block; font: 800 clamp(1.8rem, 1.2rem + 2.4vw, 3.2rem)/1 var(--disp); }
+    .stat b { display: block; font: 900 clamp(1.8rem, 1.2rem + 2.4vw, 3.2rem)/1 var(--disp); color: var(--neon); text-shadow: 0 0 18px rgba(43,255,136,.45); }
     .stat small { color: var(--muted); font-size: .8rem; }
     @media (min-width: 760px) { .stats .wrap { grid-template-columns: repeat(4, 1fr); } .stat { border-bottom: 0 !important; border-right: 1px solid var(--line) !important; } .stat:last-child { border-right: 0 !important; } }
 
@@ -107,77 +131,91 @@
     .shelf-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px 30px; }
     .rail { display: grid; grid-auto-flow: column; grid-auto-columns: 78%; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; margin: 26px calc(-1 * var(--pad)) 0; padding: 4px var(--pad); scroll-padding-inline: var(--pad); }
     .rail::-webkit-scrollbar { display: none; }
-    .item { scroll-snap-align: start; position: relative; border-radius: 22px; padding: 18px; background: linear-gradient(160deg, var(--ink-3), var(--ink-2)); border: 1px solid var(--line); overflow: hidden; transform-style: preserve-3d; transition: border-color .4s; }
-    .item::before { content: ""; position: absolute; width: 380px; height: 380px; left: var(--mx, 50%); top: var(--my, 30%); transform: translate(-50%, -50%); background: radial-gradient(circle, rgba(139,123,255,.22), transparent 60%); pointer-events: none; opacity: .5; transition: opacity .4s; }
-    .item:hover { border-color: rgba(94,242,214,.4); } .item:hover::before { opacity: 1; }
+    .item { scroll-snap-align: start; position: relative; border-radius: 22px; padding: 18px; background: linear-gradient(165deg, #0f1f16, var(--card) 55%, #070e0a); border: 1px solid var(--line); overflow: hidden; transition: border-color .4s, box-shadow .4s; }
+    .item::before { content: ""; position: absolute; width: 360px; height: 360px; left: var(--mx, 50%); top: var(--my, 30%); transform: translate(-50%, -50%); background: radial-gradient(circle, rgba(43,255,136,.2), transparent 60%); pointer-events: none; opacity: .55; transition: opacity .4s; }
+    .item:hover { border-color: rgba(43,255,136,.55); box-shadow: 0 0 40px -14px rgba(43,255,136,.6); } .item:hover::before { opacity: 1; }
     .item .art { height: 170px; display: grid; place-items: center; position: relative; }
-    .item .art svg { height: 150px; width: auto; overflow: visible; filter: drop-shadow(0 0 12px rgba(94,242,214,.35)); }
+    .item .art svg { height: 150px; width: auto; overflow: visible; filter: drop-shadow(0 0 4px rgba(43,255,136,.9)) drop-shadow(0 0 14px rgba(43,255,136,.45)); }
     .item h3 { margin-top: 8px; }
     .item p { color: var(--muted); font-size: .9rem; margin-top: 6px; }
-    .item .n { position: absolute; top: 14px; right: 16px; font: 700 .72rem/1 var(--sans); color: var(--muted); letter-spacing: .1em; }
+    .item .n { position: absolute; top: 14px; right: 16px; font: 700 .7rem/1 var(--disp); color: var(--neon); letter-spacing: .06em; }
     .dots { display: flex; justify-content: center; gap: 6px; margin-top: 14px; }
-    .dots i { width: 6px; height: 6px; border-radius: 50%; background: rgba(238,241,246,.2); transition: width .3s, background .3s; }
-    .dots i.on { width: 20px; border-radius: 3px; background: var(--teal); }
+    .dots i { width: 6px; height: 6px; border-radius: 50%; background: rgba(234,255,242,.2); transition: width .3s, background .3s; }
+    .dots i.on { width: 20px; border-radius: 3px; background: var(--neon); box-shadow: 0 0 8px var(--neon); }
     @media (min-width: 900px) { .rail { grid-auto-flow: row; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 34px 0 0; padding: 0; overflow: visible; } .dots { display: none; } .item .art { height: 210px; } .item .art svg { height: 180px; } }
     @media (min-width: 600px) and (max-width: 899px) { .rail { grid-auto-columns: 46%; } }
-    .glowline { fill: none; stroke: url(#gl); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
-    .glowfill { fill: url(#glf); }
-    .bub { fill: none; stroke: #5ef2d6; stroke-width: 1.6; }
+    .gl { fill: none; stroke: #eafff2; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+    .gf { fill: rgba(43,255,136,.14); }
+    .gg { fill: none; stroke: var(--neon); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+    .bub { fill: none; stroke: var(--mint); stroke-width: 1.6; }
 
     /* why */
-    .why .big { font: 700 clamp(1.6rem, 1.1rem + 2.6vw, 3.6rem)/1.12 var(--disp); letter-spacing: -.02em; max-width: 22ch; margin-top: 20px; }
+    .why .big { font: 800 clamp(1.5rem, 1rem + 2.6vw, 3.5rem)/1.12 var(--disp); text-transform: uppercase; letter-spacing: -.02em; max-width: 22ch; margin-top: 20px; }
     .why .w { opacity: .14; }
     .points { display: grid; gap: 12px; margin-top: 34px; }
-    .pt { border-top: 1px solid var(--line); padding-top: 16px; display: grid; grid-template-columns: 40px 1fr; gap: 12px; }
-    .pt i { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; background: rgba(94,242,214,.08); border: 1px solid rgba(94,242,214,.3); font-style: normal; font: 700 .82rem/1 var(--sans); color: var(--teal); }
+    .pt { border-top: 1px solid var(--line); padding-top: 16px; display: grid; grid-template-columns: 44px 1fr; gap: 12px; }
+    .pt i { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; background: rgba(43,255,136,.08); border: 1px solid rgba(43,255,136,.35); font: 800 .8rem/1 var(--disp); font-style: normal; color: var(--neon); }
     .pt p { color: var(--muted); font-size: .92rem; margin-top: 4px; }
     .src { color: var(--muted); font-size: .74rem; margin-top: 18px; }
     @media (min-width: 900px) { .points { grid-template-columns: repeat(3, 1fr); gap: 30px; } }
 
     /* visit */
-    .visit-grid { display: grid; border: 1px solid var(--line); border-radius: 28px; overflow: hidden; background: var(--ink-2); }
+    .visit-grid { display: grid; border: 1px solid var(--line); border-radius: 28px; overflow: hidden; background: var(--bg-2); }
     .visit-info { padding: clamp(22px, 4vw, 48px); display: grid; gap: 18px; align-content: start; }
     .visit-info dl { display: grid; gap: 16px; margin: 0; }
-    .visit-info dt { font: 600 .7rem/1 var(--sans); letter-spacing: .22em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+    .visit-info dt { font: 700 .68rem/1 var(--sans); letter-spacing: .22em; text-transform: uppercase; color: var(--neon); margin-bottom: 6px; }
     .visit-info dd { margin: 0; font-weight: 500; }
-    .visit-info .tel { font: 700 clamp(1.5rem, 1.2rem + 1.2vw, 2.1rem)/1 var(--disp); }
+    .visit-info .tel { font: 800 clamp(1.4rem, 1.1rem + 1.2vw, 2rem)/1 var(--disp); }
     .hours { width: 100%; border-collapse: collapse; font-size: .92rem; }
     .hours td { padding: 6px 0; border-bottom: 1px solid var(--line); }
     .hours td:last-child { text-align: right; color: var(--muted); }
-    .hours tr.today td { color: var(--teal); }
-    .id { display: flex; gap: 12px; align-items: center; padding: 14px 16px; border-radius: 16px; border: 1px dashed rgba(255,122,200,.4); color: #ffc2e6; font-size: .9rem; }
-    .id b { font: 800 1.2rem/1 var(--disp); color: var(--pink); }
+    .hours tr.today td { color: var(--neon); }
+    .id { display: flex; gap: 12px; align-items: center; padding: 14px 16px; border-radius: 16px; border: 1px dashed rgba(182,255,74,.45); color: #e3ffc4; font-size: .9rem; }
+    .id b { font: 900 1.2rem/1 var(--disp); color: var(--lime); }
     .map { min-height: 320px; position: relative; }
-    .map iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; filter: invert(.92) hue-rotate(190deg) saturate(.6) contrast(.92); }
+    .map iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; filter: invert(.9) hue-rotate(110deg) saturate(.7) contrast(.92) brightness(.9); }
     @media (min-width: 900px) { .visit-grid { grid-template-columns: 1fr 1.2fr; } .map { min-height: 480px; } }
 
     /* closer */
-    .closer { position: relative; text-align: center; padding: var(--sec) var(--pad); overflow: hidden; }
-    .closer .huge { font: 800 clamp(3rem, 13vw, 12rem)/.85 var(--disp); letter-spacing: -.04em; color: transparent; -webkit-text-stroke: 1px rgba(238,241,246,.28); white-space: nowrap; }
-    .closer .huge span { background: var(--grad); -webkit-background-clip: text; background-clip: text; -webkit-text-stroke: 0; }
-    .closer p { color: var(--muted); margin: 18px auto 0; max-width: 30em; }
+    .closer { position: relative; text-align: center; padding: var(--sec) var(--pad); overflow: hidden; background: radial-gradient(60% 50% at 50% 50%, rgba(20,196,107,.14), transparent 70%); }
+    .closer .neon { font-size: clamp(3rem, 1.4rem + 9vw, 9.5rem); }
+    .closer .hutmark { width: clamp(56px, 8vw, 90px); height: auto; margin: 0 auto 8px; }
+    .closer p { color: var(--muted); margin: 20px auto 0; max-width: 30em; }
     .closer .ctas { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 22px; }
     footer { border-top: 1px solid var(--line); padding: 28px 0 100px; color: var(--muted); font-size: .84rem; }
     footer .wrap { display: grid; gap: 16px; }
-    .warn { border: 2px solid var(--fog); padding: 12px 14px; color: var(--fog); font-weight: 700; font-size: .92rem; letter-spacing: .01em; }
+    .warn { border: 2px solid var(--fog); padding: 12px 14px; color: var(--fog); font-weight: 700; font-size: .92rem; letter-spacing: .01em; background: #000; }
     .foot-row { display: flex; flex-wrap: wrap; gap: 10px 24px; justify-content: space-between; align-items: center; }
     .studio { display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px; border-radius: 999px; background: rgba(255,255,255,.06); color: #fff; font-size: 11px; }
     .studio i { width: 9px; height: 9px; border-radius: 3px; background: conic-gradient(from 210deg, #ff5a1f, #ffb03b, #ff5a1f); }
     @media (min-width: 760px) { footer { padding-bottom: 30px; } }
 
-    .dock { position: fixed; z-index: 60; left: 12px; right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 8px; border-radius: 999px; background: rgba(14,16,23,.94); border: 1px solid var(--line); transition: transform .3s, opacity .3s; }
+    .dock { position: fixed; z-index: 60; left: 12px; right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 8px; border-radius: 999px; background: rgba(8,17,12,.95); border: 1px solid var(--line); transition: transform .3s, opacity .3s; }
     .dock .btn { padding: 12px 8px; }
     .dock.off { transform: translateY(150%); opacity: 0; pointer-events: none; }
     @media (min-width: 760px) { .dock { display: none; } }
-    @media (prefers-reduced-motion: reduce) { .vfallback { animation: none; } .why .w { opacity: 1; } }
+    @media (prefers-reduced-motion: reduce) { .vfallback, .ttrack { animation: none; } .why .w { opacity: 1; } }
   </style>
 </head>
 <body class="locked">
   <script>document.documentElement.classList.add(matchMedia('(prefers-reduced-motion: reduce)').matches ? 'still' : 'motion');</script>
 
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="hut" viewBox="0 0 100 100">
+        <path d="M12 48 50 16l38 32"/>
+        <path d="M24 40v44h52V40"/>
+        <path d="M42 84V62a8 8 0 0 1 16 0v22"/>
+        <path class="wisp" d="M66 26c-6-6 4-10-2-16"/>
+      </symbol>
+    </defs>
+  </svg>
+
   <div class="gate" id="gate" role="dialog" aria-modal="true" aria-labelledby="gateT">
     <div class="box">
-      <div class="mark">VAPE HUT<span>Allen Park</span></div>
+      <svg class="hutmark" viewBox="0 0 100 100" aria-hidden="true"><use href="#hut"/></svg>
+      <div class="neon">VAPE HUT</div>
+      <small>Allen Park</small>
       <h2 id="gateT">Are you 21 or older?</h2>
       <p>This site is for adults of legal age only. You'll need a valid ID to buy in the shop too.</p>
       <div class="row"><button class="btn glow" type="button" id="gateYes">I'm 21+</button><button class="btn" type="button" id="gateNo">I'm under 21</button></div>
@@ -185,16 +223,9 @@
     </div>
   </div>
 
-  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-    <defs>
-      <linearGradient id="gl" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5ef2d6"/><stop offset=".55" stop-color="#8b7bff"/><stop offset="1" stop-color="#ff7ac8"/></linearGradient>
-      <linearGradient id="glf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8b7bff" stop-opacity=".55"/><stop offset="1" stop-color="#5ef2d6" stop-opacity=".2"/></linearGradient>
-    </defs>
-  </svg>
-
   <header class="nav">
     <div class="wrap">
-      <a class="brand" href="#top" aria-label="Vape Hut Allen Park, back to top">VAPE HUT<small>Allen Park</small></a>
+      <a class="brand" href="#top" aria-label="Vape Hut Allen Park, back to top"><svg class="hutmark" viewBox="0 0 100 100" aria-hidden="true"><use href="#hut"/></svg><b>VAPE HUT</b><small>Allen Park</small></a>
       <nav class="nav-links" aria-label="Main"><a href="#shelf">The shelf</a><a href="#why">Why us</a><a href="#visit">Visit</a></nav>
       <a class="btn glow" href="tel:+13134293132">Call the shop</a>
     </div>
@@ -205,20 +236,26 @@
       <div class="vfallback" aria-hidden="true"></div>
       <canvas id="vapor" aria-hidden="true"></canvas>
       <div class="hero-in">
+        <div class="sign" id="sign">
+          <svg class="hutmark off" id="signHut" viewBox="0 0 100 100" aria-hidden="true"><use href="#hut"/></svg>
+          <div class="neon off" id="signTxt" role="img" aria-label="Vape Hut">VAPE HUT</div>
+          <div class="loc">Allen Park · Allen Rd</div>
+        </div>
         <span class="status" id="status"><i></i><span id="statusTxt">7805 Allen Rd, Allen Park</span></span>
-        <h1>The vape shop Allen Park <span class="g">keeps coming back to.</span></h1>
-        <p class="lead">Disposables, devices, e-liquid, glass and accessories on Allen Rd, with a team that takes the time to walk you through your options. Adults 21+ only.</p>
+        <h1>Disposables, pods, e-liquid, glass and accessories, with a crew that actually walks you through it. Adults 21+ only.</h1>
         <div class="ctas"><a class="btn glow" id="heroCta" href="https://www.google.com/maps/dir/?api=1&amp;destination=7805+Allen+Rd+Allen+Park+MI+48101" target="_blank" rel="noopener">Get directions</a><a class="btn" href="tel:+13134293132"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>(313) 429-3132</a></div>
       </div>
       <div class="stir" aria-hidden="true"><i></i><span id="stirTxt">Move to stir the vapor</span><i></i></div>
     </section>
 
+    <div class="ticker" aria-hidden="true"><div class="ttrack"><span>Disposables</span><span>Pods</span><span>E-liquid</span><span>Salts</span><span>Glass</span><span>Water pipes</span><span>Accessories</span><span>21+ only</span><span>Disposables</span><span>Pods</span><span>E-liquid</span><span>Salts</span><span>Glass</span><span>Water pipes</span><span>Accessories</span><span>21+ only</span></div></div>
+
     <section class="stats" aria-label="At a glance">
       <div class="wrap">
-        <div class="stat"><b><span class="count" data-to="4.8" data-dec="1">4.8</span><span class="g">★</span></b><small>Google rating</small></div>
+        <div class="stat"><b><span class="count" data-to="4.8" data-dec="1">4.8</span>★</b><small>Google rating</small></div>
         <div class="stat"><b><span class="count" data-to="96">96</span></b><small>Google reviews</small></div>
-        <div class="stat"><b>7 <span class="g">days</span></b><small>Open every day</small></div>
-        <div class="stat"><b>9 <span class="g">PM</span></b><small>Open late Mon to Sat</small></div>
+        <div class="stat"><b>7 days</b><small>Open every day</small></div>
+        <div class="stat"><b>9 PM</b><small>Open late Mon to Sat</small></div>
       </div>
     </section>
 
@@ -235,7 +272,7 @@
         <span class="tag">Why people come back</span>
         <p class="big split">Real answers at the counter, the stuff you like actually in stock, and prices that hold up against anywhere else.</p>
         <div class="points">
-          <div class="pt"><i>01</i><div><h3>A team that explains</h3><p>Customers say the staff take time to explain products and options they hadn't considered.</p></div></div>
+          <div class="pt"><i>01</i><div><h3>A crew that explains</h3><p>Customers say the staff take time to explain products and options they hadn't considered.</p></div></div>
           <div class="pt"><i>02</i><div><h3>Wide, steady selection</h3><p>A big range of disposables, devices and e-liquid, with stock you can count on.</p></div></div>
           <div class="pt"><i>03</i><div><h3>Fair prices</h3><p>Pricing that people say compares well with shops outside the area.</p></div></div>
         </div>
@@ -248,7 +285,7 @@
         <div class="visit-grid">
           <div class="visit-info">
             <span class="tag">Visit</span>
-            <h2>Allen Rd, Allen Park.</h2>
+            <h2>Allen Rd, <span class="g">Allen Park.</span></h2>
             <dl>
               <div><dt>Shop</dt><dd>7805 Allen Rd<br>Allen Park, MI 48101</dd></div>
               <div><dt>Call</dt><dd><a class="tel" href="tel:+13134293132">(313) 429-3132</a></dd></div>
@@ -263,7 +300,8 @@
     </section>
 
     <section class="closer" id="closer" aria-label="Come by">
-      <div class="huge" aria-hidden="true">VAPE <span>HUT</span></div>
+      <svg class="hutmark off" id="closeHut" viewBox="0 0 100 100" aria-hidden="true"><use href="#hut"/></svg>
+      <div class="neon off" id="closeTxt" role="img" aria-label="Vape Hut">VAPE HUT</div>
       <p>Stop by Allen Rd, ask us anything, and leave with exactly what you came for.</p>
       <div class="ctas"><a class="btn glow" href="https://www.google.com/maps/dir/?api=1&amp;destination=7805+Allen+Rd+Allen+Park+MI+48101" target="_blank" rel="noopener">Get directions</a><a class="btn" href="tel:+13134293132">(313) 429-3132</a></div>
     </section>
@@ -289,12 +327,12 @@
       tz: "America/Detroit",
       hours: { 0: [10, 19], 1: [9, 21], 2: [9, 21], 3: [9, 21], 4: [9, 21], 5: [9, 21], 6: [9, 21] },
       shelf: [
-        { n: "Disposables", d: "Grab-and-go disposables in a wide range of flavors and puff counts.", art: '<rect class="glowfill" x="34" y="14" width="32" height="128" rx="14"/><rect class="glowline" x="34" y="14" width="32" height="128" rx="14"/><path class="glowline" d="M42 30v86"/><circle cx="50" cy="130" r="3" fill="#5ef2d6"/>' },
-        { n: "Devices & pods", d: "Pod systems and devices, plus replacement pods and coils.", art: '<rect class="glowfill" x="22" y="34" width="56" height="104" rx="16"/><rect class="glowline" x="22" y="34" width="56" height="104" rx="16"/><path class="glowline" d="M40 34V18h20v16"/><rect class="glowline" x="34" y="56" width="32" height="24" rx="6"/><circle class="glowline" cx="50" cy="112" r="8"/>' },
-        { n: "E-liquid", d: "Vape juice and salts in plenty of flavors and strengths.", art: '<path class="glowline" d="M40 10h20v16H40z"/><path class="glowline" d="M44 26v10M56 26v10"/><path class="glowfill liq" d="M28 82h44v46a10 10 0 0 1-10 10H38a10 10 0 0 1-10-10z"/><path class="glowline" d="M28 36h44v92a10 10 0 0 1-10 10H38a10 10 0 0 1-10-10z"/><path class="glowline wave" d="M28 82c8-4 14 4 22 0s14-4 22 0"/>' },
-        { n: "Glass pipes", d: "Hand pipes and glass, picked for quality.", art: '<path class="glowline" d="M10 110c20 10 46 6 62-14 8-10 12-24 12-40"/><path class="glowline" d="M70 56c0-10 6-16 14-16s14 6 14 16"/><ellipse class="glowfill" cx="84" cy="56" rx="14" ry="6"/><path class="glowline" d="M10 110c-4-2-4-8 0-10"/>' },
-        { n: "Water pipes", d: "Water pipes in a range of sizes and styles.", art: '<path class="glowline" d="M40 10h20M44 10v54L22 120a12 12 0 0 0 10 18h36a12 12 0 0 0 10-18L56 64V10"/><path class="glowfill" d="M30 108h40l7 12a8 8 0 0 1-7 12H30a8 8 0 0 1-7-12z"/><circle class="bub b1" cx="44" cy="118" r="3"/><circle class="bub b2" cx="54" cy="124" r="2.4"/><circle class="bub b3" cx="50" cy="112" r="2"/><path class="glowline" d="M64 92l20-18"/>' },
-        { n: "Accessories", d: "Chargers, coils, batteries, cases and the little things.", art: '<path class="glowline" d="M50 14c-14 0-14 12 0 12s14 12 0 12-14 12 0 12 14 12 0 12-14 12 0 12 14 12 0 12"/><path class="glowline" d="M50 98v20"/><rect class="glowfill" x="30" y="118" width="40" height="24" rx="8"/><rect class="glowline" x="30" y="118" width="40" height="24" rx="8"/><path class="glowline" d="M42 142v8M58 142v8"/>' }
+        { n: "Disposables", d: "Grab-and-go disposables in a wide range of flavors and puff counts.", art: '<rect class="gf" x="34" y="14" width="32" height="128" rx="14"/><rect class="gl" x="34" y="14" width="32" height="128" rx="14"/><path class="gg" d="M42 30v86"/><circle cx="50" cy="130" r="3.2" fill="#2bff88"/>' },
+        { n: "Devices & pods", d: "Pod systems and devices, plus replacement pods and coils.", art: '<rect class="gf" x="22" y="34" width="56" height="104" rx="16"/><rect class="gl" x="22" y="34" width="56" height="104" rx="16"/><path class="gl" d="M40 34V18h20v16"/><rect class="gg" x="34" y="56" width="32" height="24" rx="6"/><circle class="gg" cx="50" cy="112" r="8"/>' },
+        { n: "E-liquid", d: "Vape juice and salts in plenty of flavors and strengths.", art: '<path class="gl" d="M40 10h20v16H40z"/><path class="gl" d="M44 26v10M56 26v10"/><path class="gf liq" d="M28 82h44v46a10 10 0 0 1-10 10H38a10 10 0 0 1-10-10z"/><path class="gl" d="M28 36h44v92a10 10 0 0 1-10 10H38a10 10 0 0 1-10-10z"/><path class="gg wave" d="M28 82c8-4 14 4 22 0s14-4 22 0"/>' },
+        { n: "Glass pipes", d: "Hand pipes and glass, picked for quality.", art: '<path class="gl" d="M10 110c20 10 46 6 62-14 8-10 12-24 12-40"/><path class="gl" d="M70 56c0-10 6-16 14-16s14 6 14 16"/><ellipse class="gf" cx="84" cy="56" rx="14" ry="6"/><path class="gg" d="M10 110c-4-2-4-8 0-10"/>' },
+        { n: "Water pipes", d: "Water pipes in a range of sizes and styles.", art: '<path class="gl" d="M40 10h20M44 10v54L22 120a12 12 0 0 0 10 18h36a12 12 0 0 0 10-18L56 64V10"/><path class="gf" d="M30 108h40l7 12a8 8 0 0 1-7 12H30a8 8 0 0 1-7-12z"/><circle class="bub b1" cx="44" cy="118" r="3"/><circle class="bub b2" cx="54" cy="124" r="2.4"/><circle class="bub b3" cx="50" cy="112" r="2"/><path class="gg" d="M64 92l20-18"/>' },
+        { n: "Accessories", d: "Chargers, coils, batteries, cases and the little things.", art: '<path class="gg" d="M50 14c-14 0-14 12 0 12s14 12 0 12-14 12 0 12 14 12 0 12-14 12 0 12 14 12 0 12"/><path class="gl" d="M50 98v20"/><rect class="gf" x="30" y="118" width="40" height="24" rx="8"/><rect class="gl" x="30" y="118" width="40" height="24" rx="8"/><path class="gl" d="M42 142v8M58 142v8"/>' }
       ]
     };
     const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
@@ -321,18 +359,30 @@
     (function () { const t = CONFIG.hours[now.day], open = now.h >= t[0] && now.h < t[1], nd = (now.day + 1) % 7; $("#statusTxt").textContent = open ? `Open now · until ${fmt(t[1])}` : now.h < t[0] ? `Opens today at ${fmt(t[0])}` : `Closed · opens tomorrow at ${fmt(CONFIG.hours[nd][0])}`; $("#status").classList.toggle("open", open); })();
 
     /* shelf */
-    $("#rail").innerHTML = CONFIG.shelf.map((s, i) => `<article class="item" data-hover><span class="n">0${i + 1}</span><div class="art"><svg viewBox="0 0 100 152" aria-hidden="true">${s.art}</svg></div><h3>${esc(s.n)}</h3><p>${esc(s.d)}</p></article>`).join("");
+    $("#rail").innerHTML = CONFIG.shelf.map((s, i) => `<article class="item"><span class="n">0${i + 1}</span><div class="art"><svg viewBox="0 0 100 152" aria-hidden="true">${s.art}</svg></div><h3>${esc(s.n)}</h3><p>${esc(s.d)}</p></article>`).join("");
     $("#dots").innerHTML = CONFIG.shelf.map((_, i) => `<i${i ? "" : ' class="on"'}></i>`).join("");
     const rail = $("#rail");
     rail.addEventListener("scroll", () => { const w = rail.firstElementChild.offsetWidth + 12, i = Math.round(rail.scrollLeft / w); [...$("#dots").children].forEach((d, k) => d.classList.toggle("on", k === i)); }, { passive: true });
-    $$(".item").forEach(c => { c.addEventListener("pointermove", e => { const r = c.getBoundingClientRect(); c.style.setProperty("--mx", (e.clientX - r.left) + "px"); c.style.setProperty("--my", (e.clientY - r.top) + "px"); }); });
+    $$(".item").forEach(c => c.addEventListener("pointermove", e => { const r = c.getBoundingClientRect(); c.style.setProperty("--mx", (e.clientX - r.left) + "px"); c.style.setProperty("--my", (e.clientY - r.top) + "px"); }));
     $$(".split").forEach(el => { el.innerHTML = el.textContent.trim().split(/\s+/).map(w => `<span class="w">${esc(w)}</span>`).join(" "); });
     if (!matchMedia("(hover: hover)").matches) $("#stirTxt").textContent = "Drag to stir the vapor";
 
-    /* ---------- the vapor: curl-noise advection in a feedback loop ---------- */
+    /* neon flicker-on: a few uneven flickers, then steady */
+    function neonOn(els, delay = 0) {
+      const seq = [[0, 1], [70, 0], [140, 1], [190, 0], [330, 1], [380, 0], [460, 1]];
+      els.forEach((el, k) => {
+        if (!el) return;
+        if (still) { el.classList.remove("off"); return; }
+        seq.forEach(([t, on]) => setTimeout(() => el.classList.toggle("off", !on), delay + k * 160 + t));
+      });
+    }
+    /* now and then a single tube buzzes */
+    if (!still) setInterval(() => { if (document.hidden) return; const el = Math.random() < .5 ? $("#signTxt") : $("#signHut"); if (el.classList.contains("off")) return; el.classList.add("off"); setTimeout(() => el.classList.remove("off"), 60 + Math.random() * 80); }, 5200);
+
+    /* ---------- the vapor: curl-noise advection in a feedback loop, green palette ---------- */
     (function vapor() {
       const canvas = $("#vapor");
-      let gl = null; try { gl = canvas.getContext("webgl", { alpha: false, antialias: false, premultipliedAlpha: false, preserveDrawingBuffer: false }); } catch (e) {}
+      let gl = null; try { gl = canvas.getContext("webgl", { alpha: false, antialias: false, premultipliedAlpha: false }); } catch (e) {}
       if (!gl) { canvas.remove(); return; }
       const VS = "attribute vec2 p; varying vec2 v; void main(){ v = p * .5 + .5; gl_Position = vec4(p, 0., 1.); }";
       const NOISE = `
@@ -352,18 +402,18 @@
           vec4 c = texture2D(prev, src);
           vec4 bl = (texture2D(prev, src + vec2(px.x, 0.)) + texture2D(prev, src - vec2(px.x, 0.)) + texture2D(prev, src + vec2(0., px.y)) + texture2D(prev, src - vec2(0., px.y))) * .25;
           c = mix(c, bl, .18); c.r = max(c.r * .99 - .0022, 0.);
-          float s1 = splat(uv, e1.xy, .0018) * .12, s2 = splat(uv, e2.xy, .0018) * .12, s3 = splat(uv, vec2(.5 + .2 * sin(t * .23), .08), .0014) * .09, sm = splat(uv, m.xy, .0016) * m.z * .22;
+          float s1 = splat(uv, e1.xy, .0018) * .13, s2 = splat(uv, e2.xy, .0018) * .13, s3 = splat(uv, vec2(.5 + .2 * sin(t * .23), .08), .0014) * .1, sm = splat(uv, m.xy, .0016) * m.z * .22;
           c.r += s1 + s2 + s3 + sm;
           c.g = mix(c.g, e1.z, s1 * 2.5); c.g = mix(c.g, e2.z, s2 * 2.5); c.g = mix(c.g, fract(t * .03), clamp(sm * 3., 0., 1.));
           gl_FragColor = vec4(clamp(c.r, 0., 1.), clamp(c.g, 0., 1.), 0., 1.);
         }`;
       const OUT = `precision mediump float; varying vec2 v; uniform sampler2D tex;
-        vec3 pal(float k){ vec3 a = vec3(.37,.95,.84), b = vec3(.55,.48,1.), c = vec3(1.,.48,.78); return k < .5 ? mix(a, b, k * 2.) : mix(b, c, (k - .5) * 2.); }
+        vec3 pal(float k){ vec3 a = vec3(.71,1.,.29), b = vec3(.17,1.,.53), c = vec3(.06,.62,.38); return k < .5 ? mix(a, b, k * 2.) : mix(b, c, (k - .5) * 2.); }
         void main(){ vec4 s = texture2D(tex, v); float d = smoothstep(0., 1., s.r);
-          vec3 base = vec3(.027,.031,.047);
-          vec3 col = mix(pal(s.g), vec3(.92,.95,1.), smoothstep(.55, 1., d) * .3);
-          vec3 c = base + col * d * .72;
-          c += pal(s.g) * pow(d, 2.5) * .18;
+          vec3 base = vec3(.016,.031,.024);
+          vec3 col = mix(pal(s.g), vec3(.86,1.,.92), smoothstep(.55, 1., d) * .32);
+          vec3 c = base + col * d * .7;
+          c += pal(s.g) * pow(d, 2.5) * .2;
           gl_FragColor = vec4(c, 1.); }`;
       const sh = (ty, src) => { const s = gl.createShader(ty); gl.shaderSource(s, src); gl.compileShader(s); if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw gl.getShaderInfoLog(s); return s; };
       const prog = fs => { const p = gl.createProgram(); gl.attachShader(p, sh(gl.VERTEX_SHADER, VS)); gl.attachShader(p, sh(gl.FRAGMENT_SHADER, fs)); gl.linkProgram(p); return p; };
@@ -389,7 +439,7 @@
       canvas.parentElement.addEventListener("pointermove", e => move(e.clientX, e.clientY), { passive: true });
       canvas.parentElement.addEventListener("touchmove", e => { const t = e.touches[0]; if (t) move(t.clientX, t.clientY); }, { passive: true });
       let visible = true; new IntersectionObserver(([e]) => visible = e.isIntersecting).observe(canvas);
-      const t0 = performance.now(); let prevT = t0;
+      const t0 = performance.now();
       function frame(now) {
         if (visible && !document.hidden) {
           const t = (now - t0) / 1000, idle = now - lastMove > 1400;
@@ -421,40 +471,37 @@
       ["#heroCta", "#closer"].forEach(s => io.observe($(s)));
     } else $(".dock").classList.remove("off");
 
+    /* closer sign lights up when it comes into view */
+    if ("IntersectionObserver" in window) { const cio = new IntersectionObserver(([e]) => { if (e.isIntersecting) { neonOn([$("#closeHut"), $("#closeTxt")]); cio.disconnect(); } }, { threshold: .4 }); cio.observe($("#closeTxt")); } else neonOn([$("#closeHut"), $("#closeTxt")]);
+
     /* ---------- motion ---------- */
+    const heroSign = () => neonOn([$("#signHut"), $("#signTxt")], 250);
     if (still || !window.gsap || !window.ScrollTrigger) {
+      gate.hidden ? heroSign() : document.addEventListener("gate-open", heroSign, { once: true });
       $$(".why .w").forEach(w => w.style.opacity = 1);
     } else {
       gsap.registerPlugin(ScrollTrigger);
       let lenis = null;
       if (window.Lenis) { lenis = new Lenis({ lerp: .09, smoothWheel: true }); lenis.on("scroll", ScrollTrigger.update); gsap.ticker.add(t => lenis.raf(t * 1000)); gsap.ticker.lagSmoothing(0); }
       document.addEventListener("click", e => { const a = e.target.closest('a[href^="#"]'); if (!a) return; const t = $(a.getAttribute("href")); if (!t) return; e.preventDefault(); lenis ? lenis.scrollTo(t, { duration: 1.4, offset: -40 }) : t.scrollIntoView({ behavior: "smooth" }); });
-      const heroIn = () => gsap.timeline()
-        .from(".hero .status", { y: 20, autoAlpha: 0, duration: .8, ease: "power3.out" })
-        .from(".hero h1", { y: 50, autoAlpha: 0, filter: "blur(12px)", duration: 1.4, ease: "expo.out" }, .1)
-        .from(".hero .lead, .hero .ctas, .stir", { y: 24, autoAlpha: 0, duration: 1, stagger: .1, ease: "power3.out" }, .5);
+      gsap.set(".hero .loc, .status, .hero h1, .hero .ctas, .stir", { autoAlpha: 0, y: 18 });
+      const heroIn = () => { heroSign(); gsap.timeline({ delay: .9 }).to(".hero .loc", { autoAlpha: 1, y: 0, duration: .7, ease: "power3.out" }).to(".status, .hero h1, .hero .ctas, .stir", { autoAlpha: 1, y: 0, duration: .9, stagger: .1, ease: "power3.out" }, .15); };
       gate.hidden ? heroIn() : document.addEventListener("gate-open", heroIn, { once: true });
       gsap.to(".hero-in", { yPercent: -16, autoAlpha: 0, ease: "none", scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true } });
 
-      /* stats count up */
       $$(".count").forEach(el => { const to = +el.dataset.to, dec = +(el.dataset.dec || 0), o = { v: 0 }; ScrollTrigger.create({ trigger: el, start: "top 90%", once: true, onEnter: () => gsap.to(o, { v: to, duration: 1.6, ease: "power2.out", onUpdate: () => el.textContent = o.v.toFixed(dec) }) }); });
 
-      /* shelf: rise in, glow lines draw, liquids and bubbles move */
       gsap.from(".shelf-head > *", { y: 40, autoAlpha: 0, duration: 1.1, stagger: .1, ease: "expo.out", scrollTrigger: { trigger: ".shelf-head", start: "top 85%" } });
       gsap.from(".item", { y: 60, autoAlpha: 0, duration: 1.1, stagger: .08, ease: "expo.out", scrollTrigger: { trigger: "#rail", start: "top 88%" } });
-      $$(".item .glowline").forEach(p => { let L = 300; try { L = p.getTotalLength(); } catch (e) {} p.style.strokeDasharray = L; gsap.fromTo(p, { strokeDashoffset: L }, { strokeDashoffset: 0, duration: 1.8, ease: "power2.inOut", scrollTrigger: { trigger: p.closest(".item"), start: "top 85%" } }); });
+      $$(".item .gl, .item .gg").forEach(p => { let L = 300; try { L = p.getTotalLength(); } catch (e) {} p.style.strokeDasharray = L; gsap.fromTo(p, { strokeDashoffset: L }, { strokeDashoffset: 0, duration: 1.8, ease: "power2.inOut", scrollTrigger: { trigger: p.closest(".item"), start: "top 85%" } }); });
       gsap.to(".wave, .liq", { y: -5, duration: 1.6, yoyo: true, repeat: -1, ease: "sine.inOut" });
       $$(".bub").forEach((b, i) => gsap.fromTo(b, { y: 0, opacity: 0 }, { y: -26, opacity: 1, duration: 1.6 + i * .3, repeat: -1, ease: "sine.in", delay: i * .4 }));
-      $$(".item").forEach(c => { if (!matchMedia("(hover: hover)").matches) return; c.addEventListener("pointermove", e => { const r = c.getBoundingClientRect(); gsap.to(c, { rotateY: ((e.clientX - r.left) / r.width - .5) * 8, rotateX: -((e.clientY - r.top) / r.height - .5) * 8, transformPerspective: 800, duration: .5 }); }); c.addEventListener("pointerleave", () => gsap.to(c, { rotateY: 0, rotateX: 0, duration: .8, ease: "elastic.out(1,.5)" })); });
+      if (matchMedia("(hover: hover)").matches) $$(".item").forEach(c => { c.addEventListener("pointermove", e => { const r = c.getBoundingClientRect(); gsap.to(c, { rotateY: ((e.clientX - r.left) / r.width - .5) * 8, rotateX: -((e.clientY - r.top) / r.height - .5) * 8, transformPerspective: 800, duration: .5 }); }); c.addEventListener("pointerleave", () => gsap.to(c, { rotateY: 0, rotateX: 0, duration: .8, ease: "elastic.out(1,.5)" })); });
 
-      /* why: statement lights up */
       gsap.to(".why .w", { opacity: 1, stagger: .05, ease: "none", scrollTrigger: { trigger: ".why .big", start: "top 82%", end: "bottom 50%", scrub: true } });
       gsap.from(".pt", { y: 30, autoAlpha: 0, duration: 1, stagger: .1, ease: "power3.out", scrollTrigger: { trigger: ".points", start: "top 88%" } });
-
-      /* visit + closer */
       gsap.from(".visit-grid", { y: 50, autoAlpha: 0, duration: 1.2, ease: "expo.out", scrollTrigger: { trigger: ".visit-grid", start: "top 85%" } });
       gsap.from(".map", { clipPath: "inset(0 0 0 100%)", duration: 1.6, ease: "expo.inOut", clearProps: "clipPath", scrollTrigger: { trigger: ".visit-grid", start: "top 75%" } });
-      gsap.fromTo(".closer .huge", { xPercent: 5 }, { xPercent: -5, ease: "none", scrollTrigger: { trigger: ".closer", start: "top bottom", end: "bottom top", scrub: true } });
       addEventListener("load", () => ScrollTrigger.refresh());
     }
   </script>
