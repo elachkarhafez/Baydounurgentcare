@@ -1186,10 +1186,22 @@
     const shLogo = (c, y, h, light, t, s) => { const a = fin(t, s); if (a <= 0) return; const im = light ? SHI.logoL : SHI.logo, w = h * im.width / im.height; c.save(); c.globalAlpha *= a; c.drawImage(im, 540 - w / 2, y + (1 - a) * 14, w, h); c.restore(); };
     // the studio render, a slow push-in on the cup, one soft glint across the glass, a breathing vignette
     const CUP = [[305, 915], [775, 915], [700, 1640], [385, 1640]];
+    // the pour films (same camera as the stills): ice drops in, the tea pours and fills, then it settles on the still
+    const POUR = {}, POURLEN = 4.05; let pourOn = false;
+    const pourVid = v => {
+      if (POUR[v]) return POUR[v]; const el = document.createElement('video'); el.muted = true; el.defaultMuted = true; el.playsInline = true; el.setAttribute('playsinline', ''); el.setAttribute('muted', ''); el.preload = 'auto';
+      el.style.cssText = 'position:fixed;left:0;top:0;width:2px;height:2px;opacity:0;pointer-events:none'; el.src = SBASE + 'pour-' + RND[v] + '.mp4'; document.body.appendChild(el); try { el.load(); } catch (e) {} return (POUR[v] = el);
+    };
+    const pourable = st => st.brand === 'sh' && TPL[st.tpl].vis && visOf(st) === 'render';
+    const pourGo = () => { pourOn = false; if (!pourable(S)) return; const el = pourVid(S.v); pourOn = true; try { el.pause(); el.currentTime = 0; } catch (e) {} const pr = el.play(); if (pr && pr.catch) pr.catch(() => {}); };
+    const pourStop = () => { pourOn = false; Object.values(POUR).forEach(el => { try { el.pause(); } catch (e) {} }); };
     const studio = (c, v, t) => {
-      const im = SHI.r[v], k = ease(cl(t / DUR)), sc = 1 + .07 * k, ax = 540, ay = 1280;
-      c.save(); c.translate(ax, ay); c.scale(sc, sc); c.translate(-ax, -ay); c.drawImage(im, 0, 0, W, H);
-      const g0 = P(t, 2.1, 1.6); if (g0 > 0 && g0 < 1) {
+      const im = SHI.r[v], k = ease(cl(t / DUR)), sc = 1 + .07 * k, ax = 540, ay = 1280, vd = pourOn && t < DUR ? POUR[v] : null, live = vd && vd.readyState >= 2 && !vd.seeking;
+      c.save(); c.translate(ax, ay); c.scale(sc, sc); c.translate(-ax, -ay);
+      if (live) { c.drawImage(vd, 0, 0, W, H); const a = fin(t, POURLEN - .35, .8); if (a > 0) { c.save(); c.globalAlpha = a; c.drawImage(im, 0, 0, W, H); c.restore(); } }
+      else if (vd && t < 1.2) { c.fillStyle = ['#1d2a38', '#d8c4a0', '#efe5d3', '#b8703e'][v]; c.fillRect(0, 0, W, H); }
+      else c.drawImage(im, 0, 0, W, H);
+      const g0 = P(t, vd ? 4.4 : 2.1, vd ? 1.3 : 1.6); if (g0 > 0 && g0 < 1) {
         c.save(); c.beginPath(); CUP.forEach(([x, y], i) => c[i ? 'lineTo' : 'moveTo'](x, y)); c.closePath(); c.clip();
         const gx = -500 + g0 * 1700, g = c.createLinearGradient(gx, 900, gx + 420, 1500); g.addColorStop(0, 'rgba(255,255,255,0)'); g.addColorStop(.5, `rgba(255,250,240,${(.32 * Math.sin(g0 * Math.PI)).toFixed(3)})`); g.addColorStop(1, 'rgba(255,255,255,0)');
         c.globalCompositeOperation = 'screen'; c.fillStyle = g; c.fillRect(0, 880, W, 800); c.restore();
@@ -1251,7 +1263,119 @@
     /* their real drink photos: the white studio background is multiplied away, so nothing is cut out */
     const DRK = [['iced-adeni', 'Iced Adeni', 'Chilled Adeni spiced milk tea over ice'], ['adeni-tea', 'Adeni Tea', 'Spiced milk tea with black tea and cardamom'], ['shibam-coffee', 'Shibam Coffee', 'Our house coffee blend, smooth and balanced'], ['shibam-royal', 'Shibam Royal', 'Organic mango smoothie with evaporated milk'], ['brown-sugar-shakn', 'Brown Sugar Shaken', 'Shaken espresso with brown sugar'], ['jubani', 'Jubani', 'Bold Yemeni brew with a deep, smoky finish'], ['sanaani', "Sana'ani", 'Classic Yemeni tea with a rich spice profile'], ['qishr', 'Qishr', 'Coffee-husk tea with ginger and spices'], ['mufawar', 'Mufawar', 'Yemeni milk tea gently infused with cardamom'], ['moroccan-mint-tea', 'Moroccan Mint Tea', 'Green tea with fresh mint, lightly sweet'], ['dragon-fruit', 'Dragon Fruit', 'Dragon fruit refresher, light and fruity'], ['strawberry-acai', 'Strawberry Acai', 'Strawberry acai refresher, cool and light'], ['french-vanilla', 'French Vanilla', 'Vanilla latte, smooth and sweet'], ['pistachio-bite', 'Pistachio Bite', 'Pistachio bites, nutty and lightly sweet'], ['honeycomb', 'Honeycomb', 'Golden honeycomb pastry with natural sweetness'], ['sabaya', 'Sabaya', 'Flaky Yemeni layered pastry served with honey']];
     const DSC = {}; DRK.forEach(([k, n, d]) => { DN[k] = n; DSC[k] = d; });
-    const VD = [['Cream', SH.cream], ['Sand', SH.sandL], ['Linen', SH.sand]];
+    /* three sets for their real drinks: a sunlit wall with a window and palm shadow, a lime-trimmed arch niche like the Shibam houses, and a dusk skyline of mudbrick towers */
+    const VD = [['Window light', '#efe3cf'], ['Arch', '#d6bb92'], ['Dusk', '#f0c49c']];
+    const rngP = s => () => (s = (s * 16807) % 2147483647) / 2147483647;
+    // halve a few times, then scale back up in two hops: a soft blur that works the same on Safari and Chrome
+    const blurC = (src, steps) => {
+      let cur = src; for (let i = 0; i < steps; i++) { const n = mk(Math.max(1, cur.width >> 1), Math.max(1, cur.height >> 1)), x = n.getContext('2d'); x.imageSmoothingQuality = 'high'; x.drawImage(cur, 0, 0, n.width, n.height); cur = n; }
+      const mid = mk(src.width >> 2, src.height >> 2); let x = mid.getContext('2d'); x.imageSmoothingQuality = 'high'; x.drawImage(cur, 0, 0, mid.width, mid.height);
+      const out = mk(src.width, src.height); x = out.getContext('2d'); x.imageSmoothingQuality = 'high'; x.drawImage(mid, 0, 0, out.width, out.height); return out;
+    };
+    const noiseC = (w, h, r, lo, span) => { const n = mk(w, h), x = n.getContext('2d'), d = x.createImageData(w, h); for (let i = 0; i < d.data.length; i += 4) { const v = lo + r() * span; d.data[i] = v; d.data[i + 1] = v * .985; d.data[i + 2] = v * .96; d.data[i + 3] = 255; } x.putImageData(d, 0, 0); return n; };
+    // lime plaster: big soft blotches, smaller mottling and a fine grain, all multiplied in
+    const plaster = (c, amt, seed) => {
+      const r = rngP(seed); c.save(); c.globalCompositeOperation = 'multiply'; c.imageSmoothingQuality = 'high';
+      c.globalAlpha = amt; c.drawImage(noiseC(27, 48, r, 226, 29), 0, 0, W, H);
+      c.globalAlpha = amt * .7; c.drawImage(noiseC(135, 240, r, 222, 33), 0, 0, W, H);
+      c.globalAlpha = amt * .55; c.drawImage(noiseC(540, 960, r, 222, 33), 0, 0, W, H); c.restore();
+    };
+    const vgrad = (c, y0, y1, stops) => { const g = c.createLinearGradient(0, y0, 0, y1); stops.forEach(([o, col]) => g.addColorStop(o, col)); return g; };
+    const radG = (c, x, y, r, stops) => { const g = c.createRadialGradient(x, y, 0, x, y, r); stops.forEach(([o, col]) => g.addColorStop(o, col)); return g; };
+    const HZ = 1440, SET = {};
+    const tableTop = (c, top, bot) => {
+      c.fillStyle = vgrad(c, HZ, H, [[0, top], [1, bot]]); c.fillRect(0, HZ, W, H - HZ);
+      c.fillStyle = vgrad(c, HZ - 70, HZ, [[0, 'rgba(110,80,50,0)'], [1, 'rgba(110,80,50,.13)']]); c.fillRect(0, HZ - 70, W, 70);
+      c.fillStyle = 'rgba(255,250,240,.55)'; c.fillRect(0, HZ, W, 2);
+    };
+    const leafy = (x, ax, ay, bx, by, w) => { const mx = (ax + bx) / 2, my = (ay + by) / 2, dx = bx - ax, dy = by - ay, l = Math.hypot(dx, dy) || 1, nx = -dy / l * w, ny = dx / l * w; x.beginPath(); x.moveTo(ax, ay); x.quadraticCurveTo(mx + nx, my + ny, bx, by); x.quadraticCurveTo(mx - nx, my - ny, ax, ay); x.fill(); };
+    const setWindow = () => {
+      const p = mk(W, H), c = p.getContext('2d');
+      c.fillStyle = vgrad(c, 0, HZ, [[0, '#f6eee2'], [1, '#efe4d2']]); c.fillRect(0, 0, W, HZ);
+      c.fillStyle = radG(c, 700, 980, 1000, [[0, 'rgba(255,241,216,.7)'], [1, 'rgba(255,241,216,0)']]); c.fillRect(0, 0, W, HZ);
+      tableTop(c, '#eadbc2', '#dcc6a6'); plaster(c, .22, 7);
+      // the shadow mask: everything dark except four window panes, with a palm frond across them
+      const M = 160, m = mk(W + M * 2, HZ + M * 2), x = m.getContext('2d'); x.fillStyle = '#000'; x.fillRect(0, 0, m.width, m.height);
+      x.globalCompositeOperation = 'destination-out'; const pw = 300, ph = 400, gap = 34, sx = -150, x0 = 300 + M, y0 = 560 + M;
+      for (let rI = 0; rI < 2; rI++) for (let cI = 0; cI < 2; cI++) { const px = x0 + cI * (pw + gap) + rI * (ph + gap) * sx / ph, py = y0 + rI * (ph + gap); x.beginPath(); x.moveTo(px, py); x.lineTo(px + pw, py); x.lineTo(px + pw + sx, py + ph); x.lineTo(px + sx, py + ph); x.closePath(); x.fill(); }
+      x.globalCompositeOperation = 'source-over'; x.fillStyle = 'rgba(0,0,0,.92)'; x.strokeStyle = 'rgba(0,0,0,.92)';
+      const r = rngP(31), A = [W + M + 120, 380], C = [860 + M, 520], B = [560 + M, 1010], at = u => [(1 - u) * (1 - u) * A[0] + 2 * u * (1 - u) * C[0] + u * u * B[0], (1 - u) * (1 - u) * A[1] + 2 * u * (1 - u) * C[1] + u * u * B[1]];
+      x.lineWidth = 11; x.lineCap = 'round'; x.beginPath(); x.moveTo(A[0], A[1]); x.quadraticCurveTo(C[0], C[1], B[0], B[1]); x.stroke();
+      for (let i = 0; i < 30; i++) {
+        const u = .1 + i / 30 * .9, [px, py] = at(u), [qx, qy] = at(Math.min(1, u + .01)), a = Math.atan2(qy - py, qx - px), L = 250 * (.35 + .65 * Math.sin(Math.PI * Math.min(1, u * 1.1))) * (.85 + r() * .3);
+        [-1, 1].forEach(sd => { const d = a + sd * (.95 + r() * .25) + .35; leafy(x, px, py, px + Math.cos(d) * L, py + Math.sin(d) * L + L * .25, 19); });
+      }
+      const sh = blurC(m, 3), y = sh.getContext('2d'), lit = mk(sh.width, sh.height), z = lit.getContext('2d');
+      z.fillStyle = '#ffd9a8'; z.fillRect(0, 0, lit.width, lit.height); z.globalCompositeOperation = 'destination-out'; z.drawImage(sh, 0, 0);
+      y.globalCompositeOperation = 'source-in'; y.fillStyle = '#a98262'; y.fillRect(0, 0, sh.width, sh.height);
+      return { p, sh, lit, M };
+    };
+    const archP = (c, x, y, w, h) => { c.beginPath(); c.moveTo(x, y + h); c.lineTo(x, y + w / 2); c.arc(x + w / 2, y + w / 2, w / 2, Math.PI, 0); c.lineTo(x + w, y + h); c.closePath(); };
+    const setArch = () => {
+      const p = mk(W, H), c = p.getContext('2d'), ax = 190, ay = 790, aw = 700, ah = 1530 - 790;
+      c.fillStyle = vgrad(c, 0, H, [[0, '#e5d0ad'], [.6, '#dbc39c'], [1, '#d0b68d']]); c.fillRect(0, 0, W, H);
+      c.fillStyle = radG(c, 760, 700, 1100, [[0, 'rgba(255,240,215,.5)'], [1, 'rgba(255,240,215,0)']]); c.fillRect(0, 0, W, H);
+      // mudbrick courses, barely there, with a lit lip under each joint
+      const r = rngP(11); for (let yy = 40; yy < H; yy += 66) { c.fillStyle = 'rgba(110,75,40,.055)'; c.fillRect(0, yy, W, 3); c.fillStyle = 'rgba(255,245,228,.07)'; c.fillRect(0, yy + 3, W, 2); for (let xx = (yy / 66 % 2) * 90 + r() * 40; xx < W; xx += 150 + r() * 70) { c.fillStyle = 'rgba(110,75,40,.045)'; c.fillRect(xx, yy - 63, 3, 63); } }
+      // the niche: deeper sand, shadow under the arch and on the right, light on the left
+      c.save(); archP(c, ax, ay, aw, ah); c.clip();
+      c.fillStyle = vgrad(c, ay, ay + ah, [[0, '#a8875f'], [.45, '#c3a379'], [1, '#d6bc95']]); c.fillRect(ax, ay, aw, ah);
+      c.fillStyle = radG(c, 540, ay + 40, 520, [[0, 'rgba(70,45,20,.32)'], [1, 'rgba(70,45,20,0)']]); c.fillRect(ax, ay, aw, ah);
+      let g = c.createLinearGradient(ax + aw, 0, ax + aw - 130, 0); g.addColorStop(0, 'rgba(70,45,20,.28)'); g.addColorStop(1, 'rgba(70,45,20,0)'); c.fillStyle = g; c.fillRect(ax, ay, aw, ah);
+      g = c.createLinearGradient(ax, 0, ax + 110, 0); g.addColorStop(0, 'rgba(255,240,215,.45)'); g.addColorStop(1, 'rgba(255,240,215,0)'); c.fillStyle = g; c.fillRect(ax, ay, aw, ah);
+      c.fillStyle = vgrad(c, 1380, 1530, [[0, 'rgba(240,222,192,0)'], [.35, 'rgba(240,222,192,.75)'], [1, 'rgba(226,204,170,.9)']]); c.fillRect(ax, 1380, aw, 150);
+      c.restore();
+      // white lime trim around the arch, like the window frames in Shibam
+      c.save(); c.lineJoin = 'round'; archP(c, ax - 17, ay - 17, aw + 34, ah + 17); c.strokeStyle = '#f2e9da'; c.lineWidth = 30; c.stroke();
+      archP(c, ax - 1, ay - 1, aw + 2, ah + 1); c.strokeStyle = 'rgba(90,60,30,.22)'; c.lineWidth = 4; c.stroke(); c.restore();
+      // the sill, with a row of small copper triangles
+      c.fillStyle = '#efe4d2'; c.fillRect(150, 1530, 780, 40); c.fillStyle = 'rgba(90,60,30,.25)'; c.fillRect(150, 1570, 780, 6); c.fillStyle = vgrad(c, 1576, 1640, [[0, 'rgba(90,60,30,.16)'], [1, 'rgba(90,60,30,0)']]); c.fillRect(150, 1576, 780, 64);
+      c.fillStyle = 'rgba(177,101,51,.55)'; for (let xx = 172; xx < 910; xx += 30) { c.beginPath(); c.moveTo(xx, 1561); c.lineTo(xx + 11, 1541); c.lineTo(xx + 22, 1561); c.fill(); }
+      plaster(c, .34, 23);
+      return { p };
+    };
+    const setDusk = () => {
+      const p = mk(W, H), c = p.getContext('2d');
+      c.fillStyle = vgrad(c, 0, HZ, [[0, '#f6ede1'], [.5, '#f5e0c8'], [1, '#efc6a0']]); c.fillRect(0, 0, W, HZ);
+      // two rows of Shibam's tall mudbrick towers with small white-trimmed windows
+      const sk = mk(W, HZ), x = sk.getContext('2d'), r = rngP(5), all = new Path2D();
+      [[['#eac6a4', '#f7e8d6'], 330, 660, .8], [['#dcaa80', '#f6e3cc'], 170, 400, 1]].forEach(([[col, win], lo, hi, sc]) => {
+        let xx = -30; while (xx < W + 20) {
+          const w = (62 + r() * 56) * sc, h = (lo + r() * (hi - lo)) * (Math.abs(xx + w / 2 - 540) < 260 ? .55 : 1), tp = w * .06, top = HZ - h;
+          if (xx + w > (sc === 1 ? 300 : 340) && xx < (sc === 1 ? 780 : 740)) { xx = sc === 1 ? 780 : 740; continue; }
+          const tw = new Path2D(); tw.moveTo(xx, HZ); tw.lineTo(xx + tp, top + 6); tw.quadraticCurveTo(xx + tp, top, xx + tp + 6, top); tw.lineTo(xx + w - tp - 6, top); tw.quadraticCurveTo(xx + w - tp, top, xx + w - tp, top + 6); tw.lineTo(xx + w, HZ); tw.closePath();
+          x.fillStyle = col; x.fill(tw); all.addPath(tw);
+          x.save(); x.clip(tw); const sg = x.createLinearGradient(xx, 0, xx + w, 0); sg.addColorStop(0, 'rgba(255,236,214,.35)'); sg.addColorStop(.55, 'rgba(255,236,214,0)'); sg.addColorStop(1, 'rgba(120,64,30,.16)'); x.fillStyle = sg; x.fillRect(xx, top, w, h);
+          x.fillStyle = 'rgba(255,244,230,.5)'; x.fillRect(xx, top, w, Math.min(26, h * .08));
+          for (let wy = top + 40; wy < HZ - 60; wy += 52 + r() * 22) for (let k = 0; k < 2; k++) if (r() > .45) { const wx = xx + w * (.28 + k * .44) - 4; x.fillStyle = win; x.fillRect(wx - 3, wy - 3, 14, 17); x.fillStyle = 'rgba(90,50,25,.55)'; x.fillRect(wx, wy, 8, 11); }
+          x.restore();
+          xx += w + 4 + r() * 30;
+        }
+        x.fillStyle = vgrad(x, HZ - 200, HZ, [[0, 'rgba(246,224,200,0)'], [1, 'rgba(246,224,200,.55)']]); x.fillRect(0, HZ - 200, W, 200);
+      });
+      x.save(); x.clip(all); plaster(x, .22, 41); x.restore();
+      const fg = mk(W, H), f = fg.getContext('2d'); f.fillStyle = vgrad(f, HZ, H, [[0, '#e8c6a3'], [1, '#d4ab86']]); f.fillRect(0, HZ, W, H - HZ); f.fillStyle = 'rgba(255,240,222,.6)'; f.fillRect(0, HZ, W, 2);
+      f.fillStyle = vgrad(f, HZ, HZ + 120, [[0, 'rgba(120,70,35,.12)'], [1, 'rgba(120,70,35,0)']]); f.fillRect(0, HZ, W, 120); f.save(); f.beginPath(); f.rect(0, HZ, W, H - HZ); f.clip(); plaster(f, .3, 3); f.restore();
+      return { p, sk, fg };
+    };
+    const setOf = v => SET[v] || (SET[v] = [setWindow, setArch, setDusk][v]());
+    const drinkSet = (c, S, v, t) => {
+      const st = setOf(v), k = ease(cl(t / DUR)), z = 1 + .03 * k;
+      c.save(); c.translate(540, 1200); c.scale(z, z); c.translate(-540, -1200); c.drawImage(st.p, 0, 0);
+      if (v === 2) {
+        const sy = 1250 - 130 * eo(cl(t / DUR));
+        c.fillStyle = radG(c, 540, sy, 760, [[0, 'rgba(250,206,160,.55)'], [1, 'rgba(250,206,160,0)']]); c.fillRect(0, 0, W, HZ);
+        c.fillStyle = radG(c, 540, sy, 300, [[0, '#f7c592'], [.9, '#efaa76'], [1, 'rgba(239,170,118,0)']]); c.beginPath(); c.arc(540, sy, 300, 0, 6.3); c.fill();
+        c.drawImage(st.sk, 0, 0); c.drawImage(st.fg, 0, 0);
+      }
+      c.restore();
+      realDrink(c, S.sdk, 540, 1225, 840, 760, t, .2);
+      if (v === 0) {
+        const a = .35 + .65 * fin(t, .3, 1.6), dx = -30 + 60 * k, dy = 16 * k;
+        c.save(); c.beginPath(); c.rect(0, 0, W, HZ); c.clip(); c.globalCompositeOperation = 'multiply'; c.globalAlpha = .3 * a; c.drawImage(st.sh, -st.M + dx, -st.M + dy);
+        c.globalCompositeOperation = 'soft-light'; c.globalAlpha = .55 * a; c.drawImage(st.lit, -st.M + dx, -st.M + dy); c.restore();
+      }
+    };
     const visOf = st => { const T = TPL[st.tpl]; return (st.svm && st.svm[st.tpl]) || T.vis || 'render'; };
     const varsOf = (T, st) => T.brand === 'sh' && T.vis ? (visOf(st) === 'drink' ? VD : SHV) : T.vars;
     const feather = im => { const w = im.width, h = im.height, c2 = mk(w, h), x = c2.getContext('2d'); x.drawImage(im, 0, 0); x.globalCompositeOperation = 'destination-in'; x.translate(w / 2, h / 2); x.scale(w / h, 1); const g = x.createRadialGradient(0, 0, 0, 0, 0, h / 2); g.addColorStop(0, '#000'); g.addColorStop(.84, '#000'); g.addColorStop(1, 'rgba(0,0,0,0)'); x.fillStyle = g; x.fillRect(-h / 2, -h / 2, h, h); return c2; };
@@ -1262,10 +1386,7 @@
     };
     const shBase = (c, S, v, t) => {
       if (visOf(S) !== 'drink') { studio(c, v, t); return { dk: dkOf(v), ink: shInk(v), acc: shAcc(v), soft: shSoft(v) }; }
-      c.fillStyle = (VD[v] || VD[0])[1]; c.fillRect(0, 0, W, H);
-      const g = c.createRadialGradient(540, 1180, 60, 540, 1180, 980); g.addColorStop(0, 'rgba(255,255,255,.55)'); g.addColorStop(1, 'rgba(255,255,255,0)'); c.fillStyle = g; c.fillRect(0, 0, W, H);
-      const fl = c.createLinearGradient(0, 1380, 0, H); fl.addColorStop(0, 'rgba(120,90,60,0)'); fl.addColorStop(1, 'rgba(120,90,60,.10)'); c.fillStyle = fl; c.fillRect(0, 1380, W, H - 1380);
-      realDrink(c, S.sdk, 540, 1225, 840, 760, t, .2);
+      drinkSet(c, S, v, t);
       return { dk: false, ink: SH.navy, acc: SH.deep, soft: 'rgba(20,30,40,.62)' };
     };
     const nameOf = S => visOf(S) === 'drink' ? DN[S.sdk] || '' : S.dname || '';
@@ -1422,14 +1543,14 @@
     const render = (c, st, t) => { if (!shReady(st) || !TPL[st.tpl]) return; const T = TPL[st.tpl], L = layoutOf(c, st); c.save(); c.setTransform(1, 0, 0, 1, 0, 0); c.globalAlpha = 1; c.globalCompositeOperation = 'source-over'; c.clearRect(0, 0, W, H); T.draw(c, st, st.v, L, t); c.restore(); };
     const frame = t => { if (IMG && shReady(S)) render(CX, S, t); };
     let anim = null, rec = null, pngCache = null;
-    const stopAnim = () => { if (anim) { cancelAnimationFrame(anim.k); anim = null; setPlayUI(false); } };
+    const stopAnim = () => { if (anim) { cancelAnimationFrame(anim.k); anim = null; setPlayUI(false); } if (!rec) pourStop(); };
     const still = () => { if (!IMG || !shReady(S)) return; stopAnim(); frame(DUR); schedulePng(); };
     const redraw = () => { if (rec) return; cancelAnimationFrame(redraw.k); redraw.k = requestAnimationFrame(still); };
     const setPlayUI = on => { const i = $('[data-splayi]'); i.innerHTML = on ? '<path d="M6 5h4.5v14H6zM13.5 5H18v14h-4.5z"/>' : '<path d="M7 4.5v15l13-7.5z"/>'; $('[data-splay]').setAttribute('aria-label', on ? 'Stop the animation' : 'Play the animation'); };
     const play = () => {
       if (!IMG || rec || !shReady(S)) return; if (anim) { still(); return; }
-      const t0 = performance.now(); setPlayUI(true);
-      const step = now => { const t = (now - t0) / 1000; frame(Math.min(t, DUR)); if (t < DUR) anim.k = requestAnimationFrame(step); else { anim = null; setPlayUI(false); schedulePng(); } };
+      pourGo(); const t0 = performance.now(); setPlayUI(true);
+      const step = now => { const t = (now - t0) / 1000; frame(Math.min(t, DUR)); if (t < DUR) anim.k = requestAnimationFrame(step); else { anim = null; setPlayUI(false); pourStop(); schedulePng(); } };
       anim = { k: requestAnimationFrame(step) };
     };
     const thumbs = () => {
@@ -1468,14 +1589,14 @@
       r.ondataavailable = e => { if (e.data && e.data.size) chunks.push(e.data); };
       r.onerror = () => { me.cancel = true; };
       r.onstop = () => {
-        cancelAnimationFrame(me.k); stream.getTracks().forEach(tr => tr.stop()); rec = null; setRecUI(false); still();
+        cancelAnimationFrame(me.k); stream.getTracks().forEach(tr => tr.stop()); rec = null; pourStop(); setRecUI(false); still();
         if (me.cancel) { toast('Recording stopped'); return; }
         const mt = r.mimeType || type || 'video/webm', mp4 = /mp4/i.test(mt), blob = new Blob(chunks, { type: mp4 ? 'video/mp4' : 'video/webm' });
         if (!blob.size) { toast('The video came out empty. Try again.'); return; }
         showDone(new File([blob], fname(mp4 ? 'mp4' : 'webm'), { type: blob.type }), mp4);
       };
       try { r.start(250); } catch (e) { rec = null; toast("This browser can't record video. Try Safari or Chrome."); return; }
-      setRecUI(true, 0); const t0 = performance.now();
+      pourGo(); setRecUI(true, 0); const t0 = performance.now();
       const step = now => { if (rec !== me) return; const t = (now - t0) / 1000; frame(Math.min(t, DUR)); setRecUI(true, t / DUR); if (t < DUR + .2) me.k = requestAnimationFrame(step); else { try { r.requestData(); } catch (e) {} r.stop(); } };
       me.k = requestAnimationFrame(step);
     };
@@ -1497,7 +1618,7 @@
     $('[data-sdks]').innerHTML = DRK.map(([k, n]) => `<button class="sdk" type="button" data-sdrink="${k}" aria-pressed="false"><img src="${SBASE}d-${k}.webp" alt="" loading="lazy"><span>${esc(n)}</span></button>`).join('');
     $('[data-sshots]').innerHTML = ORDER.map(shotBtn).join('');
     const sync = () => {
-      const T = TPL[S.tpl];
+      const T = TPL[S.tpl]; if (pourable(S)) pourVid(S.v);
       $$('[data-stpl]').forEach(b => b.setAttribute('aria-pressed', b.dataset.stpl === S.tpl));
       $('[data-svars]').innerHTML = varsOf(T, S).map(([n, sw], i) => `<button type="button" data-svar="${i}" aria-pressed="${i === S.v}"><i style="background:${sw}"></i>${n}</button>`).join('');
       $$('[data-sshot]').forEach(b => b.setAttribute('aria-pressed', T.single ? b.dataset.sshot === S.hero : S.shots.includes(b.dataset.sshot)));
