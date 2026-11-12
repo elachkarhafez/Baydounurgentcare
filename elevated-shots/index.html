@@ -65,13 +65,14 @@
     h1, h2, h3 { margin: 0; font-family: var(--display); font-weight: 400; line-height: .9; text-transform: uppercase; letter-spacing: .005em; }
     h2 { font-size: clamp(52px, 8.4vw, 150px); }
     .tag { display: inline-flex; align-items: center; gap: 9px; padding: 8px 14px; border-radius: 999px; background: var(--ink); color: var(--cream); font: 700 11.5px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; }
-    .tag i { width: 9px; height: 9px; border-radius: 50%; background: var(--juice); box-shadow: 0 0 0 0 rgba(255,198,26,.6); animation: ping 2s infinite; }
+    .tag i { position: relative; flex: none; width: 9px; height: 9px; border-radius: 50%; background: var(--juice); }
+    .tag i::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: rgba(255,198,26,.6); animation: ping 2s infinite; }
     .tag.light { background: var(--cream); color: var(--ink); }
-    @keyframes ping { 70% { box-shadow: 0 0 0 9px rgba(255,198,26,0); } 100% { box-shadow: 0 0 0 0 rgba(255,198,26,0); } }
+    @keyframes ping { 0% { transform: scale(1); opacity: 1; } 70% { transform: scale(3); opacity: 0; } 100% { transform: scale(3); opacity: 0; } }
     .lede { font-size: clamp(16.5px, 1.3vw, 20px); color: var(--muted); max-width: 44ch; margin: 22px 0 0; }
     .mono { font-family: var(--mono); }
     .chars { display: inline-block; }
-    .chars .c { display: inline-block; will-change: transform; }
+    .chars .c { display: inline-block; }
     .btn { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 10px; height: 58px; padding: 0 28px; border-radius: 999px; border: 2.5px solid var(--ink); background: var(--cream); color: var(--ink); font: 800 15px/1 var(--sans); letter-spacing: .04em; text-transform: uppercase; white-space: nowrap; overflow: hidden; isolation: isolate; transition: color .3s var(--ease-out), transform .3s var(--ease-out); }
     .btn::before { content: ""; position: absolute; inset: auto -10% -120% -10%; height: 140%; border-radius: 45% 45% 0 0; background: var(--juice); z-index: -1; transition: bottom .55s var(--ease-out); }
     @media (hover: hover) { .btn:hover::before { bottom: -20%; } }
@@ -123,7 +124,9 @@
     .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 26px; }
     .chips span { padding: 8px 13px; border-radius: 999px; border: 2px solid var(--ink); font: 700 12px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; background: rgba(255,255,255,.5); }
     .h-stage { position: relative; width: min(100%, 560px); aspect-ratio: .86; margin: 0 auto; }
-    .ring { position: absolute; inset: 2% 0 8%; margin: auto; width: 98%; aspect-ratio: 1; height: auto; pointer-events: none; }
+    .ring { position: absolute; inset: 2% 0 8%; margin: auto; width: 98%; aspect-ratio: 1; height: auto; pointer-events: none; will-change: transform; }
+    /* while the opening covers the screen, don't paint the page under it */
+    html.l-busy body > :not(.loader):not(script) { visibility: hidden; }
     .ring text { font: 700 15.5px var(--mono); letter-spacing: 4.5px; fill: var(--ink); }
     .ring use { fill: var(--ink); }
     .hb { position: absolute; left: 50%; top: 45.6%; width: 58%; aspect-ratio: 320 / 440; translate: -50% -50%; touch-action: pan-y; -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent; cursor: grab; z-index: 3; }
@@ -333,6 +336,8 @@
     .pr-sticker { position: absolute; right: -14px; top: 47%; display: flex; flex-direction: column; align-items: flex-start; gap: 0; padding: 10px 14px 8px; background: var(--ink); color: var(--juice); border-radius: 14px; font: 400 clamp(22px, 2.4vw, 32px)/1 var(--display); text-transform: uppercase; letter-spacing: .02em; transform: rotate(-6deg); box-shadow: 0 10px 22px rgba(18,17,16,.3); }
     .pr-arrow { position: absolute; left: 61%; top: 34%; width: 24%; overflow: visible; fill: none; stroke: var(--ink); stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 0 2px rgba(255,255,255,.9)); }
     .tag.pr-tag { padding: 11px 18px; font-size: 13.5px; gap: 10px; }
+    .tag.big { padding: 12px 20px; font-size: clamp(14px, 1.3vw, 16px); gap: 11px; }
+    .tag.big i { width: 11px; height: 11px; }
     .tag.pr-tag i { width: 11px; height: 11px; }
     .pr-head { text-align: center; }
     .pr-head h2 { margin-top: 18px; }
@@ -474,6 +479,7 @@
 
     /* ---------- footer ---------- */
     footer { position: relative; background: var(--ink); color: var(--cream); padding: clamp(30px, 4vw, 60px) 0 34px; overflow: hidden; overflow: clip; }
+    footer > .wrap { position: relative; z-index: 1; } .f-meta span { text-shadow: 0 0 8px var(--ink), 0 0 2px var(--ink); }
     .f-stage { position: relative; width: clamp(130px, 13vw, 190px); aspect-ratio: 292 / 400; margin: clamp(150px, 15vw, 210px) auto 0; }
     .f-mark { position: absolute; inset: 0; }
     .f-mark i { position: absolute; inset: 0; background: url(img/mark.png) center / contain no-repeat; filter: invert(1); }
@@ -632,9 +638,9 @@
     .fz-handle { position: absolute; right: 7%; top: 36%; width: 12px; height: 30%; border-radius: 8px; background: linear-gradient(90deg, #b6babd, #f5f6f7 42%, #a4a8ac); box-shadow: -3px 5px 9px rgba(0,0,0,.22); }
     .fz-disp { position: absolute; left: 50%; top: 10%; translate: -50% 0; min-width: 120px; padding: 11px 16px 9px; border-radius: 12px; background: #12181b; color: #9be6ff; text-align: center; font: 700 22px/1 var(--mono); letter-spacing: .06em; box-shadow: inset 0 0 0 2px #2a3439, 0 2px 0 rgba(255,255,255,.7); text-shadow: 0 0 10px rgba(155,230,255,.75); }
     .fz-disp small { display: block; margin-top: 6px; font-size: 9px; letter-spacing: .22em; text-transform: uppercase; color: #5895aa; text-shadow: none; }
-    .fz-magnet { position: absolute; left: 15%; top: 44%; width: 62px; height: 62px; border-radius: 50%; background: var(--ink); display: grid; place-items: center; box-shadow: 0 7px 12px rgba(0,0,0,.25), inset 0 2px 0 rgba(255,255,255,.14); }
+    .fz-magnet { position: absolute; left: 12%; top: 36%; width: 62px; height: 62px; border-radius: 50%; background: var(--ink); display: grid; place-items: center; box-shadow: 0 7px 12px rgba(0,0,0,.25), inset 0 2px 0 rgba(255,255,255,.14); }
     .fz-magnet svg { width: 25px; height: 34px; fill: var(--juice); }
-    .fz-note { container-type: inline-size; position: absolute; left: 27%; top: 54%; width: 48%; aspect-ratio: 1; margin: 0; padding: 16% 9% 0; box-sizing: border-box; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; color: var(--ink); text-align: left; transform: rotate(3.5deg); border-radius: 2px 2px 2px 18px / 2px 2px 2px 14px;
+    .fz-note { container-type: inline-size; position: absolute; left: 33%; top: 56%; width: 47%; aspect-ratio: 1; margin: 0; padding: 16% 9% 0; box-sizing: border-box; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; color: var(--ink); text-align: left; transform: rotate(3.5deg); border-radius: 2px 2px 2px 18px / 2px 2px 2px 14px;
       background: linear-gradient(172deg, #ffe07a 0%, #ffd24a 55%, #ffc61a 100%); box-shadow: 0 1px 0 rgba(255,255,255,.5) inset, 0 14px 18px -8px rgba(90,60,0,.35), 0 2px 4px rgba(90,60,0,.12); }
     .fz-note::before { content: ""; position: absolute; left: 50%; top: -10px; width: 48%; height: 20px; translate: -50% 0; background: repeating-linear-gradient(90deg, rgba(18,17,16,.92) 0 6px, rgba(18,17,16,.82) 6px 12px); transform: rotate(-4deg); clip-path: polygon(0 8%, 4% 0, 9% 10%, 14% 0, 20% 8%, 100% 0, 96% 50%, 100% 100%, 0 100%, 3% 55%); box-shadow: 0 2px 3px rgba(0,0,0,.2); }
     .fz-note::after { content: ""; position: absolute; left: 0; bottom: 0; width: 26%; height: 22%; border-radius: 0 0 0 18px / 0 0 0 14px; background: linear-gradient(225deg, rgba(255,255,255,0) 45%, rgba(160,105,0,.22) 50%, #ffe596 52%, #ffd65e 100%); }
@@ -645,7 +651,7 @@
     /* ---------- juice between sections: the colour above drips into the next one ---------- */
     .drip { position: relative; z-index: 6; height: 0; pointer-events: none; }
     .drip b { position: absolute; left: 0; right: 0; top: -2px; height: 9px; background: var(--dc); border-radius: 0 0 10px 10px; }
-    .drip i { position: absolute; top: 0; background: var(--dc); border-radius: 0 0 999px 999px; transform-origin: 50% 0; will-change: transform; }
+    .drip i { position: absolute; top: 0; background: var(--dc); border-radius: 0 0 999px 999px; transform-origin: 50% 0; }
 
     /* ---------- story card ---------- */
     .cert { position: relative; padding: clamp(70px, 9vw, 140px) 0; background: var(--paper); overflow: hidden; overflow: clip; }
@@ -663,8 +669,8 @@
 
     /* ---------- footer: mini shots keep falling past the logo ---------- */
     .f-rain { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
-    .f-rain svg { position: absolute; top: -80px; animation: shotFall linear infinite; animation-play-state: paused; will-change: transform; filter: drop-shadow(0 6px 6px rgba(0,0,0,.35)); }
-    .f-rain.on svg { animation-play-state: running; }
+    .f-rain svg { position: absolute; top: -80px; animation: shotFall linear infinite; animation-play-state: paused; }
+    .f-rain.on svg { animation-play-state: running; will-change: transform; }
     @keyframes shotFall { from { transform: translate3d(0, 0, 0) rotate(var(--r0)); } to { transform: translate3d(var(--dx), var(--fall, 900px), 0) rotate(var(--r1)); } }
     footer > .wrap { position: relative; z-index: 1; }
 
@@ -974,7 +980,7 @@
     <section class="fridge-sec" id="fridge" data-fridge>
       <div class="fz-sun" aria-hidden="true"></div>
       <div class="wrap fs-grid">
-        <div class="fs-copy"><span class="tag"><i></i>Every morning</span><h2 style="margin-top:16px" data-split>Open the fridge.</h2><p class="lede fs-lede"><span>They stay cold until you need one.</span></p></div>
+        <div class="fs-copy"><span class="tag"><i></i>Every morning</span><h2 style="margin-top:16px" data-split>Open the fridge.</h2><p class="lede fs-lede"><span>They stay cold until you need one.</span> <span>Tap the one you want.</span></p></div>
         <div class="fs-stage" data-fstage></div>
         <div class="fs-card" data-fscard aria-live="polite"><b data-fsname>Tap a bottle</b><span data-fskick>See what's in it</span><div class="fs-ings" data-fsings></div><div class="fs-acts" data-fsacts hidden><button class="btn ink" type="button" data-fsadd>Add to my pack</button><button class="btn" type="button" data-fsback>Put it back</button></div></div>
       </div>
@@ -1039,7 +1045,7 @@
     <!-- WHERE TO FIND US -->
     <section class="find" id="find" data-find>
       <div class="wrap">
-        <div class="fd-head"><div><span class="tag"><i></i>Where we're located</span><h2 style="margin-top:16px" data-split>Grab one here.</h2></div><p class="lede" style="margin:0">Now at these three spots.</p></div>
+        <div class="fd-head"><div><span class="tag big"><i></i>Where we're located</span><h2 style="margin-top:16px" data-split>Grab one here.</h2></div></div>
         <div class="fd-grid" data-stk></div>
       </div>
     </section>
@@ -1101,7 +1107,7 @@
           <p class="lede">The viruses are right behind you. Dodge, jump, slide and grab every shot you can. Top score at the end of the month wins 3 free shots of their choice.</p>
           <div class="gm-teaser" aria-hidden="true"><span class="gm-runner"><svg viewBox="0 0 64 64"><use href="#i-shot"/></svg></span><span class="gm-v v1"><svg viewBox="0 0 64 64"><use href="#i-virus"/></svg></span><span class="gm-v v2"><svg viewBox="0 0 64 64"><use href="#i-virus"/></svg></span><span class="gm-v v3"><svg viewBox="0 0 64 64"><use href="#i-virus"/></svg></span><i class="gm-road"></i></div>
           <button class="btn ink gm-play" type="button" data-gplay>Play now</button>
-          <p class="gm-rules">Free to play, no purchase needed. One spot on the board per person. The winner is announced on @_elevatedshots at the start of next month and picks up their 3 shots at a sip.</p>
+          <p class="gm-rules">Free to play, no purchase needed. One spot on the board per person. The winner is announced on @_elevatedshots at the start of next month and picks up their three free shots.</p>
         </div>
         <div class="gm-board"><div class="gm-bh"><b>Top 10 this month</b><span data-gmonth></span></div><ol class="gm-list" data-gtop><li class="empty">Loading the board…</li></ol><p class="gm-best" data-gbest></p></div>
       </div>
@@ -1117,7 +1123,7 @@
       </div>
       <h2 data-split>Elevate your <span class="y">wellness.</span></h2>
       <div class="f-acts"><a class="btn juice" data-ig href="#" target="_blank" rel="noopener">Instagram @_elevatedshots</a><a class="btn ink" data-sms href="#">Text us</a><a class="btn ink" href="#order">Order a pack</a></div>
-      <div class="f-meta"><span>© <span data-year>2026</span> Elevated Shots · Metro Detroit</span><span>Sips · Orders · Collabs</span><span>Text <span data-telt></span></span></div>
+      <div class="f-meta"><span>© 2023 Elevated Shots · Metro Detroit</span><span>Contact <span data-telt></span></span></div>
     </div>
   </footer>
 
@@ -1238,7 +1244,6 @@
   $$('[data-ig]').forEach(a => a.href = CONFIG.instagram);
   $$('[data-sms]').forEach(a => a.href = smsHref('Hi Elevated Shots! I want to order some shots.'));
   $('[data-telt]').textContent = CONFIG.phone;
-  $$('[data-year]').forEach(e => e.textContent = new Date().getFullYear());
 
   /* =============================================================
      INGREDIENT ICONS: drawn once, used everywhere (symbols for the
@@ -1314,7 +1319,7 @@
   const initPoly = () => { if (POLY) return; const sv = document.createElementNS(SVGNS, 'svg'), pe = document.createElementNS(SVGNS, 'path'); sv.style.cssText = 'position:absolute;width:0;height:0'; pe.setAttribute('d', BODY_IN); sv.appendChild(pe); document.body.appendChild(sv); const L = pe.getTotalLength(); POLY = Array.from({ length: 96 }, (_, i) => { const q = pe.getPointAtLength(L * i / 96); return [q.x, q.y]; }); sv.remove(); PAREA = polyArea(POLY); };
   const rotPt = (x, y, a, cx, cy) => { const r = a * Math.PI / 180, c = Math.cos(r), s = Math.sin(r), dx = x - cx, dy = y - cy; return [cx + dx * c - dy * s, cy + dx * s + dy * c]; };
   const areaBelow = (pts, y0) => { const out = []; for (let i = 0, n = pts.length; i < n; i++) { const a = pts[i], b = pts[(i + 1) % n], ain = a[1] >= y0, bin = b[1] >= y0; if (ain) out.push(a); if (ain !== bin) { const t = (y0 - a[1]) / (b[1] - a[1]); out.push([a[0] + (b[0] - a[0]) * t, y0]); } } return out.length > 2 ? polyArea(out) : 0; };
-  const surfaceY = (fill, a, cx, cy) => { initPoly(); const pts = POLY.map(p => rotPt(p[0], p[1], a, cx, cy)); let lo = 1e9, hi = -1e9; pts.forEach(p => { lo = Math.min(lo, p[1]); hi = Math.max(hi, p[1]); }); if (fill <= 0) return hi + 2; if (fill >= 1) return lo; const want = fill * PAREA; for (let k = 0; k < 22; k++) { const m = (lo + hi) / 2; if (areaBelow(pts, m) > want) lo = m; else hi = m; } return (lo + hi) / 2; };
+  const surfaceY = (fill, a, cx, cy) => { initPoly(); const pts = POLY.map(p => rotPt(p[0], p[1], a, cx, cy)); let lo = 1e9, hi = -1e9; pts.forEach(p => { lo = Math.min(lo, p[1]); hi = Math.max(hi, p[1]); }); if (fill <= 0) return hi + 2; if (fill >= 1) return lo; const want = fill * PAREA; for (let k = 0; k < 15; k++) { const m = (lo + hi) / 2; if (areaBelow(pts, m) > want) lo = m; else hi = m; } return (lo + hi) / 2; };
   /* a pourable bottle inside any <g>. o.pivot: rotation point; o.dark: on a dark background */
   const makeRig = (g, f, o = {}) => {
     const id = 'r' + (++uid), P = o.pivot || [100, 200], NS = 26, SX0 = -260, SX1 = 460, SDX = (SX1 - SX0) / (NS - 1);
@@ -1559,7 +1564,7 @@
   R.step(0); R.draw();
   let heroOn = true; new IntersectionObserver(es => es.forEach(e => heroOn = e.isIntersecting)).observe(hStage);
   // the hold ring runs on the real clock so it takes .85 s even on a slow phone
-  let hLast = performance.now(); if (HAS_G) gsap.ticker.add(() => { const n = performance.now(), real = Math.min(.25, (n - hLast) / 1000); hLast = n; if (heroOn) stepHero(Math.min(real, .04), real); });
+  let hLast = performance.now(); if (HAS_G) gsap.ticker.add(() => { const n = performance.now(), real = Math.min(.25, (n - hLast) / 1000); hLast = n; if (heroOn && !document.documentElement.classList.contains('l-busy')) stepHero(Math.min(real, .04), real); });
   else { let last = performance.now(); const raf = n => { stepHero(Math.min(n - last, 40) / 1000); last = n; requestAnimationFrame(raf); }; requestAnimationFrame(raf); }
 
   /* =============================================================
@@ -1755,7 +1760,7 @@
   const closeFlb = () => { flb.hidden = true; $('[data-nxflyer]').focus(); };
   flb.addEventListener('click', e => { if (e.target === flb || e.target.closest('[data-flbx]')) closeFlb(); });
   addEventListener('keydown', e => { if (e.key === 'Escape' && !flb.hidden) closeFlb(); });
-  showEvent(evSel); setInterval(tickCd, 1000);
+  (window.requestIdleCallback || (f => setTimeout(f, 200)))(() => showEvent(evSel), { timeout: 1500 }); setInterval(tickCd, 1000);
 
   /* =============================================================
      THE COOLER: Matter.js physics. Ice and bottles in a white
@@ -1951,13 +1956,13 @@
      ============================================================= */
   const FZS = $('[data-fstage]');
   {
-    const frost = k => { let r = 101 + k * 977; const rnd = () => (r = (r * 9301 + 49297) % 233280) / 233280; const id = 'fz' + (++uid);
-      let sp = ''; for (let i = 0; i < 170; i++) { const y = 44 + Math.pow(rnd(), 1.6) * 300, x = 32 + rnd() * 136; sp += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(.5 + rnd() * 1.4).toFixed(2)}" opacity="${(.35 + rnd() * .6).toFixed(2)}"/>`; }
-      let dr = ''; for (let i = 0; i < 22; i++) { const x = 40 + rnd() * 120, y = 120 + rnd() * 210, q = 1.8 + rnd() * 3; dr += `<g data-fzdrop transform="translate(${x.toFixed(1)} ${y.toFixed(1)})"><ellipse rx="${q.toFixed(1)}" ry="${(q * 1.18).toFixed(1)}" fill="rgba(255,255,255,.16)" stroke="rgba(255,255,255,.85)" stroke-width=".9"/><circle cx="${(-q * .35).toFixed(1)}" cy="${(-q * .42).toFixed(1)}" r="${(q * .3).toFixed(1)}" fill="#fff"/></g>`; }
-      let cp = ''; for (let i = 0; i < 40; i++) cp += `<circle cx="${(64 + rnd() * 72).toFixed(1)}" cy="${(8 + rnd() * 12).toFixed(1)}" r="${(.5 + rnd() * 1.1).toFixed(2)}"/>`;
+    const frost = k => { const lite = k >= 10; let r = 101 + k * 977; const rnd = () => (r = (r * 9301 + 49297) % 233280) / 233280; const id = 'fz' + (++uid);
+      let sp = ''; for (let i = 0, n = lite ? 36 : 90; i < n; i++) { const y = 44 + Math.pow(rnd(), 1.6) * 300, x = 32 + rnd() * 136; sp += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(.5 + rnd() * 1.4).toFixed(2)}" opacity="${(.35 + rnd() * .6).toFixed(2)}"/>`; }
+      let dr = ''; for (let i = 0, n = lite ? 6 : 14; i < n; i++) { const x = 40 + rnd() * 120, y = 120 + rnd() * 210, q = 1.8 + rnd() * 3; dr += `<g data-fzdrop transform="translate(${x.toFixed(1)} ${y.toFixed(1)})"><ellipse rx="${q.toFixed(1)}" ry="${(q * 1.18).toFixed(1)}" fill="rgba(255,255,255,.16)" stroke="rgba(255,255,255,.85)" stroke-width=".9"/><circle cx="${(-q * .35).toFixed(1)}" cy="${(-q * .42).toFixed(1)}" r="${(q * .3).toFixed(1)}" fill="#fff"/></g>`; }
+      let cp = ''; for (let i = 0, n = lite ? 10 : 22; i < n; i++) cp += `<circle cx="${(64 + rnd() * 72).toFixed(1)}" cy="${(8 + rnd() * 12).toFixed(1)}" r="${(.5 + rnd() * 1.1).toFixed(2)}"/>`;
       return `<svg class="fz-frost" viewBox="0 0 200 360" aria-hidden="true"><defs><clipPath id="${id}c"><path d="${BODY}"/></clipPath><linearGradient id="${id}g" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".8"/><stop offset=".32" stop-color="#fff" stop-opacity=".44"/><stop offset=".62" stop-color="#fff" stop-opacity=".24"/><stop offset="1" stop-color="#fff" stop-opacity=".58"/></linearGradient><mask id="${id}m" maskUnits="userSpaceOnUse" x="0" y="0" width="200" height="360"><rect width="200" height="360" fill="#fff"/><path data-fzwipe d="M26 190 C70 206 124 238 176 262" stroke="#000" stroke-width="62" stroke-linecap="round" fill="none"/></mask></defs><g clip-path="url(#${id}c)"><g mask="url(#${id}m)"><rect width="200" height="360" fill="url(#${id}g)"/><g fill="#fff">${sp}</g></g></g><g fill="#fff" opacity=".85">${cp}</g><g>${dr}</g></svg>`; };
-    const fb = (f, i) => `<button type="button" class="fz-b" data-fzb="${i}" aria-label="${esc(f.n)}">${bottle(f, { drops: true, sw: 3 })}${frost(i)}<em>${esc(f.short)}</em></button>`;
-    const deco = (f, k) => `<span class="fz-b deco" aria-hidden="true">${bottle(f, { sw: 3 })}${frost(10 + k)}</span>`;
+    const fb = (f, i) => `<button type="button" class="fz-b" data-fzb="${i}" aria-label="${esc(f.n)}">${bottle(f, { drops: true, sw: 3 })}<i data-frost="${i}" hidden></i><em>${esc(f.short)}</em></button>`;
+    const deco = (f, k) => `<span class="fz-b deco" aria-hidden="true">${bottle(f, { sw: 3 })}<i data-frost="${10 + k}" hidden></i></span>`;
     const fruit = (k, x, r) => `<span class="fruit" style="left:${x}%;transform:rotate(${r}deg)">${ico(k)}</span>`;
     FZS.innerHTML = `<div class="fz-box"><div class="fz-shadow"></div>
         <div class="fz-in"><div class="fz-led"></div>
@@ -1974,6 +1979,9 @@
           <div class="fz-inner">${[[9, [0, 1, 2, 0]], [37, [1, 2, 0, 1]], [65, [2, 0, 1, 2]]].map(([t, ks]) => `<div class="fz-bin" style="top:${t}%"><div class="bt">${ks.map(k => `<svg viewBox="0 0 64 64"><use href="#i-shot-${FL[k].k}"/></svg>`).join('')}</div></div>`).join('')}</div></div>
       </div>`;
     if (!ANIM) FZS.classList.add('opened');
+    // the frost is a few thousand little shapes, so it only goes in once the fridge is close
+    new IntersectionObserver((es, o) => { if (!es.some(e => e.isIntersecting)) return; o.disconnect();
+      FZS.querySelectorAll('[data-frost]').forEach(x => x.outerHTML = frost(+x.dataset.frost)); }, { rootMargin: '900px 0px' }).observe(FZS);
   }
 
   /* =============================================================
@@ -2264,11 +2272,11 @@
   const VIS = {}; const watch = (el, k) => el && new IntersectionObserver(es => es.forEach(e => { VIS[k] = e.isIntersecting; }), { rootMargin: '120px' }).observe(el);
   watch($('.ribbons'), 'rib'); watch($('.hero'), 'hero'); watch(lu, 'lu');
   let liqH = liqEl.offsetHeight, maxS = 1; const measure = () => { liqH = liqEl.offsetHeight; maxS = Math.max(1, document.documentElement.scrollHeight - innerHeight); }; measure(); addEventListener('resize', measure); ScrollTrigger.addEventListener('refresh', measure);
-  let frame = 0, leanSet = 0, progSet = -1;
+  let frame = 0, leanSet = 0, progSet = -1, SY = scrollY; addEventListener('scroll', () => { SY = scrollY; }, { passive: true });
   gsap.ticker.add((t, dms) => { frame++; vel *= .9; rainVel = vel; tickRain();
     if (VIS.rib) { const sp = 1.1 + Math.min(14, Math.abs(vel) / 260); ribX -= sp * (vel < -40 ? -1 : 1); if (ribW) { if (ribX <= -ribW) ribX += ribW; if (ribX > 0) ribX -= ribW; } ra.style.transform = `translate3d(${ribX.toFixed(1)}px,0,0)`; rb.style.transform = `translate3d(${(-ribW - ribX).toFixed(1)}px,0,0)`; }
     if (VIS.hero && frame % (PHONE ? 4 : 2) === 0) { LQ.x = (LQ.x + (PHONE ? 5.2 : 2.6)) % 120; liqEl.style.setProperty('--wx', LQ.x.toFixed(1) + 'px'); liqEl.style.setProperty('--wyp', (LQ.f * liqH - 12).toFixed(1) + 'px'); }
-    pT += .08; const pr = scrollY / maxS; if (frame % (PHONE ? 4 : 2) === 0 || Math.abs(pr - progSet) > .004) { drawProg(clamp(pr, 0, 1)); progSet = pr; }
+    pT += .08; const pr = SY / maxS; if (frame % (PHONE ? 4 : 2) === 0 || Math.abs(pr - progSet) > .004) { drawProg(clamp(pr, 0, 1)); progSet = pr; }
     progLean = lerp(progLean, clamp(-vel / 90, -24, 24), .12); if (Math.abs(progLean - leanSet) > .05) { progEl.style.transform = `rotate(${progLean.toFixed(2)}deg)`; leanSet = progLean; } });
 
   /* =============================================================
@@ -2276,6 +2284,7 @@
      floods the screen, then drains away to reveal the hero.
      ============================================================= */
   const loader = $('[data-loader]'), lp = $('[data-lpct]');
+  const unhide = () => document.documentElement.classList.remove('l-busy'); document.documentElement.classList.add('l-busy'); setTimeout(unhide, 6000);
   gsap.set('.hero h1 .row > span', { yPercent: 110 }); gsap.set('[data-in]', { opacity: 0, y: 26 }); gsap.set(hb, { scale: .4, rotation: -30, opacity: 0 }); gsap.set('[data-orb]', { scale: 0 }); gsap.set('[data-ring]', { scale: .6, opacity: 0 }); gsap.set(hCall, { opacity: 0, y: 10 });
   const intro = gsap.timeline({ paused: true })
     .to('.hero h1 .row > span', { yPercent: 0, duration: 1, ease: 'back.out(1.5)', stagger: .1 }, 0)
@@ -2303,10 +2312,10 @@
     .add(() => { const r = $('[data-lglass]').getBoundingClientRect(); gsap.set(floods, { x: r.left + r.width / 2, y: r.top + r.height * .3 }); }, ltCap + 1.15)
     .to(floods, { scale: 1, duration: .7, ease: 'power3.in', stagger: .12 }, ltCap + 1.2)
     .set('.l-in', { opacity: 0 })
-    .set(loader, { background: 'transparent' })
+    .set(loader, { background: 'transparent' }).add(unhide)
     .to(floods.slice().reverse(), { y: '-=' + (innerHeight * 1.6 + innerWidth), duration: .75, ease: 'power3.inOut', stagger: .08 })
     .add(() => intro.play(), '-=.55');
-  loader.addEventListener('click', () => lt.progress(1));
+  loader.addEventListener('click', () => { lt.progress(1); unhide(); });
 
 
   /* ambient hero motion */
@@ -2317,7 +2326,9 @@
   gsap.delayedCall(5.5, function nudge() { if (H.touched) return; splash(26); gsap.fromTo(hb, { scale: 1 }, { keyframes: [{ scale: 1.06, duration: .15 }, { scale: .97, duration: .15 }, { scale: 1, duration: .4, ease: 'elastic.out(1, .4)' }] }); gsap.delayedCall(4, nudge); });
 
   /* headings: letters drop in like drips */
-  $$('[data-split]').forEach(h => { if (h.closest('.hero')) return; gsap.from($$('.c', h), { yPercent: -120, rotation: () => (Math.random() - .5) * 30, opacity: 0, duration: .9, ease: 'bounce.out', stagger: .025, scrollTrigger: { trigger: h, start: 'top 86%' } }); });
+  { const drop = h => gsap.from($$('.c', h), { yPercent: -120, rotation: () => (Math.random() - .5) * 30, opacity: 0, duration: .9, ease: 'bounce.out', stagger: .025, scrollTrigger: { trigger: h, start: 'top 86%' } });
+    const io = new IntersectionObserver(es => es.forEach(e => { if (!e.isIntersecting) return; io.unobserve(e.target); drop(e.target); }), { rootMargin: '0px 0px 60% 0px' });
+    $$('[data-split]').forEach(h => { if (!h.closest('.hero')) io.observe(h); }); }
 
   /* lineup idle demo + orbit spin */
   gsap.to(orbit, { rotation: 360, duration: 26, ease: 'none', repeat: -1 });
@@ -2453,7 +2464,7 @@
       const ir = inside.getBoundingClientRect(), br = b.getBoundingClientRect();
       const sc = Math.min(2.1, ir.height * .6 / br.height), dx = ir.left + ir.width / 2 - (br.left + br.width / 2), dy = ir.top + ir.height * .52 - (br.top + br.height / 2);
       b.style.zIndex = 9; b.parentElement.style.zIndex = 9; b.style.transition = 'none';
-      const wipe = b.querySelector('[data-fzwipe]'), WL = wipe.getTotalLength(); gsap.set(wipe, { strokeDasharray: WL, strokeDashoffset: WL });
+      const wipe = b.querySelector('[data-fzwipe]') || document.createElementNS('http://www.w3.org/2000/svg', 'path'), WL = wipe.getTotalLength ? (wipe.getTotalLength() || 1) : 1; gsap.set(wipe, { strokeDasharray: WL, strokeDashoffset: WL });
       const drops = [...b.querySelectorAll('[data-fzdrop]')].slice(0, 8); drops.forEach(d => { d._y0 = gsap.getProperty(d, 'y'); });
       gsap.timeline({ onComplete: () => { busy = false; } })
         .to([ask, hint, b.querySelector('em')], { opacity: 0, duration: .25 }, 0)
