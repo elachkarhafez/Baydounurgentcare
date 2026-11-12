@@ -1560,13 +1560,13 @@
         box: () => ({ w: 840, h: 320 }),
         draw(c, L) {
           const w = 840, h = 320, x0 = -w / 2, y0 = -h / 2, col = L.col || SH.navy, ink = L.tcol || SH.cream;
-          c.strokeStyle = 'rgba(40,40,40,.55)'; c.lineWidth = 5; [x0 + 120, x0 + w - 120].forEach(x => { c.beginPath(); c.moveTo(x, y0); c.lineTo(x, y0 - 900); c.stroke(); });
-          c.save(); shadowOn(c, .3, 40, 16); rr(c, x0, y0, w, h, 18); c.fillStyle = col; c.fill(); c.restore();
-          rr(c, x0 + 16, y0 + 16, w - 32, h - 32, 10); c.strokeStyle = ink; c.globalAlpha *= .35; c.lineWidth = 3; c.stroke(); c.globalAlpha /= .35;
+          c.strokeStyle = L.hang ? 'rgba(60,45,35,.75)' : 'rgba(40,40,40,.55)'; c.lineWidth = 5; if (L.hang) { c.beginPath(); c.moveTo(x0 + 130, y0 + 24); c.lineTo(0, y0 - 190); c.lineTo(x0 + w - 130, y0 + 24); c.stroke(); c.fillStyle = '#8a7a66'; c.beginPath(); c.arc(0, y0 - 196, 13, 0, 6.3); c.fill(); } else [x0 + 120, x0 + w - 120].forEach(x => { c.beginPath(); c.moveTo(x, y0); c.lineTo(x, y0 - 900); c.stroke(); });
+          c.save(); shadowOn(c, .3, 40, 16); rr(c, x0, y0, w, h, L.hang ? 40 : 18); c.fillStyle = col; c.fill(); c.restore();
+          rr(c, x0 + 16, y0 + 16, w - 32, h - 32, L.hang ? 28 : 10); c.strokeStyle = ink; c.globalAlpha *= .35; c.lineWidth = 3; c.stroke(); c.globalAlpha /= .35;
           const ar = L.arrow || 'l', tx0 = ar === 'l' ? x0 + 230 : x0 + 70;
           if (ar !== 'none') { const ax = ar === 'l' ? x0 + 120 : x0 + w - 120, d = ar === 'l' ? -1 : 1; c.fillStyle = ink; c.beginPath(); c.moveTo(ax + d * 62, 0); c.lineTo(ax - d * 6, -58); c.lineTo(ax - d * 6, -24); c.lineTo(ax - d * 64, -24); c.lineTo(ax - d * 64, 24); c.lineTo(ax - d * 6, 24); c.lineTo(ax - d * 6, 58); c.closePath(); c.fill(); }
-          c.textAlign = 'left'; c.textBaseline = 'alphabetic'; c.fillStyle = ink; let bs = 120; const big = String(L.tx || ''); c.font = SF.fr6(bs); while (bs > 50 && c.measureText(big).width > w - 300) { bs -= 4; c.font = SF.fr6(bs); } c.fillText(big, tx0, L.sub ? 18 : bs * .36);
-          if (L.sub) { c.font = SF.man8(30); c.globalAlpha *= .8; track(c, String(L.sub).toUpperCase(), tx0 + 4, 86, 5); }
+          const mid = ar === 'none'; c.textAlign = 'left'; c.textBaseline = 'alphabetic'; c.fillStyle = ink; let bs = mid ? 150 : 120; const big = String(L.tx || ''); c.font = SF.fr6(bs); while (bs > 50 && c.measureText(big).width > w - (mid ? 140 : 300)) { bs -= 4; c.font = SF.fr6(bs); } const bw = c.measureText(big).width; c.fillText(big, mid ? -bw / 2 : tx0, L.sub ? 18 : bs * .36);
+          if (L.sub) { c.font = SF.man8(30); c.globalAlpha *= .8; const su = String(L.sub).toUpperCase(), sw = trackW(c, su, 5); track(c, su, mid ? -sw / 2 : tx0 + 4, 86, 5); }
         }
       },
       tagbar: {
@@ -1597,6 +1597,22 @@
           else part(q => [-200 + 400 * q, Math.sin(q * 9) * 6 + q * 8], 40);
         }
       },
+      list: {
+        name: L => String(L.title || 'List').slice(0, 16),
+        box: L => ({ w: 640, h: 210 + String(L.tx || '').split('\n').length * 92 }),
+        draw(c, L, t, st, e) {
+          const items = String(L.tx || '').split('\n'), w = 640, h = 210 + items.length * 92, x0 = -w / 2, y0 = -h / 2, ink = L.col || '#26303a';
+          c.save(); shadowOn(c, .22, 40, 14); c.fillStyle = '#fffdf6'; c.fillRect(x0, y0, w, h); c.restore();
+          c.fillStyle = 'rgba(70,120,180,.2)'; for (let i = 0; i <= items.length; i++) c.fillRect(x0, y0 + 150 + i * 92, w, 2);
+          c.fillStyle = 'rgba(200,70,60,.32)'; c.fillRect(x0 + 92, y0, 2, h);
+          c.save(); c.translate(0, y0 + 6); c.rotate(-.04); c.fillStyle = 'rgba(232,220,196,.82)'; c.fillRect(-110, -26, 220, 56); c.restore();
+          c.textAlign = 'left'; c.textBaseline = 'alphabetic'; c.fillStyle = ink; c.font = SF.scr(74); c.fillText(String(L.title || ''), x0 + 116, y0 + 118);
+          const all = items.join(''), n = e.type != null ? Math.floor(e.type * all.length) : 1e9; let left = n; c.font = SF.scr(64);
+          items.forEach((it, i) => { if (left <= 0) return; const part = it.slice(0, left); left -= it.length; c.fillText(part, x0 + 116, y0 + 226 + i * 92); });
+          const last = items.length - 1; if (L.circ !== false && last >= 0 && n >= all.length) { const k = e.type != null ? cl((e.type - .999) * 1e3) : 1, tw = c.measureText(items[last]).width, cx = x0 + 116 + tw / 2, cy = y0 + 206 + last * 92;
+            c.strokeStyle = L.ccol || SH.copper; c.lineWidth = 7; c.lineCap = 'round'; c.beginPath(); for (let q = 0; q <= 60; q++) { const a = -2.2 + q / 60 * 6.9; c.lineTo(cx + Math.cos(a) * (tw / 2 + 40 + q * .2), cy + Math.sin(a) * (52 - q * .15)); } c.stroke(); }
+        }
+      },
       tray: {
         name: () => 'Silver tray',
         box: L => ({ w: L.w || 780, h: (L.w || 780) * .26 }),
@@ -1618,7 +1634,7 @@
         }
       }
     };
-    const KADD = [['text', 'Text'], ['drink', 'Drink'], ['logo', 'Logo'], ['bubbleR', 'Blue bubble'], ['bubbleL', 'Grey bubble'], ['notif', 'Notification'], ['tagbar', '| Label'], ['stamp', 'Stamp'], ['shelftag', 'Price tag'], ['sign', 'Store sign'], ['card', 'Email'], ['tray', 'Silver tray'], ['arrow', 'Arrow'], ['circle', 'Circle'], ['heart', 'Heart'], ['spark', 'Sparkle'], ['line', 'Underline'], ['photo', 'Your photo']];
+    const KADD = [['text', 'Text'], ['drink', 'Drink'], ['logo', 'Logo'], ['bubbleR', 'Blue bubble'], ['bubbleL', 'Grey bubble'], ['notif', 'Notification'], ['tagbar', '| Label'], ['stamp', 'Stamp'], ['shelftag', 'Price tag'], ['sign', 'Store sign'], ['card', 'Email'], ['list', 'List'], ['tray', 'Silver tray'], ['arrow', 'Arrow'], ['circle', 'Circle'], ['heart', 'Heart'], ['spark', 'Sparkle'], ['line', 'Underline'], ['photo', 'Your photo']];
     const newPiece = (k, st) => {
       const b = { id: nid(), x: 540, y: 900, s: 1, r: 0, a: 'pop', at: 0 };
       if (k === 'text') return Object.assign(b, { k: 'text', tx: 'Your words here', f: 'serif', sz: 84, col: SH.navy, al: 'center', w: 900 });
@@ -1632,6 +1648,7 @@
       if (k === 'sign') return Object.assign(b, { k: 'sign', tx: 'Coffee', sub: 'Shibam Coffee', arrow: 'l' });
       if (k === 'card') return Object.assign(b, { k: 'card', title: 'Out of office', tx: 'Write your note here.' });
       if (k === 'tray') return Object.assign(b, { k: 'tray', w: 780 });
+      if (k === 'list') return Object.assign(b, { k: 'list', title: 'To do', tx: 'Coffee\nMore coffee', a: 'type' });
       if (k === 'photo') return Object.assign(b, { k: 'photo', shape: 'round', w: 700, hh: 860 });
       return Object.assign(b, { k: 'doodle', d: k, col: SH.copper, a: 'draw' });
     };
@@ -1747,12 +1764,12 @@
         T_({ k: 'notif', title: 'Shibam Coffee', tx: `We're open ${TODAY} inside Meijer. Come say hi.`, x: 540, y: 1440, a: 'slide', at: 1.3 }),
         T_({ k: 'notif', title: 'Shibam Coffee', when: '2m ago', tx: 'Your Iced Adeni is ready when you are.', x: 540, y: 1622, a: 'slide', at: 2 })
       ] },
-      sh_open: { name: 'Come closer', bg: 'stone', make: () => [
-        T_({ k: 'logo', light: true, h: 160, x: 540, y: 320, a: 'fade', at: .2 }),
-        T_({ k: 'text', tx: 'hey, come closer...', f: 'script', sz: 96, col: '#fff7ea', x: 540, y: 560, a: 'type', at: .7, sh: true }),
-        T_({ k: 'drink', dk: 'brown-sugar-shakn', h: 720, x: 520, y: 1100, cast: true, a: 'rise', at: .3 }),
-        T_({ k: 'tagbar', tx: "We're open\ninside Meijer", col: '#fff7ea', sz: 32, x: 290, y: 1585, a: 'fade', at: 2, sh: true }),
-        foot('rgba(255,247,234,.7)')
+      sh_open: { name: 'Door sign', v: 2, bg: 'window', make: () => [
+        T_({ k: 'logo', h: 140, x: 540, y: 290, a: 'fade', at: .1 }),
+        T_({ k: 'sign', hang: true, arrow: 'none', tx: 'Open', sub: "Come in, we're brewing", w: 700, x: 540, y: 690, s: .82, a: 'swing', at: .3 }),
+        T_({ k: 'drink', dk: 'brown-sugar-shakn', h: 620, x: 540, y: 1200, a: 'rise', at: 1 }),
+        T_({ k: 'text', tx: 'Inside Meijer, come say hi', f: 'italic', sz: 56, col: SH.navy, x: 540, y: 1600, a: 'fade', at: 1.7 }),
+        foot(SH.muted)
       ] },
       sh_closed: { name: 'Out of office', bg: 'window', make: () => [
         T_({ k: 'logo', h: 140, x: 540, y: 310, a: 'fade', at: .1 }),
@@ -1761,20 +1778,21 @@
         T_({ k: 'text', tx: 'see you soon', f: 'script', sz: 86, col: SH.copper, x: 360, y: 1330, r: -.06, a: 'fade', at: 1.6 }),
         foot(SH.muted)
       ] },
-      sh_dotd: { name: 'Drink of the day', bg: 'flat:' + SH.navy, make: () => [
-        T_({ k: 'logo', light: true, h: 150, x: 540, y: 300, a: 'fade', at: .1 }),
-        T_({ k: 'drink', dk: 'iced-adeni', h: 920, x: 540, y: 1000, r: -.06, a: 'pop', at: .35 }),
-        T_({ k: 'text', tx: 'drink of the day', f: 'italic', sz: 50, col: '#d9c6a3', x: 540, y: 1530, a: 'fade', at: 1.1 }),
-        T_({ k: 'text', tx: 'Iced Adeni', f: 'caps', sz: 40, col: SH.cream, x: 540, y: 1610, a: 'fade', at: 1.3 }),
-        foot('rgba(250,246,238,.55)')
+      sh_dotd: { name: 'Drink of the day', v: 2, bg: 'flat:' + SH.navy, make: () => [
+        T_({ k: 'logo', light: true, h: 140, x: 540, y: 290, a: 'fade', at: .1 }),
+        T_({ k: 'drink', dk: 'iced-adeni', h: 900, x: 560, y: 980, r: -.07, a: 'pop', at: .35 }),
+        T_({ k: 'stamp', tx: 'Drink of the day · Shibam Coffee ·', big: 'Today', col: '#d9c6a3', x: 830, y: 640, r: .22, a: 'pop', at: 1.2 }),
+        T_({ k: 'text', tx: 'Iced Adeni', f: 'serif', sz: 104, col: SH.cream, al: 'left', x: 110, y: 1530, a: 'rise', at: 1 }),
+        T_({ k: 'text', tx: 'Chilled Adeni spiced milk tea over ice', f: 'clean', sz: 36, col: '#d9c6a3', al: 'left', w: 820, x: 112, y: 1620, a: 'fade', at: 1.4 }),
+        T_({ k: 'text', tx: 'shibamcoffee.com', f: 'caps', sz: 22, col: 'rgba(250,246,238,.55)', al: 'left', x: 112, y: 1712, a: 'fade', at: 2.4 })
       ] },
-      sh_new: { name: 'Velvet reveal', bg: 'curtain', make: () => [
-        T_({ k: 'logo', light: true, h: 150, x: 540, y: 300, a: 'fade', at: 1 }),
-        T_({ k: 'text', tx: 'New on the menu', f: 'italic', sz: 64, col: '#f3e3c9', x: 540, y: 500, a: 'fade', at: 1.3, sh: true }),
-        T_({ k: 'tray', w: 780, x: 540, y: 1330, a: 'rise', at: .7 }),
-        T_({ k: 'drink', dk: 'dragon-fruit', h: 640, x: 540, y: 1030, shd: false, a: 'rise', at: .9 }),
-        T_({ k: 'tagbar', tx: 'Dragon Fruit', col: '#f3e3c9', sz: 30, x: 730, y: 1580, a: 'fade', at: 1.9 }),
-        foot('rgba(243,227,201,.55)')
+      sh_new: { name: 'New on the skyline', v: 2, bg: 'dusk', make: () => [
+        T_({ k: 'logo', h: 140, x: 540, y: 290, a: 'fade', at: .1 }),
+        T_({ k: 'text', tx: 'New on the menu', f: 'serif', sz: 92, col: SH.navy, x: 540, y: 500, a: 'rise', at: .3 }),
+        T_({ k: 'drink', dk: 'dragon-fruit', h: 760, x: 540, y: 1150, a: 'rise', at: .7 }),
+        T_({ k: 'stamp', tx: 'Shibam Coffee · Inside Meijer ·', big: 'New', col: SH.copper, x: 830, y: 820, r: .2, a: 'pop', at: 1.6 }),
+        T_({ k: 'tagbar', tx: 'Dragon Fruit', col: SH.navy, sz: 32, x: 260, y: 1610, a: 'fade', at: 1.9 }),
+        foot(SH.muted, 1700)
       ] },
       sh_ltd: { name: 'Text from the drink', bg: 'flat:#ffffff', make: () => [
         T_({ k: 'chathead', dk: 'brown-sugar-shakn', tx: "Brown Sugar Shaken", sub: 'limited time', x: 540, y: 300, a: 'fade', at: .1 }),
@@ -1801,15 +1819,12 @@
         T_({ k: 'drink', dk: 'shibam-royal', h: 600, x: 540, y: 1340, a: 'rise', at: 1.8 }),
         foot('rgba(255,247,234,.7)')
       ] },
-      sh_plans: { name: 'The plans', bg: 'flat:#ecebe8', make: () => [
-        T_({ k: 'logo', h: 140, x: 540, y: 300, a: 'fade', at: .1 }),
-        T_({ k: 'bubble', side: 'r', tx: 'sorry, i have plans.', anc: 'r', x: 960, y: 640, a: 'pop', at: .5 }),
-        T_({ k: 'text', tx: 'The plans:', f: 'clean', sz: 48, col: '#2b2b2b', al: 'left', x: 140, y: 820, a: 'fade', at: 1.2 }),
-        T_({ k: 'drink', dk: 'french-vanilla', h: 470, x: 220, y: 1120, a: 'drop', at: 1.5 }),
-        T_({ k: 'drink', dk: 'dragon-fruit', h: 470, x: 433, y: 1120, a: 'drop', at: 1.65 }),
-        T_({ k: 'drink', dk: 'brown-sugar-shakn', h: 470, x: 647, y: 1120, a: 'drop', at: 1.8 }),
-        T_({ k: 'drink', dk: 'shibam-royal', h: 470, x: 860, y: 1120, a: 'drop', at: 1.95 }),
-        foot('rgba(0,0,0,.4)')
+      sh_list: { name: 'Meijer run', v: 2, bg: 'flat:#e9e2d4', make: () => [
+        T_({ k: 'logo', h: 130, x: 540, y: 270, a: 'fade', at: .1 }),
+        T_({ k: 'list', title: 'Meijer run', tx: 'Milk\nEggs\nBread\nIced Adeni', x: 430, y: 820, r: -.04, a: 'type', at: .4 }),
+        T_({ k: 'drink', dk: 'iced-adeni', h: 640, x: 790, y: 1300, r: .05, a: 'drop', at: 2.3 }),
+        T_({ k: 'text', tx: 'grab one on your way in', f: 'script', sz: 62, col: SH.copper, x: 330, y: 1600, r: -.05, a: 'fade', at: 2.9 }),
+        foot(SH.muted)
       ] },
       sh_photo: { name: 'Photo', photo: true, bg: 'photo', make: () => [
         T_({ k: 'logo', light: true, h: 150, x: 540, y: 300, a: 'fade', at: .4 }),
@@ -1824,9 +1839,9 @@
       ] }
     };
     const DEFL = {};
-    const freshScene = id => ({ bg: SCN[id].bg, layers: SCN[id].make().map(l => Object.assign({ id: nid() }, l)) });
-    const sceneOf = st => (st.lay && st.lay[st.tpl]) || DEFL[st.tpl] || (DEFL[st.tpl] = freshScene(st.tpl));
-    const editScene = () => { if (!S.lay || typeof S.lay !== 'object') S.lay = {}; if (!S.lay[S.tpl]) S.lay[S.tpl] = JSON.parse(JSON.stringify(sceneOf(S))); return S.lay[S.tpl]; };
+    const freshScene = id => ({ v: SCN[id].v || 1, bg: SCN[id].bg, layers: SCN[id].make().map(l => Object.assign({ id: nid() }, l)) });
+    const sceneOf = st => { const e = st.lay && st.lay[st.tpl]; if (e && (e.v || 1) === (SCN[st.tpl].v || 1)) return e; return DEFL[st.tpl] || (DEFL[st.tpl] = freshScene(st.tpl)); };
+    const editScene = () => { if (!S.lay || typeof S.lay !== 'object') S.lay = {}; const e = S.lay[S.tpl]; if (!e || (e.v || 1) !== (SCN[S.tpl].v || 1)) S.lay[S.tpl] = JSON.parse(JSON.stringify(sceneOf(S))); return S.lay[S.tpl]; };
     const studioDraw = (c, st, t) => { const sc = sceneOf(st); drawBg(c, st, sc.bg, t); sc.layers.forEach(L => drawPiece(c, L, t, st)); drawOver(c, sc.bg, t); };
     const SHT = {};
     Object.keys(SCN).forEach(id => { SHT[id] = { brand: 'sh', name: SCN[id].name, photo: !!SCN[id].photo, studio: true, vars: [['Default', SH.navy]], def: Object.assign({}, SHDEF), layout: () => null, draw(c, st, v, L, t) { studioDraw(c, st, t); } }; });
@@ -2057,8 +2072,8 @@
     });
 
     /* the side panel */
-    const FK = { text: [['tx', 'Text', 1]], bubble: [['tx', 'Message', 1]], notif: [['title', 'App name'], ['tx', 'Message', 1], ['when', 'Time']], card: [['title', 'Subject'], ['tx', 'Message', 1], ['when', 'Top right']], shelftag: [['big', 'Big line'], ['tx', 'Bottom line'], ['sub', 'Top line']], sign: [['tx', 'Sign'], ['sub', 'Small line']], tagbar: [['tx', 'Label', 1]], stamp: [['big', 'Middle'], ['tx', 'Around the edge']], chathead: [['tx', 'Name'], ['sub', 'Under the name']] };
-    const COLK = { text: 'col', bubble: 'col', tagbar: 'col', stamp: 'col', doodle: 'col', shelftag: 'col', sign: 'col', chathead: 'col' };
+    const FK = { text: [['tx', 'Text', 1]], bubble: [['tx', 'Message', 1]], notif: [['title', 'App name'], ['tx', 'Message', 1], ['when', 'Time']], card: [['title', 'Subject'], ['tx', 'Message', 1], ['when', 'Top right']], shelftag: [['big', 'Big line'], ['tx', 'Bottom line'], ['sub', 'Top line']], sign: [['tx', 'Sign'], ['sub', 'Small line']], tagbar: [['tx', 'Label', 1]], stamp: [['big', 'Middle'], ['tx', 'Around the edge']], chathead: [['tx', 'Name'], ['sub', 'Under the name']], list: [['title', 'Title'], ['tx', 'One item per line', 1]] };
+    const COLK = { list: 'col', text: 'col', bubble: 'col', tagbar: 'col', stamp: 'col', doodle: 'col', shelftag: 'col', sign: 'col', chathead: 'col' };
     const ANI = [['fade', 'Fade'], ['rise', 'Rise'], ['pop', 'Pop'], ['drop', 'Drop'], ['slide', 'Slide down'], ['left', 'Slide in'], ['swing', 'Swing'], ['type', 'Type'], ['draw', 'Draw'], ['none', 'None']];
     const sws = (cur, at) => SWATCH.map(([n, c]) => `<button type="button" class="sw" data-${at}="${c}" aria-label="${n}" aria-pressed="${String(cur || '').toLowerCase() === c.toLowerCase()}" style="--c:${c}"></button>`).join('');
     const chipRow = (lab, items, at, cur) => `<div class="lrow"><span class="sg-h">${lab}</span><div class="chips">${items.map(([k, n]) => `<button type="button" data-${at}="${k}" aria-pressed="${cur === k}">${n}</button>`).join('')}</div></div>`;
@@ -2072,6 +2087,8 @@
       if (L.k === 'drink' || L.k === 'chathead') h += `<div class="lrow"><span class="sg-h">Drink</span><div class="sdks">${DRK.map(([k, n]) => `<button class="sdk" type="button" data-ldk="${k}" aria-pressed="${L.dk === k}"><img src="${SBASE}c-${k}.webp" alt="" loading="lazy"><span>${esc(n)}</span></button>`).join('')}</div></div>`;
       if (L.k === 'drink') h += togRow([['flip', 'Flip', L.flip], ['cast', 'Sun shadow', L.cast], ['bub', 'Photo bubble', L.bub], ['shd', 'Floor shadow', L.shd !== false]]);
       if (L.k === 'logo') h += togRow([['light', 'Light logo', L.light]]);
+      if (L.k === 'list') h += togRow([['circ', 'Circle the last item', L.circ !== false]]);
+      if (L.k === 'sign') h += togRow([['hang', 'Door sign', L.hang]]);
       if (L.k === 'notif') h += togRow([['dark', 'Dark card', L.dark]]);
       if (L.k === 'text' || L.k === 'tagbar') { if (L.k === 'tagbar') h += togRow([['sh', 'Soft shadow', L.sh]]); }
       if (L.k === 'bubble') h += chipRow('Side', [['r', 'Sent'], ['l', 'Received']], 'lside', L.side === 'r' ? 'r' : 'l');
@@ -2082,7 +2099,7 @@
       if (L.k === 'shelftag' || L.k === 'sign' || L.k === 'bubble' || L.k === 'chathead') h += `<div class="lrow"><span class="sg-h">Text color</span><div class="swrow">${sws(L.tcol, 'ltc')}</div></div>`;
       h += `<label class="szoom"><span class="sg-h">Size</span><input type="range" min="0.15" max="3" step="0.01" value="${L.s || 1}" data-lp="s" aria-label="Size"></label>`;
       h += `<label class="szoom"><span class="sg-h">Turn</span><input type="range" min="-180" max="180" step="1" value="${Math.round((L.r || 0) * 180 / Math.PI)}" data-lp="r" aria-label="Turn"></label>`;
-      h += chipRow('How it comes in', ANI.filter(([k]) => (k !== 'type' || L.k === 'text' || L.k === 'card') && (k !== 'draw' || L.k === 'doodle')), 'lan', L.a || 'fade');
+      h += chipRow('How it comes in', ANI.filter(([k]) => (k !== 'type' || L.k === 'text' || L.k === 'card' || L.k === 'list') && (k !== 'draw' || L.k === 'doodle')), 'lan', L.a || 'fade');
       h += `<div class="lacts"><button class="btn sm" type="button" data-lact="front">Bring forward</button><button class="btn sm" type="button" data-lact="back">Send back</button><button class="btn sm" type="button" data-lact="dup">Copy</button><button class="btn sm" type="button" data-lact="center">Center</button><button class="btn sm" type="button" data-lact="del">Delete</button></div>`;
       el.innerHTML = h; el.hidden = false; buildLays();
     };
@@ -2122,7 +2139,7 @@
       let b;
       if ((b = t.closest('[data-lf]'))) { const FS = { caps: 1, clean: 1.2, bold: 1.15, serif: 1.9, italic: 1.8, script: 2.2, thin: 3 }, nf = b.dataset.lf; L.sz = Math.round((L.sz || 60) * (FS[nf] || 1) / (FS[L.f] || 1)); return set('f', nf); }
       if ((b = t.closest('[data-la]'))) return set('al', b.dataset.la);
-      if ((b = t.closest('[data-ltog]'))) { const k = b.dataset.ltog; return set(k, k === 'shd' ? L.shd === false : !L[k]); }
+      if ((b = t.closest('[data-ltog]'))) { const k = b.dataset.ltog; return set(k, k === 'shd' ? L.shd === false : k === 'circ' ? L.circ === false : !L[k]); }
       if ((b = t.closest('[data-ldk]'))) return set('dk', b.dataset.ldk);
       if ((b = t.closest('[data-lside]'))) return set('side', b.dataset.lside);
       if ((b = t.closest('[data-larrow]'))) return set('arrow', b.dataset.larrow);
