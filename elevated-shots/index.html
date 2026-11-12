@@ -1633,7 +1633,7 @@
   let packSize = 6; const counts = { glow: 0, golden: 0, og: 0 };
   $('[data-sizes]').innerHTML = SIZES.map(n => `<button type="button" data-size="${n}" aria-pressed="${n === 6}">${n}-pack</button>`).join('');
   $('[data-sizes]').insertAdjacentHTML('afterend', '<p class="or-note" style="margin-top:10px">Or pick as many as you want. Any number works.</p>');
-  $('[data-rows]').innerHTML = FL.map(f => `<div class="orow"><div>${bottle(f)}</div><div><b>${esc(f.n)}</b><small>${esc(f.ben)} · ${esc(f.ing.map(k => CONFIG.ingredients[k]).join(', '))}</small></div><div class="step"><button type="button" data-minus="${f.k}" aria-label="One less ${esc(f.n)}">−</button><output data-cnt="${f.k}">0</output><button type="button" data-plus="${f.k}" aria-label="One more ${esc(f.n)}">+</button></div></div>`).join('');
+  $('[data-rows]').innerHTML = FL.map(f => `<div class="orow"><div>${bottle(f)}</div><div><b>${esc(f.n)}</b></div><div class="step"><button type="button" data-minus="${f.k}" aria-label="One less ${esc(f.n)}">−</button><output data-cnt="${f.k}">0</output><button type="button" data-plus="${f.k}" aria-label="One more ${esc(f.n)}">+</button></div></div>`).join('');
   const crate = $('[data-crate]');
   const total = () => Object.values(counts).reduce((a, b) => a + b, 0);
   const fitSize = () => { const n = total(); if (n > packSize) packSize = SIZES.find(z => z >= n) || 24; $$('[data-size]').forEach(b => b.setAttribute('aria-pressed', +b.dataset.size === packSize)); };
