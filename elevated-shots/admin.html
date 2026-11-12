@@ -2046,12 +2046,12 @@
 
     /* ---------- state ---------- */
     const SKEY = 'es-story';
-    const S = { tpl: 'es_hello', v: 0, shots: ['og', 'golden', 'glow'], hero: 'golden', head: '', sub: '', d1: '', d2: '', d3: '', site: true, handle: true, ph: 0, pm: 'frame', pz: 1, px: 0, py: 0, brand: 'es', htxt: '', dname: 'Iced Adeni', svm: {}, sdk: 'iced-adeni' };
+    const S = { tpl: 'spot', v: 0, shots: ['og', 'golden', 'glow'], hero: 'golden', head: '', sub: '', d1: '', d2: '', d3: '', site: true, handle: true, ph: 0, pm: 'frame', pz: 1, px: 0, py: 0, brand: 'es', htxt: '', dname: 'Iced Adeni', svm: {}, sdk: 'iced-adeni' };
     let dirty = {};
     try { const sv = JSON.parse(localStorage.getItem(SKEY) || 'null'); if (sv && sv.S && TPL[sv.S.tpl]) { Object.assign(S, sv.S); dirty = sv.dirty || {}; } } catch (e) {}
     S.ph = 0; if (!['bg', 'frame', 'none'].includes(S.pm)) S.pm = 'frame';
     if (S.brand !== 'sh') S.brand = 'es'; delete S.sdr; if (typeof S.dname !== 'string') S.dname = 'Iced Adeni'; if (!S.svm || typeof S.svm !== 'object') S.svm = {}; if (!DN[S.sdk]) S.sdk = 'iced-adeni';
-    const brandOf = id => TPL[id].brand || 'es', idsOf = b => IDS.filter(id => brandOf(id) === b).sort((x, y) => (TPL[y].studio ? 1 : 0) - (TPL[x].studio ? 1 : 0));
+    const brandOf = id => TPL[id].brand || 'es', idsOf = b => IDS.filter(id => brandOf(id) === b).sort((x, y) => b === 'es' ? 0 : (TPL[y].studio ? 1 : 0) - (TPL[x].studio ? 1 : 0));
     if (!TPL[S.tpl]) S.tpl = 'spot';
     if (brandOf(S.tpl) !== S.brand) { S.tpl = idsOf(S.brand)[0]; S.v = 0; dirty = {}; }
     let BR = {}; try { BR = JSON.parse(localStorage.getItem(SKEY + '-br') || '{}') || {}; } catch (e) {}
@@ -2138,7 +2138,7 @@
 
     /* ---------- ui ---------- */
     const shotBtn = k => `<button class="ssh" type="button" data-sshot="${k}" aria-pressed="false"><img src="${BASE}bottle-${k}.png" alt="" width="18" height="40" loading="lazy">${FL[k].name}</button>`;
-    const buildRow = () => { $('[data-stpls]').innerHTML = idsOf(S.brand).map(id => `${id === 'spot' ? '<span class="stp-sep" aria-hidden="true">Classic</span>' : ''}${id === 'full' || id === 'sh_photo' || id === 'es_photo' ? '<span class="stp-sep" aria-hidden="true">With your photo</span>' : ''}<button class="stp" type="button" data-stpl="${id}" aria-pressed="false"><canvas width="144" height="256" aria-hidden="true"></canvas>${TPL[id].name}</button>`).join(''); };
+    const buildRow = () => { $('[data-stpls]').innerHTML = idsOf(S.brand).map(id => `${id === 'es_alarm' ? '<span class="stp-sep" aria-hidden="true">New, fully editable</span>' : ''}${id === 'full' || id === 'sh_photo' || id === 'es_photo' ? '<span class="stp-sep" aria-hidden="true">With your photo</span>' : ''}<button class="stp" type="button" data-stpl="${id}" aria-pressed="false"><canvas width="144" height="256" aria-hidden="true"></canvas>${TPL[id].name}</button>`).join(''); };
     buildRow();
     $('[data-sdks]').innerHTML = DRK.map(([k, n]) => `<button class="sdk" type="button" data-sdrink="${k}" aria-pressed="false"><img src="${SBASE}d-${k}.webp" alt="" loading="lazy"><span>${esc(n)}</span></button>`).join('');
     $('[data-sshots]').innerHTML = ORDER.map(shotBtn).join('');
