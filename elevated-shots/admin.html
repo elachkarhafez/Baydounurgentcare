@@ -187,6 +187,7 @@
   .stpls::-webkit-scrollbar { display: none; }
   .stp { flex: none; width: 72px; text-align: center; font: 700 11px/1.2 var(--sans); }
   .stp canvas { display: block; width: 72px; height: 128px; margin-bottom: 6px; border-radius: 10px; border: 2px solid rgba(18,17,16,.15); background: #e9dfc6; transition: transform .2s var(--ease); }
+  .stp-sep { flex: none; align-self: center; width: 58px; margin-bottom: 18px; padding: 8px 0 8px 10px; border-left: 2px solid var(--ink); font: 700 10px/1.3 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
   .stp[aria-pressed="true"] canvas { border-color: var(--ink); box-shadow: 0 0 0 3px var(--juice); }
   .stp:active canvas { transform: scale(.95); }
   .svars button i { display: inline-block; width: 14px; height: 14px; margin: -3px 7px 0 0; border-radius: 50%; border: 2px solid currentColor; vertical-align: middle; }
@@ -745,6 +746,30 @@
       c.restore();
     };
 
+    const hasPh = st => !!(st.ph && PH && PH.id === st.ph);
+    const holder = (c, x, y, w, h) => {
+      c.save(); const g = c.createLinearGradient(x, y, x, y + h); g.addColorStop(0, '#34302b'); g.addColorStop(1, '#1d1b19'); c.fillStyle = g; c.fillRect(x, y, w, h);
+      const s = Math.min(w, h, 900), cx = x + w / 2, cy = y + h / 2, gw = s * .22;
+      c.strokeStyle = JUICE; c.lineWidth = Math.max(3, s * .018); c.lineJoin = 'round';
+      rr(c, cx - gw / 2, cy - s * .26, gw, gw * .72, gw * .14); c.stroke(); c.beginPath(); c.arc(cx, cy - s * .26 + gw * .36, gw * .2, 0, 6.3); c.stroke();
+      c.textAlign = 'center'; c.textBaseline = 'alphabetic'; c.fillStyle = JUICE; c.font = FT.anton(Math.round(s * .11)); c.fillText('ADD A PHOTO', cx, cy + s * .08);
+      c.fillStyle = 'rgba(255,248,231,.72)'; c.font = FT.man7(Math.round(s * .045)); c.fillText('Tap here to pick one', cx, cy + s * .17); c.restore();
+    };
+    const photoOr = (c, x, y, w, h, st, t) => hasPh(st) ? drawPhoto(c, x, y, w, h, st, t) : holder(c, x, y, w, h);
+    const photoActive = st => TPL[st.tpl].photo ? hasPh(st) : !!phMode(st);
+    const ingOf = keys => { const out = []; ORDER.filter(k => keys.includes(k)).forEach(k => FL[k].ing.forEach(i => { if (!out.includes(i)) out.push(i); })); return out.length ? out : ['lemon', 'orange', 'ginger', 'turmeric', 'pineapple', 'honey']; };
+    // polaroid with a caption strip; caption is the second line in a handwritten-ish slant
+    const polaroid = (c, cx, cy, p, rot, st, t, k, cap, n) => {
+      if (k <= 0) return; const bw = 26, bb = 140, ow = p + bw * 2, oh = p + bw + bb, x0 = -ow / 2, y0 = -oh / 2;
+      c.save(); c.translate(cx, cy + (1 - eo(k)) * 160); c.rotate(rot + (1 - eo(k)) * .3); const sc = .7 + .3 * eb(k); c.scale(sc, sc); c.globalAlpha *= cl(k * 3);
+      c.save(); c.shadowColor = 'rgba(40,25,0,.38)'; c.shadowBlur = 44; c.shadowOffsetY = 18; c.fillStyle = '#fffdf6'; c.fillRect(x0, y0, ow, oh); c.restore();
+      c.save(); c.beginPath(); c.rect(x0 + bw, y0 + bw, p, p); c.clip(); photoOr(c, x0 + bw, y0 + bw, p, p, st, t); c.restore();
+      if (cap && cap.lines.length) drawText(c, cap, n ? x0 + bw + 14 : 0, y0 + bw + p + (bb - cap.h) / 2, { align: n ? 'left' : 'center', fill: INK, t, at: 1.1, mode: 'fade' });
+      if (!n || !cap) { c.save(); c.fillStyle = INK; c.globalAlpha *= .85; const mh = 52; c.translate(ow / 2 - bw - mh * .73, oh / 2 - bb / 2 - mh / 2); c.scale(mh / 400, mh / 400); c.fill(MARK); c.restore(); }
+      TPL.note.tape(c, 0, y0 + 4, 220, 66, .05, 'rgba(255,248,231,.75)');
+      c.restore();
+    };
+
     /* ---------- the five designs ---------- */
     const TPL = {
       spot: {
@@ -970,6 +995,117 @@
           drawBottles(c, L, t, bt, { shadow: 'rgba(110,70,0,.4)' }); bursts(c, L, t, bt);
           const pa = P(t, bt + .95, .45); pills(c, S, 540, 1574 + (1 - eo(pa)) * 40, { fill: INK, text: JUICE, line: INK }, 'center', pa);
         }
+      },
+      /* ---------- designs built around her photo ---------- */
+      full: {
+        name: 'Full bleed', photo: true, vars: [['Juice', JUICE], ['Cream', CREAM], ['Golden', '#ffb330']],
+        def: { head: 'Fresh from this morning', sub: 'Cold pressed in Metro Detroit' },
+        layout(c, S) {
+          const n = S.shots.length, mw = n === 3 ? 560 : n ? 610 : 920;
+          const sb = fit(c, S.sub, { font: FT.man7, maxW: mw, maxH: 110, lines: 2, lh: 1.25, max: 44, min: 30 });
+          const hd = fit(c, S.head, { font: FT.anton, upper: true, maxW: mw, maxH: 520, lines: 4, lh: .92, max: 190, min: 70 });
+          const sbT = 1536 - sb.h, ht = sbT - (sb.h ? 36 : 0) - hd.h;
+          return { hd, ht, sb, sbT, bs: n ? arrange(S.shots, 864, 1544, n === 1 ? 430 : 360) : [] };
+        },
+        draw(c, S, v, L, t) {
+          c.fillStyle = INK; c.fillRect(0, 0, W, H);
+          c.save(); c.globalAlpha = eo(P(t, 0, .9)); if (hasPh(S)) drawPhoto(c, 0, 0, W, H, S, t); else holder(c, 0, 320, W, Math.max(480, L.ht - 420)); c.restore();
+          const tone = v === 2 ? '64,28,0' : '18,17,16';
+          let g = c.createLinearGradient(0, 0, 0, 520); g.addColorStop(0, `rgba(${tone},.78)`); g.addColorStop(1, `rgba(${tone},0)`); c.fillStyle = g; c.fillRect(0, 0, W, 520);
+          const gt = Math.min(L.ht - 300, 1100); g = c.createLinearGradient(0, gt, 0, H); g.addColorStop(0, `rgba(${tone},0)`); g.addColorStop(.4, `rgba(${tone},.66)`); g.addColorStop(1, `rgba(${tone},.94)`); c.fillStyle = g; c.fillRect(0, gt, W, H - gt);
+          const la = P(t, .3, .45); lockup(c, 80 - (1 - eo(la)) * 40, 228, 78, CREAM, JUICE, 'left', la);
+          drawText(c, L.hd, 80, L.ht, { align: 'left', fill: v === 0 ? JUICE : CREAM, t, at: .7, lastFill: v === 0 ? CREAM : v === 1 ? JUICE : '#ffb330' });
+          const he = headEnd(L.hd, .7), bt = Math.min(he, 1.9);
+          drawText(c, L.sb, 80, L.sbT, { align: 'left', fill: 'rgba(255,248,231,.88)', t, at: he + .05, mode: 'fade' });
+          drawBottles(c, L, t, bt, { shadow: 'rgba(0,0,0,.55)' }); bursts(c, L, t, bt);
+          const pa = P(t, bt + .9, .45); pills(c, S, 80, 1572 + (1 - eo(pa)) * 40, { fill: JUICE, text: INK, line: CREAM, bg: 'rgba(18,17,16,.5)' }, 'left', pa);
+        }
+      },
+      stack: {
+        name: 'Polaroid stack', photo: true, vars: [['Juice', JUICE], ['Cream', CREAM], ['Ink', INK]],
+        def: { head: 'Good times at the pop-up', sub: 'Thank you for coming out!' },
+        layout(c, S) {
+          const n = S.shots.length, hd = fit(c, S.head, { font: FT.anton, upper: true, maxW: 920, maxH: 270, lines: 2, lh: .92, max: 150, min: 70 });
+          const ht = 334, p = 590, top = ht + hd.h + (hd.h ? 70 : 20);
+          const cap = fit(c, S.sub, { font: s => `italic 700 ${s}px Manrope, system-ui, sans-serif`, maxW: n ? 390 : 560, maxH: 100, lines: 2, lh: 1.15, max: 44, min: 28 });
+          return { hd, ht, p, top, cap, n, bs: n ? arrange(S.shots, 840, 1548, n === 1 ? 420 : 340) : [] };
+        },
+        draw(c, S, v, L, t) {
+          if (v === 0) { const g = c.createRadialGradient(540, 900, 60, 540, 900, 1400); g.addColorStop(0, '#ffe680'); g.addColorStop(.5, JUICE); g.addColorStop(1, '#efa600'); c.fillStyle = g; c.fillRect(0, 0, W, H); halftone(c, 1300, H + 20, 'rgba(18,17,16,.08)'); }
+          else if (v === 1) { c.fillStyle = CREAM; c.fillRect(0, 0, W, H); c.save(); c.strokeStyle = 'rgba(242,154,12,.14)'; c.lineWidth = 2; c.beginPath(); for (let x = 30; x < W; x += 60) { c.moveTo(x, 0); c.lineTo(x, H); } for (let y = 20; y < H; y += 60) { c.moveTo(0, y); c.lineTo(W, y); } c.stroke(); c.restore(); radial(c, 960, 1600, 600, 'rgba(255,198,26,.4)'); }
+          else { c.fillStyle = INK; c.fillRect(0, 0, W, H); radial(c, 540, 1000, 900, 'rgba(255,198,26,.2)'); }
+          const dk = v === 2, la = P(t, .05, .45); lockup(c, 540, 226 - (1 - eo(la)) * 50, 78, dk ? CREAM : INK, dk ? JUICE : INK, 'center', la);
+          const oh = L.p + 26 + 140, cy = L.top + oh / 2;
+          const back = Object.assign({}, S, { pz: (S.pz || 1) * 1.7, px: cl((S.px || 0) - .7, -1, 1), py: cl((S.py || 0) + .3, -1, 1) });
+          polaroid(c, 640, cy - 46, L.p * .8, .11, back, t, P(t, .15, .55), null, 0);
+          polaroid(c, 520, cy, L.p, -.05, S, t, P(t, .4, .6), L.cap, L.n);
+          drawText(c, L.hd, 540, L.ht, { align: 'center', fill: dk ? JUICE : INK, t, at: .9 });
+          const bt = Math.min(headEnd(L.hd, .9), 2) + .05;
+          drawBottles(c, L, t, bt, dk ? { glow: .7 } : { shadow: 'rgba(90,55,0,.45)' }); bursts(c, L, t, bt);
+          const pa = P(t, bt + .9, .45); pills(c, S, 540, 1576 + (1 - eo(pa)) * 40, dk ? { fill: JUICE, text: INK, line: CREAM } : { fill: INK, text: JUICE, line: INK }, 'center', pa);
+        }
+      },
+      split: {
+        name: 'Split', photo: true, vars: [['Juice', JUICE], ['Ink', INK], ['Cream', CREAM]],
+        def: { head: 'Fresh batch is ready', sub: 'Come grab yours before they sell out' },
+        layout(c, S) {
+          const n = S.shots.length, mw = n === 3 ? 540 : n ? 600 : 920, Y = 1050;
+          const hd = fit(c, S.head, { font: FT.anton, upper: true, maxW: mw, maxH: 270, lines: 3, lh: .92, max: 150, min: 64 });
+          const sb = fit(c, S.sub, { font: FT.man7, maxW: mw, maxH: 104, lines: 2, lh: 1.25, max: 42, min: 30 });
+          const ht = Y + 76, st = ht + hd.h + (hd.h ? 34 : 0);
+          return { Y, hd, sb, ht, st, bs: n ? arrange(S.shots, 850, 1548, n === 1 ? 520 : 440) : [] };
+        },
+        draw(c, S, v, L, t) {
+          const pan = [JUICE, INK, CREAM][v], edge = v === 0 ? INK : JUICE;
+          c.fillStyle = pan; c.fillRect(0, 0, W, H);
+          if (v === 1) radial(c, 860, 1400, 600, 'rgba(255,198,26,.18)'); else halftone(c, 1380, H + 20, v === 0 ? 'rgba(18,17,16,.08)' : 'rgba(242,154,12,.16)');
+          const k = eo(P(t, 0, .9)), Ye = (L.Y + 40) * k - 40, wave = x => Ye + Math.sin(x / W * Math.PI * 3 + 1) * 20;
+          if (Ye > -30) {
+            const path = () => { c.beginPath(); c.moveTo(0, 0); c.lineTo(W, 0); for (let x = W; x >= 0; x -= 20) c.lineTo(x, wave(x)); c.closePath(); };
+            c.save(); path(); c.clip(); photoOr(c, 0, 0, W, L.Y + 30, S, t);
+            const g = c.createLinearGradient(0, 0, 0, 440); g.addColorStop(0, 'rgba(18,17,16,.62)'); g.addColorStop(1, 'rgba(18,17,16,0)'); c.fillStyle = g; c.fillRect(0, 0, W, 440); c.restore();
+            c.save(); c.beginPath(); for (let x = 0; x <= W; x += 20) c[x ? 'lineTo' : 'moveTo'](x, wave(x)); c.lineWidth = 10; c.strokeStyle = edge; c.stroke(); c.restore();
+          }
+          const la = P(t, .4, .45); lockup(c, 540, 226 - (1 - eo(la)) * 50, 78, CREAM, JUICE, 'center', la);
+          drawText(c, L.hd, 80, L.ht, { align: 'left', fill: v === 1 ? JUICE : INK, t, at: .85 });
+          const he = headEnd(L.hd, .85), bt = Math.min(he, 2);
+          drawText(c, L.sb, 80, L.st, { align: 'left', fill: v === 1 ? 'rgba(255,248,231,.84)' : 'rgba(18,17,16,.78)', t, at: he + .05, mode: 'fade' });
+          drawBottles(c, L, t, bt, v === 1 ? { glow: .7 } : { shadow: 'rgba(90,55,0,.45)' }); bursts(c, L, t, bt);
+          const pa = P(t, bt + .9, .45); pills(c, S, 80, 1580 + (1 - eo(pa)) * 40, v === 1 ? { fill: JUICE, text: INK, line: CREAM } : { fill: INK, text: JUICE, line: INK }, 'left', pa);
+        }
+      },
+      circ: {
+        name: 'Circle spotlight', photo: true, vars: [['Sunset', '#ff9f1c'], ['Ink', INK], ['Cream', CREAM]],
+        def: { head: 'Made fresh every morning', sub: 'Say hi at the next pop-up' },
+        layout(c, S) {
+          const n = S.shots.length, hd = fit(c, S.head, { font: FT.anton, upper: true, maxW: 920, maxH: 210, lines: 2, lh: .92, max: 130, min: 64 });
+          const ht = 330, r = n ? 290 : 340, cy = n ? 880 : 930;
+          const sb = fit(c, S.sub, { font: FT.anton, upper: true, maxW: 620, maxH: 60, lines: 1, max: 54, min: 30 });
+          return { hd, ht, r, cy, sb, ing: ingOf(S.shots).slice(0, 8), bs: n ? arrange(S.shots, 540, 1552, 300) : [] };
+        },
+        draw(c, S, v, L, t) {
+          if (v === 0) { const g = c.createRadialGradient(540, L.cy, 60, 540, L.cy, 1400); g.addColorStop(0, '#ffd27a'); g.addColorStop(.45, '#ffa126'); g.addColorStop(1, '#e0640a'); c.fillStyle = g; }
+          else if (v === 1) c.fillStyle = INK; else { const g = c.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#fffaf0'); g.addColorStop(1, '#ffeec2'); c.fillStyle = g; }
+          c.fillRect(0, 0, W, H);
+          rays(c, 540, L.cy, 1700, 24, t * .09, v === 0 ? 'rgba(255,238,180,' : 'rgba(255,198,26,', eo(P(t, 0, 1)) * (v === 1 ? .6 : 1));
+          const k = P(t, .15, .7);
+          if (k > 0) {
+            const sc = eb(k), r = L.r; c.save(); c.translate(540, L.cy); c.scale(sc, sc);
+            c.save(); c.shadowColor = v === 1 ? 'rgba(255,198,26,.45)' : 'rgba(80,30,0,.35)'; c.shadowBlur = 50; c.shadowOffsetY = v === 1 ? 0 : 16; c.beginPath(); c.arc(0, 0, r + 30, 0, 6.3); c.fillStyle = JUICE; c.fill(); c.restore();
+            if (v !== 1) { c.beginPath(); c.arc(0, 0, r + 30, 0, 6.3); c.lineWidth = 6; c.strokeStyle = INK; c.stroke(); }
+            c.save(); c.beginPath(); c.arc(0, 0, r, 0, 6.3); c.clip(); photoOr(c, -r, -r, r * 2, r * 2, S, t); c.restore();
+            c.beginPath(); c.arc(0, 0, r, 0, 6.3); c.lineWidth = 5; c.strokeStyle = INK; c.stroke(); c.restore();
+          }
+          const ni = L.ing.length;
+          L.ing.forEach((ig, i) => { const ka = eo(P(t, .8 + i * .06, .6)); if (ka <= 0) return; const a = i * 6.283 / ni + t * .3 - 1.2; icon(c, ICO.indexOf(ig), 540 + Math.cos(a) * 440 * ka, L.cy + Math.sin(a) * (L.r + 50) * ka, 116, Math.sin(t * 1.3 + i) * .25, ka); });
+          const la = P(t, .05, .45); lockup(c, 540, 226 - (1 - eo(la)) * 50, 78, v === 1 ? CREAM : INK, v === 1 ? JUICE : INK, 'center', la);
+          drawText(c, L.hd, 540, L.ht, { align: 'center', fill: v === 1 ? JUICE : INK, t, at: .7 });
+          const he = headEnd(L.hd, .7);
+          if (L.sb.lines.length) { const ka = P(t, he, .45); if (ka > 0) { c.save(); c.font = L.sb.font; const bw = c.measureText(L.sb.lines[0]).width + 80, bh = L.sb.cap + 50; c.restore(); c.save(); c.translate(540, L.cy + L.r + 30); c.rotate(-.04); const sc = .4 + .6 * eb(ka); c.scale(sc, sc); c.globalAlpha *= cl(ka * 3); rr(c, -bw / 2, -bh / 2, bw, bh, 22); c.fillStyle = v === 1 ? JUICE : INK; c.fill(); drawText(c, L.sb, 0, -L.sb.cap / 2, { align: 'center', fill: v === 1 ? INK : JUICE, t: DUR, at: 0 }); c.restore(); } }
+          const bt = Math.min(he, 2) + .2;
+          drawBottles(c, L, t, bt, v === 1 ? { glow: .7 } : { shadow: 'rgba(90,40,0,.45)' }); bursts(c, L, t, bt);
+          const pa = P(t, bt + .9, .45); pills(c, S, 540, 1576 + (1 - eo(pa)) * 40, v === 1 ? { fill: JUICE, text: INK, line: CREAM } : { fill: INK, text: JUICE, line: INK }, 'center', pa);
+        }
       }
     };
     const IDS = Object.keys(TPL);
@@ -1088,7 +1224,7 @@
 
     /* ---------- ui ---------- */
     const shotBtn = k => `<button class="ssh" type="button" data-sshot="${k}" aria-pressed="false"><img src="${BASE}bottle-${k}.png" alt="" width="18" height="40" loading="lazy">${FL[k].name}</button>`;
-    $('[data-stpls]').innerHTML = IDS.map(id => `<button class="stp" type="button" data-stpl="${id}" aria-pressed="false"><canvas width="144" height="256" aria-hidden="true"></canvas>${TPL[id].name}</button>`).join('');
+    $('[data-stpls]').innerHTML = IDS.map(id => `${id === 'full' ? '<span class="stp-sep" aria-hidden="true">With your photo</span>' : ''}<button class="stp" type="button" data-stpl="${id}" aria-pressed="false"><canvas width="144" height="256" aria-hidden="true"></canvas>${TPL[id].name}</button>`).join('');
     $('[data-sshots]').innerHTML = ORDER.map(shotBtn).join('');
     const sync = () => {
       const T = TPL[S.tpl];
@@ -1102,20 +1238,20 @@
       $('[data-sf="head"]').placeholder = T.def.head; $('[data-sf="sub"]').placeholder = T.def.sub;
       $$('[data-stog]').forEach(b => b.setAttribute('aria-pressed', !!S[b.dataset.stog]));
       $('[data-sphaddl]').textContent = PH ? 'Change photo' : 'Add a photo'; $('[data-sphrm]').hidden = !PH; $('[data-sphctl]').hidden = !PH;
-      $$('[data-spm]').forEach(b => b.setAttribute('aria-pressed', b.dataset.spm === S.pm)); const zr = $('[data-spz]'); zr.value = S.pz; zr.disabled = !phMode(S);
-      $('.story-frame').classList.toggle('drag', !!phMode(S));
+      $$('[data-spm]').forEach(b => b.setAttribute('aria-pressed', b.dataset.spm === S.pm)); const zr = $('[data-spz]'); zr.value = S.pz; zr.disabled = !photoActive(S);
+      $('.story-frame').classList.toggle('drag', photoActive(S)); $('[data-spm]').parentNode.hidden = !!T.photo;
     };
     const changed = (thumbsToo) => { persist(); redraw(); if (thumbsToo) thumbs(); };
     SM.addEventListener('click', e => {
       const tp = e.target.closest('[data-stpl]');
-      if (tp) { const id = tp.dataset.stpl; if (id === S.tpl) return; Object.assign(S, withDefaults(S, id)); S.v = 0; sync(); changed(true); return; }
+      if (tp) { const id = tp.dataset.stpl; if (TPL[id].photo && !PH) $('[data-sphfile]').click(); if (id === S.tpl) return; Object.assign(S, withDefaults(S, id)); S.v = 0; fixShots(); sync(); changed(true); return; }
       const pmb = e.target.closest('[data-spm]'); if (pmb) { S.pm = pmb.dataset.spm; fixShots(); sync(); changed(true); return; }
       if (e.target.closest('[data-sphrm]')) { PH = null; box = null; S.ph = 0; fixShots(); memo.clear(); sync(); changed(true); toast('Photo removed'); return; }
       const vb = e.target.closest('[data-svar]'); if (vb) { S.v = +vb.dataset.svar; sync(); changed(true); return; }
       const sh = e.target.closest('[data-sshot]');
       if (sh) { const k = sh.dataset.sshot;
         if (TPL[S.tpl].single) S.hero = k;
-        else if (S.shots.includes(k)) { if (S.shots.length === 1 && !phMode(S)) { toast('Keep at least one shot'); return; } S.shots = S.shots.filter(x => x !== k); }
+        else if (S.shots.includes(k)) { if (S.shots.length === 1 && !photoActive(S) && !TPL[S.tpl].photo) { toast('Keep at least one shot'); return; } S.shots = S.shots.filter(x => x !== k); }
         else S.shots = ORDER.filter(x => x === k || S.shots.includes(x));
         sync(); changed(true); return; }
       const tg = e.target.closest('[data-stog]'); if (tg) { const k = tg.dataset.stog; S[k] = !S[k]; sync(); changed(true); return; }
@@ -1129,7 +1265,7 @@
     SM.addEventListener('input', e => { if (e.target.matches('[data-spz]')) { S.pz = +e.target.value; persist(); redraw(); return; } const k = e.target.dataset && e.target.dataset.sf; if (!k) return; S[k] = e.target.value; dirty[k] = e.target.value !== ''; if (!dirty[k]) S[k] = ''; changed(false); clearTimeout(thumbs.t2); thumbs.t2 = setTimeout(thumbs, 700); });
     SM.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.matches('input')) e.target.blur(); });
     document.addEventListener('keydown', e => { if (e.key === 'Escape' && !SM.hidden) { if (!$('[data-sdone]').hidden) closeDone(); else close(); } });
-    const fixShots = () => { if (!S.shots.length && !phMode(S)) S.shots = ORDER.slice(); };
+    const fixShots = () => { if (!S.shots.length && !photoActive(S) && !TPL[S.tpl].photo) S.shots = ORDER.slice(); };
     // iPhone hands over a JPEG for HEIC photos; <img> decoding applies EXIF rotation; big photos get shrunk to 2160px
     const addPhoto = async file => {
       if (!file) return; if (file.type && !/^image\//i.test(file.type)) { toast('Pick a photo'); return; }
@@ -1151,7 +1287,7 @@
     const ptrs = new Map(); let pinch = null;
     const pdist = () => { const [a, b] = [...ptrs.values()]; return Math.hypot(a.x - b.x, a.y - b.y) || 1; };
     const setZoom = z => { S.pz = cl(z, 1, 3); $('[data-spz]').value = S.pz; };
-    CV.addEventListener('pointerdown', e => { if (!phMode(S) || rec) return; e.preventDefault(); try { CV.setPointerCapture(e.pointerId); } catch (er) {} ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY }); if (ptrs.size === 2) pinch = { d: pdist(), z: S.pz }; if (anim) still(); });
+    CV.addEventListener('pointerdown', e => { if (!photoActive(S) || rec) return; e.preventDefault(); try { CV.setPointerCapture(e.pointerId); } catch (er) {} ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY }); if (ptrs.size === 2) pinch = { d: pdist(), z: S.pz }; if (anim) still(); });
     CV.addEventListener('pointermove', e => {
       const pr = ptrs.get(e.pointerId); if (!pr || !PH) return; const cur = { x: e.clientX, y: e.clientY }; ptrs.set(e.pointerId, cur);
       if (ptrs.size >= 2 && pinch) setZoom(pinch.z * pdist() / pinch.d);
@@ -1160,7 +1296,8 @@
     });
     const pend = e => { if (!ptrs.delete(e.pointerId)) return; if (ptrs.size < 2) pinch = null; if (!ptrs.size) { persist(); thumbs(); } };
     CV.addEventListener('pointerup', pend); CV.addEventListener('pointercancel', pend);
-    CV.addEventListener('wheel', e => { if (!phMode(S) || rec) return; e.preventDefault(); setZoom(S.pz * Math.exp(-e.deltaY * .0015)); redraw(); }, { passive: false });
+    CV.addEventListener('click', () => { if (TPL[S.tpl].photo && !PH && !rec) $('[data-sphfile]').click(); });
+    CV.addEventListener('wheel', e => { if (!photoActive(S) || rec) return; e.preventDefault(); setZoom(S.pz * Math.exp(-e.deltaY * .0015)); redraw(); }, { passive: false });
     const open = async () => {
       SM.hidden = false; document.body.style.overflow = 'hidden'; sync();
       const ld = $('[data-sload]');
