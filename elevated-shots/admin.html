@@ -229,6 +229,26 @@
     .story-bar .btn { flex: none; min-width: 160px; }
   }
 
+  .vis { margin-top: 18px; padding: 18px 16px; border-radius: 24px; border: 2px solid var(--ink); background: var(--cream); box-shadow: 4px 4px 0 var(--ink); }
+  .vis-h { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .vis-h h3 { margin: 0; font: 400 26px/1 var(--display); text-transform: uppercase; }
+  .vis-h a { font: 700 11px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .vis-n { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 14px; }
+  .vis-n div { padding: 12px 10px; border-radius: 16px; background: var(--ink); color: var(--cream); text-align: center; }
+  .vis-n div:first-child { background: var(--juice); color: var(--ink); }
+  .vis-n b { display: block; font: 400 clamp(30px, 8vw, 44px)/1 var(--display); }
+  .vis-n small { display: block; margin-top: 6px; font: 700 10px/1.2 var(--mono); letter-spacing: .1em; text-transform: uppercase; opacity: .75; }
+  .vis-bars { display: flex; align-items: flex-end; gap: 4px; height: 70px; margin-top: 14px; padding: 0 2px; }
+  .vis-bars i { flex: 1; min-height: 3px; border-radius: 4px 4px 0 0; background: var(--juice); border: 1.5px solid var(--ink); border-bottom: 0; transform-origin: 50% 100%; animation: grow .7s cubic-bezier(.2,.9,.25,1.2) both; }
+  .vis-bars i.today { background: var(--juice-d); }
+  @keyframes grow { from { transform: scaleY(0); } }
+  .vis-cols { display: grid; gap: 14px; margin-top: 16px; }
+  .vis-cols h4 { margin: 0 0 8px; font: 700 11px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+  .vis-li { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 8px 0; border-top: 1px solid var(--line); font: 700 14px/1.2 var(--sans); }
+  .vis-li span { position: relative; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .vis-li b { font: 400 20px/1 var(--display); }
+  .vis-empty { margin: 12px 0 0; color: var(--muted); font-size: 14px; }
+  @media (min-width: 720px) { .vis { padding: 22px 24px; } .vis-cols { grid-template-columns: 1fr 1fr; gap: 28px; } }
   @media (min-width: 720px) {
     .stats { grid-template-columns: repeat(4, minmax(0, 1fr)); }
     .wall { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -295,6 +315,8 @@
     <section class="mk"><div class="mk-art" data-mkart aria-hidden="true"></div><div><h3>Make a story</h3><p>Pick a look, type your line and save it for Instagram.</p><button class="btn ink sm" type="button" data-openstory>Open the story maker</button></div></section>
 
     <div class="stats" data-stats></div>
+
+    <section class="vis" data-vis hidden></section>
 
     <section class="lead" data-lead></section>
 
@@ -434,9 +456,29 @@
   const count = (el, to) => { const t0 = performance.now(), d = 900; const f = t => { const k = Math.min(1, (t - t0) / d), e = 1 - Math.pow(1 - k, 3); el.textContent = Math.round(to * e).toLocaleString(); if (k < 1) requestAnimationFrame(f); }; requestAnimationFrame(f); };
   const load = async () => {
     const r = $('[data-refresh]'); r.classList.add('spin');
-    try { DATA = await call('GET'); if (!view || !DATA.months.some(m => m.month === view)) view = DATA.now; render(); }
+    try { DATA = await call('GET'); if (!view || !DATA.months.some(m => m.month === view)) view = DATA.now; render(); loadVisitors(); }
     catch (e) { if (token) toast(e.message); }
     finally { r.classList.remove('spin'); }
+  };
+  const SRC = h => !h ? 'Typed it in or a saved link' : /instagram/i.test(h) ? 'Instagram' : /facebook|fb\./i.test(h) ? 'Facebook' : /tiktok/i.test(h) ? 'TikTok' : /google/i.test(h) ? 'Google' : /snapchat/i.test(h) ? 'Snapchat' : /t\.co$|twitter|x\.com/i.test(h) ? 'X / Twitter' : h.replace(/^www\./, '');
+  const DEV = d => ({ mobile: 'Phone', desktop: 'Computer', tablet: 'Tablet' }[String(d).toLowerCase()] || d || 'Other');
+  const loadVisitors = async () => {
+    const el = $('[data-vis]');
+    try {
+      const r = await fetch(API + '?view=visitors', { headers: { authorization: 'Bearer ' + token }, cache: 'no-store' }); if (!r.ok) return;
+      const v = (await r.json()).visitors; if (!v) return;
+      const n = x => (x && x.visitors) || 0;
+      const group = (rows, key, map) => { const m = new Map(); (rows || []).forEach(x => { const k = map(x[key]); m.set(k, (m.get(k) || 0) + (x.visitors || 0)); }); return [...m].sort((a, b) => b[1] - a[1]); };
+      const refs = group(v.refs && v.refs.data, 'referrerHostname', SRC), devs = group(v.devices && v.devices.data, 'deviceType', DEV);
+      const days = ((v.days && v.days.data) || []).map(x => ({ t: x.day || x.timestamp || x.date || '', n: x.visitors || 0 })).sort((a, b) => String(a.t).localeCompare(String(b.t))).slice(-14);
+      const mx = Math.max(1, ...days.map(d => d.n));
+      const li = rows => rows.length ? rows.slice(0, 5).map(([k, c]) => `<div class="vis-li"><span>${esc(k)}</span><b>${c.toLocaleString()}</b></div>`).join('') : '<p class="vis-empty">Nothing yet.</p>';
+      el.innerHTML = `<div class="vis-h"><h3>Who's been visiting</h3><a href="https://vercel.com/elachkarhafezs-projects/elevated-shots/analytics" target="_blank" rel="noopener">More</a></div>
+        <div class="vis-n"><div><b data-n="${n(v.today)}">0</b><small>Today</small></div><div><b data-n="${n(v.week)}">0</b><small>Last 7 days</small></div><div><b data-n="${n(v.month)}">0</b><small>This month</small></div></div>
+        ${days.length ? `<div class="vis-bars" aria-label="Visitors per day, last two weeks">${days.map((d, i) => `<i class="${i === days.length - 1 ? 'today' : ''}" style="height:${Math.max(4, d.n / mx * 100).toFixed(0)}%;animation-delay:${(i * .04).toFixed(2)}s" title="${d.n}"></i>`).join('')}</div>` : ''}
+        <div class="vis-cols"><div><h4>Where they came from</h4>${li(refs)}</div><div><h4>On a</h4>${li(devs)}</div></div>`;
+      el.hidden = false; $$('[data-vis] .vis-n b').forEach(b => count(b, +b.dataset.n));
+    } catch (e) {}
   };
   $('[data-refresh]').addEventListener('click', () => load().then(() => toast('Up to date')));
   const cur = () => DATA.months.find(m => m.month === view) || DATA.months[0];
