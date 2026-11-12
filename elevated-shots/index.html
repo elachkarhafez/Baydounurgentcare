@@ -241,7 +241,8 @@
     @media (max-width: 900px) {
       .press.pinned .p-pin { align-items: flex-start; padding-top: 74px; }
       .p-grid { grid-template-columns: 1fr; gap: 6px; }
-      .p-scene { width: min(76vw, 44svh); }
+      /* the copy above takes ~370px, so on shorter phones (Safari with its bars) the bottle fell off the bottom of the pinned screen */
+      .p-scene { width: min(76vw, 44svh, calc((100svh - 380px) * .82)); }
       .p-copy { order: -1; }
       .p-copy h2 { font-size: clamp(42px, 13vw, 70px); }
       .p-steps { margin-top: 12px; }
@@ -367,7 +368,7 @@
     .ch-col:nth-child(even) { margin-top: 70px; }
     .clip { position: relative; border-radius: 20px; overflow: hidden; aspect-ratio: 9 / 15; background: var(--ink); cursor: pointer; -webkit-tap-highlight-color: transparent; }
     .clip video, .clip img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-    .clip figcaption { position: absolute; left: 10px; right: 10px; bottom: 10px; padding: 8px 10px; border-radius: 12px; background: rgba(18,17,16,.72); color: var(--cream); font: 700 11px/1.25 var(--mono); letter-spacing: .04em; text-transform: uppercase; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+    .clip figcaption { position: absolute; left: 10px; right: 10px; bottom: 10px; padding: 8px 10px; border-radius: 12px; background: rgba(18,17,16,.8); color: var(--cream); font: 700 11px/1.25 var(--mono); letter-spacing: .04em; text-transform: uppercase; }
     .clip .cb { position: absolute; right: 10px; top: 10px; padding: 7px 10px; border-radius: 999px; background: var(--juice); border: 2px solid var(--ink); font: 700 11px/1 var(--mono); text-transform: uppercase; }
     .clip .burst { position: absolute; left: 50%; top: 45%; translate: -50% -50%; font: 400 44px/1 var(--display); color: var(--juice); -webkit-text-stroke: 2px var(--ink); text-transform: uppercase; opacity: 0; pointer-events: none; white-space: nowrap; }
     @media (max-width: 760px) { .ch-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .ch-col:nth-child(even) { margin-top: 40px; } .clip { border-radius: 14px; } }
@@ -623,6 +624,8 @@
     @media (hover: hover) { .fz-b:not(.deco):hover { translate: 0 -8px; } }
     .fz-shelf { position: absolute; left: 11px; right: 11px; bottom: calc(40% - 13px); height: 13px; background: linear-gradient(rgba(255,255,255,.85), rgba(176,210,224,.6)); border-top: 1px solid #fff; box-shadow: 0 8px 16px rgba(70,110,130,.18); }
     .fz-hint { position: absolute; left: 50%; bottom: 29%; translate: -50% 0; padding: 9px 14px; border-radius: 999px; background: var(--ink); color: var(--cream); font: 700 11px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; white-space: nowrap; z-index: 3; }
+    /* on a phone-sized fridge 29% put the hint on top of the GLOW / GOLDEN / THE OG tags: keep it just under them */
+    @media (max-width: 760px) { .fz-hint { bottom: calc(40% - 62px); } }
     .fz-drawer { position: absolute; left: 11px; right: 11px; bottom: 11px; height: 23%; border-radius: 0 0 14px 14px; }
     .fz-drawer .fruit { position: absolute; bottom: 30%; width: 22%; aspect-ratio: 1; }
     .fz-drawer .fruit svg { width: 100%; height: 100%; }
@@ -774,7 +777,7 @@
 
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
     <symbol id="i-mark" viewBox="0 0 292 400"><path d="M157.8 398.6C157.1 397.8 156.6 388.7 156.4 375.9C156.2 358.8 156.0 359.7 163.6 351.3C170.2 344.2 179.9 334.7 197.2 318.5C217.1 299.8 231.7 283.8 240.7 270.7C249.0 258.6 251.1 253.8 256.0 235.5C256.6 233.3 257.4 230.5 257.7 229.4C258.4 227.0 258.5 226.0 258.0 226.0C257.4 226.0 251.0 231.1 245.9 235.7C239.9 240.9 231.5 249.4 220.4 261.0C215.7 266.0 208.6 273.3 204.8 277.0C201.0 280.8 196.9 284.9 195.8 286.0C177.8 305.0 171.8 310.9 164.2 317.5C159.6 321.4 157.7 322.8 157.2 322.6C156.4 322.2 156.2 316.4 156.1 265.5C156.0 209.8 155.9 213.0 158.0 209.7C158.5 208.8 168.0 199.2 179.0 188.2C190.0 177.2 211.2 156.0 226.1 141.1C240.9 126.2 253.6 113.8 254.2 113.5C256.6 112.2 258.0 113.7 266.9 127.5C271.6 134.7 271.9 135.4 271.3 137.5C270.9 138.9 269.8 140.1 260.7 148.9C224.1 184.6 191.3 217.4 189.1 220.7C187.4 223.3 187.0 230.0 187.6 245.1C187.9 252.8 187.5 252.7 194.4 246.8C201.9 240.4 216.8 225.4 238.3 202.7C253.7 186.4 273.4 167.3 280.8 161.7C281.9 160.8 283.1 162.5 284.7 167.2C285.2 168.6 286.1 171.1 286.7 172.7C288.7 178.2 291.0 188.2 291.0 191.4C291.0 192.1 291.2 193.2 291.5 193.9C292.2 195.5 292.2 209.2 291.5 212.3C291.3 213.5 290.8 216.3 290.5 218.5C290.2 220.7 289.6 224.2 289.1 226.3C287.8 232.4 287.4 234.1 286.2 240.2C282.5 257.9 274.4 276.6 263.5 292.0C260.4 296.4 253.3 305.9 250.9 308.8C237.1 325.4 225.8 337.2 204.5 357.1C181.6 378.6 177.6 382.3 168.7 390.2C157.9 399.7 158.4 399.4 157.8 398.6ZM130.3 397.3C129.5 396.5 126.6 394.1 123.8 391.9C102.1 374.7 89.5 363.7 71.8 346.1C54.7 329.2 42.3 315.8 35.8 307.3C25.9 294.5 16.3 277.3 11.5 264.0C11.1 262.8 10.2 260.6 9.7 259.0C8.4 255.6 6.8 250.8 6.2 248.5C3.8 239.7 2.2 232.5 1.3 226.5C1.1 225.0 0.7 222.8 0.5 221.5C-0.2 218.3 -0.2 202.0 0.5 197.5C0.8 195.7 1.2 191.9 1.5 189.2C4.0 166.8 13.3 140.9 25.2 123.7C25.7 122.8 26.9 121.2 27.7 120.0C31.0 115.0 33.0 113.0 34.6 113.0C36.2 113.0 37.2 114.0 64.7 141.5C104.5 181.4 112.1 188.9 121.9 197.8C130.7 205.7 132.2 207.5 133.5 211.0C134.2 212.8 134.5 233.8 134.0 243.0C133.5 251.8 133.0 252.0 126.9 245.4C122.1 240.2 108.4 226.5 100.5 219.2C91.1 210.3 73.6 193.1 61.5 180.6C45.7 164.4 43.4 162.1 42.2 161.2C39.4 159.3 38.3 160.2 36.0 166.0C32.8 174.1 31.6 179.2 32.3 180.7C32.6 181.1 34.7 183.4 37.0 185.8C42.5 191.5 57.9 207.5 62.2 212.0C79.4 230.0 88.5 239.6 94.3 245.5C98.1 249.3 102.7 254.1 104.5 256.0C106.3 257.9 109.8 261.5 112.2 264.0C114.6 266.5 118.0 270.1 119.8 272.0C121.7 273.9 125.3 277.7 127.9 280.4L132.7 285.3 L132.5 289.0C132.4 291.1 132.5 297.7 132.8 303.7C133.5 318.0 133.5 322.6 132.8 322.9C132.2 323.1 131.1 322.2 122.6 314.5C114.1 306.9 102.1 295.4 91.0 284.3C82.4 275.8 78.4 271.7 62.0 254.7C47.9 240.0 33.6 225.7 33.1 225.7C32.3 225.7 32.2 226.6 32.6 229.9C34.1 242.4 41.2 258.6 52.3 275.2C58.7 284.6 66.7 293.3 91.8 318.1C133.3 359.0 132.5 358.1 133.3 362.7C133.6 364.9 133.5 396.1 133.1 397.5C132.7 398.9 132.1 398.9 130.3 397.3ZM135.6 178.6C129.9 172.9 125.3 168.0 125.3 167.7C125.3 167.4 130.0 162.5 135.6 156.9C143.7 148.8 146.0 146.6 146.5 146.8C147.6 147.1 167.3 167.1 167.3 167.8C167.3 168.6 147.1 189.0 146.3 189.0C146.1 189.0 141.2 184.3 135.6 178.6ZM163.3 132.5C153.2 122.3 144.8 114.0 144.5 114.0C144.3 114.0 136.0 122.2 126.0 132.2C116.0 142.2 107.6 150.3 107.4 150.3C106.7 150.3 88.0 131.6 88.0 130.9C88.0 130.2 144.7 73.3 145.4 73.3C145.6 73.3 158.6 86.1 174.1 101.7C198.4 126.0 202.4 130.1 202.2 130.8C202.0 131.4 182.7 150.7 181.9 151.0C181.8 151.0 173.4 142.7 163.3 132.5ZM60.9 104.1C55.0 98.2 51.7 94.6 51.7 94.2C51.7 93.6 144.3 0.3 145.2 0.1C145.7 -0.1 238.5 92.9 238.6 93.7C238.7 94.3 236.7 96.4 229.4 103.7C224.3 108.8 219.9 113.0 219.6 113.0C219.3 113.0 202.6 96.5 182.4 76.3C162.2 56.2 145.5 39.7 145.3 39.7C145.1 39.7 128.3 56.2 108.1 76.5C87.8 96.8 71.0 113.3 70.7 113.3C70.4 113.3 66.0 109.2 60.9 104.1Z"/></symbol>
-    <symbol id="i-virus" viewBox="0 0 64 64"><defs><radialGradient id="vgr" cx="36%" cy="33%" r="72%"><stop offset="0" stop-color="#b4f06c"/><stop offset="1" stop-color="#2e7d32"/></radialGradient></defs><path d="M49.5 32.0L55.5 32.0M47.2 40.8L52.4 43.8M40.8 47.2L43.8 52.4M32.0 49.5L32.0 55.5M23.3 47.2L20.3 52.4M16.8 40.8L11.6 43.8M14.5 32.0L8.5 32.0M16.8 23.2L11.6 20.2M23.2 16.8L20.2 11.6M32.0 14.5L32.0 8.5M40.8 16.8L43.8 11.6M47.2 23.2L52.4 20.2" stroke="#2e7d32" stroke-width="2.6" stroke-linecap="round" fill="none"/><g fill="#b4f06c" stroke="#2e7d32" stroke-width="1.4"><ellipse cx="57.2" cy="32.0" rx="2.1" ry="3.1" transform="rotate(90 57.2 32.0)"/><ellipse cx="53.8" cy="44.6" rx="2.1" ry="3.1" transform="rotate(120 53.8 44.6)"/><ellipse cx="44.6" cy="53.8" rx="2.1" ry="3.1" transform="rotate(150 44.6 53.8)"/><ellipse cx="32.0" cy="57.2" rx="2.1" ry="3.1" transform="rotate(180 32.0 57.2)"/><ellipse cx="19.4" cy="53.8" rx="2.1" ry="3.1" transform="rotate(210 19.4 53.8)"/><ellipse cx="10.2" cy="44.6" rx="2.1" ry="3.1" transform="rotate(240 10.2 44.6)"/><ellipse cx="6.8" cy="32.0" rx="2.1" ry="3.1" transform="rotate(270 6.8 32.0)"/><ellipse cx="10.2" cy="19.4" rx="2.1" ry="3.1" transform="rotate(300 10.2 19.4)"/><ellipse cx="19.4" cy="10.2" rx="2.1" ry="3.1" transform="rotate(330 19.4 10.2)"/><ellipse cx="32.0" cy="6.8" rx="2.1" ry="3.1" transform="rotate(360 32.0 6.8)"/><ellipse cx="44.6" cy="10.2" rx="2.1" ry="3.1" transform="rotate(390 44.6 10.2)"/><ellipse cx="53.8" cy="19.4" rx="2.1" ry="3.1" transform="rotate(420 53.8 19.4)"/></g><circle cx="32" cy="32" r="19" fill="url(#vgr)" stroke="#143d1a" stroke-width="1.6"/><g fill="rgba(8,40,15,.3)"><circle cx="23.4" cy="36.2" r="1.9"/><circle cx="37.7" cy="40.7" r="1.5"/><circle cx="41.9" cy="29.7" r="1.7"/><circle cx="30.5" cy="21.0" r="1.3"/><circle cx="33.1" cy="35.8" r="1.1"/><circle cx="21.4" cy="26.7" r="1.3"/><circle cx="37.3" cy="22.9" r="1.1"/></g><ellipse cx="24.8" cy="23.4" rx="5" ry="2.7" fill="#fff" opacity=".32" transform="rotate(-34 24.8 23.4)"/><g transform="translate(26.3 32.4) rotate(19)"><ellipse rx="4" ry="1.55" fill="#0c2410"/><ellipse rx="2.5" ry=".7" fill="#efff9a"/></g><g transform="translate(37.7 32.4) rotate(-19)"><ellipse rx="4" ry="1.55" fill="#0c2410"/><ellipse rx="2.5" ry=".7" fill="#efff9a"/></g></symbol>
+    <radialGradient id="vgr" cx="36%" cy="33%" r="72%"><stop offset="0" stop-color="#b4f06c"/><stop offset="1" stop-color="#2e7d32"/></radialGradient><symbol id="i-virus" viewBox="0 0 64 64"><path d="M49.5 32.0L55.5 32.0M47.2 40.8L52.4 43.8M40.8 47.2L43.8 52.4M32.0 49.5L32.0 55.5M23.3 47.2L20.3 52.4M16.8 40.8L11.6 43.8M14.5 32.0L8.5 32.0M16.8 23.2L11.6 20.2M23.2 16.8L20.2 11.6M32.0 14.5L32.0 8.5M40.8 16.8L43.8 11.6M47.2 23.2L52.4 20.2" stroke="#2e7d32" stroke-width="2.6" stroke-linecap="round" fill="none"/><g fill="#b4f06c" stroke="#2e7d32" stroke-width="1.4"><ellipse cx="57.2" cy="32.0" rx="2.1" ry="3.1" transform="rotate(90 57.2 32.0)"/><ellipse cx="53.8" cy="44.6" rx="2.1" ry="3.1" transform="rotate(120 53.8 44.6)"/><ellipse cx="44.6" cy="53.8" rx="2.1" ry="3.1" transform="rotate(150 44.6 53.8)"/><ellipse cx="32.0" cy="57.2" rx="2.1" ry="3.1" transform="rotate(180 32.0 57.2)"/><ellipse cx="19.4" cy="53.8" rx="2.1" ry="3.1" transform="rotate(210 19.4 53.8)"/><ellipse cx="10.2" cy="44.6" rx="2.1" ry="3.1" transform="rotate(240 10.2 44.6)"/><ellipse cx="6.8" cy="32.0" rx="2.1" ry="3.1" transform="rotate(270 6.8 32.0)"/><ellipse cx="10.2" cy="19.4" rx="2.1" ry="3.1" transform="rotate(300 10.2 19.4)"/><ellipse cx="19.4" cy="10.2" rx="2.1" ry="3.1" transform="rotate(330 19.4 10.2)"/><ellipse cx="32.0" cy="6.8" rx="2.1" ry="3.1" transform="rotate(360 32.0 6.8)"/><ellipse cx="44.6" cy="10.2" rx="2.1" ry="3.1" transform="rotate(390 44.6 10.2)"/><ellipse cx="53.8" cy="19.4" rx="2.1" ry="3.1" transform="rotate(420 53.8 19.4)"/></g><circle cx="32" cy="32" r="19" fill="url(#vgr)" stroke="#143d1a" stroke-width="1.6"/><g fill="rgba(8,40,15,.3)"><circle cx="23.4" cy="36.2" r="1.9"/><circle cx="37.7" cy="40.7" r="1.5"/><circle cx="41.9" cy="29.7" r="1.7"/><circle cx="30.5" cy="21.0" r="1.3"/><circle cx="33.1" cy="35.8" r="1.1"/><circle cx="21.4" cy="26.7" r="1.3"/><circle cx="37.3" cy="22.9" r="1.1"/></g><ellipse cx="24.8" cy="23.4" rx="5" ry="2.7" fill="#fff" opacity=".32" transform="rotate(-34 24.8 23.4)"/><g transform="translate(26.3 32.4) rotate(19)"><ellipse rx="4" ry="1.55" fill="#0c2410"/><ellipse rx="2.5" ry=".7" fill="#efff9a"/></g><g transform="translate(37.7 32.4) rotate(-19)"><ellipse rx="4" ry="1.55" fill="#0c2410"/><ellipse rx="2.5" ry=".7" fill="#efff9a"/></g></symbol>
     <defs data-symbols></defs>
   </svg>
 
@@ -1447,9 +1450,12 @@
   const MASCOT = { c: '#ffe866', c2: '#ffcb1f' };
   const strip = v => v.replace(/^<svg[^>]*>/, '').replace(/<\/svg>\s*$/, '');
   const CAP_EDGE = '<rect x="62" y="6" width="76" height="44" rx="5" fill="none" stroke="#fff8e7" stroke-opacity=".5" stroke-width="5"/>';
-  ICONS.shot = `<g transform="translate(14.4 2) scale(.1667)">${strip(bottle(MASCOT, { sw: 7 }))}${CAP_EDGE}</g>`;
-  $('#i-shot').innerHTML = ICONS.shot;
-  $('[data-symbols]').insertAdjacentHTML('beforeend', FL.map(f => `<symbol id="i-shot-${f.k}" viewBox="0 0 64 64"><g transform="translate(14.4 2) scale(.1667)">${strip(bottle(f, { sw: 7 }))}${CAP_EDGE}</g></symbol>`).join(''));
+  // Safari drops <clipPath>/<linearGradient> from a <use> copy of a <symbol> and can't paint from the originals
+  // inside it either, so the juice came out clear (grey). Their defs live next to the symbols instead.
+  const hoist = v => { let d = ''; const g = v.replace(/<\/?defs>/g, '').replace(/<(clipPath|linearGradient|radialGradient)\b[\s\S]*?<\/\1>/g, m => { d += m; return ''; }); return [g, d]; };
+  const shotSym = f => { const [g, d] = hoist(strip(bottle(f, { sw: 7 }))); return [`<g transform="translate(14.4 2) scale(.1667)">${g}${CAP_EDGE}</g>`, d]; };
+  { const [g, d] = shotSym(MASCOT); ICONS.shot = g; $('#i-shot').innerHTML = g; $('[data-symbols]').insertAdjacentHTML('beforeend', d); }
+  $('[data-symbols]').insertAdjacentHTML('beforeend', FL.map(f => { const [g, d] = shotSym(f); return `${d}<symbol id="i-shot-${f.k}" viewBox="0 0 64 64">${g}</symbol>`; }).join(''));
   { const t = document.createElement('div'); t.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><defs>${SHARED}</defs><g transform="translate(14.4 2) scale(.1667)">${strip(bottle(MASCOT, { sw: 7, standalone: true })).replace(/<defs>[\s\S]*?<\/defs>/, '')}${CAP_EDGE}</g></svg>`; const sv = t.firstElementChild; sv.setAttribute('xmlns', 'http://www.w3.org/2000/svg'); const im = new Image(); im.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(new XMLSerializer().serializeToString(sv)); SPRITES.shot = im; }
 
   /* ---------- split headings into letters ---------- */
@@ -1580,7 +1586,7 @@
      ============================================================= */
   const lu = $('[data-lineup]'), luB = $('[data-lbottle]'), orbit = $('[data-orbit]'), shelf = $('[data-shelf]'), lReveal = $('[data-lreveal]');
   shelf.insertAdjacentHTML('beforeend', FL.map(f => `<button class="pick" type="button" data-pick="${f.k}" aria-pressed="false" aria-label="${esc(f.n)}">${bottle(f)}<em>${esc(f.short)}</em></button>`).join(''));
-  let luCur = null, luTouched = false, luDemo = null, orbitEls = [];
+  let luCur = null, luTouched = false, luDemo = null, orbitEls = [], luTl = null;
   const fillLineup = f => { $('[data-lname]').textContent = f.n; $('[data-lkick]').textContent = f.kick; $('[data-lben]').textContent = f.ben; $('[data-ldesc]').textContent = f.d;
     $('[data-lings]').innerHTML = f.ing.map(k => `<span data-poppable data-fruit="${k}">${ico(k)}${esc(CONFIG.ingredients[k])}</span>`).join('');
     orbit.innerHTML = f.ing.map((k, i) => `<div class="o" style="--i:${i}" data-fruit="${k}">${ico(k)}</div>`).join('');
@@ -1590,18 +1596,32 @@
     $$('[data-pick]').forEach(b => b.setAttribute('aria-pressed', b.dataset.pick === k));
     if (!ANIM || first) { lu.style.setProperty('--fbg', f.bg); luB.innerHTML = bottle(f, { label: 'flavor', drops: true }); fillLineup(f); return; }
     const lr = lu.getBoundingClientRect(), br = src ? src.getBoundingClientRect() : luB.getBoundingClientRect(), cx = br.left + br.width / 2 - lr.left, cy = br.top + br.height / 2 - lr.top;
-    const dot = lReveal.firstElementChild; dot.style.background = f.bg;
+    // a second tap mid-switch used to run two swaps at once (the colour flashed back to the old flavor for a frame)
+    // GSAP turns the CSS centring (translate: -50% -52%) into fixed px on the first tween, so after a rotation the bottle sat off-centre: keep it in %
+    if (!luTl) gsap.set(luB, { x: 0, y: 0, xPercent: -50, yPercent: -52 });
+    const dot = lReveal.firstElementChild; gsap.killTweensOf(dot); if (luTl) luTl.kill(); dot.style.background = f.bg;
     gsap.fromTo(dot, { x: cx, y: cy, scale: 0 }, { scale: Math.hypot(lr.width, lr.height) / 100 + .2, duration: .9, ease: 'power3.inOut', onComplete: () => { lu.style.setProperty('--fbg', f.bg); gsap.set(dot, { scale: 0 }); } });
-    gsap.timeline().to(luB, { scaleX: 0, rotation: -8, duration: .25, ease: 'power2.in', onComplete: () => { luB.innerHTML = bottle(f, { label: 'flavor', drops: true }); fillLineup(f); animIn(); } }).to(luB, { scaleX: 1, rotation: 0, duration: .55, ease: 'back.out(2)' });
+    luTl = gsap.timeline().to(luB, { scaleX: 0, rotation: -8, duration: .25, ease: 'power2.in', onComplete: () => { luB.innerHTML = bottle(f, { label: 'flavor', drops: true }); fillLineup(f); animIn(); } }).to(luB, { scaleX: 1, rotation: 0, duration: .55, ease: 'back.out(2)' });
     if (src) gsap.fromTo(src.querySelector('svg'), { y: 0, scaleY: 1 }, { keyframes: [{ y: 6, scaleY: .88, duration: .12 }, { y: -38, scaleY: 1.06, duration: .28, ease: 'power2.out' }, { y: 0, scaleY: 1, duration: .45, ease: 'bounce.out' }], transformOrigin: '50% 100%' });
   };
   const animIn = () => { if (!ANIM) return;
     gsap.fromTo($$('.o', orbit), { scale: 0 }, { scale: 1, duration: .55, ease: 'back.out(2.6)', stagger: .05 });
     gsap.fromTo('[data-lings] span', { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: .4, stagger: .04, ease: 'back.out(2)' });
     gsap.fromTo('[data-lname]', { yPercent: 40, opacity: 0, skewY: 6 }, { yPercent: 0, opacity: 1, skewY: 0, duration: .55, ease: 'back.out(1.8)' }); };
-  const luTouch = () => { if (luTouched) return; luTouched = true; if (luDemo) luDemo.kill(); const c = $('[data-lcall]'); if (ANIM) gsap.to(c, { opacity: 0, duration: .3, onComplete: () => c.remove() }); else c.remove(); };
+  const luTouch = () => { if (luTouched) return; luTouched = true; if (luDemo) luDemo.kill(); const c = $('[data-lcall]'); if (!c) return; if (ANIM) gsap.to(c, { opacity: 0, duration: .3, onComplete: () => c.remove() }); else c.remove(); };
   shelf.addEventListener('click', e => { const b = e.target.closest('[data-pick]'); if (!b) return; luTouch(); setLineup(b.dataset.pick, b); });
   setLineup('glow');
+  // the three flavors have different amounts of copy, so on phones the section grew and shrank by ~50px on every
+  // switch (the demo switches every few seconds) and the whole page under it jumped. Hold it at the tallest one.
+  const luInfo = $('.lu-info'); let luW = -1;
+  const sizeLu = () => { if (innerWidth === luW) return; luW = innerWidth; const w = luInfo.getBoundingClientRect().width; if (!w) return;
+    const c = luInfo.cloneNode(true); c.setAttribute('aria-hidden', 'true'); c.style.cssText = `position:absolute;left:0;top:0;width:${w}px;min-height:0;visibility:hidden;pointer-events:none`;
+    $$('[aria-live]', c).forEach(x => x.removeAttribute('aria-live')); luInfo.parentElement.appendChild(c);
+    const q = s => c.querySelector(s); let mx = 0;
+    FL.forEach(f => { q('[data-lname]').textContent = f.n; q('[data-lkick]').textContent = f.kick; q('[data-lben]').textContent = f.ben; q('[data-ldesc]').textContent = f.d;
+      q('[data-lings]').innerHTML = f.ing.map(k => `<span>${ico(k)}${esc(CONFIG.ingredients[k])}</span>`).join(''); mx = Math.max(mx, c.offsetHeight); });
+    c.remove(); luInfo.style.minHeight = Math.ceil(mx) + 'px'; };
+  sizeLu(); addEventListener('resize', sizeLu); document.fonts && document.fonts.ready.then(() => { luW = -1; sizeLu(); });
   let goTo = t => t.scrollIntoView({ behavior: RM ? 'auto' : 'smooth' });
   $('[data-laddto]').addEventListener('click', () => { addToPack(luCur, 1); toast(`Added a ${FK[luCur].short} to your pack`); goTo($('#order')); });
 
@@ -1614,7 +1634,7 @@
   const bulbs = $('[data-bulbs]'); bulbs.innerHTML = '<i></i>'.repeat(14); const bulbEls = $$('i', bulbs);
   let bulbT = 0, spinning = false, mood = null, slFlav = null;
   $('[data-moods]').innerHTML = CONFIG.moods.map((m, i) => `<button type="button" data-mood="${i}" aria-pressed="false">${esc(m.m)}<em>${m.s === '?' ? 'Random' : 'Pick'}</em></button>`).join('');
-  $('[data-moods]').addEventListener('click', e => { const b = e.target.closest('[data-mood]'); if (!b) return; mood = +b.dataset.mood; $$('[data-mood]').forEach(x => x.setAttribute('aria-pressed', x === b)); spin(); });
+  $('[data-moods]').addEventListener('click', e => { const b = e.target.closest('[data-mood]'); if (!b || spinning) return; mood = +b.dataset.mood; $$('[data-mood]').forEach(x => x.setAttribute('aria-pressed', x === b)); spin(); });
   const spin = () => {
     if (spinning) return; spinning = true; if (mood == null) { mood = 3; $$('[data-mood]').forEach((x, i) => x.setAttribute('aria-pressed', i === 3)); }
     const m = CONFIG.moods[mood], fk = m.s === '?' ? FL[Math.floor(Math.random() * FL.length)].k : m.s, f = FK[fk];
@@ -1629,6 +1649,8 @@
       gsap.fromTo(st, { y: -start * s }, { y: -end * s, duration: 1.4 + r * .45, ease: 'back.out(.8)', onComplete: () => { gsap.set(st, { y: -target * s }); gsap.fromTo(st.parentElement, { y: -6 }, { y: 0, duration: .4, ease: 'bounce.out' }); if (r === 2) done(); } }); });
   };
   $('[data-lever]').addEventListener('click', spin);
+  // the reels are sized in px from the window width: after a resize/rotation put each strip back on its symbol
+  addEventListener('resize', () => { if (spinning) return; const s = RS(); $$('.strip').forEach((st, r) => { if (ANIM) gsap.set(st, { y: -reelPos[r] * s }); else st.style.transform = `translateY(${-reelPos[r] * s}px)`; }); });
   $('[data-sladd]').addEventListener('click', () => { if (slFlav) { addToPack(slFlav, 1); toast(`Added a ${FK[slFlav].short} to your pack`); } });
 
   /* =============================================================
@@ -2292,7 +2314,7 @@
      ============================================================= */
   const loader = $('[data-loader]'), lp = $('[data-lpct]');
   const unhide = () => document.documentElement.classList.remove('l-busy'); document.documentElement.classList.add('l-busy'); setTimeout(unhide, 6000);
-  gsap.set('.hero h1 .row > span', { yPercent: 110 }); gsap.set('[data-in]', { opacity: 0, y: 26 }); gsap.set(hb, { scale: .4, rotation: -30, opacity: 0 }); gsap.set('[data-orb]', { scale: 0 }); gsap.set('[data-ring]', { scale: .6, opacity: 0 }); gsap.set(hCall, { opacity: 0, y: 10 });
+  gsap.set('.hero h1 .row > span', { yPercent: 110 }); gsap.set('[data-in]', { opacity: 0, y: 26 }); gsap.set(hb, { x: 0, y: 0, xPercent: -50, yPercent: -50, scale: .4, rotation: -30, opacity: 0 }); gsap.set('[data-orb]', { scale: 0 }); gsap.set('[data-ring]', { scale: .6, opacity: 0 }); gsap.set(hCall, { opacity: 0, y: 10 });
   const intro = gsap.timeline({ paused: true })
     .to('.hero h1 .row > span', { yPercent: 0, duration: 1, ease: 'back.out(1.5)', stagger: .1 }, 0)
     .fromTo(LQ, { f: 1.1 }, { f: .14, duration: 2.2, ease: 'power2.out' }, .4)
@@ -2333,14 +2355,14 @@
   gsap.delayedCall(5.5, function nudge() { if (H.touched) return; splash(26); gsap.fromTo(hb, { scale: 1 }, { keyframes: [{ scale: 1.06, duration: .15 }, { scale: .97, duration: .15 }, { scale: 1, duration: .4, ease: 'elastic.out(1, .4)' }] }); gsap.delayedCall(4, nudge); });
 
   /* headings: letters drop in like drips */
-  { const drop = h => gsap.from($$('.c', h), { yPercent: -120, rotation: () => (Math.random() - .5) * 30, opacity: 0, duration: .9, ease: 'bounce.out', stagger: .025, scrollTrigger: { trigger: h, start: 'top 86%' } });
+  { const drop = h => gsap.from($$('.c', h), { yPercent: -120, rotation: () => (Math.random() - .5) * 30, opacity: 0, duration: .9, ease: 'bounce.out', stagger: .025, scrollTrigger: { trigger: h, start: 'top 86%', pinnedContainer: h.closest('.p-pin') || undefined } });
     const io = new IntersectionObserver(es => es.forEach(e => { if (!e.isIntersecting) return; io.unobserve(e.target); drop(e.target); }), { rootMargin: '0px 0px 60% 0px' });
     $$('[data-split]').forEach(h => { if (!h.closest('.hero')) io.observe(h); }); }
 
   /* lineup idle demo + orbit spin */
   gsap.to(orbit, { rotation: 360, duration: 26, ease: 'none', repeat: -1 });
   gsap.ticker.add(() => { if (!VIS.lu) return; const r = gsap.getProperty(orbit, 'rotation') || 0; orbitEls.forEach(o => { const svg = o.firstElementChild; if (svg) svg.style.transform = `rotate(${-r}deg)`; }); });
-  ScrollTrigger.create({ trigger: lu, start: 'top 60%', once: true, onEnter: () => { let i = 0; const go = () => { if (luTouched) return; i = (i + 1) % FL.length; setLineup(FL[i].k, $(`[data-pick="${FL[i].k}"]`)); luDemo = gsap.delayedCall(3.6, go); }; luDemo = gsap.delayedCall(2.6, go); } });
+  ScrollTrigger.create({ trigger: lu, start: 'top 60%', once: true, onEnter: () => { let i = 0; const go = () => { if (luTouched) return; if (!VIS.lu) { luDemo = gsap.delayedCall(1, go); return; } i = (i + 1) % FL.length; setLineup(FL[i].k, $(`[data-pick="${FL[i].k}"]`)); luDemo = gsap.delayedCall(3.6, go); }; luDemo = gsap.delayedCall(2.6, go); } });
   gsap.to('[data-lcall]', { y: -5, duration: .9, ease: 'sine.inOut', yoyo: true, repeat: -1 });
   gsap.from('.pick', { y: 80, opacity: 0, duration: .9, ease: 'back.out(1.8)', stagger: .1, scrollTrigger: { trigger: shelf, start: 'top 92%' } });
 
@@ -2450,11 +2472,13 @@
       .fromTo(ask, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: .6, ease: 'expo.out' }, '-=.4')
       .fromTo(hint, { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: .5, ease: 'back.out(2)' }, '-=.3')
       .add(() => { ready = true; bob = gsap.to(hint, { y: -4, duration: .8, ease: 'sine.inOut', yoyo: true, repeat: -1 }); });
-    let bob, shut;
+    let bob, shut, pickTl = null;
     // the door shuts when you scroll past it (either way) and opens again when you come back
-    const close = () => { open.pause(); ready = false; if (bob) bob.kill(); if (shut) shut.kill();
+    // scrolling away mid-pick left that timeline running after this reset: the other bottles stayed faded to .2
+    // (grey), the frost stayed wiped and the card filled in. Stop it (and the put-back) first.
+    const close = () => { open.pause(); ready = false; if (bob) bob.kill(); if (shut) shut.kill(); if (pickTl) { pickTl.kill(); pickTl = null; }
       if (chosen != null) { const b = fronts[chosen]; gsap.killTweensOf(b); gsap.to(b, { x: 0, y: 0, scale: 1, rotation: 0, duration: .45, ease: 'power2.inOut', onComplete: () => { b.style.zIndex = ''; b.parentElement.style.zIndex = ''; b.style.transition = ''; } });
-        const w = b.querySelector('[data-fzwipe]'); gsap.set(w, { strokeDashoffset: w.getTotalLength() }); b.querySelectorAll('[data-fzdrop]').forEach(d => { if (d._y0 != null) gsap.set(d, { y: d._y0 }); });
+        const w = b.querySelector('[data-fzwipe]'); gsap.set(w, { strokeDashoffset: w.getTotalLength() }); b.querySelectorAll('[data-fzdrop]').forEach(d => { if (d._y0 != null) { gsap.killTweensOf(d); gsap.set(d, { y: d._y0 }); } });
         gsap.to(fronts, { opacity: 1, scale: 1, duration: .3 }); gsap.to(qa('.fz-b.deco'), { opacity: .62, duration: .3 }); gsap.to(q('.fz-drawer'), { opacity: 1, duration: .3 }); gsap.set(b.querySelector('em'), { opacity: 1 }); chosen = null; busy = false; }
       lab.textContent = 'Cooling';
       shut = gsap.timeline({ onComplete: () => { door.classList.remove('open'); disp.textContent = '41°F'; } })
@@ -2473,7 +2497,7 @@
       b.style.zIndex = 9; b.parentElement.style.zIndex = 9; b.style.transition = 'none';
       const wipe = b.querySelector('[data-fzwipe]') || document.createElementNS('http://www.w3.org/2000/svg', 'path'), WL = wipe.getTotalLength ? (wipe.getTotalLength() || 1) : 1; gsap.set(wipe, { strokeDasharray: WL, strokeDashoffset: WL });
       const drops = [...b.querySelectorAll('[data-fzdrop]')].slice(0, 8); drops.forEach(d => { d._y0 = gsap.getProperty(d, 'y'); });
-      gsap.timeline({ onComplete: () => { busy = false; } })
+      pickTl = gsap.timeline({ onComplete: () => { busy = false; } })
         .to([ask, hint, b.querySelector('em')], { opacity: 0, duration: .25 }, 0)
         .to(fronts.filter(x => x !== b), { opacity: .2, scale: .9, duration: .5, ease: 'power2.out' }, 0)
         .to(qa('.fz-b.deco, .fz-drawer'), { opacity: .2, duration: .5 }, 0)
@@ -2486,7 +2510,7 @@
     };
     const putBack = () => { if (chosen == null && !busy) { fill(null); return; } if (busy || chosen == null) return; busy = true; const b = fronts[chosen], wipe = b.querySelector('[data-fzwipe]'), drops = [...b.querySelectorAll('[data-fzdrop]')].slice(0, 8);
       fill(null);
-      gsap.timeline({ onComplete: () => { b.style.zIndex = ''; b.parentElement.style.zIndex = ''; b.style.transition = ''; chosen = null; busy = false; } })
+      pickTl = gsap.timeline({ onComplete: () => { b.style.zIndex = ''; b.parentElement.style.zIndex = ''; b.style.transition = ''; chosen = null; busy = false; } })
         .to(b, { x: 0, y: 0, scale: 1, rotation: 0, duration: .8, ease: 'power3.inOut' }, 0)
         .to(wipe, { strokeDashoffset: wipe.getTotalLength(), duration: .7, ease: 'power1.inOut' }, .2)
         .add(() => drops.forEach(d => gsap.to(d, { y: d._y0, duration: .4 })), .3)
@@ -2605,6 +2629,11 @@
 
   addEventListener('load', () => ScrollTrigger.refresh());
   document.fonts && document.fonts.ready.then(() => ScrollTrigger.refresh());
+  // a tap that grows the page (the slot result, the fridge card, a bigger crate, the score board) moves everything
+  // under it, and the scroll animations below kept firing at the old spots. Re-measure once it settles.
+  if (window.ResizeObserver) { let pageH = 0, rfT = 0; const docH = () => document.documentElement.scrollHeight;
+    ScrollTrigger.addEventListener('refresh', () => { pageH = docH(); });
+    new ResizeObserver(() => { const h = docH(); if (!pageH) { pageH = h; return; } if (Math.abs(h - pageH) < 2) return; pageH = h; clearTimeout(rfT); rfT = setTimeout(() => ScrollTrigger.refresh(), 350); }).observe(document.body); }
   })();
   </script>
 </body>
