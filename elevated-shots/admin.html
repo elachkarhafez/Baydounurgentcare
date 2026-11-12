@@ -473,7 +473,7 @@
       const days = ((v.days && v.days.data) || []).map(x => ({ t: x.day || x.timestamp || x.date || '', n: x.visitors || 0 })).sort((a, b) => String(a.t).localeCompare(String(b.t))).slice(-14);
       const mx = Math.max(1, ...days.map(d => d.n));
       const li = rows => rows.length ? rows.slice(0, 5).map(([k, c]) => `<div class="vis-li"><span>${esc(k)}</span><b>${c.toLocaleString()}</b></div>`).join('') : '<p class="vis-empty">Nothing yet.</p>';
-      el.innerHTML = `<div class="vis-h"><h3>Who's been visiting</h3><a href="https://vercel.com/elachkarhafezs-projects/elevated-shots/analytics" target="_blank" rel="noopener">More</a></div>
+      el.innerHTML = `<div class="vis-h"><h3>Who's been visiting</h3></div>
         <div class="vis-n"><div><b data-n="${n(v.today)}">0</b><small>Today</small></div><div><b data-n="${n(v.week)}">0</b><small>Last 7 days</small></div><div><b data-n="${n(v.month)}">0</b><small>This month</small></div></div>
         ${days.length ? `<div class="vis-bars" aria-label="Visitors per day, last two weeks">${days.map((d, i) => `<i class="${i === days.length - 1 ? 'today' : ''}" style="height:${Math.max(4, d.n / mx * 100).toFixed(0)}%;animation-delay:${(i * .04).toFixed(2)}s" title="${d.n}"></i>`).join('')}</div>` : ''}
         <div class="vis-cols"><div><h4>Where they came from</h4>${li(refs)}</div><div><h4>On a</h4>${li(devs)}</div></div>`;
