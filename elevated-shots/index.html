@@ -580,6 +580,7 @@
     .fs-copy .fs-lede span { display: block; white-space: nowrap; }
     .fs-copy .fs-lede { max-width: none; font: 400 clamp(19px, 2.1vw, 26px)/1.15 var(--display); text-transform: uppercase; letter-spacing: .01em; color: var(--ink); }
     .fs-stage { grid-area: stage; position: relative; padding-bottom: 18px; }
+    @media (min-width: 761px) { .fs-stage { padding-left: clamp(120px, 13vw, 190px); } }
     .fs-stage.opened .fz-door, .fs-stage.opened .fz-dark { display: none; }
     .fs-stage .fz-disp { font-size: 18px; min-width: 104px; } .fs-stage .fz-note { font-size: 13px; } .fs-stage .fz-magnet { width: 52px; height: 52px; }
     .fs-card { grid-area: card; align-self: start; max-width: 420px; padding: 20px 20px 22px; border-radius: 18px; background: #fffaf0; border: 2px solid var(--ink); box-shadow: 6px 6px 0 var(--ink); }
@@ -589,7 +590,7 @@
     .fs-ings span { display: inline-flex; align-items: center; gap: 6px; padding: 5px 11px 5px 5px; border-radius: 999px; background: var(--cream); border: 1.5px solid var(--line); font: 600 13px/1 var(--sans); }
     .fs-ings svg { width: 22px; height: 22px; }
     .fs-acts { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; } .fs-acts[hidden] { display: none; }
-    @media (max-width: 760px) { .fs-grid { grid-template-columns: 1fr; grid-template-areas: "copy" "stage" "card"; text-align: center; } .fs-copy .lede { margin-left: auto; margin-right: auto; } .fs-stage { justify-self: center; } .fs-card { justify-self: center; width: 100%; text-align: left; } }
+    @media (max-width: 760px) { .fs-grid { grid-template-columns: 1fr; grid-template-areas: "copy" "stage" "card"; text-align: center; } .fs-copy .lede { margin-left: auto; margin-right: auto; } .fs-stage { justify-self: stretch; } .fs-stage .fz-box { width: min(62vw, 300px); margin-left: auto; margin-right: 2%; } .fs-card { justify-self: center; width: 100%; text-align: left; } }
     .fz-sun { position: absolute; inset: -30% -40%; background: repeating-linear-gradient(118deg, rgba(255,255,255,0) 0 7%, rgba(255,251,238,.6) 7% 12%, rgba(255,255,255,0) 12% 19%); opacity: .7; pointer-events: none; }
     .fz-box { position: relative; width: min(72vw, 380px); aspect-ratio: .63; perspective: 1700px; }
     .fz-shadow { position: absolute; left: 2%; right: -8%; bottom: -4%; height: 9%; border-radius: 50%; background: radial-gradient(closest-side, rgba(70,45,10,.38), transparent); }
@@ -615,16 +616,29 @@
     .fz-dark { position: absolute; inset: 0; border-radius: 24px; background: #0e1519; z-index: 6; pointer-events: none; }
     .fz-mist { position: absolute; inset: -10% -25% -20%; pointer-events: none; z-index: 7; }
     .fz-door.open { pointer-events: none; }
+    .fz-door .fz-face { pointer-events: none; }
     .fz-mist i { position: absolute; width: 70%; aspect-ratio: 1.7; border-radius: 50%; background: radial-gradient(closest-side, rgba(255,255,255,.8), rgba(255,255,255,.35) 55%, rgba(255,255,255,0)); opacity: 0; }
-    .fz-door { position: absolute; inset: 0; z-index: 8; border-radius: 24px; transform-origin: 0 50%; background: linear-gradient(100deg, #fdfcf8, #f1eee6 58%, #e4e0d6); box-shadow: inset 0 0 0 1px rgba(0,0,0,.05), inset -10px 0 22px rgba(0,0,0,.06), 0 30px 60px rgba(70,45,10,.28); backface-visibility: hidden; will-change: transform; }
-    .fz-door::before { content: ""; position: absolute; left: 0; right: 0; top: 30%; height: 2px; background: rgba(0,0,0,.07); box-shadow: 0 1px 0 rgba(255,255,255,.8); }
+    .fz-door { position: absolute; inset: 0; z-index: 8; transform-origin: 0 50%; transform-style: preserve-3d; will-change: transform; }
+    .fz-face, .fz-inner { position: absolute; inset: 0; border-radius: 24px; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+    .fz-face { background: linear-gradient(100deg, #fdfcf8, #f1eee6 58%, #e4e0d6); box-shadow: inset 0 0 0 1px rgba(0,0,0,.05), inset -10px 0 22px rgba(0,0,0,.06), 0 30px 60px rgba(70,45,10,.28); }
+    .fz-inner { transform: rotateY(180deg); background: linear-gradient(90deg, #dfe8ec, #f3f7f8 30%, #eaf0f2 70%, #d3dee3); box-shadow: inset 0 0 0 7px #e9eef0, inset 0 0 0 9px #c4d0d6, inset 0 0 0 13px #f6f8f9, 0 20px 40px rgba(70,45,10,.2); overflow: hidden; }
+    .fz-bin { position: absolute; left: 9%; right: 9%; height: 21%; }
+    .fz-bin .bt { position: absolute; bottom: 8%; left: 0; right: 0; display: flex; justify-content: space-evenly; align-items: flex-end; }
+    .fz-bin .bt svg { width: 30%; aspect-ratio: 1; margin: 0 -4%; filter: drop-shadow(0 3px 3px rgba(40,70,90,.18)); }
+    .fz-bin::after { content: ""; position: absolute; left: -4%; right: -4%; bottom: 0; height: 42%; border-radius: 3px 3px 9px 9px; background: linear-gradient(rgba(255,255,255,.7), rgba(200,224,234,.55)); border: 1px solid rgba(255,255,255,.95); border-top: 2px solid rgba(255,255,255,1); box-shadow: 0 6px 10px rgba(60,100,120,.16), inset 0 -6px 10px rgba(120,160,180,.18); z-index: 2; }
+    .fz-face::before { content: ""; position: absolute; left: 0; right: 0; top: 30%; height: 2px; background: rgba(0,0,0,.07); box-shadow: 0 1px 0 rgba(255,255,255,.8); }
     .fz-handle { position: absolute; right: 7%; top: 36%; width: 12px; height: 30%; border-radius: 8px; background: linear-gradient(90deg, #b6babd, #f5f6f7 42%, #a4a8ac); box-shadow: -3px 5px 9px rgba(0,0,0,.22); }
     .fz-disp { position: absolute; left: 50%; top: 10%; translate: -50% 0; min-width: 120px; padding: 11px 16px 9px; border-radius: 12px; background: #12181b; color: #9be6ff; text-align: center; font: 700 22px/1 var(--mono); letter-spacing: .06em; box-shadow: inset 0 0 0 2px #2a3439, 0 2px 0 rgba(255,255,255,.7); text-shadow: 0 0 10px rgba(155,230,255,.75); }
     .fz-disp small { display: block; margin-top: 6px; font-size: 9px; letter-spacing: .22em; text-transform: uppercase; color: #5895aa; text-shadow: none; }
     .fz-magnet { position: absolute; left: 15%; top: 44%; width: 62px; height: 62px; border-radius: 50%; background: var(--ink); display: grid; place-items: center; box-shadow: 0 7px 12px rgba(0,0,0,.25), inset 0 2px 0 rgba(255,255,255,.14); }
     .fz-magnet svg { width: 25px; height: 34px; fill: var(--juice); }
-    .fz-note { position: absolute; left: 30%; top: 56%; width: 42%; margin: 0; padding: 16px 14px 20px; background: #ffe866; color: var(--ink); font: 700 15px/1.3 var(--sans); transform: rotate(4deg); box-shadow: 0 12px 20px rgba(80,60,0,.18); }
-    .fz-note::before { content: ""; position: absolute; left: 50%; top: -9px; width: 46px; height: 18px; margin-left: -23px; background: rgba(255,255,255,.55); transform: rotate(-3deg); }
+    .fz-note { container-type: inline-size; position: absolute; left: 27%; top: 54%; width: 48%; aspect-ratio: 1; margin: 0; padding: 16% 9% 0; box-sizing: border-box; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; color: var(--ink); text-align: left; transform: rotate(3.5deg); border-radius: 2px 2px 2px 18px / 2px 2px 2px 14px;
+      background: linear-gradient(172deg, #ffe07a 0%, #ffd24a 55%, #ffc61a 100%); box-shadow: 0 1px 0 rgba(255,255,255,.5) inset, 0 14px 18px -8px rgba(90,60,0,.35), 0 2px 4px rgba(90,60,0,.12); }
+    .fz-note::before { content: ""; position: absolute; left: 50%; top: -10px; width: 48%; height: 20px; translate: -50% 0; background: repeating-linear-gradient(90deg, rgba(18,17,16,.92) 0 6px, rgba(18,17,16,.82) 6px 12px); transform: rotate(-4deg); clip-path: polygon(0 8%, 4% 0, 9% 10%, 14% 0, 20% 8%, 100% 0, 96% 50%, 100% 100%, 0 100%, 3% 55%); box-shadow: 0 2px 3px rgba(0,0,0,.2); }
+    .fz-note::after { content: ""; position: absolute; left: 0; bottom: 0; width: 26%; height: 22%; border-radius: 0 0 0 18px / 0 0 0 14px; background: linear-gradient(225deg, rgba(255,255,255,0) 45%, rgba(160,105,0,.22) 50%, #ffe596 52%, #ffd65e 100%); }
+    .fz-note small { font: 700 9px/1 var(--mono); font-size: 8.4cqw; white-space: nowrap; letter-spacing: .16em; text-transform: uppercase; color: rgba(18,17,16,.62); }
+    .fz-note b { font: 400 16px/.95 var(--display); font-size: 19cqw; white-space: nowrap; text-transform: uppercase; letter-spacing: .01em; }
+    .fz-note svg { position: absolute; right: 11%; bottom: 12%; width: 13%; height: auto; fill: var(--ink); opacity: .85; }
 
     /* ---------- juice between sections: the colour above drips into the next one ---------- */
     .drip { position: relative; z-index: 6; height: 0; pointer-events: none; }
@@ -1954,7 +1968,8 @@
           <div class="fz-dark"></div>
         </div>
         <div class="fz-mist" aria-hidden="true">${[[18, 46], [52, 40], [34, 62], [64, 58], [10, 74], [48, 80], [72, 86]].map(([x, y]) => `<i style="left:${x}%;top:${y}%"></i>`).join('')}</div>
-        <div class="fz-door" aria-hidden="true"><div class="fz-disp"><span data-fzpct>41°F</span><small data-fzlab>Cooling</small></div><div class="fz-magnet"><svg viewBox="0 0 292 400"><use href="#i-mark"/></svg></div><p class="fz-note">Don’t forget your shot</p><div class="fz-handle"></div></div>
+        <div class="fz-door" aria-hidden="true"><div class="fz-face"><div class="fz-disp"><span data-fzpct>41°F</span><small data-fzlab>Cooling</small></div><div class="fz-magnet"><svg viewBox="0 0 292 400"><use href="#i-mark"/></svg></div><p class="fz-note"><small>Note to self</small><b>Don’t forget<br>your shot.</b><svg viewBox="0 0 292 400"><use href="#i-mark"/></svg></p><div class="fz-handle"></div></div>
+          <div class="fz-inner">${[[9, [0, 1, 2, 0]], [37, [1, 2, 0, 1]], [65, [2, 0, 1, 2]]].map(([t, ks]) => `<div class="fz-bin" style="top:${t}%"><div class="bt">${ks.map(k => `<svg viewBox="0 0 64 64"><use href="#i-shot-${FL[k].k}"/></svg>`).join('')}</div></div>`).join('')}</div></div>
       </div>`;
     if (!ANIM) FZS.classList.add('opened');
   }
@@ -2407,18 +2422,32 @@
       .to(T, { t: 34, duration: 1.1, ease: 'power2.out', onUpdate: () => { disp.textContent = Math.round(T.t) + '°F'; } })
       .add(() => { lab.textContent = 'Cold and ready'; })
       .to(door, { rotationY: -7, duration: .22, ease: 'power2.out' }, '+=.15')
-      .to(door, { rotationY: -118, duration: 1.25, ease: 'power3.inOut', onStart: () => door.classList.add('open') })
+      .to(door, { rotationY: () => (PHONE ? -112 : -124), duration: 1.25, ease: 'power3.inOut', onStart: () => door.classList.add('open') })
       .to(dark, { opacity: 0, duration: .55, ease: 'power1.in' }, '<.1')
       .to(led, { keyframes: [{ opacity: .7, duration: .05 }, { opacity: .1, duration: .06 }, { opacity: 1, duration: .12 }] }, '<.05')
       .add(mistOut, '<.05')
       .fromTo(fronts, { y: 10 }, { y: 0, duration: .6, ease: 'back.out(2.4)', stagger: .07 }, '<.3')
       .fromTo(ask, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: .6, ease: 'expo.out' }, '-=.4')
       .fromTo(hint, { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: .5, ease: 'back.out(2)' }, '-=.3')
-      .add(() => { ready = true; gsap.to(hint, { y: -4, duration: .8, ease: 'sine.inOut', yoyo: true, repeat: -1 }); });
-    ScrollTrigger.create({ trigger: FZS, start: 'top 62%', once: true, onEnter: () => open.play() });
-    const fill = f => { $('[data-fsname]').textContent = f ? f.n : 'Tap a bottle'; $('[data-fskick]').textContent = f ? `${f.ben} · ${f.kick}` : "See what's in it";
+      .add(() => { ready = true; bob = gsap.to(hint, { y: -4, duration: .8, ease: 'sine.inOut', yoyo: true, repeat: -1 }); });
+    let bob, shut;
+    // the door shuts when you scroll past it (either way) and opens again when you come back
+    const close = () => { open.pause(); ready = false; if (bob) bob.kill(); if (shut) shut.kill();
+      if (chosen != null) { const b = fronts[chosen]; gsap.killTweensOf(b); gsap.to(b, { x: 0, y: 0, scale: 1, rotation: 0, duration: .45, ease: 'power2.inOut', onComplete: () => { b.style.zIndex = ''; b.parentElement.style.zIndex = ''; b.style.transition = ''; } });
+        const w = b.querySelector('[data-fzwipe]'); gsap.set(w, { strokeDashoffset: w.getTotalLength() }); b.querySelectorAll('[data-fzdrop]').forEach(d => { if (d._y0 != null) gsap.set(d, { y: d._y0 }); });
+        gsap.to(fronts, { opacity: 1, scale: 1, duration: .3 }); gsap.to(qa('.fz-b.deco'), { opacity: .62, duration: .3 }); gsap.to(q('.fz-drawer'), { opacity: 1, duration: .3 }); gsap.set(b.querySelector('em'), { opacity: 1 }); chosen = null; busy = false; }
+      lab.textContent = 'Cooling';
+      shut = gsap.timeline({ onComplete: () => { door.classList.remove('open'); disp.textContent = '41°F'; } })
+        .to([ask, hint], { opacity: 0, duration: .2 }, 0)
+        .to(door, { rotationY: 0, duration: .75, ease: 'power3.in' }, 0)
+        .to(dark, { opacity: 1, duration: .25 }, .5).to(led, { opacity: 0, duration: .15 }, .55)
+        .to(door, { keyframes: [{ rotationY: -3, duration: .09 }, { rotationY: 0, duration: .18, ease: 'power2.out' }] }, .75); };
+    const reopen = () => { if (shut) shut.kill(); open.restart(); };
+    ScrollTrigger.create({ trigger: FZS, start: 'top 62%', end: 'bottom 8%', onEnter: reopen, onEnterBack: reopen, onLeave: close, onLeaveBack: close });
+    let shown = null;
+    const fill = f => { shown = f; $('[data-fsname]').textContent = f ? f.n : 'Tap a bottle'; $('[data-fskick]').textContent = f ? `${f.ben} · ${f.kick}` : "See what's in it";
       $('[data-fsings]').innerHTML = f ? f.ing.map(k => `<span data-poppable data-fruit="${k}">${ico(k)}${esc(CONFIG.ingredients[k])}</span>`).join('') : ''; acts.hidden = !f; };
-    const pick = i => { if (!ready || busy || chosen != null) return; busy = true; chosen = i; const b = fronts[i], f = FL[i]; PICK = f.k;
+    const pick = i => { if (!ready || busy || chosen != null) return; gsap.set(fronts[i], { opacity: 1, scale: 1 }); busy = true; chosen = i; const b = fronts[i], f = FL[i]; PICK = f.k;
       const ir = inside.getBoundingClientRect(), br = b.getBoundingClientRect();
       const sc = Math.min(2.1, ir.height * .6 / br.height), dx = ir.left + ir.width / 2 - (br.left + br.width / 2), dy = ir.top + ir.height * .52 - (br.top + br.height / 2);
       b.style.zIndex = 9; b.parentElement.style.zIndex = 9; b.style.transition = 'none';
@@ -2435,7 +2464,7 @@
         .add(() => drops.forEach((d, k) => gsap.to(d, { y: d._y0 + 50 + k * 14, duration: 1 + k * .1, ease: 'power2.in', delay: k * .06 })), .85)
         .add(() => { fill(f); gsap.fromTo(card, { y: 14, scale: .97 }, { y: 0, scale: 1, duration: .5, ease: 'back.out(2.2)' }); gsap.fromTo('[data-fsings] span', { y: 10, opacity: 0 }, { y: 0, opacity: 1, duration: .35, stagger: .05, ease: 'back.out(2)' }); }, 1.0);
     };
-    const putBack = () => { if (busy || chosen == null) return; busy = true; const b = fronts[chosen], wipe = b.querySelector('[data-fzwipe]'), drops = [...b.querySelectorAll('[data-fzdrop]')].slice(0, 8);
+    const putBack = () => { if (chosen == null && !busy) { fill(null); return; } if (busy || chosen == null) return; busy = true; const b = fronts[chosen], wipe = b.querySelector('[data-fzwipe]'), drops = [...b.querySelectorAll('[data-fzdrop]')].slice(0, 8);
       fill(null);
       gsap.timeline({ onComplete: () => { b.style.zIndex = ''; b.parentElement.style.zIndex = ''; b.style.transition = ''; chosen = null; busy = false; } })
         .to(b, { x: 0, y: 0, scale: 1, rotation: 0, duration: .8, ease: 'power3.inOut' }, 0)
@@ -2447,7 +2476,7 @@
     };
     FZS.addEventListener('click', e => { const b = e.target.closest('[data-fzb]'); if (!b) return; if (chosen != null && +b.dataset.fzb === chosen) putBack(); else pick(+b.dataset.fzb); });
     $('[data-fsback]').addEventListener('click', putBack);
-    $('[data-fsadd]').addEventListener('click', () => { if (chosen == null) return; const f = FL[chosen]; addToPack(f.k, 1); toast(`${f.n} is in your pack.`); });
+    $('[data-fsadd]').addEventListener('click', () => { const f = shown; if (!f) return; addToPack(f.k, 1); toast(`${f.n} is in your pack.`); });
     if (FINE) FZS.addEventListener('pointermove', e => { const r = FZS.getBoundingClientRect(), nx = (e.clientX - r.left) / r.width - .5; gsap.to(q('.fz-row.back'), { x: nx * -10, duration: .7, overwrite: 'auto' }); gsap.to(q('.fz-drawer'), { x: nx * 8, duration: .7, overwrite: 'auto' }); });
   }
 
