@@ -156,6 +156,7 @@
     .hero h1 .hw:nth-child(2) { padding-left: .5em; }
     .hero h1 .fill { display: inline-block; -webkit-text-stroke-width: 1.5px; filter: drop-shadow(2px 2px 0 var(--ink)); }
     .hero .ctas { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+    .hero .ctas .btn { flex: 1 1 100%; }
     .cupwrap { position: relative; }
     .cupstage { position: relative; width: min(270px, 70vw); aspect-ratio: 1; margin: 8px auto 0; }
     .cupstage .ring { position: absolute; inset: 0; animation: spin 26s linear infinite; }
@@ -176,8 +177,8 @@
     .pol { position: absolute; z-index: 1; width: 72px; padding: 6px 6px 22px; background: #ffffff; border: 2px solid var(--ink); box-shadow: 4px 4px 0 var(--ink); }
     .pol img { width: 100%; aspect-ratio: 1; object-fit: cover; }
     .pol span { position: absolute; left: 0; right: 0; bottom: 2px; text-align: center; font: 700 15px/1 var(--hand); color: var(--bean); }
-    .hero .p1 { right: -2%; bottom: 34%; rotate: 8deg; width: 70px; }
-    .hero .p2 { left: -2%; bottom: 10%; rotate: -9deg; width: 70px; }
+    .hero .p1 { right: 1%; bottom: 40%; rotate: 8deg; width: 66px; }
+    .hero .p2 { display: none; left: -2%; bottom: 10%; rotate: -9deg; width: 70px; }
     .hero .p3 { right: -4%; bottom: 30%; rotate: 6deg; display: none; }
     @media (min-width: 900px) {
       .hero { padding: 88px 0 0; }
@@ -188,6 +189,7 @@
       .hero .p1 { right: auto; left: 57%; top: -8px; bottom: auto; rotate: -7deg; width: 112px; }
       .hero .p2 { width: 112px; }
       .hero .p2, .hero .p3 { display: block; }
+      .hero .ctas .btn { flex: 0 0 auto; }
       .hero .p2 { left: 50%; bottom: 30%; }
       .burst { top: auto; bottom: 2%; left: -6%; }
       .hero .p3 { right: -1%; bottom: 2%; }
@@ -207,47 +209,54 @@
     .drip { position: absolute; left: 0; right: 0; bottom: -60px; z-index: 3; height: 62px; pointer-events: none; overflow: visible; }
     .drip rect { transform-box: fill-box; transform-origin: top; }
 
-    /* ---------- the menu: pick your drink ---------- */
-    .menu { padding: 36px 0 32px; overflow: hidden; transition: background .1s; }
-    .menu .flood { position: absolute; inset: 0; z-index: 0; clip-path: circle(0% at 50% 50%); pointer-events: none; }
-    .menu .wrap { z-index: 1; }
-    @media (min-width: 900px) { .menu { padding: 72px 0 60px; } }
-    .drink { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; padding: 16px; border: var(--line); border-radius: 22px; background: var(--paper); box-shadow: 8px 8px 0 var(--ink); }
-    .drink > * { min-width: 0; }
-    .drink .big { position: relative; display: grid; place-items: center; height: min(250px, 32vh); background: var(--foam) var(--dots); border: var(--line); border-radius: 16px; overflow: hidden; perspective: 600px; }
-    .drink .big .cupbox { position: relative; height: 70%; aspect-ratio: 80 / 110; transform-style: preserve-3d; }
-    .drink .big .cupbox svg { width: 100%; height: 100%; }
-    .drink .big .steam { position: absolute; left: 50%; top: -18%; width: 60%; translate: -50% 0; overflow: visible; }
-    .drink .big .steam path { fill: none; stroke: rgba(21,16,12,.3); stroke-width: 3; stroke-linecap: round; animation: steam 2.4s ease-in-out infinite; }
-    .drink .big .steam path:nth-child(2) { animation-delay: .6s; } .drink .big .steam path:nth-child(3) { animation-delay: 1.2s; }
-    @keyframes steam { 0% { opacity: 0; transform: translateY(8px); } 40% { opacity: 1; } 100% { opacity: 0; transform: translateY(-14px); } }
-    .drink .big .num { position: absolute; left: 10px; top: 6px; font: 400 1.75rem/1 var(--display); color: var(--ink); }
-    .orbit { position: absolute; inset: 0; pointer-events: none; }
-    .orbit span { position: absolute; left: 0; top: 0; padding: 5px 9px; border: 2px solid var(--ink); border-radius: 999px; background: var(--paper); font: 700 11px/1 var(--sans); white-space: nowrap; box-shadow: 2px 2px 0 var(--ink); }
-    .drink .nick { font: 700 1.25rem/1 var(--hand); color: var(--bean); }
-    .drink h3 { font-size: clamp(1.375rem, 1rem + 1.4vw, 2rem); margin-top: 4px; }
-    .drink .when { margin-top: 8px; }
-    .drink p { margin: 10px 0 0; color: var(--muted); }
-    .drink .ings { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
-    .drink .ings span { padding: 6px 10px; border: 2px solid var(--ink); border-radius: 999px; background: var(--cream); font: 600 .8125rem/1 var(--sans); }
-    .drink .go { margin-top: 16px; }
-    .shelf { position: relative; margin-top: 8px; }
-    .shelf::after { content: ""; position: absolute; left: 0; right: 0; bottom: 14px; height: 12px; border: var(--line); border-radius: 6px; background: var(--bean); box-shadow: 0 5px 0 var(--ink); }
-    .cups { position: relative; z-index: 1; display: grid; grid-auto-flow: column; grid-auto-columns: 88px; gap: 8px; overflow-x: auto; padding: 22px var(--pad) 26px; margin: 0 calc(-1 * var(--pad)); scroll-snap-type: x mandatory; scrollbar-width: none; }
-    .cups::-webkit-scrollbar { display: none; }
-    .cups button { scroll-snap-align: start; display: grid; justify-items: center; align-content: end; gap: 6px; padding: 6px 2px; transition: transform .35s var(--spring); }
-    .cups button svg { height: 64px; width: auto; transition: transform .35s var(--spring); }
-    .cups button span { font: 400 12px/1.05 var(--display); text-transform: uppercase; text-align: center; letter-spacing: .03em; }
-    .cups button[aria-pressed="true"] { transform: translateY(-14px); }
-    .cups button[aria-pressed="true"] svg { transform: rotate(-6deg) scale(1.08); }
-    .cups button[aria-pressed="true"] span { background: var(--ink); color: var(--paper); padding: 3px 6px; border-radius: 6px; }
+    /* ---------- the menu: pick your drink (tap a row to open it) ---------- */
+    .menu { padding: 36px 0 32px; overflow: hidden; }
+    .menu-grid { position: relative; z-index: 1; display: grid; gap: 16px; }
+    .howto { list-style: none; margin: 12px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+    .howto li { display: inline-flex; align-items: center; gap: 7px; padding: 6px 11px 6px 6px; border: 2px solid var(--ink); border-radius: 999px; background: var(--paper); font: 600 .8125rem/1 var(--sans); }
+    .howto b { display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--bean); color: var(--cream); font: 400 .75rem/1 var(--display); }
+    .menu-list { display: grid; gap: 10px; }
+    .mi { border: var(--line); border-radius: 16px; background: var(--paper); box-shadow: 4px 4px 0 var(--ink); overflow: hidden; transition: box-shadow .3s; }
+    .mi.open { box-shadow: 5px 5px 0 var(--bean); }
+    .mi-head { width: 100%; display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 10px 12px; text-align: left; }
+    .mi-head .cupic { width: 34px; height: 46px; transition: transform .4s var(--spring); }
+    .mi.open .cupic { transform: rotate(-8deg) scale(1.08); }
+    .mi-head b { display: block; font: 400 1.0625rem/1.05 var(--display); text-transform: uppercase; letter-spacing: .01em; }
+    .mi-head small { display: block; margin-top: 3px; font: 700 1rem/1 var(--hand); color: var(--bean); }
+    .mi-head .plus { display: grid; place-items: center; width: 30px; height: 30px; border: 2px solid var(--ink); border-radius: 50%; font: 400 1.125rem/1 var(--display); transition: transform .35s var(--spring), background .25s, color .25s; }
+    .mi.open .plus { transform: rotate(45deg); background: var(--bean); color: var(--cream); border-color: var(--bean); }
+    .mi-body { height: 0; overflow: hidden; }
+    .mi.open .mi-body { height: auto; }
+    .mi-in { padding: 2px 14px 16px; border-top: 2px dashed rgba(21,16,12,.15); margin: 0 12px; padding-left: 0; padding-right: 0; padding-top: 12px; }
+    .mi-in p { margin: 8px 0 0; color: var(--muted); font-size: .9375rem; }
+    .mi-in .inc { display: block; margin-top: 12px; font: 700 .6875rem/1 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+    .ings { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+    .ings span { padding: 6px 10px; border: 2px solid var(--ink); border-radius: 999px; background: var(--cream); font: 600 .8125rem/1 var(--sans); }
+    .mi-in .btn { margin-top: 14px; }
     @media (min-width: 900px) {
-      .drink { grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: 30px; padding: 24px; align-items: center; }
-      .drink .big { height: 330px; }
-      .orbit span { font-size: 12.5px; padding: 6px 11px; }
-      .cups { grid-auto-columns: minmax(0, 1fr); overflow: visible; margin: 0; padding-inline: 0; }
-      .cups button svg { height: 82px; }
+      .menu { padding: 72px 0 60px; }
+      .menu-grid { grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 40px; align-items: start; }
+      .menu-intro { position: sticky; top: 96px; }
+      .mi-head { padding: 12px 16px; grid-template-columns: 40px minmax(0, 1fr) auto; }
+      .mi-head .cupic { width: 40px; height: 54px; }
+      .mi-head b { font-size: 1.25rem; }
+      .mi-in { margin: 0 16px 0 68px; }
     }
+
+    /* ---------- scroll + swipe cues ---------- */
+    .cue { display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px; border: 2px solid currentColor; border-radius: 999px; font: 400 .8125rem/1 var(--display); letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
+    .cue svg { width: 14px; height: 14px; animation: nudgey 1.2s var(--ease) infinite; }
+    .cue.x svg { animation-name: nudgex; }
+    @keyframes nudgey { 50% { transform: translateY(4px); } }
+    @keyframes nudgex { 50% { transform: translateX(4px); } }
+    .cue-row { display: flex; justify-content: center; margin-top: 12px; }
+    .hero .cue-row { margin-top: 10px; color: var(--muted); }
+    .pin-cue { position: absolute; z-index: 5; left: 50%; bottom: 84px; translate: -50% 0; background: var(--paper); color: var(--ink); transition: opacity .35s; }
+    .pin-cue.gone { opacity: 0; }
+    .dark .pin-cue { background: var(--cream); }
+    .phone-only { display: flex; }
+    @media (min-width: 1000px) { .pin-cue { bottom: 22px; } .phone-only { display: none; } }
+    @media (max-width: 699px) { .ghost { display: none; } }
 
     /* ---------- how it's brewed (pinned) ---------- */
     .brew { background: var(--espresso); color: var(--cream); }
@@ -273,7 +282,7 @@
     html.rm .brew-pin, html.no-pin .brew-pin { height: auto; min-height: 0; padding: 48px 0; }
 
     /* ---------- the content machine ---------- */
-    .machine-sec { background: var(--bean) radial-gradient(rgba(247,243,236,.12) 1.2px, transparent 1.6px) 0 0 / 11px 11px; color: var(--cream); border-block: var(--line); padding: 36px 0; overflow: hidden; }
+    .machine-sec { background: var(--bean) radial-gradient(rgba(247,243,236,.12) 1.2px, transparent 1.6px) 0 0 / 11px 11px; color: var(--cream); border-block: var(--line); padding: 68px 0 36px; overflow: hidden; }
     .machine-sec .lede { color: rgba(247,243,236,.82); }
     .machine-sec .hl { color: var(--latte); }
     .machine-sec .ghost { -webkit-text-stroke-color: rgba(247,243,236,.12); }
@@ -322,12 +331,15 @@
 
     /* ---------- "it's just a quick video" (pinned, sideways) ---------- */
     .quick { background: var(--cream); overflow: hidden; }
-    .quick-pin { position: relative; height: 100svh; min-height: 540px; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto 1fr; padding: 66px 0 18px; }
+    .quick-pin { position: relative; height: 100svh; min-height: 540px; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto 1fr auto; padding: 66px 0 18px; }
     .quick .stamp { display: inline-block; margin-top: 10px; padding: 6px 14px; border: 3px solid #5e3b25; border-radius: 10px; color: #5e3b25; font: 400 clamp(1.125rem, .9rem + 1vw, 1.5rem)/1 var(--display); text-transform: uppercase; rotate: -6deg; mix-blend-mode: multiply; }
     .days { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; margin-top: 14px; position: relative; }
     .days span { padding: 6px 0; border: 2px solid var(--ink); border-radius: 8px; text-align: center; font: 400 .8125rem/1 var(--display); letter-spacing: .06em; background: var(--paper); transition: background .25s, color .25s; }
     .days span.on { background: var(--bean); color: var(--cream); border-color: var(--bean); }
     .rail { align-self: center; overflow: visible; min-width: 0; }
+    .quick-cue { justify-self: center; margin: 4px 0 78px; transition: opacity .35s; }
+    .quick-cue.gone { opacity: 0; }
+    @media (min-width: 1000px) { .quick-cue { margin-bottom: 8px; } }
     .track { display: flex; align-items: flex-start; gap: 16px; padding: 22px var(--pad) 10px; width: max-content; will-change: transform; }
     .note { position: relative; flex: none; width: min(72vw, 290px); padding: 16px 16px 18px; border: var(--line); border-radius: 4px; background: #ffffff; box-shadow: var(--shadow); }
     .note:nth-child(2n) { background: #efe2d0; rotate: 1.5deg; } .note:nth-child(2n+1) { rotate: -1.2deg; }
@@ -371,7 +383,7 @@
     @media (min-width: 900px) { .feed { padding: 72px 0 90px; } }
 
     /* ---------- where I've been ---------- */
-    .places { padding: 56px 0 32px; overflow: hidden; }
+    .places { padding: 68px 0 32px; overflow: hidden; }
     .map { position: relative; border: var(--line); border-radius: 22px; background: #f3ead9; box-shadow: 8px 8px 0 var(--ink); overflow: hidden; }
     .map svg { width: 100%; height: auto; }
     .map .pin { cursor: pointer; }
@@ -556,6 +568,7 @@
             <svg class="burst" viewBox="0 0 100 100" aria-hidden="true"><polygon points="50,2 58,18 75,8 76,27 95,26 86,43 99,55 82,63 88,81 69,79 63,97 50,85 37,97 31,79 12,81 18,63 1,55 14,43 5,26 24,27 25,8 42,18" fill="#5e3b25" stroke="#15100c" stroke-width="2"/><text x="50" y="46" text-anchor="middle" fill="#efe2d0">FRESHLY</text><text x="50" y="62" text-anchor="middle" fill="#ffffff">BREWED</text></svg>
           </div>
           <p class="poured" aria-live="polite">Cups Poured Here: <b data-poured>0</b></p>
+          <div class="cue-row"><span class="cue" data-herocue>Scroll For More <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2v11M4 9l4 4 4-4" fill="none" stroke="currentColor" stroke-width="2.2"/></svg></span></div>
         </div>
         <figure class="pol p1" data-par="18" style="margin:0"><img src="img/coffee-week.webp" width="720" height="1277" alt="Noor at Dearborn Coffee Week"><span>coffee week!</span></figure>
         <figure class="pol p2" data-par="-24" style="margin:0"><img src="img/pink-market.webp" width="720" height="1280" alt="Noor at Pink For A Purpose"><span>that's me</span></figure>
@@ -568,33 +581,15 @@
     </section>
 
     <!-- MENU -->
-    <section class="menu" id="menu" data-menu>
-      <div class="flood" data-flood></div>
+    <section class="menu" id="menu">
       <span class="ghost" data-ghost>Menu</span>
-      <div class="wrap">
-        <div class="sec-head">
+      <div class="wrap menu-grid">
+        <div class="menu-intro">
           <h2 data-split>Pick Your <span class="hl">Drink.</span></h2>
-          <span class="hand">Every service has its own cup. Tap one.</span>
+          <p class="lede">Every service I offer is a drink on the menu. Open one to see exactly what you get.</p>
+          <ol class="howto"><li><b>1</b>Tap a drink</li><li><b>2</b>See what's in it</li><li><b>3</b>Add it to your package</li></ol>
         </div>
-        <div class="drink" aria-live="polite">
-          <div class="big" data-big>
-            <span class="num" data-dnum>01</span>
-            <div class="cupbox" data-cupbox>
-              <svg class="steam" viewBox="0 0 60 30" aria-hidden="true"><path d="M15 28 C 8 20, 22 14, 15 4"/><path d="M30 28 C 23 20, 37 14, 30 2"/><path d="M45 28 C 38 20, 52 14, 45 4"/></svg>
-              <svg viewBox="0 0 80 110" data-dcup aria-hidden="true"><use href="#papercup"/></svg>
-            </div>
-            <div class="orbit" data-orbit aria-hidden="true"></div>
-          </div>
-          <div>
-            <span class="nick" data-dnick></span>
-            <h3 data-dname></h3>
-            <span class="tag when" data-dwhen></span>
-            <p data-ddesc></p>
-            <div class="ings" data-dings></div>
-            <a class="btn loud go" href="#package" data-dgo>Add To My Package <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
-          </div>
-        </div>
-        <div class="shelf"><div class="cups" data-cups role="group" aria-label="Services"></div></div>
+        <div class="menu-list" data-mlist></div>
       </div>
     </section>
 
@@ -602,6 +597,7 @@
     <section class="brew dark" id="brewed" data-brew>
       <div class="brew-pin" data-brewpin>
         <span class="bignum" data-bignum>1</span>
+        <span class="cue pin-cue" data-brewcue>Keep Scrolling <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2v11M4 9l4 4 4-4" fill="none" stroke="currentColor" stroke-width="2.2"/></svg></span>
         <div class="wrap brew-grid">
           <div>
             <h2 data-split>How It's <span class="hl">Brewed.</span></h2>
@@ -677,6 +673,7 @@
           <div class="days" data-days><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span></div>
         </div>
         <div class="rail" data-rail><div class="track" data-track></div></div>
+        <span class="cue quick-cue" data-quickcue>Scroll To Move Through The Week <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2v11M4 9l4 4 4-4" fill="none" stroke="currentColor" stroke-width="2.2"/></svg></span>
       </div>
     </section>
 
@@ -690,6 +687,7 @@
         </div>
         <p class="lede">Swipe through and tap the middle one to watch it with sound. All mine, straight off @_coffeetalks.</p>
       </div>
+      <div class="cue-row phone-only"><span class="cue x">Swipe The Reels <svg viewBox="0 0 16 16" aria-hidden="true"><use href="#i-arrow"/></svg></span></div>
       <div class="flow" data-flow data-cur="PLAY"></div>
       <div class="flow-nav"><button type="button" data-fprev aria-label="Previous clip"><svg viewBox="0 0 16 16" aria-hidden="true" style="transform:scaleX(-1)"><use href="#i-arrow"/></svg></button><div class="dots" data-fdots></div><button type="button" data-fnext aria-label="Next clip"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#i-arrow"/></svg></button></div>
       <div class="follow"><a class="btn" data-ig href="#" target="_blank" rel="noopener">Follow @_coffeetalks <svg aria-hidden="true"><use href="#i-arrow"/></svg></a></div>
@@ -723,6 +721,7 @@
             </svg>
             <span class="note-s">Not to scale</span>
           </div>
+          <div class="cue-row phone-only" style="justify-content:flex-start"><span class="cue x">Swipe For More Spots <svg viewBox="0 0 16 16" aria-hidden="true"><use href="#i-arrow"/></svg></span></div>
           <div class="spots" data-spots></div>
         </div>
       </div>
@@ -834,13 +833,13 @@
     forWho: ['Cafés', 'Restaurants', 'Boutiques', 'Salons', 'Bakeries', 'Events', 'Small Businesses', 'Personal Brands'],
     services: ['Social Media Management', 'Content Creation', 'Event Coverage', 'Instagram Audits', 'Brand Collaborations', 'Strategy Sessions'],
     menu: [
-      { t: 'Social Media Management', nick: 'The Monthly Latte', w: 'Monthly', c1: '#ffffff', c2: '#5e3b25', bg: '#f1e5d6', d: 'Your accounts, handled. I plan it, post it, write the captions and keep your feed looking like you every week.', ings: ['Content Calendar', 'Posting', 'Captions', 'Stories', 'Monthly Check-In'] },
-      { t: 'Content Creation', nick: 'The Double Shot', w: 'Reels & Photos', c1: '#c9a27a', c2: '#15100c', bg: '#e9d6bf', d: 'Short-form video and photos made for the way people actually scroll, ready for you to post.', ings: ['Reels', 'Photos', 'Editing', 'Covers'] },
-      { t: 'Event Coverage', nick: 'The To-Go Cup', w: 'Day Of', c1: '#15100c', c2: '#c9a27a', bg: '#efe3d3', d: 'Markets, openings and community events, filmed and posted while people are still talking about it.', ings: ['Day-Of Filming', 'Same-Day Stories', 'Recap Reel', 'Photos'] },
-      { t: 'Business Features', nick: 'The House Special', w: 'Spotlights', c1: '#efe2d0', c2: '#5e3b25', bg: '#f3e9dc', d: 'I visit your shop, café, salon or studio and turn it into a Reel that makes people want to come in.', ings: ['The Visit', 'Spotlight Reel', 'Collab Post'] },
-      { t: 'Brand Collaborations', nick: 'The Collab Cold Brew', w: 'Partnerships', c1: '#5e3b25', c2: '#efe2d0', bg: '#e6d2bb', d: 'Sponsored posts and stories on @_coffeetalks for brands that fit what I already love.', ings: ['Sponsored Reel', 'Stories', 'Collab Post'] },
-      { t: 'Instagram Audits', nick: 'The Espresso Check', w: 'One-Time', c1: '#ffffff', c2: '#c9a27a', bg: '#f5ece1', d: 'I go through your account and hand you a clear list of fixes you can start on the same day.', ings: ['Bio', 'Grid', 'Reels', 'Captions', 'Posting Times'] },
-      { t: 'Strategy Session', nick: 'The Coffee Chat', w: 'Over Coffee', c1: '#c9a27a', c2: '#5e3b25', bg: '#ead8c3', d: 'Not sure what you need yet? We sit down, look at your accounts and make a plan together.', ings: ['Account Review', 'Content Plan', 'Q&A'] }
+      { t: 'Social Media Management', nick: 'The Monthly Latte', svc: 'Social Media Management', w: 'Monthly', c1: '#ffffff', c2: '#5e3b25', bg: '#f1e5d6', d: 'Your accounts, handled. I plan it, post it, write the captions and keep your feed looking like you every week.', ings: ['Content Calendar', 'Posting', 'Captions', 'Stories', 'Monthly Check-In'] },
+      { t: 'Content Creation', nick: 'The Double Shot', svc: 'Content Creation', w: 'Reels & Photos', c1: '#c9a27a', c2: '#15100c', bg: '#e9d6bf', d: 'Short-form video and photos made for the way people actually scroll, ready for you to post.', ings: ['Reels', 'Photos', 'Editing', 'Covers'] },
+      { t: 'Event Coverage', nick: 'The To-Go Cup', svc: 'Event Coverage', w: 'Day Of', c1: '#15100c', c2: '#c9a27a', bg: '#efe3d3', d: 'Markets, openings and community events, filmed and posted while people are still talking about it.', ings: ['Day-Of Filming', 'Same-Day Stories', 'Recap Reel', 'Photos'] },
+      { t: 'Business Features', nick: 'The House Special', svc: 'Content Creation', w: 'Spotlights', c1: '#efe2d0', c2: '#5e3b25', bg: '#f3e9dc', d: 'I visit your shop, café, salon or studio and turn it into a Reel that makes people want to come in.', ings: ['The Visit', 'Spotlight Reel', 'Collab Post'] },
+      { t: 'Brand Collaborations', nick: 'The Collab Cold Brew', svc: 'Brand Collaboration', w: 'Partnerships', c1: '#5e3b25', c2: '#efe2d0', bg: '#e6d2bb', d: 'Sponsored posts and stories on @_coffeetalks for brands that fit what I already love.', ings: ['Sponsored Reel', 'Stories', 'Collab Post'] },
+      { t: 'Instagram Audits', nick: 'The Espresso Check', svc: 'Instagram Audit', w: 'One-Time', c1: '#ffffff', c2: '#c9a27a', bg: '#f5ece1', d: 'I go through your account and hand you a clear list of fixes you can start on the same day.', ings: ['Bio', 'Grid', 'Reels', 'Captions', 'Posting Times'] },
+      { t: 'Strategy Session', nick: 'The Coffee Chat', svc: 'Strategy Session', w: 'Over Coffee', c1: '#c9a27a', c2: '#5e3b25', bg: '#ead8c3', d: 'Not sure what you need yet? We sit down, look at your accounts and make a plan together.', ings: ['Account Review', 'Content Plan', 'Q&A'] }
     ],
     brew: [
       { k: 'We grind it out', t: 'Discovery Call', d: 'A quick call to learn about your business, your customers and what you want from social.' },
@@ -999,6 +998,7 @@
 
   /* header cup fills with page progress */
   const pfill = $('[data-pfill]'), psteam = $('[data-psteam]');
+  const hcue = $('[data-herocue]'); addEventListener('scroll', () => { if (hcue) hcue.style.opacity = scrollY > 120 ? 0 : 1; }, { passive: true });
   const pcup = () => { const p = clamp(scrollY / Math.max(1, document.documentElement.scrollHeight - innerHeight), 0, 1); pfill.setAttribute('y', 31 - p * 22); psteam.setAttribute('opacity', p > .97 ? 1 : 0); };
   pcup(); addEventListener('scroll', pcup, { passive: true });
 
@@ -1055,45 +1055,27 @@
   })();
 
   /* =============================================================
-     THE MENU: pick your drink. The section floods with its colour,
-     what's in it orbits the cup, and the cup leans toward the mouse.
+     THE MENU: tap a drink to open it, see what's in it, add it
      ============================================================= */
   (() => {
-    const M = CONFIG.menu, row = $('[data-cups]'), sec = $('[data-menu]'), flood = $('[data-flood]'), orbit = $('[data-orbit]'), big = $('[data-big]'), box = $('[data-cupbox]');
-    row.innerHTML = M.map((m, i) => `<button type="button" aria-pressed="${i ? 'false' : 'true'}" data-i="${i}" data-cur="SIP"><svg viewBox="0 0 80 110" style="--c1:${m.c1};--c2:${m.c2}" aria-hidden="true"><use href="#papercup"/></svg><span>${esc(m.nick.replace('The ', ''))}</span></button>`).join('');
-    let orbs = [], ang = 0, cur = 0;
-    sec.style.background = M[0].bg;
-    const show = (i, anim, from) => {
-      const m = M[i]; cur = i;
-      $$('button', row).forEach((b, k) => b.setAttribute('aria-pressed', k === i ? 'true' : 'false'));
-      $('[data-dnum]').textContent = String(i + 1).padStart(2, '0');
-      const cup = $('[data-dcup]'); cup.style.setProperty('--c1', m.c1); cup.style.setProperty('--c2', m.c2);
-      $('[data-dnick]').textContent = m.nick; $('[data-dname]').textContent = m.t; $('[data-dwhen]').textContent = m.w; $('[data-ddesc]').textContent = m.d;
-      $('[data-dings]').innerHTML = m.ings.map(x => `<span>${esc(x)}</span>`).join('');
-      orbit.innerHTML = m.ings.map(x => `<span>${esc(x)}</span>`).join(''); orbs = $$('span', orbit);
-      $('[data-dgo]').dataset.svc = CONFIG.base.find(b => m.t.startsWith(b.v.split(' ')[0]))?.v || '';
-      if (anim && ANIM) {
-        // colour flood from the tapped cup
-        const r = sec.getBoundingClientRect(), fx = from ? from.left + from.width / 2 - r.left : r.width / 2, fy = from ? from.top + from.height / 2 - r.top : r.height / 2;
-        flood.style.background = m.bg;
-        gsap.fromTo(flood, { clipPath: `circle(0px at ${fx}px ${fy}px)` }, { clipPath: `circle(${Math.hypot(r.width, r.height)}px at ${fx}px ${fy}px)`, duration: .8, ease: 'power3.inOut', onComplete: () => { sec.style.background = m.bg; gsap.set(flood, { clipPath: 'circle(0px at 50% 50%)' }); } });
-        gsap.fromTo(box, { y: 70, rotation: -18, scale: .7 }, { y: 0, rotation: 0, scale: 1, duration: .8, ease: 'back.out(2.2)' });
-        gsap.from(orbs, { scale: 0, duration: .6, ease: 'back.out(2.5)', stagger: .06 });
-        gsap.from('[data-dings] span', { y: -50, x: () => gsap.utils.random(-70, 70), rotation: () => gsap.utils.random(-40, 40), opacity: 0, duration: .7, ease: 'back.out(1.6)', stagger: .05 });
-        gsap.from('[data-dname]', { yPercent: 50, opacity: 0, duration: .5, ease: 'power3.out' });
-      } else sec.style.background = m.bg;
+    const M = CONFIG.menu, L = $('[data-mlist]');
+    L.innerHTML = M.map((m, i) => `<div class="mi" data-i="${i}"><button class="mi-head" type="button" aria-expanded="false" aria-controls="mi${i}" data-cur="OPEN"><svg class="cupic" viewBox="0 0 80 110" style="--c1:${m.c1};--c2:${m.c2}" aria-hidden="true"><use href="#papercup"/></svg><span><b>${esc(m.t)}</b><small>${esc(m.nick)}</small></span><span class="plus" aria-hidden="true"><svg viewBox="0 0 14 14" width="14" height="14"><path d="M7 1.5v11M1.5 7h11" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></span></button><div class="mi-body" id="mi${i}" role="region" aria-label="${esc(m.t)}"><div class="mi-in"><span class="tag">${esc(m.w)}</span><p>${esc(m.d)}</p><span class="inc">What's In It</span><div class="ings">${m.ings.map(x => `<span>${esc(x)}</span>`).join('')}</div><a class="btn loud sm" href="#package" data-svc="${esc(m.svc)}">Add To My Package <svg aria-hidden="true"><use href="#i-arrow"/></svg></a></div></div></div>`).join('');
+    const items = $$('.mi', L);
+    const set = (it, open, anim) => {
+      const body = $('.mi-body', it), head = $('.mi-head', it);
+      it.classList.toggle('open', open); head.setAttribute('aria-expanded', open);
+      if (!anim || !ANIM) { body.style.height = open ? 'auto' : '0px'; return; }
+      if (open) { gsap.fromTo(body, { height: 0 }, { height: 'auto', duration: .45, ease: 'power3.out' }); gsap.from($$('.ings span', it), { y: 12, opacity: 0, duration: .4, ease: 'back.out(2)', stagger: .04, delay: .1 }); }
+      else gsap.to(body, { height: 0, duration: .3, ease: 'power2.inOut' });
     };
-    row.addEventListener('click', e => { const b = e.target.closest('button'); if (b && +b.dataset.i !== cur) show(+b.dataset.i, true, b.getBoundingClientRect()); });
-    $('[data-dgo]').addEventListener('click', e => { const v = e.currentTarget.dataset.svc; const r = v && $(`[data-base] input[value="${CSS.escape(v)}"]`); if (r) { r.checked = true; r.dispatchEvent(new Event('change', { bubbles: true })); } });
-    show(0, false);
-    // orbit + tilt
-    let tx = 0, ty = 0, vis = false; onScreen(big, v => vis = v);
-    if (FINE) big.addEventListener('pointermove', e => { const r = big.getBoundingClientRect(); tx = ((e.clientX - r.left) / r.width - .5); ty = ((e.clientY - r.top) / r.height - .5); });
-    big.addEventListener('pointerleave', () => { tx = ty = 0; });
-    const tick = dt => { if (!vis) return; ang += dt * .45; const W = big.clientWidth, H = big.clientHeight, n = orbs.length;
-      orbs.forEach((o, k) => { const a = ang + k / n * Math.PI * 2, x = W / 2 + Math.cos(a) * W * .36 - o.offsetWidth / 2, y = H / 2 + Math.sin(a) * H * .34 - o.offsetHeight / 2; o.style.transform = `translate(${x}px,${y}px)`; o.style.zIndex = Math.sin(a) > 0 ? 3 : 0; o.style.opacity = Math.sin(a) > 0 ? 1 : .75; });
-      box.style.transform = `rotateY(${tx * 30}deg) rotateX(${-ty * 18}deg) rotate(${Math.sin(ang * 2) * 3}deg)`; };
-    if (ANIM) gsap.ticker.add((t, d) => tick(d / 1000)); else tick(0);
+    L.addEventListener('click', e => {
+      const add = e.target.closest('[data-svc]');
+      if (add) { const r = $(`[data-base] input[value="${CSS.escape(add.dataset.svc)}"]`); if (r) { r.checked = true; r.dispatchEvent(new Event('change', { bubbles: true })); } return; }
+      const h = e.target.closest('.mi-head'); if (!h) return; const it = h.parentElement, open = !it.classList.contains('open');
+      items.forEach(x => { if (x !== it && x.classList.contains('open')) set(x, false, true); });
+      set(it, open, true);
+    });
+    set(items[0], true, false);
   })();
 
   /* =============================================================
@@ -1178,6 +1160,7 @@
     const desk = $('[data-desk]'), R = CONFIG.roll;
     desk.insertAdjacentHTML('beforeend', R.map((r, i) => `<div class="pola" data-i="${i}"><img src="${esc(r.img)}" width="720" height="1280" alt="" loading="lazy"><span>${esc(r.t)}</span></div>`).join(''));
     const P = $$('.pola', desk);
+    if (!FINE) $('[data-deskhint]').textContent = 'Tap A Photo To Flick It';
     const layoutStatic = () => { const W = desk.clientWidth, H = desk.clientHeight; P.forEach((p, i) => { const x = (i % 5) / 4 * (W - p.offsetWidth), y = H - p.offsetHeight - (i < 5 ? 10 : p.offsetHeight * .6); p.style.transform = `translate(${x}px,${y}px) rotate(${(i % 2 ? 1 : -1) * (4 + i)}deg)`; }); };
     let started = false;
     const start = () => {
@@ -1398,6 +1381,7 @@
      ============================================================= */
   const intro = $('[data-intro]'), seen = document.documentElement.classList.contains('seen');
   if (!ANIM) {
+    $$('.pin-cue').forEach(c => c.remove());
     if (intro) intro.remove(); heroCup.boot().then(() => heroCup.pour());
     document.documentElement.classList.add('no-pin'); brew.set(1); quick.set(); return;
   }
@@ -1445,10 +1429,10 @@
   }
 
   // brewed: pin + scrub
-  ScrollTrigger.create({ trigger: '[data-brew]', start: 'top top', end: '+=260%', pin: '[data-brewpin]', scrub: .6, onUpdate: s => brew.set(s.progress) });
+  ScrollTrigger.create({ trigger: '[data-brew]', start: 'top top', end: '+=260%', pin: '[data-brewpin]', scrub: .6, onUpdate: s => { brew.set(s.progress); $('[data-brewcue]').classList.toggle('gone', s.progress > .94); } });
   // quick video: pin + sideways
   (() => { const tr = quick.track, dist = () => Math.max(0, tr.scrollWidth - innerWidth + 24);
-    gsap.to(tr, { x: () => -dist(), ease: 'none', scrollTrigger: { trigger: '[data-quick]', start: 'top top', end: () => '+=' + (dist() + innerHeight * .4), pin: '[data-quickpin]', scrub: .6, invalidateOnRefresh: true, onUpdate: quick.set } });
+    gsap.to(tr, { x: () => -dist(), ease: 'none', scrollTrigger: { trigger: '[data-quick]', start: 'top top', end: () => '+=' + (dist() + innerHeight * .4), pin: '[data-quickpin]', scrub: .6, invalidateOnRefresh: true, onUpdate: s => { quick.set(); $('[data-quickcue]').classList.toggle('gone', s.progress > .94); } } });
     quick.set(); })();
   // headings: letters bounce up one by one
   $$('main h2[data-split]').forEach(h => { const ch = $$('.ch', h); gsap.from(ch, { yPercent: 110, rotation: () => gsap.utils.random(-25, 25), opacity: 0, duration: .7, ease: 'back.out(2)', stagger: .025, scrollTrigger: { trigger: h, start: 'top 88%' } }); });
@@ -1458,7 +1442,7 @@
   $$('[data-par]').forEach(el => gsap.to(el, { y: () => +el.dataset.par * 4, ease: 'none', scrollTrigger: { trigger: el.closest('section'), start: 'top bottom', end: 'bottom top', scrub: .6 } }));
   if (FINE) { const pols = $$('.hero .pol'); addEventListener('pointermove', e => { const x = e.clientX / innerWidth - .5, y = e.clientY / innerHeight - .5; pols.forEach((p, i) => gsap.to(p, { xPercent: x * (12 + i * 8), yPercent: y * (10 + i * 6), duration: .8, overwrite: 'auto' })); }, { passive: true }); }
   const pop = (sel, trig, st = .07) => { if (!$(trig)) return; gsap.from(sel, { y: 60, rotation: () => gsap.utils.random(-8, 8), opacity: 0, duration: .8, ease: 'back.out(1.6)', stagger: st, scrollTrigger: { trigger: trig, start: 'top 85%' } }); };
-  pop('.cups button', '.cups', .05); pop('.spot', '.spots', .08); pop('.drink', '.drink'); pop('.biz button', '.biz', .05); pop('.slot', '.slot');
+  pop('.mi', '.menu-list', .06); pop('.spot', '.spots', .08); pop('.biz button', '.biz', .05); pop('.slot', '.slot');
   gsap.from('[data-qstamp]', { scale: 3, opacity: 0, rotation: -30, duration: .5, ease: 'back.out(2.5)', scrollTrigger: { trigger: '[data-qstamp]', start: 'top 82%' } });
   gsap.from('.collage .ph', { scale: .6, opacity: 0, duration: .9, ease: 'back.out(1.5)', stagger: .12, scrollTrigger: { trigger: '.collage', start: 'top 80%' } });
   gsap.from('.collage .stk', { scale: 0, rotation: 40, duration: .6, ease: 'back.out(2.5)', stagger: .15, delay: .4, scrollTrigger: { trigger: '.collage', start: 'top 75%' } });
