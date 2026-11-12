@@ -1439,9 +1439,14 @@
     const TODAYL = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', timeZone: 'America/Detroit' });
     const SWATCH = [['Navy', SH.navy], ['Cream', SH.cream], ['Copper', SH.copper], ['Sand', '#d9c6a3'], ['Espresso', SH.esp], ['White', '#ffffff'], ['Black', '#111111'], ['Blue', '#2f7cf6'], ['Yellow', '#f4cf3c']];
     const TF = { serif: s => SF.fr6(s), italic: s => SF.fri(s), script: s => SF.scr(s), caps: s => SF.man8(s), clean: s => SF.man5(s), bold: s => SF.man8(s), thin: s => `300 ${s}px Manrope, system-ui, sans-serif` };
-    const TFN = [['serif', 'Serif'], ['italic', 'Italic'], ['script', 'Script'], ['caps', 'Caps'], ['clean', 'Clean'], ['bold', 'Bold'], ['thin', 'Thin']];
+    TF.poster = s => FT.anton(s); TF.narrow = s => FT.osw(s);
+    const TFN = [['serif', 'Serif'], ['italic', 'Italic'], ['script', 'Script'], ['caps', 'Caps'], ['clean', 'Clean'], ['bold', 'Bold'], ['thin', 'Thin'], ['poster', 'Poster'], ['narrow', 'Narrow']];
+    const SWATCH_ES = [['Juice', JUICE], ['Ink', INK], ['Cream', CREAM], ['Orange', DEEP], ['Golden', '#ffb330'], ['White', '#ffffff'], ['Red', '#e0432b'], ['Blue', '#2f7cf6'], ['Sand', '#e6d7bd']];
+    const swOf = st => st.brand === 'sh' ? SWATCH : SWATCH_ES;
+    const appIcon = (c, x, y, s, st, round) => { c.save(); if (round) { c.beginPath(); c.arc(x + s / 2, y + s / 2, s / 2, 0, 6.3); } else rr(c, x, y, s, s, s * .25); if (st.brand === 'sh') { c.fillStyle = SH.cream; c.fill(); c.clip(); const im = SHI.logo, lh = s * .86, lw = lh * im.width / im.height; c.drawImage(im, x + s / 2 - lw / 2, y + s * .52 - lh / 2, lw, lh); } else { c.fillStyle = JUICE; c.fill(); const m = s * .62; c.translate(x + s / 2 - m * .73 / 2, y + s / 2 - m / 2); c.scale(m / 400, m / 400); c.fillStyle = INK; c.fill(MARK); } c.restore(); };
     let lidN = 0; const nid = () => 'l' + Date.now().toString(36).slice(-4) + (++lidN);
     const dkImg = k => SHI && SHI.cut && SHI.cut[k];
+    const brandName = st => st.brand === 'sh' ? 'Shibam Coffee' : 'Elevated Shots';
     const lum = h => { if (!/^#[0-9a-f]{6}$/i.test(h || '')) return .5; const [r, g, b] = rgbOf(h); return (r * .3 + g * .59 + b * .11) / 255; };
 
     // text that wraps to the box width; caps get wide tracking
@@ -1508,12 +1513,12 @@
       notif: {
         name: () => 'Notification',
         box: (c, L) => { const r = txL(c, { tx: L.tx, f: 'clean', sz: 38, w: 700, lh: 1.25 }); return { w: 940, h: Math.max(176, r.h + 118) }; },
-        draw(c, L) {
+        draw(c, L, t, st) {
           const r = txL(c, { tx: L.tx, f: 'clean', sz: 38, w: 700, lh: 1.25 }), w = 940, h = Math.max(176, r.h + 118);
           c.save(); shadowOn(c, .18, 40, 10); rr(c, -w / 2, -h / 2, w, h, 52); c.fillStyle = L.dark ? 'rgba(30,30,32,.72)' : 'rgba(246,242,236,.8)'; c.fill(); c.restore();
           const ink = L.dark ? '#fff' : '#111', soft = L.dark ? 'rgba(255,255,255,.6)' : 'rgba(0,0,0,.45)', ix = -w / 2 + 34, iy = -h / 2 + 34;
-          c.save(); rr(c, ix, iy, 96, 96, 24); c.fillStyle = SH.cream; c.fill(); c.clip(); const im = SHI.logo, lh = 84, lw = lh * im.width / im.height; c.drawImage(im, ix + 48 - lw / 2, iy + 50 - lh / 2, lw, lh); c.restore();
-          c.textBaseline = 'alphabetic'; c.textAlign = 'left'; c.font = SF.man8(36); c.fillStyle = ink; c.fillText(L.title || 'Shibam Coffee', ix + 128, iy + 38);
+          appIcon(c, ix, iy, 96, st);
+          c.textBaseline = 'alphabetic'; c.textAlign = 'left'; c.font = SF.man8(36); c.fillStyle = ink; c.fillText(L.title || brandName(st), ix + 128, iy + 38);
           c.font = SF.man5(30); c.fillStyle = soft; c.textAlign = 'right'; c.fillText(L.when || 'now', w / 2 - 36, iy + 36);
           c.save(); c.translate(ix + 128 + r.w / 2, iy + 58 + r.h / 2); txDraw(c, r, 'left', ink); c.restore();
         }
@@ -1522,7 +1527,7 @@
         name: () => 'Chat header',
         box: () => ({ w: 600, h: 250 }),
         draw(c, L) {
-          c.save(); c.beginPath(); c.arc(0, -40, 82, 0, 6.3); c.fillStyle = L.col || '#d9c6a3'; c.fill(); c.clip(); const im = dkImg(L.dk); if (im) { const h = 150, w = h * im.width / im.height; c.drawImage(im, -w / 2, -40 - h / 2 + 8, w, h); } c.restore();
+          c.save(); c.beginPath(); c.arc(0, -40, 82, 0, 6.3); c.fillStyle = L.col || (L.bt ? JUICE : '#d9c6a3'); c.fill(); c.clip(); const im = L.bt ? IMG && IMG.b[L.bt] : dkImg(L.dk); if (im) { const h = L.bt ? 190 : 150, w = h * im.width / im.height; c.drawImage(im, -w / 2, -40 - h / 2 + (L.bt ? 30 : 8), w, h); } c.restore();
           c.textAlign = 'center'; c.textBaseline = 'alphabetic'; c.font = SF.man5(36); c.fillStyle = L.tcol || '#111'; const nm = String(L.tx || ''); c.fillText(nm, -10, 94); const nw = c.measureText(nm).width;
           c.strokeStyle = 'rgba(0,0,0,.35)'; c.lineWidth = 4; c.lineCap = 'round'; c.beginPath(); c.moveTo(nw / 2 + 4, 72); c.lineTo(nw / 2 + 14, 82); c.lineTo(nw / 2 + 4, 92); c.stroke();
           if (L.sub) { c.font = SF.man5(26); c.fillStyle = 'rgba(0,0,0,.45)'; c.fillText(L.sub, 0, 130); }
@@ -1534,8 +1539,8 @@
         draw(c, L, t, st, e) {
           const r = txL(c, { tx: L.tx, f: 'clean', sz: 40, w: 760, lh: 1.32 }), s = txL(c, { tx: L.title, f: 'bold', sz: 50, w: 760 }), w = 860, h = 236 + s.h + r.h, x0 = -w / 2, y0 = -h / 2;
           c.save(); shadowOn(c, .2, 60, 18); rr(c, x0, y0, w, h, 40); c.fillStyle = '#fff'; c.fill(); c.restore();
-          c.save(); c.beginPath(); c.arc(x0 + 86, y0 + 92, 42, 0, 6.3); c.fillStyle = SH.cream; c.fill(); c.clip(); const im = SHI.logo, lh = 70, lw = lh * im.width / im.height; c.drawImage(im, x0 + 86 - lw / 2, y0 + 94 - lh / 2, lw, lh); c.restore();
-          c.textAlign = 'left'; c.textBaseline = 'alphabetic'; c.font = SF.man8(34); c.fillStyle = '#111'; c.fillText(L.from || 'Shibam Coffee', x0 + 148, y0 + 84);
+          appIcon(c, x0 + 44, y0 + 50, 84, st, true);
+          c.textAlign = 'left'; c.textBaseline = 'alphabetic'; c.font = SF.man8(34); c.fillStyle = '#111'; c.fillText(L.from || brandName(st), x0 + 148, y0 + 84);
           c.font = SF.man5(28); c.fillStyle = 'rgba(0,0,0,.45)'; c.fillText(L.to || 'To: you', x0 + 148, y0 + 122); c.textAlign = 'right'; c.fillText(L.when || 'Auto-reply', w / 2 - 50, y0 + 84);
           c.fillStyle = 'rgba(0,0,0,.08)'; c.fillRect(x0 + 50, y0 + 168, w - 100, 2);
           c.save(); c.translate(x0 + 50 + s.w / 2, y0 + 196 + s.h / 2); txDraw(c, s, 'left', '#111'); c.restore();
@@ -1551,7 +1556,7 @@
           c.fillStyle = 'rgba(0,0,0,.08)'; c.fillRect(x0, y0, w, 22);
           c.textBaseline = 'alphabetic'; c.fillStyle = ink; c.textAlign = 'left'; c.font = SF.man8(30); track(c, String(L.sub || '').toUpperCase(), x0 + 40, y0 + 78, 4);
           const big = String(L.big || ''); let bs = 170; c.font = SF.man8(bs); while (bs > 60 && c.measureText(big).width > w - 80) { bs -= 6; c.font = SF.man8(bs); } c.fillText(big, x0 + 34, y0 + 92 + bs * .74);
-          c.font = SF.man(34); c.fillText(String(L.tx || ''), x0 + 40, y0 + h - 44);
+          let ts = 34; const tl = String(L.tx || ''); c.font = SF.man(ts); while (ts > 18 && c.measureText(tl).width > w - 270) { ts -= 2; c.font = SF.man(ts); } c.fillText(tl, x0 + 40, y0 + h - 44);
           const r = rngP(11); let bx = x0 + w - 200; c.fillStyle = ink; while (bx < x0 + w - 40) { const bw = 2 + Math.floor(r() * 7); c.fillRect(bx, y0 + h - 104, bw, 68); bx += bw + 2 + Math.floor(r() * 6); }
         }
       },
@@ -1599,18 +1604,68 @@
       },
       list: {
         name: L => String(L.title || 'List').slice(0, 16),
-        box: L => ({ w: 640, h: 210 + String(L.tx || '').split('\n').length * 92 }),
+        box: (c, L) => { const its = String(L.tx || '').split('\n'); c.save(); c.font = SF.scr(64); const mw = Math.max(0, ...its.map(x => c.measureText(x).width)); c.font = SF.scr(74); const tw = c.measureText(String(L.title || '')).width; c.restore(); return { w: Math.max(640, Math.max(mw + (L.check ? 76 : 0), tw) + 190), h: 210 + its.length * 92 }; },
         draw(c, L, t, st, e) {
-          const items = String(L.tx || '').split('\n'), w = 640, h = 210 + items.length * 92, x0 = -w / 2, y0 = -h / 2, ink = L.col || '#26303a';
+          const items = String(L.tx || '').split('\n'), bx = KIND.list.box(c, L), w = bx.w, h = bx.h, x0 = -w / 2, y0 = -h / 2, ink = L.col || '#26303a', tx0 = x0 + 116 + (L.check ? 76 : 0);
           c.save(); shadowOn(c, .22, 40, 14); c.fillStyle = '#fffdf6'; c.fillRect(x0, y0, w, h); c.restore();
           c.fillStyle = 'rgba(70,120,180,.2)'; for (let i = 0; i <= items.length; i++) c.fillRect(x0, y0 + 150 + i * 92, w, 2);
           c.fillStyle = 'rgba(200,70,60,.32)'; c.fillRect(x0 + 92, y0, 2, h);
           c.save(); c.translate(0, y0 + 6); c.rotate(-.04); c.fillStyle = 'rgba(232,220,196,.82)'; c.fillRect(-110, -26, 220, 56); c.restore();
           c.textAlign = 'left'; c.textBaseline = 'alphabetic'; c.fillStyle = ink; c.font = SF.scr(74); c.fillText(String(L.title || ''), x0 + 116, y0 + 118);
-          const all = items.join(''), n = e.type != null ? Math.floor(e.type * all.length) : 1e9; let left = n; c.font = SF.scr(64);
-          items.forEach((it, i) => { if (left <= 0) return; const part = it.slice(0, left); left -= it.length; c.fillText(part, x0 + 116, y0 + 226 + i * 92); });
-          const last = items.length - 1; if (L.circ !== false && last >= 0 && n >= all.length) { const k = e.type != null ? cl((e.type - .999) * 1e3) : 1, tw = c.measureText(items[last]).width, cx = x0 + 116 + tw / 2, cy = y0 + 206 + last * 92;
-            c.strokeStyle = L.ccol || SH.copper; c.lineWidth = 7; c.lineCap = 'round'; c.beginPath(); for (let q = 0; q <= 60; q++) { const a = -2.2 + q / 60 * 6.9; c.lineTo(cx + Math.cos(a) * (tw / 2 + 40 + q * .2), cy + Math.sin(a) * (52 - q * .15)); } c.stroke(); }
+          const all = items.join(''), n = e.type != null ? Math.floor(e.type * all.length) : 1e9, done = n >= all.length; let left = n; c.font = SF.scr(64);
+          items.forEach((it, i) => { if (left <= 0 && it) return; const part = it.slice(0, Math.max(0, left)); left -= it.length; if (L.check) { c.save(); c.strokeStyle = ink; c.lineWidth = 5; c.strokeRect(x0 + 116, y0 + 180 + i * 92, 46, 46); c.restore(); } c.fillText(part, tx0, y0 + 226 + i * 92); });
+          const last = items.length - 1; if (L.circ !== false && last >= 0 && done) { const col = L.ccol || (st.brand === 'sh' ? SH.copper : '#e0432b'); c.strokeStyle = col; c.lineWidth = 7; c.lineCap = 'round'; c.lineJoin = 'round';
+            if (L.check) { const bx0 = x0 + 116, by0 = y0 + 180 + last * 92; c.lineWidth = 9; c.beginPath(); c.moveTo(bx0 + 4, by0 + 22); c.lineTo(bx0 + 20, by0 + 44); c.lineTo(bx0 + 58, by0 - 14); c.stroke(); }
+            else { const tw = c.measureText(items[last]).width, cx = tx0 + tw / 2, cy = y0 + 206 + last * 92; c.beginPath(); for (let q = 0; q <= 60; q++) { const a = -2.2 + q / 60 * 6.9; c.lineTo(cx + Math.cos(a) * (tw / 2 + 40 + q * .2), cy + Math.sin(a) * (52 - q * .15)); } c.stroke(); } }
+        }
+      },
+      bottle: {
+        name: L => (FL[L.bt] || FL.og).name,
+        box: L => { const im = IMG && IMG.b[L.bt || 'og'], h = L.h || 700; return { w: im ? h * im.width / im.height : h * .41, h }; },
+        draw(c, L) {
+          const k = L.bt || 'og', im = IMG.b[k], h = L.h || 700, sc = h / im.height, w = im.width * sc;
+          if (L.shd !== false) { c.save(); c.translate(0, h / 2 - 4); c.scale(1, .14); const g = c.createRadialGradient(0, 0, 0, 0, 0, w * .7); g.addColorStop(0, 'rgba(0,0,0,.4)'); g.addColorStop(1, 'rgba(0,0,0,0)'); c.fillStyle = g; c.fillRect(-w, -w, w * 2, w * 2); c.restore(); }
+          if (L.glow) { const g = IMG.glow[k]; c.save(); c.globalCompositeOperation = 'lighter'; c.globalAlpha *= .8; c.drawImage(g.c, -(im.width / 2 + g.pad) * sc, -h / 2 - g.pad * sc, (im.width + g.pad * 2) * sc, (im.height + g.pad * 2) * sc); c.restore(); }
+          c.drawImage(im, -w / 2, -h / 2, w, h);
+        }
+      },
+      icon: {
+        name: L => (LBL[ICO[L.ic]] || 'Icon'),
+        box: L => ({ w: L.h || 200, h: L.h || 200 }),
+        draw(c, L) { const z = L.h || 200; c.drawImage(IMG.ic, (L.ic || 0) * 192, 0, 192, 192, -z / 2, -z / 2, z, z); }
+      },
+      eslogo: {
+        name: () => 'Logo',
+        box: (c, L) => { const mh = L.h || 84; if (L.mark) return { w: mh * .73, h: mh }; c.save(); c.font = FT.osw(mh * .58); const tw = trackW(c, 'ELEVATED SHOTS', mh * .58 * .05); c.restore(); return { w: mh * .73 + mh * .28 + tw, h: mh }; },
+        draw(c, L) { const mh = L.h || 84, col = L.light ? CREAM : INK, tg = L.light ? JUICE : INK; if (L.mark) { c.fillStyle = L.light ? JUICE : INK; c.translate(-mh * .73 / 2, -mh / 2); c.scale(mh / 400, mh / 400); c.fill(MARK); return; } lockup(c, 0, -mh / 2, mh, col, tg, 'center', 1); }
+      },
+      pill: {
+        name: L => String(L.tx || 'Button').slice(0, 16),
+        box: (c, L) => { c.save(); c.font = FT.man(34); const tw = c.measureText(String(L.tx || '')).width; c.restore(); return { w: Math.max(L.w || 0, tw + 70), h: 78 }; },
+        draw(c, L) { const b = KIND.pill.box(c, L), col = L.col || INK; c.save(); rr(c, -b.w / 2, -39, b.w, 78, 39); if (L.line) { c.lineWidth = 4; c.strokeStyle = col; c.stroke(); } else { c.fillStyle = col; c.fill(); } c.restore(); c.font = FT.man(34); c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillStyle = L.tcol || (L.line ? col : lum(col) < .5 ? JUICE : INK); c.fillText(String(L.tx || ''), 0, 2); }
+      },
+      nametag: {
+        name: () => 'Name tag',
+        box: () => ({ w: 780, h: 540 }),
+        draw(c, L) {
+          const w = 780, h = 540, x0 = -w / 2, y0 = -h / 2, col = L.col || '#e0432b';
+          c.save(); shadowOn(c, .25, 40, 14); rr(c, x0, y0, w, h, 40); c.fillStyle = col; c.fill(); c.restore();
+          c.save(); rr(c, x0 + 26, y0 + 190, w - 52, h - 216, 18); c.fillStyle = '#fffdf8'; c.fill(); c.restore();
+          c.textAlign = 'center'; c.textBaseline = 'alphabetic'; c.fillStyle = L.tcol || '#fff'; c.font = FT.anton(104); track(c, 'HELLO', -trackW(c, 'HELLO', 6) / 2, y0 + 118, 6); c.font = FT.osw(36); const mn = 'MY NAME IS'; c.textAlign = 'left'; track(c, mn, -trackW(c, mn, 5) / 2, y0 + 168, 5);
+          let bs = 130; const nm = String(L.tx || ''); c.font = SF.scr(bs); while (bs > 50 && c.measureText(nm).width > w - 120) { bs -= 6; c.font = SF.scr(bs); } c.fillStyle = '#1d2a6b'; c.textAlign = 'center'; c.fillText(nm, 0, y0 + 360);
+          if (L.sub) { c.font = FT.man7(32); c.fillStyle = 'rgba(18,17,16,.7)'; c.fillText(String(L.sub), 0, y0 + h - 58); }
+        }
+      },
+      ticket: {
+        name: () => 'Ticket',
+        box: () => ({ w: 900, h: 440 }),
+        draw(c, L) {
+          const w = 900, h = 440, x0 = -w / 2, y0 = -h / 2, col = L.col || JUICE, ink = L.tcol || INK, cut = x0 + w * .72;
+          c.save(); shadowOn(c, .28, 40, 14); c.beginPath(); c.moveTo(x0 + 30, y0); c.lineTo(x0 + w - 30, y0); c.arc(x0 + w, y0, 30, Math.PI, Math.PI / 2, true); c.lineTo(x0 + w, y0 + h - 30); c.arc(x0 + w, y0 + h, 30, -Math.PI / 2, Math.PI, true); c.lineTo(x0 + 30, y0 + h); c.arc(x0, y0 + h, 30, 0, -Math.PI / 2, true); c.lineTo(x0, y0 + 30); c.arc(x0, y0, 30, Math.PI / 2, 0, true); c.closePath(); c.fillStyle = col; c.fill(); c.restore();
+          c.fillStyle = ink; for (let y = y0 + 24; y < y0 + h - 20; y += 30) c.fillRect(cut - 2, y, 4, 16);
+          c.textAlign = 'left'; c.textBaseline = 'alphabetic'; let bs = 110; const ti = String(L.tx || '').toUpperCase(); c.font = FT.anton(bs); while (bs > 50 && c.measureText(ti).width > cut - x0 - 90) { bs -= 4; c.font = FT.anton(bs); } c.fillText(ti, x0 + 50, y0 + 50 + bs * .9);
+          c.font = FT.osw(40); [L.d1, L.d2, L.d3].forEach((d, i) => { if (d) c.fillText(String(d).toUpperCase(), x0 + 52, y0 + 230 + i * 62); });
+          c.save(); c.translate(cut + (x0 + w - cut) / 2, 0); c.rotate(-Math.PI / 2); c.font = FT.anton(54); c.textAlign = 'center'; c.fillText(String(L.stub || 'ADMIT ONE').toUpperCase(), 0, 18); c.restore();
         }
       },
       tray: {
@@ -1634,28 +1689,38 @@
         }
       }
     };
+    const KADD_ES = [['text', 'Text'], ['bottle', 'Bottle'], ['eslogo', 'Logo'], ['icon', 'Ingredient'], ['pill', 'Button'], ['bubbleR', 'Blue bubble'], ['bubbleL', 'Grey bubble'], ['notif', 'Notification'], ['nametag', 'Name tag'], ['ticket', 'Ticket'], ['tagbar', '| Label'], ['stamp', 'Stamp'], ['shelftag', 'Price tag'], ['sign', 'Store sign'], ['card', 'Email'], ['list', 'List'], ['arrow', 'Arrow'], ['circle', 'Circle'], ['heart', 'Heart'], ['spark', 'Sparkle'], ['line', 'Underline'], ['photo', 'Your photo']];
     const KADD = [['text', 'Text'], ['drink', 'Drink'], ['logo', 'Logo'], ['bubbleR', 'Blue bubble'], ['bubbleL', 'Grey bubble'], ['notif', 'Notification'], ['tagbar', '| Label'], ['stamp', 'Stamp'], ['shelftag', 'Price tag'], ['sign', 'Store sign'], ['card', 'Email'], ['list', 'List'], ['tray', 'Silver tray'], ['arrow', 'Arrow'], ['circle', 'Circle'], ['heart', 'Heart'], ['spark', 'Sparkle'], ['line', 'Underline'], ['photo', 'Your photo']];
     const newPiece = (k, st) => {
       const b = { id: nid(), x: 540, y: 900, s: 1, r: 0, a: 'pop', at: 0 };
-      if (k === 'text') return Object.assign(b, { k: 'text', tx: 'Your words here', f: 'serif', sz: 84, col: SH.navy, al: 'center', w: 900 });
+      const es = st.brand !== 'sh';
+      if (k === 'text') return Object.assign(b, { k: 'text', tx: 'Your words here', f: es ? 'poster' : 'serif', sz: es ? 110 : 84, col: es ? INK : SH.navy, al: 'center', w: 900 });
+      if (k === 'bottle') return Object.assign(b, { k: 'bottle', bt: 'og', h: 640, a: 'bounce' });
+      if (k === 'eslogo') return Object.assign(b, { k: 'eslogo', h: 84 });
+      if (k === 'icon') return Object.assign(b, { k: 'icon', ic: 2, h: 200 });
+      if (k === 'pill') return Object.assign(b, { k: 'pill', tx: 'elevatedshotsus.com', col: INK });
+      if (k === 'nametag') return Object.assign(b, { k: 'nametag', tx: 'Detroit', sub: 'and I have a shot problem', r: -.05 });
+      if (k === 'ticket') return Object.assign(b, { k: 'ticket', tx: 'Pop-up', d1: nextSat(), d2: '10 AM to 4 PM', d3: 'Location here' });
       if (k === 'drink') return Object.assign(b, { k: 'drink', dk: st.sdk || 'iced-adeni', h: 640 });
       if (k === 'logo') return Object.assign(b, { k: 'logo', h: 150 });
       if (k === 'bubbleR' || k === 'bubbleL') return Object.assign(b, { k: 'bubble', side: k === 'bubbleR' ? 'r' : 'l', tx: k === 'bubbleR' ? 'on my way' : 'you up?' });
-      if (k === 'notif') return Object.assign(b, { k: 'notif', title: 'Shibam Coffee', tx: 'Your drink is ready when you are.' });
-      if (k === 'tagbar') return Object.assign(b, { k: 'tagbar', tx: 'Iced Adeni', col: SH.navy });
-      if (k === 'stamp') return Object.assign(b, { k: 'stamp', tx: 'Shibam Coffee · Inside Meijer ·', big: 'NEW', r: -.2 });
+      if (k === 'notif') return Object.assign(b, { k: 'notif', title: brandName(st), tx: es ? 'Time to take your shot.' : 'Your drink is ready when you are.' });
+      if (k === 'tagbar') return Object.assign(b, { k: 'tagbar', tx: es ? 'The OG' : 'Iced Adeni', col: es ? INK : SH.navy });
+      if (k === 'stamp') return Object.assign(b, { k: 'stamp', tx: es ? 'Elevated Shots · Metro Detroit ·' : 'Shibam Coffee · Inside Meijer ·', big: 'NEW', r: -.2, col: es ? INK : SH.copper });
       if (k === 'shelftag') return Object.assign(b, { k: 'shelftag', big: '$1 OFF', sub: 'Today only', tx: 'Any iced drink' });
-      if (k === 'sign') return Object.assign(b, { k: 'sign', tx: 'Coffee', sub: 'Shibam Coffee', arrow: 'l' });
+      if (k === 'sign') return Object.assign(b, { k: 'sign', tx: es ? 'Shots' : 'Coffee', sub: brandName(st), arrow: 'l', col: es ? INK : SH.navy, tcol: es ? JUICE : SH.cream });
       if (k === 'card') return Object.assign(b, { k: 'card', title: 'Out of office', tx: 'Write your note here.' });
       if (k === 'tray') return Object.assign(b, { k: 'tray', w: 780 });
       if (k === 'list') return Object.assign(b, { k: 'list', title: 'To do', tx: 'Coffee\nMore coffee', a: 'type' });
       if (k === 'photo') return Object.assign(b, { k: 'photo', shape: 'round', w: 700, hh: 860 });
-      return Object.assign(b, { k: 'doodle', d: k, col: SH.copper, a: 'draw' });
+      return Object.assign(b, { k: 'doodle', d: k, col: es ? '#e0432b' : SH.copper, a: 'draw' });
     };
 
     /* backgrounds */
     const BGS = [['flat:' + SH.navy, 'Navy'], ['flat:' + SH.cream, 'Cream'], ['flat:#c98a5a', 'Copper'], ['flat:#e6d7bd', 'Sand'], ['flat:#ecebe8', 'Light grey'], ['lock', 'Lock screen'], ['stone', 'Stone & sun'], ['window', 'Window light'], ['arch', 'Arch'], ['dusk', 'Dusk'], ['curtain', 'Velvet'], ['shelf', 'Shelf'], ['aisle', 'Store lights'], ['studio:0', 'Studio navy'], ['studio:1', 'Studio sand'], ['studio:2', 'Studio cream'], ['studio:3', 'Studio copper'], ['photo', 'Your photo']];
-    const bgDark = bg => /^flat:/.test(bg) ? lum(bg.slice(5)) < .5 : ['lock', 'stone', 'curtain', 'aisle', 'photo', 'studio:0', 'studio:3'].includes(bg);
+    const BGS_ES = [['flat:' + JUICE, 'Juice'], ['flat:' + INK, 'Ink'], ['flat:' + CREAM, 'Cream'], ['flat:#ffb330', 'Golden'], ['flat:#ffffff', 'White'], ['es:rays', 'Sunburst'], ['es:glow', 'Night glow'], ['es:fridge', 'Fridge'], ['lock', 'Lock screen'], ['window', 'Window light'], ['stone', 'Stone & sun'], ['shelf', 'Shelf'], ['aisle', 'Store lights'], ['photo', 'Your photo']];
+    const bgsOf = st => st.brand === 'sh' ? BGS : BGS_ES;
+    const bgDark = bg => /^flat:/.test(bg) ? lum(bg.slice(5)) < .5 : ['lock', 'stone', 'curtain', 'aisle', 'photo', 'studio:0', 'studio:3', 'es:glow'].includes(bg);
     const stoneSet = () => SET.stone || (SET.stone = (() => {
       const p = mk(W, H), c = p.getContext('2d'), r = rngP(19); c.fillStyle = '#56544f'; c.fillRect(0, 0, W, H);
       c.save(); c.globalCompositeOperation = 'overlay'; c.globalAlpha = .9; c.imageSmoothingEnabled = false; c.drawImage(noiseC(540, 960, r, 60, 150), 0, 0, W, H); c.restore();
@@ -1697,6 +1762,14 @@
       c.fillStyle = vgrad(c, 0, H, [[0, 'rgba(20,30,40,.35)'], [.5, 'rgba(20,30,40,0)'], [1, 'rgba(20,30,40,.5)']]); c.fillRect(0, 0, W, H); plaster(c, .06, 5);
       return p;
     })());
+    const fridgeSet = () => SET.fridge || (SET.fridge = (() => {
+      const p = mk(W, H), c = p.getContext('2d'); c.fillStyle = vgrad(c, 0, H, [[0, '#f6f9fb'], [.55, '#e2eaef'], [1, '#c5d0d8']]); c.fillRect(0, 0, W, H);
+      c.fillStyle = 'rgba(120,145,165,.22)'; c.beginPath(); c.moveTo(0, 0); c.lineTo(110, 150); c.lineTo(110, 1770); c.lineTo(0, H); c.closePath(); c.fill(); c.beginPath(); c.moveTo(W, 0); c.lineTo(W - 110, 150); c.lineTo(W - 110, 1770); c.lineTo(W, H); c.closePath(); c.fill();
+      c.fillStyle = radG(c, 540, 0, 820, [[0, 'rgba(255,255,255,1)'], [.4, 'rgba(255,255,255,.5)'], [1, 'rgba(255,255,255,0)']]); c.fillRect(0, 0, W, 900);
+      c.fillStyle = 'rgba(255,255,255,.95)'; rr(c, 300, 40, 480, 26, 13); c.fill();
+      [820, 1400].forEach(y => { c.fillStyle = 'rgba(205,225,238,.6)'; c.fillRect(0, y - 16, W, 24); c.fillStyle = 'rgba(255,255,255,.95)'; c.fillRect(0, y + 8, W, 5); c.fillStyle = vgrad(c, y + 13, y + 110, [[0, 'rgba(70,95,115,.2)'], [1, 'rgba(70,95,115,0)']]); c.fillRect(0, y + 13, W, 97); });
+      plaster(c, .035, 9); return p;
+    })());
     const lockSet = () => SET.lock || (SET.lock = (() => {
       const p = mk(W, H), c = p.getContext('2d'); c.fillStyle = vgrad(c, 0, H, [[0, '#101a24'], [.5, '#2a2622'], [1, '#5a3420']]); c.fillRect(0, 0, W, H);
       [[220, 1500, 900, 'rgba(177,101,51,.75)'], [930, 520, 760, 'rgba(230,215,189,.32)'], [600, 1150, 600, 'rgba(208,138,92,.4)'], [80, 300, 520, 'rgba(47,86,120,.5)']].forEach(([x, y, rr0, cc]) => { c.fillStyle = radG(c, x, y, rr0, [[0, cc], [1, cc.replace(/[\d.]+\)$/, '0)')]]); c.fillRect(0, 0, W, H); });
@@ -1714,6 +1787,9 @@
       const k = ease(cl(t / DUR));
       if (/^flat:/.test(bg)) { const col = bg.slice(5); c.fillStyle = col; c.fillRect(0, 0, W, H); if (lum(col) > .97) return; c.fillStyle = radG(c, 540, 900, 1100, [[0, lum(col) < .5 ? 'rgba(255,255,255,.07)' : 'rgba(255,255,255,.35)'], [1, 'rgba(0,0,0,0)']]); c.fillRect(0, 0, W, H); c.fillStyle = vgrad(c, 1300, H, [[0, 'rgba(0,0,0,0)'], [1, 'rgba(0,0,0,.08)']]); c.fillRect(0, 1300, W, H - 1300); return; }
       if (/^studio:/.test(bg)) { studio(c, +bg.split(':')[1] || 0, t); return; }
+      if (bg === 'es:rays') { const g = c.createRadialGradient(540, 1100, 60, 540, 1100, 1500); g.addColorStop(0, '#ffe680'); g.addColorStop(.45, '#ffc61a'); g.addColorStop(1, '#efa600'); c.fillStyle = g; c.fillRect(0, 0, W, H); rays(c, 540, 1100, 1700, 24, t * .09, 'rgba(255,255,255,', eo(P(t, 0, 1))); halftone(c, 1240, H + 20, 'rgba(18,17,16,.09)'); return; }
+      if (bg === 'es:glow') { c.fillStyle = INK; c.fillRect(0, 0, W, H); const ga = eo(P(t, 0, 1.2)); c.save(); c.globalAlpha = ga; radial(c, 540, 1150, 900, 'rgba(255,198,26,.24)'); radial(c, 1000, 160, 760, 'rgba(242,154,12,.14)'); c.restore(); const r = rng(5); for (let i = 0; i < 16; i++) { const x = r() * W, y0 = r() * H, rad = 18 + r() * 70, a = .05 + r() * .12, sp = 10 + r() * 30; radial(c, x + Math.sin(t * .7 + i) * 20, ((y0 - t * sp) % H + H) % H, rad, `rgba(255,198,26,${(a * ga).toFixed(3)})`); } return; }
+      if (bg === 'es:fridge') { const z = 1 + .02 * k; c.save(); c.translate(540, 960); c.scale(z, z); c.translate(-540, -960); c.drawImage(fridgeSet(), 0, 0); c.restore(); return; }
       if (bg === 'window' || bg === 'arch' || bg === 'dusk') {
         const v = ['window', 'arch', 'dusk'].indexOf(bg), s = setOf(v), z = 1 + .03 * k; c.save(); c.translate(540, 1200); c.scale(z, z); c.translate(-540, -1200); c.drawImage(s.p, 0, 0);
         if (v === 2) { const sy = 1250 - 130 * eo(cl(t / DUR)); c.fillStyle = radG(c, 540, sy, 760, [[0, 'rgba(250,206,160,.55)'], [1, 'rgba(250,206,160,0)']]); c.fillRect(0, 0, W, HZ); c.fillStyle = radG(c, 540, sy, 300, [[0, '#f7c592'], [.9, '#efaa76'], [1, 'rgba(239,170,118,0)']]); c.beginPath(); c.arc(540, sy, 300, 0, 6.3); c.fill(); c.drawImage(s.sk, 0, 0); c.drawImage(s.fg, 0, 0); }
@@ -1732,6 +1808,7 @@
     // how each piece arrives
     const ENT = (L, t) => {
       const a = L.a || 'fade', s0 = L.at || 0; if (a === 'none' || t >= DUR) return { a: 1, dx: 0, dy: 0, s: 1, r: 0 };
+      if (a === 'bounce') { const f = pop(t, s0); if (!f) return { a: 0 }; return { a: 1, dx: 0, dy: f.dy, s: 1, sx: f.sx, sy: f.sy, r: 0 }; }
       if (a === 'swing') { const k = P(t, s0, .3); return { a: cl(k * 2), dx: 0, dy: -(1 - eo(k)) * 120, s: 1, r: t > s0 ? Math.sin((t - s0) * 5.2) * .16 * Math.exp(-(t - s0) * 1.5) : -.16 }; }
       if (a === 'type') { const n = String(L.tx || '').length, k = P(t, s0, Math.max(.4, n * .045)); return { a: t >= s0 ? 1 : 0, dx: 0, dy: 0, s: 1, r: 0, type: k }; }
       if (a === 'draw') { const k = P(t, s0, .7); return { a: t >= s0 ? 1 : 0, dx: 0, dy: 0, s: 1, r: 0, draw: eo(k) }; }
@@ -1749,7 +1826,7 @@
       const K = KIND[L.k]; if (!K) return; const e = ENT(L, t);
       if (L.k === 'bubble' && L.side !== 'r' && L.dots !== false && t < (L.at || 0) && t > (L.at || 0) - .75) { c.save(); c.translate(L.x, L.y); c.rotate(L.r || 0); c.scale(L.s || 1, L.s || 1); const b = boxOf(c, L), ox = ANCX(L, b) - b.w / 2 + 80; c.fillStyle = L.col || '#e6e5ea'; rr(c, ox - 80, -38, 160, 76, 38); c.fill(); for (let i = 0; i < 3; i++) { c.globalAlpha = .35 + .5 * (Math.sin(t * 9 - i * .9) * .5 + .5); c.fillStyle = '#8e8e93'; c.beginPath(); c.arc(ox - 36 + i * 36, 0, 11, 0, 6.3); c.fill(); } c.restore(); }
       if (!(e.a > 0)) return;
-      const b = boxOf(c, L); c.save(); c.translate(L.x + (e.dx || 0), L.y + (e.dy || 0)); c.rotate((L.r || 0) + (e.r || 0)); const s = (L.s || 1) * (e.s || 1); c.scale(s, s); c.globalAlpha *= e.a; c.translate(ANCX(L, b), 0);
+      const b = boxOf(c, L); c.save(); c.translate(L.x + (e.dx || 0), L.y + (e.dy || 0)); c.rotate((L.r || 0) + (e.r || 0)); const s = (L.s || 1) * (e.s || 1); c.scale(s * (e.sx || 1), s * (e.sy || 1)); c.globalAlpha *= e.a; c.translate(ANCX(L, b), 0);
       K.draw(c, L, t, st, e); c.restore();
     };
 
@@ -1838,13 +1915,106 @@
         foot(SH.muted)
       ] }
     };
+    const pillFoot = (y = 1690) => T_({ k: 'pill', tx: 'elevatedshotsus.com', col: INK, x: 540, y, a: 'rise', at: 2.4 });
+    Object.assign(SCN, {
+      es_alarm: { brand: 'es', name: 'Shot alarm', bg: 'es:glow', make: () => [
+        T_({ k: 'text', tx: 'Alarm', f: 'clean', sz: 44, col: 'rgba(255,248,231,.7)', x: 540, y: 290, a: 'fade', at: .1 }),
+        T_({ k: 'text', tx: '7:00', f: 'thin', sz: 300, col: CREAM, x: 540, y: 470, a: 'rise', at: .2 }),
+        T_({ k: 'text', tx: 'Take your shot', f: 'clean', sz: 56, col: CREAM, x: 540, y: 650, a: 'fade', at: .5 }),
+        T_({ k: 'bottle', bt: 'og', h: 700, glow: true, x: 540, y: 1090, a: 'bounce', at: .7 }),
+        T_({ k: 'pill', tx: 'Snooze', col: 'rgba(255,248,231,.18)', tcol: CREAM, w: 420, x: 540, y: 1520, a: 'rise', at: 1.6 }),
+        T_({ k: 'pill', tx: 'Stop', col: JUICE, tcol: INK, w: 420, x: 540, y: 1630, a: 'rise', at: 1.8 })
+      ] },
+      es_hello: { brand: 'es', name: 'Hello my name is', bg: 'flat:' + JUICE, make: () => [
+        T_({ k: 'eslogo', h: 84, x: 540, y: 270, a: 'fade', at: .1 }),
+        T_({ k: 'nametag', tx: 'Detroit', sub: 'and I have a shot problem', x: 540, y: 700, r: -.05, a: 'pop', at: .3 }),
+        T_({ k: 'bottle', bt: 'golden', h: 540, x: 330, y: 1360, r: -.06, a: 'bounce', at: 1.1 }),
+        T_({ k: 'bottle', bt: 'og', h: 590, x: 540, y: 1340, a: 'bounce', at: 1.25 }),
+        T_({ k: 'bottle', bt: 'glow', h: 540, x: 750, y: 1360, r: .06, a: 'bounce', at: 1.4 }),
+        pillFoot()
+      ] },
+      es_fridge: { brand: 'es', name: 'Fresh batch', bg: 'es:fridge', make: () => [
+        T_({ k: 'eslogo', h: 80, x: 540, y: 250, a: 'fade', at: .1 }),
+        T_({ k: 'text', tx: 'FRESH BATCH', f: 'poster', sz: 150, col: INK, x: 540, y: 460, a: 'rise', at: .3 }),
+        T_({ k: 'text', tx: 'Just pressed. Grab yours before they sell out.', f: 'clean', sz: 40, col: 'rgba(18,17,16,.75)', w: 900, x: 540, y: 620, a: 'fade', at: .7 }),
+        T_({ k: 'bottle', bt: 'og', h: 520, x: 290, y: 1140, a: 'drop', at: .9 }),
+        T_({ k: 'bottle', bt: 'golden', h: 520, x: 540, y: 1140, a: 'drop', at: 1.05 }),
+        T_({ k: 'bottle', bt: 'glow', h: 520, x: 790, y: 1140, a: 'drop', at: 1.2 }),
+        T_({ k: 'tagbar', tx: 'Cold-pressed\nnever heated', col: INK, sz: 32, x: 260, y: 1560, a: 'fade', at: 1.8 }),
+        pillFoot()
+      ] },
+      es_stock: { brand: 'es', name: 'Stock up', bg: 'shelf', make: () => [
+        T_({ k: 'eslogo', h: 80, x: 540, y: 250, a: 'fade', at: .1 }),
+        T_({ k: 'text', tx: 'STOCK UP', f: 'poster', sz: 170, col: INK, x: 540, y: 470, a: 'rise', at: .3 }),
+        T_({ k: 'bottle', bt: 'og', h: 560, x: 290, y: 958, a: 'drop', at: .5 }),
+        T_({ k: 'bottle', bt: 'golden', h: 560, x: 540, y: 958, a: 'drop', at: .65 }),
+        T_({ k: 'bottle', bt: 'glow', h: 560, x: 790, y: 958, a: 'drop', at: .8 }),
+        T_({ k: 'text', tx: 'Pick as many as you want.', f: 'clean', sz: 42, col: 'rgba(18,17,16,.75)', x: 540, y: 610, a: 'fade', at: .6 }),
+        T_({ k: 'shelftag', big: '$4.50', sub: '20 shots or more', tx: 'Each, any mix', col: JUICE, tcol: INK, x: 540, y: 1470, a: 'swing', at: 1.4 }),
+        pillFoot(1720)
+      ] },
+      es_where: { brand: 'es', name: 'Where to grab one', bg: 'flat:' + CREAM, make: () => [
+        T_({ k: 'eslogo', h: 80, x: 540, y: 250, a: 'fade', at: .1 }),
+        T_({ k: 'list', title: 'Grab one at', tx: 'Detroit Perk\nMocha and Co\nElsayed Meat Market', circ: false, x: 470, y: 760, r: -.03, a: 'type', at: .4 }),
+        T_({ k: 'bottle', bt: 'glow', h: 640, x: 820, y: 1300, r: .06, a: 'bounce', at: 2.4 }),
+        T_({ k: 'tagbar', tx: 'Metro Detroit', col: INK, sz: 34, x: 260, y: 1340, a: 'fade', at: 2.8 }),
+        pillFoot()
+      ] },
+      es_chat: { brand: 'es', name: 'Text from your shot', bg: 'flat:#ffffff', make: () => [
+        T_({ k: 'chathead', bt: 'og', tx: 'The OG', sub: 'cold-pressed', x: 540, y: 300, a: 'fade', at: .1 }),
+        T_({ k: 'bubble', side: 'l', tx: 'did you take your shot today?', anc: 'l', x: 70, y: 580, a: 'pop', at: .8 }),
+        T_({ k: 'bubble', side: 'r', tx: 'not yet', anc: 'r', x: 1010, y: 720, a: 'pop', at: 1.6 }),
+        T_({ k: 'bubble', side: 'l', tx: "i'm in the fridge. top shelf.", anc: 'l', x: 70, y: 860, a: 'pop', at: 2.4 }),
+        T_({ k: 'bottle', bt: 'og', h: 560, x: 540, y: 1300, a: 'bounce', at: 3.1 }),
+        pillFoot()
+      ] },
+      es_inside: { brand: 'es', name: "What's inside", bg: 'flat:' + CREAM, make: () => [
+        T_({ k: 'text', tx: "WHAT'S IN THE OG", f: 'poster', sz: 110, col: INK, x: 540, y: 330, a: 'rise', at: .1 }),
+        T_({ k: 'bottle', bt: 'og', h: 820, x: 540, y: 1060, a: 'bounce', at: .3 }),
+        T_({ k: 'icon', ic: 0, h: 190, x: 210, y: 700, r: -.2, a: 'pop', at: 1 }), T_({ k: 'text', tx: 'Lemon', f: 'narrow', sz: 38, col: INK, x: 210, y: 820, a: 'fade', at: 1.1 }),
+        T_({ k: 'icon', ic: 2, h: 190, x: 870, y: 700, r: .2, a: 'pop', at: 1.2 }), T_({ k: 'text', tx: 'Ginger', f: 'narrow', sz: 38, col: INK, x: 870, y: 820, a: 'fade', at: 1.3 }),
+        T_({ k: 'icon', ic: 3, h: 190, x: 200, y: 1230, r: .15, a: 'pop', at: 1.4 }), T_({ k: 'text', tx: 'Turmeric', f: 'narrow', sz: 38, col: INK, x: 200, y: 1350, a: 'fade', at: 1.5 }),
+        T_({ k: 'icon', ic: 5, h: 190, x: 880, y: 1230, r: -.15, a: 'pop', at: 1.6 }), T_({ k: 'text', tx: 'Black pepper', f: 'narrow', sz: 38, col: INK, x: 880, y: 1350, a: 'fade', at: 1.7 }),
+        T_({ k: 'text', tx: 'Cold-pressed. Never heated.', f: 'clean', sz: 40, col: 'rgba(18,17,16,.75)', x: 540, y: 1570, a: 'fade', at: 2 }),
+        pillFoot()
+      ] },
+      es_pick: { brand: 'es', name: 'Pick your shot', bg: 'flat:' + INK, make: () => [
+        T_({ k: 'eslogo', light: true, h: 80, x: 540, y: 250, a: 'fade', at: .1 }),
+        T_({ k: 'text', tx: 'TODAY I NEED', f: 'poster', sz: 140, col: JUICE, x: 540, y: 450, a: 'rise', at: .2 }),
+        T_({ k: 'list', title: 'Check one', tx: 'Energy (Golden)\nImmunity (The OG)\nWellness (Glow)', check: true, x: 540, y: 860, r: .02, a: 'type', at: .6 }),
+        T_({ k: 'bottle', bt: 'golden', h: 400, x: 330, y: 1400, r: -.05, a: 'bounce', at: 2.6 }),
+        T_({ k: 'bottle', bt: 'og', h: 400, x: 540, y: 1390, a: 'bounce', at: 2.75 }),
+        T_({ k: 'bottle', bt: 'glow', h: 400, x: 750, y: 1400, r: .05, a: 'bounce', at: 2.9 }),
+        T_({ k: 'pill', tx: 'elevatedshotsus.com', col: JUICE, x: 540, y: 1690, a: 'rise', at: 3.2 })
+      ] },
+      es_popup: { brand: 'es', name: 'Pop-up ticket', bg: 'es:rays', make: () => [
+        T_({ k: 'eslogo', h: 80, x: 540, y: 250, a: 'fade', at: .1 }),
+        T_({ k: 'text', tx: 'CATCH US AT THE POP-UP', f: 'poster', sz: 120, col: INK, w: 900, x: 540, y: 500, a: 'rise', at: .3 }),
+        T_({ k: 'ticket', tx: 'Pop-up', d1: nextSat(), d2: '10 AM to 4 PM', d3: 'Location here', col: CREAM, x: 540, y: 950, r: -.04, a: 'pop', at: .8 }),
+        T_({ k: 'bottle', bt: 'golden', h: 540, x: 380, y: 1390, r: -.06, a: 'bounce', at: 1.5 }),
+        T_({ k: 'bottle', bt: 'og', h: 580, x: 680, y: 1370, r: .05, a: 'bounce', at: 1.65 }),
+        pillFoot()
+      ] },
+      es_photo: { brand: 'es', name: 'Photo', photo: true, bg: 'photo', make: () => [
+        T_({ k: 'eslogo', light: true, h: 84, x: 540, y: 260, a: 'fade', at: .4 }),
+        T_({ k: 'tagbar', tx: 'Take a shot', col: CREAM, sz: 48, x: 290, y: 1540, a: 'fade', at: 1.1, sh: true }),
+        T_({ k: 'pill', tx: 'elevatedshotsus.com', col: JUICE, x: 540, y: 1690, a: 'rise', at: 1.6 })
+      ] },
+      es_polaroid: { brand: 'es', name: 'Polaroid', photo: true, bg: 'flat:' + JUICE, make: () => [
+        T_({ k: 'eslogo', h: 80, x: 540, y: 250, a: 'fade', at: .1 }),
+        T_({ k: 'photo', shape: 'polaroid', w: 700, hh: 700, x: 520, y: 860, r: -.04, a: 'rise', at: .3 }),
+        T_({ k: 'text', tx: 'a shot a day', f: 'script', sz: 110, col: INK, x: 400, y: 1430, r: -.05, a: 'fade', at: 1.2 }),
+        T_({ k: 'bottle', bt: 'golden', h: 480, x: 850, y: 1420, r: .1, a: 'bounce', at: 1.5 }),
+        pillFoot()
+      ] }
+    });
     const DEFL = {};
     const freshScene = id => ({ v: SCN[id].v || 1, bg: SCN[id].bg, layers: SCN[id].make().map(l => Object.assign({ id: nid() }, l)) });
     const sceneOf = st => { const e = st.lay && st.lay[st.tpl]; if (e && (e.v || 1) === (SCN[st.tpl].v || 1)) return e; return DEFL[st.tpl] || (DEFL[st.tpl] = freshScene(st.tpl)); };
     const editScene = () => { if (!S.lay || typeof S.lay !== 'object') S.lay = {}; const e = S.lay[S.tpl]; if (!e || (e.v || 1) !== (SCN[S.tpl].v || 1)) S.lay[S.tpl] = JSON.parse(JSON.stringify(sceneOf(S))); return S.lay[S.tpl]; };
     const studioDraw = (c, st, t) => { const sc = sceneOf(st); drawBg(c, st, sc.bg, t); sc.layers.forEach(L => drawPiece(c, L, t, st)); drawOver(c, sc.bg, t); };
     const SHT = {};
-    Object.keys(SCN).forEach(id => { SHT[id] = { brand: 'sh', name: SCN[id].name, photo: !!SCN[id].photo, studio: true, vars: [['Default', SH.navy]], def: Object.assign({}, SHDEF), layout: () => null, draw(c, st, v, L, t) { studioDraw(c, st, t); } }; });
+    Object.keys(SCN).forEach(id => { SHT[id] = { brand: SCN[id].brand || 'sh', name: SCN[id].name, photo: !!SCN[id].photo, studio: true, vars: [['Default', SH.navy]], def: SCN[id].brand === 'es' ? {} : Object.assign({}, SHDEF), layout: () => null, draw(c, st, v, L, t) { studioDraw(c, st, t); } }; });
     Object.assign(TPL, SHT);
     const IDS = Object.keys(TPL);
 
@@ -1876,12 +2046,12 @@
 
     /* ---------- state ---------- */
     const SKEY = 'es-story';
-    const S = { tpl: 'spot', v: 0, shots: ['og', 'golden', 'glow'], hero: 'golden', head: '', sub: '', d1: '', d2: '', d3: '', site: true, handle: true, ph: 0, pm: 'frame', pz: 1, px: 0, py: 0, brand: 'es', htxt: '', dname: 'Iced Adeni', svm: {}, sdk: 'iced-adeni' };
+    const S = { tpl: 'es_hello', v: 0, shots: ['og', 'golden', 'glow'], hero: 'golden', head: '', sub: '', d1: '', d2: '', d3: '', site: true, handle: true, ph: 0, pm: 'frame', pz: 1, px: 0, py: 0, brand: 'es', htxt: '', dname: 'Iced Adeni', svm: {}, sdk: 'iced-adeni' };
     let dirty = {};
     try { const sv = JSON.parse(localStorage.getItem(SKEY) || 'null'); if (sv && sv.S && TPL[sv.S.tpl]) { Object.assign(S, sv.S); dirty = sv.dirty || {}; } } catch (e) {}
     S.ph = 0; if (!['bg', 'frame', 'none'].includes(S.pm)) S.pm = 'frame';
     if (S.brand !== 'sh') S.brand = 'es'; delete S.sdr; if (typeof S.dname !== 'string') S.dname = 'Iced Adeni'; if (!S.svm || typeof S.svm !== 'object') S.svm = {}; if (!DN[S.sdk]) S.sdk = 'iced-adeni';
-    const brandOf = id => TPL[id].brand || 'es', idsOf = b => IDS.filter(id => brandOf(id) === b);
+    const brandOf = id => TPL[id].brand || 'es', idsOf = b => IDS.filter(id => brandOf(id) === b).sort((x, y) => (TPL[y].studio ? 1 : 0) - (TPL[x].studio ? 1 : 0));
     if (!TPL[S.tpl]) S.tpl = 'spot';
     if (brandOf(S.tpl) !== S.brand) { S.tpl = idsOf(S.brand)[0]; S.v = 0; dirty = {}; }
     let BR = {}; try { BR = JSON.parse(localStorage.getItem(SKEY + '-br') || '{}') || {}; } catch (e) {}
@@ -1968,7 +2138,7 @@
 
     /* ---------- ui ---------- */
     const shotBtn = k => `<button class="ssh" type="button" data-sshot="${k}" aria-pressed="false"><img src="${BASE}bottle-${k}.png" alt="" width="18" height="40" loading="lazy">${FL[k].name}</button>`;
-    const buildRow = () => { $('[data-stpls]').innerHTML = idsOf(S.brand).map(id => `${id === 'full' || id === 'sh_photo' ? '<span class="stp-sep" aria-hidden="true">With your photo</span>' : ''}<button class="stp" type="button" data-stpl="${id}" aria-pressed="false"><canvas width="144" height="256" aria-hidden="true"></canvas>${TPL[id].name}</button>`).join(''); };
+    const buildRow = () => { $('[data-stpls]').innerHTML = idsOf(S.brand).map(id => `${id === 'spot' ? '<span class="stp-sep" aria-hidden="true">Classic</span>' : ''}${id === 'full' || id === 'sh_photo' || id === 'es_photo' ? '<span class="stp-sep" aria-hidden="true">With your photo</span>' : ''}<button class="stp" type="button" data-stpl="${id}" aria-pressed="false"><canvas width="144" height="256" aria-hidden="true"></canvas>${TPL[id].name}</button>`).join(''); };
     buildRow();
     $('[data-sdks]').innerHTML = DRK.map(([k, n]) => `<button class="sdk" type="button" data-sdrink="${k}" aria-pressed="false"><img src="${SBASE}d-${k}.webp" alt="" loading="lazy"><span>${esc(n)}</span></button>`).join('');
     $('[data-sshots]').innerHTML = ORDER.map(shotBtn).join('');
@@ -1986,7 +2156,7 @@
       $$('[data-stog]').forEach(b => b.setAttribute('aria-pressed', !!S[b.dataset.stog]));
       $('[data-sphaddl]').textContent = PH ? 'Change photo' : 'Add a photo'; $('[data-sphrm]').hidden = !PH; $('[data-sphctl]').hidden = !PH;
       $$('[data-spm]').forEach(b => b.setAttribute('aria-pressed', b.dataset.spm === S.pm)); const zr = $('[data-spz]'); zr.value = S.pz; zr.disabled = !photoActive(S);
-      $('.story-frame').classList.toggle('drag', photoActive(S)); $('[data-spm]').parentNode.hidden = !!T.photo || S.brand === 'sh';
+      $('.story-frame').classList.toggle('drag', photoActive(S)); $('[data-spm]').parentNode.hidden = !!T.photo || S.brand === 'sh' || !!T.studio;
       const sh = S.brand === 'sh'; $$('[data-sbrand]').forEach(b => b.setAttribute('aria-pressed', b.dataset.sbrand === S.brand));
       $('[data-sf="head"]').closest('label').hidden = sh && !!T.nohead; $('[data-sf="sub"]').closest('label').hidden = sh && !!T.nosub;
       $('[data-sshg]').hidden = sh; $('[data-sdnl]').hidden = !sh || !(T.dname || (T.named && visOf(S) !== 'drink')); const dn = $('[data-sdname]'); if (document.activeElement !== dn) dn.value = S.dname || '';
@@ -2006,7 +2176,7 @@
     const changed = (thumbsToo) => { persist(); redraw(); if (thumbsToo) thumbs(); };
     /* ---------- Shibam studio editor: tap a piece, drag it, pinch or use the corner dot to resize and turn ---------- */
     let sel = null, guide = null, edDrag = null, g2 = null; const eptr = new Map(), BGT = {};
-    const isStudio = st => st.brand === 'sh' && !!TPL[st.tpl] && !!TPL[st.tpl].studio;
+    const isStudio = st => !!TPL[st.tpl] && !!TPL[st.tpl].studio && brandOf(st.tpl) === st.brand;
     const pieceById = id => sceneOf(S).layers.find(l => l.id === id);
     const toCv = e => { const r = CV.getBoundingClientRect(); return { x: (e.clientX - r.left) * W / r.width, y: (e.clientY - r.top) * H / r.height }; };
     const kpx = () => W / (CV.getBoundingClientRect().width || W);
@@ -2072,10 +2242,10 @@
     });
 
     /* the side panel */
-    const FK = { text: [['tx', 'Text', 1]], bubble: [['tx', 'Message', 1]], notif: [['title', 'App name'], ['tx', 'Message', 1], ['when', 'Time']], card: [['title', 'Subject'], ['tx', 'Message', 1], ['when', 'Top right']], shelftag: [['big', 'Big line'], ['tx', 'Bottom line'], ['sub', 'Top line']], sign: [['tx', 'Sign'], ['sub', 'Small line']], tagbar: [['tx', 'Label', 1]], stamp: [['big', 'Middle'], ['tx', 'Around the edge']], chathead: [['tx', 'Name'], ['sub', 'Under the name']], list: [['title', 'Title'], ['tx', 'One item per line', 1]] };
-    const COLK = { list: 'col', text: 'col', bubble: 'col', tagbar: 'col', stamp: 'col', doodle: 'col', shelftag: 'col', sign: 'col', chathead: 'col' };
+    const FK = { text: [['tx', 'Text', 1]], bubble: [['tx', 'Message', 1]], notif: [['title', 'App name'], ['tx', 'Message', 1], ['when', 'Time']], card: [['title', 'Subject'], ['tx', 'Message', 1], ['when', 'Top right']], shelftag: [['big', 'Big line'], ['tx', 'Bottom line'], ['sub', 'Top line']], sign: [['tx', 'Sign'], ['sub', 'Small line']], tagbar: [['tx', 'Label', 1]], stamp: [['big', 'Middle'], ['tx', 'Around the edge']], chathead: [['tx', 'Name'], ['sub', 'Under the name']], pill: [['tx', 'Words']], nametag: [['tx', 'Name'], ['sub', 'Bottom line']], ticket: [['tx', 'Title'], ['d1', 'Line 1'], ['d2', 'Line 2'], ['d3', 'Line 3'], ['stub', 'Side stub']], list: [['title', 'Title'], ['tx', 'One item per line', 1]] };
+    const COLK = { list: 'col', pill: 'col', nametag: 'col', ticket: 'col', text: 'col', bubble: 'col', tagbar: 'col', stamp: 'col', doodle: 'col', shelftag: 'col', sign: 'col', chathead: 'col' };
     const ANI = [['fade', 'Fade'], ['rise', 'Rise'], ['pop', 'Pop'], ['drop', 'Drop'], ['slide', 'Slide down'], ['left', 'Slide in'], ['swing', 'Swing'], ['type', 'Type'], ['draw', 'Draw'], ['none', 'None']];
-    const sws = (cur, at) => SWATCH.map(([n, c]) => `<button type="button" class="sw" data-${at}="${c}" aria-label="${n}" aria-pressed="${String(cur || '').toLowerCase() === c.toLowerCase()}" style="--c:${c}"></button>`).join('');
+    const sws = (cur, at) => swOf(S).map(([n, c]) => `<button type="button" class="sw" data-${at}="${c}" aria-label="${n}" aria-pressed="${String(cur || '').toLowerCase() === c.toLowerCase()}" style="--c:${c}"></button>`).join('');
     const chipRow = (lab, items, at, cur) => `<div class="lrow"><span class="sg-h">${lab}</span><div class="chips">${items.map(([k, n]) => `<button type="button" data-${at}="${k}" aria-pressed="${cur === k}">${n}</button>`).join('')}</div></div>`;
     const togRow = items => `<div class="chips lrow">${items.map(([k, n, on]) => `<button type="button" data-ltog="${k}" aria-pressed="${!!on}">${n}</button>`).join('')}</div>`;
     const buildSel = () => {
@@ -2084,9 +2254,15 @@
       const K = KIND[L.k]; let h = `<div class="ssel-h"><b>${esc(K.name(L))}</b><button type="button" class="btn sm ink" data-lact="done">Done</button></div>`;
       (FK[L.k] || []).forEach(([f, lab, area]) => { h += `<label class="sf"><span class="sg-h">${lab}</span>${area ? `<textarea data-lp="${f}" rows="2" maxlength="200" enterkeyhint="enter">${esc(L[f] || '')}</textarea>` : `<input type="text" data-lp="${f}" maxlength="60" value="${esc(L[f] || '')}" autocomplete="off" enterkeyhint="done">`}</label>`; });
       if (L.k === 'text') { h += chipRow('Font', TFN, 'lf', L.f); h += chipRow('Align', [['left', 'Left'], ['center', 'Center'], ['right', 'Right']], 'la', L.al || 'center'); h += togRow([['sh', 'Soft shadow', L.sh]]); }
-      if (L.k === 'drink' || L.k === 'chathead') h += `<div class="lrow"><span class="sg-h">Drink</span><div class="sdks">${DRK.map(([k, n]) => `<button class="sdk" type="button" data-ldk="${k}" aria-pressed="${L.dk === k}"><img src="${SBASE}c-${k}.webp" alt="" loading="lazy"><span>${esc(n)}</span></button>`).join('')}</div></div>`;
+      if (L.k === 'drink' || (L.k === 'chathead' && !L.bt)) h += `<div class="lrow"><span class="sg-h">Drink</span><div class="sdks">${DRK.map(([k, n]) => `<button class="sdk" type="button" data-ldk="${k}" aria-pressed="${L.dk === k}"><img src="${SBASE}c-${k}.webp" alt="" loading="lazy"><span>${esc(n)}</span></button>`).join('')}</div></div>`;
       if (L.k === 'drink') h += togRow([['flip', 'Flip', L.flip], ['cast', 'Sun shadow', L.cast], ['bub', 'Photo bubble', L.bub], ['shd', 'Floor shadow', L.shd !== false]]);
       if (L.k === 'logo') h += togRow([['light', 'Light logo', L.light]]);
+      if (L.k === 'eslogo') h += togRow([['light', 'Light logo', L.light], ['mark', 'Icon only', L.mark]]);
+      if (L.k === 'bottle' || (L.k === 'chathead' && L.bt)) h += chipRow('Shot', ORDER.map(k => [k, FL[k].name]), 'lbt', L.bt || 'og');
+      if (L.k === 'bottle') h += togRow([['glow', 'Glow', L.glow], ['shd', 'Floor shadow', L.shd !== false]]);
+      if (L.k === 'icon') h += chipRow('Ingredient', ICO.slice(0, 8).map((k, i) => [String(i), LBL[k]]), 'lic', String(L.ic || 0));
+      if (L.k === 'list') h += togRow([['check', 'Tick boxes', L.check]]);
+      if (L.k === 'pill') h += togRow([['line', 'Outline', L.line]]);
       if (L.k === 'list') h += togRow([['circ', 'Circle the last item', L.circ !== false]]);
       if (L.k === 'sign') h += togRow([['hang', 'Door sign', L.hang]]);
       if (L.k === 'notif') h += togRow([['dark', 'Dark card', L.dark]]);
@@ -2096,10 +2272,10 @@
       if (L.k === 'doodle') h += chipRow('Shape', [['arrow', 'Arrow'], ['circle', 'Circle'], ['heart', 'Heart'], ['spark', 'Sparkle'], ['line', 'Underline']], 'ldd', L.d);
       if (L.k === 'photo') h += chipRow('Shape', [['round', 'Rounded'], ['rect', 'Square'], ['arch', 'Arch'], ['circle', 'Circle'], ['polaroid', 'Polaroid']], 'lshape', L.shape || 'rect');
       if (COLK[L.k]) h += `<div class="lrow"><span class="sg-h">${L.k === 'text' ? 'Color' : 'Main color'}</span><div class="swrow">${sws(L[COLK[L.k]], 'lc')}</div></div>`;
-      if (L.k === 'shelftag' || L.k === 'sign' || L.k === 'bubble' || L.k === 'chathead') h += `<div class="lrow"><span class="sg-h">Text color</span><div class="swrow">${sws(L.tcol, 'ltc')}</div></div>`;
+      if (L.k === 'shelftag' || L.k === 'sign' || L.k === 'bubble' || L.k === 'chathead' || L.k === 'pill' || L.k === 'ticket') h += `<div class="lrow"><span class="sg-h">Text color</span><div class="swrow">${sws(L.tcol, 'ltc')}</div></div>`;
       h += `<label class="szoom"><span class="sg-h">Size</span><input type="range" min="0.15" max="3" step="0.01" value="${L.s || 1}" data-lp="s" aria-label="Size"></label>`;
       h += `<label class="szoom"><span class="sg-h">Turn</span><input type="range" min="-180" max="180" step="1" value="${Math.round((L.r || 0) * 180 / Math.PI)}" data-lp="r" aria-label="Turn"></label>`;
-      h += chipRow('How it comes in', ANI.filter(([k]) => (k !== 'type' || L.k === 'text' || L.k === 'card' || L.k === 'list') && (k !== 'draw' || L.k === 'doodle')), 'lan', L.a || 'fade');
+      h += chipRow('How it comes in', ANI.filter(([k]) => (k !== 'type' || L.k === 'text' || L.k === 'card' || L.k === 'list') && (k !== 'draw' || L.k === 'doodle')).concat(L.k === 'bottle' ? [['bounce', 'Bounce']] : []), 'lan', L.a || 'fade');
       h += `<div class="lacts"><button class="btn sm" type="button" data-lact="front">Bring forward</button><button class="btn sm" type="button" data-lact="back">Send back</button><button class="btn sm" type="button" data-lact="dup">Copy</button><button class="btn sm" type="button" data-lact="center">Center</button><button class="btn sm" type="button" data-lact="del">Delete</button></div>`;
       el.innerHTML = h; el.hidden = false; buildLays();
     };
@@ -2107,12 +2283,12 @@
     const focusField = () => { const i = $('[data-ssel] textarea, [data-ssel] input[type="text"]'); if (!i) return; $('.story-ctl').scrollTo({ top: 0, behavior: 'smooth' }); try { i.focus({ preventScroll: true }); i.select && i.select(); } catch (e) {} };
     const toTop = () => { const c = $('.story-ctl'); if (c) c.scrollTo({ top: 0, behavior: 'smooth' }); };
     const buildLays = () => { const el = $('[data-slays]'); if (!el || !isStudio(S)) return; const ls = sceneOf(S).layers; el.innerHTML = ls.slice().reverse().map(L => `<button type="button" data-lsel="${L.id}" aria-pressed="${L.id === sel}">${esc(KIND[L.k] ? KIND[L.k].name(L) : L.k)}</button>`).join(''); };
-    const buildAdds = () => { const el = $('[data-sadds]'); if (el && !el.childElementCount) el.innerHTML = KADD.map(([k, n]) => `<button type="button" data-ladd="${k}">+ ${n}</button>`).join(''); };
+    const buildAdds = () => { const el = $('[data-sadds]'); if (el && el.dataset.b !== S.brand) { el.dataset.b = S.brand; el.innerHTML = ''; } if (el && !el.childElementCount) el.innerHTML = (S.brand === 'sh' ? KADD : KADD_ES).map(([k, n]) => `<button type="button" data-ladd="${k}">+ ${n}</button>`).join(''); };
     const bgThumbs = () => {
-      if (!SHI) return; const wk = bgThumbs.wk || (bgThumbs.wk = mk(270, 480)), x = wk.getContext('2d');
+      if (!IMG || (S.brand === 'sh' && !SHI)) return; const wk = bgThumbs.wk || (bgThumbs.wk = mk(270, 480)), x = wk.getContext('2d');
       $$('[data-lbg]').forEach(b => { const key = b.dataset.lbg, cv = b.querySelector('canvas'); let im = key === 'photo' ? null : BGT[key]; if (!im) { x.save(); x.setTransform(.25, 0, 0, .25, 0, 0); drawBg(x, S, key, DUR); drawOver(x, key, DUR); x.restore(); im = mk(108, 192); const o = im.getContext('2d'); o.imageSmoothingQuality = 'high'; o.drawImage(wk, 0, 0, 108, 192); if (key !== 'photo') BGT[key] = im; } const o = cv.getContext('2d'); o.clearRect(0, 0, cv.width, cv.height); o.drawImage(im, 0, 0, cv.width, cv.height); });
     };
-    const buildBgs = () => { const el = $('[data-sbgs]'); if (!el || !isStudio(S)) return; const cur = sceneOf(S).bg; el.innerHTML = BGS.map(([k, n]) => `<button class="sbg" type="button" data-lbg="${k}" aria-pressed="${cur === k}"><canvas width="108" height="192" aria-hidden="true"></canvas><span>${n}</span></button>`).join(''); clearTimeout(buildBgs.k); buildBgs.k = setTimeout(bgThumbs, 60); };
+    const buildBgs = () => { const el = $('[data-sbgs]'); if (!el || !isStudio(S)) return; const cur = sceneOf(S).bg; el.innerHTML = bgsOf(S).map(([k, n]) => `<button class="sbg" type="button" data-lbg="${k}" aria-pressed="${cur === k}"><canvas width="108" height="192" aria-hidden="true"></canvas><span>${n}</span></button>`).join(''); clearTimeout(buildBgs.k); buildBgs.k = setTimeout(bgThumbs, 60); };
     const syncStudio = () => {
       const stu = isStudio(S); $('[data-sed]').hidden = !stu; $('.story-frame').classList.toggle('edit', stu);
       $('[data-svars]').closest('.sg').hidden = stu; $('[data-sf="head"]').closest('.sg').hidden = stu; $('.stogs').hidden = stu;
@@ -2122,7 +2298,7 @@
     SM.addEventListener('click', e => {
       if (!isStudio(S)) return; const t = e.target;
       const sb = t.closest('[data-lsel]'); if (sb) { editScene(); sel = sb.dataset.lsel === sel ? null : sb.dataset.lsel; buildSel(); redraw(); if (sel) toTop(); return; }
-      const ad = t.closest('[data-ladd]'); if (ad) { const sc = editScene(), k = ad.dataset.ladd, L = newPiece(k, S); L.y = 880 + (sc.layers.length % 5) * 50; if (bgDark(sc.bg) && COLK[L.k] && L.k !== 'shelftag' && L.k !== 'sign' && L.k !== 'doodle') L[COLK[L.k]] = SH.cream; if (L.k === 'logo' && bgDark(sc.bg)) L.light = true; sc.layers.push(L); sel = L.id; if (k === 'photo') pickPhotoIfNone(); buildSel(); changed(true); toTop(); play(); return; }
+      const ad = t.closest('[data-ladd]'); if (ad) { const sc = editScene(), k = ad.dataset.ladd, L = newPiece(k, S); L.y = 880 + (sc.layers.length % 5) * 50; if (bgDark(sc.bg) && COLK[L.k] && L.k !== 'shelftag' && L.k !== 'sign' && L.k !== 'doodle') L[COLK[L.k]] = SH.cream; if ((L.k === 'logo' || L.k === 'eslogo') && bgDark(sc.bg)) L.light = true; sc.layers.push(L); sel = L.id; if (k === 'photo') pickPhotoIfNone(); buildSel(); changed(true); toTop(); play(); return; }
       const bg = t.closest('[data-lbg]'); if (bg) { const sc = editScene(); sc.bg = bg.dataset.lbg; if (sc.bg === 'photo') pickPhotoIfNone(); if (pourable(S)) pourVid(pourIdx(S)); $$('[data-lbg]').forEach(b => b.setAttribute('aria-pressed', b.dataset.lbg === sc.bg)); changed(true); return; }
       if (t.closest('[data-lreset]')) { if (S.lay) delete S.lay[S.tpl]; delete DEFL[S.tpl]; sel = null; buildSel(); buildBgs(); changed(true); play(); toast('Design reset'); return; }
       const L = sel && pieceById(sel); if (!L) return; const sc = editScene();
@@ -2137,10 +2313,12 @@
         else if (act === 'center') { const g = selGeo(L); L.x = Math.round(L.x + 540 - g.cx); }
         buildSel(); changed(true); return; }
       let b;
-      if ((b = t.closest('[data-lf]'))) { const FS = { caps: 1, clean: 1.2, bold: 1.15, serif: 1.9, italic: 1.8, script: 2.2, thin: 3 }, nf = b.dataset.lf; L.sz = Math.round((L.sz || 60) * (FS[nf] || 1) / (FS[L.f] || 1)); return set('f', nf); }
+      if ((b = t.closest('[data-lf]'))) { const FS = { caps: 1, clean: 1.2, bold: 1.15, serif: 1.9, italic: 1.8, script: 2.2, thin: 3, poster: 2.6, narrow: 1.4 }, nf = b.dataset.lf; L.sz = Math.round((L.sz || 60) * (FS[nf] || 1) / (FS[L.f] || 1)); return set('f', nf); }
       if ((b = t.closest('[data-la]'))) return set('al', b.dataset.la);
       if ((b = t.closest('[data-ltog]'))) { const k = b.dataset.ltog; return set(k, k === 'shd' ? L.shd === false : k === 'circ' ? L.circ === false : !L[k]); }
       if ((b = t.closest('[data-ldk]'))) return set('dk', b.dataset.ldk);
+      if ((b = t.closest('[data-lbt]'))) return set('bt', b.dataset.lbt);
+      if ((b = t.closest('[data-lic]'))) return set('ic', +b.dataset.lic);
       if ((b = t.closest('[data-lside]'))) return set('side', b.dataset.lside);
       if ((b = t.closest('[data-larrow]'))) return set('arrow', b.dataset.larrow);
       if ((b = t.closest('[data-ldd]'))) return set('d', b.dataset.ldd);
