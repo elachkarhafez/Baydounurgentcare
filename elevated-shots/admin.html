@@ -238,6 +238,32 @@
   .sbg canvas { display: block; width: 54px; height: 96px; margin: 0 auto 5px; border-radius: 8px; border: 2px solid rgba(18,17,16,.15); }
   .sbg[aria-pressed="true"] canvas { border-color: var(--ink); box-shadow: 0 0 0 3px var(--juice); }
   .story-frame.edit canvas { touch-action: none; }
+  .stabs { position: sticky; top: -14px; z-index: 3; display: flex; gap: 4px; margin: -14px -16px 14px; padding: 8px 12px; background: var(--paper); border-bottom: 1px solid var(--line); overflow-x: auto; scrollbar-width: none; }
+  .stabs::-webkit-scrollbar { display: none; }
+  .stabs button { flex: 1 0 auto; height: 40px; padding: 0 12px; border-radius: 999px; font: 800 14px/1 var(--sans); white-space: nowrap; color: var(--muted); }
+  .stabs button[aria-selected="true"] { background: var(--ink); color: var(--cream); }
+  .stabs button i { display: inline-block; min-width: 18px; height: 18px; margin-left: 6px; padding: 0 5px; border-radius: 9px; background: var(--juice); color: var(--ink); font: 800 11px/18px var(--sans); font-style: normal; vertical-align: 1px; }
+  .story-ctl[data-tab="design"] [data-tab]:not([data-tab="design"]), .story-ctl[data-tab="edit"] [data-tab]:not([data-tab="edit"]), .story-ctl[data-tab="add"] [data-tab]:not([data-tab="add"]), .story-ctl[data-tab="bg"] [data-tab]:not([data-tab="bg"]), .story-ctl[data-tab="photo"] [data-tab]:not([data-tab="photo"]), .story-ctl[data-tab="text"] [data-tab]:not([data-tab="text"]), .story-ctl[data-tab="look"] [data-tab]:not([data-tab="look"]) { display: none !important; }
+  .story-ctl .stpls { flex-wrap: wrap; overflow: visible; }
+  .story-ctl .stp-sep { flex: 1 1 100%; width: auto; margin: 4px 0 2px; padding: 4px 0 4px 10px; }
+  .story-ctl .sbgs { flex-wrap: wrap; overflow: visible; }
+  .sadd h4 { margin: 12px 0 8px; font: 700 11px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+  .sadd h4:first-child { margin-top: 0; }
+  .sadd div { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .sadd button { height: 48px; padding: 0 6px; border-radius: 14px; border: 2px solid var(--ink); background: #fff; font: 800 13px/1.15 var(--sans); }
+  .sadd button:active { transform: scale(.96); }
+  .smore { margin-top: 12px; border-top: 1px solid var(--line); padding-top: 10px; }
+  .smore summary { cursor: pointer; font: 800 13px/1 var(--sans); padding: 6px 0; }
+  .smore[open] summary { margin-bottom: 10px; }
+  .lacts.main .btn { flex: 1; }
+  .sqa { position: absolute; right: calc(100% + 10px); top: 0; display: flex; flex-direction: column; gap: 6px; }
+  .sqa span { display: contents; }
+  .sqa button { display: grid; place-items: center; width: clamp(30px, calc(6vh - 9px), 40px); height: clamp(30px, calc(6vh - 9px), 40px); width: clamp(30px, calc(6dvh - 9px), 40px); height: clamp(30px, calc(6dvh - 9px), 40px); border-radius: 50%; border: 2px solid var(--cream); background: rgba(18,17,16,.55); }
+  .sqa button svg { width: 18px; height: 18px; fill: none; stroke: var(--cream); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+  .sqa button:disabled { opacity: .35; }
+  .sqa button:active { transform: scale(.93); }
+  .sqa [data-qsel][hidden] { display: none; }
+  @media (min-width: 900px) { .story-ctl .stabs { margin: -20px -22px 16px; padding: 10px 16px; top: -20px; } .sadd div { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
   .story-bar { flex: none; display: flex; gap: 8px; padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); border-top: 1px solid var(--line); background: var(--paper); }
   .story-bar .btn { flex: 1; min-width: 0; padding: 0 12px; }
   .story-bar .btn.rec { position: relative; overflow: hidden; }
@@ -368,22 +394,34 @@
           <canvas data-scv width="1080" height="1920" role="img" aria-label="Story preview"></canvas>
           <div class="story-load" data-sload>Loading…</div>
           <button class="story-play" type="button" data-splay aria-label="Play the animation"><svg viewBox="0 0 24 24" data-splayi><path d="M7 4.5v15l13-7.5z"/></svg></button>
+          <div class="sqa" data-sqa hidden>
+            <button type="button" data-qa="undo" aria-label="Undo"><svg viewBox="0 0 24 24"><path d="M9 7H4v5"/><path d="M4.5 11.5A8 8 0 1 1 7 18"/></svg></button>
+            <button type="button" data-qa="redo" aria-label="Redo"><svg viewBox="0 0 24 24"><path d="M15 7h5v5"/><path d="M19.5 11.5A8 8 0 1 0 17 18"/></svg></button>
+            <span data-qsel>
+              <button type="button" data-qa="text" aria-label="Change the words"><svg viewBox="0 0 24 24"><path d="M5 19h4L19 9l-4-4L5 15z"/><path d="M13 7l4 4"/></svg></button>
+              <button type="button" data-qa="bigger" aria-label="Bigger"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+              <button type="button" data-qa="smaller" aria-label="Smaller"><svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg></button>
+              <button type="button" data-qa="dup" aria-label="Copy"><svg viewBox="0 0 24 24"><rect x="8" y="8" width="11" height="11" rx="2"/><path d="M5 15V6a1 1 0 0 1 1-1h9"/></svg></button>
+              <button type="button" data-qa="del" aria-label="Delete"><svg viewBox="0 0 24 24"><path d="M5 7h14M10 7V5h4v2M7 7l1 12h8l1-12"/></svg></button>
+            </span>
+          </div>
         </div>
       </div>
-      <div class="story-ctl">
-        <div class="ssel" data-ssel hidden></div>
-        <div class="sg"><span class="sg-h">Design</span><div class="stpls" data-stpls role="group" aria-label="Pick a design"></div></div>
+      <div class="story-ctl" data-tab="design">
+        <div class="stabs" data-stabs role="tablist" aria-label="Story maker sections"></div>
+        <div class="ssel" data-ssel data-tab="edit" hidden></div>
+        <div class="sg" data-tab="design"><span class="sg-h">Design</span><div class="stpls" data-stpls role="group" aria-label="Pick a design"></div></div>
         <div data-sed hidden>
-          <div class="sg"><span class="sg-h">Pieces</span><div class="lchips" data-slays role="group" aria-label="Pick a piece to edit"></div><p class="sg-note">Tap any piece on the preview to edit it. Drag to move it. Pinch with two fingers, or drag the yellow dot, to resize and turn it. Tap it again to change the words.</p></div>
-          <div class="sg"><span class="sg-h">Add</span><div class="lchips" data-sadds role="group" aria-label="Add a piece"></div></div>
-          <div class="sg"><span class="sg-h">Background</span><div class="sbgs" data-sbgs role="group" aria-label="Pick a background"></div></div>
-          <div class="sg"><button class="btn sm" type="button" data-lreset>Reset this design</button></div>
+          <div class="sg" data-tab="edit" data-sedhint><span class="sg-h">Pieces</span><div class="lchips" data-slays role="group" aria-label="Pick a piece to edit"></div><p class="sg-note">Tap a piece on the preview, or pick one here. Drag it to move it. Pinch with two fingers, or drag the yellow dot, to resize and turn it.</p></div>
+          <div class="sg" data-tab="add"><span class="sg-h">Tap to add it to your story</span><div class="sadd" data-sadds role="group" aria-label="Add a piece"></div></div>
+          <div class="sg" data-tab="bg"><span class="sg-h">Pick a scene</span><div class="sbgs" data-sbgs role="group" aria-label="Pick a background"></div></div>
+          <div class="sg" data-tab="design"><button class="btn sm" type="button" data-lreset>Reset this design</button></div>
         </div>
-        <div class="sg" data-svisg hidden><span class="sg-h">Picture</span><div class="chips" role="group" aria-label="Pick the picture"><button type="button" data-svis="drink" aria-pressed="false">Real drink</button><button type="button" data-svis="render">Studio cup</button></div></div>
-        <div class="sg" data-sdrg hidden><span class="sg-h">Drink</span><div class="sdks" data-sdks role="group" aria-label="Pick the drink"></div></div>
-        <div class="sg"><span class="sg-h">Colors</span><div class="chips svars" data-svars role="group" aria-label="Pick colors"></div></div>
-        <div class="sg" data-sshg><span class="sg-h" data-sshoth>Shots</span><div class="sshots" data-sshots role="group" aria-label="Pick shots"></div><p class="sg-note" data-sshotn hidden>This one shows a single shot. Tap the one you want.</p></div>
-        <div class="sg"><span class="sg-h">Your photo</span>
+        <div class="sg" data-tab="look" data-svisg hidden><span class="sg-h">Picture</span><div class="chips" role="group" aria-label="Pick the picture"><button type="button" data-svis="drink" aria-pressed="false">Real drink</button><button type="button" data-svis="render">Studio cup</button></div></div>
+        <div class="sg" data-tab="look" data-sdrg hidden><span class="sg-h">Drink</span><div class="sdks" data-sdks role="group" aria-label="Pick the drink"></div></div>
+        <div class="sg" data-tab="look"><span class="sg-h">Colors</span><div class="chips svars" data-svars role="group" aria-label="Pick colors"></div></div>
+        <div class="sg" data-tab="look" data-sshg><span class="sg-h" data-sshoth>Shots</span><div class="sshots" data-sshots role="group" aria-label="Pick shots"></div><p class="sg-note" data-sshotn hidden>This one shows a single shot. Tap the one you want.</p></div>
+        <div class="sg" data-tab="photo"><span class="sg-h">Your photo</span>
           <div class="sph"><label class="btn sm"><span data-sphaddl>Add a photo</span><input class="vh" type="file" accept="image/*" data-sphfile></label><button class="btn sm" type="button" data-sphrm hidden>Remove photo</button></div>
           <div data-sphctl hidden>
             <div class="chips" role="group" aria-label="How the photo shows"><button type="button" data-spm="bg" aria-pressed="false">Background</button><button type="button" data-spm="frame" aria-pressed="false">Framed</button><button type="button" data-spm="none" aria-pressed="false">None</button></div>
@@ -391,7 +429,7 @@
             <p class="sg-note">Drag the photo on the preview to move it. Pinch or use the slider to zoom.</p>
           </div>
         </div>
-        <div class="sg">
+        <div class="sg" data-tab="text">
           <label class="sf"><span class="sg-h">Headline</span><input type="text" data-sf="head" maxlength="70" autocomplete="off" enterkeyhint="done"></label>
           <label class="sf" data-sdnl hidden><span class="sg-h">Drink name</span><input type="text" data-sdname maxlength="30" autocomplete="off" enterkeyhint="done" placeholder="Iced Adeni"></label>
           <label class="sf"><span class="sg-h">Second line</span><input type="text" data-sf="sub" maxlength="90" autocomplete="off" enterkeyhint="done"></label>
@@ -401,7 +439,7 @@
             <label class="sf" data-sd3><span class="sg-h" data-sdl>Where</span><input type="text" data-sf="d3" maxlength="50" autocomplete="off" enterkeyhint="done"></label>
           </div>
         </div>
-        <div class="sg stogs"><button class="toggle" type="button" data-stog="site" aria-pressed="true"><i></i><span data-ssite>elevatedshotsus.com</span></button><button class="toggle" type="button" data-stog="handle" aria-pressed="true"><i></i>@_elevatedshots</button><label class="sf shtx" data-shtxl hidden><span class="sg-h">Instagram handle</span><input type="text" data-shtxt maxlength="30" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="@yourhandle" enterkeyhint="done"></label></div>
+        <div class="sg stogs" data-tab="text"><button class="toggle" type="button" data-stog="site" aria-pressed="true"><i></i><span data-ssite>elevatedshotsus.com</span></button><button class="toggle" type="button" data-stog="handle" aria-pressed="true"><i></i>@_elevatedshots</button><label class="sf shtx" data-shtxl hidden><span class="sg-h">Instagram handle</span><input type="text" data-shtxt maxlength="30" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="@yourhandle" enterkeyhint="done"></label></div>
       </div>
     </div>
     <div class="story-bar"><button class="btn ink" type="button" data-spng>Save image</button><button class="btn juice" type="button" data-svid><span data-svidl>Save video</span></button></div>
@@ -2196,14 +2234,14 @@
     const pickPhotoIfNone = () => { if (!hasPh(S)) $('[data-sphfile]').click(); };
     CV.addEventListener('pointerdown', e => {
       if (!isStudio(S) || rec) return; e.stopImmediatePropagation(); e.preventDefault(); try { CV.setPointerCapture(e.pointerId); } catch (er) {}
-      if (anim) stopAnim(); editScene(); const p = toCv(e); eptr.set(e.pointerId, p);
+      if (anim) stopAnim(); editScene(); if (!eptr.size) edPre = snap(); const p = toCv(e); eptr.set(e.pointerId, p);
       if (eptr.size === 2) { const [a, b] = [...eptr.values()], d = Math.hypot(a.x - b.x, a.y - b.y) || 1, an = Math.atan2(b.y - a.y, b.x - a.x), L = sel && pieceById(sel); g2 = L ? { L, d, an, s: L.s || 1, r: L.r || 0 } : bgIsPhoto() && hasPh(S) ? { ph: true, d, z: S.pz || 1 } : null; edDrag = null; return; }
       const L0 = sel && pieceById(sel);
       if (L0) { const g = selGeo(L0); if (Math.hypot(p.x - g.hx, p.y - g.hy) < 30 * kpx()) { edDrag = { mode: 'rs', L: L0, c: { x: g.cx, y: g.cy }, d: Math.hypot(p.x - g.cx, p.y - g.cy) || 1, an: Math.atan2(p.y - g.cy, p.x - g.cx), s: L0.s || 1, r: L0.r || 0 }; return; } }
       const L = hitPiece(p), was = sel;
       if (L) { sel = L.id; edDrag = { mode: 'mv', L, ox: p.x - L.x, oy: p.y - L.y, p0: p, moved: false, same: was === L.id }; }
       else { sel = null; edDrag = bgIsPhoto() && hasPh(S) ? { mode: 'pan', p0: p, last: p, moved: false } : { mode: 'none', p0: p }; }
-      if (was !== sel) buildSel(); redraw();
+      if (was !== sel) { buildSel(); buildTabs(); syncQa(); } if (L && was !== sel) setTab('edit'); redraw();
     }, true);
     CV.addEventListener('pointermove', e => {
       if (!isStudio(S) || !eptr.has(e.pointerId)) return; e.stopImmediatePropagation(); const p = toCv(e); eptr.set(e.pointerId, p);
@@ -2224,7 +2262,8 @@
       if (D && D.mode === 'mv' && !D.moved && D.L.k === 'photo') pickPhotoIfNone();
       else if (D && D.mode === 'none' && bgIsPhoto()) pickPhotoIfNone();
       else if (D && D.mode === 'mv' && !D.moved && D.same) focusField();
-      persist(); redraw(); thumbs(); if (D && D.mode !== 'none') syncSliders();
+      if (edPre && snap() !== edPre) remember(edPre); edPre = null;
+      persist(); redraw(); thumbs(); if (D && D.mode !== 'none') syncSliders(); syncQa();
     };
     CV.addEventListener('pointerup', eUp, true); CV.addEventListener('pointercancel', eUp, true);
     CV.addEventListener('click', e => { if (isStudio(S)) e.stopImmediatePropagation(); }, true);
@@ -2235,10 +2274,11 @@
       redraw(); clearTimeout(eUp.k); eUp.k = setTimeout(() => { persist(); thumbs(); syncSliders(); }, 400);
     }, { passive: false, capture: true });
     document.addEventListener('keydown', e => {
+      if (!SM.hidden && isStudio(S) && (e.metaKey || e.ctrlKey) && (e.key === 'z' || e.key === 'Z') && !/^(INPUT|TEXTAREA)$/.test((e.target && e.target.tagName) || '')) { e.preventDefault(); if (e.shiftKey) redo(); else undo(); return; }
       if (SM.hidden || !isStudio(S) || !sel || /^(INPUT|TEXTAREA|SELECT)$/.test((e.target && e.target.tagName) || '')) return; const L = pieceById(sel); if (!L) return;
       const st = e.shiftKey ? 20 : 4, mv = { ArrowLeft: [-st, 0], ArrowRight: [st, 0], ArrowUp: [0, -st], ArrowDown: [0, st] }[e.key];
       if (mv) { e.preventDefault(); L.x += mv[0]; L.y += mv[1]; persist(); redraw(); return; }
-      if (e.key === 'Delete' || e.key === 'Backspace') { e.preventDefault(); const ls = editScene().layers; ls.splice(ls.indexOf(L), 1); sel = null; buildSel(); changed(true); }
+      if (e.key === 'Delete' || e.key === 'Backspace') { e.preventDefault(); remember(); const ls = editScene().layers; ls.splice(ls.indexOf(L), 1); sel = null; buildSel(); changed(true); }
     });
 
     /* the side panel */
@@ -2250,7 +2290,7 @@
     const togRow = items => `<div class="chips lrow">${items.map(([k, n, on]) => `<button type="button" data-ltog="${k}" aria-pressed="${!!on}">${n}</button>`).join('')}</div>`;
     const buildSel = () => {
       const el = $('[data-ssel]'), L = isStudio(S) && sel && pieceById(sel);
-      if (!L) { el.hidden = true; el.innerHTML = ''; buildLays(); return; }
+      if (!L) { el.hidden = true; el.innerHTML = ''; buildLays(); syncQa(); if ($('[data-stabs]').childElementCount) buildTabs(); return; }
       const K = KIND[L.k]; let h = `<div class="ssel-h"><b>${esc(K.name(L))}</b><button type="button" class="btn sm ink" data-lact="done">Done</button></div>`;
       (FK[L.k] || []).forEach(([f, lab, area]) => { h += `<label class="sf"><span class="sg-h">${lab}</span>${area ? `<textarea data-lp="${f}" rows="2" maxlength="200" enterkeyhint="enter">${esc(L[f] || '')}</textarea>` : `<input type="text" data-lp="${f}" maxlength="60" value="${esc(L[f] || '')}" autocomplete="off" enterkeyhint="done">`}</label>`; });
       if (L.k === 'text') { h += chipRow('Font', TFN, 'lf', L.f); h += chipRow('Align', [['left', 'Left'], ['center', 'Center'], ['right', 'Right']], 'la', L.al || 'center'); h += togRow([['sh', 'Soft shadow', L.sh]]); }
@@ -2274,37 +2314,60 @@
       if (COLK[L.k]) h += `<div class="lrow"><span class="sg-h">${L.k === 'text' ? 'Color' : 'Main color'}</span><div class="swrow">${sws(L[COLK[L.k]], 'lc')}</div></div>`;
       if (L.k === 'shelftag' || L.k === 'sign' || L.k === 'bubble' || L.k === 'chathead' || L.k === 'pill' || L.k === 'ticket') h += `<div class="lrow"><span class="sg-h">Text color</span><div class="swrow">${sws(L.tcol, 'ltc')}</div></div>`;
       h += `<label class="szoom"><span class="sg-h">Size</span><input type="range" min="0.15" max="3" step="0.01" value="${L.s || 1}" data-lp="s" aria-label="Size"></label>`;
+      h += `<div class="lacts main"><button class="btn sm" type="button" data-lact="dup">Copy</button><button class="btn sm" type="button" data-lact="del">Delete</button></div>`;
+      h += `<details class="smore" data-smore${moreOpen ? ' open' : ''}><summary>More options</summary>`;
       h += `<label class="szoom"><span class="sg-h">Turn</span><input type="range" min="-180" max="180" step="1" value="${Math.round((L.r || 0) * 180 / Math.PI)}" data-lp="r" aria-label="Turn"></label>`;
       h += chipRow('How it comes in', ANI.filter(([k]) => (k !== 'type' || L.k === 'text' || L.k === 'card' || L.k === 'list') && (k !== 'draw' || L.k === 'doodle')).concat(L.k === 'bottle' ? [['bounce', 'Bounce']] : []), 'lan', L.a || 'fade');
-      h += `<div class="lacts"><button class="btn sm" type="button" data-lact="front">Bring forward</button><button class="btn sm" type="button" data-lact="back">Send back</button><button class="btn sm" type="button" data-lact="dup">Copy</button><button class="btn sm" type="button" data-lact="center">Center</button><button class="btn sm" type="button" data-lact="del">Delete</button></div>`;
-      el.innerHTML = h; el.hidden = false; buildLays();
+      h += `<div class="lacts"><button class="btn sm" type="button" data-lact="front">Bring forward</button><button class="btn sm" type="button" data-lact="back">Send back</button><button class="btn sm" type="button" data-lact="center">Center</button></div></details>`;
+      el.innerHTML = h; el.hidden = false; buildLays(); syncQa(); if ($('[data-stabs]').childElementCount) buildTabs();
     };
     const syncSliders = () => { const L = sel && pieceById(sel); if (!L) return; const s = $('[data-ssel] [data-lp="s"]'), r = $('[data-ssel] [data-lp="r"]'); if (s) s.value = L.s || 1; if (r) r.value = Math.round((L.r || 0) * 180 / Math.PI); };
     const focusField = () => { const i = $('[data-ssel] textarea, [data-ssel] input[type="text"]'); if (!i) return; $('.story-ctl').scrollTo({ top: 0, behavior: 'smooth' }); try { i.focus({ preventScroll: true }); i.select && i.select(); } catch (e) {} };
     const toTop = () => { const c = $('.story-ctl'); if (c) c.scrollTo({ top: 0, behavior: 'smooth' }); };
     const buildLays = () => { const el = $('[data-slays]'); if (!el || !isStudio(S)) return; const ls = sceneOf(S).layers; el.innerHTML = ls.slice().reverse().map(L => `<button type="button" data-lsel="${L.id}" aria-pressed="${L.id === sel}">${esc(KIND[L.k] ? KIND[L.k].name(L) : L.k)}</button>`).join(''); };
-    const buildAdds = () => { const el = $('[data-sadds]'); if (el && el.dataset.b !== S.brand) { el.dataset.b = S.brand; el.innerHTML = ''; } if (el && !el.childElementCount) el.innerHTML = (S.brand === 'sh' ? KADD : KADD_ES).map(([k, n]) => `<button type="button" data-ladd="${k}">+ ${n}</button>`).join(''); };
+    const ADDG = { sh: [['Words', ['text', 'tagbar', 'bubbleR', 'bubbleL', 'notif', 'card']], ['Coffee', ['drink', 'logo', 'tray']], ['Stickers', ['stamp', 'shelftag', 'sign', 'list']], ['Doodles', ['arrow', 'circle', 'heart', 'spark', 'line']], ['Photo', ['photo']]],
+      es: [['Words', ['text', 'tagbar', 'pill', 'bubbleR', 'bubbleL', 'notif', 'card']], ['Shots', ['bottle', 'eslogo', 'icon']], ['Stickers', ['nametag', 'ticket', 'stamp', 'shelftag', 'sign', 'list']], ['Doodles', ['arrow', 'circle', 'heart', 'spark', 'line']], ['Photo', ['photo']]] };
+    const buildAdds = () => { const el = $('[data-sadds]'); if (!el || el.dataset.b === S.brand) return; el.dataset.b = S.brand; const nm = Object.fromEntries((S.brand === 'sh' ? KADD : KADD_ES)); el.innerHTML = ADDG[S.brand === 'sh' ? 'sh' : 'es'].map(([g, ks]) => `<h4>${g}</h4><div>${ks.filter(k => nm[k]).map(k => `<button type="button" data-ladd="${k}">${esc(nm[k])}</button>`).join('')}</div>`).join(''); };
     const bgThumbs = () => {
       if (!IMG || (S.brand === 'sh' && !SHI)) return; const wk = bgThumbs.wk || (bgThumbs.wk = mk(270, 480)), x = wk.getContext('2d');
       $$('[data-lbg]').forEach(b => { const key = b.dataset.lbg, cv = b.querySelector('canvas'); let im = key === 'photo' ? null : BGT[key]; if (!im) { x.save(); x.setTransform(.25, 0, 0, .25, 0, 0); drawBg(x, S, key, DUR); drawOver(x, key, DUR); x.restore(); im = mk(108, 192); const o = im.getContext('2d'); o.imageSmoothingQuality = 'high'; o.drawImage(wk, 0, 0, 108, 192); if (key !== 'photo') BGT[key] = im; } const o = cv.getContext('2d'); o.clearRect(0, 0, cv.width, cv.height); o.drawImage(im, 0, 0, cv.width, cv.height); });
     };
     const buildBgs = () => { const el = $('[data-sbgs]'); if (!el || !isStudio(S)) return; const cur = sceneOf(S).bg; el.innerHTML = bgsOf(S).map(([k, n]) => `<button class="sbg" type="button" data-lbg="${k}" aria-pressed="${cur === k}"><canvas width="108" height="192" aria-hidden="true"></canvas><span>${n}</span></button>`).join(''); clearTimeout(buildBgs.k); buildBgs.k = setTimeout(bgThumbs, 60); };
+    let tab = 'design', moreOpen = false; const HIS = { u: [], r: [] }; let edPre = null;
+    const tabsOf = () => isStudio(S) ? [['design', 'Designs'], ['edit', 'Edit'], ['add', 'Add'], ['bg', 'Scene'], ['photo', 'Photo']] : [['design', 'Designs'], ['text', 'Words'], ['look', 'Style'], ['photo', 'Photo']];
+    const buildTabs = () => { const ts = tabsOf(); if (!ts.some(([k]) => k === tab)) tab = 'design'; const n = isStudio(S) ? sceneOf(S).layers.length : 0; $('[data-stabs]').innerHTML = ts.map(([k, l]) => `<button type="button" role="tab" data-stab="${k}" aria-selected="${k === tab}">${l}${k === 'edit' && sel ? '<i>1</i>' : ''}</button>`).join(''); $('.story-ctl').dataset.tab = tab; };
+    const setTab = k => { if (tab === k) return; tab = k; buildTabs(); const c = $('.story-ctl'); if (c) c.scrollTop = 0; };
+    const snap = () => JSON.stringify({ t: S.tpl, l: (S.lay && S.lay[S.tpl]) || null });
+    const syncQa = () => { const q = $('[data-sqa]'); if (!q) return; const stu = isStudio(S); q.hidden = !stu; if (!stu) return; const L = sel && pieceById(sel); $('[data-qa="undo"]').disabled = !HIS.u.length; $('[data-qa="redo"]').disabled = !HIS.r.length; $('[data-qsel]').hidden = !L; if (L) $('[data-qa="text"]').hidden = !FK[L.k]; };
+    const remember = pre => { const s0 = pre || snap(); if (HIS.u[HIS.u.length - 1] !== s0) { HIS.u.push(s0); if (HIS.u.length > 80) HIS.u.shift(); } HIS.r = []; syncQa(); };
+    const restoreSnap = js => { const o = JSON.parse(js); if (o.t !== S.tpl) return; if (!S.lay || typeof S.lay !== 'object') S.lay = {}; if (o.l) S.lay[o.t] = o.l; else delete S.lay[o.t]; if (sel && !pieceById(sel)) sel = null; TXK.clear(); buildSel(); buildBgs(); changed(true); syncQa(); };
+    const undo = () => { if (!HIS.u.length) return; const cur = snap(), prev = HIS.u.pop(); HIS.r.push(cur); restoreSnap(prev); };
+    const redo = () => { if (!HIS.r.length) return; const cur = snap(), nx = HIS.r.pop(); HIS.u.push(cur); restoreSnap(nx); };
     const syncStudio = () => {
       const stu = isStudio(S); $('[data-sed]').hidden = !stu; $('.story-frame').classList.toggle('edit', stu);
       $('[data-svars]').closest('.sg').hidden = stu; $('[data-sf="head"]').closest('.sg').hidden = stu; $('.stogs').hidden = stu;
       if (stu) { ['[data-svisg]', '[data-sdrg]', '[data-sshg]'].forEach(s => { $(s).hidden = true; }); buildAdds(); buildBgs(); }
-      buildSel();
+      if (syncStudio.tpl !== S.tpl + S.brand) { syncStudio.tpl = S.tpl + S.brand; HIS.u = []; HIS.r = []; sel = null; }
+      buildSel(); buildTabs(); syncQa();
     };
     SM.addEventListener('click', e => {
+      const tb = e.target.closest('[data-stab]'); if (tb) { setTab(tb.dataset.stab); return; }
       if (!isStudio(S)) return; const t = e.target;
+      const qa = t.closest('[data-qa]'); if (qa) { const k = qa.dataset.qa, L = sel && pieceById(sel);
+        if (k === 'undo') undo(); else if (k === 'redo') redo();
+        else if (L && k === 'text') { setTab('edit'); focusField(); }
+        else if (L && (k === 'bigger' || k === 'smaller')) { remember(); L.s = cl((L.s || 1) * (k === 'bigger' ? 1.12 : 1 / 1.12), .15, 4); persist(); redraw(); syncSliders(); clearTimeout(qa.k); qa.k = setTimeout(thumbs, 500); }
+        else if (L && (k === 'dup' || k === 'del')) { const b2 = $(`[data-ssel] [data-lact="${k}"]`); if (b2) b2.click(); }
+        return; }
+      if (t.closest('[data-smore] summary')) { setTimeout(() => { const d = $('[data-smore]'); moreOpen = !!(d && d.open); }, 0); return; }
       const sb = t.closest('[data-lsel]'); if (sb) { editScene(); sel = sb.dataset.lsel === sel ? null : sb.dataset.lsel; buildSel(); redraw(); if (sel) toTop(); return; }
-      const ad = t.closest('[data-ladd]'); if (ad) { const sc = editScene(), k = ad.dataset.ladd, L = newPiece(k, S); L.y = 880 + (sc.layers.length % 5) * 50; if (bgDark(sc.bg) && COLK[L.k] && L.k !== 'shelftag' && L.k !== 'sign' && L.k !== 'doodle') L[COLK[L.k]] = SH.cream; if ((L.k === 'logo' || L.k === 'eslogo') && bgDark(sc.bg)) L.light = true; sc.layers.push(L); sel = L.id; if (k === 'photo') pickPhotoIfNone(); buildSel(); changed(true); toTop(); play(); return; }
-      const bg = t.closest('[data-lbg]'); if (bg) { const sc = editScene(); sc.bg = bg.dataset.lbg; if (sc.bg === 'photo') pickPhotoIfNone(); if (pourable(S)) pourVid(pourIdx(S)); $$('[data-lbg]').forEach(b => b.setAttribute('aria-pressed', b.dataset.lbg === sc.bg)); changed(true); return; }
-      if (t.closest('[data-lreset]')) { if (S.lay) delete S.lay[S.tpl]; delete DEFL[S.tpl]; sel = null; buildSel(); buildBgs(); changed(true); play(); toast('Design reset'); return; }
+      const ad = t.closest('[data-ladd]'); if (ad) { remember(); setTab('edit'); const sc = editScene(), k = ad.dataset.ladd, L = newPiece(k, S); L.y = 880 + (sc.layers.length % 5) * 50; if (bgDark(sc.bg) && COLK[L.k] && L.k !== 'shelftag' && L.k !== 'sign' && L.k !== 'doodle') L[COLK[L.k]] = SH.cream; if ((L.k === 'logo' || L.k === 'eslogo') && bgDark(sc.bg)) L.light = true; sc.layers.push(L); sel = L.id; if (k === 'photo') pickPhotoIfNone(); buildSel(); changed(true); toTop(); play(); return; }
+      const bg = t.closest('[data-lbg]'); if (bg) { remember(); const sc = editScene(); sc.bg = bg.dataset.lbg; if (sc.bg === 'photo') pickPhotoIfNone(); if (pourable(S)) pourVid(pourIdx(S)); $$('[data-lbg]').forEach(b => b.setAttribute('aria-pressed', b.dataset.lbg === sc.bg)); changed(true); return; }
+      if (t.closest('[data-lreset]')) { remember(); if (S.lay) delete S.lay[S.tpl]; delete DEFL[S.tpl]; sel = null; buildSel(); buildBgs(); changed(true); play(); toast('Design reset'); return; }
       const L = sel && pieceById(sel); if (!L) return; const sc = editScene();
-      const set = (k, v, anim2) => { L[k] = v; TXK.clear(); buildSel(); changed(true); if (anim2) play(); };
+      const set = (k, v, anim2) => { remember(); L[k] = v; TXK.clear(); buildSel(); changed(true); if (anim2) play(); };
       const a = t.closest('[data-lact]');
-      if (a) { const i = sc.layers.indexOf(L), act = a.dataset.lact;
+      if (a) { const i = sc.layers.indexOf(L), act = a.dataset.lact; if (act !== 'done') remember();
         if (act === 'done') sel = null;
         else if (act === 'del') { sc.layers.splice(i, 1); sel = null; toast('Deleted'); }
         else if (act === 'front' && i < sc.layers.length - 1) { sc.layers.splice(i, 1); sc.layers.splice(i + 1, 0, L); }
@@ -2329,6 +2392,7 @@
     });
     SM.addEventListener('input', e => {
       if (!isStudio(S)) return; const k = e.target.dataset && e.target.dataset.lp; if (!k) return; const L = sel && pieceById(sel); if (!L) return;
+      if (!e.target.dataset.pre) e.target.dataset.pre = '1', remember();
       let v = e.target.value; if (k === 's') v = +v; else if (k === 'r') v = snapR(+v * Math.PI / 180); L[k] = v; persist(); redraw();
       if (k !== 's' && k !== 'r') { const hb = $('.ssel-h b'); if (hb) hb.textContent = KIND[L.k].name(L); clearTimeout(buildLays.k); buildLays.k = setTimeout(() => { buildLays(); thumbs(); }, 600); } else { clearTimeout(buildLays.k2); buildLays.k2 = setTimeout(thumbs, 600); }
     });
