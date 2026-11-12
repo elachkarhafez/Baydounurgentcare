@@ -4,8 +4,8 @@
 // The board is built from the file names alone, so reading it never opens anyone's contact details.
 // GET  -> this month's top 10 (names and scores only)
 // POST -> { name, contact, dist, bottles, boosts, ms }: the server recomputes the score and checks the run adds up.
-import { list, put, del } from '@vercel/blob';
-import { createHash } from 'node:crypto';
+import { list, put, del, get } from '@vercel/blob';
+import { createHash, timingSafeEqual } from 'node:crypto';
 
 const MAX_SPEED = 32;            // m/s, a little above the game's cap of 30
 const month = () => {
@@ -38,7 +38,21 @@ async function board(m) {
 }
 const pub = best => best.slice(0, 10).map((e, i) => ({ rank: i + 1, name: e.name, score: e.score }));
 
+// the owner's view: GET ?admin=1&month=YYYY-MM (or month=last) with header x-admin-key = ADMIN_KEY returns the top 10 with contacts
+const isAdmin = request => { const k = request.headers.get('x-admin-key') || '', a = Buffer.from(k), b = Buffer.from(process.env.ADMIN_KEY || ''); return b.length > 0 && a.length === b.length && timingSafeEqual(a, b); };
+const lastMonth = () => { const [y, mo] = month().split('-').map(Number); return mo === 1 ? `${y - 1}-12` : `${y}-${String(mo - 1).padStart(2, '0')}`; };
+async function adminView(request) {
+  const q = new URL(request.url).searchParams.get('month') || month(), m = q === 'last' ? lastMonth() : q === 'dry-run' ? 'dry-run' : /^\d{4}-\d{2}$/.test(q) ? q : month();
+  const { best } = await board(m), top = [];
+  for (const [i, e] of best.slice(0, 10).entries()) {
+    let d = {}; try { const r = await get(e.pathname, { access: 'private', useCache: false }); if (r && r.stream) d = JSON.parse(await new Response(r.stream).text()); } catch (err) {}
+    top.push({ rank: i + 1, name: e.name, score: e.score, contact: d.contact || '', dist: d.dist, bottles: d.bottles, at: d.at });
+  }
+  return json({ month: m, players: best.length, top });
+}
+
 export async function GET(request) {
+  if (new URL(request.url).searchParams.get('admin') === '1') return isAdmin(request) ? adminView(request) : json({ error: 'Not allowed.' }, 401);
   const m = which(request);
   try { return json({ month: m, top: pub((await board(m)).best) }); }
   catch (e) { return json({ month: m, top: [], error: 'The board is busy. Try again.' }, 503); }
