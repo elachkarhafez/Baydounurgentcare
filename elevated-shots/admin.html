@@ -190,13 +190,12 @@
   .sbrand { flex: none; display: flex; justify-content: center; gap: 6px; padding: 8px 16px; border-bottom: 1px solid var(--line); }
   .sbrand button { flex: 1; max-width: 200px; height: 36px; border-radius: 999px; border: 2px solid var(--ink); background: var(--cream); font: 800 13px/1 var(--sans); white-space: nowrap; }
   .sbrand button[aria-pressed="true"] { background: var(--ink); color: var(--cream); }
-  .sdks { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding: 2px 2px 6px; }
-  .sdks::-webkit-scrollbar { display: none; }
-  .sdk { flex: none; width: 82px; padding: 6px 4px 8px; border-radius: 16px; border: 2px solid rgba(18,17,16,.18); background: #fbf7ef; font: 700 11px/1.2 var(--sans); text-align: center; }
-  .sdk img { display: block; width: 100%; height: 70px; margin-bottom: 4px; object-fit: contain; }
-  .sdk[aria-pressed="true"] { border-color: var(--ink); background: #fff; box-shadow: 0 0 0 3px #d08a5c; }
-  .sdk i { display: inline-grid; place-items: center; width: 18px; height: 18px; margin-right: 3px; border-radius: 50%; background: var(--ink); color: var(--cream); font: 800 10px/1 var(--sans); font-style: normal; }
   .shtx { flex: 1 1 100%; }
+  .sdks { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding: 4px 4px 6px; margin: -4px -4px 0; }
+  .sdks::-webkit-scrollbar { display: none; }
+  .sdk { flex: none; width: 84px; padding: 6px 4px 8px; border-radius: 16px; border: 2px solid rgba(18,17,16,.16); background: #fff; font: 700 11px/1.2 var(--sans); text-align: center; }
+  .sdk img { display: block; width: 100%; height: 72px; margin-bottom: 4px; object-fit: contain; }
+  .sdk[aria-pressed="true"] { border-color: var(--ink); box-shadow: 0 0 0 3px #d08a5c; }
   .stp-sep { flex: none; align-self: center; width: 58px; margin-bottom: 18px; padding: 8px 0 8px 10px; border-left: 2px solid var(--ink); font: 700 10px/1.3 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
   .stp[aria-pressed="true"] canvas { border-color: var(--ink); box-shadow: 0 0 0 3px var(--juice); }
   .stp:active canvas { transform: scale(.95); }
@@ -353,8 +352,9 @@
       </div>
       <div class="story-ctl">
         <div class="sg"><span class="sg-h">Design</span><div class="stpls" data-stpls role="group" aria-label="Pick a design"></div></div>
+        <div class="sg" data-svisg hidden><span class="sg-h">Picture</span><div class="chips" role="group" aria-label="Pick the picture"><button type="button" data-svis="drink" aria-pressed="false">Real drink</button><button type="button" data-svis="render">Studio cup</button></div></div>
+        <div class="sg" data-sdrg hidden><span class="sg-h">Drink</span><div class="sdks" data-sdks role="group" aria-label="Pick the drink"></div></div>
         <div class="sg"><span class="sg-h">Colors</span><div class="chips svars" data-svars role="group" aria-label="Pick colors"></div></div>
-        <div class="sg" data-sdrg hidden><span class="sg-h" data-sdrh>Drinks</span><div class="sdks" data-sdks role="group" aria-label="Pick drinks"></div><p class="sg-note" data-sdrn></p></div>
         <div class="sg" data-sshg><span class="sg-h" data-sshoth>Shots</span><div class="sshots" data-sshots role="group" aria-label="Pick shots"></div><p class="sg-note" data-sshotn hidden>This one shows a single shot. Tap the one you want.</p></div>
         <div class="sg"><span class="sg-h">Your photo</span>
           <div class="sph"><label class="btn sm"><span data-sphaddl>Add a photo</span><input class="vh" type="file" accept="image/*" data-sphfile></label><button class="btn sm" type="button" data-sphrm hidden>Remove photo</button></div>
@@ -366,6 +366,7 @@
         </div>
         <div class="sg">
           <label class="sf"><span class="sg-h">Headline</span><input type="text" data-sf="head" maxlength="70" autocomplete="off" enterkeyhint="done"></label>
+          <label class="sf" data-sdnl hidden><span class="sg-h">Drink name</span><input type="text" data-sdname maxlength="30" autocomplete="off" enterkeyhint="done" placeholder="Iced Adeni"></label>
           <label class="sf"><span class="sg-h">Second line</span><input type="text" data-sf="sub" maxlength="90" autocomplete="off" enterkeyhint="done"></label>
           <div data-sdet hidden>
             <label class="sf"><span class="sg-h" data-sdl>When</span><input type="text" data-sf="d1" maxlength="40" autocomplete="off" enterkeyhint="done"></label>
@@ -1163,33 +1164,39 @@
       }
     };
 
-    /* ---------- Shibam Coffee Co. (second brand): quiet, premium, one hero drink ---------- */
+    /* ---------- Shibam Coffee Co. (second brand): studio renders of their cup, quiet type ---------- */
     const SH = { navy: '#141e28', copper: '#b16533', deep: '#8e4e27', light: '#d08a5c', sand: '#e6d7bd', sandL: '#f1e8d8', cream: '#faf6ee', esp: '#30251f', muted: '#6b5344' };
-    const SF = { fr: s => `700 ${s}px Fraunces, Georgia, serif`, fri: s => `italic 600 ${s}px Fraunces, Georgia, serif`, man: s => `700 ${s}px Manrope, system-ui, sans-serif`, man5: s => `500 ${s}px Manrope, system-ui, sans-serif`, man8: s => `800 ${s}px Manrope, system-ui, sans-serif`, scr: s => `700 ${s}px Caveat, "Bradley Hand", cursive`, ios: s => `400 ${s}px -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif` };
-    const DRK = [['shibam-royal', 'Shibam Royal'], ['iced-adeni', 'Iced Adeni'], ['strawberry-acai', 'Strawberry Acai'], ['shibam-coffee', 'Shibam Coffee'], ['adeni-tea', 'Adeni Tea'], ['jubani', 'Jubani'], ['sanaani', 'Sanaani'], ['qishr', 'Qishr'], ['moroccan-mint-tea', 'Moroccan Mint Tea'], ['mufawar', 'Mufawar']];
-    const DN = Object.fromEntries(DRK), SBASE = BASE + 'shibam/';
-    const SHDEF = { head: 'Now brewing inside Meijer', sub: 'Yemeni coffee, made fresh', d1: 'Inside Meijer, Michigan', d2: '', d3: '' };
+    const SF = { fr: s => `700 ${s}px Fraunces, Georgia, serif`, fr6: s => `600 ${s}px Fraunces, Georgia, serif`, fri: s => `italic 600 ${s}px Fraunces, Georgia, serif`, man: s => `700 ${s}px Manrope, system-ui, sans-serif`, man5: s => `500 ${s}px Manrope, system-ui, sans-serif`, man8: s => `800 ${s}px Manrope, system-ui, sans-serif`, scr: s => `700 ${s}px Caveat, "Bradley Hand", cursive`, ios: s => `400 ${s}px -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif` };
+    const DN = {}, SBASE = BASE + 'shibam/', RND = ['navy', 'sand', 'cream', 'copper'];
+    const SHDEF = { head: 'Now brewing inside Meijer', sub: 'Yemeni coffee, made fresh', d1: 'Inside Meijer, Michigan', d2: '', d3: '', m1: 'Iced Adeni', m2: 'Adeni Tea', m3: 'Qishr' };
+    const SHV = [['Navy', SH.navy], ['Sand', '#b39a74'], ['Cream', '#d9cfbe'], ['Copper', SH.copper]];
     let SHI = null, shBooting = null;
     const bootSh = () => shBooting || (shBooting = (async () => {
-      const f = Promise.race([Promise.all(['700 100px Fraunces', 'italic 600 100px Fraunces', '700 100px Caveat', '800 100px Manrope', '700 100px Manrope', '500 100px Manrope'].map(x => document.fonts.load(x))), new Promise(r => setTimeout(r, 5000))]).catch(() => {});
-      const list = await Promise.all([...DRK.map(([k]) => loadImg(SBASE + k + '.webp')), loadImg(SBASE + 'logo.webp'), loadImg(SBASE + 'logo-light.webp')]);
-      await f; caps = {}; const d = {}; DRK.forEach(([k], i) => { d[k] = list[i]; });
-      SHI = { d, logo: list[DRK.length], logoL: list[DRK.length + 1] };
+      const f = Promise.race([Promise.all(['700 100px Fraunces', '600 100px Fraunces', 'italic 600 100px Fraunces', '700 100px Caveat', '800 100px Manrope', '700 100px Manrope', '500 100px Manrope'].map(x => document.fonts.load(x))), new Promise(r => setTimeout(r, 5000))]).catch(() => {});
+      const list = await Promise.all([...RND.map(k => loadImg(SBASE + 'render-' + k + '.jpg')), loadImg(SBASE + 'logo.webp'), loadImg(SBASE + 'logo-light.webp')]);
+      const dr = await Promise.all(DRK.map(([k]) => loadImg(SBASE + 'd-' + k + '.webp').catch(() => null)));
+      await f; caps = {}; const dm = {}; DRK.forEach(([k], i) => { if (dr[i]) dm[k] = feather(dr[i]); });
+      SHI = { r: list.slice(0, 4), logo: list[4], logoL: list[5], dr: dm };
     })().catch(e => { shBooting = null; throw e; }));
     const shReady = st => st.brand !== 'sh' || !!SHI;
     const fin = (t, s, d = .7) => eo(P(t, s, d));
+    const ease = k => k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+    const dkOf = v => v === 0 || v === 3;
+    const shInk = v => dkOf(v) ? SH.cream : SH.navy, shAcc = v => v === 0 ? SH.light : v === 3 ? SH.sandL : SH.deep, shSoft = v => dkOf(v) ? 'rgba(250,246,238,.72)' : 'rgba(20,30,40,.66)';
     const shLogo = (c, y, h, light, t, s) => { const a = fin(t, s); if (a <= 0) return; const im = light ? SHI.logoL : SHI.logo, w = h * im.width / im.height; c.save(); c.globalAlpha *= a; c.drawImage(im, 540 - w / 2, y + (1 - a) * 14, w, h); c.restore(); };
-    // one drink, cut out with its own soft shadow; fades up, then a slow push-in
-    const drink = (c, k, cx, base, bw, bh, t, s) => {
-      const im = SHI.d[k]; if (!im) return; const sc = Math.min(bw / im.width, bh / im.height), w = im.width * sc, h = im.height * sc, a = fin(t, s, .9); if (a <= 0) return;
-      const push = 1 + .04 * eo(P(t, s, DUR - s)); c.save(); c.globalAlpha *= a; c.translate(cx, base + (1 - a) * 46); c.scale(push, push); c.drawImage(im, -w / 2, -h, w, h); c.restore();
+    // the studio render, a slow push-in on the cup, one soft glint across the glass, a breathing vignette
+    const CUP = [[305, 915], [775, 915], [700, 1640], [385, 1640]];
+    const studio = (c, v, t) => {
+      const im = SHI.r[v], k = ease(cl(t / DUR)), sc = 1 + .07 * k, ax = 540, ay = 1280;
+      c.save(); c.translate(ax, ay); c.scale(sc, sc); c.translate(-ax, -ay); c.drawImage(im, 0, 0, W, H);
+      const g0 = P(t, 2.1, 1.6); if (g0 > 0 && g0 < 1) {
+        c.save(); c.beginPath(); CUP.forEach(([x, y], i) => c[i ? 'lineTo' : 'moveTo'](x, y)); c.closePath(); c.clip();
+        const gx = -500 + g0 * 1700, g = c.createLinearGradient(gx, 900, gx + 420, 1500); g.addColorStop(0, 'rgba(255,255,255,0)'); g.addColorStop(.5, `rgba(255,250,240,${(.32 * Math.sin(g0 * Math.PI)).toFixed(3)})`); g.addColorStop(1, 'rgba(255,255,255,0)');
+        c.globalCompositeOperation = 'screen'; c.fillStyle = g; c.fillRect(0, 880, W, 800); c.restore();
+      }
+      c.restore();
+      const fa = 1 - fin(t, 0, .9); if (fa > 0) { c.fillStyle = `rgba(${v === 0 ? '8,14,22' : v === 3 ? '60,25,8' : '40,30,20'},${fa.toFixed(3)})`; c.fillRect(0, 0, W, H); }
     };
-    const row = (c, keys, base, t, s) => {
-      const n = keys.length, bw = n === 1 ? 560 : n === 2 ? 400 : 280, bh = n === 1 ? 720 : n === 2 ? 620 : 540, gap = n === 1 ? 0 : 30, tot = n * bw + (n - 1) * gap;
-      keys.forEach((k, i) => drink(c, k, 540 - tot / 2 + bw / 2 + i * (bw + gap), base, bw, bh, t, s + i * .18));
-    };
-    const pool = (c, cx, cy, rx, ry, rgb, a) => { if (a <= 0) return; c.save(); c.globalAlpha *= a; c.translate(cx, cy); c.scale(rx / ry, 1); const g = c.createRadialGradient(0, 0, 0, 0, 0, ry); g.addColorStop(0, `rgba(${rgb},.96)`); g.addColorStop(.5, `rgba(${rgb},.78)`); g.addColorStop(1, `rgba(${rgb},0)`); c.fillStyle = g; c.fillRect(-ry, -ry, ry * 2, ry * 2); c.restore(); };
-    const archPath = (c, x, y, w, h) => { c.beginPath(); c.moveTo(x, y + w / 2); c.arc(x + w / 2, y + w / 2, w / 2, Math.PI, 0); c.lineTo(x + w, y + h); c.lineTo(x, y + h); c.closePath(); };
     const spaced = (c, s, x, y, font, sp, col, align) => { c.font = font; const w = trackW(c, s, sp); c.fillStyle = col; c.textAlign = 'left'; c.textBaseline = 'alphabetic'; track(c, s, align === 'center' ? x - w / 2 : align === 'right' ? x - w : x, y, sp); return w; };
     // "| NAME" label: thin bar, then small spaced caps
     const tag = (c, x, y, lines, col, align, t, s) => {
@@ -1197,14 +1204,16 @@
       const ws = lines.map(([tx, sz, wt]) => { c.font = (wt === 5 ? SF.man5 : SF.man8)(sz); return trackW(c, tx, wt === 5 ? sz * .03 : sz * .14); }), mw = Math.max(...ws);
       const hs = lines.map(([, sz]) => sz), tot = hs.reduce((p, q, i) => p + q * (i ? 1.3 : 1), 0);
       const x0 = align === 'right' ? x - mw : align === 'center' ? x - mw / 2 + 14 : x + 26;
-      c.fillStyle = col; c.fillRect(x0 - 26, y - 4, 4, (tot + 12) * eo(P(t, s, .5)));
+      c.fillStyle = col; c.fillRect(x0 - 26, y - 4, 3, (tot + 12) * eo(P(t, s, .5)));
       let yy = y; lines.forEach(([tx, sz, wt], i) => { yy += sz * (i ? 1.3 : .82); spaced(c, tx, x0, yy, (wt === 5 ? SF.man5 : SF.man8)(sz), wt === 5 ? sz * .03 : sz * .14, col, 'left'); });
       c.restore();
     };
-    const nameLines = (c, name, sz, maxW) => { c.font = SF.man8(sz); const up = name.toUpperCase(); if (trackW(c, up, sz * .14) <= maxW) return [up]; const w = up.split(' '), h = Math.ceil(w.length / 2); return [w.slice(0, h).join(' '), w.slice(h).join(' ')]; };
-    const shFoot = (c, S, y, col, t, s) => {
+    const nameLines = (c, name) => { c.save(); c.font = SF.man8(28); const ws = String(name || '').toUpperCase().trim().split(/\s+/).filter(Boolean), out = []; let cur = ''; ws.forEach(w => { const tt = cur ? cur + ' ' + w : w; if (!cur || trackW(c, tt, 28 * .14) <= 215) cur = tt; else { out.push(cur); cur = w; } }); if (cur) out.push(cur); c.restore(); return out.slice(0, 4); };
+    const drinkTag = (c, S, L, v, t, s) => tag(c, 1004, 1556 - (L.nl.length - 1) * 37, L.nl.map(x => [x, 28, 8]), shInk(v), 'right', t, s);
+    const shFoot = (c, S, y, col, t, s, align = 'center') => {
       const it = []; if (S.site) it.push('SHIBAMCOFFEE.COM'); const hd = String(S.htxt || '').trim().replace(/^@+/, ''); if (hd) it.push('@' + hd);
-      const a = fin(t, s, .6); if (!it.length || a <= 0) return; c.save(); c.globalAlpha *= a; spaced(c, it.join('   ·   '), 540, y, SF.man(26), 4, col, 'center'); c.restore();
+      const a = fin(t, s, .6); if (!it.length || a <= 0) return; c.save(); c.globalAlpha *= a;
+      if (align === 'left') it.forEach((x, i) => spaced(c, x, 70, y - (it.length - 1 - i) * 34, SF.man(21), 3, col, 'left')); else spaced(c, it.join('   ·   '), 540, y, SF.man(24), 4, col, align); c.restore();
     };
     const typed = (c, L, x, top, col, t, s, align) => {
       if (!L.lines.length) return; const n = chars(L), shown = Math.floor(cl((t - s) / (n * .045)) * n); if (shown <= 0) return;
@@ -1212,7 +1221,24 @@
       L.lines.forEach((ln, i) => { if (left <= 0) return; const part = ln.slice(0, left); left -= ln.length; const w = c.measureText(ln).width; c.textAlign = 'left'; c.fillText(part, align === 'center' ? x - w / 2 : x, top + L.cap + i * L.lh); });
       c.restore();
     };
+    // headline letters fade in with a slight upward drift; optional italic accent on the last word
+    const softHead = (c, L, top, col, acc, t, s, italicLast) => {
+      if (!L.lines.length) return; c.save(); c.textBaseline = 'alphabetic'; c.textAlign = 'left'; let ci = 0;
+      L.lines.forEach((ln, i) => {
+        const last = i === L.lines.length - 1 && italicLast, wi = last ? ln.lastIndexOf(' ') : -1;
+        const pa = wi > 0 ? ln.slice(0, wi + 1) : last && L.lines.length > 1 ? '' : ln, pb = wi > 0 ? ln.slice(wi + 1) : last && L.lines.length > 1 ? ln : '';
+        c.font = L.font; const wa = c.measureText(pa).width; c.font = L.ifont; const wb = pb ? c.measureText(pb).width : 0;
+        let x = 540 - (wa + wb) / 2; const by = top + L.cap + i * L.lh;
+        [[pa, L.font, col], [pb, L.ifont, acc]].forEach(([part, font, fill]) => {
+          c.font = font;
+          for (let j = 0; j < part.length; j++, ci++) { const ch = part[j], cw = c.measureText(part.slice(0, j + 1)).width - c.measureText(part.slice(0, j)).width, k = fin(t, s + i * .3, 1.1); if (k > 0 && ch !== ' ') { c.save(); c.globalAlpha *= k; c.fillStyle = fill; c.fillText(ch, x + c.measureText(part.slice(0, j)).width, by + (1 - k) * 16); c.restore(); } }
+          x += c.measureText(part).width;
+        });
+      });
+      c.restore();
+    };
     const fadeText = (c, L, x, top, col, align, t, s) => drawText(c, L, x, top, { align, fill: col, t, at: s, mode: 'fade' });
+    const capsLine = (c, txt, y, col, t, s, sz = 26) => { const a = fin(t, s, .7); if (a <= 0 || !txt) return; c.save(); c.globalAlpha *= a; spaced(c, String(txt).toUpperCase(), 540, y + (1 - a) * 12, SF.man(sz), sz * .26, col, 'center'); c.restore(); };
     const shHolder = (c, x, y, w, h) => {
       c.save(); const g = c.createLinearGradient(x, y, x, y + h); g.addColorStop(0, '#3b2f27'); g.addColorStop(1, SH.esp); c.fillStyle = g; c.fillRect(x, y, w, h);
       const s = Math.min(w, h, 900), cx = x + w / 2, cy = y + h / 2, gw = s * .2; c.strokeStyle = SH.light; c.lineWidth = Math.max(3, s * .014); c.lineJoin = 'round';
@@ -1221,130 +1247,95 @@
       c.fillStyle = 'rgba(230,215,189,.7)'; c.font = SF.man5(Math.round(s * .04)); c.fillText('Tap here to pick one', cx, cy + s * .16); c.restore();
     };
     const shPhoto = (c, x, y, w, h, st, t) => hasPh(st) ? drawPhoto(c, x, y, w, h, st, t) : shHolder(c, x, y, w, h);
-    const TEXC = {};
-    const texture = kind => {
-      if (TEXC[kind]) return TEXC[kind]; const w = 540, h = 960, cv = mk(w, h), x = cv.getContext('2d');
-      if (kind === 0) { x.fillStyle = '#2b2a28'; x.fillRect(0, 0, w, h); }
-      else if (kind === 1) { for (let i = 0; i < w; i++) { const k = .5 + .5 * Math.sin(i / w * Math.PI * 2 * 6 + Math.sin(i * .021) * 1.6), l = 18 + k * 22; x.fillStyle = `rgb(${l + 26},${l * .55 + 8},${l * .45 + 6})`; x.fillRect(i, 0, 1, h); } }
-      else { x.fillStyle = '#3d2a1e'; x.fillRect(0, 0, w, h); for (let i = 0; i < 260; i++) { const y0 = Math.random() * h; x.strokeStyle = `rgba(${Math.random() < .5 ? '20,10,5' : '120,80,50'},${(.08 + Math.random() * .14).toFixed(2)})`; x.lineWidth = .6 + Math.random() * 1.6; x.beginPath(); x.moveTo(0, y0); for (let xx = 0; xx <= w; xx += 30) x.lineTo(xx, y0 + Math.sin(xx * .01 + i) * 6); x.stroke(); } x.fillStyle = 'rgba(0,0,0,.35)'; for (let y0 = 150; y0 < h; y0 += 170) x.fillRect(0, y0, w, 2); }
-      const id = x.getImageData(0, 0, w, h), d = id.data, amp = kind === 0 ? 34 : 12;
-      for (let i = 0; i < d.length; i += 4) { const n = (Math.random() - .5) * amp + (kind === 0 && Math.random() < .015 ? 26 : 0); d[i] += n; d[i + 1] += n; d[i + 2] += n; }
-      x.putImageData(id, 0, 0);
-      if (kind === 0) { x.strokeStyle = 'rgba(0,0,0,.5)'; x.lineWidth = 2; for (let k = -3; k < 6; k++) { x.beginPath(); x.moveTo(k * 230, 0); x.lineTo(k * 230 + 560, h); x.stroke(); x.beginPath(); x.moveTo(k * 260 + 600, 0); x.lineTo(k * 260 - 300, h); x.stroke(); } }
-      return (TEXC[kind] = cv);
+    const archPath = (c, x, y, w, h) => { c.beginPath(); c.moveTo(x, y + w / 2); c.arc(x + w / 2, y + w / 2, w / 2, Math.PI, 0); c.lineTo(x + w, y + h); c.lineTo(x, y + h); c.closePath(); };
+    /* their real drink photos: the white studio background is multiplied away, so nothing is cut out */
+    const DRK = [['iced-adeni', 'Iced Adeni', 'Chilled Adeni spiced milk tea over ice'], ['adeni-tea', 'Adeni Tea', 'Spiced milk tea with black tea and cardamom'], ['shibam-coffee', 'Shibam Coffee', 'Our house coffee blend, smooth and balanced'], ['shibam-royal', 'Shibam Royal', 'Organic mango smoothie with evaporated milk'], ['brown-sugar-shakn', 'Brown Sugar Shaken', 'Shaken espresso with brown sugar'], ['jubani', 'Jubani', 'Bold Yemeni brew with a deep, smoky finish'], ['sanaani', "Sana'ani", 'Classic Yemeni tea with a rich spice profile'], ['qishr', 'Qishr', 'Coffee-husk tea with ginger and spices'], ['mufawar', 'Mufawar', 'Yemeni milk tea gently infused with cardamom'], ['moroccan-mint-tea', 'Moroccan Mint Tea', 'Green tea with fresh mint, lightly sweet'], ['dragon-fruit', 'Dragon Fruit', 'Dragon fruit refresher, light and fruity'], ['strawberry-acai', 'Strawberry Acai', 'Strawberry acai refresher, cool and light'], ['french-vanilla', 'French Vanilla', 'Vanilla latte, smooth and sweet'], ['pistachio-bite', 'Pistachio Bite', 'Pistachio bites, nutty and lightly sweet'], ['honeycomb', 'Honeycomb', 'Golden honeycomb pastry with natural sweetness'], ['sabaya', 'Sabaya', 'Flaky Yemeni layered pastry served with honey']];
+    const DSC = {}; DRK.forEach(([k, n, d]) => { DN[k] = n; DSC[k] = d; });
+    const VD = [['Cream', SH.cream], ['Sand', SH.sandL], ['Linen', SH.sand]];
+    const visOf = st => { const T = TPL[st.tpl]; return (st.svm && st.svm[st.tpl]) || T.vis || 'render'; };
+    const varsOf = (T, st) => T.brand === 'sh' && T.vis ? (visOf(st) === 'drink' ? VD : SHV) : T.vars;
+    const feather = im => { const w = im.width, h = im.height, c2 = mk(w, h), x = c2.getContext('2d'); x.drawImage(im, 0, 0); x.globalCompositeOperation = 'destination-in'; x.translate(w / 2, h / 2); x.scale(w / h, 1); const g = x.createRadialGradient(0, 0, 0, 0, 0, h / 2); g.addColorStop(0, '#000'); g.addColorStop(.84, '#000'); g.addColorStop(1, 'rgba(0,0,0,0)'); x.fillStyle = g; x.fillRect(-h / 2, -h / 2, h, h); return c2; };
+    const realDrink = (c, k, cx, cy, bw, bh, t, s) => {
+      const im = SHI.dr && SHI.dr[k]; if (!im) return; const a = fin(t, s, 1.2); if (a <= 0) return;
+      const sc = Math.min(bw / im.width, bh / im.height) * (1 + .05 * ease(cl(t / DUR))), w = im.width * sc, h = im.height * sc;
+      c.save(); c.globalCompositeOperation = 'multiply'; c.globalAlpha *= a; c.drawImage(im, cx - w / 2, cy - h / 2 + (1 - a) * 24, w, h); c.restore();
     };
-    const vignette = (c, a) => { const g = c.createRadialGradient(540, 1000, 300, 540, 1000, 1300); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, `rgba(0,0,0,${a})`); c.fillStyle = g; c.fillRect(0, 0, W, H); };
-    const one = S => [S.sdr && S.sdr[0] || DRK[0][0]];
+    const shBase = (c, S, v, t) => {
+      if (visOf(S) !== 'drink') { studio(c, v, t); return { dk: dkOf(v), ink: shInk(v), acc: shAcc(v), soft: shSoft(v) }; }
+      c.fillStyle = (VD[v] || VD[0])[1]; c.fillRect(0, 0, W, H);
+      const g = c.createRadialGradient(540, 1180, 60, 540, 1180, 980); g.addColorStop(0, 'rgba(255,255,255,.55)'); g.addColorStop(1, 'rgba(255,255,255,0)'); c.fillStyle = g; c.fillRect(0, 0, W, H);
+      const fl = c.createLinearGradient(0, 1380, 0, H); fl.addColorStop(0, 'rgba(120,90,60,0)'); fl.addColorStop(1, 'rgba(120,90,60,.10)'); c.fillStyle = fl; c.fillRect(0, 1380, W, H - 1380);
+      realDrink(c, S.sdk, 540, 1225, 840, 760, t, .2);
+      return { dk: false, ink: SH.navy, acc: SH.deep, soft: 'rgba(20,30,40,.62)' };
+    };
+    const nameOf = S => visOf(S) === 'drink' ? DN[S.sdk] || '' : S.dname || '';
+    // one layout for all eight: optional kicker, one headline, up to two small lines
+    const shL = (c, o) => {
+      const out = { kick: String(o.kick || '').trim().toUpperCase(), lines: [] }, n = (o.lines || []).filter(l => String(l.text || '').trim()).length;
+      out.hd = fit(c, o.head || '', { font: SF.fr6, maxW: 880, maxH: n > 1 ? 190 : 230, lines: 2, lh: 1.06, max: o.hsz || 104, min: 52 }); out.hd.ifont = SF.fri(out.hd.size);
+      (o.lines || []).forEach(l => { const tx = String(l.text || '').trim(); if (!tx) return; if (l.kind === 'caps') out.lines.push({ caps: tx.toUpperCase() }); else out.lines.push({ big: l.kind === 'big', f: fit(c, tx, { font: l.kind === 'big' ? SF.fr6 : SF.fri, maxW: 860, maxH: l.kind === 'big' ? 76 : 100, lines: l.kind === 'big' ? 1 : 2, lh: 1.18, max: l.kind === 'big' ? 64 : 40, min: 26 }) }); });
+      return out;
+    };
+    const shDraw = (c, S, v, L, t, italic) => {
+      const pal = shBase(c, S, v, t); shLogo(c, 238, 112, pal.dk, t, .3);
+      let y = 422;
+      if (L.kick) { capsLine(c, L.kick, y + 16, pal.acc, t, .6, 22); y += 58; }
+      if (L.hd.lines.length) { softHead(c, L.hd, y, pal.ink, pal.acc, t, .8, italic); y += L.hd.h + 46; }
+      L.lines.forEach((ln, i) => { const s = 1.6 + i * .3; if (ln.caps) { capsLine(c, ln.caps, y + 18, pal.soft, t, s, 22); y += 54; } else { fadeText(c, ln.f, 540, y, ln.big ? pal.ink : pal.acc, 'center', t, s); y += ln.f.h + 32; } });
+      shFoot(c, S, 1640, pal.soft, t, 2.5, 'left');
+    };
+    const TODAY = new Date().toLocaleDateString('en-US', { weekday: 'long', timeZone: 'America/Detroit' });
     const SHT = {
-      sh_hero: {
-        brand: 'sh', name: 'Hero drink', single: true, vars: [['Navy', SH.navy], ['Sand', SH.sand], ['Copper', SH.copper]],
-        def: Object.assign({}, SHDEF, { head: 'Yemeni coffee, made fresh', sub: '' }),
-        layout(c, S) {
-          const hd = fit(c, S.head, { font: SF.fri, maxW: 860, maxH: 150, lines: 2, lh: 1.12, max: 64, min: 40 });
-          const sb = fit(c, S.sub, { font: SF.man5, maxW: 860, maxH: 44, lines: 1, max: 34, min: 24 });
-          return { hd, sb, k: one(S)[0] };
-        },
-        draw(c, S, v, L, t) {
-          const bg = [SH.navy, SH.sand, SH.copper][v], ink = v === 1 ? SH.navy : SH.cream, arch = [SH.sandL, '#efe3cd', SH.cream][v];
-          c.fillStyle = bg; c.fillRect(0, 0, W, H);
-          shLogo(c, 236, 150, v === 0, t, .15);
-          fadeText(c, L.hd, 540, 432, v === 1 ? SH.deep : v === 0 ? SH.light : SH.cream, 'center', t, .45);
-          const ka = fin(t, .2, 1); if (ka > 0) { c.save(); c.globalAlpha *= ka; archPath(c, 230, 580 + (1 - ka) * 30, 620, 880); c.fillStyle = arch; c.fill(); archPath(c, 252, 602 + (1 - ka) * 30, 576, 836); c.lineWidth = 2; c.strokeStyle = v === 1 ? 'rgba(142,78,39,.35)' : 'rgba(177,101,51,.45)'; c.stroke(); c.restore(); }
-          drink(c, L.k, 540, 1420, 540, 740, t, .7);
-          const nm = DN[L.k].toUpperCase(); const na = fin(t, 1.5, .7); if (na > 0) { c.save(); c.globalAlpha *= na; spaced(c, nm, 540, 1530, SF.man8(40), 6, ink, 'center'); c.restore(); }
-          if (L.sb.lines.length) fadeText(c, L.sb, 540, 1556, v === 1 ? SH.muted : 'rgba(250,246,238,.78)', 'center', t, 1.8);
-          shFoot(c, S, 1636, v === 1 ? SH.muted : 'rgba(250,246,238,.7)', t, 2.2);
-        }
+      sh_hours: {
+        brand: 'sh', name: 'Hours today', vis: 'render', vars: SHV, f: { head: 'Day', sub: false, d1: 'Opens', d2: 'Closes', d3: 'Small line', ph: ['7 AM', '9 PM', 'Inside Meijer'] },
+        def: Object.assign({}, SHDEF, { head: TODAY, sub: '', d1: '', d2: '', d3: 'Inside Meijer' }),
+        layout(c, S) { const o = String(S.d1 || '').trim(), cz = String(S.d2 || '').trim(); return shL(c, { head: S.head, hsz: 112, lines: [{ text: o && cz ? `${o} to ${cz}` : o || cz, kind: 'big' }, { text: S.d3, kind: 'caps' }] }); },
+        draw(c, S, v, L, t) { shDraw(c, S, v, L, t, false); }
       },
-      sh_moody: {
-        brand: 'sh', name: 'Moody', single: true, vars: [['Stone', '#2b2a28'], ['Velvet', '#4a2a22'], ['Wood', '#5a3b26']],
-        def: Object.assign({}, SHDEF, { head: 'hey come closer...', sub: '' }),
-        layout(c, S) {
-          const hd = fit(c, S.head, { font: SF.scr, maxW: 860, maxH: 200, lines: 2, lh: 1.05, max: 96, min: 56 });
-          const sb = fit(c, S.sub, { font: SF.man5, maxW: 620, maxH: 40, lines: 1, max: 30, min: 22 });
-          return { hd, sb, k: one(S)[0] };
-        },
-        draw(c, S, v, L, t) {
-          c.drawImage(texture(v), 0, 0, W, H);
-          pool(c, 540, 1160, 560, 600, v === 0 ? '246,236,218' : '244,226,200', fin(t, 0, 1.2) * .95);
-          vignette(c, .62);
-          shLogo(c, 236, 140, true, t, .2);
-          typed(c, L.hd, 540, 460, SH.cream, t, .8, 'center');
-          drink(c, L.k, 540, 1440, 520, 760, t, .5);
-          tag(c, 90, 1530, [[DN[L.k].toUpperCase(), 38, 8]].concat(L.sb.lines.length ? [[L.sb.lines[0], 28, 5]] : []), SH.cream, 'left', t, 2);
-          shFoot(c, S, 1640, 'rgba(250,246,238,.66)', t, 2.4);
-        }
+      sh_open: {
+        brand: 'sh', name: "We're open", vis: 'render', vars: SHV, f: { head: 'Headline', sub: 'Second line', d1: 'Time line', ph: ['Until 9 PM'] },
+        def: Object.assign({}, SHDEF, { head: 'Open now', sub: 'Come say hi', d1: '' }),
+        layout(c, S) { return shL(c, { head: S.head, hsz: 120, lines: [{ text: S.sub, kind: 'ital' }, { text: S.d1, kind: 'caps' }] }); },
+        draw(c, S, v, L, t) { shDraw(c, S, v, L, t, true); }
       },
-      sh_plans: {
-        brand: 'sh', name: 'The plans', vars: [['Cream', SH.cream], ['Sand', SH.sandL], ['White', '#ffffff']],
-        def: Object.assign({}, SHDEF, { head: 'sorry i have plans.', sub: 'The plans:' }),
-        layout(c, S) {
-          const hd = fit(c, S.head, { font: SF.ios, maxW: 600, maxH: 190, lines: 3, lh: 1.22, max: 50, min: 36, balance: false });
-          const sb = fit(c, S.sub, { font: SF.man5, maxW: 800, maxH: 60, lines: 1, max: 48, min: 30 });
-          c.save(); c.font = hd.font; const tw = hd.lines.length ? Math.max(...hd.lines.map(l => c.measureText(l).width)) : 0; c.restore();
-          return { hd, sb, bw: tw + 70, bh: hd.h + 60, keys: (S.sdr && S.sdr.length ? S.sdr : one(S)).slice(0, 3) };
-        },
-        draw(c, S, v, L, t) {
-          c.fillStyle = [SH.cream, SH.sandL, '#ffffff'][v]; c.fillRect(0, 0, W, H);
-          if (v !== 2) radial(c, 540, 1200, 900, 'rgba(255,255,255,.55)');
-          shLogo(c, 236, 140, false, t, .1);
-          const bx = 930 - L.bw, by = 640;
-          if (L.hd.lines.length) {
-            const ty = P(t, .6, .9); if (ty > 0 && ty < 1) { const a = cl(ty * 4) * cl((1 - ty) * 6); c.save(); c.globalAlpha *= a; rr(c, 930 - 150, by, 150, 84, 42); c.fillStyle = '#e5e5ea'; c.fill(); for (let i = 0; i < 3; i++) { c.beginPath(); c.arc(930 - 112 + i * 37, by + 42, 10, 0, 6.3); c.fillStyle = `rgba(120,120,128,${.45 + .45 * Math.max(0, Math.sin(t * 9 - i))})`; c.fill(); } c.restore(); }
-            const k = P(t, 1.45, .35); if (k > 0) {
-              c.save(); c.globalAlpha *= cl(k * 2.5); c.translate(930, by + L.bh); const sc = .82 + .18 * eo(k); c.scale(sc, sc); c.translate(-930, -(by + L.bh));
-              const g = c.createLinearGradient(0, by, 0, by + L.bh); g.addColorStop(0, '#3a9bff'); g.addColorStop(1, '#0a7cff'); c.fillStyle = g;
-              rr(c, bx, by, L.bw, L.bh, 44); c.fill(); c.beginPath(); c.moveTo(930 - 30, by + L.bh - 34); c.quadraticCurveTo(930 + 4, by + L.bh - 4, 930 + 18, by + L.bh + 4); c.quadraticCurveTo(930 - 18, by + L.bh + 2, 930 - 58, by + L.bh - 10); c.closePath(); c.fill();
-              c.font = L.hd.font; c.fillStyle = '#fff'; c.textAlign = 'left'; c.textBaseline = 'alphabetic'; L.hd.lines.forEach((ln, i) => c.fillText(ln, bx + 35, by + 30 + L.hd.cap + i * L.hd.lh)); c.restore();
-            }
-          }
-          fadeText(c, L.sb, 150, by + L.bh + 120, SH.esp, 'left', t, 2);
-          row(c, L.keys, 1470, t, 2.3);
-          shFoot(c, S, 1626, SH.muted, t, 3);
-        }
+      sh_closed: {
+        brand: 'sh', name: 'Closed today', vis: 'render', vars: SHV, f: { head: 'Headline', sub: false, d1: 'Reason', d2: 'Back on', ph: ['For the holiday', 'Back tomorrow'] },
+        def: Object.assign({}, SHDEF, { head: 'Closed today', sub: '', d1: 'For the holiday', d2: 'Back tomorrow' }),
+        layout(c, S) { return shL(c, { head: S.head, lines: [{ text: S.d1, kind: 'ital' }, { text: S.d2, kind: 'caps' }] }); },
+        draw(c, S, v, L, t) { shDraw(c, S, v, L, t, true); }
       },
-      sh_label: {
-        brand: 'sh', name: 'Label', single: true, vars: [['Sand', SH.sand], ['Cream', SH.cream], ['Navy', SH.navy]],
-        def: Object.assign({}, SHDEF, { head: 'Yemeni coffee, made fresh', sub: '' }),
-        layout(c, S) {
-          const hd = fit(c, S.head, { font: SF.fri, maxW: 820, maxH: 130, lines: 2, lh: 1.12, max: 52, min: 36 });
-          const sb = fit(c, S.sub, { font: SF.man5, maxW: 420, maxH: 40, lines: 1, max: 30, min: 22 });
-          const k = one(S)[0]; return { hd, sb, k, nl: nameLines(c, DN[k], 44, 440) };
-        },
-        draw(c, S, v, L, t) {
-          c.fillStyle = [SH.sand, SH.cream, SH.navy][v]; c.fillRect(0, 0, W, H);
-          if (v === 2) pool(c, 500, 1080, 560, 620, '241,232,216', fin(t, 0, 1.1)); else radial(c, 500, 1050, 760, 'rgba(255,255,255,.45)');
-          shLogo(c, 236, 140, v === 2, t, .15);
-          fadeText(c, L.hd, 540, 418, v === 2 ? SH.light : SH.deep, 'center', t, .5);
-          drink(c, L.k, 500, 1470, 800, Math.min(960, 1470 - (418 + L.hd.h + 60)), t, .4);
-          const col = v === 2 ? SH.cream : SH.navy;
-          tag(c, 990, 1500, L.nl.map(s => [s, 44, 8]).concat(L.sb.lines.length ? [[L.sb.lines[0], 28, 5]] : []), col, 'right', t, 1.6);
-          shFoot(c, S, 1640, v === 2 ? 'rgba(250,246,238,.66)' : SH.muted, t, 2.2);
-        }
+      sh_dotd: {
+        brand: 'sh', name: 'Drink of the day', vis: 'drink', named: true, vars: SHV, f: { head: false, sub: 'Description', d1: 'Top line', ph: ['Drink of the day'] },
+        def: Object.assign({}, SHDEF, { head: '', sub: '', d1: 'Drink of the day' }),
+        layout(c, S) { return shL(c, { kick: S.d1, head: nameOf(S), lines: [{ text: S.sub || (visOf(S) === 'drink' ? DSC[S.sdk] : ''), kind: 'ital' }] }); },
+        draw(c, S, v, L, t) { shDraw(c, S, v, L, t, false); }
       },
-      sh_loc: {
-        brand: 'sh', name: 'Now at Meijer', details: true, dl: ['Location', 'Hours'], vars: [['Cream', SH.cream], ['Navy', SH.navy], ['Sand', SH.sand]],
-        def: Object.assign({}, SHDEF),
-        layout(c, S) {
-          const hd = fit(c, S.head, { font: SF.fr, maxW: 900, maxH: 250, lines: 2, lh: 1.08, max: 112, min: 60 });
-          const sb = fit(c, S.sub, { font: SF.fri, maxW: 860, maxH: 60, lines: 1, max: 46, min: 30 });
-          const det = [S.d1, S.d2].map(s => String(s || '').trim().toUpperCase()).filter(Boolean);
-          return { hd, sb, det, st: 420 + hd.h + 30, keys: (S.sdr && S.sdr.length ? S.sdr : one(S)).slice(0, 3) };
-        },
-        draw(c, S, v, L, t) {
-          const dk = v === 1; c.fillStyle = [SH.cream, SH.navy, SH.sand][v]; c.fillRect(0, 0, W, H);
-          shLogo(c, 236, 140, dk, t, .1);
-          fadeText(c, L.hd, 540, 420, dk ? SH.cream : SH.navy, 'center', t, .4);
-          fadeText(c, L.sb, 540, L.st, dk ? SH.light : SH.copper, 'center', t, .8);
-          const pt = L.st + L.sb.h + 60, ka = fin(t, .9, .9);
-          if (ka > 0) { c.save(); c.globalAlpha *= ka; archPath(c, 160, pt, 760, 1340 - pt); c.fillStyle = dk ? SH.sandL : v === 2 ? '#efe3cd' : SH.sandL; c.fill(); c.restore(); }
-          row(c, L.keys, 1330, t, 1.1);
-          if (L.det.length) tag(c, 540, 1420, L.det.map(s => [s, 32, 8]), dk ? SH.cream : SH.navy, 'center', t, 1.9);
-          shFoot(c, S, 1640, dk ? 'rgba(250,246,238,.66)' : SH.muted, t, 2.4);
-        }
+      sh_new: {
+        brand: 'sh', name: 'New on the menu', vis: 'drink', named: true, vars: SHV, f: { head: false, sub: 'Small line', d1: 'Top line', ph: ['New on the menu'] },
+        def: Object.assign({}, SHDEF, { head: '', sub: '', d1: 'New on the menu' }),
+        layout(c, S) { return shL(c, { kick: S.d1, head: nameOf(S), hsz: 112, lines: [{ text: S.sub, kind: 'ital' }] }); },
+        draw(c, S, v, L, t) { shDraw(c, S, v, L, t, false); }
+      },
+      sh_ltd: {
+        brand: 'sh', name: 'Limited time', vis: 'render', vars: SHV, f: { head: 'Drink name', sub: 'Small line', d1: 'Top line', ph: ['Limited time'] },
+        def: Object.assign({}, SHDEF, { head: 'Pumpkin Pie Latte', sub: 'While it lasts', d1: 'Limited time' }),
+        layout(c, S) { return shL(c, { kick: S.d1, head: S.head, lines: [{ text: S.sub, kind: 'ital' }] }); },
+        draw(c, S, v, L, t) { shDraw(c, S, v, L, t, false); }
+      },
+      sh_deal: {
+        brand: 'sh', name: 'Deal of the day', vis: 'drink', vars: SHV, f: { head: 'The offer', sub: 'Small line', d1: 'Top line', ph: ['Deal of the day'] },
+        def: Object.assign({}, SHDEF, { head: 'Any iced drink $1 off', sub: 'Today only', d1: 'Deal of the day' }),
+        layout(c, S) { return shL(c, { kick: S.d1, head: S.head, lines: [{ text: S.sub, kind: 'ital' }] }); },
+        draw(c, S, v, L, t) { shDraw(c, S, v, L, t, false); }
+      },
+      sh_find: {
+        brand: 'sh', name: 'Find us', vis: 'render', vars: SHV, f: { head: 'Headline', sub: false, d1: 'Location', d2: 'Directions', ph: ['Inside Meijer, Michigan', 'Near the front entrance'] },
+        def: Object.assign({}, SHDEF, { head: 'Find us inside Meijer', sub: '', d1: 'Inside Meijer, Michigan', d2: '' }),
+        layout(c, S) { return shL(c, { head: S.head, lines: [{ text: S.d1, kind: 'caps' }, { text: S.d2, kind: 'ital' }] }); },
+        draw(c, S, v, L, t) { shDraw(c, S, v, L, t, true); }
       },
       sh_photo: {
-        brand: 'sh', name: 'Photo', photo: true, vars: [['Navy', SH.navy], ['Espresso', SH.esp], ['Copper', SH.deep]],
+        brand: 'sh', name: 'Photo', photo: true, nosub: true, vars: [['Navy', SH.navy], ['Espresso', SH.esp], ['Copper', SH.deep]],
         def: Object.assign({}, SHDEF),
         layout(c, S) {
           const hd = fit(c, S.head, { font: SF.man8, upper: true, maxW: 780, maxH: 120, lines: 2, lh: 1.3, max: 46, min: 30, step: 2 });
@@ -1357,12 +1348,12 @@
           let g = c.createLinearGradient(0, 0, 0, 480); g.addColorStop(0, `rgba(${rgb},.7)`); g.addColorStop(1, `rgba(${rgb},0)`); c.fillStyle = g; c.fillRect(0, 0, W, 480);
           g = c.createLinearGradient(0, 1180, 0, H); g.addColorStop(0, `rgba(${rgb},0)`); g.addColorStop(.5, `rgba(${rgb},.72)`); g.addColorStop(1, `rgba(${rgb},.92)`); c.fillStyle = g; c.fillRect(0, 1180, W, H - 1180);
           shLogo(c, 236, 130, true, t, .5);
-          tag(c, 90, 1474 - (L.hd.lines.length - 1) * 58, L.hd.lines.map(s => [s, L.hd.size, 8]).concat(L.sb.lines.length ? [[L.sb.lines[0], 30, 5]] : []), SH.cream, 'left', t, 1.2);
+          tag(c, 90, 1474 - (L.hd.lines.length - 1) * 58, L.hd.lines.map(s => [s, L.hd.size, 8]), SH.cream, 'left', t, 1.2);
           shFoot(c, S, 1640, 'rgba(250,246,238,.7)', t, 1.9);
         }
       },
       sh_arch: {
-        brand: 'sh', name: 'Photo arch', photo: true, vars: [['Cream', SH.cream], ['Sand', SH.sand], ['Navy', SH.navy]],
+        brand: 'sh', name: 'Photo arch', photo: true, nosub: true, vars: [['Cream', SH.cream], ['Sand', SH.sand], ['Navy', SH.navy]],
         def: Object.assign({}, SHDEF),
         layout(c, S) {
           const hd = fit(c, S.head, { font: SF.man8, upper: true, maxW: 760, maxH: 110, lines: 2, lh: 1.3, max: 40, min: 28, step: 2 });
@@ -1373,9 +1364,8 @@
           const dk = v === 2; c.fillStyle = [SH.cream, SH.sand, SH.navy][v]; c.fillRect(0, 0, W, H);
           shLogo(c, 236, 130, dk, t, .1);
           const x = 160, y = 430, w = 760, h = 1000, k = fin(t, .2, 1.2);
-          c.save(); archPath(c, x - 18, y - 18, w + 36, h + 36); c.lineWidth = 2; c.strokeStyle = dk ? 'rgba(208,138,92,.7)' : 'rgba(177,101,51,.6)'; c.globalAlpha *= fin(t, .1, .8); c.stroke(); c.restore();
           if (k > 0) { c.save(); c.beginPath(); c.rect(0, y + h - (h + 10) * k, W, (h + 10) * k); c.clip(); archPath(c, x, y, w, h); c.clip(); shPhoto(c, x, y, w, h, S, t); c.restore(); }
-          tag(c, 540, 1486, L.hd.lines.map(s => [s, L.hd.size, 8]).concat(L.sb.lines.length ? [[L.sb.lines[0], 28, 5]] : []), dk ? SH.cream : SH.navy, 'center', t, 1.3);
+          tag(c, 540, 1486, L.hd.lines.map(s => [s, L.hd.size, 8]), dk ? SH.cream : SH.navy, 'center', t, 1.3);
           shFoot(c, S, 1644, dk ? 'rgba(250,246,238,.66)' : SH.muted, t, 1.9);
         }
       }
@@ -1411,16 +1401,17 @@
 
     /* ---------- state ---------- */
     const SKEY = 'es-story';
-    const S = { tpl: 'spot', v: 0, shots: ['og', 'golden', 'glow'], hero: 'golden', head: '', sub: '', d1: '', d2: '', d3: '', site: true, handle: true, ph: 0, pm: 'frame', pz: 1, px: 0, py: 0, brand: 'es', sdr: ['shibam-royal', 'iced-adeni', 'strawberry-acai'], htxt: '' };
+    const S = { tpl: 'spot', v: 0, shots: ['og', 'golden', 'glow'], hero: 'golden', head: '', sub: '', d1: '', d2: '', d3: '', site: true, handle: true, ph: 0, pm: 'frame', pz: 1, px: 0, py: 0, brand: 'es', htxt: '', dname: 'Iced Adeni', svm: {}, sdk: 'iced-adeni' };
     let dirty = {};
     try { const sv = JSON.parse(localStorage.getItem(SKEY) || 'null'); if (sv && sv.S && TPL[sv.S.tpl]) { Object.assign(S, sv.S); dirty = sv.dirty || {}; } } catch (e) {}
     S.ph = 0; if (!['bg', 'frame', 'none'].includes(S.pm)) S.pm = 'frame';
-    if (S.brand !== 'sh') S.brand = 'es'; if (!Array.isArray(S.sdr) || !S.sdr.length || !S.sdr.every(k => DN[k])) S.sdr = ['shibam-royal', 'iced-adeni', 'strawberry-acai'];
+    if (S.brand !== 'sh') S.brand = 'es'; delete S.sdr; if (typeof S.dname !== 'string') S.dname = 'Iced Adeni'; if (!S.svm || typeof S.svm !== 'object') S.svm = {}; if (!DN[S.sdk]) S.sdk = 'iced-adeni';
     const brandOf = id => TPL[id].brand || 'es', idsOf = b => IDS.filter(id => brandOf(id) === b);
+    if (!TPL[S.tpl]) S.tpl = 'spot';
     if (brandOf(S.tpl) !== S.brand) { S.tpl = idsOf(S.brand)[0]; S.v = 0; dirty = {}; }
     let BR = {}; try { BR = JSON.parse(localStorage.getItem(SKEY + '-br') || '{}') || {}; } catch (e) {}
     if (!Array.isArray(S.shots) || !S.shots.length) S.shots = ['og', 'golden', 'glow']; if (!FL[S.hero]) S.hero = 'golden';
-    const FIELDS = ['head', 'sub', 'd1', 'd2', 'd3'];
+    const FIELDS = ['head', 'sub', 'd1', 'd2', 'd3', 'm1', 'm2', 'm3'];
     const withDefaults = (st, id) => { const d = Object.assign({}, TPL[id].brand === 'sh' ? SHDEF : TPL.pop.def, TPL[id].def), o = Object.assign({}, st, { tpl: id }); FIELDS.forEach(k => { if (!dirty[k]) o[k] = d[k] || ''; }); return o; };
     Object.assign(S, withDefaults(S, S.tpl));
     const persist = () => { try { localStorage.setItem(SKEY, JSON.stringify({ S: Object.assign({}, S, { ph: 0 }), dirty })); localStorage.setItem(SKEY + '-br', JSON.stringify(BR)); } catch (e) {} };
@@ -1428,8 +1419,8 @@
     /* ---------- render ---------- */
     const memo = new Map();
     const layoutOf = (c, st) => { const key = JSON.stringify(st); let L = memo.get(key); if (!L) { L = TPL[st.tpl].layout(c, st); memo.set(key, L); if (memo.size > 24) memo.delete(memo.keys().next().value); } return L; };
-    const render = (c, st, t) => { const T = TPL[st.tpl], L = layoutOf(c, st); c.save(); c.setTransform(1, 0, 0, 1, 0, 0); c.globalAlpha = 1; c.globalCompositeOperation = 'source-over'; c.clearRect(0, 0, W, H); T.draw(c, st, st.v, L, t); c.restore(); };
-    const frame = t => render(CX, S, t);
+    const render = (c, st, t) => { if (!shReady(st) || !TPL[st.tpl]) return; const T = TPL[st.tpl], L = layoutOf(c, st); c.save(); c.setTransform(1, 0, 0, 1, 0, 0); c.globalAlpha = 1; c.globalCompositeOperation = 'source-over'; c.clearRect(0, 0, W, H); T.draw(c, st, st.v, L, t); c.restore(); };
+    const frame = t => { if (IMG && shReady(S)) render(CX, S, t); };
     let anim = null, rec = null, pngCache = null;
     const stopAnim = () => { if (anim) { cancelAnimationFrame(anim.k); anim = null; setPlayUI(false); } };
     const still = () => { if (!IMG || !shReady(S)) return; stopAnim(); frame(DUR); schedulePng(); };
@@ -1503,28 +1494,36 @@
     const shotBtn = k => `<button class="ssh" type="button" data-sshot="${k}" aria-pressed="false"><img src="${BASE}bottle-${k}.png" alt="" width="18" height="40" loading="lazy">${FL[k].name}</button>`;
     const buildRow = () => { $('[data-stpls]').innerHTML = idsOf(S.brand).map(id => `${id === 'full' || id === 'sh_photo' ? '<span class="stp-sep" aria-hidden="true">With your photo</span>' : ''}<button class="stp" type="button" data-stpl="${id}" aria-pressed="false"><canvas width="144" height="256" aria-hidden="true"></canvas>${TPL[id].name}</button>`).join(''); };
     buildRow();
-    $('[data-sdks]').innerHTML = DRK.map(([k, n]) => `<button class="sdk" type="button" data-sdrink="${k}" aria-pressed="false"><img src="${SBASE}${k}.webp" alt="" loading="lazy"><span>${n}</span></button>`).join('');
+    $('[data-sdks]').innerHTML = DRK.map(([k, n]) => `<button class="sdk" type="button" data-sdrink="${k}" aria-pressed="false"><img src="${SBASE}d-${k}.webp" alt="" loading="lazy"><span>${esc(n)}</span></button>`).join('');
     $('[data-sshots]').innerHTML = ORDER.map(shotBtn).join('');
     const sync = () => {
       const T = TPL[S.tpl];
       $$('[data-stpl]').forEach(b => b.setAttribute('aria-pressed', b.dataset.stpl === S.tpl));
-      $('[data-svars]').innerHTML = T.vars.map(([n, sw], i) => `<button type="button" data-svar="${i}" aria-pressed="${i === S.v}"><i style="background:${sw}"></i>${n}</button>`).join('');
+      $('[data-svars]').innerHTML = varsOf(T, S).map(([n, sw], i) => `<button type="button" data-svar="${i}" aria-pressed="${i === S.v}"><i style="background:${sw}"></i>${n}</button>`).join('');
       $$('[data-sshot]').forEach(b => b.setAttribute('aria-pressed', T.single ? b.dataset.sshot === S.hero : S.shots.includes(b.dataset.sshot)));
       $('[data-sshoth]').textContent = T.single ? 'Pick the shot' : 'Shots';
       $('[data-sshotn]').hidden = !T.single;
       $('[data-sdet]').hidden = !T.details;
-      FIELDS.forEach(k => { const i = $(`[data-sf="${k}"]`); if (document.activeElement !== i) i.value = S[k]; });
+      const sdi = $$('[data-sdet] input'); sdi.forEach((el, i) => { el.dataset.sf = (S.brand === 'sh' && T.menu ? 'm' : 'd') + (i + 1); });
+      FIELDS.forEach(k => { const i = $(`[data-sf="${k}"]`); if (i && document.activeElement !== i) i.value = S[k] || ''; });
       $('[data-sf="head"]').placeholder = T.def.head; $('[data-sf="sub"]').placeholder = T.def.sub;
       $$('[data-stog]').forEach(b => b.setAttribute('aria-pressed', !!S[b.dataset.stog]));
       $('[data-sphaddl]').textContent = PH ? 'Change photo' : 'Add a photo'; $('[data-sphrm]').hidden = !PH; $('[data-sphctl]').hidden = !PH;
       $$('[data-spm]').forEach(b => b.setAttribute('aria-pressed', b.dataset.spm === S.pm)); const zr = $('[data-spz]'); zr.value = S.pz; zr.disabled = !photoActive(S);
       $('.story-frame').classList.toggle('drag', photoActive(S)); $('[data-spm]').parentNode.hidden = !!T.photo || S.brand === 'sh';
       const sh = S.brand === 'sh'; $$('[data-sbrand]').forEach(b => b.setAttribute('aria-pressed', b.dataset.sbrand === S.brand));
-      $('[data-sshg]').hidden = sh; $('[data-sdrg]').hidden = !sh || !!T.photo;
-      $$('[data-sdrink]').forEach(b => { const i = S.sdr.indexOf(b.dataset.sdrink), on = T.single ? i === 0 : i >= 0; b.setAttribute('aria-pressed', on); const sp = b.querySelector('span'); sp.innerHTML = (!T.single && on && S.sdr.length > 1 ? `<i>${i + 1}</i>` : '') + esc(DN[b.dataset.sdrink]); });
-      $('[data-sdrh]').textContent = T.single ? 'Pick the drink' : 'Drinks (up to 3)'; $('[data-sdrn]').textContent = T.single ? 'This one shows a single drink.' : 'Tap to add or remove. They show in the order you pick.';
+      $('[data-sf="head"]').closest('label').hidden = sh && !!T.nohead; $('[data-sf="sub"]').closest('label').hidden = sh && !!T.nosub;
+      $('[data-sshg]').hidden = sh; $('[data-sdnl]').hidden = !sh || !(T.dname || (T.named && visOf(S) !== 'drink')); const dn = $('[data-sdname]'); if (document.activeElement !== dn) dn.value = S.dname || '';
+      sdi.forEach((el, i) => { el.maxLength = sh && T.menu ? 30 : [40, 40, 50][i]; });
       const dl = T.dl || ['When', 'Time', 'Where']; $$('[data-sdl]').forEach((el, i) => { el.textContent = dl[i] || ''; }); $('[data-sd3]').hidden = dl.length < 3;
-      if (sh) { $('[data-sf="d1"]').placeholder = T.def.d1 || ''; $('[data-sf="d2"]').placeholder = 'Hours, like 7 AM to 9 PM'; }
+      if (sh) { if (T.menu) sdi.forEach(el => { el.placeholder = 'Drink name'; }); else { sdi[0].placeholder = T.def.d1 || ''; sdi[1].placeholder = 'Hours, like 7 AM to 9 PM'; } } else sdi.forEach(el => { el.placeholder = ''; });
+      $('[data-svisg]').hidden = !(sh && T.vis); $('[data-sdrg]').hidden = !(sh && T.vis && visOf(S) === 'drink');
+      $$('[data-svis]').forEach(b => b.setAttribute('aria-pressed', b.dataset.svis === visOf(S))); $$('[data-sdrink]').forEach(b => b.setAttribute('aria-pressed', b.dataset.sdrink === S.sdk));
+      const hl = $('[data-sf="head"]').closest('label'), sl = $('[data-sf="sub"]').closest('label');
+      if (sh && T.f) { const F = T.f; hl.hidden = !F.head; sl.hidden = !F.sub; hl.querySelector('.sg-h').textContent = F.head || ''; sl.querySelector('.sg-h').textContent = F.sub || '';
+        if (T.name === 'Drink of the day') $('[data-sf="sub"]').placeholder = 'Leave empty for the menu description';
+        $('[data-sdet]').hidden = !(F.d1 || F.d2 || F.d3); sdi.forEach((el, i) => { const lb = F['d' + (i + 1)], lab = el.closest('label'); lab.hidden = !lb; lab.querySelector('.sg-h').textContent = lb || ''; el.placeholder = (F.ph && F.ph[i]) || ''; el.maxLength = 40; }); }
+      else { hl.querySelector('.sg-h').textContent = 'Headline'; sl.querySelector('.sg-h').textContent = 'Second line'; if (!sh) sdi.forEach(el => { el.closest('label').hidden = false; }); $('[data-sd3]').hidden = (T.dl || ['When', 'Time', 'Where']).length < 3; }
       $('[data-ssite]').textContent = sh ? 'shibamcoffee.com' : 'elevatedshotsus.com'; $('[data-stog="handle"]').hidden = sh; $('[data-shtxl]').hidden = !sh; const hx = $('[data-shtxt]'); if (document.activeElement !== hx) hx.value = S.htxt || '';
     };
     const changed = (thumbsToo) => { persist(); redraw(); if (thumbsToo) thumbs(); };
@@ -1532,11 +1531,8 @@
       const tp = e.target.closest('[data-stpl]');
       if (tp) { const id = tp.dataset.stpl; if (TPL[id].photo && !PH) $('[data-sphfile]').click(); if (id === S.tpl) return; Object.assign(S, withDefaults(S, id)); S.v = 0; fixShots(); sync(); changed(true); return; }
       const bb = e.target.closest('[data-sbrand]'); if (bb) { setBrand(bb.dataset.sbrand); return; }
-      const dk = e.target.closest('[data-sdrink]'); if (dk) { const k = dk.dataset.sdrink;
-        if (TPL[S.tpl].single) S.sdr = [k].concat(S.sdr.filter(x => x !== k)).slice(0, 3);
-        else if (S.sdr.includes(k)) { if (S.sdr.length === 1) { toast('Keep at least one drink'); return; } S.sdr = S.sdr.filter(x => x !== k); }
-        else { S.sdr = S.sdr.concat(k); if (S.sdr.length > 3) S.sdr = S.sdr.slice(-3); }
-        sync(); changed(true); return; }
+      const vs = e.target.closest('[data-svis]'); if (vs) { S.svm = Object.assign({}, S.svm, { [S.tpl]: vs.dataset.svis }); S.v = 0; memo.clear(); sync(); changed(true); return; }
+      const dk = e.target.closest('[data-sdrink]'); if (dk) { S.sdk = dk.dataset.sdrink; sync(); changed(true); return; }
       const pmb = e.target.closest('[data-spm]'); if (pmb) { S.pm = pmb.dataset.spm; fixShots(); sync(); changed(true); return; }
       if (e.target.closest('[data-sphrm]')) { PH = null; box = null; S.ph = 0; fixShots(); memo.clear(); sync(); changed(true); toast('Photo removed'); return; }
       const vb = e.target.closest('[data-svar]'); if (vb) { S.v = +vb.dataset.svar; sync(); changed(true); return; }
@@ -1554,7 +1550,7 @@
       if (e.target.closest('[data-sdclose]')) { closeDone(); return; }
       if (e.target.closest('[data-sclose]')) { close(); return; }
     });
-    SM.addEventListener('input', e => { if (e.target.matches('[data-shtxt]')) { S.htxt = e.target.value.trim().slice(0, 30); changed(false); return; } if (e.target.matches('[data-spz]')) { S.pz = +e.target.value; persist(); redraw(); return; } const k = e.target.dataset && e.target.dataset.sf; if (!k) return; S[k] = e.target.value; dirty[k] = e.target.value !== ''; if (!dirty[k]) S[k] = ''; changed(false); clearTimeout(thumbs.t2); thumbs.t2 = setTimeout(thumbs, 700); });
+    SM.addEventListener('input', e => { if (e.target.matches('[data-sdname]')) { S.dname = e.target.value.slice(0, 30); changed(false); clearTimeout(thumbs.t2); thumbs.t2 = setTimeout(thumbs, 700); return; } if (e.target.matches('[data-shtxt]')) { S.htxt = e.target.value.trim().slice(0, 30); changed(false); return; } if (e.target.matches('[data-spz]')) { S.pz = +e.target.value; persist(); redraw(); return; } const k = e.target.dataset && e.target.dataset.sf; if (!k) return; S[k] = e.target.value; dirty[k] = e.target.value !== ''; if (!dirty[k]) S[k] = ''; changed(false); clearTimeout(thumbs.t2); thumbs.t2 = setTimeout(thumbs, 700); });
     SM.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.matches('input')) e.target.blur(); });
     document.addEventListener('keydown', e => { if (e.key === 'Escape' && !SM.hidden) { if (!$('[data-sdone]').hidden) closeDone(); else close(); } });
     const fixShots = () => { if (!S.shots.length && !photoActive(S) && !TPL[S.tpl].photo) S.shots = ORDER.slice(); };
