@@ -82,8 +82,39 @@ async function months() {
   return [...set].sort().reverse().slice(0, 24);
 }
 
+// visitor numbers from Vercel Web Analytics (needs VERCEL_STATS_TOKEN, a Vercel access token)
+const VA = 'https://api.vercel.com/v1/query/web-analytics/visits';
+const PROJECT = 'prj_ihdUVUCsGsfvHccGQkqpLynN36Rz', TEAM = 'team_AYB0SFZ1qQkp6TebSji5xEKA';
+const detroitMidnight = (daysAgo = 0) => {
+  const now = new Date(), local = new Date(now.toLocaleString('en-US', { timeZone: 'America/Detroit' })), off = now - local;
+  local.setHours(0, 0, 0, 0); local.setDate(local.getDate() - daysAgo); return new Date(local.getTime() + off);
+};
+async function va(path, params) {
+  const u = new URL(VA + path); u.searchParams.set('projectId', PROJECT); u.searchParams.set('teamId', TEAM);
+  for (const [k, v] of Object.entries(params)) [].concat(v).forEach(x => u.searchParams.append(k, x instanceof Date ? x.toISOString() : String(x)));
+  const r = await fetch(u, { headers: { authorization: 'Bearer ' + process.env.VERCEL_STATS_TOKEN } });
+  if (!r.ok) throw new Error('va ' + r.status);
+  return r.json();
+}
+async function visitors() {
+  if (!process.env.VERCEL_STATS_TOKEN) return null;
+  const until = new Date(), monthStart = (() => { const d = detroitMidnight(0), n = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Detroit' })); return new Date(d.getTime() - (n.getDate() - 1) * 864e5); })();
+  const cnt = since => va('/count', { since, until }).then(r => r.data || {});
+  const [today, week, monthC, refs, devs, days] = await Promise.allSettled([
+    cnt(detroitMidnight(0)), cnt(detroitMidnight(6)), cnt(monthStart),
+    va('/aggregate', { by: 'referrerHostname', since: detroitMidnight(29), until, limit: 6 }),
+    va('/aggregate', { by: 'deviceType', since: detroitMidnight(29), until, limit: 4 }),
+    va('/aggregate', { by: 'day', since: detroitMidnight(13), until, limit: 14 })
+  ]);
+  const v = x => (x.status === 'fulfilled' ? x.value : null);
+  return { today: v(today), week: v(week), month: v(monthC), refs: v(refs), devices: v(devs), days: v(days) };
+}
+
 export async function GET(request) {
   if (!(await auth(request))) return json({ error: 'Log in again.' }, 401);
+  if (new URL(request.url).searchParams.get('view') === 'visitors') {
+    try { return json({ visitors: await visitors() }); } catch (e) { return json({ visitors: null, error: 'Couldn’t load visitors.' }, 503); }
+  }
   try {
     const now = month(), ms = await months(), given = await readJSON('admin/given.json', {});
     const out = [];
