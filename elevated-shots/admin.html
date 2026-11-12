@@ -195,6 +195,14 @@
   .ssh img { width: 18px; height: 40px; object-fit: contain; }
   .ssh[aria-pressed="true"] { background: var(--ink); color: var(--cream); }
   .sg-note { margin: 8px 0 0; font-size: 13px; color: var(--muted); }
+  .sph { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+  .sph label.btn { position: relative; overflow: hidden; cursor: pointer; }
+  .vh { position: absolute; left: 0; top: 0; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+  .szoom { display: block; margin-top: 12px; }
+  .szoom input { display: block; width: 100%; height: 30px; margin: 4px 0 0; accent-color: var(--ink); }
+  .szoom input:disabled { opacity: .35; }
+  .story-frame.drag canvas { cursor: grab; touch-action: none; }
+  .story-frame.drag canvas:active { cursor: grabbing; }
   .sf { display: block; margin-bottom: 10px; }
   .sf input { display: block; width: 100%; height: 48px; margin-top: 6px; padding: 0 14px; border-radius: 14px; border: 2px solid var(--ink); background: #fff; outline: none; font: 700 16px/1 var(--sans); }
   .sf input:focus { box-shadow: 0 0 0 3px var(--juice); }
@@ -313,6 +321,14 @@
         <div class="sg"><span class="sg-h">Design</span><div class="stpls" data-stpls role="group" aria-label="Pick a design"></div></div>
         <div class="sg"><span class="sg-h">Colors</span><div class="chips svars" data-svars role="group" aria-label="Pick colors"></div></div>
         <div class="sg"><span class="sg-h" data-sshoth>Shots</span><div class="sshots" data-sshots role="group" aria-label="Pick shots"></div><p class="sg-note" data-sshotn hidden>This one shows a single shot. Tap the one you want.</p></div>
+        <div class="sg"><span class="sg-h">Your photo</span>
+          <div class="sph"><label class="btn sm"><span data-sphaddl>Add a photo</span><input class="vh" type="file" accept="image/*" data-sphfile></label><button class="btn sm" type="button" data-sphrm hidden>Remove photo</button></div>
+          <div data-sphctl hidden>
+            <div class="chips" role="group" aria-label="How the photo shows"><button type="button" data-spm="bg" aria-pressed="false">Background</button><button type="button" data-spm="frame" aria-pressed="false">Framed</button><button type="button" data-spm="none" aria-pressed="false">None</button></div>
+            <label class="szoom"><span class="sg-h">Zoom</span><input type="range" min="1" max="3" step="0.01" value="1" data-spz aria-label="Zoom the photo"></label>
+            <p class="sg-note">Drag the photo on the preview to move it. Pinch or use the slider to zoom.</p>
+          </div>
+        </div>
         <div class="sg">
           <label class="sf"><span class="sg-h">Headline</span><input type="text" data-sf="head" maxlength="70" autocomplete="off" enterkeyhint="done"></label>
           <label class="sf"><span class="sg-h">Second line</span><input type="text" data-sf="sub" maxlength="90" autocomplete="off" enterkeyhint="done"></label>
@@ -646,6 +662,7 @@
     /* bottles: pop up with squash and stretch, then a gentle bob */
     const arrange = (keys, cx, base, hm) => {
       const ks = ORDER.filter(k => keys.includes(k)), r = IMG.b.og.width / IMG.b.og.height;
+      if (!ks.length) return [];
       if (ks.length === 1) return [{ k: ks[0], x: cx, base, h: hm, rot: 0, i: 0 }];
       if (ks.length === 2) { const h = hm * .9, w = h * r; return [{ k: ks[0], x: cx - w * .57, base, h, rot: -.045, i: 0 }, { k: ks[1], x: cx + w * .57, base, h, rot: .045, i: 1 }]; }
       const hs = hm * .8, off = (hm * r + hs * r) / 2 * .9;
@@ -675,6 +692,59 @@
     };
     const bursts = (c, L, t, t0) => L.bs.forEach(b => burst(c, t, t0 + b.i * .13 + .5, 11 + b.i * 37, b.x, b.base - b.h * .8, L.bs.length === 1 ? 16 : 9));
 
+
+    /* her own photo: kept in memory only, drawn cover-fit with zoom and drag */
+    let PH = null, phId = 0, box = null;
+    const phMode = st => (st.ph && PH && PH.id === st.ph && st.pm && st.pm !== 'none') ? st.pm : '';
+    const rgbOf = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+    const drawPhoto = (c, x, y, w, h, st, t) => {
+      const z = (st.pz || 1), kb = 1 + .1 * (1 - eo(P(t, 0, DUR))), s0 = Math.max(w / PH.w, h / PH.h) * z, s = s0 * kb, dw = PH.w * s, dh = PH.h * s, ox = dw - w, oy = dh - h;
+      c.drawImage(PH.c, x - ox / 2 * (1 - (st.px || 0)), y - oy / 2 * (1 - (st.py || 0)), dw, dh);
+      if (c.canvas === CV) box = { w, h, s: s0 };
+    };
+    // full-bleed photo with a brand-colored wash where the text sits
+    const photoBg = (c, st, t, rgb, tb, bt) => {
+      if (phMode(st) !== 'bg') return false;
+      const a = x => `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${x})`;
+      c.fillStyle = a(1); c.fillRect(0, 0, W, H);
+      const k = eo(P(t, 0, .7)); if (k > 0) { c.save(); c.globalAlpha = k; drawPhoto(c, 0, 0, W, H, st, t); c.restore(); }
+      const fy = y => cl(y / H), s1 = fy(tb), s2 = fy(tb + 260), s4 = fy(bt), s3 = Math.max(s2, fy(bt - 220));
+      const g = c.createLinearGradient(0, 0, 0, H); g.addColorStop(0, a(.9)); g.addColorStop(s1, a(.74)); g.addColorStop(s2, a(.06)); g.addColorStop(s3, a(.08)); g.addColorStop(Math.max(s3, s4), a(.76)); g.addColorStop(1, a(.9));
+      c.fillStyle = g; c.fillRect(0, 0, W, H); return true;
+    };
+    const frameBehind = (shots, top, base, style) => {
+      const avail = base - top, has = shots.length > 0, exH = style === 'polaroid' ? 110 : 0;
+      const p = Math.round(cl((has ? avail * .8 : avail - 30) - exH, 240, has ? 620 : 760)), oh = p + exH;
+      return { fr: { cx: 540, cy: top + (has ? oh / 2 + 6 : avail / 2), p, rot: style === 'polaroid' ? -.045 : 0, style }, bs: has ? arrange(shots, 540, base, cl(avail * .4, 260, 430)) : [] };
+    };
+    const frameSide = (shots, top, base) => {
+      const avail = base - top;
+      if (!shots.length) { const p = Math.round(cl(avail - 40 - 110, 240, 620)); return { fr: { cx: 540, cy: top + avail / 2, p, rot: -.04, style: 'polaroid' }, bs: [] }; }
+      const p = Math.round(cl(avail - 30 - 110, 220, 420));
+      return { fr: { cx: 90 + (p + 52) / 2, cy: top + (p + 110) / 2 + 10, p, rot: -.07, style: 'polaroid' }, bs: arrange(shots, 770, base, cl(avail * .95, 300, 500)) };
+    };
+    const drawFrame = (c, f, st, t, k) => {
+      if (!f || k <= 0 || !PH) return;
+      c.save(); c.translate(f.cx, f.cy); c.rotate(f.rot + (1 - eo(k)) * .22); const sc = .55 + .45 * eb(k); c.scale(sc, sc); c.globalAlpha *= cl(k * 3);
+      const p = f.p;
+      if (f.style === 'polaroid') {
+        const bw = 26, bb = 84, ow = p + bw * 2, oh = p + bw + bb, x0 = -ow / 2, y0 = -oh / 2;
+        c.save(); c.shadowColor = 'rgba(40,25,0,.35)'; c.shadowBlur = 40; c.shadowOffsetY = 16; c.fillStyle = '#fffdf6'; c.fillRect(x0, y0, ow, oh); c.restore();
+        c.save(); c.beginPath(); c.rect(x0 + bw, y0 + bw, p, p); c.clip(); drawPhoto(c, x0 + bw, y0 + bw, p, p, st, t); c.restore();
+        c.save(); c.fillStyle = INK; c.globalAlpha *= .85; const mh = 46; c.translate(ow / 2 - bw - mh * .73, oh / 2 - bb / 2 - mh / 2); c.scale(mh / 400, mh / 400); c.fill(MARK); c.restore();
+        TPL.note.tape(c, 0, y0 + 4, 200, 62, .05, 'rgba(255,248,231,.75)');
+      } else if (f.style === 'card') {
+        c.save(); c.shadowColor = 'rgba(255,198,26,.5)'; c.shadowBlur = 60; rr(c, -p / 2, -p / 2, p, p, 40); c.fillStyle = INK; c.fill(); c.restore();
+        c.save(); rr(c, -p / 2, -p / 2, p, p, 40); c.clip(); drawPhoto(c, -p / 2, -p / 2, p, p, st, t); c.restore();
+        rr(c, -p / 2 + 3, -p / 2 + 3, p - 6, p - 6, 38); c.lineWidth = 6; c.strokeStyle = JUICE; c.stroke();
+      } else {
+        const r = p / 2;
+        c.save(); c.shadowColor = f.glow ? 'rgba(255,198,26,.45)' : 'rgba(60,30,0,.35)'; c.shadowBlur = 50; c.shadowOffsetY = f.glow ? 0 : 14; c.beginPath(); c.arc(0, 0, r, 0, 6.3); c.fillStyle = f.ring; c.fill(); c.restore();
+        c.save(); c.beginPath(); c.arc(0, 0, r - 16, 0, 6.3); c.clip(); drawPhoto(c, -r + 16, -r + 16, p - 32, p - 32, st, t); c.restore();
+      }
+      c.restore();
+    };
+
     /* ---------- the five designs ---------- */
     const TPL = {
       spot: {
@@ -686,21 +756,25 @@
           { bg: ['#ffffff', '#fff8e7', '#ffe39a'], acc: JUICE, ray: 'rgba(255,198,26,', dot: 'rgba(242,154,12,.16)', sh: 'rgba(120,80,0,.35)' }
         ],
         layout(c, S) {
-          const hd = fit(c, S.head, { font: FT.anton, upper: true, maxW: 940, maxH: 500, lines: 4, lh: .9, max: 250, min: 64 });
+          const fr = phMode(S) === 'frame';
+          const hd = fit(c, S.head, { font: FT.anton, upper: true, maxW: 940, maxH: fr ? 340 : 500, lines: 4, lh: .9, max: fr ? 190 : 250, min: 64 });
           const ht = 362, sb = fit(c, S.sub, { font: FT.osw, upper: true, maxW: 860, maxH: 130, lines: 2, lh: 1.15, max: 54, min: 34 });
-          const st = ht + hd.h + (hd.h ? 46 : 0), base = 1530, hm = cl(base - (st + sb.h + 70), 420, 780);
-          return { hd, ht, sb, st, base, hm, bs: arrange(S.shots, 540, base, hm) };
+          const st = ht + hd.h + (hd.h ? 46 : 0), base = 1530, hm = cl(base - (st + sb.h + 70), 420, 780), tb = st + sb.h;
+          if (fr) { const F = frameBehind(S.shots, tb + 50, base, 'polaroid'); return { hd, ht, sb, st, base, hm, tb, bs: F.bs, fr: F.fr }; }
+          return { hd, ht, sb, st, base, hm, tb, bs: arrange(S.shots, 540, base, hm) };
         },
         draw(c, S, v, L, t) {
           const p = this.pal[v], cy = L.base - L.hm * .45;
-          const g = c.createRadialGradient(540, cy, 60, 540, cy, 1500); g.addColorStop(0, p.bg[0]); g.addColorStop(.45, p.bg[1]); g.addColorStop(1, p.bg[2]); c.fillStyle = g; c.fillRect(0, 0, W, H);
-          rays(c, 540, cy, 1700, 24, t * .09, p.ray, eo(P(t, 0, 1)));
-          halftone(c, 1240, H + 20, p.dot);
+          const pb = photoBg(c, S, t, rgbOf(p.bg[1]), L.tb, 1550);
+          if (!pb) { const g = c.createRadialGradient(540, cy, 60, 540, cy, 1500); g.addColorStop(0, p.bg[0]); g.addColorStop(.45, p.bg[1]); g.addColorStop(1, p.bg[2]); c.fillStyle = g; c.fillRect(0, 0, W, H); }
+          rays(c, 540, cy, 1700, 24, t * .09, p.ray, eo(P(t, 0, 1)) * (pb ? .35 : 1));
+          if (!pb) halftone(c, 1240, H + 20, p.dot);
           [[64, 1020, 170, -.5], [1018, 960, 160, .55], [58, 1330, 150, .3], [1024, 1290, 190, -.4], [930, 1770, 160, .7], [150, 1800, 170, -.6]].forEach((f, i) => icon(c, 8 + i % 3, f[0], f[1] + Math.sin(t * 1.4 + i * 2) * 16, f[2], f[3] + Math.sin(t + i) * .12, eo(P(t, .2 + i * .07, .5))));
           const la = P(t, .05, .45); lockup(c, 540, 226 - (1 - eo(la)) * 50, 84, INK, INK, 'center', la);
           drawText(c, L.hd, 540, L.ht, { align: 'center', fill: INK, t, at: .4, lastFill: p.acc, lastStroke: INK, lastSw: Math.round(L.hd.size * .05) });
           const he = headEnd(L.hd, .4), bt = Math.min(he, 1.7);
           drawText(c, L.sb, 540, L.st, { align: 'center', fill: INK, t, at: he + .05, mode: 'fade' });
+          drawFrame(c, L.fr, S, t, P(t, bt - .3, .55));
           drawBottles(c, L, t, bt, { shadow: p.sh }); bursts(c, L, t, bt);
           const pa = P(t, bt + .95, .45); pills(c, S, 540, 1572 + (1 - eo(pa)) * 40, { fill: INK, text: JUICE, line: INK }, 'center', pa);
         }
@@ -709,14 +783,16 @@
         name: 'Ink', vars: [['Juice', JUICE], ['Cream', CREAM], ['Golden', '#ffb330']],
         def: { head: 'Fresh batch just pressed', sub: 'Grab yours before they sell out' },
         layout(c, S) {
-          const hd = fit(c, S.head, { font: FT.anton, upper: true, maxW: 920, maxH: 440, lines: 4, lh: .92, max: 200, min: 64 });
+          const fr = phMode(S) === 'frame';
+          const hd = fit(c, S.head, { font: FT.anton, upper: true, maxW: 920, maxH: fr ? 320 : 440, lines: 4, lh: .92, max: fr ? 170 : 200, min: 64 });
           const ht = 380, sb = fit(c, S.sub, { font: FT.man7, maxW: 880, maxH: 124, lines: 2, lh: 1.28, max: 48, min: 32 });
-          const st = ht + hd.h + (hd.h ? 44 : 0), base = 1488, hm = cl(base - (st + sb.h + 90), 420, 700);
-          return { hd, ht, sb, st, base, hm, bs: arrange(S.shots, 540, base, hm) };
+          const st = ht + hd.h + (hd.h ? 44 : 0), base = 1488, hm = cl(base - (st + sb.h + 90), 420, 700), tb = st + sb.h;
+          if (fr) { const F = frameBehind(S.shots, tb + 60, base, 'card'); return { hd, ht, sb, st, base, hm, tb, bs: F.bs, fr: F.fr }; }
+          return { hd, ht, sb, st, base, hm, tb, bs: arrange(S.shots, 540, base, hm) };
         },
         draw(c, S, v, L, t) {
-          c.fillStyle = INK; c.fillRect(0, 0, W, H);
-          const cy = L.base - L.hm * .5, ga = eo(P(t, 0, 1.2));
+          const pb = photoBg(c, S, t, [18, 17, 16], L.tb, 1560); if (!pb) { c.fillStyle = INK; c.fillRect(0, 0, W, H); }
+          const cy = L.base - L.hm * .5, ga = eo(P(t, 0, 1.2)) * (pb ? .6 : 1);
           c.save(); c.globalAlpha = ga; radial(c, 540, cy, 900, 'rgba(255,198,26,.24)'); radial(c, 1000, 160, 760, 'rgba(242,154,12,.14)'); c.restore();
           const r = rng(5); for (let i = 0; i < 16; i++) { const x = r() * W, y0 = r() * H, rad = 18 + r() * 70, a = .05 + r() * .12, sp = 10 + r() * 30; radial(c, x + Math.sin(t * .7 + i) * 20, ((y0 - t * sp) % H + H) % H, rad, `rgba(255,198,26,${(a * ga).toFixed(3)})`); }
           radial(c, 540, L.base + 6, 640, `rgba(255,198,26,${(.3 * P(t, .9, .6)).toFixed(3)})`, .09);
@@ -726,7 +802,8 @@
           drawText(c, L.hd, 80, L.ht, { align: 'left', fill: col, t, at: .4, lastFill: null, lastStroke: col, lastSw: Math.max(4, Math.round(L.hd.size * .028)) });
           const he = headEnd(L.hd, .4), bt = Math.min(he, 1.7);
           drawText(c, L.sb, 80, L.st, { align: 'left', fill: v === 1 ? 'rgba(255,198,26,.92)' : 'rgba(255,248,231,.82)', t, at: he + .05, mode: 'fade' });
-          drawBottles(c, L, t, bt, { glow: .8, refl: true }); bursts(c, L, t, bt);
+          drawFrame(c, L.fr, S, t, P(t, bt - .3, .55));
+          drawBottles(c, L, t, bt, { glow: .8, refl: !pb }); bursts(c, L, t, bt);
           const pa = P(t, bt + .95, .45); pills(c, S, 80, 1584 + (1 - eo(pa)) * 40, { fill: JUICE, text: INK, line: CREAM, bg: INK }, 'left', pa);
         }
       },
@@ -742,9 +819,10 @@
           const det = [S.d1, S.d2, S.d3].map((s, i) => [i, String(s || '').trim()]).filter(d => d[1]).map(([i, s]) => ({ i, f: fit(c, s, { font: FT.osw, upper: true, maxW: 690, maxH: 80, lines: 1, max: 58, min: 28, balance: false }) }));
           const sb = fit(c, S.sub, { font: FT.anton, upper: true, maxW: 800, maxH: 124, lines: 2, lh: 1, max: 62, min: 34 });
           const bandH = sb.lines.length ? Math.round(sb.h + 66) : 0, rowsH = det.length ? 30 + det.length * 112 + 16 : 0, cardH = bandH + rowsH;
-          const ht = 350, base = 1552, minB = 330;
+          const fr = phMode(S) === 'frame', ht = 350, base = 1552, minB = fr ? 470 : 330;
           const hd = fit(c, S.head, { font: FT.anton, upper: true, maxW: 920, maxH: Math.max(110, Math.min(440, base - minB + 40 - cardH - 50 - ht)), lines: 3, lh: .9, max: 210, min: 64 });
           const ct = ht + hd.h + (hd.h ? 52 : 0), cb = ct + cardH, hm = cl(base - (cardH ? cb - 40 : cb + 40), minB, 600);
+          if (fr) { const F = frameSide(S.shots, cb + 30, base); return { hd, ht, sb, det, bandH, rowsH, cardH, ct, cb, base, hm, bs: F.bs, fr: F.fr }; }
           return { hd, ht, sb, det, bandH, rowsH, cardH, ct, cb, base, hm, bs: arrange(S.shots, 540, base, hm) };
         },
         glyph(c, kind, x, y, s, col) {
@@ -755,7 +833,7 @@
           c.restore();
         },
         draw(c, S, v, L, t) {
-          const p = this.pal[v]; c.fillStyle = p.bg; c.fillRect(0, 0, W, H);
+          const p = this.pal[v], pb = photoBg(c, S, t, rgbOf(p.bg), L.ht + L.hd.h, 1560); if (!pb) { c.fillStyle = p.bg; c.fillRect(0, 0, W, H); }
           const cy = L.base - L.hm * .45;
           if (p.glow) radial(c, 540, cy, 760, 'rgba(255,198,26,.2)');
           c.save(); c.lineWidth = 6; for (let i = 0; i < 9; i++) { const rad = (i * 150 + t * 80) % 1350 + 60, a = .34 * (1 - rad / 1410) * eo(P(t, 0, .8)); c.strokeStyle = p.ring + a.toFixed(3) + ')'; c.beginPath(); c.arc(540, cy, rad, 0, 6.3); c.stroke(); } c.restore();
@@ -769,7 +847,7 @@
             if (L.bandH) {
               c.save(); rr(c, x, y, w, L.cardH, 40); c.clip(); c.fillStyle = p.band; c.fillRect(x, y, w, L.bandH); c.restore();
               drawText(c, L.sb, 540, y + (L.bandH - L.sb.cap) / 2, { align: 'center', fill: p.bandT, t, at: Math.min(he, 1.6) + .2, mode: 'line' });
-              if (L.rowsH) { c.fillStyle = p.bg; [x, x + w].forEach(nx => { c.beginPath(); c.arc(nx, y + L.bandH, 26, 0, 6.3); c.fill(); }); c.save(); c.setLineDash([16, 14]); c.lineWidth = 4; c.strokeStyle = p.dash; c.beginPath(); c.moveTo(x + 46, y + L.bandH); c.lineTo(x + w - 46, y + L.bandH); c.stroke(); c.restore(); }
+              if (L.rowsH) { c.fillStyle = p.bg; if (!pb) [x, x + w].forEach(nx => { c.beginPath(); c.arc(nx, y + L.bandH, 26, 0, 6.3); c.fill(); }); c.save(); c.setLineDash([16, 14]); c.lineWidth = 4; c.strokeStyle = p.dash; c.beginPath(); c.moveTo(x + 46, y + L.bandH); c.lineTo(x + w - 46, y + L.bandH); c.stroke(); c.restore(); }
             }
             const ry = y + L.bandH + 30;
             L.det.forEach((d, j) => {
@@ -783,6 +861,7 @@
             c.restore();
           }
           const bt = Math.min(he, 1.6) + .3;
+          drawFrame(c, L.fr, S, t, P(t, bt - .2, .55));
           drawBottles(c, L, t, bt, p.glow ? { glow: p.glow } : { shadow: p.sh }); bursts(c, L, t, bt);
           const pa = P(t, bt + .95, .45); pills(c, S, 540, 1576 + (1 - eo(pa)) * 40, p.pill, 'center', pa);
         }
@@ -802,13 +881,14 @@
           const oy = base - hm * .75, rx = 430, n = f.ing.length, bw = hm * IMG.b.og.width / IMG.b.og.height;
           let best = 0, bestS = -1; for (let ph = 0; ph < 6.28; ph += .04) { let s = 1e9; for (let i = 0; i < n; i++) { const a = ph + i * 6.283 / n; if (Math.sin(a) > -.1) s = Math.min(s, Math.abs(Math.cos(a)) * rx - bw * .5); } if (s > bestS) { bestS = s; best = ph; } }
           const big = fit(c, f.name, { font: FT.anton, upper: true, maxW: 1000, maxH: 380, lines: 1, max: 360, min: 120 });
-          return { f, hd, bnT, bnH, nm, nmT, ing, ingT, sb, sbT, base, hm, bs, oy, rx, ph: best - DUR * .45, big };
+          const fr = phMode(S) === 'frame' ? { cx: 540, cy: base - hm * .5, p: Math.round(Math.min(hm, 760)), rot: 0, style: 'circle', ring: S.v === 0 ? CREAM : JUICE, glow: S.v === 1 } : null;
+          return { f, hd, bnT, bnH, nm, nmT, ing, ingT, sb, sbT, base, hm, bs, oy, rx, ph: best - DUR * .45, big, fr };
         },
         draw(c, S, v, L, t) {
-          const f = L.f, cy = L.base - L.hm * .5;
-          if (v === 0) { const g = c.createRadialGradient(540, cy, 40, 540, cy, 1400); g.addColorStop(0, f.top); g.addColorStop(.5, f.mid); g.addColorStop(1, f.bot); c.fillStyle = g; }
+          const f = L.f, cy = L.base - L.hm * .5, pb = photoBg(c, S, t, v === 0 ? rgbOf(f.mid) : v === 1 ? [18, 17, 16] : [255, 248, 231], 300, L.nmT - 30);
+          if (pb) {} else if (v === 0) { const g = c.createRadialGradient(540, cy, 40, 540, cy, 1400); g.addColorStop(0, f.top); g.addColorStop(.5, f.mid); g.addColorStop(1, f.bot); c.fillStyle = g; }
           else if (v === 1) c.fillStyle = INK; else { const g = c.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#fffaf0'); g.addColorStop(1, '#ffeec2'); c.fillStyle = g; }
-          c.fillRect(0, 0, W, H);
+          if (!pb) c.fillRect(0, 0, W, H);
           if (v === 1) radial(c, 540, cy, 820, 'rgba(255,198,26,.26)');
           const ringC = v === 0 ? 'rgba(255,255,255,' : v === 1 ? 'rgba(255,198,26,' : 'rgba(242,154,12,';
           c.save(); c.lineWidth = 3; for (let i = 0; i < 12; i++) { const rad = 180 + ((i * 100 + t * 30) % 1200), a = (v === 1 ? .2 : .36) * (1 - rad / 1400) * eo(P(t, 0, 1)); c.strokeStyle = ringC + a.toFixed(3) + ')'; c.beginPath(); c.arc(540, cy, rad, 0, 6.3); c.stroke(); } c.restore();
@@ -824,6 +904,7 @@
           }
           const he = Math.min(headEnd(L.hd, .5), 1.5), b = L.bs[0], n = f.ing.length;
           const orb = side => { for (let i = 0; i < n; i++) { const a = L.ph + i * 6.283 / n + t * .45, d = Math.sin(a); if ((d >= 0) !== side) continue; const ka = eo(P(t, he + .45 + i * .06, .6)); if (ka <= 0) continue; const s = 136 * (.7 + .3 * (d + 1) / 2); icon(c, ICO.indexOf(f.ing[i]), 540 + Math.cos(a) * L.rx * ka, L.oy + d * 84 * ka + Math.sin(t * 2 + i) * 8, s, Math.sin(t * 1.2 + i) * .25, ka * (side ? 1 : .82)); } };
+          drawFrame(c, L.fr, S, t, P(t, he - .2, .6));
           orb(false);
           drawB(c, b, t, he, v === 1 ? { glow: .8 } : { shadow: v === 0 ? 'rgba(110,50,0,.5)' : 'rgba(120,80,0,.35)' });
           orb(true);
@@ -848,7 +929,8 @@
           const hd = fit(c, S.head, { font: FT.anton, upper: true, maxW: 730, maxH: 430, lines: 5, lh: .96, max: 170, min: 56 });
           const sb = fit(c, S.sub, { font: FT.man7, maxW: 730, maxH: 124, lines: 2, lh: 1.3, max: 46, min: 32 });
           const tx = -NW / 2 + 86, ty = -NH / 2 + 128, st = ty + hd.h + (hd.h ? (hd.lines.length > 1 ? 70 : 64) : 0);
-          const base = 1548, hm = S.shots.length === 1 ? 520 : 470;
+          const base = 1548, hm = cl(base - (NT + NH / 2 + st + sb.h + 34), 380, S.shots.length === 1 ? 520 : 470);
+          if (phMode(S) === 'frame') { const F = frameSide(S.shots, NT + NH + 20, base); return { NW, NH, NT, hd, sb, tx, ty, st, base, hm, bs: F.bs, fr: F.fr }; }
           return { NW, NH, NT, hd, sb, tx, ty, st, base, hm, bs: arrange(S.shots, 540, base, hm) };
         },
         tape(c, x, y, w, h, rot, col) {
@@ -859,9 +941,10 @@
         },
         draw(c, S, v, L, t) {
           const p = this.pal[v];
-          c.fillStyle = CREAM; c.fillRect(0, 0, W, H);
+          const pb = photoBg(c, S, t, [255, 248, 231], 310, 1560);
+          if (!pb) { c.fillStyle = CREAM; c.fillRect(0, 0, W, H);
           c.save(); c.strokeStyle = 'rgba(242,154,12,.14)'; c.lineWidth = 2; c.beginPath(); for (let x = 30; x < W; x += 60) { c.moveTo(x, 0); c.lineTo(x, H); } for (let y = 20; y < H; y += 60) { c.moveTo(0, y); c.lineTo(W, y); } c.stroke(); c.restore();
-          radial(c, 960, 1560, 620, 'rgba(255,198,26,.42)'); radial(c, 80, 260, 420, 'rgba(255,198,26,.28)');
+          radial(c, 960, 1560, 620, 'rgba(255,198,26,.42)'); radial(c, 80, 260, 420, 'rgba(255,198,26,.28)'); }
           const la = P(t, .05, .45); lockup(c, 540, 226 - (1 - eo(la)) * 50, 78, INK, INK, 'center', la);
           const k = P(t, .15, .5);
           if (k > 0) {
@@ -883,6 +966,7 @@
             [[-300, -.5, .55], [300, .42, .72]].forEach(([dx, rot, s0]) => { const tk = P(t, s0, .3); if (tk <= 0) return; c.save(); c.translate(540, L.NT + NH / 2); c.rotate(-.04); c.globalAlpha *= tk; const ts = 1 + (1 - eo(tk)) * .4; c.translate(dx, -NH / 2 + 6); c.scale(ts, ts); this.tape(c, 0, 0, 230, 74, rot, p.tape); c.restore(); });
           }
           const bt = Math.min(headEnd(L.hd, .75), 1.9) + .2;
+          drawFrame(c, L.fr, S, t, P(t, bt - .3, .55));
           drawBottles(c, L, t, bt, { shadow: 'rgba(110,70,0,.4)' }); bursts(c, L, t, bt);
           const pa = P(t, bt + .95, .45); pills(c, S, 540, 1574 + (1 - eo(pa)) * 40, { fill: INK, text: JUICE, line: INK }, 'center', pa);
         }
@@ -918,14 +1002,15 @@
 
     /* ---------- state ---------- */
     const SKEY = 'es-story';
-    const S = { tpl: 'spot', v: 0, shots: ['og', 'golden', 'glow'], hero: 'golden', head: '', sub: '', d1: '', d2: '', d3: '', site: true, handle: true };
+    const S = { tpl: 'spot', v: 0, shots: ['og', 'golden', 'glow'], hero: 'golden', head: '', sub: '', d1: '', d2: '', d3: '', site: true, handle: true, ph: 0, pm: 'frame', pz: 1, px: 0, py: 0 };
     let dirty = {};
     try { const sv = JSON.parse(localStorage.getItem(SKEY) || 'null'); if (sv && sv.S && TPL[sv.S.tpl]) { Object.assign(S, sv.S); dirty = sv.dirty || {}; } } catch (e) {}
+    S.ph = 0; if (!['bg', 'frame', 'none'].includes(S.pm)) S.pm = 'frame';
     if (!Array.isArray(S.shots) || !S.shots.length) S.shots = ['og', 'golden', 'glow']; if (!FL[S.hero]) S.hero = 'golden';
     const FIELDS = ['head', 'sub', 'd1', 'd2', 'd3'];
     const withDefaults = (st, id) => { const d = Object.assign({}, TPL.pop.def, TPL[id].def), o = Object.assign({}, st, { tpl: id }); FIELDS.forEach(k => { if (!dirty[k]) o[k] = d[k] || ''; }); return o; };
     Object.assign(S, withDefaults(S, S.tpl));
-    const persist = () => { try { localStorage.setItem(SKEY, JSON.stringify({ S, dirty })); } catch (e) {} };
+    const persist = () => { try { localStorage.setItem(SKEY, JSON.stringify({ S: Object.assign({}, S, { ph: 0 }), dirty })); } catch (e) {} };
 
     /* ---------- render ---------- */
     const memo = new Map();
@@ -1016,16 +1101,21 @@
       FIELDS.forEach(k => { const i = $(`[data-sf="${k}"]`); if (document.activeElement !== i) i.value = S[k]; });
       $('[data-sf="head"]').placeholder = T.def.head; $('[data-sf="sub"]').placeholder = T.def.sub;
       $$('[data-stog]').forEach(b => b.setAttribute('aria-pressed', !!S[b.dataset.stog]));
+      $('[data-sphaddl]').textContent = PH ? 'Change photo' : 'Add a photo'; $('[data-sphrm]').hidden = !PH; $('[data-sphctl]').hidden = !PH;
+      $$('[data-spm]').forEach(b => b.setAttribute('aria-pressed', b.dataset.spm === S.pm)); const zr = $('[data-spz]'); zr.value = S.pz; zr.disabled = !phMode(S);
+      $('.story-frame').classList.toggle('drag', !!phMode(S));
     };
     const changed = (thumbsToo) => { persist(); redraw(); if (thumbsToo) thumbs(); };
     SM.addEventListener('click', e => {
       const tp = e.target.closest('[data-stpl]');
       if (tp) { const id = tp.dataset.stpl; if (id === S.tpl) return; Object.assign(S, withDefaults(S, id)); S.v = 0; sync(); changed(true); return; }
+      const pmb = e.target.closest('[data-spm]'); if (pmb) { S.pm = pmb.dataset.spm; fixShots(); sync(); changed(true); return; }
+      if (e.target.closest('[data-sphrm]')) { PH = null; box = null; S.ph = 0; fixShots(); memo.clear(); sync(); changed(true); toast('Photo removed'); return; }
       const vb = e.target.closest('[data-svar]'); if (vb) { S.v = +vb.dataset.svar; sync(); changed(true); return; }
       const sh = e.target.closest('[data-sshot]');
       if (sh) { const k = sh.dataset.sshot;
         if (TPL[S.tpl].single) S.hero = k;
-        else if (S.shots.includes(k)) { if (S.shots.length === 1) { toast('Keep at least one shot'); return; } S.shots = S.shots.filter(x => x !== k); }
+        else if (S.shots.includes(k)) { if (S.shots.length === 1 && !phMode(S)) { toast('Keep at least one shot'); return; } S.shots = S.shots.filter(x => x !== k); }
         else S.shots = ORDER.filter(x => x === k || S.shots.includes(x));
         sync(); changed(true); return; }
       const tg = e.target.closest('[data-stog]'); if (tg) { const k = tg.dataset.stog; S[k] = !S[k]; sync(); changed(true); return; }
@@ -1036,9 +1126,41 @@
       if (e.target.closest('[data-sdclose]')) { closeDone(); return; }
       if (e.target.closest('[data-sclose]')) { close(); return; }
     });
-    SM.addEventListener('input', e => { const k = e.target.dataset && e.target.dataset.sf; if (!k) return; S[k] = e.target.value; dirty[k] = e.target.value !== ''; if (!dirty[k]) S[k] = ''; changed(false); clearTimeout(thumbs.t2); thumbs.t2 = setTimeout(thumbs, 700); });
+    SM.addEventListener('input', e => { if (e.target.matches('[data-spz]')) { S.pz = +e.target.value; persist(); redraw(); return; } const k = e.target.dataset && e.target.dataset.sf; if (!k) return; S[k] = e.target.value; dirty[k] = e.target.value !== ''; if (!dirty[k]) S[k] = ''; changed(false); clearTimeout(thumbs.t2); thumbs.t2 = setTimeout(thumbs, 700); });
     SM.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.matches('input')) e.target.blur(); });
     document.addEventListener('keydown', e => { if (e.key === 'Escape' && !SM.hidden) { if (!$('[data-sdone]').hidden) closeDone(); else close(); } });
+    const fixShots = () => { if (!S.shots.length && !phMode(S)) S.shots = ORDER.slice(); };
+    // iPhone hands over a JPEG for HEIC photos; <img> decoding applies EXIF rotation; big photos get shrunk to 2160px
+    const addPhoto = async file => {
+      if (!file) return; if (file.type && !/^image\//i.test(file.type)) { toast('Pick a photo'); return; }
+      if (!IMG) { try { await boot(); } catch (e) { toast("Couldn't load the story pieces."); return; } }
+      toast('Adding your photo…'); const u = URL.createObjectURL(file);
+      try {
+        const img = await loadImg(u); try { await img.decode(); } catch (e) {}
+        const iw = img.naturalWidth, ih = img.naturalHeight; if (!iw || !ih) throw new Error('empty');
+        const k = Math.min(1, 2160 / Math.max(iw, ih)), cv = mk(Math.max(1, Math.round(iw * k)), Math.max(1, Math.round(ih * k))), x = cv.getContext('2d');
+        x.imageSmoothingEnabled = true; x.imageSmoothingQuality = 'high'; x.drawImage(img, 0, 0, cv.width, cv.height);
+        PH = { c: cv, w: cv.width, h: cv.height, id: ++phId }; box = null;
+        Object.assign(S, { ph: PH.id, px: 0, py: 0, pz: 1 }); if (S.pm === 'none') S.pm = 'frame';
+        memo.clear(); sync(); changed(true); toast('Photo added. Drag it to move it.');
+      } catch (e) { toast("Couldn't open that photo. Try a JPG or PNG."); }
+      finally { URL.revokeObjectURL(u); }
+    };
+    SM.addEventListener('change', e => { if (!e.target.matches('[data-sphfile]')) return; const fl = e.target.files && e.target.files[0]; addPhoto(fl).finally(() => { e.target.value = ''; }); });
+    // drag to move, pinch or wheel to zoom, right on the preview
+    const ptrs = new Map(); let pinch = null;
+    const pdist = () => { const [a, b] = [...ptrs.values()]; return Math.hypot(a.x - b.x, a.y - b.y) || 1; };
+    const setZoom = z => { S.pz = cl(z, 1, 3); $('[data-spz]').value = S.pz; };
+    CV.addEventListener('pointerdown', e => { if (!phMode(S) || rec) return; e.preventDefault(); try { CV.setPointerCapture(e.pointerId); } catch (er) {} ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY }); if (ptrs.size === 2) pinch = { d: pdist(), z: S.pz }; if (anim) still(); });
+    CV.addEventListener('pointermove', e => {
+      const pr = ptrs.get(e.pointerId); if (!pr || !PH) return; const cur = { x: e.clientX, y: e.clientY }; ptrs.set(e.pointerId, cur);
+      if (ptrs.size >= 2 && pinch) setZoom(pinch.z * pdist() / pinch.d);
+      else if (box) { const k = W / (CV.clientWidth || W), ox = PH.w * box.s - box.w, oy = PH.h * box.s - box.h; if (ox > 1) S.px = cl(S.px + 2 * (cur.x - pr.x) * k / ox, -1, 1); if (oy > 1) S.py = cl(S.py + 2 * (cur.y - pr.y) * k / oy, -1, 1); }
+      redraw();
+    });
+    const pend = e => { if (!ptrs.delete(e.pointerId)) return; if (ptrs.size < 2) pinch = null; if (!ptrs.size) { persist(); thumbs(); } };
+    CV.addEventListener('pointerup', pend); CV.addEventListener('pointercancel', pend);
+    CV.addEventListener('wheel', e => { if (!phMode(S) || rec) return; e.preventDefault(); setZoom(S.pz * Math.exp(-e.deltaY * .0015)); redraw(); }, { passive: false });
     const open = async () => {
       SM.hidden = false; document.body.style.overflow = 'hidden'; sync();
       const ld = $('[data-sload]');
