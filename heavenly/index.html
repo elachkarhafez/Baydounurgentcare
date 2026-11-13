@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noai, noimageai">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Heavenly Coffee | Coffee and matcha bar for events in the San Fernando Valley</title>
+<meta name="description" content="Heavenly Coffee is a coffee and matcha bar for events around the San Fernando Valley and Los Angeles. Brûlée lattes, strawberry matcha and specialty drinks, made at your event. DM @theheavenlycoffee to book.">
+<meta property="og:title" content="Heavenly Coffee · Coffee and matcha for your event">
+<meta property="og:description" content="Brûlée lattes, strawberry matcha and specialty coffee, poured at your event in the Valley. DM to book.">
+<meta property="og:image" content="media/r-latte.webp">
+<meta name="theme-color" content="#f7efe4">
+<link rel="icon" href="media/icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@1,500;1,600&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="media/r-latte.webp">
+<style>
+/* Heavenly Coffee, San Fernando Valley / Los Angeles
+   Concept: their badge is three church windows over a cup, so the page is those windows with light coming through.
+   The hero is a tall pointed arch with god rays and drifting light motes, their rose window turning above it, and the
+   3D iced latte (the reused Buzz'n Brew Cycles cup with their badge as the sticker) standing in the light. The drinks
+   are the badge's three windows, events and pastries are framed in arches, and the closer draws their badge line by line.
+   Palette from the badge (coffee brown on cream), their gold trays and frames, strawberry pink and matcha green.
+   MOBILE FIRST. */
+:root{
+  --cream:#f7efe4; --cream2:#efe3d2; --paper:#fbf7f1; --brown:#4b2e21; --brown2:#6e4a38; --soft:#8a6f60; --line:rgba(75,46,33,.14);
+  --gold:#c6a15b; --gold2:#e8d3a2; --pink:#f2c6cc; --berry:#c8455b; --matcha:#8aa75a; --sky:#fdf6e8;
+  --arch:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 140' preserveAspectRatio='none'%3E%3Cpath d='M0 140V52Q0 14 50 0Q100 14 100 52V140Z'/%3E%3C/svg%3E");
+  --t:'Cinzel', Georgia, serif; --i:'Cormorant Garamond', Georgia, serif; --f:'Montserrat', system-ui, sans-serif;
+  --pad:18px; --sec:40px; --nav:56px; --out:cubic-bezier(.16,1,.3,1);
+}
+*{box-sizing:border-box;margin:0}
+html{-webkit-text-size-adjust:100%;overflow-x:clip;background:var(--cream);scroll-padding-top:calc(var(--nav) + 12px)}
+body{background:var(--cream);color:var(--brown);font:400 .9375rem/1.6 var(--f);overflow-x:clip;-webkit-font-smoothing:antialiased}
+body.intro{overflow:hidden}
+img,video{display:block;max-width:100%;height:auto}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:6px}
+.wrap{max-width:1140px;margin:0 auto;padding:0 var(--pad)}
+h1,h2{font-family:var(--t);font-weight:600;line-height:1.08;letter-spacing:.01em}
+h1{font-size:1.75rem}
+h2{font-size:1.5rem}
+h1 em,h2 em{font:italic 600 1.18em/1 var(--i);letter-spacing:0;color:var(--gold);text-transform:none}
+h3{font:600 1.0625rem/1.25 var(--t);letter-spacing:.02em}
+p{margin:0}
+.sub{color:var(--soft);margin-top:8px;max-width:40ch}
+.kick{display:inline-flex;align-items:center;gap:8px;font:600 .6875rem/1 var(--f);letter-spacing:.22em;text-transform:uppercase;color:var(--brown2)}
+.kick::before{content:"";width:18px;height:1px;background:var(--gold)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:0 20px;border-radius:999px;background:var(--brown);color:var(--paper);text-decoration:none;font:600 .8125rem/1 var(--f);letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;border:0;transition:transform .2s,background .2s,box-shadow .2s}
+.btn:active{transform:scale(.97)}
+.btn.ghost{background:transparent;color:var(--brown);box-shadow:inset 0 0 0 1.5px rgba(75,46,33,.35)}
+.btn svg{width:16px;height:16px;flex:none}
+@media (hover:hover) and (pointer:fine){.btn:hover{background:var(--brown2);box-shadow:0 10px 24px -10px rgba(75,46,33,.5)}.btn.ghost:hover{background:rgba(75,46,33,.06)}}
+.row{display:flex;flex-wrap:wrap;gap:8px}
+.badge{display:block;color:var(--brown)}
+.badge svg{display:block;width:100%;height:100%}
+
+/* intro: the rose window draws, then light floods in */
+.veil{position:fixed;inset:0;z-index:200;display:none;place-items:center;background:var(--cream)}
+.motion .veil{display:grid}
+.veil .badge{width:132px;height:132px}
+.veil .badge *{stroke-dasharray:var(--len,600);stroke-dashoffset:var(--len,600)}
+.veil .badge text{opacity:0}
+
+/* nav */
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:var(--nav);background:rgba(247,239,228,.92);box-shadow:0 1px 0 var(--line)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:100%;gap:10px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;white-space:nowrap}
+.brand .badge{width:32px;height:32px}
+.brand b{font:600 .9375rem/1 var(--t);letter-spacing:.14em}
+.links{display:none}
+.nav .btn{min-height:36px;padding:0 14px;font-size:.6875rem}
+
+/* hero: the window */
+.hero{position:relative;padding:calc(var(--nav) + 18px) 0 var(--sec);overflow:hidden;background:radial-gradient(90% 60% at 50% 0%,#fffaf0,var(--cream) 70%)}
+.hero .wrap{display:grid;gap:22px}
+.hero h1{margin-top:10px}
+.hero .sub{font-size:.9375rem}
+.hero .row{margin-top:16px}
+.facts{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.facts span{padding:6px 11px;border-radius:999px;background:rgba(198,161,91,.12);box-shadow:inset 0 0 0 1px rgba(198,161,91,.35);font:600 .75rem/1 var(--f)}
+.window{position:relative;justify-self:center;width:min(72vw,280px);aspect-ratio:100/140;margin-top:40px}
+.window .glass{position:absolute;inset:0;-webkit-mask:var(--arch) center/100% 100% no-repeat;mask:var(--arch) center/100% 100% no-repeat;background:linear-gradient(180deg,#fff9ec,#f6e6cc 60%,#ecd7b8);overflow:hidden}
+.window .frame{position:absolute;inset:-7px;-webkit-mask:var(--arch) center/100% 100% no-repeat;mask:var(--arch) center/100% 100% no-repeat;background:linear-gradient(160deg,var(--gold2),var(--gold) 45%,#9c7a3c);z-index:-1}
+.rays{position:absolute;left:50%;top:-30%;width:220%;height:160%;transform:translateX(-50%);background:repeating-conic-gradient(from 180deg at 50% 0%,rgba(255,255,255,0) 0deg 5deg,rgba(255,250,232,.85) 6deg 8deg,rgba(255,255,255,0) 9deg 15deg);-webkit-mask:linear-gradient(180deg,#000,transparent 80%);mask:linear-gradient(180deg,#000,transparent 80%);mix-blend-mode:screen;opacity:.75;animation:rays 9s ease-in-out infinite alternate}
+@keyframes rays{to{transform:translateX(-50%) rotate(6deg);opacity:.95}}
+.motes{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.window .cup{position:absolute;inset:0;z-index:0;overflow:hidden}
+.window .cup img{width:100%;height:100%;object-fit:cover;object-position:50% 72%;transform-origin:50% 80%}
+.window .rays,.window .motes,.window .mullion{z-index:1}
+.rose{position:absolute;left:50%;top:-12%;width:30%;aspect-ratio:1;transform:translateX(-50%);z-index:3;color:var(--brown);background:var(--cream);border-radius:50%;padding:4%;box-shadow:0 0 0 3px var(--gold),0 8px 20px -8px rgba(75,46,33,.4)}
+.rose svg{width:100%;height:100%;overflow:visible}
+.mullion{position:absolute;top:0;bottom:0;width:2px;background:linear-gradient(180deg,rgba(198,161,91,.0),rgba(198,161,91,.35) 30%,rgba(198,161,91,.12));z-index:1}
+.mullion.a{left:33%}.mullion.b{right:33%}
+.halo{position:absolute;left:50%;bottom:-6%;width:130%;height:22%;transform:translateX(-50%);background:radial-gradient(closest-side,rgba(198,161,91,.35),transparent);z-index:-2}
+
+/* light strip */
+.strip{overflow:hidden;padding:14px 0;border-block:1px solid var(--line);background:var(--paper)}
+.strip .tr{display:flex;width:max-content;animation:marq 40s linear infinite}
+.strip span{padding-right:26px;white-space:nowrap;font:italic 600 1.375rem/1.1 var(--i);color:var(--brown2)}
+.strip span i{font-style:normal;color:var(--gold);margin-left:26px}
+@keyframes marq{to{transform:translateX(-50%)}}
+
+/* the three windows */
+.sec{padding:var(--sec) 0}
+.head{margin-bottom:16px}
+.trio{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 calc(var(--pad) * -1);padding:16px var(--pad) 6px;scrollbar-width:none}
+.trio::-webkit-scrollbar{display:none}
+.pane{flex:0 0 72%;scroll-snap-align:center;display:flex;flex-direction:column}
+.pane .arch{position:relative;aspect-ratio:100/128;-webkit-mask:var(--arch) center/100% 100% no-repeat;mask:var(--arch) center/100% 100% no-repeat;overflow:hidden}
+.pane .arch img,.pane .arch video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.pane.render .arch{background:linear-gradient(180deg,#fff8ea,var(--cream2))}
+.pane.render .arch img{object-position:50% 74%}
+.pane.pinkbg .arch{background:linear-gradient(180deg,#fdeef0,var(--pink))}
+.pane .ring{position:absolute;inset:0;-webkit-mask:var(--arch) center/100% 100% no-repeat;mask:var(--arch) center/100% 100% no-repeat;box-shadow:inset 0 0 0 3px var(--gold);pointer-events:none;border-radius:0}
+.pane .shine{position:absolute;inset:-20%;background:linear-gradient(115deg,transparent 42%,rgba(255,255,255,.55) 50%,transparent 58%);transform:translateX(-80%);pointer-events:none}
+.pane .tx{padding:12px 4px 0;text-align:center}
+.pane .tx p{color:var(--soft);font-size:.8125rem;margin-top:4px}
+.pane .tag{display:inline-block;margin-top:8px;padding:5px 10px;border-radius:999px;background:var(--paper);box-shadow:inset 0 0 0 1px var(--line);font:600 .6875rem/1 var(--f);letter-spacing:.08em;text-transform:uppercase}
+.dots{display:flex;justify-content:center;gap:6px;margin-top:12px}
+.dots i{width:6px;height:6px;border-radius:50%;background:rgba(75,46,33,.2);transition:width .25s,background .25s}
+.dots i.on{width:18px;border-radius:3px;background:var(--gold)}
+
+/* pour */
+.pour{display:grid;gap:18px;align-items:center}
+.pour .arch{position:relative;justify-self:center;width:min(70vw,280px);aspect-ratio:3/4;max-height:50svh;-webkit-mask:var(--arch) center/100% 100% no-repeat;mask:var(--arch) center/100% 100% no-repeat;background:var(--cream2)}
+.pour .arch video{width:100%;height:100%;object-fit:cover}
+.pour blockquote{margin:12px 0 0;font:italic 600 1.375rem/1.25 var(--i);color:var(--brown)}
+.pour small{display:block;margin-top:8px;color:var(--soft);font-size:.75rem}
+
+/* events */
+.events{background:var(--paper);border-block:1px solid var(--line)}
+.gallery{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 calc(var(--pad) * -1);padding:0 var(--pad) 4px;scrollbar-width:none}
+.gallery::-webkit-scrollbar{display:none}
+.shot{flex:0 0 78%;scroll-snap-align:start;margin:0;border-radius:18px;overflow:hidden;background:var(--cream2);position:relative}
+.shot img{width:100%;aspect-ratio:4/3;height:auto;object-fit:cover}
+.shot figcaption{padding:10px 12px 12px;font-size:.8125rem;color:var(--soft)}
+.shot figcaption b{display:block;font:600 .9375rem/1.25 var(--t);color:var(--brown);letter-spacing:.02em}
+.events .quote{margin-top:18px;padding:16px 18px;border-radius:18px;background:var(--cream);box-shadow:inset 0 0 0 1px var(--line)}
+.events .quote p{font:italic 600 1.25rem/1.3 var(--i)}
+.events .quote small{display:block;margin-top:8px;color:var(--soft);font-size:.75rem}
+
+/* sweet */
+.sweet{display:grid;gap:16px;align-items:center}
+.sweet .pic{position:relative;border-radius:20px;overflow:hidden;aspect-ratio:4/3}
+.sweet .pic img{width:100%;height:100%;object-fit:cover}
+.sweet .pic::after{content:"";position:absolute;inset:0;box-shadow:inset 0 0 0 3px var(--gold);border-radius:20px;pointer-events:none}
+
+/* steps */
+.steps{display:grid;gap:8px;counter-reset:s;list-style:none;padding:0}
+.steps li{display:grid;grid-template-columns:42px 1fr;gap:12px;align-items:start;padding:14px;border-radius:16px;background:var(--paper);box-shadow:inset 0 0 0 1px var(--line);counter-increment:s}
+.steps li::before{content:counter(s);display:grid;place-items:center;width:42px;height:50px;-webkit-mask:var(--arch) center/100% 100% no-repeat;mask:var(--arch) center/100% 100% no-repeat;background:var(--brown);color:var(--paper);font:600 1rem/1 var(--t);padding-top:8px}
+.steps p{color:var(--soft);font-size:.875rem;margin-top:3px}
+
+/* closer */
+.close{position:relative;overflow:hidden;padding:52px 0 48px;text-align:center;background:radial-gradient(80% 70% at 50% 0%,#fffaf0,var(--cream2))}
+.close .badge{width:150px;height:150px;margin:0 auto 16px}
+.close p{margin:8px auto 0;max-width:34ch;color:var(--soft)}
+.close .row{justify-content:center;margin-top:18px}
+.close .rays{top:-40%;width:160%;opacity:.5}
+footer{padding:22px 0 calc(96px + env(safe-area-inset-bottom));background:var(--cream2);color:var(--soft);font-size:.8125rem;border-top:1px solid var(--line)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:10px 20px;align-items:center;justify-content:space-between}
+footer b{color:var(--brown)}
+.studio{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;background:#2a2725;color:#fff;font:500 11px/1 var(--f);text-decoration:none}
+.studio i{width:9px;height:9px;border-radius:3px;background:conic-gradient(from 210deg,#ff5a1f,#ffb03b,#ff5a1f)}
+.dock{position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom));z-index:45;display:grid;grid-template-columns:1fr 1.3fr;gap:6px;padding:6px;border-radius:999px;background:rgba(251,247,241,.97);box-shadow:0 12px 30px rgba(75,46,33,.22);border:1px solid var(--line);transform:translateY(150%);transition:transform .35s var(--out)}
+.dock.on{transform:none}
+.dock .btn{min-height:42px;padding:0 10px;font-size:.75rem}
+.rv{opacity:0;transform:translateY(16px);transition:opacity .8s ease,transform .9s var(--out)}
+.rv.on{opacity:1;transform:none}
+
+@media (min-width:600px){ .pane{flex-basis:40%} .shot{flex-basis:46%} }
+@media (min-width:900px){
+  :root{--pad:32px;--sec:76px;--nav:66px}
+  body{font-size:1rem}
+  h1{font-size:3.1rem} h2{font-size:2.4rem}
+  .brand .badge{width:40px;height:40px} .brand b{font-size:1.0625rem}
+  .links{display:flex;gap:28px;font:600 .6875rem/1 var(--f);letter-spacing:.16em;text-transform:uppercase;color:var(--soft)}
+  .links a{text-decoration:none}.links a:hover{color:var(--brown)}
+  .hero{padding-top:calc(var(--nav) + 40px)}
+  .hero .wrap{grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
+  .hero .sub{font-size:1.0625rem}
+  .window{width:340px;max-height:none}
+  .strip span{font-size:1.875rem}
+  .trio{overflow:visible;margin:0;padding:24px 0 0;gap:22px;align-items:end}
+  .pane{flex:1}
+  .pane.mid .arch{aspect-ratio:100/150}
+  .dots{display:none}
+  .pour{grid-template-columns:.9fr 1.1fr;gap:56px}
+  .pour .arch{width:360px;max-height:none}
+  .gallery{display:grid;grid-template-columns:repeat(4,1fr);overflow:visible;margin:0;padding:0;gap:14px}
+  .sweet{grid-template-columns:1.1fr .9fr;gap:48px}
+  .steps{grid-template-columns:repeat(3,1fr);gap:14px}
+  .close{padding:90px 0}
+  .close .badge{width:190px;height:190px}
+  .dock{display:none} footer{padding-bottom:26px}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.rv{opacity:1!important;transform:none!important}}
+</style>
+</head>
+<body>
+<script>document.documentElement.classList.add(matchMedia('(prefers-reduced-motion: reduce)').matches ? 'still' : 'motion'); if (document.documentElement.classList.contains('motion')) document.body.classList.add('intro');</script>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-ig" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6" fill="currentColor"/></g></symbol>
+</svg>
+<template id="badgeTpl"><svg viewBox="0 0 400 400" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><defs><path id="ARC" d="M 66 266 A 146 146 0 1 1 334 266"/></defs><circle cx="200" cy="200" r="188" stroke-width="9"/><circle cx="200" cy="200" r="118" stroke-width="6"/><text fill="currentColor" stroke="none" font-family="Montserrat, Arial, sans-serif" font-weight="700" font-size="44" letter-spacing="5"><textPath href="#ARC" startOffset="50%" text-anchor="middle">HEAVENLY COFFEE</textPath></text><g stroke-width="5"><circle cx="200" cy="114" r="19"/><circle cx="200" cy="114" r="5"/><path d="M200 95v13M200 120v13M181 114h13M206 114h13M187 101l9 9M204 118l9 9M213 101l-9 9M196 118l-9 9" stroke-width="3.5"/><path d="M180 222V158q0-16 20-24q20 8 20 24v64"/><path d="M200 146v76" stroke-width="3.5"/><path d="M124 222V176q0-22 24-36q24 14 24 36v46"/><path d="M148 152v70" stroke-width="3.5"/><path d="M228 222V176q0-22 24-36q24 14 24 36v46"/><path d="M252 152v70" stroke-width="3.5"/><path d="M114 222h172"/><path d="M166 244h68q0 38-34 38t-34-38z"/><path d="M234 252q18 0 16 13t-18 12"/><path d="M154 292h92"/><path d="M192 238q-6-6 0-11q6-5 0-10M208 238q-6-6 0-11q6-5 0-10" stroke-width="3.5"/></g></svg></template>
+
+<div class="veil" id="veil" aria-hidden="true"><span class="badge" data-badge></span></div>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Heavenly Coffee, back to the top"><span class="badge" data-badge></span><b>HEAVENLY COFFEE</b></a>
+    <nav class="links" aria-label="Sections"><a href="#drinks">Drinks</a><a href="#events">Events</a><a href="#book">Book</a></nav>
+    <a class="btn" data-book href="#book"><svg aria-hidden="true"><use href="#i-ig"/></svg>Book</a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero" aria-label="Intro">
+    <div class="wrap">
+      <div>
+        <span class="kick hi">San Fernando Valley · Los Angeles</span>
+        <h1 class="hi">Coffee and matcha that make your event feel <em>heavenly.</em></h1>
+        <p class="sub hi">Brûlée lattes, strawberry matcha and specialty drinks, made right at your party, shower, wellness morning or pop-up.</p>
+        <div class="row hi" id="heroCta"><a class="btn" data-book href="#book"><svg aria-hidden="true"><use href="#i-ig"/></svg>DM to book</a><a class="btn ghost" href="#drinks">See the drinks</a></div>
+        <div class="facts hi"><span>Coffee bar</span><span>Matcha bar</span><span>Event catering</span></div>
+      </div>
+      <div class="window" id="window">
+        <div class="halo" aria-hidden="true"></div>
+        <div class="frame" aria-hidden="true"></div>
+        <div class="glass">
+          <div class="rays" aria-hidden="true"></div>
+          <canvas class="motes" id="motes" aria-hidden="true"></canvas>
+          <span class="mullion a" aria-hidden="true"></span><span class="mullion b" aria-hidden="true"></span>
+          <div class="cup" id="heroCup"><img src="media/r-latte.webp" alt="A Heavenly Coffee iced latte in a clear cup with a cream top and their round badge sticker" width="864" height="864" fetchpriority="high"></div>
+        </div>
+        <div class="rose" id="rose" aria-hidden="true"><svg viewBox="-24 -24 48 48" fill="none" stroke="currentColor" stroke-linecap="round"><circle r="21" stroke-width="2.4"/><circle r="6" stroke-width="2"/><g stroke-width="1.8"><path d="M0-21v15M0 6v15M-21 0h15M6 0h15M-15-15l10.7 10.7M4.3 4.3 15 15M15-15 4.3-4.3M-4.3 4.3-15 15"/></g><g stroke-width="1.4"><circle cx="0" cy="-13.5" r="3.4"/><circle cx="0" cy="13.5" r="3.4"/><circle cx="-13.5" cy="0" r="3.4"/><circle cx="13.5" cy="0" r="3.4"/></g></svg></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="strip" aria-hidden="true"><div class="tr"><span>Brûlée Latte<i>✦</i></span><span>Strawberry Matcha<i>✦</i></span><span>Iced Matcha<i>✦</i></span><span>Specialty coffee<i>✦</i></span><span>Wellness mornings<i>✦</i></span><span>Brûlée Latte<i>✦</i></span><span>Strawberry Matcha<i>✦</i></span><span>Iced Matcha<i>✦</i></span><span>Specialty coffee<i>✦</i></span><span>Wellness mornings<i>✦</i></span></div></div>
+
+  <section class="sec" id="drinks" aria-label="Drinks">
+    <div class="wrap">
+      <div class="head rv"><h2>What we <em>pour.</em></h2><p class="sub">Specialty coffee and crafted matcha, made fresh at the bar for every guest.</p></div>
+      <div class="trio" id="trio">
+        <article class="pane render"><div class="arch"><img src="media/r-latte.webp" alt="Iced latte with a cream top and the Heavenly Coffee sticker" width="864" height="864" loading="lazy"><span class="shine"></span><span class="ring"></span></div><div class="tx"><h3>Brûlée Latte</h3><p>The one people ask for at the wellness mornings.</p><span class="tag">Coffee</span></div></article>
+        <article class="pane mid pinkbg"><div class="arch"><img src="media/smatcha.webp" alt="Matcha poured over milk and strawberry in a clear cup" width="600" height="800" loading="lazy"><span class="shine"></span><span class="ring"></span></div><div class="tx"><h3>Strawberry Matcha</h3><p>Strawberry on the bottom, milk, then matcha poured over the top.</p><span class="tag">Fan favorite</span></div></article>
+        <article class="pane render"><div class="arch"><img src="media/r-matcha.webp" alt="Iced matcha latte with a cream top and the Heavenly Coffee sticker" width="864" height="864" loading="lazy"><span class="shine"></span><span class="ring"></span></div><div class="tx"><h3>Iced Matcha</h3><p>Bright green matcha over milk and ice.</p><span class="tag">Matcha</span></div></article>
+      </div>
+      <div class="dots" id="trioDots" aria-hidden="true"><i></i><i class="on"></i><i></i></div>
+    </div>
+  </section>
+
+  <section class="sec" aria-label="The pour" style="padding-top:0">
+    <div class="wrap pour">
+      <div class="arch rv"><video id="pourVid" muted playsinline loop preload="none" poster="media/smatcha.webp" aria-label="Matcha being poured into a strawberry matcha at an event"><source src="media/pour.mp4" type="video/mp4"></video></div>
+      <div class="rv">
+        <h2>Poured to order, <em>right there.</em></h2>
+        <blockquote>"Catering all your coffee and matcha needs."</blockquote>
+        <small>From their Instagram. Specialty coffee and crafted drinks for any social you're having.</small>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec events" id="events" aria-label="Events">
+    <div class="wrap">
+      <div class="head rv"><h2>Wellness mornings, <em>pilates weekends.</em></h2><p class="sub">Yoga, pilates and women's wellness events around the Valley, plus any social you're planning.</p></div>
+      <div class="gallery" id="gallery">
+        <figure class="shot rv"><img src="media/tent.webp" alt="A Morning Wellness setup under a white tent with lounge seating and silver balloons" width="800" height="578" loading="lazy"><figcaption><b>My Space Wellness Club</b>Morning wellness: yoga, coffee and matcha</figcaption></figure>
+        <figure class="shot rv"><img src="media/pilates.webp" alt="The Heavenly Coffee station under a Figue Madera pilates sign with pink accents" width="600" height="800" loading="lazy"><figcaption><b>Figue Madera Pilates</b>A weekend of pilates and coffee</figcaption></figure>
+        <figure class="shot rv"><img src="media/patio.webp" alt="Pilates reformers lined up on a covered patio at a wellness event" width="800" height="600" loading="lazy"><figcaption><b>Out on the patio</b>Moving first, coffee after</figcaption></figure>
+        <figure class="shot rv"><img src="media/latte-stand.webp" alt="An iced latte on a wooden stand beside a gold frame and a gold lantern" width="600" height="800" loading="lazy"><figcaption><b>The little details</b>Gold trays, lanterns, the works</figcaption></figure>
+      </div>
+      <div class="quote rv"><p>"From yoga to coffee, aromatherapy, and the sweetest little goodies, every detail felt so thoughtful."</p><small>From their post about the My Space Wellness Club morning</small></div>
+    </div>
+  </section>
+
+  <section class="sec" aria-label="Something sweet">
+    <div class="wrap sweet">
+      <div class="pic rv"><img src="media/danish.webp" alt="Puff pastry danishes topped with cream and whole strawberries on a wooden board" width="800" height="600" loading="lazy"></div>
+      <div class="rv"><h2>Something sweet <em>with it.</em></h2><p class="sub">Strawberry cream danishes and sweet little goodies have sat right next to the drinks at their setups. Ask about them when you book.</p></div>
+    </div>
+  </section>
+
+  <section class="sec" id="book" aria-label="How to book" style="padding-top:0">
+    <div class="wrap">
+      <div class="head rv"><h2>How it <em>works.</em></h2></div>
+      <ol class="steps">
+        <li class="rv"><div><h3>Send us a DM</h3><p>Your date, where it is and roughly how many guests.</p></div></li>
+        <li class="rv"><div><h3>Pick the drinks</h3><p>Coffee, matcha, strawberry matcha, brûlée lattes. We'll help you choose.</p></div></li>
+        <li class="rv"><div><h3>We set up and pour</h3><p>The bar comes to you and every drink is made fresh.</p></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="close" id="closer" aria-label="Book">
+    <div class="rays" aria-hidden="true"></div>
+    <div class="wrap" style="position:relative">
+      <span class="badge" id="closeBadge" data-badge></span>
+      <h2>Make it a <em>heavenly</em> morning.</h2>
+      <p>DM us your date and we'll get back to you with the details.</p>
+      <div class="row"><a class="btn" data-book href="#book"><svg aria-hidden="true"><use href="#i-ig"/></svg>Book Heavenly Coffee</a><a class="btn ghost" data-ig href="#book">@theheavenlycoffee</a></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span><b>Heavenly Coffee</b> · Coffee and matcha bar for events · San Fernando Valley, Los Angeles · <a data-ig href="#book">@theheavenlycoffee</a></span>
+    <a class="studio" href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener" aria-label="Site by ElaSystems (opens in a new tab)"><i aria-hidden="true"></i><span>Site by <b style="color:#fff">ElaSystems</b></span></a>
+  </div>
+</footer>
+
+<div class="dock" id="dock"><a class="btn ghost" href="#drinks">Drinks</a><a class="btn" data-book href="#book"><svg aria-hidden="true"><use href="#i-ig"/></svg>DM to book</a></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+const CONFIG = { instagram: 'https://www.instagram.com/theheavenlycoffee/', book: 'https://ig.me/m/theheavenlycoffee' };
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const still = document.documentElement.classList.contains('still');
+/* their badge, stamped wherever [data-badge] sits (each copy gets its own arc id) */
+const tpl = $('#badgeTpl').innerHTML;
+$$('[data-badge]').forEach((el, i) => { el.innerHTML = tpl.replace(/ARC/g, 'arc' + i); });
+$$('[data-ig]').forEach(a => { a.href = CONFIG.instagram; a.target = '_blank'; a.rel = 'noopener'; });
+$$('[data-book]').forEach(a => { a.href = CONFIG.book; a.target = '_blank'; a.rel = 'noopener'; });
+
+/* rails: dots + start the drinks on the middle window */
+function dots(rail, dotsEl) {
+  const paint = () => { const w = rail.firstElementChild.getBoundingClientRect().width + 10, k = Math.round(rail.scrollLeft / w); [...dotsEl.children].forEach((d, i) => d.classList.toggle('on', i === k)); };
+  rail.addEventListener('scroll', () => requestAnimationFrame(paint), { passive: true });
+}
+const trio = $('#trio'); dots(trio, $('#trioDots'));
+addEventListener('load', () => { if (trio.scrollWidth > trio.clientWidth) trio.scrollLeft = trio.children[1].offsetLeft - (trio.clientWidth - trio.children[1].offsetWidth) / 2; });
+
+/* light motes drifting up through the window */
+(function () {
+  const c = $('#motes'), x = c.getContext('2d'); if (!x) return;
+  let W, H, ps = [], vis = true;
+  const size = () => { const d = Math.min(devicePixelRatio || 1, 2); W = c.clientWidth; H = c.clientHeight; c.width = W * d; c.height = H * d; x.setTransform(d, 0, 0, d, 0, 0); };
+  size(); addEventListener('resize', size);
+  for (let i = 0; i < 46; i++) ps.push({ x: Math.random(), y: Math.random(), r: .6 + Math.random() * 1.8, s: .0006 + Math.random() * .0014, w: Math.random() * 6.28, a: .3 + Math.random() * .6 });
+  new IntersectionObserver(([e]) => vis = e.isIntersecting).observe(c);
+  function draw(t) {
+    if (vis && !document.hidden) {
+      x.clearRect(0, 0, W, H);
+      for (const p of ps) {
+        if (!still) { p.y -= p.s; if (p.y < -.05) { p.y = 1.05; p.x = Math.random(); } }
+        const px = (p.x + Math.sin(t / 2400 + p.w) * .02) * W, py = p.y * H, tw = .55 + .45 * Math.sin(t / 700 + p.w * 3);
+        x.beginPath(); x.arc(px, py, p.r, 0, 6.283); x.fillStyle = `rgba(255,246,214,${p.a * tw})`; x.shadowColor = 'rgba(255,230,160,.9)'; x.shadowBlur = 6; x.fill();
+      }
+    }
+    if (!still) requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+})();
+
+/* pour video plays while on screen */
+const pv = $('#pourVid');
+if (!still && 'IntersectionObserver' in window) new IntersectionObserver(([e]) => { e.isIntersecting ? pv.play().catch(() => {}) : pv.pause(); }, { threshold: .3 }).observe(pv);
+
+/* dock */
+const dock = $('#dock'); let atClose = false, inHero = true;
+const syncDock = () => dock.classList.toggle('on', !inHero && !atClose);
+new IntersectionObserver(es => { atClose = es[0].isIntersecting; syncDock(); }).observe($('#closer'));
+new IntersectionObserver(es => { inHero = es[0].isIntersecting; syncDock(); }).observe($('#heroCta'));
+
+/* reveals */
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -8% 0px' });
+$$('.rv').forEach(el => io.observe(el));
+
+/* ---------- motion ---------- */
+const veil = $('#veil');
+if (still || !window.gsap || !window.ScrollTrigger) { veil.remove(); document.body.classList.remove('intro'); }
+else {
+  gsap.registerPlugin(ScrollTrigger);
+  /* intro: the badge draws itself line by line, the name fades in, then the veil lifts like morning light */
+  const vb = veil.querySelector('svg');
+  vb.querySelectorAll('circle,path').forEach(p => { let L = 400; try { L = p.getTotalLength(); } catch (e) {} p.style.setProperty('--len', L); });
+  gsap.set('.hi', { autoAlpha: 0, y: 22 });
+  gsap.set('#window', { autoAlpha: 0, y: 40, scale: .96 });
+  gsap.set('#heroCup img', { scale: 1.25, autoAlpha: 0 });
+  gsap.set('#rose', { scale: 0, rotate: -90 });
+  const heroIn = () => gsap.timeline()
+    .to('#window', { autoAlpha: 1, y: 0, scale: 1, duration: 1.1, ease: 'expo.out' })
+    .to('#rose', { scale: 1, rotate: 0, duration: 1.1, ease: 'back.out(1.6)' }, .2)
+    .to('#heroCup img', { scale: 1, autoAlpha: 1, duration: 1.4, ease: 'expo.out' }, .3)
+    .to('.hi', { autoAlpha: 1, y: 0, duration: .9, stagger: .09, ease: 'power3.out' }, .15)
+    .add(() => gsap.to('#heroCup img', { scale: 1.03, duration: 3.2, yoyo: true, repeat: -1, ease: 'sine.inOut' }));
+  let lifted = false;
+  const lift = () => { if (lifted) return; lifted = true; gsap.to(veil, { autoAlpha: 0, duration: .6, ease: 'power2.out', onComplete: () => { veil.remove(); document.body.classList.remove('intro'); } }); heroIn(); };
+  gsap.timeline({ onComplete: lift })
+    .to(vb.querySelectorAll('circle,path'), { strokeDashoffset: 0, duration: .9, stagger: .025, ease: 'power2.inOut' })
+    .to(vb.querySelector('text'), { opacity: 1, duration: .35 }, '-=.35')
+    .to(veil.querySelector('.badge'), { scale: 1.08, duration: .25, ease: 'power2.out' });
+  veil.addEventListener('click', lift); addEventListener('keydown', e => { if (e.key === 'Escape') lift(); });
+
+  /* the rose window keeps turning with the scroll */
+  gsap.to('#rose svg', { rotate: 360, ease: 'none', scrollTrigger: { trigger: document.body, start: 'top top', end: 'bottom bottom', scrub: 1 } });
+  /* scrolling past the hero, the cup rises up through the light */
+  gsap.to('#heroCup', { scale: 1.12, transformOrigin: '50% 80%', ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+  gsap.to('.hero .rays', { opacity: 1, rotate: 8, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+  /* fine pointers: the window tilts toward you */
+  if (matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    const w = $('#window');
+    $('.hero').addEventListener('pointermove', e => { const r = w.getBoundingClientRect(), dx = (e.clientX - r.left - r.width / 2) / r.width, dy = (e.clientY - r.top - r.height / 2) / r.height; gsap.to(w, { rotateY: dx * 8, rotateX: -dy * 6, transformPerspective: 900, duration: .8 }); gsap.to('#heroCup', { xPercent: dx * 3, duration: .8 }); });
+    $('.hero').addEventListener('pointerleave', () => gsap.to('#window', { rotateY: 0, rotateX: 0, duration: 1, ease: 'elastic.out(1,.5)' }));
+  }
+
+  /* the three windows open from the sill up, then light sweeps across the glass */
+  $$('.pane').forEach((p, i) => {
+    const a = p.querySelector('.arch');
+    gsap.fromTo(a, { clipPath: 'inset(100% 0 0 0)' }, { clipPath: 'inset(0% 0 0 0)', duration: 1.3, delay: i * .15, ease: 'expo.out', scrollTrigger: { trigger: '#trio', start: 'top 82%' } });
+    gsap.from(p.querySelector('img'), { scale: 1.18, duration: 1.6, delay: i * .15, ease: 'expo.out', scrollTrigger: { trigger: '#trio', start: 'top 82%' } });
+    gsap.from(p.querySelector('.tx'), { y: 20, autoAlpha: 0, duration: .9, delay: .35 + i * .15, ease: 'power3.out', scrollTrigger: { trigger: '#trio', start: 'top 82%' } });
+    gsap.to(p.querySelector('.shine'), { xPercent: 160, duration: 1.4, delay: .9 + i * .25, ease: 'power2.inOut', repeat: -1, repeatDelay: 5 + i, scrollTrigger: { trigger: '#trio', start: 'top 82%' } });
+  });
+  /* pour arch rises from the sill */
+  gsap.fromTo('.pour .arch', { clipPath: 'inset(100% 0 0 0)' }, { clipPath: 'inset(0% 0 0 0)', duration: 1.4, ease: 'expo.out', scrollTrigger: { trigger: '.pour', start: 'top 80%' } });
+  /* gallery shots drift at slightly different speeds */
+  $$('.shot img').forEach((im, i) => gsap.fromTo(im, { yPercent: -4, scale: 1.08 }, { yPercent: 4, scale: 1.08, ease: 'none', scrollTrigger: { trigger: im, start: 'top bottom', end: 'bottom top', scrub: true } }));
+  gsap.fromTo('.sweet .pic img', { scale: 1.2 }, { scale: 1, ease: 'none', scrollTrigger: { trigger: '.sweet', start: 'top bottom', end: 'center center', scrub: true } });
+  /* closer: their badge draws itself again, then glows */
+  const cb = $('#closeBadge svg');
+  cb.querySelectorAll('circle,path').forEach(p => { let L = 400; try { L = p.getTotalLength(); } catch (e) {} p.style.strokeDasharray = L; p.style.strokeDashoffset = L; });
+  gsap.set(cb.querySelector('text'), { opacity: 0 });
+  ScrollTrigger.create({ trigger: '#closer', start: 'top 75%', once: true, onEnter: () => gsap.timeline()
+    .to(cb.querySelectorAll('circle,path'), { strokeDashoffset: 0, duration: 1.2, stagger: .03, ease: 'power2.inOut' })
+    .to(cb.querySelector('text'), { opacity: 1, duration: .5 }, '-=.4')
+    .fromTo('#closeBadge', { filter: 'drop-shadow(0 0 0 rgba(198,161,91,0))' }, { filter: 'drop-shadow(0 0 18px rgba(198,161,91,.8))', duration: .8, yoyo: true, repeat: 1 }) });
+  addEventListener('load', () => ScrollTrigger.refresh());
+}
+</script>
+</body>
+</html>
