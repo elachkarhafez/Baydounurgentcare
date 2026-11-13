@@ -98,6 +98,15 @@
     header { position: fixed; left: 0; right: 0; top: 0; z-index: 90; transition: background .4s, box-shadow .4s, transform .5s var(--ease-out); }
     header.scrolled { background: rgba(255,248,231,.97); box-shadow: 0 1px 0 var(--line); }
     header.hide { transform: translateY(-110%); }
+    .gtop { display: none; }
+    @media (max-width: 920px) {
+      .gtop { display: flex; align-items: center; justify-content: center; gap: 7px; width: max-content; max-width: calc(100% - 32px); height: 36px; max-height: 40px; margin: -6px auto 8px; padding: 0 14px; overflow: hidden; border-radius: 999px; border: 2px solid var(--ink); background: var(--juice); color: var(--ink); box-shadow: 0 2px 0 var(--ink); font: 800 13px/1 var(--sans); white-space: nowrap; text-decoration: none; transition: max-height .35s, margin .35s, opacity .3s, border-width .35s; }
+      .gtop svg { flex: none; width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 2.3; stroke-linecap: round; stroke-linejoin: round; }
+      .gtop .ar { width: 15px; height: 15px; }
+      .gtop span { overflow: hidden; text-overflow: ellipsis; }
+      .gtop:active { transform: translateY(2px); box-shadow: 0 0 0 var(--ink); }
+      header.at-play .gtop { max-height: 0; margin: 0 auto; border-width: 0; opacity: 0; pointer-events: none; }
+    }
     .nav { display: flex; align-items: center; justify-content: space-between; gap: 20px; height: 78px; }
     .brand { display: flex; align-items: center; gap: 10px; color: var(--ink); }
     .brand .bm { width: 29px; height: 40px; flex: none; fill: currentColor; }
@@ -150,7 +159,7 @@
     .h-msg { position: absolute; left: 50%; top: calc(44% + clamp(50px, 5vw, 70px)); translate: -50% 0; z-index: 8; font: 700 13px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; opacity: 0; background: var(--cream); padding: 8px 12px; border-radius: 999px; border: 2px solid var(--ink); }
     .flash { position: fixed; inset: 0; z-index: 85; pointer-events: none; background: radial-gradient(circle at var(--fx, 50%) var(--fy, 40%), rgba(255,198,26,.85), rgba(255,198,26,0) 60%); opacity: 0; }
     @media (max-width: 920px) {
-      .hero { padding: 92px 0 40px; }
+      .hero { padding: 132px 0 40px; }
       .hero-grid { grid-template-columns: 1fr; gap: 0; }
       .hero h1 { font-size: clamp(70px, 21vw, 150px); margin-top: 16px; }
       .hero-grid > div:first-child { display: contents; }
@@ -802,6 +811,7 @@
         <a class="btn ink" href="#order">Order</a>
       </div>
     </div>
+    <a class="gtop" href="#play" data-gbtn-top><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6H5.5a2.5 2.5 0 0 0 2.6 4M16 6h2.5a2.5 2.5 0 0 1-2.6 4M12 13v3M9 20h6M10 16h4v4"/></svg><span>Play and win 3 free shots this month</span><svg class="ar" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
   </header>
 
   <main>
@@ -1912,6 +1922,8 @@
 
   /* ---------- header + phone bar ---------- */
   const header = $('[data-header]'), mbar = $('[data-mbar]'); let lastY = scrollY;
+  // the small play button under the header steps aside once the game is on screen
+  if ('IntersectionObserver' in window && $('#play')) new IntersectionObserver(es => es.forEach(e => header.classList.toggle('at-play', e.isIntersecting)), { rootMargin: '-20% 0px -20% 0px' }).observe($('#play'));
   const onScroll = () => { const y = scrollY; header.classList.toggle('scrolled', y > 30); header.classList.toggle('hide', y > lastY + 2 && y > innerHeight * .9); lastY = y; mbar.classList.toggle('on', y > innerHeight * .7 && y + innerHeight < document.documentElement.scrollHeight - 220);
     const max = document.documentElement.scrollHeight - innerHeight; if (!ANIM) drawProg(max > 0 ? y / max : 0); };
   onScroll(); addEventListener('scroll', onScroll, { passive: true });
