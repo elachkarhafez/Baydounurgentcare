@@ -155,8 +155,8 @@
     header nav { display: none; }
     header .right { display: flex; align-items: center; gap: 10px; }
     .pcup { width: 26px; height: 32px; overflow: visible; }
-    .dock { position: fixed; left: 10px; right: 10px; bottom: 10px; z-index: 70; display: grid; grid-template-columns: 1fr auto; gap: 8px; padding: 8px; border: var(--line); border-radius: 18px; background: var(--paper); box-shadow: var(--shadow); transition: transform .4s var(--ease), opacity .4s; }
-    .dock .btn { height: 44px; box-shadow: none; font-size: .9375rem; }
+    .dock { position: fixed; left: 10px; right: 10px; bottom: 10px; z-index: 70; display: grid; grid-template-columns: 1fr auto auto; gap: 8px; padding: 8px; border: var(--line); border-radius: 18px; background: var(--paper); box-shadow: var(--shadow); transition: transform .4s var(--ease), opacity .4s; }
+    .dock .btn { height: 44px; box-shadow: none; font-size: .9375rem; white-space: nowrap; padding: 0 14px; }
     .dock.away { transform: translateY(140%); opacity: 0; pointer-events: none; }
     @media (min-width: 1000px) {
       header .wrap { height: 64px; }
@@ -222,6 +222,92 @@
     .marquee img { width: 18px; height: 18px; flex: none; }
     @media (min-width: 900px) { .xm { gap: 12px; padding: 24px 0 28px; } .marquee { rotate: -1.1deg; } }
 
+
+    /* ---------- the coffee pour wipe (nav jumps, the teaser) ---------- */
+    .pour { position: fixed; left: 0; right: 0; top: 0; height: 130vh; z-index: 190; pointer-events: none; visibility: hidden; display: flex; flex-direction: column; will-change: transform; }
+    .pour .pw-top { position: relative; height: 56px; flex: none; overflow: hidden; }
+    .pour .pw-top svg { position: absolute; left: 0; bottom: -1px; width: 200%; height: 100%; animation: pwave 1.1s linear infinite; }
+    .pour .pw-top svg + svg { bottom: 10px; animation-duration: 1.6s; animation-direction: reverse; opacity: .9; }
+    @keyframes pwave { to { transform: translateX(-50%); } }
+    .pour .pw-bot { transform: scaleY(-1); margin-top: -1px; }
+    .pour .pw-body { flex: 1; margin-top: -1px; background: var(--espresso); display: grid; place-items: center; }
+    .pour .pw-body img { width: 96px; height: auto; animation: spin 1.4s linear infinite; }
+
+    /* ---------- teaser: just kidding, coming soon ---------- */
+    html.teaser, html.teaser body { overflow: hidden; height: 100%; }
+    html.teaser .dock { display: none; }
+    .teaser { position: fixed; inset: 0; z-index: 150; background: var(--espresso); color: var(--cream); overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; }
+    .teaser[hidden], .jk[hidden] { display: none; }
+    .t-bg { position: fixed; inset: -20% -30%; pointer-events: none; display: grid; align-content: space-evenly; rotate: -9deg; overflow: hidden; }
+    .t-row { display: flex; width: max-content; font: 400 clamp(3.75rem, 2rem + 9vw, 10rem)/.9 var(--display); text-transform: uppercase; color: transparent; -webkit-text-stroke: 1.5px rgba(210, 176, 142, .12); white-space: nowrap; animation: trow 46s linear infinite; will-change: transform; }
+    .t-row:nth-child(even) { animation-direction: reverse; animation-duration: 58s; }
+    .t-row span { padding-right: .35em; }
+    .t-rib { margin-inline: calc(var(--pad) * -1 - 30px); overflow: hidden; padding: 10px 0; background: var(--bean); border-block: 3px solid var(--ink); color: var(--cream); font: 400 clamp(1.125rem, 1rem + 1vw, 1.75rem)/1 var(--display); text-transform: uppercase; white-space: nowrap; rotate: -2deg; }
+    .t-ribtr { display: flex; width: max-content; animation: trow 30s linear infinite; will-change: transform; }
+    .t-rib span { padding-right: .35em; }
+    html.rm .t-ribtr { animation: none; }
+    .t-grid { grid-template-columns: minmax(0, 1fr); padding-block: 6px 12px; }
+    @media (min-width: 900px) { .t-rib { grid-column: 1 / -1; order: 3; margin-top: 6px; margin-inline: calc((100vw - min(100vw, 1200px)) / -2 - var(--pad) - 30px); rotate: -1.2deg; } }
+    @keyframes trow { to { transform: translateX(-50%); } }
+    html.rm .t-row { animation: none; }
+    .t-wrap { position: relative; max-width: 1200px; margin: 0 auto; padding: 18px var(--pad) 40px; }
+    .t-top { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+    .t-logo { height: 40px; width: auto; }
+    .t-jk { display: inline-block; padding: 7px 12px; border: 2.5px solid var(--ink); border-radius: 12px; background: var(--latte); color: var(--ink); box-shadow: 3px 3px 0 var(--ink); font: 400 .9375rem/1 var(--display); text-transform: uppercase; rotate: 5deg; }
+    .t-grid { display: grid; gap: 26px; margin-top: 22px; }
+    .t-kick { margin: 0; font: 700 1.375rem/1.1 var(--hand); color: var(--latte); }
+    .t-h { margin: 4px 0 0; font-size: clamp(2.25rem, 1.6rem + 2.6vw, 3.5rem); line-height: .95; text-transform: uppercase; }
+    .t-h .fill { -webkit-text-stroke-width: 1.5px; }
+    .t-h .fs { -webkit-text-stroke-width: 1.5px; }
+    .t-sub { margin: 10px 0 0; color: rgba(247, 243, 236, .78); max-width: 42ch; }
+    .cd { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-top: 18px; }
+    .cd > div { position: relative; padding: 12px 4px 10px; border: 3px solid var(--ink); border-radius: 16px; background: var(--cream); color: var(--ink); text-align: center; box-shadow: 5px 5px 0 var(--bean); }
+    .cd b { display: inline-block; font: 400 clamp(2.5rem, 1.6rem + 4vw, 5.5rem)/1 var(--display); font-variant-numeric: tabular-nums; }
+    .cd span { display: block; margin-top: 4px; font: 700 .6875rem/1 var(--sans); letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+    .cd > div:last-child { background: var(--latte); }
+    .t-ctas { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+    .t-ctas .btn { white-space: nowrap; }
+    .t-ctas .btn:not(.loud) { background: var(--cream); color: var(--ink); box-shadow: 4px 4px 0 var(--latte); }
+    .t-ctas .btn.loud { box-shadow: 4px 4px 0 var(--ink); }
+    .t-contact { margin: 16px 0 0; color: rgba(247, 243, 236, .78); font-size: .9375rem; }
+    .t-contact a { color: var(--cream); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--latte); }
+    .t-game .g-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+    .t-game .g-head b { font: 400 1.5rem/1 var(--display); text-transform: uppercase; }
+    .t-game .g-head span { font: 700 .75rem/1 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--latte); }
+    .g-box { position: relative; margin-top: 10px; height: min(52svh, 400px); border: 3px solid var(--ink); border-radius: 22px; overflow: hidden; background: #f3ead9 radial-gradient(rgba(94, 59, 37, .14) 1.2px, transparent 1.6px) 0 0 / 14px 14px; box-shadow: 7px 7px 0 var(--bean); touch-action: manipulation; user-select: none; -webkit-user-select: none; cursor: pointer; }
+    .g-box:focus-visible { outline: 3px solid var(--latte); outline-offset: 3px; }
+    .g-box canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .g-ui { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 8px; text-align: center; color: var(--ink); padding: 20px; pointer-events: none; }
+    .g-ui { background: rgba(243, 234, 217, .86); }
+    .g-ui[hidden] { display: none; }
+    .g-ui .gt { font: 400 clamp(1.75rem, 1.4rem + 1.4vw, 2.5rem)/1 var(--display); text-transform: uppercase; }
+    .g-ui .gs { font: 700 .9375rem/1.3 var(--sans); color: var(--muted); max-width: 26ch; }
+    .g-ui .gb { margin-top: 6px; padding: 10px 18px; border: 2.5px solid var(--ink); border-radius: 999px; background: var(--ink); color: var(--cream); font: 400 1rem/1 var(--display); text-transform: uppercase; letter-spacing: .04em; box-shadow: 4px 4px 0 var(--bean); animation: bob 2.2s var(--ease) infinite; }
+    .g-tip { margin: 12px 0 0; font-size: .875rem; color: rgba(247, 243, 236, .7); }
+    @media (min-width: 900px) {
+      .t-wrap { padding-top: 26px; }
+      .t-logo { height: 52px; }
+      .t-grid { grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); align-items: center; gap: 56px; margin-top: 34px; }
+      .cd { gap: 12px; }
+      .g-box { height: min(60vh, 470px); }
+    }
+    /* the gag */
+    .jk { position: fixed; inset: 0; z-index: 170; display: grid; place-items: center; pointer-events: none; }
+    .jk-dim { position: absolute; inset: 0; background: rgba(21, 16, 12, .55); }
+    .jk-stamp { position: relative; display: grid; justify-items: center; gap: 10px; padding: 18px 26px 16px; border: 4px solid var(--ink); border-radius: 22px; background: var(--latte); color: var(--ink); box-shadow: 10px 10px 0 var(--ink); text-align: center; }
+    .jk-stamp b { font: 400 clamp(2.75rem, 1.6rem + 6vw, 6.5rem)/.9 var(--display); text-transform: uppercase; }
+    .jk-stamp span { font: 700 clamp(1.375rem, 1.1rem + 1vw, 2rem)/1 var(--hand); color: var(--espresso); }
+
+    /* ---------- closing: the number, huge ---------- */
+    .callme { display: inline-grid; justify-items: center; gap: 6px; margin: 6px auto 0; }
+    .callme .lbl { font: 700 .75rem/1 var(--sans); letter-spacing: .18em; text-transform: uppercase; color: var(--latte); }
+    .callme .fw { font: 400 clamp(2.25rem, 1.2rem + 5vw, 5rem)/1 var(--display); }
+    .callme .fill { -webkit-text-stroke-width: 1.5px; }
+    .callme .fs { -webkit-text-stroke-width: 1.5px; }
+    @media (hover: hover) { .callme:hover .fw { transform: rotate(-2deg) scale(1.03); } .callme .fw { transition: transform .35s var(--spring); } }
+    .orline { margin: 14px auto 0 !important; font-size: .9375rem; }
+    .orline a { color: var(--cream); font-weight: 700; text-decoration: underline; text-decoration-color: var(--latte); text-underline-offset: 3px; overflow-wrap: anywhere; }
+
     /* coffee drips at the bottom of dark sections */
     .drip { position: absolute; left: 0; right: 0; bottom: -60px; z-index: 3; height: 62px; pointer-events: none; overflow: visible; }
     .drip rect { transform-box: fill-box; transform-origin: top; }
@@ -235,9 +321,11 @@
     .menu-list { display: grid; gap: 10px; }
     .mi { border: var(--line); border-radius: 16px; background: var(--paper); box-shadow: 4px 4px 0 var(--ink); overflow: hidden; transition: box-shadow .3s; }
     .mi.open { box-shadow: 5px 5px 0 var(--bean); }
-    .mi-head { width: 100%; display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 10px 12px; text-align: left; }
-    .mi-head .cupic { width: 34px; height: 46px; transition: transform .4s var(--spring); }
-    .mi.open .cupic { transform: rotate(-8deg) scale(1.08); }
+    .mi-head { width: 100%; display: grid; grid-template-columns: 52px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 10px 12px; text-align: left; }
+    .mnum { display: block; font: 400 2.125rem/1 var(--display); letter-spacing: -.01em; -webkit-text-stroke-width: 1.5px; background-position-y: 0%; transition: background-position-y 1.2s cubic-bezier(.3, .7, .2, 1), transform .45s var(--spring); }
+    .mi.open .mnum { background-position-y: 46%; transform: rotate(-6deg) scale(1.08); animation: slosh 2.8s linear infinite; }
+    @keyframes slosh { to { background-position-x: -260px; } }
+    html.rm .mi.open .mnum { animation: none; }
     .mi-head b { display: block; font: 400 1.0625rem/1.05 var(--display); text-transform: uppercase; letter-spacing: .01em; }
     .mi-head small { display: block; margin-top: 3px; font: 700 1rem/1 var(--hand); color: var(--bean); }
     .mi-head .plus { display: grid; place-items: center; width: 30px; height: 30px; border: 2px solid var(--ink); border-radius: 50%; font: 400 1.125rem/1 var(--display); transition: transform .35s var(--spring), background .25s, color .25s; }
@@ -254,8 +342,8 @@
       .menu { padding: 72px 0 60px; }
       .menu-grid { grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 40px; align-items: start; }
       .menu-intro { position: sticky; top: 96px; }
-      .mi-head { padding: 12px 16px; grid-template-columns: 40px minmax(0, 1fr) auto; }
-      .mi-head .cupic { width: 40px; height: 54px; }
+      .mi-head { padding: 12px 16px; grid-template-columns: 64px minmax(0, 1fr) auto; }
+      .mnum { font-size: 2.75rem; }
       .mi-head b { font-size: 1.25rem; }
       .mi-in { margin: 0 16px 0 68px; }
     }
@@ -531,7 +619,7 @@
     footer .wrap { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 20px; margin-top: 30px; padding-top: 18px; border-top: 2px solid var(--ink); font-size: 13px; color: var(--muted); }
     @media (min-width: 1000px) { .sign-off { padding-bottom: 30px; } .closing { padding: 80px 0 72px; } footer .wrap { justify-content: space-between; } }
   </style>
-  <script>document.documentElement.classList.add('js');if(matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('rm');if(matchMedia('(hover: hover) and (pointer: fine)').matches)document.documentElement.classList.add('fine');try{if(sessionStorage.getItem('ct2-intro')&&!/[?&]intro/.test(location.search))document.documentElement.classList.add('seen')}catch(e){}</script>
+  <script>document.documentElement.classList.add('js');if(matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('rm');if(matchMedia('(hover: hover) and (pointer: fine)').matches)document.documentElement.classList.add('fine');try{if(sessionStorage.getItem('ct2-intro')&&!/[?&]intro/.test(location.search))document.documentElement.classList.add('seen')}catch(e){}(function(){var q=location.search,L=Date.parse('2026-11-16T03:00:00Z'),t=/[?&]in=(\d+)/.exec(q);if(t)L=Date.now()+t[1]*1000;window.__LAUNCH=L;if(t||/[?&]teaser/.test(q)||(Date.now()<L&&!/[?&]preview/.test(q)))document.documentElement.classList.add('teaser')})()</script>
 </head>
 <body>
   <div class="beans-bg" data-beans aria-hidden="true"></div>
@@ -549,10 +637,36 @@
     <button class="skip" type="button" data-skip>Skip</button>
   </div>
 
+  <div class="pour" data-pour aria-hidden="true"><div class="pw-top"><svg viewBox="0 0 1200 56" preserveAspectRatio="none"><path d="M0 56 V28 Q75 4 150 28 T300 28 T450 28 T600 28 T750 28 T900 28 T1050 28 T1200 28 V56Z" fill="#3a2418"/></svg><svg viewBox="0 0 1200 56" preserveAspectRatio="none"><path d="M0 56 V28 Q75 4 150 28 T300 28 T450 28 T600 28 T750 28 T900 28 T1050 28 T1200 28 V56Z" fill="#d2b08e"/></svg></div><div class="pw-body"><img src="img/bean-light.webp" width="360" height="367" alt=""></div><div class="pw-top pw-bot"><svg viewBox="0 0 1200 56" preserveAspectRatio="none"><path d="M0 56 V28 Q75 4 150 28 T300 28 T450 28 T600 28 T750 28 T900 28 T1050 28 T1200 28 V56Z" fill="#3a2418"/></svg></div></div>
+  <div class="jk" data-jkgag hidden aria-hidden="true"><div class="jk-dim"></div><div class="jk-stamp"><b>Just Kidding.</b><span>It's not open yet</span></div></div>
+  <div class="teaser dark" data-teaser hidden data-lenis-prevent>
+    <div class="t-bg" aria-hidden="true"><div class="t-row"><span>Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ </span><span>Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ </span></div><div class="t-row"><span>Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ </span><span>Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ </span></div><div class="t-row"><span>Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ </span><span>Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ </span></div><div class="t-row"><span>Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ </span><span>Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ </span></div><div class="t-row"><span>Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ </span><span>Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ </span></div></div>
+    <div class="t-wrap">
+      <div class="t-top" data-tin><img class="t-logo" src="img/logo-light.webp" width="1200" height="776" alt="Coffee Talks"><span class="t-jk">Just Kidding</span></div>
+      <div class="t-grid">
+        <div class="t-main">
+          <p class="t-kick" data-tin>Okay, the new site is still brewing.</p>
+          <h1 class="t-h" data-tin>Coming <span class="fw"><span class="fs" aria-hidden="true">Soon.</span><span class="fill" data-tfill>Soon.</span></span></h1>
+          <p class="t-sub" data-tin>The doors open Sunday, November 15 at 10 PM Eastern. Set a reminder, stack a latte, and come back hungry.</p>
+          <div class="cd" role="timer" aria-label="Time until the site opens" data-tin><div><b data-cdd>00</b><span>Days</span></div><div><b data-cdh>00</b><span>Hours</span></div><div><b data-cdm>00</b><span>Minutes</span></div><div><b data-cds>00</b><span>Seconds</span></div></div>
+          <div class="t-ctas" data-tin><a class="btn loud" href="opening.ics" download="coffee-talks-opening.ics">Remind Me Sunday</a><a class="btn" data-sms href="#">Text Me</a><a class="btn" data-dm href="#" target="_blank" rel="noopener">DM @_coffeetalks</a></div>
+          <p class="t-contact" data-tin>Can't wait till Sunday? Call or text <a data-tel href="#">(313) 289-3399</a> or email <a data-mail-plain href="#">Coffeetalksbusiness@gmail.com</a></p>
+        </div>
+        <div class="t-rib" aria-hidden="true"><div class="t-ribtr"><span>Opening Sunday · 10 PM · Your Brand&#39;s New Bestie ✦ Opening Sunday · 10 PM · Your Brand&#39;s New Bestie ✦ Opening Sunday · 10 PM · Your Brand&#39;s New Bestie ✦ Opening Sunday · 10 PM · Your Brand&#39;s New Bestie ✦ </span><span>Opening Sunday · 10 PM · Your Brand&#39;s New Bestie ✦ Opening Sunday · 10 PM · Your Brand&#39;s New Bestie ✦ Opening Sunday · 10 PM · Your Brand&#39;s New Bestie ✦ Opening Sunday · 10 PM · Your Brand&#39;s New Bestie ✦ </span></div></div>
+        <div class="t-game" data-tin>
+          <div class="g-head"><b>Stack The Latte</b><span>Your Best: <i data-gbest>0</i></span></div>
+          <div class="g-box" data-gbox tabindex="0" role="application" aria-label="Stack The Latte game. Press space or tap to drop a layer." data-cur="POUR"><canvas data-game></canvas><div class="g-ui" data-gui><span class="gt">Stack The Latte</span><span class="gs">Tap to pour each layer right on top of the last. Line it up perfect and it grows back.</span><span class="gb">Tap To Start</span></div></div>
+          <p class="g-tip">Stack a tall one, screenshot it and tag @_coffeetalks.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
     <symbol id="i-ig" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.4" cy="6.6" r="1.3" fill="currentColor"/></symbol>
     <symbol id="i-tt" viewBox="0 0 24 24"><path fill="currentColor" d="M16.6 3c.4 2.2 1.8 3.7 4 3.9v3.2c-1.5 0-2.9-.4-4-1.1v6.2c0 3.6-2.6 5.8-5.6 5.8A5.6 5.6 0 0 1 5.4 15c0-3.3 2.9-5.9 6.5-5.4v3.3c-1.6-.4-3.2.6-3.2 2.1 0 1.3 1 2.3 2.3 2.3 1.4 0 2.4-1 2.4-2.6V3h3.2Z"/></symbol>
     <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="m4 7 8 6 8-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+    <symbol id="i-text" viewBox="0 0 24 24"><path d="M5 4h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-7l-5 4v-4H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M8 10.5h.01M12 10.5h.01M16 10.5h.01" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></symbol>
     <symbol id="i-arrow" viewBox="0 0 16 16"><path d="M2 8h11M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2.2"/></symbol>
     <symbol id="i-play" viewBox="0 0 20 20"><path d="M4 2.5v15L17 10z" fill="currentColor"/></symbol>
     <symbol id="papercup" viewBox="0 0 80 110"><path d="M10 22 H70 L62 104 Q61 108 57 108 H23 Q19 108 18 104 Z" fill="var(--c1)" stroke="#15100c" stroke-width="3" stroke-linejoin="round"/><path d="M14 50 H66 L63 80 H17 Z" fill="var(--c2)" stroke="#15100c" stroke-width="3" stroke-linejoin="round"/><rect x="6" y="12" width="68" height="12" rx="4" fill="#ffffff" stroke="#15100c" stroke-width="3"/><path d="M14 12 Q16 4 24 4 H56 Q64 4 66 12" fill="#ffffff" stroke="#15100c" stroke-width="3"/><path d="M22 30 V100" stroke="rgba(255,255,255,.35)" stroke-width="5" stroke-linecap="round"/></symbol>
@@ -574,9 +688,9 @@
     <section class="hero" id="top">
       <div class="wrap hero-grid">
         <div>
-          <div class="chips" data-in><span class="tag"><img src="img/bean.webp" alt="" width="360" height="367">Dearborn, MI</span><span class="tag">Content Creator</span><span class="tag">Social Media Manager</span></div>
+          <div class="chips" data-in><span class="tag"><img src="img/bean.webp" alt="" width="360" height="367">Metro Detroit</span><span class="tag">Working Nationwide</span><span class="tag">Your Brand's New Bestie</span></div>
           <h1 aria-label="Let's talk over coffee."><span class="hw" data-split>Let's Talk</span><span class="hw"><span data-split>Over </span><span class="fw" data-fillwrap><span class="fs" aria-hidden="true">Coffee.</span><span class="fill" data-fillword>Coffee.</span></span></span></h1>
-          <p class="lede" data-in>Hi, I'm Noor. I make content for cafés, restaurants, boutiques, salons, events and anybody with a story worth posting.</p>
+          <p class="lede" data-in>Hi, I'm Noor. Coffee Talks makes the content and runs the socials for coffee shops, restaurants, bakeries, salons, boutiques, clinics, fitness studios and everything in between.</p>
           <div class="ctas" data-in>
             <a class="btn solid" href="#package">Build Your Package <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
             <a class="btn" data-dm href="#" target="_blank" rel="noopener">DM @_coffeetalks</a>
@@ -609,8 +723,8 @@
       <span class="ghost" data-ghost>Menu</span>
       <div class="wrap menu-grid">
         <div class="menu-intro">
-          <h2 data-split>Pick Your <span class="hl">Drink.</span></h2>
-          <p class="lede">Every service I offer is a drink on the menu. Open one to see exactly what you get.</p>
+          <h2 data-split>The <span class="hl">Menu.</span></h2>
+          <p class="lede">All eight things we do, poured the way we'd pour them for you. Open one to see exactly what's in it.</p>
           <ol class="howto"><li><b>1</b>Tap a drink</li><li><b>2</b>See what's in it</li><li><b>3</b>Add it to your package</li></ol>
         </div>
         <div class="menu-list" data-mlist></div>
@@ -838,6 +952,7 @@
             <div class="tclip"><div class="ticket" aria-live="polite" data-ticket></div></div>
             <div class="acts">
               <a class="btn solid" data-mail href="#"><svg class="glass" viewBox="0 0 20 26" aria-hidden="true"><defs><clipPath id="gClip"><path d="M2.5 3 H17.5 L15.6 23 Q15.4 24.5 13.9 24.5 H6.1 Q4.6 24.5 4.4 23 Z"/></clipPath></defs><rect data-gfill x="0" y="26" width="20" height="26" fill="#c9a27a" clip-path="url(#gClip)"/><path d="M2.5 3 H17.5 L15.6 23 Q15.4 24.5 13.9 24.5 H6.1 Q4.6 24.5 4.4 23 Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>Send My Package</a>
+              <a class="btn sm" data-smspkg href="#">Text It</a>
               <a class="btn sm" data-dm data-dmcopy href="#" target="_blank" rel="noopener">DM Instead</a>
               <button class="btn sm" type="button" data-copy>Copy</button>
             </div>
@@ -899,16 +1014,18 @@
         <p class="small">Grab A Coffee.</p>
         <h2 class="big"><span class="fw"><span class="fs" aria-hidden="true">Let's Talk.</span><span class="fill" data-closefill>Let's Talk.</span></span></h2>
         <p>Tell me about your business and what you want people to feel when they see it. I'll take it from there.</p>
-        <div class="ctas"><a class="btn loud" href="#package">Build Your Package</a><a class="btn" data-mail-plain href="#">Email Me</a></div>
+        <a class="callme" data-sms href="#" aria-label="Text Coffee Talks at (313) 289-3399"><span class="lbl">Call, Text Or DM</span><span class="fw"><span class="fs" aria-hidden="true">(313) 289-3399</span><span class="fill" data-phonefill>(313) 289-3399</span></span></a>
+        <div class="ctas" style="margin-top:20px"><a class="btn loud" href="#package">Build Your Package</a><a class="btn" data-sms href="#">Text Me</a><a class="btn" data-tel href="#">Call</a></div>
+        <p class="orline">Or email <a data-mail-plain href="#">Coffeetalksbusiness@gmail.com</a></p>
         <div class="socials" data-socials></div>
       </div>
     </section>
   </main>
   <div class="sign-off">
     <img class="logo-big" src="img/logo.webp" width="1200" height="776" alt="Coffee Talks" loading="lazy">
-    <footer><div class="wrap"><span>© <span data-year>2026</span> Coffee Talks · Dearborn, Michigan</span><span data-fnav></span></div></footer>
+    <footer><div class="wrap"><span>© <span data-year>2026</span> Coffee Talks · Metro Detroit, working nationwide</span><span data-fnav></span></div></footer>
   </div>
-  <div class="dock" data-dock><a class="btn solid" href="#package">Build Your Package</a><a class="btn" data-dm href="#" target="_blank" rel="noopener">DM</a></div>
+  <div class="dock" data-dock><a class="btn solid" href="#package">Build Your Package</a><a class="btn" data-sms href="#">Text</a><a class="btn" data-dm href="#" target="_blank" rel="noopener">DM</a></div>
 
   <script src="assets/lib/gsap.min.js"></script>
   <script src="assets/lib/ScrollTrigger.min.js"></script>
@@ -920,18 +1037,20 @@
      ============================================================= */
   const CONFIG = {
     email: 'coffeetalksbusiness@gmail.com',
+    phone: '+13132893399', phoneShow: '(313) 289-3399',
     instagram: { url: 'https://www.instagram.com/_coffeetalks/', dm: 'https://ig.me/m/_coffeetalks' },
     tiktok: '',
-    forWho: ['Cafés', 'Restaurants', 'Boutiques', 'Salons', 'Bakeries', 'Events', 'Small Businesses', 'Personal Brands'],
-    services: ['Social Media Management', 'Content Creation', 'Event Coverage', 'Instagram Audits', 'Brand Collaborations', 'Strategy Sessions'],
+    forWho: ['Coffee Shops', 'Cafés', 'Restaurants', 'Bakeries', 'Dessert Shops', 'Beauty Brands', 'Salons', 'Wellness Brands', 'Fitness Studios', 'Retail Stores', 'Boutiques', 'Clinics', 'Lifestyle Brands', 'Hospitality'],
+    services: ['Social Media Management', 'Content Creation', 'Event Coverage', 'Wedding Coverage', 'Influencer Outreach', 'Paid Ads', 'Analytics & Growth', 'Short-Form Video'],
     menu: [
-      { t: 'Social Media Management', nick: 'The Monthly Latte', svc: 'Social Media Management', w: 'Monthly', c1: '#ffffff', c2: '#5e3b25', bg: '#f1e5d6', d: 'Your accounts, handled. I plan it, post it, write the captions and keep your feed looking like you every week.', ings: ['Content Calendar', 'Posting', 'Captions', 'Stories', 'Monthly Check-In'] },
-      { t: 'Content Creation', nick: 'The Double Shot', svc: 'Content Creation', w: 'Reels & Photos', c1: '#c9a27a', c2: '#15100c', bg: '#e9d6bf', d: 'Short-form video and photos made for the way people actually scroll, ready for you to post.', ings: ['Reels', 'Photos', 'Editing', 'Covers'] },
-      { t: 'Event Coverage', nick: 'The To-Go Cup', svc: 'Event Coverage', w: 'Day Of', c1: '#15100c', c2: '#c9a27a', bg: '#efe3d3', d: 'Markets, openings and community events, filmed and posted while people are still talking about it.', ings: ['Day-Of Filming', 'Same-Day Stories', 'Recap Reel', 'Photos'] },
-      { t: 'Business Features', nick: 'The House Special', svc: 'Content Creation', w: 'Spotlights', c1: '#efe2d0', c2: '#5e3b25', bg: '#f3e9dc', d: 'I visit your shop, café, salon or studio and turn it into a Reel that makes people want to come in.', ings: ['The Visit', 'Spotlight Reel', 'Collab Post'] },
-      { t: 'Brand Collaborations', nick: 'The Collab Cold Brew', svc: 'Brand Collaboration', w: 'Partnerships', c1: '#5e3b25', c2: '#efe2d0', bg: '#e6d2bb', d: 'Sponsored posts and stories on @_coffeetalks for brands that fit what I already love.', ings: ['Sponsored Reel', 'Stories', 'Collab Post'] },
-      { t: 'Instagram Audits', nick: 'The Espresso Check', svc: 'Instagram Audit', w: 'One-Time', c1: '#ffffff', c2: '#c9a27a', bg: '#f5ece1', d: 'I go through your account and hand you a clear list of fixes you can start on the same day.', ings: ['Bio', 'Grid', 'Reels', 'Captions', 'Posting Times'] },
-      { t: 'Strategy Session', nick: 'The Coffee Chat', svc: 'Strategy Session', w: 'Over Coffee', c1: '#c9a27a', c2: '#5e3b25', bg: '#ead8c3', d: 'Not sure what you need yet? We sit down, look at your accounts and make a plan together.', ings: ['Account Review', 'Content Plan', 'Q&A'] }
+      { t: 'Social Media Management', nick: 'The Monthly Latte', svc: 'Social Media Management', w: 'Monthly', c1: '#ffffff', c2: '#5e3b25', d: 'We take it all off your plate. Tailored content for your brand, captions written in your voice, posts scheduled, stories planned, and your DMs and comments answered before they go cold. You stop dreading the app, and we keep the feed alive.', ings: ['Tailored Content', 'Captions In Your Voice', 'Scheduling', 'Stories', 'DMs & Comments'] },
+      { t: 'Content Creation', nick: 'The Double Shot', svc: 'Content Creation', w: 'Shoot Days', c1: '#c9a27a', c2: '#15100c', d: 'Photo and video shoots planned from mood board to final delivery. Studio or on location, product or people, single shoots or a month of content in a day. You walk away with a folder you\'ll actually use, not 200 files you forget about.', ings: ['Mood Board', 'Photo & Video', 'Studio Or On Location', 'A Month In A Day', 'Final Folder'] },
+      { t: 'Event Coverage', nick: 'The To-Go Cup', svc: 'Event Coverage', w: 'Day Of', c1: '#15100c', c2: '#c9a27a', d: 'We show up early and stay late. Photo, video, behind the scenes, and same-day social cuts so the post goes up while the room is still buzzing. You host, we make sure the people who weren\'t there won\'t want to miss the next one.', ings: ['Early To Late', 'Photo & Video', 'Behind The Scenes', 'Same-Day Cuts'] },
+      { t: 'Wedding Coverage', nick: 'The Sweetheart Latte', svc: 'Wedding Coverage', w: 'Your Big Day', c1: '#ffffff', c2: '#c9a27a', d: 'Your day, captured the way you\'d actually want to remember it. Getting ready, the ceremony, the speech that made everyone cry, the dance floor at midnight. Reels that capture the essence of your dream night. No stiff poses or awkward direction.', ings: ['Getting Ready', 'The Ceremony', 'The Speeches', 'The Dance Floor', 'Reels'] },
+      { t: 'Influencer Outreach', nick: 'The Collab Cold Brew', svc: 'Influencer Outreach', w: 'Creators', c1: '#5e3b25', c2: '#efe2d0', d: 'We find the right voices for your brand and handle the rest. Sourcing creators who actually fit your audience, rate negotiation, briefs, contracts and delivery management. You get content that converts, and a paper trail when it doesn\'t.', ings: ['Creator Sourcing', 'Rate Negotiation', 'Briefs & Contracts', 'Delivery'] },
+      { t: 'Paid Ads', nick: 'The Extra Shot', svc: 'Paid Ads', w: 'Meta + TikTok', c1: '#15100c', c2: '#5e3b25', d: 'Strategy and creative built in the same room, never separately. Meta and TikTok campaigns with ads that stop the scroll. Weekly check-ins, monthly performance reviews, and budgets we treat like our own money. No spray and pray.', ings: ['Meta Ads', 'TikTok Ads', 'Ad Creative', 'Weekly Check-Ins', 'Monthly Reviews'] },
+      { t: 'Analytics & Growth Strategy', nick: 'The Pour Over', svc: 'Analytics & Growth Strategy', w: 'Monthly Reports', c1: '#efe2d0', c2: '#5e3b25', d: 'What\'s working, what isn\'t, and what to do next. Monthly reports with the metrics that actually matter, audience deep dives, content performance breakdowns, and a clear plan for the next 90 days. The numbers, in front of you.', ings: ['Monthly Reports', 'Audience Deep Dives', 'Content Breakdowns', '90-Day Plan'] },
+      { t: 'Short-Form Video Content', nick: 'The Ristretto', svc: 'Short-Form Video', w: '3-5 A Week', c1: '#c9a27a', c2: '#5e3b25', d: 'Reels and TikTok content unlike everyone else\'s. Concept, script, shoot, edit, captions, and sound choices that move with culture. 3-5 videos a week or whatever cadence fits the goal. We watch the platforms so you don\'t have to.', ings: ['Concept', 'Script', 'Shoot & Edit', 'Captions', 'Sound'] }
     ],
     brew: [
       { k: 'We grind it out', t: 'Discovery Call', d: 'A quick call to learn about your business, your customers and what you want from social.' },
@@ -998,15 +1117,17 @@
       { n: 'Yates Cider Mill', a: 'Rochester Hills', w: 'Seasonal Content', img: 'img/cider-mill.webp', x: 232, y: 60 }
     ],
     base: [
-      { v: 'Social Media Management', d: 'I run your accounts' },
-      { v: 'Content Creation', d: 'Reels & photos for you' },
-      { v: 'Event Coverage', d: 'Film & post your event' },
-      { v: 'Brand Collaboration', d: 'A feature on @_coffeetalks' },
-      { v: 'Instagram Audit', d: 'A clear list of fixes' },
-      { v: 'Strategy Session', d: 'Let\'s make a plan' }
+      { v: 'Social Media Management', d: 'We run your accounts' },
+      { v: 'Content Creation', d: 'Planned photo & video shoots' },
+      { v: 'Event Coverage', d: 'Early to late, posted same day' },
+      { v: 'Wedding Coverage', d: 'Your day, the real way' },
+      { v: 'Influencer Outreach', d: 'The right creators, handled' },
+      { v: 'Paid Ads', d: 'Meta & TikTok that stop the scroll' },
+      { v: 'Analytics & Growth Strategy', d: 'Reports and a 90-day plan' },
+      { v: 'Short-Form Video', d: 'Reels & TikToks, 3-5 a week' }
     ],
     size: [{ v: 'One-Time', d: 'A single project' }, { v: 'Monthly', d: 'A few posts a week' }, { v: 'Full Service', d: 'Posting most days' }],
-    shots: ['Reels', 'Stories', 'Photography', 'Captions & Hashtags', 'Grand Opening', 'Strategy Session'],
+    shots: ['Reels', 'Stories', 'Photography', 'Captions & Hashtags', 'Grand Opening', 'Instagram Audit', 'Strategy Session'],
     orders: [
       { o: 'Iced Latte', v: 'Posts every day, plans never. Your camera roll is 90% drinks.' },
       { o: 'Cappuccino', v: 'Classic feed, perfect grid, color palette chosen in 2019 and still loyal to it.' },
@@ -1031,18 +1152,20 @@
   const ANIM = HAS_G && !RM;
   const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const TEASER = document.documentElement.classList.contains('teaser');
   const store = { get(k, d) { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch (e) { return d; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} } };
   const onScreen = (el, cb, margin = '200px') => new IntersectionObserver(([e]) => cb(e.isIntersecting), { rootMargin: margin }).observe(el);
   if (HAS_G) gsap.registerPlugin(ScrollTrigger);
 
   /* links */
-  const SOC = [['Instagram', CONFIG.instagram.url, 'i-ig'], ['TikTok', CONFIG.tiktok, 'i-tt'], ['Email', 'mailto:' + CONFIG.email, 'i-mail']].filter(s => s[1]);
+  const SOC = [['Instagram', CONFIG.instagram.url, 'i-ig'], ['TikTok', CONFIG.tiktok, 'i-tt'], ['Text', 'sms:' + CONFIG.phone, 'i-text'], ['Email', 'mailto:' + CONFIG.email, 'i-mail']].filter(s => s[1]);
   const ext = u => u.startsWith('http') ? ' target="_blank" rel="noopener"' : '';
   $$('[data-socials]').forEach(e => e.innerHTML = SOC.map(([n, u, i]) => `<a href="${esc(u)}" aria-label="${n}"${ext(u)}><svg aria-hidden="true"><use href="#${i}"/></svg></a>`).join(''));
-  $('[data-fnav]').innerHTML = SOC.map(([n, u]) => `<a href="${esc(u)}"${ext(u)} style="margin-left:14px">${n === 'Email' ? esc(CONFIG.email) : n}</a>`).join('');
+  $('[data-fnav]').innerHTML = SOC.map(([n, u]) => `<a href="${esc(u)}"${ext(u)} style="margin-left:14px">${n === 'Email' ? esc(CONFIG.email) : n === 'Text' ? esc(CONFIG.phoneShow) : n}</a>`).join('');
   $$('[data-ig]').forEach(a => a.href = CONFIG.instagram.url);
   $$('[data-dm]').forEach(a => a.href = CONFIG.instagram.dm);
   $$('[data-mail-plain]').forEach(a => a.href = 'mailto:' + CONFIG.email);
+  $$('[data-sms]').forEach(a => a.href = 'sms:' + CONFIG.phone); $$('[data-tel]').forEach(a => a.href = 'tel:' + CONFIG.phone);
   $$('[data-year]').forEach(e => e.textContent = new Date().getFullYear());
   const BEAN = '<img src="img/bean.webp" width="360" height="367" alt="">', BEAN_L = '<img src="img/bean-light.webp" width="360" height="367" alt="">';
   $('[data-marquee="1"]').innerHTML = [0, 1].map(() => CONFIG.forWho.map(w => `<span>${esc(w)}</span>${BEAN_L}`).join('')).join('');
@@ -1071,8 +1194,20 @@
   const hs = () => header.classList.toggle('scrolled', scrollY > 20); hs(); addEventListener('scroll', hs, { passive: true });
   new IntersectionObserver(es => es.forEach(e => dock.classList.toggle('away', e.isIntersecting)), { threshold: .2 }).observe($('[data-closing]'));
   let lenis = null;
-  if (ANIM && window.Lenis) { lenis = new Lenis({ duration: 1.1, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true }); lenis.on('scroll', ScrollTrigger.update); gsap.ticker.add(t => lenis.raf(t * 1000)); gsap.ticker.lagSmoothing(0); }
-  const go = t => { const off = -header.offsetHeight; if (lenis) lenis.scrollTo(t, { duration: 1.3, offset: t === 0 ? 0 : off }); else if (t === 0) scrollTo({ top: 0 }); else scrollTo({ top: t.getBoundingClientRect().top + scrollY + off, behavior: RM ? 'auto' : 'smooth' }); };
+  if (ANIM && window.Lenis && !TEASER) { lenis = new Lenis({ duration: 1.1, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true }); lenis.on('scroll', ScrollTrigger.update); gsap.ticker.add(t => lenis.raf(t * 1000)); gsap.ticker.lagSmoothing(0); }
+  /* the pour: coffee floods up over the screen, something happens underneath, it drains off the top */
+  const pourEl = $('[data-pour]');
+  const pour = (mid, o = {}) => new Promise(res => {
+    if (!ANIM) { if (mid) mid(); res(); return; }
+    const H = innerHeight; gsap.killTweensOf(pourEl); gsap.set(pourEl, { visibility: 'visible', y: H * 1.04 });
+    gsap.timeline({ onComplete: () => { gsap.set(pourEl, { visibility: 'hidden' }); res(); } })
+      .to(pourEl, { y: -H * .16, duration: o.up || .55, ease: 'power2.in' })
+      .add(() => { if (mid) mid(); })
+      .to(pourEl, { y: -H * 1.45, duration: o.down || .65, ease: 'power2.out' }, '+=' + (o.hold || .08));
+  });
+  const jump = (t, smooth) => { const off = t === 0 ? 0 : -header.offsetHeight; if (lenis) lenis.scrollTo(t, smooth ? { duration: 1.3, offset: off } : { immediate: true, force: true, offset: off }); else if (t === 0) scrollTo({ top: 0 }); else scrollTo({ top: t.getBoundingClientRect().top + scrollY + off, behavior: smooth && !RM ? 'smooth' : 'auto' }); };
+  // long jumps pour you there; short ones just glide
+  const go = t => { const y = t === 0 ? 0 : t.getBoundingClientRect().top + scrollY; if (ANIM && Math.abs(y - scrollY) > innerHeight * 1.6) pour(() => jump(t, false)); else jump(t, true); };
   document.addEventListener('click', e => { const a = e.target.closest('a[href^="#"]'); if (!a || a.hasAttribute('data-mail')) return; const id = a.getAttribute('href'); if (id === '#') return; const t = id === '#top' ? 0 : $(id); if (t === null) return; e.preventDefault(); go(t); });
 
   /* scroll velocity, shared by everything that sloshes */
@@ -1084,9 +1219,9 @@
      ============================================================= */
   const fills = [];
   const fillWord = (el, startLvl) => { const f = { el, lvl: startLvl, x: Math.random() * 260, speed: 26 + Math.random() * 10, vis: true }; fills.push(f); onScreen(el, v => f.vis = v, '0px'); return f; };
-  const heroFill = fillWord($('[data-fillword]'), 0), closeFill = fillWord($('[data-closefill]'), 0);
+  const heroFill = fillWord($('[data-fillword]'), 0), closeFill = fillWord($('[data-closefill]'), 0), phoneFill = fillWord($('[data-phonefill]'), 0), tFill = fillWord($('[data-tfill]'), 0);
   const paintFills = dt => fills.forEach(f => { if (!f.vis && dt) return; f.x = (f.x + (f.speed + Math.abs(vel) * 18) * dt) % 260; f.el.style.backgroundPosition = `${-f.x}px ${f.lvl.toFixed(2)}%`; });
-  if (!ANIM) { heroFill.lvl = 42; closeFill.lvl = 42; paintFills(0); }
+  if (!ANIM) { heroFill.lvl = 42; closeFill.lvl = 42; phoneFill.lvl = 42; tFill.lvl = 42; paintFills(0); }
 
   /* header cup fills with page progress */
   const pfill = $('[data-pfill]'), psteam = $('[data-psteam]');
@@ -1143,7 +1278,7 @@
      ============================================================= */
   (() => {
     const M = CONFIG.menu, L = $('[data-mlist]');
-    L.innerHTML = M.map((m, i) => `<div class="mi" data-i="${i}"><button class="mi-head" type="button" aria-expanded="false" aria-controls="mi${i}" data-cur="OPEN"><svg class="cupic" viewBox="0 0 80 110" style="--c1:${m.c1};--c2:${m.c2}" aria-hidden="true"><use href="#papercup"/></svg><span><b>${esc(m.t)}</b><small>${esc(m.nick)}</small></span><span class="plus" aria-hidden="true"><svg viewBox="0 0 14 14" width="14" height="14"><path d="M7 1.5v11M1.5 7h11" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></span></button><div class="mi-body" id="mi${i}" role="region" aria-label="${esc(m.t)}"><div class="mi-in"><span class="tag">${esc(m.w)}</span><p>${esc(m.d)}</p><span class="inc">What's In It</span><div class="ings">${m.ings.map(x => `<span>${esc(x)}</span>`).join('')}</div><a class="btn loud sm" href="#package" data-svc="${esc(m.svc)}">Add To My Package <svg aria-hidden="true"><use href="#i-arrow"/></svg></a></div></div></div>`).join('');
+    L.innerHTML = M.map((m, i) => `<div class="mi" data-i="${i}"><button class="mi-head" type="button" aria-expanded="false" aria-controls="mi${i}" data-cur="OPEN"><span class="mnum fill" aria-hidden="true">${String(i + 1).padStart(2, '0')}.</span><span><b>${esc(m.t)}</b><small>${esc(m.nick)}</small></span><span class="plus" aria-hidden="true"><svg viewBox="0 0 14 14" width="14" height="14"><path d="M7 1.5v11M1.5 7h11" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></span></button><div class="mi-body" id="mi${i}" role="region" aria-label="${esc(m.t)}"><div class="mi-in"><span class="tag">${esc(m.w)}</span><p>${esc(m.d)}</p><span class="inc">What's In It</span><div class="ings">${m.ings.map(x => `<span>${esc(x)}</span>`).join('')}</div><a class="btn loud sm" href="#package" data-svc="${esc(m.svc)}">Add To My Package <svg aria-hidden="true"><use href="#i-arrow"/></svg></a></div></div></div>`).join('');
     const items = $$('.mi', L);
     const set = (it, open, anim) => {
       const body = $('.mi-body', it), head = $('.mi-head', it);
@@ -1160,6 +1295,118 @@
       set(it, open, true);
     });
     set(items[0], true, false);
+  })();
+
+
+  /* =============================================================
+     TEASER: the opening plays, the site starts to show... just kidding.
+     Coming soon, a countdown to Sunday 10 PM Eastern and a latte to stack.
+     ============================================================= */
+  const teaser = (() => {
+    if (!TEASER) return null;
+    const T = $('[data-teaser]'), LAUNCH = window.__LAUNCH, testing = /[?&](in|teaser)/.test(location.search);
+    let skew = 0, prev = [], opened = false, timer = 0, shown = false;
+    fetch(location.pathname, { method: 'HEAD', cache: 'no-store' }).then(r => { const d = Date.parse(r.headers.get('date')); if (d && !/[?&]in=/.test(location.search)) skew = d - Date.now(); }).catch(() => {});
+    const cells = ['d', 'h', 'm', 's'].map(k => $(`[data-cd${k}]`, T)), two = n => String(n).padStart(2, '0');
+    const tick = () => {
+      const left = Math.max(0, LAUNCH - (Date.now() + skew)), s = Math.floor(left / 1000);
+      const v = [Math.floor(s / 86400), Math.floor(s % 86400 / 3600), Math.floor(s % 3600 / 60), s % 60].map(two);
+      v.forEach((x, i) => { if (x === prev[i]) return; cells[i].textContent = x; if (ANIM && prev.length) gsap.fromTo(cells[i], { rotationX: -100, opacity: .2 }, { rotationX: 0, opacity: 1, duration: .5, ease: 'back.out(2.2)', transformPerspective: 500 }); });
+      prev = v;
+      if (!left && !opened && !/[?&]teaser/.test(location.search)) { opened = true; open(); }
+    };
+    // at zero: the stamp flips to WE'RE OPEN, coffee floods, the real site loads with the opening
+    const open = () => {
+      clearInterval(timer);
+      const g = $('[data-jkgag]') || document.body.appendChild(Object.assign(document.createElement('div'), { className: 'jk', innerHTML: '<div class="jk-dim"></div><div class="jk-stamp"><b></b><span></span></div>' }));
+      g.hidden = false; $('b', g).textContent = "We're Open."; $('span', g).textContent = 'Come on in';
+      const go = () => { try { sessionStorage.removeItem('ct2-intro'); } catch (e) {} location.replace(location.pathname + (testing ? '?preview' : '')); };
+      if (!ANIM) { go(); return; }
+      gsap.timeline().fromTo($('.jk-stamp', g), { scale: 3, rotation: 20, opacity: 0 }, { scale: 1, rotation: 6, opacity: 1, duration: .55, ease: 'back.out(2.6)' }).add(() => pour(go, { hold: 2 }), '+=1.2');
+    };
+    const show = () => {
+      if (shown) return; shown = true;
+      T.hidden = false; tick(); timer = setInterval(tick, 250); game.init();
+      if (!ANIM) { tFill.lvl = 42; return; }
+      gsap.from($$('[data-tin]', T), { y: 46, opacity: 0, rotation: () => gsap.utils.random(-4, 4), duration: .8, ease: 'back.out(1.7)', stagger: .07, delay: .3 });
+      gsap.from($$('.cd > div', T), { scale: .4, rotation: () => gsap.utils.random(-14, 14), duration: .7, ease: 'back.out(2.4)', stagger: .08, delay: .7 });
+      gsap.to(tFill, { lvl: 44, duration: 2.4, ease: 'power2.out', delay: .8 });
+    };
+    // the gag: the hero is mid-entrance, the screen jolts, the stamp slams, coffee floods in
+    const gag = () => {
+      const g = $('[data-jkgag]'); g.hidden = false;
+      gsap.timeline()
+        .to('main', { x: 9, duration: .045, yoyo: true, repeat: 7, ease: 'none', clearProps: 'x' })
+        .fromTo($('.jk-dim', g), { opacity: 0 }, { opacity: 1, duration: .25 }, 0)
+        .fromTo($('.jk-stamp', g), { scale: 3.4, rotation: -26, opacity: 0 }, { scale: 1, rotation: -7, opacity: 1, duration: .5, ease: 'back.out(2.6)' }, .1)
+        .fromTo($('.jk-stamp span', g), { y: 16, opacity: 0 }, { y: 0, opacity: 1, duration: .35 }, .5)
+        .to($('.jk-stamp', g), { rotation: -4, scale: 1.04, duration: .9, ease: 'sine.inOut' }, .65)
+        .add(() => pour(() => { g.hidden = true; show(); }, { hold: .15 }), '+=.2');
+    };
+
+    /* STACK THE LATTE: tap to pour each layer onto the last, the overhang spills off */
+    const game = (() => {
+      const box = $('[data-gbox]'), cv = $('[data-game]'), ui = $('[data-gui]'), bestEl = $('[data-gbest]'), cx = cv.getContext('2d');
+      const COLS = ['#3a2418', '#5e3b25', '#7a4a28', '#a8764c', '#c9a27a', '#d2b08e', '#efe2d0', '#f7f3ec', '#efe2d0', '#d2b08e', '#a8764c', '#7a4a28'];
+      const LH = 24, BASE = 70;
+      let W = 0, H = 0, dpr = 1, w0 = 0, stack = [], cur = null, bits = [], pops = [], cam = 0, camT = 0, state = 'idle', score = 0, streak = 0, speed = 0, vis = false, raf = 0, last = 0, ready = false;
+      let best = +store.get('ct-stack-best', 0); bestEl.textContent = best;
+      const size = () => { const r = box.getBoundingClientRect(); dpr = Math.min(devicePixelRatio || 1, 2); W = r.width; H = r.height; cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); w0 = Math.min(W * .58, 230); };
+      const yOf = i => H - BASE - (i + 1) * LH + cam;
+      const spawn = () => { const top = stack[stack.length - 1], dir = stack.length % 2 ? 1 : -1; cur = { x: dir > 0 ? -top.w * .6 : W - top.w * .4, w: top.w, c: stack.length % COLS.length, dir }; speed = Math.min(170 + score * 8, 430); };
+      const reset = () => { stack = [{ x: (W - w0) / 2, w: w0, c: 0 }]; bits = []; pops = []; cam = camT = 0; score = 0; streak = 0; spawn(); };
+      const rr = (x, y, w, h, r) => { cx.beginPath(); if (cx.roundRect) cx.roundRect(x, y, w, h, r); else cx.rect(x, y, w, h); };
+      const layer = (x, y, w, c) => { rr(x, y, w, LH, 7); cx.fillStyle = COLS[c]; cx.fill(); cx.lineWidth = 2.5; cx.strokeStyle = '#15100c'; cx.stroke(); cx.fillStyle = 'rgba(255,255,255,.22)'; rr(x + 5, y + 4, Math.max(0, w - 10), 3, 2); cx.fill(); };
+      const draw = () => {
+        cx.setTransform(dpr, 0, 0, dpr, 0, 0); cx.clearRect(0, 0, W, H);
+        // saucer under the drink
+        const sy = H - BASE + cam + 4; cx.fillStyle = '#ffffff'; cx.strokeStyle = '#15100c'; cx.lineWidth = 2.5;
+        cx.beginPath(); cx.ellipse(W / 2, sy + 10, w0 * .78, 13, 0, 0, Math.PI * 2); cx.fill(); cx.stroke();
+        cx.fillStyle = '#5e3b25'; cx.font = '400 11px Anton, Impact, sans-serif'; cx.textAlign = 'center'; cx.fillText('COFFEE TALKS', W / 2, sy + 14);
+        stack.forEach((l, i) => { const y = yOf(i - 1) - LH; if (y < H + LH && y > -LH * 2) layer(l.x, y, l.w, l.c); });
+        if (cur && state === 'play') layer(cur.x, yOf(stack.length - 1) - LH, cur.w, cur.c);
+        bits.forEach(b => { cx.save(); cx.translate(b.x + b.w / 2, b.y + LH / 2); cx.rotate(b.r); cx.globalAlpha = Math.max(0, 1 - b.t / 1.4); layer(-b.w / 2, -LH / 2, b.w, b.c); cx.restore(); });
+        // steam over the top layer
+        if (state !== 'idle') { const top = stack[stack.length - 1], ty = yOf(stack.length - 2) - LH, t = performance.now() / 1000; cx.strokeStyle = 'rgba(94,59,37,.35)'; cx.lineWidth = 2.5; cx.lineCap = 'round';
+          for (let k = -1; k <= 1; k++) { const x = top.x + top.w / 2 + k * 12, ph = (t * .8 + k * .3) % 1; cx.globalAlpha = Math.sin(ph * Math.PI) * .9; cx.beginPath(); cx.moveTo(x, ty - 6 - ph * 10); cx.quadraticCurveTo(x - 6, ty - 14 - ph * 10, x, ty - 22 - ph * 10); cx.quadraticCurveTo(x + 6, ty - 30 - ph * 10, x, ty - 38 - ph * 10); cx.stroke(); } cx.globalAlpha = 1; }
+        // score
+        if (state !== 'idle') { cx.fillStyle = '#15100c'; cx.textAlign = 'center'; cx.font = '400 46px Anton, Impact, sans-serif'; cx.fillText(score, W / 2, 62); }
+        pops.forEach(p => { const k = Math.min(1, p.t / .25), a = Math.max(0, 1 - Math.max(0, p.t - .6) / .4); cx.save(); cx.globalAlpha = a; cx.translate(p.x, p.y - p.t * 30); cx.scale(.6 + .4 * k, .6 + .4 * k); cx.rotate(-.08); cx.font = '400 22px Anton, Impact, sans-serif'; cx.textAlign = 'center'; cx.lineWidth = 5; cx.strokeStyle = '#15100c'; cx.strokeText(p.s, 0, 0); cx.fillStyle = '#d2b08e'; cx.fillText(p.s, 0, 0); cx.restore(); });
+      };
+      const loop = now => {
+        raf = 0; const dt = Math.min(.033, (now - last) / 1000); last = now;
+        if (state === 'play' && cur) { cur.x += cur.dir * speed * dt; if (cur.x > W - cur.w * .3) cur.dir = -1; if (cur.x < -cur.w * .7) cur.dir = 1; }
+        bits.forEach(b => { b.t += dt; b.vy += 1500 * dt; b.y += b.vy * dt; b.x += b.vx * dt; b.r += b.vr * dt; }); bits = bits.filter(b => b.t < 1.4);
+        pops.forEach(p => p.t += dt); pops = pops.filter(p => p.t < 1);
+        cam += (camT - cam) * Math.min(1, dt * 6);
+        draw();
+        if (vis && (state === 'play' || bits.length || pops.length || Math.abs(camT - cam) > .5)) raf = requestAnimationFrame(loop);
+      };
+      const kick = () => { if (!raf && vis) { last = performance.now(); raf = requestAnimationFrame(loop); } };
+      const over = () => {
+        state = 'over'; if (score > best) { best = score; store.set('ct-stack-best', best); bestEl.textContent = best; }
+        ui.hidden = false; ui.innerHTML = `<span class="gt">${score >= 15 ? 'That\'s A Tall Order.' : score >= 6 ? 'Not Bad, Barista.' : 'Spilled It.'}</span><span class="gs">You stacked ${score} ${score === 1 ? 'layer' : 'layers'}. Your best is ${best}.</span><span class="gb">Pour Again</span>`;
+        if (ANIM) gsap.from(ui.children, { y: 20, opacity: 0, duration: .45, stagger: .06, ease: 'back.out(2)' });
+      };
+      const drop = () => {
+        const top = stack[stack.length - 1], y = yOf(stack.length - 1) - LH, l = Math.max(cur.x, top.x), r = Math.min(cur.x + cur.w, top.x + top.w), ov = r - l;
+        if (ov <= 2) { bits.push({ x: cur.x, y, w: cur.w, c: cur.c, vx: cur.dir * 80, vy: -60, r: 0, vr: cur.dir * 2.4, t: 0 }); cur = null; over(); return; }
+        if (Math.abs(cur.x - top.x) < 5) { streak++; const grow = streak >= 2 ? Math.min(8, w0 - top.w) : 0; stack.push({ x: top.x - grow / 2, w: top.w + grow, c: cur.c }); pops.push({ x: top.x + top.w / 2, y: y - 6, s: streak > 1 ? `Perfect Pour x${streak}` : 'Perfect Pour', t: 0 }); }
+        else { streak = 0; if (cur.x < top.x) bits.push({ x: cur.x, y, w: top.x - cur.x, c: cur.c, vx: -70, vy: -40, r: 0, vr: -2.2, t: 0 }); else bits.push({ x: r, y, w: cur.x + cur.w - r, c: cur.c, vx: 70, vy: -40, r: 0, vr: 2.2, t: 0 }); stack.push({ x: l, w: ov, c: cur.c }); }
+        score++; camT = Math.max(0, stack.length * LH - (H - BASE) * .5); spawn();
+      };
+      const press = e => { if (e) e.preventDefault(); if (!ready) return; if (state !== 'play') { ui.hidden = true; reset(); state = 'play'; kick(); return; } drop(); kick(); };
+      const init = () => {
+        if (ready) return; ready = true; size(); reset(); draw();
+        addEventListener('resize', () => { const w = W; size(); if (Math.abs(w - W) > 2) { reset(); if (state === 'play') { state = 'idle'; ui.hidden = false; } } draw(); });
+        box.addEventListener('pointerdown', press);
+        box.addEventListener('keydown', e => { if (e.key === ' ' || e.key === 'Enter') press(e); });
+        new IntersectionObserver(([en]) => { vis = en.isIntersecting; if (vis) kick(); }, { root: T }).observe(box);
+        document.fonts && document.fonts.ready.then(draw);
+      };
+      return { init };
+    })();
+    return { show, gag };
   })();
 
   /* =============================================================
@@ -1411,6 +1658,7 @@
       const subj = `My Coffee Talks Package${biz ? ' · ' + biz : ''}`;
       const body = ['Hi Noor! Here\'s my package:', '', `Service: ${base || '(not sure yet)'}`, `How often: ${size || '(not sure yet)'}`, `Extras: ${shots.length ? shots.join(', ') : 'none'}`, `Business: ${biz || '(your business)'}`, '', 'Let\'s set up a discovery call!', `- ${name || '(your name)'}`].join('\n');
       $('[data-mail]').href = `mailto:${CONFIG.email}?subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(body)}`;
+      $('[data-smspkg]').href = `sms:${CONFIG.phone}?&body=${encodeURIComponent(body)}`;
       return { subj, body };
     };
     f.addEventListener('change', () => render(true));
@@ -1491,7 +1739,7 @@
   const intro = $('[data-intro]'), seen = document.documentElement.classList.contains('seen');
   if (!ANIM) {
     $$('.pin-cue').forEach(c => c.remove());
-    if (intro) intro.remove(); heroCup.boot().then(() => heroCup.pour());
+    if (intro) intro.remove(); if (TEASER) teaser.show(); else heroCup.boot().then(() => heroCup.pour());
     document.documentElement.classList.add('no-pin'); brew.set(1); quick.set(); return;
   }
   gsap.ticker.add((t, d) => { vel *= .9; paintFills(Math.min(.05, d / 1000)); });
@@ -1504,8 +1752,8 @@
     .to(heroFill, { lvl: 44, duration: 2.2, ease: 'power2.out' }, .6)
     .to('[data-in]', { opacity: 1, y: 0, duration: .8, ease: 'back.out(1.4)', stagger: .07 }, .2)
     .to('.hero .pol', { scale: 1, duration: .8, ease: 'back.out(2.4)', stagger: .12 }, .5)
-    .add(() => heroCup.boot().then(() => setTimeout(() => heroCup.pour(), 300)), .2);
-  if (seen || !intro) { if (intro) intro.remove(); heroIn.play(); }
+    .add(() => { if (!TEASER) heroCup.boot().then(() => setTimeout(() => heroCup.pour(), 300)); }, .2);
+  if (seen || !intro) { if (intro) intro.remove(); heroIn.play(); if (TEASER) teaser.show(); }
   else {
     try { sessionStorage.setItem('ct2-intro', '1'); } catch (e) {}
     const stage = $('[data-stage]'), ib = $('[data-ibean]'), bl = $('[data-bl]'), br = $('[data-br]');
@@ -1513,7 +1761,7 @@
     gsap.set(ib, { x: bx, y: by, scale: bigS, transformOrigin: '50% 50%' });
     gsap.set('[data-empty], [data-fill]', { scale: .35, opacity: 0, transformOrigin: '50% 55%' });
     gsap.set('[data-istamp]', { scale: 2.4, rotation: -14 });
-    const itl = gsap.timeline({ onComplete: () => { intro.remove(); heroIn.play(); } });
+    const itl = gsap.timeline({ onComplete: () => { intro.remove(); heroIn.play(); if (TEASER) gsap.delayedCall(1.6, teaser.gag); } });
     itl.from(ib, { y: by - innerHeight * .7, rotation: -25, duration: .45, ease: 'power3.in' })
       .to(ib, { scaleY: bigS * .9, scaleX: bigS * 1.06, duration: .07, yoyo: true, repeat: 1 })
       .to(ib, { rotation: 7, duration: .06, yoyo: true, repeat: 3, ease: 'sine.inOut' }, '+=.04')
@@ -1564,6 +1812,7 @@
 
   // closing: coffee rises in LET'S TALK as you scroll in
   ScrollTrigger.create({ trigger: '[data-closing]', start: 'top 85%', end: 'center 45%', scrub: .8, onUpdate: s => { closeFill.lvl = s.progress * 46; } });
+  ScrollTrigger.create({ trigger: '[data-phonefill]', start: 'top 92%', end: 'center 55%', scrub: .8, onUpdate: s => { phoneFill.lvl = s.progress * 46; } });
 
   // marquees with scroll velocity, opposite directions
   let xmVis = true; onScreen($('.xm'), v => xmVis = v, '0px');
