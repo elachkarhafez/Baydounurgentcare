@@ -231,13 +231,14 @@ cd.lens = float(ENV('LENS', '42')); cd.dof.use_dof = True; cd.dof.aperture_fstop
 aim = bpy.data.objects.new('aim', None); col.objects.link(aim)
 tc = cam.constraints.new('TRACK_TO'); tc.target = aim; tc.track_axis = 'TRACK_NEGATIVE_Z'; tc.up_axis = 'UP_Y'
 OFFX = float(ENV('OFFX', '-2.3'))   # aim left of the products so they sit right of centre (text goes left)
+AIMZ = float(ENV('AIMZ', '1.55'))  # lower it for the portrait cut so the line sits in the top half (text goes below)
 
 def state(t):
     ph = TAU * t
     ang = radians(-90) + radians(5) * sin(ph)
     rad = 10.2 + .35 * cos(ph)
     cam.location = (rad * cos(ang), rad * sin(ang), 3.05 + .2 * sin(ph + 1.))
-    aim.location = (OFFX + .25 * sin(ph), 0, 1.55)
+    aim.location = (OFFX + .25 * sin(ph), 0, AIMZ)
     cd.dof.focus_distance = (Vector(cam.location) - Vector((0, -.4, 1.4))).length
     # one light sweep across the set per loop, dark at the seam
     u = (t + .5) % 1.; w = smoother(clamp((u - .15) / .55))
