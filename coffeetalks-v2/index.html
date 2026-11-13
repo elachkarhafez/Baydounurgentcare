@@ -106,8 +106,12 @@
     .btn.solid.sm { box-shadow: 3px 3px 0 var(--bean); }
 
     /* coffee inside the letters: a wave tile clipped to the text, level set from JS */
-    .fill { color: transparent; -webkit-text-stroke: 2.5px var(--ink); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 260 300' preserveAspectRatio='none'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23d9b48f'/%3E%3Cstop offset='.06' stop-color='%23a8764c'/%3E%3Cstop offset='.25' stop-color='%236e4022'/%3E%3Cstop offset='1' stop-color='%232a1a10'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M0 100 Q32.5 86 65 100 T130 100 T195 100 T260 100 V300 H0Z' fill='url(%23g)'/%3E%3C/svg%3E"); background-size: 260px 300%; background-repeat: repeat-x; background-position: 0 0%; -webkit-background-clip: text; background-clip: text; filter: drop-shadow(3px 3px 0 var(--ink)); }
-    .dark .fill { -webkit-text-stroke-color: var(--cream); filter: drop-shadow(4px 4px 0 var(--bean)); }
+    .fill { color: transparent; -webkit-text-stroke: 2.5px var(--ink); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 260 300' preserveAspectRatio='none'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23d9b48f'/%3E%3Cstop offset='.06' stop-color='%23a8764c'/%3E%3Cstop offset='.25' stop-color='%236e4022'/%3E%3Cstop offset='1' stop-color='%232a1a10'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M0 100 Q32.5 86 65 100 T130 100 T195 100 T260 100 V300 H0Z' fill='url(%23g)'/%3E%3C/svg%3E"); background-size: 260px 300%; background-repeat: repeat-x; background-position: 0 0%; -webkit-background-clip: text; background-clip: text; }
+    .dark .fill { -webkit-text-stroke-color: var(--cream); }
+    .fw { position: relative; display: inline-block; }
+    .fw .fill { position: relative; }
+    .fw .fs { position: absolute; left: 0; top: 0; color: var(--ink); -webkit-text-stroke: 2.5px var(--ink); transform: translate(3px, 3px); pointer-events: none; white-space: nowrap; }
+    .dark .fw .fs { color: var(--bean); -webkit-text-stroke-color: var(--bean); transform: translate(4px, 4px); }
 
     /* bean cursor (fine pointers only) */
     html.fine, html.fine a, html.fine button, html.fine [data-cur], html.fine label { cursor: none; }
@@ -121,7 +125,10 @@
     .cur.on .ring span { opacity: 1; }
 
     /* floating beans */
-    .beans-bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+    .beans-bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .beans-bg i { position: absolute; top: 0; width: var(--s); aspect-ratio: 360 / 367; background: url(img/bean.webp) center / contain no-repeat; opacity: var(--a); animation: drift var(--d) linear var(--dl) infinite; will-change: transform; }
+    @keyframes drift { from { transform: translate3d(0, 104vh, 0) rotate(0deg); } to { transform: translate3d(0, -12vh, 0) rotate(var(--r)); } }
+    html.rm .beans-bg { display: none; }
     main, header, .sign-off { position: relative; z-index: 1; }
 
     /* ---------- intro ---------- */
@@ -168,7 +175,8 @@
     .hero h1 { position: relative; z-index: 2; font-size: clamp(1.875rem, 1.1rem + 3.2vw, 3.5rem); line-height: .98; }
     .hero h1 .hw { display: block; }
     .hero h1 .hw:nth-child(2) { padding-left: .5em; }
-    .hero h1 .fill { display: inline-block; -webkit-text-stroke-width: 1.5px; filter: drop-shadow(2px 2px 0 var(--ink)); }
+    .hero h1 .fill { display: inline-block; -webkit-text-stroke-width: 1.5px; }
+    .hero h1 .fs { -webkit-text-stroke-width: 1.5px; transform: translate(2px, 2px); }
     .hero .ctas { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
     .hero .ctas .btn { flex: 1 1 100%; }
     .cupwrap { position: relative; }
@@ -181,43 +189,38 @@
     .cupstage .fallback { position: absolute; inset: 22%; display: grid; place-items: center; }
     .cupstage .fallback img { width: 70%; }
     .cupstage.has3d .fallback { display: none; }
-    .tapme { position: absolute; z-index: 3; right: -4%; top: 4%; padding: 6px 10px; border: var(--line); border-radius: 14px 14px 14px 4px; background: var(--bean); color: var(--cream); box-shadow: 3px 3px 0 var(--ink); font: 400 .8125rem/1 var(--display); text-transform: uppercase; rotate: 6deg; pointer-events: none; animation: bob 2.2s var(--ease) infinite; }
+    .cuprow { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px 12px; margin-top: 6px; }
+    .tapme { position: relative; display: inline-block; padding: 6px 10px; border: var(--line); border-radius: 14px 14px 14px 4px; background: var(--bean); color: var(--cream); box-shadow: 3px 3px 0 var(--ink); font: 400 .8125rem/1 var(--display); text-transform: uppercase; rotate: -3deg; pointer-events: none; animation: bob 2.2s var(--ease) infinite; }
     @keyframes bob { 50% { transform: translateY(-6px); } }
-    .burst { position: absolute; z-index: 3; left: -2%; top: 2%; width: 72px; height: 72px; animation: spin 14s linear infinite; pointer-events: none; }
+    .burst { position: absolute; z-index: 3; right: -11%; top: -7%; width: 56px; height: 56px; display: none; animation: spin 14s linear infinite; pointer-events: none; }
     .burst text { font: 400 13px var(--display); letter-spacing: .04em; }
-    .poured { text-align: center; margin-top: 2px; font: 700 11.5px/1 var(--sans); letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+    .poured { text-align: center; margin: 0; font: 700 11.5px/1 var(--sans); letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
     .poured b { color: var(--ink); }
     /* her photos as polaroids floating around the hero */
-    .pol { position: absolute; z-index: 1; width: 72px; padding: 6px 6px 22px; background: #ffffff; border: 2px solid var(--ink); box-shadow: 4px 4px 0 var(--ink); }
+    .pols { display: none; }
+    .pol { position: relative; z-index: 1; width: 104px; padding: 6px 6px 22px; background: #ffffff; border: 2px solid var(--ink); box-shadow: 4px 4px 0 var(--ink); }
     .pol img { width: 100%; aspect-ratio: 1; object-fit: cover; }
     .pol span { position: absolute; left: 0; right: 0; bottom: 2px; text-align: center; font: 700 15px/1 var(--hand); color: var(--bean); }
-    .hero .p1 { right: 1%; bottom: 40%; rotate: 8deg; width: 66px; }
-    .hero .p2 { display: none; left: -2%; bottom: 10%; rotate: -9deg; width: 70px; }
-    .hero .p3 { right: -4%; bottom: 30%; rotate: 6deg; display: none; }
     @media (min-width: 900px) {
       .hero { padding: 88px 0 0; }
       .hero-grid { grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr); align-items: center; gap: 20px; }
       .lede { font-size: 1.0625rem; }
       .cupstage { width: min(380px, 30vw); }
-      .pol { width: 112px; padding: 7px 7px 26px; } .pol span { font-size: 17px; bottom: 4px; }
-      .hero .p1 { right: auto; left: 57%; top: -8px; bottom: auto; rotate: -7deg; width: 112px; }
-      .hero .p2 { width: 112px; }
-      .hero .p2, .hero .p3 { display: block; }
+      .pols { display: flex; gap: 22px; margin-top: 28px; padding-left: 4px; }
+      .pol { padding: 7px 7px 26px; } .pol span { font-size: 17px; bottom: 4px; }
+      .pols .p1 { rotate: -6deg; } .pols .p2 { rotate: 4deg; top: 8px; } .pols .p3 { rotate: -3deg; }
       .hero .ctas .btn { flex: 0 0 auto; }
-      .hero .p2 { left: 50%; bottom: 30%; }
-      .burst { top: auto; bottom: 2%; left: -6%; }
-      .hero .p3 { right: -1%; bottom: 2%; }
+      .burst { display: block; width: 76px; height: 76px; }
     }
-    /* two marquees crossing */
-    .xm { position: relative; height: 86px; margin-top: 8px; }
-    .marquee { position: absolute; left: -30px; right: -30px; overflow: hidden; border-block: var(--line); padding: 8px 0; }
-    .marquee.a { top: 12px; background: var(--bean); color: var(--cream); rotate: -3deg; z-index: 2; }
-    .marquee.b { top: 38px; background: var(--paper); color: var(--ink); rotate: 2.5deg; }
+    /* two ribbons, parallel with a gap between them */
+    .xm { position: relative; display: grid; gap: 10px; padding: 16px 0 20px; margin-top: 6px; overflow: hidden; }
+    .marquee { position: relative; margin-inline: -40px; overflow: hidden; border-block: var(--line); padding: 8px 0; rotate: -1.5deg; }
+    .marquee.a { background: var(--bean); color: var(--cream); }
+    .marquee.b { background: var(--paper); color: var(--ink); }
     .marquee .track { display: inline-flex; align-items: center; white-space: nowrap; will-change: transform; }
     .marquee span { font: 400 clamp(1rem, .8rem + 1vw, 1.5rem)/1 var(--display); text-transform: uppercase; padding: 0 .45em; }
     .marquee img { width: 18px; height: 18px; flex: none; }
-    .marquee.a img { filter: brightness(1.9); }
-    @media (min-width: 900px) { .xm { height: 104px; } .marquee.b { top: 46px; } }
+    @media (min-width: 900px) { .xm { gap: 12px; padding: 24px 0 28px; } .marquee { rotate: -1.1deg; } }
 
     /* coffee drips at the bottom of dark sections */
     .drip { position: absolute; left: 0; right: 0; bottom: -60px; z-index: 3; height: 62px; pointer-events: none; overflow: visible; }
@@ -278,7 +281,12 @@
     .brew .bignum { position: absolute; right: -2%; bottom: -6%; font: 400 clamp(9rem, 6rem + 14vw, 20rem)/.8 var(--display); color: transparent; -webkit-text-stroke: 3px rgba(210,176,142,.2); pointer-events: none; }
     .brew-grid { position: relative; display: grid; gap: 8px; }
     
-    .machine { width: min(250px, 64vw); height: auto; margin: 6px auto 0; overflow: visible; }
+    .machine { display: block; width: min(340px, 88vw); height: auto; margin: 10px auto 4px; overflow: visible; }
+    .machine [data-bsteam] path { transform-box: fill-box; transform-origin: 50% 100%; animation: wisp 2.4s ease-in-out infinite paused; }
+    .machine [data-bsteam] path:nth-child(2) { animation-delay: -.8s; } .machine [data-bsteam] path:nth-child(3) { animation-delay: -1.6s; }
+    .machine.serve [data-bsteam] path { animation-play-state: running; }
+    @keyframes wisp { 0% { transform: translateY(6px) scaleY(.75); opacity: 0; } 35% { opacity: 1; } 100% { transform: translateY(-12px) scaleY(1.1); opacity: 0; } }
+    html.rm .machine [data-bsteam] path { animation: none; }
     .bstep { min-height: 112px; }
     .bstep .k { font: 700 1.375rem/1 var(--hand); color: var(--latte); }
     .bstep h3 { font-size: clamp(1.375rem, 1rem + 1.2vw, 2rem); margin-top: 4px; }
@@ -290,7 +298,7 @@
     .blabels span.on { color: var(--latte); }
     @media (min-width: 900px) {
       .brew-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: 40px; }
-      .machine { width: min(380px, 30vw); }
+      .machine { width: min(500px, 40vw); margin-top: 18px; }
       .brew-pin { padding-top: 72px; }
     }
     html.rm .brew-pin, html.no-pin .brew-pin { height: auto; min-height: 0; padding: 48px 0; }
@@ -308,7 +316,7 @@
     .bulbs i { width: 8px; height: 8px; border-radius: 50%; background: #6b4a2e; }
     .bulbs i.lit { background: #fff3e0; box-shadow: 0 0 8px rgba(255,240,215,.9); }
     .slot .top { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; color: var(--latte); font: 400 1.125rem/1 var(--display); letter-spacing: .06em; }
-    .slot .top img { width: 22px; height: 22px; filter: brightness(1.8); }
+    .slot .top img { width: 22px; height: 22px; }
     .wins { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
     .win { position: relative; height: 112px; border-radius: 12px; background: var(--paper); color: var(--ink); overflow: hidden; box-shadow: inset 0 0 0 2.5px var(--ink); }
     .win small { position: absolute; z-index: 2; left: 0; right: 0; top: 6px; text-align: center; font: 700 9px/1 var(--sans); letter-spacing: .18em; color: var(--muted); }
@@ -474,7 +482,7 @@
     .mycard .what { position: relative; z-index: 2; font: 400 clamp(2rem, 1.4rem + 2.6vw, 3rem)/.95 var(--display); text-transform: uppercase; margin-top: 4px; }
     .mycard .vibe { position: relative; z-index: 2; margin-top: 10px; font: 600 14px/1.35 var(--sans); color: rgba(255,250,242,.82); }
     .mycard .tagline { position: relative; z-index: 2; margin-top: 12px; font: 700 10.5px/1 var(--sans); letter-spacing: .18em; text-transform: uppercase; color: rgba(255,250,242,.55); }
-    .mycard .big-bean { position: absolute; right: -40px; top: -30px; width: 200px; opacity: .9; rotate: 18deg; filter: brightness(1.5); }
+    .mycard .big-bean { position: absolute; right: -40px; top: -30px; width: 200px; opacity: .9; rotate: 18deg; }
     .mycard .holo { position: absolute; inset: 0; z-index: 1; pointer-events: none; mix-blend-mode: color-dodge; opacity: .55; background: radial-gradient(circle at var(--hx, 30%) var(--hy, 20%), rgba(255,236,190,.55), transparent 40%), linear-gradient(115deg, transparent 20%, rgba(201,162,122,.35) 35%, rgba(255,210,140,.25) 45%, transparent 60%) var(--hx, 30%) 0 / 250% 100%; }
     @media (min-width: 900px) {
       .card-sec { padding: 72px 0 56px; }
@@ -508,6 +516,7 @@
     .closing { background: var(--espresso); color: var(--cream); text-align: center; padding: 48px 0 44px; overflow: hidden; }
     .closing .big { font: 400 clamp(2.75rem, 1.6rem + 3vw, 3.5rem)/.95 var(--display); text-transform: uppercase; margin: 0; }
     .closing .big .fill { display: inline-block; -webkit-text-stroke-width: 1.5px; }
+    .closing .big .fs { -webkit-text-stroke-width: 1.5px; }
     .closing .small { font: 400 clamp(1.25rem, 1rem + 1vw, 1.75rem)/1 var(--display); text-transform: uppercase; color: var(--latte); }
     .closing p { color: rgba(255,250,242,.72); max-width: 40ch; margin: 16px auto 22px; }
     .closing .ctas { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
@@ -525,7 +534,7 @@
   <script>document.documentElement.classList.add('js');if(matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('rm');if(matchMedia('(hover: hover) and (pointer: fine)').matches)document.documentElement.classList.add('fine');try{if(sessionStorage.getItem('ct2-intro')&&!/[?&]intro/.test(location.search))document.documentElement.classList.add('seen')}catch(e){}</script>
 </head>
 <body>
-  <canvas class="beans-bg" data-beans aria-hidden="true"></canvas>
+  <div class="beans-bg" data-beans aria-hidden="true"></div>
   <div class="cur" data-cursor aria-hidden="true"><img class="dot" src="img/bean.webp" alt="" width="360" height="367"><div class="ring"><span data-curlbl></span></div></div>
 
   <div class="intro" aria-hidden="true" data-intro>
@@ -566,11 +575,16 @@
       <div class="wrap hero-grid">
         <div>
           <div class="chips" data-in><span class="tag"><img src="img/bean.webp" alt="" width="360" height="367">Dearborn, MI</span><span class="tag">Content Creator</span><span class="tag">Social Media Manager</span></div>
-          <h1 aria-label="Let's talk over coffee."><span class="hw" data-split>Let's Talk</span><span class="hw"><span data-split>Over </span><span class="fill" data-fillword>Coffee.</span></span></h1>
+          <h1 aria-label="Let's talk over coffee."><span class="hw" data-split>Let's Talk</span><span class="hw"><span data-split>Over </span><span class="fw" data-fillwrap><span class="fs" aria-hidden="true">Coffee.</span><span class="fill" data-fillword>Coffee.</span></span></span></h1>
           <p class="lede" data-in>Hi, I'm Noor. I make content for cafés, restaurants, boutiques, salons, events and anybody with a story worth posting.</p>
           <div class="ctas" data-in>
             <a class="btn solid" href="#package">Build Your Package <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
             <a class="btn" data-dm href="#" target="_blank" rel="noopener">DM @_coffeetalks</a>
+          </div>
+          <div class="pols">
+            <figure class="pol p1" style="margin:0"><img src="img/coffee-week.webp" width="720" height="1277" alt="Noor at Dearborn Coffee Week"><span>coffee week!</span></figure>
+            <figure class="pol p2" style="margin:0"><img src="img/pink-market.webp" width="720" height="1280" alt="Noor at Pink For A Purpose"><span>that's me</span></figure>
+            <figure class="pol p3" style="margin:0"><img src="img/cider-mill.webp" width="720" height="1276" alt="Yates Cider Mill"><span>yates 🍂</span></figure>
           </div>
         </div>
         <div class="cupwrap" data-in>
@@ -578,15 +592,11 @@
             <svg class="ring" viewBox="0 0 300 300" aria-hidden="true"><defs><path id="ringp" d="M150 150 m -128 0 a 128 128 0 1 1 256 0 a 128 128 0 1 1 -256 0"/></defs><circle cx="150" cy="150" r="146" fill="none" stroke="#15100c" stroke-width="2.5"/><circle cx="150" cy="150" r="110" fill="#ffffff" stroke="#15100c" stroke-width="2.5"/><text><textPath href="#ringp" textLength="790">HI I'M NOOR ✦ LET'S TALK OVER COFFEE ✦ TAP THE CUP ✦ </textPath></text></svg>
             <div class="fallback"><img src="img/logo.webp" width="1200" height="776" alt=""></div>
             <canvas data-cup3d data-cur="POUR" hidden aria-label="A 3D cappuccino. Tap it and it pours again." role="img"></canvas>
-            <span class="tapme" data-tapme>Tap The Cup</span>
             <svg class="burst" viewBox="0 0 100 100" aria-hidden="true"><polygon points="50,2 58,18 75,8 76,27 95,26 86,43 99,55 82,63 88,81 69,79 63,97 50,85 37,97 31,79 12,81 18,63 1,55 14,43 5,26 24,27 25,8 42,18" fill="#5e3b25" stroke="#15100c" stroke-width="2"/><text x="50" y="46" text-anchor="middle" fill="#efe2d0">FRESHLY</text><text x="50" y="62" text-anchor="middle" fill="#ffffff">BREWED</text></svg>
           </div>
-          <p class="poured" aria-live="polite">Cups Poured Here: <b data-poured>0</b></p>
+          <div class="cuprow"><span class="tapme" data-tapme>Tap The Cup</span><p class="poured" aria-live="polite">Cups Poured Here: <b data-poured>0</b></p></div>
           <div class="cue-row"><span class="cue" data-herocue>Scroll For More <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2v11M4 9l4 4 4-4" fill="none" stroke="currentColor" stroke-width="2.2"/></svg></span></div>
         </div>
-        <figure class="pol p1" data-par="18" style="margin:0"><img src="img/coffee-week.webp" width="720" height="1277" alt="Noor at Dearborn Coffee Week"><span>coffee week!</span></figure>
-        <figure class="pol p2" data-par="-24" style="margin:0"><img src="img/pink-market.webp" width="720" height="1280" alt="Noor at Pink For A Purpose"><span>that's me</span></figure>
-        <figure class="pol p3" data-par="30" style="margin:0"><img src="img/cider-mill.webp" width="720" height="1276" alt="Yates Cider Mill"><span>yates 🍂</span></figure>
       </div>
       <div class="xm" aria-hidden="true">
         <div class="marquee a"><div class="track" data-marquee="1"></div></div>
@@ -615,21 +625,89 @@
         <div class="wrap brew-grid">
           <div>
             <h2 data-split>How It's <span class="hl">Brewed.</span></h2>
-            <svg class="machine" viewBox="0 0 300 300" data-machine aria-hidden="true">
-              <g data-hopper><path d="M40 40 H110 L96 92 H54 Z" fill="#2c211a" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"/><rect x="58" y="92" width="34" height="22" fill="#2c211a" stroke="#ffffff" stroke-width="3"/></g>
-              <g data-beansdrop></g>
-              <rect x="120" y="60" width="150" height="150" rx="14" fill="#2c211a" stroke="#ffffff" stroke-width="3"/>
-              <rect x="134" y="74" width="122" height="34" rx="8" fill="#15100c" stroke="#ffffff" stroke-width="2.5"/>
-              <circle cx="158" cy="91" r="8" fill="#c9a27a" data-lamp/><circle cx="232" cy="91" r="9" fill="none" stroke="#ffffff" stroke-width="2.5"/><path d="M232 91 L238 86" stroke="#ffffff" stroke-width="2.5" data-needle/>
-              <text x="195" y="96" text-anchor="middle" font-family="Anton" font-size="12" fill="#ffffff" letter-spacing="1">COFFEE TALKS</text>
-              <rect x="170" y="108" width="50" height="16" fill="#ffffff"/>
-              <g data-tamp><rect x="178" y="80" width="34" height="10" rx="3" fill="#c9a27a" stroke="#15100c" stroke-width="2"/><rect x="191" y="62" width="8" height="20" fill="#c9a27a" stroke="#15100c" stroke-width="2"/></g>
-              <g data-pf><rect x="166" y="124" width="58" height="14" rx="4" fill="#cfc6bb" stroke="#15100c" stroke-width="2.5"/><rect x="224" y="127" width="44" height="8" rx="4" fill="#15100c" stroke="#ffffff" stroke-width="2"/></g>
-              <rect x="191" y="138" width="8" height="0" rx="3" fill="#7a4a28" data-shot/>
-              <rect x="132" y="210" width="126" height="10" rx="4" fill="#ffffff"/>
-              <g data-bcup><path d="M172 172 H218 L213 208 Q212 211 208 211 H182 Q178 211 177 208 Z" fill="#ffffff" stroke="#15100c" stroke-width="2.5"/><clipPath id="bcc"><path d="M173 174 H217 L212.5 207 Q211.5 209.5 208 209.5 H182 Q178.5 209.5 177.5 207 Z"/></clipPath><rect x="170" y="210" width="50" height="40" fill="#5e3b25" clip-path="url(#bcc)" data-bfill/><path d="M218 180 Q232 182 230 192 Q228 200 215 199" fill="none" stroke="#ffffff" stroke-width="5"/><path d="M186 182 q9 -9 18 0 q-9 6 -18 0z" fill="#f1e2cb" opacity="0" data-heart/></g>
-              <g data-bsteam fill="none" stroke="rgba(255,250,242,.5)" stroke-width="2.5" stroke-linecap="round" opacity="0"><path d="M186 166 q-6 -8 0 -16"/><path d="M196 164 q-6 -8 0 -18"/><path d="M206 166 q-6 -8 0 -16"/></g>
-              <g data-phone2 opacity="0"><rect x="30" y="140" width="62" height="110" rx="10" fill="#15100c" stroke="#ffffff" stroke-width="3"/><rect x="38" y="152" width="46" height="70" rx="4" fill="#f1e2cb"/><image href="img/logo.webp" x="42" y="170" width="38" height="25"/><circle cx="61" cy="236" r="4" fill="#ffffff"/></g>
+            <svg class="machine" viewBox="0 0 400 240" data-machine aria-hidden="true">
+              <defs>
+                <clipPath id="mHop"><path d="M19.5 23.5 H90.5 L78.7 80.5 H31.3 Z"/></clipPath>
+                <clipPath id="mCup"><path d="M265.5 167.5 H294.5 L291.2 193.5 Q290.8 195.5 288.6 195.5 H271.4 Q269.2 195.5 268.8 193.5 Z"/></clipPath>
+              </defs>
+              <rect x="33" y="96" width="58" height="120" rx="10" fill="#15100c"/>
+              <rect x="184" y="50" width="210" height="166" rx="18" fill="#15100c"/>
+              <rect x="-20" y="214" width="440" height="16" rx="3" fill="#5e3b25" stroke="#15100c" stroke-width="3"/>
+              <g data-grinder>
+                <path d="M18 22 H92 L80 82 H30 Z" fill="#f7f3ec"/>
+                <g clip-path="url(#mHop)" data-hopbeans></g>
+                <path d="M27 32 L32 68" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+                <path d="M18 22 H92 L80 82 H30 Z" fill="none" stroke="#15100c" stroke-width="3" stroke-linejoin="round"/>
+                <rect x="13" y="11" width="84" height="12" rx="6" fill="#5e3b25" stroke="#15100c" stroke-width="3"/>
+                <rect x="40" y="82" width="30" height="10" fill="#d9d2c8" stroke="#15100c" stroke-width="3"/>
+                <rect x="26" y="90" width="58" height="124" rx="10" fill="#5e3b25" stroke="#15100c" stroke-width="3"/>
+                <circle cx="55" cy="114" r="12" fill="#efe2d0" stroke="#15100c" stroke-width="2.5"/>
+                <path d="M55 114 V105" stroke="#15100c" stroke-width="3" stroke-linecap="round" data-burr/>
+                <path d="M46 136 H64 L60 148 H50 Z" fill="#d9d2c8" stroke="#15100c" stroke-width="2.5" stroke-linejoin="round"/>
+                <path d="M35 190 H75" stroke="#15100c" stroke-width="4" stroke-linecap="round"/>
+                <g data-grounds fill="#1f130b"></g>
+              </g>
+              <g data-mach>
+                <rect x="190" y="31" width="182" height="13" rx="4" fill="#d9d2c8" stroke="#15100c" stroke-width="2.5"/>
+                <path d="M206 31 L210 15 H228 L232 31 Z" fill="#efe2d0" stroke="#15100c" stroke-width="2.5" stroke-linejoin="round"/>
+                <path d="M238 31 L242 15 H260 L264 31 Z" fill="#ffffff" stroke="#15100c" stroke-width="2.5" stroke-linejoin="round"/>
+                <rect x="176" y="44" width="210" height="170" rx="18" fill="#efe2d0" stroke="#15100c" stroke-width="3"/>
+                <path d="M177.5 62 Q177.5 45.5 194 45.5 H368 Q384.5 45.5 384.5 62 V100 H177.5 Z" fill="#5e3b25"/>
+                <path d="M177.5 100 H384.5" stroke="#15100c" stroke-width="3"/>
+                <circle cx="208" cy="72" r="14" fill="#ffffff" stroke="#15100c" stroke-width="2.5"/>
+                <path d="M198.5 79 l3 -2 M208 61.5 v3 M217.5 79 l-3 -2" stroke="#15100c" stroke-width="1.6" stroke-linecap="round"/>
+                <path d="M208 72 V62" stroke="#15100c" stroke-width="2.6" stroke-linecap="round" data-needle/>
+                <circle cx="354" cy="72" r="14" fill="#ffffff" stroke="#15100c" stroke-width="2.5"/>
+                <path d="M344.5 79 l3 -2 M354 61.5 v3 M363.5 79 l-3 -2" stroke="#15100c" stroke-width="1.6" stroke-linecap="round"/>
+                <path d="M354 72 V62" stroke="#15100c" stroke-width="2.6" stroke-linecap="round" data-needle2/>
+                <circle cx="208" cy="72" r="2.6" fill="#15100c"/><circle cx="354" cy="72" r="2.6" fill="#15100c"/>
+                <text x="281" y="80" text-anchor="middle" font-family="Anton, Impact, sans-serif" font-size="17" letter-spacing="1.5" fill="#efe2d0">COFFEE TALKS</text>
+                <circle cx="281" cy="91" r="7" fill="#fff1dc" opacity="0" data-glow/>
+                <circle cx="281" cy="91" r="3.5" fill="#d2b08e" stroke="#15100c" stroke-width="1.2" data-lamp/>
+                <rect x="232" y="110" width="98" height="88" rx="8" fill="#e0ccb2"/>
+                <circle cx="206" cy="132" r="7" fill="#5e3b25" stroke="#15100c" stroke-width="2.5"/>
+                <circle cx="206" cy="154" r="7" fill="#efe2d0" stroke="#15100c" stroke-width="2.5"/>
+                <path d="M258 100 H304 L299 116 H263 Z" fill="#d9d2c8" stroke="#15100c" stroke-width="2.5" stroke-linejoin="round"/>
+                <rect x="255" y="114" width="52" height="12" rx="4" fill="#15100c"/>
+                <path d="M362 104 V154 Q362 170 350 177" fill="none" stroke="#15100c" stroke-width="8.5" stroke-linecap="round"/>
+                <path d="M362 104 V154 Q362 170 350 177" fill="none" stroke="#d9d2c8" stroke-width="3.5" stroke-linecap="round"/>
+                <circle cx="362" cy="108" r="7" fill="#5e3b25" stroke="#15100c" stroke-width="2.5"/>
+                <rect x="236" y="198" width="90" height="16" rx="3" fill="#d9d2c8" stroke="#15100c" stroke-width="2.5"/>
+                <path d="M246 204 H316 M246 209 H316" stroke="#15100c" stroke-width="1.6" stroke-linecap="round"/>
+              </g>
+              <g data-bcup>
+                <path d="M264 166 H296 L292.5 194 Q292 197 289 197 H271 Q268 197 267.5 194 Z" fill="#ffffff"/>
+                <rect x="262" y="197" width="36" height="34" fill="#5e3b25" clip-path="url(#mCup)" data-bfill/>
+                <rect x="262" y="197" width="36" height="3.5" fill="#d2b08e" clip-path="url(#mCup)" opacity="0" data-crema/>
+                <path d="M268 172 L270.5 190" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" opacity=".8"/>
+                <path d="M264 166 H296 L292.5 194 Q292 197 289 197 H271 Q268 197 267.5 194 Z" fill="none" stroke="#15100c" stroke-width="2.5" stroke-linejoin="round"/>
+                <path d="M295.5 172 Q306 172 305 181 Q304 189 293.5 188" fill="none" stroke="#15100c" stroke-width="3"/>
+                <g data-bsteam fill="none" stroke="rgba(247,243,236,.75)" stroke-width="2.5" stroke-linecap="round" opacity="0"><path d="M272 158 q-5 -7 0 -14 q5 -7 0 -14"/><path d="M280 156 q-5 -7 0 -14 q5 -7 0 -16"/><path d="M288 158 q-5 -7 0 -14 q5 -7 0 -14"/></g>
+              </g>
+              <rect x="270" y="148" width="3" height="0" rx="1.5" fill="#6e4022" data-stream/>
+              <rect x="287" y="148" width="3" height="0" rx="1.5" fill="#6e4022" data-stream/>
+              <g data-pf>
+                <rect x="300" y="128" width="18" height="9" fill="#15100c"/>
+                <rect x="314" y="127" width="34" height="11" rx="5.5" fill="#5e3b25" stroke="#15100c" stroke-width="2.5"/>
+                <rect x="268" y="141" width="7" height="7" fill="#d9d2c8" stroke="#15100c" stroke-width="2"/>
+                <rect x="285" y="141" width="7" height="7" fill="#d9d2c8" stroke="#15100c" stroke-width="2"/>
+                <path d="M260 126 Q280 111 300 126 Z" fill="#3a2418" stroke="#15100c" stroke-width="1.5" data-mound/>
+                <path d="M258 126 H302 V134 Q302 142 294 142 H266 Q258 142 258 134 Z" fill="#d9d2c8" stroke="#15100c" stroke-width="2.5" stroke-linejoin="round"/>
+                <path d="M263 131 H285" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+              </g>
+              <g data-tamp opacity="0">
+                <ellipse cx="130" cy="158" rx="14" ry="10" fill="#5e3b25" stroke="#15100c" stroke-width="2.5"/>
+                <rect x="125" y="166" width="10" height="17" fill="#d9d2c8" stroke="#15100c" stroke-width="2.5"/>
+                <rect x="110" y="182" width="40" height="8" rx="2" fill="#d9d2c8" stroke="#15100c" stroke-width="2.5"/>
+              </g>
+              <g data-phone2 opacity="0">
+                <rect x="16" y="98" width="70" height="116" rx="11" fill="#15100c" stroke="#efe2d0" stroke-width="2.5"/>
+                <rect x="22" y="108" width="58" height="88" rx="4" fill="#f7f3ec"/>
+                <image href="img/logo.webp" x="29" y="118" width="44" height="28"/>
+                <path d="M44 160 C44 155 51 155 51 160 C51 155 58 155 58 160 C58 166 51 169 51 172 C51 169 44 166 44 160Z" fill="#c9a27a" stroke="#15100c" stroke-width="1.5"/>
+                <rect x="31" y="180" width="40" height="5" rx="2.5" fill="#d2b08e"/>
+                <rect x="41" y="203" width="20" height="3" rx="1.5" fill="#efe2d0"/>
+              </g>
               <g data-hearts></g>
             </svg>
           </div>
@@ -655,7 +733,7 @@
         <div style="position:relative;z-index:2">
           <div class="slot">
             <div class="bulbs" data-bulbs aria-hidden="true"></div>
-            <div class="top"><span>The Content Machine</span><img src="img/bean.webp" alt="" width="360" height="367"></div>
+            <div class="top"><span>The Content Machine</span><img src="img/bean-light.webp" alt="" width="360" height="367"></div>
             <div class="wins" data-wins>
               <div class="win"><small>THE HOOK</small><div class="reel"></div></div>
               <div class="win"><small>THE SHOT</small><div class="reel"></div></div>
@@ -718,7 +796,7 @@
             <svg viewBox="0 0 400 300" aria-label="A hand-drawn map of places Noor has filmed around Metro Detroit" role="img">
               <rect width="400" height="300" fill="#f3ead9"/>
               <path d="M300 0 C 320 80, 360 150, 400 190 V 300 H 340 C 330 240, 300 210, 290 160 C 282 110, 280 40, 270 0 Z" fill="#e3cfb6" stroke="#15100c" stroke-width="2"/>
-              <text x="352" y="268" font-family="Anton" font-size="11" fill="#5e3b25" letter-spacing="1">DETROIT RIVER</text>
+              <text transform="translate(346 200) rotate(66)" text-anchor="middle" font-family="Anton" font-size="11" fill="#5e3b25" letter-spacing="1">DETROIT RIVER</text>
               <g fill="none" stroke="#15100c" stroke-linecap="round">
                 <path d="M0 214 C 120 206, 220 196, 300 190" stroke-width="5" stroke="#ffffff"/><path d="M0 214 C 120 206, 220 196, 300 190" stroke-width="1.5" stroke-dasharray="6 5"/>
                 <path d="M0 160 H 290" stroke-width="5" stroke="#ffffff"/><path d="M0 160 H 290" stroke-width="1.5"/>
@@ -728,7 +806,7 @@
               <g font-family="Anton" font-size="10" fill="#6c5d50" letter-spacing=".8"><text x="8" y="210">I-94</text><text x="8" y="156">MICHIGAN AVE</text><text x="8" y="116">WARREN AVE</text><text x="184" y="290">SOUTHFIELD FWY</text></g>
               <g font-family="Anton" font-size="18" fill="#15100c" letter-spacing="1" opacity=".18"><text x="196" y="150">DEARBORN</text><text x="24" y="98">DEARBORN HTS</text></g>
               <path d="M200 110 C 210 70, 230 40, 240 6" fill="none" stroke="#15100c" stroke-width="2" stroke-dasharray="3 5"/>
-              <g transform="translate(232 6)"><rect x="-58" y="0" width="116" height="22" rx="11" fill="#ffffff" stroke="#15100c" stroke-width="2"/><text x="0" y="15" text-anchor="middle" font-family="Anton" font-size="10.5" letter-spacing=".6">↑ ROCHESTER HILLS · 35 MI</text></g>
+              <g transform="translate(232 6)"><rect x="-68" y="0" width="136" height="22" rx="11" fill="#ffffff" stroke="#15100c" stroke-width="2"/><text x="0" y="15" text-anchor="middle" font-family="Anton" font-size="10.5" letter-spacing=".6">↑ ROCHESTER HILLS · 35 MI</text></g>
               <path d="M92 112 C 130 150, 180 96, 222 118 C 250 132, 238 160, 262 168" fill="none" stroke="#5e3b25" stroke-width="5" stroke-linecap="round" data-route/>
               <g data-pins></g>
               <g data-car><circle r="10" fill="#15100c"/><path d="M-5 -3 H5 L4 5 H-4 Z" fill="#ffffff"/></g>
@@ -782,7 +860,7 @@
         <div class="cardbox" data-cardbox data-cur="TILT">
           <div class="mycard" data-mycard>
             <div class="holo" aria-hidden="true"></div>
-            <img class="big-bean" src="img/bean.webp" alt="" width="360" height="367">
+            <img class="big-bean" src="img/bean-light.webp" alt="" width="360" height="367">
             <img class="lg" src="img/logo.webp" alt="Coffee Talks" width="1200" height="776">
             <span class="who" data-cwho>Your Order</span>
             <span class="what" data-cwhat>Iced Latte</span>
@@ -819,7 +897,7 @@
       <canvas class="confetti" data-confetti aria-hidden="true"></canvas>
       <div class="wrap" style="position:relative">
         <p class="small">Grab A Coffee.</p>
-        <h2 class="big"><span class="fill" data-closefill>Let's Talk.</span></h2>
+        <h2 class="big"><span class="fw"><span class="fs" aria-hidden="true">Let's Talk.</span><span class="fill" data-closefill>Let's Talk.</span></span></h2>
         <p>Tell me about your business and what you want people to feel when they see it. I'll take it from there.</p>
         <div class="ctas"><a class="btn loud" href="#package">Build Your Package</a><a class="btn" data-mail-plain href="#">Email Me</a></div>
         <div class="socials" data-socials></div>
@@ -917,7 +995,7 @@
       { n: 'Hype Athletics', a: 'Dearborn Heights', w: 'Pink For A Purpose Market', img: 'img/pink-market.webp', x: 92, y: 112 },
       { n: 'Adeni Tea & Coffee', a: 'Dearborn', w: 'Café Spotlight', img: 'img/adeni.webp', x: 222, y: 118 },
       { n: 'Peace Park East', a: 'Dearborn', w: 'Coffee Week Ambassador', img: 'img/coffee-week.webp', x: 262, y: 168 },
-      { n: 'Yates Cider Mill', a: 'Rochester Hills', w: 'Seasonal Content', img: 'img/cider-mill.webp', x: 232, y: 44 }
+      { n: 'Yates Cider Mill', a: 'Rochester Hills', w: 'Seasonal Content', img: 'img/cider-mill.webp', x: 232, y: 60 }
     ],
     base: [
       { v: 'Social Media Management', d: 'I run your accounts' },
@@ -966,8 +1044,8 @@
   $$('[data-dm]').forEach(a => a.href = CONFIG.instagram.dm);
   $$('[data-mail-plain]').forEach(a => a.href = 'mailto:' + CONFIG.email);
   $$('[data-year]').forEach(e => e.textContent = new Date().getFullYear());
-  const BEAN = '<img src="img/bean.webp" width="360" height="367" alt="">';
-  $('[data-marquee="1"]').innerHTML = [0, 1].map(() => CONFIG.forWho.map(w => `<span>${esc(w)}</span>${BEAN}`).join('')).join('');
+  const BEAN = '<img src="img/bean.webp" width="360" height="367" alt="">', BEAN_L = '<img src="img/bean-light.webp" width="360" height="367" alt="">';
+  $('[data-marquee="1"]').innerHTML = [0, 1].map(() => CONFIG.forWho.map(w => `<span>${esc(w)}</span>${BEAN_L}`).join('')).join('');
   $('[data-marquee="-1"]').innerHTML = [0, 1].map(() => CONFIG.services.map(w => `<span>${esc(w)}</span>${BEAN}`).join('')).join('');
 
   /* split headings into letters (keeps .hl spans, words never break) */
@@ -982,7 +1060,7 @@
           frag.appendChild(w);
         });
         n.replaceWith(frag);
-      } else if (n.nodeType === 1 && !n.hasAttribute('data-fillword')) walk(n);
+      } else if (n.nodeType === 1 && !n.classList.contains('fw')) walk(n);
     });
     walk(el);
   };
@@ -1005,9 +1083,9 @@
      COFFEE IN THE LETTERS: hero word fills on load, closing fills on scroll
      ============================================================= */
   const fills = [];
-  const fillWord = (el, startLvl) => { const f = { el, lvl: startLvl, x: Math.random() * 260, speed: 26 + Math.random() * 10 }; fills.push(f); return f; };
+  const fillWord = (el, startLvl) => { const f = { el, lvl: startLvl, x: Math.random() * 260, speed: 26 + Math.random() * 10, vis: true }; fills.push(f); onScreen(el, v => f.vis = v, '0px'); return f; };
   const heroFill = fillWord($('[data-fillword]'), 0), closeFill = fillWord($('[data-closefill]'), 0);
-  const paintFills = dt => fills.forEach(f => { f.x = (f.x + (f.speed + Math.abs(vel) * 18) * dt) % 260; f.el.style.backgroundPosition = `${-f.x}px ${f.lvl.toFixed(2)}%`; });
+  const paintFills = dt => fills.forEach(f => { if (!f.vis && dt) return; f.x = (f.x + (f.speed + Math.abs(vel) * 18) * dt) % 260; f.el.style.backgroundPosition = `${-f.x}px ${f.lvl.toFixed(2)}%`; });
   if (!ANIM) { heroFill.lvl = 42; closeFill.lvl = 42; paintFills(0); }
 
   /* header cup fills with page progress */
@@ -1031,19 +1109,11 @@
      FLOATING BEANS behind the page, faster on a fast scroll
      ============================================================= */
   (() => {
-    const cv = $('[data-beans]'), cx = cv.getContext('2d'), img = new Image(); img.src = 'img/bean.webp';
-    if (RM) { cv.remove(); return; }
-    const N = innerWidth < 600 ? 9 : 16; let W = 0, H = 0, dpr = 1;
-    const B = Array.from({ length: N }, () => ({ x: Math.random(), y: Math.random(), s: 14 + Math.random() * 22, r: Math.random() * 6.28, vr: (Math.random() - .5) * .6, vy: .008 + Math.random() * .014, a: .1 + Math.random() * .14 }));
-    const size = () => { dpr = Math.min(devicePixelRatio || 1, 2); W = innerWidth; H = innerHeight; cv.width = W * dpr; cv.height = H * dpr; cv.style.width = W + 'px'; cv.style.height = H + 'px'; };
-    size(); addEventListener('resize', size);
-    let last = performance.now();
-    const tick = now => { const dt = Math.min(.05, (now - last) / 1000); last = now; const boost = Math.abs(vel);
-      cx.setTransform(dpr, 0, 0, dpr, 0, 0); cx.clearRect(0, 0, W, H);
-      if (img.complete) for (const b of B) { b.y -= (b.vy + boost * .02) * dt * 2 * (vel < 0 ? -1 : 1); b.r += b.vr * dt * (1 + boost); if (b.y < -.08) { b.y = 1.08; b.x = Math.random(); } if (b.y > 1.1) { b.y = -.06; b.x = Math.random(); }
-        cx.save(); cx.globalAlpha = b.a; cx.translate(b.x * W, b.y * H); cx.rotate(b.r); cx.drawImage(img, -b.s / 2, -b.s / 2, b.s, b.s * 1.02); cx.restore(); }
-      if (!document.hidden) requestAnimationFrame(tick); };
-    requestAnimationFrame(tick); document.addEventListener('visibilitychange', () => { if (!document.hidden) { last = performance.now(); requestAnimationFrame(tick); } });
+    const box = $('[data-beans]'); if (RM) { box.hidden = true; return; }
+    // only in the side margins, never behind text; none on phones and tablets
+    const gut = (innerWidth - 1200) / 2 - 40, N = gut > 30 ? 10 : 0, r = (a, b) => a + Math.random() * (b - a);
+    if (!N) { box.hidden = true; return; }
+    box.innerHTML = Array.from({ length: N }, (_, i) => `<i style="${i % 2 ? 'right' : 'left'}:${r(4, gut - 30).toFixed(0)}px;--s:${r(14, 34).toFixed(0)}px;--a:${r(.1, .24).toFixed(2)};--d:${r(22, 40).toFixed(1)}s;--dl:-${r(0, 40).toFixed(1)}s;--r:${(r(-1, 1) * 400).toFixed(0)}deg"></i>`).join('');
   })();
 
   /* =============================================================
@@ -1096,10 +1166,18 @@
      HOW IT'S BREWED: an espresso machine you scroll through
      ============================================================= */
   const brew = (() => {
-    const S = CONFIG.brew, bars = $$('[data-bbars] b'), labels = $$('[data-blabels] span'), drop = $('[data-beansdrop]'), hearts = $('[data-hearts]');
-    drop.innerHTML = Array.from({ length: 9 }, (_, i) => `<image href="img/bean.webp" x="${50 + (i % 3) * 16}" y="${14 + Math.floor(i / 3) * 11}" width="14" height="14" style="filter:brightness(1.6)"/>`).join('');
-    hearts.innerHTML = Array.from({ length: 8 }, (_, i) => `<path d="M0 3 C0 -1 5 -1 5 3 C5 -1 10 -1 10 3 C10 7 5 9 5 11 C5 9 0 7 0 3Z" fill="#c9a27a" stroke="#15100c" stroke-width="1" opacity="0" data-h="${i}"/>`).join('');
-    const beans = $$('image', drop), hs = $$('[data-h]', hearts);
+    const S = CONFIG.brew, bars = $$('[data-bbars] b'), labels = $$('[data-blabels] span'), svg = $('[data-machine]'), q = k => $(`[data-${k}]`, svg);
+    const seg = (p, a, b) => clamp((p - a) / (b - a), 0, 1), sm = t => t * t * (3 - 2 * t), lerp = (a, b, t) => a + (b - a) * t;
+    // beans in the hopper, a few rows of them
+    const rows = [[74, [41, 53, 65]], [65, [37, 49, 61, 73]], [56, [35, 47, 59, 71, 82]], [47, [32, 44, 56, 68, 80]], [38, [36, 50, 64, 77]]];
+    const bean = (x, y, r) => `<g data-x="${x}" data-y="${y}" data-r="${r}" transform="translate(${x} ${y}) rotate(${r})"><ellipse rx="6.4" ry="4.7" fill="#7a4a28" stroke="#15100c" stroke-width="1.5"/><path d="M-4.4 .6 Q-1.6 -2 1 .3 T4.4 -.3" fill="none" stroke="#15100c" stroke-width="1.2"/></g>`;
+    q('hopbeans').innerHTML = rows.map(([y, xs], j) => xs.map((x, i) => bean(x, y, ((i * 47 + j * 31) % 120) - 60)).join('')).join('');
+    q('grounds').innerHTML = Array.from({ length: 9 }, () => '<circle r="1.8" cx="55" cy="148" opacity="0"/>').join('');
+    q('hearts').innerHTML = Array.from({ length: 8 }, (_, i) => `<path d="M0 3 C0 -1 5 -1 5 3 C5 -1 10 -1 10 3 C10 7 5 9 5 11 C5 9 0 7 0 3Z" fill="${i % 2 ? '#c9a27a' : '#efe2d0'}" stroke="#15100c" stroke-width="1" opacity="0"/>`).join('');
+    const hop = $$('g', q('hopbeans')), grounds = $$('circle', q('grounds')), hs = $$('path', q('hearts')), streams = $$('[data-stream]', svg);
+    const E = { grinder: q('grinder'), burr: q('burr'), pf: q('pf'), mound: q('mound'), tamp: q('tamp'), bcup: q('bcup'), bfill: q('bfill'), crema: q('crema'), steam: q('bsteam'), needle: q('needle'), needle2: q('needle2'), lamp: q('lamp'), glow: q('glow'), phone: q('phone2') };
+    const A = [-225, 38], T = [-150, 64];
+    const at = (el, k, v) => el.setAttribute(k, v);
     let cur = -1;
     const text = i => { if (i === cur) return; cur = i; $('[data-bk]').textContent = S[i].k; $('[data-bt]').textContent = S[i].t; $('[data-bd]').textContent = S[i].d; $('[data-bignum]').textContent = i + 1; labels.forEach((l, k) => l.classList.toggle('on', k === i));
       if (ANIM) { gsap.fromTo('[data-bstep] > *', { x: 40, opacity: 0 }, { x: 0, opacity: 1, duration: .5, stagger: .06, ease: 'back.out(1.6)' }); gsap.fromTo('[data-bignum]', { yPercent: 30, opacity: 0 }, { yPercent: 0, opacity: 1, duration: .6, ease: 'power3.out' }); } };
@@ -1107,22 +1185,38 @@
       const st = Math.min(3, Math.floor(p * 4)), lp = p * 4 - st;
       bars.forEach((b, i) => b.style.width = (i < st ? 100 : i === st ? clamp(lp, 0, 1) * 100 : 0) + '%');
       text(st);
-      const g = clamp(p / .25, 0, 1);
-      beans.forEach((b, i) => { const t = clamp(g * 1.6 - i * .07, 0, 1); b.setAttribute('transform', `translate(${Math.sin(i + t * 4) * 3} ${t * t * 72})`); b.style.opacity = t > .9 ? 0 : 1; });
-      $('[data-hopper]').setAttribute('transform', `translate(${Math.sin(g * 40) * (g > 0 && g < 1 ? 1.5 : 0)} 0)`);
-      const tp = clamp((p - .25) / .25, 0, 1), press = Math.sin(tp * Math.PI);
-      $('[data-tamp]').setAttribute('transform', `translate(0 ${press * 26})`);
-      const sp = clamp((p - .5) / .25, 0, 1), on = sp > 0 && sp < .98;
-      $('[data-shot]').setAttribute('height', on ? 34 : 0); $('[data-shot]').setAttribute('width', on ? 6 + Math.sin(sp * 30) * 1.5 : 8);
-      $('[data-bfill]').setAttribute('y', 210 - sp * 30);
-      $('[data-needle]').setAttribute('transform', `rotate(${sp * 120 - 30} 232 91)`);
-      $('[data-lamp]').setAttribute('fill', on ? '#fff1dc' : '#c9a27a');
-      $('[data-bsteam]').setAttribute('opacity', sp > .6 ? Math.min(1, (sp - .6) * 3) : 0);
-      const sv = clamp((p - .75) / .25, 0, 1);
-      $('[data-heart]').setAttribute('opacity', sv > .05 ? 1 : 0);
-      $('[data-phone2]').setAttribute('opacity', clamp(sv * 3, 0, 1));
-      $('[data-phone2]').setAttribute('transform', `translate(0 ${(1 - clamp(sv * 2, 0, 1)) * 40})`);
-      hs.forEach((h, i) => { const t = clamp(sv * 2.4 - i * .16, 0, 1); h.setAttribute('opacity', t > 0 && t < 1 ? 1 - t * .5 : 0); h.setAttribute('transform', `translate(${46 + (i % 4) * 10 + Math.sin(i * 2 + t * 6) * 6} ${196 - t * 150}) scale(${1 + t * .8})`); });
+      const g = seg(p, 0, .25), tp = seg(p, .25, .5), sp = seg(p, .5, .75), sv = seg(p, .75, 1);
+      // 1 grind: beans sink, the burr spins, grounds fall into the portafilter
+      const grinding = g > .03 && g < .97;
+      hop.forEach((b, i) => at(b, 'transform', `translate(${+b.dataset.x + (grinding ? Math.sin(i * 3 + g * 60) * 1.1 : 0)} ${+b.dataset.y + sm(g) * 20}) rotate(${+b.dataset.r + g * 50})`));
+      at(E.burr, 'transform', `rotate(${g * 1080} 55 114)`);
+      at(E.grinder, 'transform', `translate(${grinding ? Math.sin(g * 160) * .7 : 0} 0)`); at(E.grinder, 'opacity', (1 - sm(seg(sv, .25, .5))).toFixed(2));
+      grounds.forEach((c, i) => { const f = (g * 8 + i / grounds.length) % 1; at(c, 'cy', (148 + f * 20).toFixed(1)); at(c, 'cx', (55 + Math.sin(i * 2.3 + f * 3) * 3.5).toFixed(1)); at(c, 'opacity', grinding ? 1 : 0); });
+      // 2 tamp: the portafilter slides over, the tamper presses the grounds flat
+      const m1 = sm(seg(tp, 0, .3)), m2 = sm(seg(sp, 0, .3)), tq = seg(tp, .3, 1);
+      const appear = sm(seg(tq, 0, .25)), press = sm(seg(tq, .25, .55)), lift = sm(seg(tq, .72, 1));
+      let px, py, rot = 0;
+      if (sp > 0) { px = lerp(T[0], 0, m2); py = lerp(T[1], 0, m2) - Math.sin(m2 * Math.PI) * 30; rot = -14 * m2 * (1 - sm(seg(sp, .3, .4))); }
+      else { px = lerp(A[0], T[0], m1); py = lerp(A[1], T[1], m1) - Math.sin(m1 * Math.PI) * 16; }
+      at(E.pf, 'transform', `translate(${px.toFixed(1)} ${py.toFixed(1)}) rotate(${rot.toFixed(2)} 280 134)`);
+      const mk = sp > .28 ? 0 : sm(g) * (1 - .65 * press);
+      at(E.mound, 'transform', `translate(0 126) scale(1 ${Math.max(.001, mk).toFixed(3)}) translate(0 -126)`);
+      const ty = lift > 0 ? lerp(0, -70, lift) : -60 + 46 * appear + 14 * press;
+      at(E.tamp, 'transform', `translate(0 ${ty.toFixed(1)})`); at(E.tamp, 'opacity', tq > 0 && lift < 1 ? (Math.min(1, appear * 1.4) * (1 - lift)).toFixed(2) : 0);
+      // 3 pull the shot: lamp on, pressure up, two streams fill the glass
+      const flow = sp > .4 && sp < .97 && sv === 0, fill = sm(seg(sp, .42, .95)), surf = 197 - fill * 26;
+      at(E.bfill, 'y', surf.toFixed(1)); at(E.crema, 'y', (surf - .5).toFixed(1)); at(E.crema, 'opacity', fill > .03 ? 1 : 0);
+      streams.forEach((s, i) => { const w = 2.6 + Math.sin(sp * 60 + i * 2) * .8; at(s, 'height', flow ? (surf - 148).toFixed(1) : 0); at(s, 'width', w.toFixed(2)); at(s, 'x', ((i ? 288.5 : 271.5) - w / 2).toFixed(2)); });
+      const pres = sv > 0 ? 1 - sm(seg(sv, 0, .3)) : sm(seg(sp, .32, .48));
+      at(E.needle, 'transform', `rotate(${(-60 + 110 * pres + (flow ? Math.sin(sp * 70) * 3 : 0)).toFixed(1)} 208 72)`);
+      at(E.needle2, 'transform', `rotate(${(-60 + 95 * sm(seg(p, 0, .5))).toFixed(1)} 354 72)`);
+      at(E.lamp, 'fill', flow ? '#fff1dc' : '#d2b08e'); at(E.glow, 'opacity', flow ? .45 : 0);
+      // 4 serve: the glass goes on the counter, steam, it lands on her phone and the hearts come in
+      const mv = sm(seg(sv, 0, .4));
+      at(E.bcup, 'transform', `translate(${(-130 * mv).toFixed(1)} ${(16 * sm(seg(mv, .5, .85))).toFixed(1)})`);
+      const steamOn = sm(seg(sv, .35, .6)); at(E.steam, 'opacity', steamOn.toFixed(2)); svg.classList.toggle('serve', steamOn > 0);
+      const ph = sm(seg(sv, .3, .6)); at(E.phone, 'opacity', ph.toFixed(2)); at(E.phone, 'transform', `translate(0 ${((1 - ph) * 36).toFixed(1)})`);
+      hs.forEach((h, i) => { const t = seg(sv, .42 + i * .055, .82 + i * .055); at(h, 'opacity', t > 0 && t < 1 ? (1 - t * .6).toFixed(2) : 0); at(h, 'transform', `translate(${(30 + (i % 4) * 11 + Math.sin(i * 2 + t * 6) * 6).toFixed(1)} ${(100 - t * 92).toFixed(1)}) scale(${(1 + t * .6).toFixed(2)})`); });
     };
     set(0);
     return { set };
@@ -1142,7 +1236,8 @@
     const types = Object.keys(CONFIG.ideas), bizEl = $('[data-biz]'), reels = $$('[data-wins] .reel'), wins = $$('[data-wins] .win'), lever = $('[data-lever]'), rod = $('[data-rod]'), bulbs = $('[data-bulbs]');
     bulbs.innerHTML = '<i></i>'.repeat(innerWidth < 600 ? 14 : 22); const B = $$('i', bulbs);
     let type = types[0], spinning = false, lastIdx = -1, chase = 0, fast = false;
-    if (ANIM) gsap.ticker.add(() => { chase += fast ? .5 : .12; B.forEach((b, i) => b.classList.toggle('lit', (i + Math.floor(chase)) % 3 === 0)); });
+    let bvis = false, lastStep = -1; onScreen(bulbs, v => bvis = v, '0px');
+    if (ANIM) gsap.ticker.add(() => { if (!bvis) return; chase += fast ? .5 : .12; const k = Math.floor(chase) % 3; if (k === lastStep) return; lastStep = k; B.forEach((b, i) => b.classList.toggle('lit', (i + k) % 3 === 0)); });
     else B.forEach((b, i) => b.classList.toggle('lit', i % 2 === 0));
     bizEl.innerHTML = types.map((t, i) => `<button type="button" aria-pressed="${i ? 'false' : 'true'}">${esc(t)}</button>`).join('');
     bizEl.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; type = b.textContent; $$('button', bizEl).forEach(x => x.setAttribute('aria-pressed', x === b ? 'true' : 'false')); });
@@ -1366,9 +1461,9 @@
     $('[data-csave]').addEventListener('click', async () => {
       const o = cur(), n = name.value.trim(), W = 1080, H = 1350, c = document.createElement('canvas'); c.width = W; c.height = H; const x = c.getContext('2d');
       const load = s => new Promise(r => { const i = new Image(); i.onload = () => r(i); i.onerror = () => r(null); i.src = s; });
-      const [logo, bean] = await Promise.all([load('img/logo.webp'), load('img/bean.webp')]); await document.fonts.ready;
+      const [logo, bean] = await Promise.all([load('img/logo.webp'), load('img/bean-light.webp')]); await document.fonts.ready;
       x.fillStyle = '#15100c'; x.fillRect(0, 0, W, H);
-      if (bean) { x.save(); x.translate(900, 160); x.rotate(.3); x.filter = 'brightness(1.5)'; x.drawImage(bean, -260, -260, 520, 530); x.restore(); }
+      if (bean) { x.save(); x.translate(900, 160); x.rotate(.3); x.drawImage(bean, -260, -260, 520, 530); x.restore(); }
       x.fillStyle = '#f7f3ec'; x.beginPath(); x.roundRect ? x.roundRect(80, 80, 260, 180, 26) : x.rect(80, 80, 260, 180); x.fill(); if (logo) x.drawImage(logo, 100, 92, 220, 142);
       x.fillStyle = '#c9a27a'; x.font = '700 78px Caveat'; x.fillText(n ? `${n}'s Order` : 'My Order', 80, 820);
       x.fillStyle = '#ffffff'; x.font = '180px Anton'; const words = o.o.toUpperCase().split(' '); words.forEach((w, i) => x.fillText(w, 76, 990 + i * 170 - (words.length - 1) * 170));
@@ -1402,10 +1497,10 @@
   gsap.ticker.add((t, d) => { vel *= .9; paintFills(Math.min(.05, d / 1000)); });
 
   const heroChars = $$('.hero h1 .ch');
-  gsap.set(heroChars, { yPercent: 120, rotation: 12, opacity: 0 }); gsap.set('[data-fillword]', { scale: .6, opacity: 0, rotation: -6 }); gsap.set('[data-in]', { opacity: 0, y: 26 }); gsap.set('.hero .pol', { scale: 0 });
+  gsap.set(heroChars, { yPercent: 120, rotation: 12, opacity: 0 }); gsap.set('[data-fillwrap]', { scale: .6, opacity: 0, rotation: -6 }); gsap.set('[data-in]', { opacity: 0, y: 26 }); gsap.set('.hero .pol', { scale: 0 });
   const heroIn = gsap.timeline({ paused: true })
     .to(heroChars, { yPercent: 0, rotation: 0, opacity: 1, duration: .7, ease: 'back.out(2)', stagger: .03 }, 0)
-    .to('[data-fillword]', { scale: 1, opacity: 1, rotation: 0, duration: .8, ease: 'back.out(2.2)' }, .3)
+    .to('[data-fillwrap]', { scale: 1, opacity: 1, rotation: 0, duration: .8, ease: 'back.out(2.2)' }, .3)
     .to(heroFill, { lvl: 44, duration: 2.2, ease: 'power2.out' }, .6)
     .to('[data-in]', { opacity: 1, y: 0, duration: .8, ease: 'back.out(1.4)', stagger: .07 }, .2)
     .to('.hero .pol', { scale: 1, duration: .8, ease: 'back.out(2.4)', stagger: .12 }, .5)
@@ -1453,10 +1548,10 @@
   // ghost words drift sideways with scroll
   $$('[data-ghost]').forEach(gw => gsap.fromTo(gw, { xPercent: 10 }, { xPercent: -30, ease: 'none', scrollTrigger: { trigger: gw.parentElement, start: 'top bottom', end: 'bottom top', scrub: .5 } }));
   // parallax for polaroids and the collage
-  $$('[data-par]').forEach(el => gsap.to(el, { y: () => +el.dataset.par * 4, ease: 'none', scrollTrigger: { trigger: el.closest('section'), start: 'top bottom', end: 'bottom top', scrub: .6 } }));
-  if (FINE) { const pols = $$('.hero .pol'); addEventListener('pointermove', e => { const x = e.clientX / innerWidth - .5, y = e.clientY / innerHeight - .5; pols.forEach((p, i) => gsap.to(p, { xPercent: x * (12 + i * 8), yPercent: y * (10 + i * 6), duration: .8, overwrite: 'auto' })); }, { passive: true }); }
-  const pop = (sel, trig, st = .07) => { if (!$(trig)) return; gsap.from(sel, { y: 60, rotation: () => gsap.utils.random(-8, 8), opacity: 0, duration: .8, ease: 'back.out(1.6)', stagger: st, scrollTrigger: { trigger: trig, start: 'top 85%' } }); };
-  pop('.mi', '.menu-list', .06); pop('.spot', '.spots', .08); pop('.biz button', '.biz', .05); pop('.slot', '.slot');
+  $$('[data-par]').forEach(el => gsap.fromTo(el, { y: () => -el.dataset.par * .5 }, { y: () => +el.dataset.par * .5, ease: 'none', scrollTrigger: { trigger: el.closest('section'), start: 'top bottom', end: 'bottom top', scrub: .6 } }));
+  if (FINE) { const q = $$('.hero .pol').map(p => [gsap.quickTo(p, 'xPercent', { duration: .8, ease: 'power3' }), gsap.quickTo(p, 'yPercent', { duration: .8, ease: 'power3' })]); addEventListener('pointermove', e => { const x = e.clientX / innerWidth - .5, y = e.clientY / innerHeight - .5; q.forEach(([qx, qy], i) => { qx(x * (8 + i * 5)); qy(y * (6 + i * 4)); }); }, { passive: true }); }
+  const pop = (sel, trig, st = .07, tilt = 8) => { if (!$(trig)) return; gsap.from(sel, { y: tilt ? 60 : 36, rotation: () => gsap.utils.random(-tilt, tilt), opacity: 0, duration: tilt ? .8 : .6, ease: tilt ? 'back.out(1.6)' : 'power3.out', stagger: st, scrollTrigger: { trigger: trig, start: 'top 85%' } }); };
+  pop('.mi', '.menu-list', .06, 0); pop('.spot', '.spots', .08, 0); pop('.biz button', '.biz', .05); pop('.slot', '.slot');
   gsap.from('[data-qstamp]', { scale: 3, opacity: 0, rotation: -30, duration: .5, ease: 'back.out(2.5)', scrollTrigger: { trigger: '[data-qstamp]', start: 'top 82%' } });
   gsap.from('.collage .ph', { scale: .6, opacity: 0, duration: .9, ease: 'back.out(1.5)', stagger: .12, scrollTrigger: { trigger: '.collage', start: 'top 80%' } });
   gsap.from('.collage .stk', { scale: 0, rotation: 40, duration: .6, ease: 'back.out(2.5)', stagger: .15, delay: .4, scrollTrigger: { trigger: '.collage', start: 'top 75%' } });
@@ -1471,17 +1566,18 @@
   ScrollTrigger.create({ trigger: '[data-closing]', start: 'top 85%', end: 'center 45%', scrub: .8, onUpdate: s => { closeFill.lvl = s.progress * 46; } });
 
   // marquees with scroll velocity, opposite directions
+  let xmVis = true; onScreen($('.xm'), v => xmVis = v, '0px');
   $$('[data-marquee]').forEach(tr => { const dir = +tr.dataset.marquee; let x = dir > 0 ? 0 : null, w = 0; const m = () => { w = tr.scrollWidth / 2; if (x === null) x = -w; }; m(); addEventListener('resize', m); document.fonts && document.fonts.ready.then(m);
-    gsap.ticker.add(() => { const s = .8 + Math.abs(vel) * 1.2; x -= s * dir; if (w) { if (x <= -w) x += w; if (x > 0) x -= w; } tr.style.transform = `translate3d(${x}px,0,0)`; }); });
+    gsap.ticker.add(() => { if (!xmVis) return; const s = .8 + Math.abs(vel) * 1.2; x -= s * dir; if (w) { if (x <= -w) x += w; if (x > 0) x -= w; } tr.style.transform = `translate3d(${x}px,0,0)`; }); });
 
   // closing: beans burst when it fills
   (() => {
-    const cv = $('[data-confetti]'), cx = cv.getContext('2d'), img = new Image(); img.src = 'img/bean.webp'; let parts = [], raf = 0;
+    const cv = $('[data-confetti]'), cx = cv.getContext('2d'), img = new Image(); img.src = 'img/bean-light.webp'; let parts = [], raf = 0;
     const burst = () => { const r = cv.getBoundingClientRect(), dpr = Math.min(devicePixelRatio || 1, 2); cv.width = r.width * dpr; cv.height = r.height * dpr; cx.setTransform(dpr, 0, 0, dpr, 0, 0);
       parts = Array.from({ length: innerWidth < 600 ? 28 : 56 }, () => ({ x: r.width / 2, y: r.height * .5, vx: (Math.random() - .5) * 1000, vy: -300 - Math.random() * 800, r: Math.random() * 6, vr: (Math.random() - .5) * 12, s: 16 + Math.random() * 24 }));
       let last = performance.now(); cancelAnimationFrame(raf);
       const tick = now => { const dt = Math.min(.04, (now - last) / 1000); last = now; cx.clearRect(0, 0, r.width, r.height); let alive = 0;
-        for (const p of parts) { p.vy += 1400 * dt; p.x += p.vx * dt; p.y += p.vy * dt; p.r += p.vr * dt; if (p.y < r.height + 40) alive++; cx.save(); cx.translate(p.x, p.y); cx.rotate(p.r); cx.filter = 'brightness(1.6)'; cx.drawImage(img, -p.s / 2, -p.s / 2, p.s, p.s); cx.restore(); }
+        for (const p of parts) { p.vy += 1400 * dt; p.x += p.vx * dt; p.y += p.vy * dt; p.r += p.vr * dt; if (p.y < r.height + 40) alive++; cx.save(); cx.translate(p.x, p.y); cx.rotate(p.r); cx.drawImage(img, -p.s / 2, -p.s / 2, p.s, p.s); cx.restore(); }
         if (alive) raf = requestAnimationFrame(tick); else cx.clearRect(0, 0, r.width, r.height); };
       raf = requestAnimationFrame(tick); };
     ScrollTrigger.create({ trigger: '[data-closing]', start: 'center 50%', onEnter: burst, onEnterBack: burst });

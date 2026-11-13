@@ -27,10 +27,10 @@ export async function mountCup(canvas, o = {}) {
   const SPEED = +(new URLSearchParams(location.search).get('cupspeed') || 1);
   const FINE = matchMedia('(hover: hover) and (pointer: fine)').matches;
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
-  renderer.setPixelRatio(Math.min(devicePixelRatio || 1, SMALL ? 1.75 : 2));
+  renderer.setPixelRatio(Math.min(devicePixelRatio || 1, SMALL ? 1.5 : 1.75));
   renderer.toneMapping = THREE.NeutralToneMapping; renderer.toneMappingExposure = 1.02;
   renderer.outputColorSpace = THREE.SRGBColorSpace;
-  renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap; renderer.shadowMap.autoUpdate = false; renderer.shadowMap.needsUpdate = true;
   renderer.setClearColor(0x000000, 0);
 
   const scene = new THREE.Scene();
@@ -243,7 +243,7 @@ export async function mountCup(canvas, o = {}) {
   }
 
   // ---- loop ----
-  let visible = true, last = performance.now(), raf = 0;
+  let visible = true, last = performance.now(), raf = 0, odd = false;
   function advance(dt) {
     let dirty = false;
     while (true) {
@@ -256,8 +256,13 @@ export async function mountCup(canvas, o = {}) {
     return dirty;
   }
   const frame = now => {
-    raf = 0; const dt = clamp((now - last) / 1000, 0, .1) * SPEED; last = now; t0 += dt;
+    raf = 0;
+    // idle (no pour running): draw every other frame, it only drifts and steams
+    const idle = !cur && !steps.length && !cocoa.visible && pose.in < .001;
+    odd = !odd; if (idle && odd) { if (visible) raf = requestAnimationFrame(frame); return; }
+    const dt = clamp((now - last) / 1000, 0, .1) * SPEED; last = now; t0 += dt;
     const dirty = advance(dt);
+    if (dirty || pose.in > .001) renderer.shadowMap.needsUpdate = true;
     if (simDirty) { drawSim(); simDirty = false; }
     if (dirty) { placeSurface(); setDome(.012 * st.settle); paint(); }
     placePitcher();
