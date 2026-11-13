@@ -2055,7 +2055,7 @@
     const G = {}; if (/[?&]gdebug/.test(location.search)) window.__G = G;
     const ok = im => im && im.complete && im.naturalWidth;
     const rnd = Math.random;
-    const size = () => { dpr = Math.min(1.5, devicePixelRatio || 1); W = innerWidth; H = innerHeight; cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); HY = H * .33; F = (H * .8 - HY) * -CAMZ / CAMH; ZB = CAMH * F / (H - HY) + CAMZ; };
+    const size = () => { dpr = Math.min(window.__G && window.__G.dprCap || 1.5, devicePixelRatio || 1); W = innerWidth; H = innerHeight; cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); HY = H * .33; F = (H * .8 - HY) * -CAMZ / CAMH; ZB = CAMH * F / (H - HY) + CAMZ; };
     const P = (x, y, z) => { const d = Math.max(.08, z - CAMZ), s = F / d; return [W / 2 + (x - G.cam) * s + G.shx, HY + (CAMH - y) * s + G.shy, s]; };
     const fog = z => Math.max(0, Math.min(1, 1 - (z - 50) / 30));
     const vib = ms => { try { navigator.vibrate && navigator.vibrate(ms); } catch (e) {} };
@@ -2333,6 +2333,7 @@
       if (gt) { if (gt !== goLast) { goEl.textContent = gt; goEl.classList.remove('pop'); void goEl.offsetWidth; goEl.classList.add('pop'); } goEl.hidden = false; } else goEl.hidden = true; goLast = gt; };
 
     const loop = t => { raf = requestAnimationFrame(loop); const dt = Math.min(.05, (t - (last || t)) / 1000); last = t; if (G.paused) return; step(dt); draw(); };
+    if (window.__G) Object.assign(window.__G, { _step: step, _draw: draw, _act: act });
 
     /* ---------- the screen around it ---------- */
     let hudScore, hudBt, boostEl, goEl, howEl, overEl;
