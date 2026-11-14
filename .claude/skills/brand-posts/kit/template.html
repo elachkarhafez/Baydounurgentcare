@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<!-- 1. the brand's own fonts (from brief.json); Google Fonts only -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;800&family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<style>
+/* 2. the brand's own palette (from brief.json color_tokens / top_hex and the logo) */
+:root { --ink: #12301f; --ground: #f5f3f0; --accent: #2d5a3d; --pop: #d30002; --gold: #c4a57b; }
+* { box-sizing: border-box; }
+body { margin: 0; background: #777; display: flex; flex-wrap: wrap; gap: 40px; padding: 40px; }
+body.solo { padding: 0; gap: 0; background: none; }
+.post { position: relative; overflow: hidden; font-family: Inter, sans-serif; color: var(--ink); background: var(--ground); }
+.feed { width: 1080px; height: 1350px; }   /* 4:5 feed post */
+.square { width: 1080px; height: 1080px; }
+.reel { width: 1080px; height: 1920px; }   /* 9:16 reel / story: keep text inside 1080x1420 centered (top 250, bottom 250 are UI) */
+.h { margin: 0; font-weight: 800; letter-spacing: -.04em; line-height: .95; }
+.photo { position: absolute; background: center/cover no-repeat; }
+.w { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: .16em; margin-bottom: -.16em; }
+.w > span { display: inline-block; }
+</style></head><body>
+
+<!-- 3. one element per post. data-post + an id. Size class sets the canvas. Images are files in img/ from grab.py -->
+<div class="post feed" data-post id="p1">
+  <div class="photo" data-zoom style="inset: 0; background-image: url(img/hero.webp)"></div>
+  <div style="position: absolute; left: 80px; right: 80px; bottom: 100px">
+    <h1 class="h" data-words style="font-size: 140px">Headline in their words</h1>
+    <p data-rise style="font: 500 36px/1.4 Inter; margin: 24px 0 0">One supporting line, a real fact from their site or posts.</p>
+  </div>
+</div>
+
+<script>
+// ---- helpers: everything moves on a paused GSAP timeline, never CSS animations (the renderer steps time itself)
+const TL = {}, CUES = {};
+const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+// split a heading into words that rise from behind a mask
+function words(el) { if (el.dataset.split) return $$('.w > span', el); el.dataset.split = 1; el.innerHTML = el.innerHTML.split(/(\s+|<[^>]+>)/).map(t => /^\s+$|^<|^$/.test(t) ? t : `<span class="w"><span>${t}</span></span>`).join(''); return $$('.w > span', el); }
+const A = {
+  words: (tl, el, at = 0, o = {}) => tl.from(words(typeof el === 'string' ? $(el) : el), { yPercent: 110, duration: .7, ease: 'power4.out', stagger: .06, ...o }, at),
+  rise: (tl, t, at = 0, o = {}) => tl.from(t, { y: 50, opacity: 0, duration: .7, ease: 'power3.out', stagger: .08, ...o }, at),
+  pop: (tl, t, at = 0, o = {}) => tl.from(t, { scale: .3, opacity: 0, rotation: -8, duration: .6, ease: 'back.out(2.2)', stagger: .07, ...o }, at),
+  wipe: (tl, t, at = 0, o = {}) => tl.fromTo(t, { clipPath: 'inset(100% 0 0 0)' }, { clipPath: 'inset(0% 0 0 0)', duration: .9, ease: 'power3.inOut', ...o }, at),
+  zoom: (tl, t, dur, o = {}) => tl.fromTo(t, { scale: 1.14 }, { scale: 1, duration: dur, ease: 'power1.out', ...o }, 0),   // slow push on a photo, whole post
+  float: (tl, t, at, dur, o = {}) => tl.to(t, { y: -18, duration: 1.2, ease: 'sine.inOut', yoyo: true, repeat: Math.max(1, Math.floor(dur / 1.2) | 1), ...o }, at),
+  count: (tl, el, to, at = 0, o = {}) => { const v = { n: 0 }; return tl.to(v, { n: to, duration: 1.2, ease: 'power2.out', onUpdate: () => { el.textContent = Math.round(v.n); }, ...o }, at); },
+  hold: (tl, total) => tl.to({}, { duration: Math.max(0, total - tl.duration()) }),          // pad the end so the finished frame holds
+};
+
+// ---- 4. one paused timeline per animated post. 6-9 s: build in by ~2.5 s, then hold with slow motion so it reads.
+{ const p = $('#p1'), tl = TL.p1 = gsap.timeline({ paused: true });
+  A.zoom(tl, $('[data-zoom]', p), 8);
+  A.words(tl, $('[data-words]', p), .3);
+  A.rise(tl, $('[data-rise]', p), 1.0);
+  A.hold(tl, 8);
+  CUES.p1 = [[.3, 'whoosh', .5], [1.0, 'pop', .5]];   // optional: kit/snd names or file paths, [seconds, name, gain]
+}
+</script>
+</body></html>
