@@ -87,3 +87,6 @@ A client judges a shop site by whether *their products* are on it. Don't settle 
 - A brand-new *kind* of object (a car, a building, liquid in a glass) is a new primitive: budget an hour the first time, then it's in the kit.
 - Software-rendered headless checks can't tell you real-phone frame rate; adaptive quality covers most of it.
 - True photorealism of a specific real product needs real photos/video or AI frames (Higgsfield credits). build3d gets close for food and objects made of simple shapes.
+
+## og/card.mjs: link preview cards
+`node kit/og/card.mjs <site> https://<project>.vercel.app [card.html]` renders `<site>/render/og.html` (a 1200x630 page that can use ../media and ../brand files) to `media/og.jpg`, writes a 180px apple-touch-icon from media/icon.png, and rewrites the og/twitter/canonical tags with absolute URLs and a cache-busting version. Run it again whenever the card or the live URL changes.

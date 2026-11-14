@@ -2,6 +2,14 @@
 
 Each folder is a single-file client website built with the `ela-studio` skill (`.claude/skills/ela-studio/`) and deployed to Vercel (team `team_AYB0SFZ1qQkp6TebSji5xEKA`).
 
+## Standing rule: every site gets a custom link preview (newest)
+
+The user said: "From now on each website should have a custom preview link". When the link is texted or shared (iMessage, WhatsApp, Instagram DMs, Slack), it must unfurl into a designed card, not a blank or generic one.
+- Design a 1200x630 card per site in `<site>/render/og.html` (render/ is excluded from deploys): the business's real logo (vectorised or rendered), one or two of their best photos, the name, a one-line hook and the location or key fact (opening date, city). Brand colours lead, text stays clear of photos, nothing smaller than about 20px.
+- Run `node .claude/skills/ela-studio/kit/og/card.mjs <site> https://<project>.vercel.app` after the project name is known. It renders `media/og.jpg`, makes a 180px `apple-touch-icon.png`, and rewrites the head with ABSOLUTE og/twitter tags (og:url, og:image with a cache-busting ?v=, width/height/alt, twitter:card summary_large_image, canonical). Relative og:image paths do not unfurl in most apps.
+- Look at the rendered card before shipping, and after deploying curl the og:image URL for a 200.
+- If the user means a custom domain instead, a domain costs money: ask before buying one.
+
 ## Standing rule: when a business doesn't want their site
 
 Newest instruction from the user: "When i say pause or said no i mean delete the entire damn project to free up space". The team sits at the 200-project Hobby limit, so a declined business's Vercel project gets deleted, not just paused. **Newer clarification (overrides the "pause" part above):** "No when i tell you they didnt want it you delete, when i say pause it just means pause". So "pause X" = only `pause_project` on Vercel (no deletion link, no DECLINED marker). Delete only when the user says the business didn't want it / said no / passed / not interested.
