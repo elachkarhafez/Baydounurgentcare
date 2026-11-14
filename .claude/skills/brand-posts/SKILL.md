@@ -1,6 +1,6 @@
 ---
 name: brand-posts
-description: Make high quality social posts for a brand (from its website and straight from its Instagram), as still images and animated videos (feed posts, carousels, reels/stories) with motion and sound, built from the brand's own photos, logo, colors, fonts and words. Use when the user types /brand-posts <brand>, or asks for posts, content, animated posts, reels, promo graphics or "example posts" for a business or brand, including to show a client. Covers finding the brand, pulling real assets, writing the post set, animating, rendering MP4s with sound, QA and delivery.
+description: Make high quality social posts for a brand (from its website and straight from its Instagram), as still images and animated videos (feed posts, carousels, reels/stories) with motion and sound, built from the brand's own photos, logo, colors, fonts and words. Use when the user types /brand-posts followed by a brand name, or asks for posts, content, animated posts, reels, promo graphics or "example posts" for a business or brand, including to show a client. Covers finding the brand, pulling real assets, writing the post set, animating, rendering MP4s with sound, QA and delivery.
 ---
 
 # Brand posts: stills and animated videos from the brand's real assets
