@@ -29,7 +29,7 @@ def text(name, body, font, size, space, z, material, depth, bevel):
 
 chrome_t = mat('chromeText', (0.93, 0.94, 0.96), 1, 0.07)
 word = text('word', 'MYDRIVE', 'michroma.ttf', 0.95, 1.06, -1.30, chrome_t, 0.05, 0.007)
-desc = text('desc', 'COLLISION', 'montserrat-600.ttf', 0.27, 1.75, -2.30, steel, 0.02, 0.003)
+desc = text('desc', 'AUTO SALES', 'montserrat-600.ttf', 0.27, 1.75, -2.30, steel, 0.02, 0.003)
 for sx in (-1, 1):  # copper rules either side of the descriptor
     bpy.ops.mesh.primitive_cube_add(size=1, location=(sx * 1.74, 0, -2.42))
     r = bpy.context.active_object; r.scale = (0.62, 0.02, 0.012); r.data.materials.append(copper)
