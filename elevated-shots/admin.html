@@ -423,6 +423,7 @@
         <div class="sg" data-tab="look" data-sshg><span class="sg-h" data-sshoth>Shots</span><div class="sshots" data-sshots role="group" aria-label="Pick shots"></div><p class="sg-note" data-sshotn hidden>This one shows a single shot. Tap the one you want.</p></div>
         <div class="sg" data-tab="photo"><span class="sg-h">Your photo</span>
           <div class="sph"><label class="btn sm"><span data-sphaddl>Add a photo</span><input class="vh" type="file" accept="image/*" data-sphfile></label><button class="btn sm" type="button" data-sphrm hidden>Remove photo</button></div>
+          <div class="chips" data-sphuse hidden style="margin-bottom:10px"><button type="button" data-phuse="piece" aria-pressed="false">Add to the story</button><button type="button" data-phuse="bg" aria-pressed="false">Use as background</button></div>
           <div data-sphctl hidden>
             <div class="chips" role="group" aria-label="How the photo shows"><button type="button" data-spm="bg" aria-pressed="false">Background</button><button type="button" data-spm="frame" aria-pressed="false">Framed</button><button type="button" data-spm="none" aria-pressed="false">None</button></div>
             <label class="szoom"><span class="sg-h">Zoom</span><input type="range" min="1" max="3" step="0.01" value="1" data-spz aria-label="Zoom the photo"></label>
@@ -1657,6 +1658,23 @@
             else { const tw = c.measureText(items[last]).width, cx = tx0 + tw / 2, cy = y0 + 206 + last * 92; c.beginPath(); for (let q = 0; q <= 60; q++) { const a = -2.2 + q / 60 * 6.9; c.lineTo(cx + Math.cos(a) * (tw / 2 + 40 + q * .2), cy + Math.sin(a) * (52 - q * .15)); } c.stroke(); } }
         }
       },
+      hours: {
+        name: () => 'Hours',
+        box: (c, L) => { const n = String(L.tx || '').split('\n').filter(x => x.trim()).length; return { w: 840, h: (L.title ? 130 : 56) + n * 96 + 44 }; },
+        draw(c, L, t, st) {
+          const sh = st.brand === 'sh', rows = String(L.tx || '').split('\n').map(x => x.trim()).filter(Boolean).map(x => { const m = x.match(/^(.*?)\s+((?:\d|closed|hours|open).*)$/i); return m ? [m[1], m[2]] : [x, '']; });
+          const b = KIND.hours.box(c, L), w = b.w, h = b.h, x0 = -w / 2, y0 = -h / 2, dark = !!L.dark, acc = L.col || (sh ? SH.copper : '#ffb330'), ink2 = dark ? (sh ? SH.cream : CREAM) : (sh ? SH.navy : INK), soft = dark ? 'rgba(255,248,235,.32)' : 'rgba(20,30,40,.22)';
+          c.save(); shadowOn(c, .22, 50, 16); rr(c, x0, y0, w, h, 44); c.fillStyle = dark ? (sh ? SH.navy : INK) : (sh ? '#fffaf1' : '#fffdf6'); c.fill(); c.restore();
+          let y = y0 + 40; c.textBaseline = 'alphabetic';
+          if (L.title) { c.textAlign = 'center'; c.fillStyle = ink2; c.font = sh ? SF.fr6(60) : FT.anton(66); c.fillText(String(L.title), 0, y + 56); y += 90; c.fillStyle = soft; c.fillRect(x0 + 60, y - 6, w - 120, 2); y += 10; }
+          const today = new Date().toLocaleDateString('en-US', { weekday: 'long', timeZone: 'America/Detroit' }).toLowerCase();
+          rows.forEach(([d, tm], i) => { const ry = y + i * 96, on = L.today !== false && d.toLowerCase().startsWith(today.slice(0, 3)), mid = ry + 48;
+            if (on) { c.save(); rr(c, x0 + 30, ry + 6, w - 60, 84, 42); c.fillStyle = acc; c.fill(); c.restore(); }
+            const fc = on ? (lum(acc) < .55 ? '#fff' : (sh ? SH.navy : INK)) : ink2; c.fillStyle = fc; c.font = (sh ? SF.man : FT.osw)(40); c.textAlign = 'left'; const dw = c.measureText(d).width; c.fillText(d, x0 + 66, mid + 14);
+            c.textAlign = 'right'; c.font = (sh ? SF.man8 : FT.anton)(40); const tw = c.measureText(tm).width; c.fillText(tm, w / 2 - 66, mid + 14);
+            if (!on && tm) { c.fillStyle = soft; for (let dx = x0 + 66 + dw + 22; dx < w / 2 - 66 - tw - 20; dx += 16) { c.beginPath(); c.arc(dx, mid + 4, 2.6, 0, 6.3); c.fill(); } } });
+        }
+      },
       bottle: {
         name: L => (FL[L.bt] || FL.og).name,
         box: L => { const im = IMG && IMG.b[L.bt || 'og'], h = L.h || 700; return { w: im ? h * im.width / im.height : h * .41, h }; },
@@ -1727,8 +1745,8 @@
         }
       }
     };
-    const KADD_ES = [['text', 'Text'], ['bottle', 'Bottle'], ['eslogo', 'Logo'], ['icon', 'Ingredient'], ['pill', 'Button'], ['bubbleR', 'Blue bubble'], ['bubbleL', 'Grey bubble'], ['notif', 'Notification'], ['nametag', 'Name tag'], ['ticket', 'Ticket'], ['tagbar', '| Label'], ['stamp', 'Stamp'], ['shelftag', 'Price tag'], ['sign', 'Store sign'], ['card', 'Email'], ['list', 'List'], ['arrow', 'Arrow'], ['circle', 'Circle'], ['heart', 'Heart'], ['spark', 'Sparkle'], ['line', 'Underline'], ['photo', 'Your photo']];
-    const KADD = [['text', 'Text'], ['drink', 'Drink'], ['logo', 'Logo'], ['bubbleR', 'Blue bubble'], ['bubbleL', 'Grey bubble'], ['notif', 'Notification'], ['tagbar', '| Label'], ['stamp', 'Stamp'], ['shelftag', 'Price tag'], ['sign', 'Store sign'], ['card', 'Email'], ['list', 'List'], ['tray', 'Silver tray'], ['arrow', 'Arrow'], ['circle', 'Circle'], ['heart', 'Heart'], ['spark', 'Sparkle'], ['line', 'Underline'], ['photo', 'Your photo']];
+    const KADD_ES = [['text', 'Text'], ['bottle', 'Bottle'], ['eslogo', 'Logo'], ['icon', 'Ingredient'], ['pill', 'Button'], ['bubbleR', 'Blue bubble'], ['bubbleL', 'Grey bubble'], ['notif', 'Notification'], ['nametag', 'Name tag'], ['ticket', 'Ticket'], ['tagbar', '| Label'], ['stamp', 'Stamp'], ['shelftag', 'Price tag'], ['sign', 'Store sign'], ['card', 'Email'], ['list', 'List'], ['hours', 'Hours list'], ['arrow', 'Arrow'], ['circle', 'Circle'], ['heart', 'Heart'], ['spark', 'Sparkle'], ['line', 'Underline'], ['photo', 'Your photo']];
+    const KADD = [['text', 'Text'], ['drink', 'Drink'], ['logo', 'Logo'], ['bubbleR', 'Blue bubble'], ['bubbleL', 'Grey bubble'], ['notif', 'Notification'], ['tagbar', '| Label'], ['stamp', 'Stamp'], ['shelftag', 'Price tag'], ['sign', 'Store sign'], ['card', 'Email'], ['list', 'List'], ['hours', 'Hours list'], ['tray', 'Silver tray'], ['arrow', 'Arrow'], ['circle', 'Circle'], ['heart', 'Heart'], ['spark', 'Sparkle'], ['line', 'Underline'], ['photo', 'Your photo']];
     const newPiece = (k, st) => {
       const b = { id: nid(), x: 540, y: 900, s: 1, r: 0, a: 'pop', at: 0 };
       const es = st.brand !== 'sh';
@@ -1749,6 +1767,7 @@
       if (k === 'sign') return Object.assign(b, { k: 'sign', tx: es ? 'Shots' : 'Coffee', sub: brandName(st), arrow: 'l', col: es ? INK : SH.navy, tcol: es ? JUICE : SH.cream });
       if (k === 'card') return Object.assign(b, { k: 'card', title: 'Out of office', tx: 'Write your note here.' });
       if (k === 'tray') return Object.assign(b, { k: 'tray', w: 780 });
+      if (k === 'hours') return Object.assign(b, { k: 'hours', title: 'Our hours', tx: es ? 'Monday Hours here\nTuesday Hours here\nWednesday Hours here\nThursday Hours here\nFriday Hours here\nSaturday Hours here\nSunday Hours here' : 'Monday 7 AM–7 PM\nTuesday 7 AM–7 PM\nWednesday 7 AM–7 PM\nThursday 7 AM–7 PM\nFriday 7 AM–7 PM\nSaturday 7 AM–7 PM\nSunday 7 AM–7 PM', a: 'rise' });
       if (k === 'list') return Object.assign(b, { k: 'list', title: 'To do', tx: 'Coffee\nMore coffee', a: 'type' });
       if (k === 'photo') return Object.assign(b, { k: 'photo', shape: 'round', w: 700, hh: 860 });
       return Object.assign(b, { k: 'doodle', d: k, col: es ? '#e0432b' : SH.copper, a: 'draw' });
@@ -1876,8 +1895,16 @@
         T_({ k: 'text', tx: TODAYL, f: 'clean', sz: 44, col: 'rgba(255,255,255,.85)', x: 540, y: 270, a: 'fade', at: .1 }),
         T_({ k: 'text', tx: '7:00', f: 'thin', sz: 300, col: '#fff7ea', x: 540, y: 470, a: 'rise', at: .25 }),
         T_({ k: 'drink', dk: 'iced-adeni', h: 880, x: 540, y: 1060, a: 'rise', at: .5 }),
-        T_({ k: 'notif', title: 'Shibam Coffee', tx: `We're open ${TODAY} inside Meijer. Come say hi.`, x: 540, y: 1440, a: 'slide', at: 1.3 }),
+        T_({ k: 'notif', title: 'Shibam Coffee', tx: 'Open today from 7 AM to 7 PM inside Meijer. Come say hi.', x: 540, y: 1440, a: 'slide', at: 1.3 }),
         T_({ k: 'notif', title: 'Shibam Coffee', when: '2m ago', tx: 'Your Iced Adeni is ready when you are.', x: 540, y: 1622, a: 'slide', at: 2 })
+      ] },
+      sh_week: { name: 'Weekly hours', bg: 'window', make: () => [
+        T_({ k: 'logo', h: 130, x: 540, y: 250, a: 'fade', at: .1 }),
+        T_({ k: 'text', tx: 'Open every day', f: 'serif', sz: 92, col: SH.navy, x: 540, y: 440, a: 'rise', at: .25 }),
+        T_({ k: 'text', tx: '7 AM to 7 PM, inside Meijer', f: 'italic', sz: 50, col: SH.copper, x: 540, y: 540, a: 'fade', at: .6 }),
+        T_({ k: 'hours', title: '', tx: 'Monday 7 AM–7 PM\nTuesday 7 AM–7 PM\nWednesday 7 AM–7 PM\nThursday 7 AM–7 PM\nFriday 7 AM–7 PM\nSaturday 7 AM–7 PM\nSunday 7 AM–7 PM', x: 540, y: 1000, a: 'rise', at: .9 }),
+        T_({ k: 'drink', dk: 'iced-adeni', h: 380, x: 905, y: 1555, r: .07, a: 'rise', at: 1.6 }),
+        foot(SH.muted)
       ] },
       sh_open: { name: 'Door sign', v: 2, bg: 'window', make: () => [
         T_({ k: 'logo', h: 140, x: 540, y: 290, a: 'fade', at: .1 }),
@@ -2282,8 +2309,8 @@
     });
 
     /* the side panel */
-    const FK = { text: [['tx', 'Text', 1]], bubble: [['tx', 'Message', 1]], notif: [['title', 'App name'], ['tx', 'Message', 1], ['when', 'Time']], card: [['title', 'Subject'], ['tx', 'Message', 1], ['when', 'Top right']], shelftag: [['big', 'Big line'], ['tx', 'Bottom line'], ['sub', 'Top line']], sign: [['tx', 'Sign'], ['sub', 'Small line']], tagbar: [['tx', 'Label', 1]], stamp: [['big', 'Middle'], ['tx', 'Around the edge']], chathead: [['tx', 'Name'], ['sub', 'Under the name']], pill: [['tx', 'Words']], nametag: [['tx', 'Name'], ['sub', 'Bottom line']], ticket: [['tx', 'Title'], ['d1', 'Line 1'], ['d2', 'Line 2'], ['d3', 'Line 3'], ['stub', 'Side stub']], list: [['title', 'Title'], ['tx', 'One item per line', 1]] };
-    const COLK = { list: 'col', pill: 'col', nametag: 'col', ticket: 'col', text: 'col', bubble: 'col', tagbar: 'col', stamp: 'col', doodle: 'col', shelftag: 'col', sign: 'col', chathead: 'col' };
+    const FK = { text: [['tx', 'Text', 1]], bubble: [['tx', 'Message', 1]], notif: [['title', 'App name'], ['tx', 'Message', 1], ['when', 'Time']], card: [['title', 'Subject'], ['tx', 'Message', 1], ['when', 'Top right']], shelftag: [['big', 'Big line'], ['tx', 'Bottom line'], ['sub', 'Top line']], sign: [['tx', 'Sign'], ['sub', 'Small line']], tagbar: [['tx', 'Label', 1]], stamp: [['big', 'Middle'], ['tx', 'Around the edge']], chathead: [['tx', 'Name'], ['sub', 'Under the name']], pill: [['tx', 'Words']], nametag: [['tx', 'Name'], ['sub', 'Bottom line']], ticket: [['tx', 'Title'], ['d1', 'Line 1'], ['d2', 'Line 2'], ['d3', 'Line 3'], ['stub', 'Side stub']], list: [['title', 'Title'], ['tx', 'One item per line', 1]], hours: [['title', 'Title (leave empty for none)'], ['tx', 'One day per line, like Monday 7 AM–7 PM', 1]] };
+    const COLK = { hours: 'col', list: 'col', pill: 'col', nametag: 'col', ticket: 'col', text: 'col', bubble: 'col', tagbar: 'col', stamp: 'col', doodle: 'col', shelftag: 'col', sign: 'col', chathead: 'col' };
     const ANI = [['fade', 'Fade'], ['rise', 'Rise'], ['pop', 'Pop'], ['drop', 'Drop'], ['slide', 'Slide down'], ['left', 'Slide in'], ['swing', 'Swing'], ['type', 'Type'], ['draw', 'Draw'], ['none', 'None']];
     const sws = (cur, at) => swOf(S).map(([n, c]) => `<button type="button" class="sw" data-${at}="${c}" aria-label="${n}" aria-pressed="${String(cur || '').toLowerCase() === c.toLowerCase()}" style="--c:${c}"></button>`).join('');
     const chipRow = (lab, items, at, cur) => `<div class="lrow"><span class="sg-h">${lab}</span><div class="chips">${items.map(([k, n]) => `<button type="button" data-${at}="${k}" aria-pressed="${cur === k}">${n}</button>`).join('')}</div></div>`;
@@ -2302,6 +2329,7 @@
       if (L.k === 'bottle') h += togRow([['glow', 'Glow', L.glow], ['shd', 'Floor shadow', L.shd !== false]]);
       if (L.k === 'icon') h += chipRow('Ingredient', ICO.slice(0, 8).map((k, i) => [String(i), LBL[k]]), 'lic', String(L.ic || 0));
       if (L.k === 'list') h += togRow([['check', 'Tick boxes', L.check]]);
+      if (L.k === 'hours') h += togRow([['today', 'Highlight today', L.today !== false], ['dark', 'Dark card', L.dark]]);
       if (L.k === 'pill') h += togRow([['line', 'Outline', L.line]]);
       if (L.k === 'list') h += togRow([['circ', 'Circle the last item', L.circ !== false]]);
       if (L.k === 'sign') h += togRow([['hang', 'Door sign', L.hang]]);
@@ -2325,8 +2353,8 @@
     const focusField = () => { const i = $('[data-ssel] textarea, [data-ssel] input[type="text"]'); if (!i) return; $('.story-ctl').scrollTo({ top: 0, behavior: 'smooth' }); try { i.focus({ preventScroll: true }); i.select && i.select(); } catch (e) {} };
     const toTop = () => { const c = $('.story-ctl'); if (c) c.scrollTo({ top: 0, behavior: 'smooth' }); };
     const buildLays = () => { const el = $('[data-slays]'); if (!el || !isStudio(S)) return; const ls = sceneOf(S).layers; el.innerHTML = ls.slice().reverse().map(L => `<button type="button" data-lsel="${L.id}" aria-pressed="${L.id === sel}">${esc(KIND[L.k] ? KIND[L.k].name(L) : L.k)}</button>`).join(''); };
-    const ADDG = { sh: [['Words', ['text', 'tagbar', 'bubbleR', 'bubbleL', 'notif', 'card']], ['Coffee', ['drink', 'logo', 'tray']], ['Stickers', ['stamp', 'shelftag', 'sign', 'list']], ['Doodles', ['arrow', 'circle', 'heart', 'spark', 'line']], ['Photo', ['photo']]],
-      es: [['Words', ['text', 'tagbar', 'pill', 'bubbleR', 'bubbleL', 'notif', 'card']], ['Shots', ['bottle', 'eslogo', 'icon']], ['Stickers', ['nametag', 'ticket', 'stamp', 'shelftag', 'sign', 'list']], ['Doodles', ['arrow', 'circle', 'heart', 'spark', 'line']], ['Photo', ['photo']]] };
+    const ADDG = { sh: [['Words', ['text', 'tagbar', 'bubbleR', 'bubbleL', 'notif', 'card']], ['Coffee', ['drink', 'logo', 'tray']], ['Stickers', ['hours', 'stamp', 'shelftag', 'sign', 'list']], ['Doodles', ['arrow', 'circle', 'heart', 'spark', 'line']], ['Photo', ['photo']]],
+      es: [['Words', ['text', 'tagbar', 'pill', 'bubbleR', 'bubbleL', 'notif', 'card']], ['Shots', ['bottle', 'eslogo', 'icon']], ['Stickers', ['hours', 'nametag', 'ticket', 'stamp', 'shelftag', 'sign', 'list']], ['Doodles', ['arrow', 'circle', 'heart', 'spark', 'line']], ['Photo', ['photo']]] };
     const buildAdds = () => { const el = $('[data-sadds]'); if (!el || el.dataset.b === S.brand) return; el.dataset.b = S.brand; const nm = Object.fromEntries((S.brand === 'sh' ? KADD : KADD_ES)); el.innerHTML = ADDG[S.brand === 'sh' ? 'sh' : 'es'].map(([g, ks]) => `<h4>${g}</h4><div>${ks.filter(k => nm[k]).map(k => `<button type="button" data-ladd="${k}">${esc(nm[k])}</button>`).join('')}</div>`).join(''); };
     const bgThumbs = () => {
       if (!IMG || (S.brand === 'sh' && !SHI)) return; const wk = bgThumbs.wk || (bgThumbs.wk = mk(270, 480)), x = wk.getContext('2d');
@@ -2343,15 +2371,21 @@
     const restoreSnap = js => { const o = JSON.parse(js); if (o.t !== S.tpl) return; if (!S.lay || typeof S.lay !== 'object') S.lay = {}; if (o.l) S.lay[o.t] = o.l; else delete S.lay[o.t]; if (sel && !pieceById(sel)) sel = null; TXK.clear(); buildSel(); buildBgs(); changed(true); syncQa(); };
     const undo = () => { if (!HIS.u.length) return; const cur = snap(), prev = HIS.u.pop(); HIS.r.push(cur); restoreSnap(prev); };
     const redo = () => { if (!HIS.r.length) return; const cur = snap(), nx = HIS.r.pop(); HIS.u.push(cur); restoreSnap(nx); };
+    // a photo added on a design with no photo spot goes onto the story as its own piece
+    const usesPhoto = () => { const sc = sceneOf(S); return sc.bg === 'photo' || sc.layers.some(l => l.k === 'photo'); };
+    const photoPiece = () => { remember(); const sc = editScene(), L = newPiece('photo', S), ar = PH ? PH.h / PH.w : 1.2, w = ar > 1.3 ? 640 : 780; Object.assign(L, { shape: 'round', w, hh: Math.round(Math.min(1150, w * ar)), x: 540, y: 960, a: 'pop' }); sc.layers.push(L); sel = L.id; buildSel(); setTab('edit'); changed(true); };
+    const photoIn = () => { if (!isStudio(S) || !PH) return false; if (!usesPhoto()) { photoPiece(); toast('Photo added. Drag it to move it, pinch to resize.'); return true; } return false; };
+    const syncPhUse = () => { const el = $('[data-sphuse]'); if (!el) return; const on = isStudio(S) && !!PH; el.hidden = !on; if (on) { const bg = sceneOf(S).bg === 'photo'; $('[data-phuse="bg"]').setAttribute('aria-pressed', bg); } };
     const syncStudio = () => {
       const stu = isStudio(S); $('[data-sed]').hidden = !stu; $('.story-frame').classList.toggle('edit', stu);
       $('[data-svars]').closest('.sg').hidden = stu; $('[data-sf="head"]').closest('.sg').hidden = stu; $('.stogs').hidden = stu;
       if (stu) { ['[data-svisg]', '[data-sdrg]', '[data-sshg]'].forEach(s => { $(s).hidden = true; }); buildAdds(); buildBgs(); }
       if (syncStudio.tpl !== S.tpl + S.brand) { syncStudio.tpl = S.tpl + S.brand; HIS.u = []; HIS.r = []; sel = null; }
-      buildSel(); buildTabs(); syncQa();
+      buildSel(); buildTabs(); syncQa(); syncPhUse();
     };
     SM.addEventListener('click', e => {
       const tb = e.target.closest('[data-stab]'); if (tb) { setTab(tb.dataset.stab); return; }
+      const pu = e.target.closest('[data-phuse]'); if (pu && isStudio(S) && PH) { if (pu.dataset.phuse === 'piece') { photoPiece(); toast('Photo added. Drag it to move it, pinch to resize.'); } else { remember(); editScene().bg = 'photo'; buildBgs(); changed(true); toast('Your photo is the background now'); } syncPhUse(); return; }
       if (!isStudio(S)) return; const t = e.target;
       const qa = t.closest('[data-qa]'); if (qa) { const k = qa.dataset.qa, L = sel && pieceById(sel);
         if (k === 'undo') undo(); else if (k === 'redo') redo();
@@ -2378,7 +2412,7 @@
       let b;
       if ((b = t.closest('[data-lf]'))) { const FS = { caps: 1, clean: 1.2, bold: 1.15, serif: 1.9, italic: 1.8, script: 2.2, thin: 3, poster: 2.6, narrow: 1.4 }, nf = b.dataset.lf; L.sz = Math.round((L.sz || 60) * (FS[nf] || 1) / (FS[L.f] || 1)); return set('f', nf); }
       if ((b = t.closest('[data-la]'))) return set('al', b.dataset.la);
-      if ((b = t.closest('[data-ltog]'))) { const k = b.dataset.ltog; return set(k, k === 'shd' ? L.shd === false : k === 'circ' ? L.circ === false : !L[k]); }
+      if ((b = t.closest('[data-ltog]'))) { const k = b.dataset.ltog; return set(k, k === 'shd' ? L.shd === false : k === 'circ' ? L.circ === false : k === 'today' ? L.today === false : !L[k]); }
       if ((b = t.closest('[data-ldk]'))) return set('dk', b.dataset.ldk);
       if ((b = t.closest('[data-lbt]'))) return set('bt', b.dataset.lbt);
       if ((b = t.closest('[data-lic]'))) return set('ic', +b.dataset.lic);
@@ -2435,7 +2469,7 @@
         x.imageSmoothingEnabled = true; x.imageSmoothingQuality = 'high'; x.drawImage(img, 0, 0, cv.width, cv.height);
         PH = { c: cv, w: cv.width, h: cv.height, id: ++phId }; box = null;
         Object.assign(S, { ph: PH.id, px: 0, py: 0, pz: 1 }); if (S.pm === 'none') S.pm = 'frame';
-        memo.clear(); sync(); changed(true); toast('Photo added. Drag it to move it.');
+        memo.clear(); sync(); changed(true); if (!photoIn()) toast('Photo added. Drag it to move it.');
       } catch (e) { toast("Couldn't open that photo. Try a JPG or PNG."); }
       finally { URL.revokeObjectURL(u); }
     };
