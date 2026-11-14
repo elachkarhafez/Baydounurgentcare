@@ -96,6 +96,60 @@ body.menu-open .sheet{transform:none;visibility:visible}
 html.opening .up{animation-play-state:paused}
 @keyframes upin{to{opacity:1;transform:none}}
 
+/* ---------- countdown ---------- */
+.cd{overflow:hidden;background:radial-gradient(70% 60% at 50% 40%,#101a30 0%,var(--bg) 70%)}
+.cd .glow{position:absolute;left:50%;top:44%;width:min(120vw,900px);aspect-ratio:2/1;transform:translate(-50%,-50%);background:radial-gradient(closest-side,rgba(201,138,90,.16),transparent);pointer-events:none;animation:beat 1s ease-out infinite}
+@keyframes beat{0%{opacity:.55;transform:translate(-50%,-50%) scale(1)}12%{opacity:1;transform:translate(-50%,-50%) scale(1.03)}100%{opacity:.55;transform:translate(-50%,-50%) scale(1)}}
+.cd .wrap{position:relative;text-align:center}
+.cd .kick{font:400 11px/1 var(--d);letter-spacing:.24em;text-transform:uppercase;color:var(--copper)}
+.cd h2{margin-top:12px}
+.cd .date{margin-top:8px;color:var(--mute);font-size:.92rem}
+.board{position:relative;display:inline-flex;align-items:flex-start;gap:5px;margin-top:26px;perspective:900px}
+.unit{display:flex;flex-direction:column;align-items:center;gap:10px}
+.unit .ds{display:flex;gap:4px}
+.unit span.lab{font:500 10px/1 var(--f);letter-spacing:.2em;text-transform:uppercase;color:var(--mute)}
+.sep{display:flex;flex-direction:column;gap:10px;padding-top:16px}
+.sep i{width:5px;height:5px;border-radius:50%;background:var(--copper);box-shadow:0 0 8px rgba(201,138,90,.8);animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:.25}}
+.fd{--h:50px;position:relative;width:calc(var(--h) * .66);height:var(--h);border-radius:8px;font:400 calc(var(--h) * .5)/var(--h) var(--d);color:#f2f5f9;text-align:center;box-shadow:0 14px 30px -12px rgba(0,0,0,.9);transform-style:preserve-3d}
+.fd .h{position:absolute;left:0;right:0;height:50%;overflow:hidden;background:linear-gradient(180deg,#1a2438,#121a2b);backface-visibility:hidden}
+.fd .h b{position:absolute;left:0;right:0;height:var(--h);font-weight:400}
+.fd .t{top:0;border-radius:8px 8px 0 0}
+.fd .t b{top:0}
+.fd .bo{bottom:0;border-radius:0 0 8px 8px;background:linear-gradient(180deg,#0f1626,#151e31)}
+.fd .bo b{bottom:0}
+.fd::after{content:"";position:absolute;left:0;right:0;top:50%;height:1px;margin-top:-.5px;background:rgba(0,0,0,.75);z-index:5}
+.fd .lf{z-index:4}
+.fd .lf.t{transform-origin:50% 100%}
+.fd .lf.bo{transform-origin:50% 0;transform:rotateX(90deg)}
+.fd.go .lf.t{animation:fold .32s cubic-bezier(.55,0,.9,.5) forwards}
+.fd.go .lf.bo{animation:unfold .34s cubic-bezier(.1,.5,.4,1.3) .3s forwards}
+@keyframes fold{to{transform:rotateX(-90deg);filter:brightness(.55)}}
+@keyframes unfold{from{transform:rotateX(90deg);filter:brightness(1.6)}to{transform:none;filter:none}}
+.board .sweep{position:absolute;inset:-10px -20px;pointer-events:none;background:linear-gradient(100deg,transparent 40%,rgba(255,236,214,.16) 50%,transparent 60%);background-size:250% 100%;animation:bsweep 4.5s ease-in-out infinite;mix-blend-mode:screen;z-index:6}
+@keyframes bsweep{0%,55%{background-position:120% 0}100%{background-position:-120% 0}}
+.js-cd .unit{opacity:0;transform:rotateX(-80deg) translateY(-20px);transform-origin:50% 0}
+.js-cd.in .unit{animation:tumble .9s cubic-bezier(.2,1.2,.4,1) forwards}
+.js-cd.in .unit:nth-of-type(2){animation-delay:.08s}.js-cd.in .unit:nth-of-type(3){animation-delay:.16s}.js-cd.in .unit:nth-of-type(4){animation-delay:.24s}
+@keyframes tumble{to{opacity:1;transform:none}}
+.track{display:grid;grid-template-columns:repeat(30,1fr);gap:3px;max-width:640px;margin:30px auto 0}
+.track i{height:16px;border-radius:2px;background:#151d2e;position:relative;overflow:hidden;transform:scaleY(.4);opacity:.5;transition:transform .5s cubic-bezier(.2,1.4,.4,1),opacity .5s}
+.track.in i{transform:none;opacity:1}
+.track i b{position:absolute;inset:0;background:linear-gradient(180deg,#e3a678,var(--copper));transform-origin:0 50%;transform:scaleX(0)}
+.track i.done b{transform:scaleX(1)}
+.track i.now{box-shadow:0 0 0 1px var(--copper),0 0 14px rgba(201,138,90,.6)}
+.track i.now b{animation:none}
+.track i.day0{background:#243049}
+.tlab{display:flex;justify-content:space-between;max-width:640px;margin:10px auto 0;font:500 10px/1 var(--f);letter-spacing:.16em;text-transform:uppercase;color:var(--mute)}
+.tlab b{color:var(--ink);font-weight:500}
+.cd .ctas{justify-content:center;margin-top:26px}
+.cd.open .board,.cd.open .track,.cd.open .tlab{display:none}
+.hchip{display:inline-flex;align-items:center;gap:8px;margin-bottom:14px;padding:7px 12px 7px 9px;border-radius:999px;background:rgba(201,138,90,.12);box-shadow:inset 0 0 0 1px rgba(201,138,90,.45);font:500 11px/1 var(--f);letter-spacing:.1em;text-transform:uppercase;color:#f0d2b8;text-decoration:none}
+.hchip i{width:7px;height:7px;border-radius:50%;background:var(--copper);animation:ping2 1.6s infinite}
+@keyframes ping2{0%{box-shadow:0 0 0 0 rgba(201,138,90,.7)}70%{box-shadow:0 0 0 8px rgba(201,138,90,0)}100%{box-shadow:0 0 0 0 rgba(201,138,90,0)}}
+@media (min-width:700px){.fd{--h:96px}.board{gap:14px}.unit .ds{gap:6px}.sep{padding-top:36px;gap:18px}.sep i{width:6px;height:6px}.track i{height:22px}}
+@media (max-width:370px){.fd{--h:45px}.board{gap:4px}.unit .ds{gap:3px}}
+
 /* ---------- before / after ---------- */
 .tabs{display:flex;gap:6px;margin-top:18px;overflow-x:auto;scrollbar-width:none}
 .tabs::-webkit-scrollbar{display:none}
@@ -211,7 +265,8 @@ footer a{text-decoration:none}
 }
 @media (prefers-reduced-motion:reduce){
   *{animation:none!important;transition:none!important}
-  .rv,.up{opacity:1;transform:none}
+  .rv,.up,.js-cd .unit{opacity:1;transform:none}
+  .track i{transform:none;opacity:1}
   html{scroll-behavior:auto}
 }
 </style>
@@ -234,7 +289,7 @@ footer a{text-decoration:none}
 <header class="nav" id="nav">
   <div class="wrap">
     <a class="brand" href="#top" aria-label="MyDrive Collision home"><svg class="cr" id="navCrest" aria-hidden="true"><use href="#crest"/></svg><svg class="wm" viewBox="0 0 716.7 75" aria-hidden="true"><use href="#wordmark" width="716.7" height="75"/></svg></a>
-    <nav class="links" aria-label="Main"><a href="#work">Before &amp; after</a><a href="#services">Services</a><a href="#process">Process</a><a href="#estimate">Estimate</a></nav>
+    <nav class="links" aria-label="Main"><a href="#opening">Opening</a><a href="#work">Before &amp; after</a><a href="#services">Services</a><a href="#process">Process</a><a href="#estimate">Estimate</a></nav>
     <a class="btn cta" href="#estimate">Get an estimate</a>
     <button class="burger" id="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="sheet"><i></i></button>
   </div>
@@ -248,11 +303,34 @@ footer a{text-decoration:none}
   <section class="hero">
     <div class="ph"><img src="media/hero.webp" width="1920" height="1281" alt="A car on a lift in a clean, brightly lit body shop" fetchpriority="high"></div>
     <div class="txt"><div class="wrap">
+      <a class="hchip up" href="#opening" id="hchip" style="animation-delay:.05s"><i></i><span>Opening soon</span></a>
       <h1 class="up" style="animation-delay:.1s">Collision repair, finished to <span class="cu">factory standard</span></h1>
       <p class="lede up" style="animation-delay:.25s">MyDrive Collision is opening soon. Bodywork, paint and dent repair, done right and explained in plain words.</p>
       <div class="ctas up" style="animation-delay:.4s" id="heroCta"><a class="btn" href="#estimate">Get an estimate</a><a class="btn o" href="#work">See the difference</a></div>
       <div class="chips up" style="animation-delay:.55s"><span>Collision repair</span><span>Paint and refinishing</span><span>Dent repair</span><span>Insurance claims</span></div>
     </div></div>
+  </section>
+
+  <section class="cd" id="opening">
+    <div class="glow" aria-hidden="true"></div>
+    <div class="wrap">
+      <p class="kick rv">Grand opening</p>
+      <h2 class="rv">Doors open in</h2>
+      <p class="date rv" id="cdDate"></p>
+      <div class="board js-cd" id="board" role="timer" aria-live="off" aria-label="Time until opening">
+        <div class="unit" data-u="d"><div class="ds"></div><span class="lab">Days</span></div>
+        <div class="sep" aria-hidden="true"><i></i><i></i></div>
+        <div class="unit" data-u="h"><div class="ds"></div><span class="lab">Hours</span></div>
+        <div class="sep" aria-hidden="true"><i></i><i></i></div>
+        <div class="unit" data-u="m"><div class="ds"></div><span class="lab">Min</span></div>
+        <div class="sep" aria-hidden="true"><i></i><i></i></div>
+        <div class="unit" data-u="s"><div class="ds"></div><span class="lab">Sec</span></div>
+        <div class="sweep" aria-hidden="true"></div>
+      </div>
+      <div class="track" id="track" aria-hidden="true"></div>
+      <div class="tlab"><span>Countdown started</span><span id="tlabNow"></span><span>Opening day</span></div>
+      <div class="ctas rv"><a class="btn" href="#estimate">Get your estimate in early</a></div>
+    </div>
   </section>
 
   <section id="work">
@@ -360,6 +438,8 @@ footer a{text-decoration:none}
 const CONFIG = {
   // fill these in when the shop has them; the page adapts (call / text / email buttons appear)
   phone: '', email: '', address: '', hours: '',
+  // grand opening: the countdown runs one month, from Nov 14 to Dec 14, 2026 (Eastern time)
+  countFrom: '2026-11-14T09:00:00-05:00', openAt: '2026-12-14T09:00:00-05:00',
   pairs: [
     ['dent', 'Dent', 'A creased door: the light line bends through the dent, then runs straight after the repair.'],
     ['panel', 'Collision', 'Scuffed and dented paint pulled, refinished and cleared.'],
@@ -375,6 +455,56 @@ const setMenu = on => { document.body.classList.toggle('menu-open', on); burger.
 burger.addEventListener('click', () => setMenu(!document.body.classList.contains('menu-open')));
 $$('#sheet a').forEach(a => a.addEventListener('click', () => setMenu(false)));
 addEventListener('keydown', e => { if (e.key === 'Escape') setMenu(false); });
+
+/* ---------- opening countdown: one month, then it flips to open ---------- */
+(function countdown() {
+  const end = new Date(CONFIG.openAt), start = new Date(CONFIG.countFrom), DAYS = 30;
+  const sec = $('#opening'), board = $('#board'), track = $('#track');
+  $('#cdDate').textContent = end.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+  const units = {}; let visible = false;
+  $$('#board .unit').forEach(u => {
+    const n = u.dataset.u === 'd' ? 2 : 2;
+    u.querySelector('.ds').innerHTML = Array.from({ length: n }, () => '<span class="fd"><span class="h t"><b>0</b></span><span class="h bo"><b>0</b></span><span class="h t lf"><b>0</b></span><span class="h bo lf"><b>0</b></span></span>').join('');
+    units[u.dataset.u] = [...u.querySelectorAll('.fd')];
+  });
+  track.innerHTML = Array.from({ length: DAYS }, () => '<i><b></b></i>').join('');
+  const cells = [...track.children];
+  function setDigit(fd, v, animate) {
+    if (fd.dataset.v === v) return;
+    const old = fd.dataset.v ?? v; fd.dataset.v = v;
+    const [st, sb, lt, lb] = fd.querySelectorAll('b');
+    if (!animate || still || !visible) { st.textContent = sb.textContent = lt.textContent = lb.textContent = v; fd.classList.remove('go'); return; }
+    st.textContent = v; sb.textContent = old; lt.textContent = old; lb.textContent = v;
+    fd.classList.remove('go'); void fd.offsetWidth; fd.classList.add('go');
+    clearTimeout(fd._t); fd._t = setTimeout(() => { sb.textContent = v; fd.classList.remove('go'); lt.textContent = v; }, 680);
+  }
+  function tick(animate) {
+    const now = Date.now(), left = Math.max(0, end - now);
+    if (left === 0) {
+      sec.classList.add('open'); $('#opening h2').textContent = "We're open"; $('#opening .kick').textContent = 'MyDrive Collision';
+      $('#hchip span').textContent = 'Now open'; return false;
+    }
+    const s = Math.floor(left / 1000), v = { d: Math.floor(s / 86400), h: Math.floor(s / 3600) % 24, m: Math.floor(s / 60) % 60, s: s % 60 };
+    for (const k in v) { const str = String(Math.min(v[k], 99)).padStart(2, '0'); units[k].forEach((fd, i) => setDigit(fd, str[i], animate)); }
+    // the month as 30 segments: finished days are copper, today fills as the hours go by
+    const total = end - start, el = Math.min(total, Math.max(0, now - start)), daysDone = el / total * DAYS;
+    cells.forEach((c, i) => {
+      const f = Math.min(1, Math.max(0, daysDone - i));
+      c.classList.toggle('done', f >= 1); c.classList.toggle('now', f > 0 && f < 1 || (i === 0 && daysDone === 0));
+      c.firstChild.style.transform = `scaleX(${f.toFixed(3)})`;
+    });
+    $('#tlabNow').innerHTML = `<b>${v.d}</b> ${v.d === 1 ? 'day' : 'days'} to go`;
+    $('#hchip span').textContent = `Opening in ${v.d} ${v.d === 1 ? 'day' : 'days'}`;
+    board.setAttribute('aria-label', `Opening in ${v.d} days, ${v.h} hours, ${v.m} minutes`);
+    return true;
+  }
+  tick(false);
+  const timer = setInterval(() => { if (!tick(true)) clearInterval(timer); }, 1000);
+  new IntersectionObserver(es => es.forEach(e => {
+    visible = e.isIntersecting;
+    if (visible) { board.classList.add('in'); setTimeout(() => track.classList.add('in'), 300); cells.forEach((c, i) => c.style.transitionDelay = (i * 18) + 'ms'); }
+  }), { threshold: .3 }).observe(sec);
+})();
 
 /* ---------- before / after ---------- */
 const ba = $('#ba'), rng = $('#baR');
@@ -410,7 +540,7 @@ rail.addEventListener('scroll', () => { const i = Math.round(rail.scrollLeft / (
 /* ---------- reveals, nav highlight, dock ---------- */
 const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .12 });
 $$('.rv').forEach(el => io.observe(el));
-const secs = ['work', 'services', 'process', 'estimate'].map(id => $('#' + id));
+const secs = ['opening', 'work', 'services', 'process', 'estimate'].map(id => $('#' + id));
 const nio = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) $$('.links a').forEach(a => a.classList.toggle('cur', a.getAttribute('href') === '#' + e.target.id)); }), { rootMargin: '-45% 0px -50% 0px' });
 secs.forEach(s => nio.observe(s));
 const seen = new Set(), dock = $('#dock');
