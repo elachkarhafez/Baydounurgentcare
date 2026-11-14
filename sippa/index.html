@@ -69,6 +69,80 @@ p{margin:0}
 @keyframes fz{to{transform:translateY(-110lvh);opacity:.2}}
 @keyframes pour{to{transform:translateY(calc(-100% - 100px))}}
 
+/* getting around: progress bar, active section, phone menu, back to top */
+.prog{position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--red);transform-origin:left;transform:scaleX(var(--p,0));pointer-events:none}
+.links a{position:relative}
+.links a::after{content:"";position:absolute;left:0;right:0;bottom:-8px;height:3px;border-radius:3px;background:var(--red);transform:scaleX(0);transition:transform .35s var(--out)}
+.links a.on::after{transform:none}
+.mbtn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:36px;padding:0 12px;border-radius:999px;border:0;background:rgba(255,255,255,.18);color:inherit;font:800 .8125rem/1 var(--f);cursor:pointer}
+.nav.solid .mbtn{background:var(--aqua2);color:var(--ink)}
+.mbtn i{display:block;width:16px;height:2px;background:currentColor;border-radius:2px;box-shadow:0 -5px 0 currentColor,0 5px 0 currentColor}
+.navr{display:flex;align-items:center;gap:8px}
+.mnav{position:fixed;inset:0;z-index:120;background:var(--red);color:#fff;display:flex;flex-direction:column;padding:calc(env(safe-area-inset-top) + 14px) var(--pad) calc(24px + env(safe-area-inset-bottom));clip-path:circle(0 at calc(100% - 40px) 28px);transition:clip-path .6s var(--out);visibility:hidden}
+.mnav.on{clip-path:circle(150% at calc(100% - 40px) 28px);visibility:visible}
+.mnav .top{display:flex;justify-content:space-between;align-items:center}
+.mnav .top img{width:92px}
+.mnav .x{width:44px;height:44px;border-radius:50%;border:0;background:rgba(255,255,255,.18);color:#fff;font:800 1.25rem/1 var(--f);cursor:pointer}
+.mnav ol{list-style:none;padding:0;margin:22px 0 0;display:grid;gap:4px;counter-reset:n}
+.mnav li{counter-increment:n;opacity:0;transform:translateY(16px);transition:opacity .4s,transform .6s var(--out)}
+.mnav.on li{opacity:1;transform:none}
+.mnav ol a{display:flex;align-items:baseline;gap:12px;padding:10px 0;text-decoration:none;font:800 1.875rem/1.05 var(--d);border-bottom:1px solid rgba(255,255,255,.2)}
+.mnav ol a::before{content:"0" counter(n);font:700 .8125rem/1 var(--f);opacity:.7;min-width:22px}
+.mnav ol a.on{color:var(--aqua)}
+.mnav .row{margin-top:auto;padding-top:18px}
+.totop{position:fixed;right:18px;bottom:22px;z-index:44;width:46px;height:46px;border-radius:50%;border:0;background:var(--ink);color:#fff;font:800 1.125rem/1 var(--f);cursor:pointer;opacity:0;transform:translateY(20px);transition:opacity .3s,transform .4s var(--out);display:none}
+.totop.on{opacity:1;transform:none}
+
+/* how a Sippa gets made: pinned, built from their real photo of The 804 */
+.how{position:relative;background:var(--slate2);color:#fff;overflow:hidden}
+.howpin{min-height:100svh;display:grid;align-items:center;padding:calc(var(--nav) + 6px) 0 18px}
+.hw{display:grid;gap:12px;align-items:center}
+.hstage{position:relative;height:min(52svh,430px);aspect-ratio:2/3;justify-self:center}
+.hstage>img,.hstage>.tint{position:absolute;inset:0;width:100%;height:100%}
+.hbody{clip-path:inset(calc(var(--fill,100) * 1%) 0 0 0)}
+.tint{background:radial-gradient(40% 30% at 45% 55%,#ffb347,transparent 70%),radial-gradient(35% 25% at 60% 70%,#fff2c7,transparent 70%);-webkit-mask:url(media/hero/the-804.webp) center/100% 100% no-repeat;mask:url(media/hero/the-804.webp) center/100% 100% no-repeat;mix-blend-mode:soft-light;opacity:var(--syr,0);clip-path:inset(calc(var(--fill,100) * 1%) 0 0 0)}
+.hice{clip-path:inset(0 36% 60% 0);transform:translateY(calc(var(--ice,1) * -22%));opacity:calc(1 - var(--ice,1))}
+.hlime{clip-path:inset(0 0 60% 64%);transform-origin:80% 20%;transform:translate(calc(var(--lime,1) * 18%),calc(var(--lime,1) * -16%)) rotate(calc(var(--lime,1) * 35deg));opacity:calc(1 - var(--lime,1))}
+.hcup{position:absolute;inset:0;width:100%;height:100%;opacity:var(--cup,1);pointer-events:none}
+.hcup path{fill:rgba(255,255,255,.06);stroke:rgba(255,255,255,.65);stroke-width:.6;stroke-dasharray:2 1.4}
+.stream{position:absolute;left:47%;top:-40%;width:5%;height:calc(40% + var(--sh,0) * 1%);border-radius:0 0 99px 99px;background:linear-gradient(#5a2a1b,#2b120b);transform-origin:top;transform:scaleY(var(--st,0));box-shadow:inset 2px 0 0 rgba(255,255,255,.25)}
+.hname{position:absolute;left:50%;bottom:-6%;transform:translate(-50%,calc((1 - var(--nm,0)) * 20px));opacity:var(--nm,0);white-space:nowrap;text-align:center;font:800 1.5rem/1 var(--d)}
+.hname small{display:block;font:700 .75rem/1 var(--f);letter-spacing:.14em;text-transform:uppercase;color:var(--aqua);margin-bottom:6px}
+.hsteps{list-style:none;padding:0;display:grid;gap:4px;counter-reset:s}
+.hsteps li{counter-increment:s;display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:center;padding:7px 10px;border-radius:14px;opacity:.35;transition:opacity .35s,background .35s}
+.hsteps li::before{content:attr(data-n);display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.12);font:800 .9375rem/1 var(--d)}
+.hsteps li.on{opacity:1;background:rgba(255,255,255,.1)}
+.hsteps li.on::before{background:var(--red)}
+.hsteps b{display:block;font:800 1rem/1.1 var(--d)}
+.hsteps span{font-size:.75rem;color:#c9d7db}
+.how h2{margin-bottom:10px}
+.howhint{font-size:.75rem;color:#9fb3b9;margin-top:8px}
+@media (max-width:899px){.hsteps li:not(.on){display:none}.hsteps li.on{background:none;padding:0}.hname{display:none}}
+
+/* drink sheet */
+.card{cursor:pointer}
+.card:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+.dsheet{position:fixed;inset:0;z-index:110;display:grid;align-items:end;visibility:hidden}
+.dsheet.on{visibility:visible}
+.dsb{position:absolute;inset:0;background:rgba(30,20,22,.55);opacity:0;transition:opacity .35s}
+.dsheet.on .dsb{opacity:1}
+.dsp{position:relative;background:var(--cream);border-radius:26px 26px 0 0;max-height:92svh;overflow:auto;padding:0 0 calc(18px + env(safe-area-inset-bottom));transform:translateY(105%);transition:transform .55s var(--out)}
+.dsheet.on .dsp{transform:none}
+.dsp::before{content:"";display:block;width:44px;height:5px;border-radius:5px;background:rgba(42,26,29,.2);margin:10px auto 0}
+.dsx{position:absolute;right:12px;top:12px;width:40px;height:40px;border-radius:50%;border:0;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.12);font:800 1rem/1 var(--f);cursor:pointer;z-index:2}
+.dsimg{height:min(42svh,360px);display:grid;place-items:center;background:radial-gradient(60% 60% at 50% 60%,var(--tint,#fde9ec),var(--cream) 75%)}
+.dsimg img,.dsimg svg{height:min(40svh,340px);width:auto;max-width:90%;transform:translateY(30px) scale(.9);opacity:0;transition:transform .8s var(--pop) .1s,opacity .4s .1s}
+.dsheet.on .dsimg img,.dsheet.on .dsimg svg{transform:none;opacity:1}
+.dst{padding:4px var(--pad) 0}
+.dst .bs{font:700 .6875rem/1 var(--f);letter-spacing:.14em;text-transform:uppercase;color:var(--red)}
+.dst h3{font-size:1.75rem;margin-top:6px}
+.dst ul{list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.dst li{font:600 .8125rem/1 var(--f);padding:8px 11px;border-radius:999px;background:#fff;box-shadow:inset 0 0 0 1px var(--line)}
+.dst .pr{font:800 1.5rem/1 var(--d);color:var(--red);margin-top:12px}
+.dst .row{margin-top:14px}
+.dst .nav2{display:flex;justify-content:space-between;margin-top:16px;padding-top:12px;border-top:1px solid var(--line)}
+.dst .nav2 button{border:0;background:none;font:700 .8125rem/1 var(--f);color:var(--ink2);cursor:pointer;padding:6px 0}
+
 /* nav */
 .nav{position:fixed;top:0;left:0;right:0;z-index:50;height:var(--nav);transition:transform .45s var(--out),background .4s,box-shadow .4s}
 .nav.solid{background:rgba(255,250,247,.96);box-shadow:0 1px 0 var(--line)}
@@ -276,6 +350,20 @@ footer a{color:#fff}
 }
 @media (min-width:900px){
   :root{--pad:32px;--sec:76px;--nav:70px}
+  .mbtn{display:none}
+  .totop{display:block}
+  .hw{grid-template-columns:1fr auto 1fr;gap:48px}
+  .hstage{height:min(72svh,600px);grid-column:2;grid-row:1}
+  .hcol{grid-column:1;grid-row:1}
+  .hsteps{grid-column:3;grid-row:1}
+  .hname{font-size:2.25rem}
+  .dsheet{align-items:center;justify-items:center}
+  .dsp{border-radius:28px;width:min(880px,92vw);display:grid;grid-template-columns:1fr 1fr;transform:translateY(40px) scale(.96);opacity:0;transition:transform .55s var(--out),opacity .3s}
+  .dsheet.on .dsp{transform:none;opacity:1}
+  .dsp::before{display:none}
+  .dsimg{height:auto;min-height:480px}
+  .dsimg img,.dsimg svg{height:440px}
+  .dst{padding:34px 30px 28px}
   body{font-size:1rem}
   h1{font-size:2.75rem}
   h2{font-size:2.75rem}
@@ -308,7 +396,7 @@ footer a{color:#fff}
   .dock{display:none}
   footer{padding-bottom:22px}
 }
-@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.up,.card{opacity:1!important;transform:none!important}.w>*{transform:none}.fizz,.bub{display:none}}
+@media (prefers-reduced-motion:reduce){.hbody,.tint{clip-path:none!important}.hice,.hlime{transform:none!important;opacity:1!important}.hcup,.stream{display:none}.hname{opacity:1!important}.hsteps li{opacity:1!important;display:grid!important}*,*::before,*::after{animation:none!important;transition:none!important}.up,.card{opacity:1!important;transform:none!important}.w>*{transform:none}.fizz,.bub{display:none}}
 </style>
 </head>
 <body>
@@ -323,10 +411,16 @@ footer a{color:#fff}
 <header class="nav" id="nav">
   <div class="wrap">
     <a class="brand" href="#top" aria-label="Sippa home"><img src="media/logo.svg" alt="sippa" width="285" height="146"></a>
-    <nav class="links" aria-label="Sections"><a href="#menu">Menu</a><a href="#build">Build your own</a><a href="#catering">Catering</a><a href="#visit">Locations</a></nav>
-    <a class="btn" data-order href="#visit"><svg aria-hidden="true"><use href="#i-cup"/></svg>Order ahead</a>
+    <nav class="links" aria-label="Sections"><a href="#menu">Drinks</a><a href="#how">How it's made</a><a href="#build">Build your own</a><a href="#catering">Catering</a><a href="#visit">Locations</a></nav>
+    <div class="navr"><a class="btn" data-order href="#visit"><svg aria-hidden="true"><use href="#i-cup"/></svg>Order ahead</a><button type="button" class="mbtn" id="mbtn" aria-expanded="false" aria-controls="mnav"><i aria-hidden="true"></i>Menu</button></div>
   </div>
+  <span class="prog" aria-hidden="true"></span>
 </header>
+<div class="mnav" id="mnav" role="dialog" aria-modal="true" aria-label="Site menu">
+  <div class="top"><img src="media/logo-footer-1.svg" alt="sippa" width="317" height="158"><button type="button" class="x" id="mclose" aria-label="Close menu">✕</button></div>
+  <ol><li><a href="#menu">The drinks</a></li><li><a href="#how">How it's made</a></li><li><a href="#build">Build your own</a></li><li><a href="#picks">Picks &amp; snacks</a></li><li><a href="#catering">Catering</a></li><li><a href="#visit">Locations &amp; hours</a></li><li><a href="#story">Our story</a></li></ol>
+  <div class="row"><a class="btn wh" data-order href="#visit"><svg aria-hidden="true"><use href="#i-cup"/></svg>Order ahead</a><a class="btn o" href="https://www.instagram.com/sippa.drinks/" target="_blank" rel="noopener">Instagram</a></div>
+</div>
 
 <main id="top">
   <section class="hero" id="hero" aria-label="Sippa drinks">
@@ -355,6 +449,31 @@ footer a{color:#fff}
       <div class="head"><h2>Drink your way <span class="r">across Richmond.</span></h2><p class="sub up">Pick a base and scroll. Every drink below is one we make every day, most of them named after a corner of the city.</p></div>
       <div class="chips up" id="bases" role="group" aria-label="Filter by base"></div>
       <div class="rail cards" id="cards"></div>
+    </div>
+  </section>
+
+  <section class="how" id="how" aria-label="How a Sippa gets made">
+    <div class="howpin">
+      <div class="wrap hw">
+        <div class="hcol"><h2>How a Sippa <span style="color:var(--aqua)">gets made.</span></h2><p class="sub" style="color:#c9d7db">Keep scrolling and watch The 804 come together, from an empty cup to the lime on top.</p><p class="howhint" aria-hidden="true">Scroll to pour ↓</p></div>
+        <div class="hstage" aria-hidden="true">
+          <svg class="hcup" viewBox="0 0 100 150" preserveAspectRatio="none"><path d="M17 31 L83 31 L75 146 Q74.5 148 72 148 L28 148 Q25.5 148 25 146Z"/></svg>
+          <div class="stream"></div>
+          <img class="hbody" src="media/hero/the-804.webp" alt="" width="760" height="1140" loading="lazy">
+          <div class="tint"></div>
+          <img class="hice" src="media/hero/the-804.webp" alt="" width="760" height="1140" loading="lazy">
+          <img class="hlime" src="media/hero/the-804.webp" alt="" width="760" height="1140" loading="lazy">
+          <div class="hname"><small>Our area code</small>The 804 · $3.45+</div>
+        </div>
+        <ol class="hsteps" id="hsteps">
+          <li class="on"><div><b>Grab a cup</b><span>Kids, small, medium or large.</span></div></li>
+          <li><div><b>Pour the base</b><span>Coke, for this one.</span></div></li>
+          <li><div><b>Add the syrups</b><span>Passion fruit and coconut.</span></div></li>
+          <li><div><b>Pebble ice</b><span>The good ice, the chewable kind.</span></div></li>
+          <li><div><b>Lime on top</b><span>A fresh wedge to finish.</span></div></li>
+          <li><div><b>The 804</b><span>$3.45 and up. Yours in about a minute.</span></div></li>
+        </ol>
+      </div>
     </div>
   </section>
 
@@ -452,7 +571,17 @@ footer a{color:#fff}
 
 <div class="dock" id="dock"><a class="btn o" href="#build" style="color:var(--ink)">Build</a><a class="btn" data-order href="#visit"><svg aria-hidden="true"><use href="#i-cup"/></svg>Order ahead</a></div>
 <div class="toast" id="toast" role="status"></div>
+<button type="button" class="totop" id="totop" aria-label="Back to top">↑</button>
+<div class="dsheet" id="dsheet" role="dialog" aria-modal="true" aria-labelledby="dsName">
+  <div class="dsb" data-close></div>
+  <div class="dsp"><button type="button" class="dsx" data-close aria-label="Close">✕</button><div class="dsimg" id="dsImg"></div>
+    <div class="dst"><p class="bs" id="dsBase"></p><h3 id="dsName"></h3><ul id="dsRec"></ul><p class="pr" id="dsPr"></p>
+      <div class="row"><button type="button" class="btn" id="dsMake">Make it mine</button><a class="btn o" data-order href="#visit" style="color:var(--ink)">Order ahead</a></div>
+      <div class="nav2"><button type="button" id="dsPrev">‹ Previous</button><button type="button" id="dsNext">Next ›</button></div></div></div>
+</div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
 <script>
 const CONFIG = {
@@ -533,7 +662,7 @@ const CONFIG = {
     ['Rootin Tootin', 'Kids', 'Root beer, toasted coconut, vanilla', '', 'kids-root-beer', '#ecd9cf']
   ],
   sizes: [['K', 'Kids', 1.95], ['S', 'Small', 2.15], ['M', 'Medium', 2.70], ['L', 'Large', 2.90]],
-  bases: [['Coke', '#3a1a10'], ['Diet Coke', '#4a2616'], ['Coke Zero', '#3a1a10'], ['Pepsi', '#3a1d12'], ['Pepsi Zero', '#3a1d12'], ['Dr Pepper', '#4a1518'], ['Diet Dr Pepper', '#4a1518'], ['Mug Root Beer', '#4b2412'], ['Mountain Dew', '#d6e24a'], ['Diet Mountain Dew', '#e2ea8e'], ['Sprite', '#eef6e6'], ['Fresca', '#f4f1e2'], ['Schweppes Ginger Ale', '#e8d6a0'], ['Minute Maid Lemonade', '#f6e9a0'], ['Fuze Tea', '#a5521f'], ['Powerade', '#4aa7e6']],
+  bases: [['Coke', '#3a1a10'], ['Diet Coke', '#4a2616'], ['Coke Zero', '#3a1a10'], ['Pepsi', '#3a1d12'], ['Pepsi Zero', '#3a1d12'], ['Dr Pepper', '#4a1518'], ['Diet Dr Pepper', '#4a1518'], ['Mug Root Beer', '#4b2412'], ['Mountain Dew', '#d6e24a'], ['Diet Mountain Dew', '#e2ea8e'], ['Sprite', '#eef6e6'], ['Fresca', '#f4f1e2'], ['Schweppes Ginger Ale', '#e8d6a0'], ['Minute Maid Lemonade', '#f6e9a0'], ['Fuze Tea', '#a5521f'], ['Powerade', '#4aa7e6'], ['Water', '#e3f3f8']],
   syrups: [['Strawberry', '#e8324a'], ['Guava', '#f2728a'], ['Coconut', '#f4efe4'], ['Passion Fruit', '#f6a21e'], ['Pineapple', '#f7d24a'], ['Peach', '#f6a26b'], ['Vanilla', '#f3e2c0'], ['Mango', '#f7a823'], ['Grapefruit', '#f47a6a'], ['Pomegranate', '#b0122c'], ['Watermelon', '#f0506a'], ['Cherry', '#c8102e'], ['Chocolate', '#5a3020'], ['Butterscotch', '#d68a2a'], ['Raspberry', '#d61f5c'], ['Blackberry', '#4a1640'], ['Blue Curacao', '#1f8fd6'], ['Apple', '#9acd32'], ['Hibiscus', '#c2185b'], ['Dragon Fruit', '#e0218a'], ['Lime', '#8cc63f'], ['Lemon', '#f6e05e'], ['Grenadine', '#c8102e'], ['Irish Cream', '#d8b98a'], ['Desert Pear', '#e0457b'], ['Strawberry SF', '#e8324a'], ['Peach SF', '#f6a26b'], ['Vanilla SF', '#f3e2c0'], ['Mango SF', '#f7a823'], ['Raspberry SF', '#d61f5c']],
   creamers: [['Coconut creamer', '#fbf6ec'], ['Vanilla creamer', '#fbf1dc'], ['Half & half', '#fffdf6']],
   purees: [['Peach puree', '#f6a26b'], ['Strawberry puree', '#e3233c'], ['Mango puree', '#f7a823'], ['Raspberry puree', '#c8174a']],
@@ -608,11 +737,27 @@ $('#t2').innerHTML = band(['Sweet', 'Fizzy', 'Creamy', 'Made your way', 'Since w
   const groups = [...new Set(CONFIG.drinks.map(d => d[1]))], chips = $('#bases'), cards = $('#cards');
   chips.innerHTML = groups.map((g, i) => `<button type="button" aria-pressed="${i === 0}" data-g="${esc(g)}">${esc(g)}</button>`).join('');
   const draw = g => {
-    cards.innerHTML = CONFIG.drinks.filter(d => d[1] === g).map(([n, , r, p, img, tint], k) => `<article class="card" style="--tint:${tint};animation-delay:${Math.min(k, 8) * 55}ms"><div class="ph">${img ? `<img src="media/d/${img}.webp" alt="${esc(n)}" width="480" height="720" loading="lazy">` : cupSVG(tint, '#ffffff')}</div><div class="t"><h3>${esc(n)}</h3><p>${esc(r)}</p>${p ? `<p class="pr">${esc(p)}</p>` : ''}</div></article>`).join('');
+    cards.innerHTML = CONFIG.drinks.filter(d => d[1] === g).map(([n, , r, p, img, tint], k) => `<article class="card" tabindex="0" role="button" aria-label="${esc(n)}, see the recipe" data-n="${esc(n)}" style="--tint:${tint};animation-delay:${Math.min(k, 8) * 55}ms"><div class="ph">${img ? `<img src="media/d/${img}.webp" alt="${esc(n)}" width="480" height="720" loading="lazy">` : cupSVG(tint, '#ffffff')}</div><div class="t"><h3>${esc(n)}</h3><p>${esc(r)}</p>${p ? `<p class="pr">${esc(p)}</p>` : ''}</div></article>`).join('');
     cards.scrollTo({ left: 0 });
   };
   chips.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; $$('#bases button').forEach(x => x.setAttribute('aria-pressed', x === b)); draw(b.dataset.g); });
   draw(groups[0]);
+  /* drink sheet: big photo, recipe chips, Make it mine */
+  const sheet = $('#dsheet'); let list = [], idx = 0, lastFocus = null;
+  const fill = () => { const [n, g, r, p, img, tint] = list[idx];
+    $('#dsImg').style.setProperty('--tint', tint); $('#dsImg').innerHTML = img ? `<img src="media/d/${img}.webp" alt="${esc(n)}" width="480" height="720">` : cupSVG(tint, '#ffffff');
+    $('#dsBase').textContent = g === 'Kids' ? 'Kids menu' : g + ' base'; $('#dsName').textContent = n; $('#dsRec').innerHTML = r.split(', ').map(x => `<li>${esc(x)}</li>`).join(''); $('#dsPr').textContent = p || 'Ask at the window';
+    sheet.classList.remove('on'); void sheet.offsetWidth; sheet.classList.add('on'); };
+  const open = n => { const g = CONFIG.drinks.find(d => d[0] === n)[1]; list = CONFIG.drinks.filter(d => d[1] === g); idx = list.findIndex(d => d[0] === n); lastFocus = document.activeElement; fill(); document.body.style.overflow = 'hidden'; window.sipLenis && window.sipLenis.stop(); $('.dsx').focus(); };
+  const close = () => { sheet.classList.remove('on'); document.body.style.overflow = ''; window.sipLenis && window.sipLenis.start(); lastFocus && lastFocus.focus(); };
+  cards.addEventListener('click', e => { const c = e.target.closest('.card'); if (c) open(c.dataset.n); });
+  cards.addEventListener('keydown', e => { const c = e.target.closest('.card'); if (c && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); open(c.dataset.n); } });
+  $$('#dsheet [data-close]').forEach(b => b.addEventListener('click', close));
+  addEventListener('keydown', e => { if (!sheet.classList.contains('on')) return; if (e.key === 'Escape') close(); if (e.key === 'ArrowRight') { idx = (idx + 1) % list.length; fill(); } if (e.key === 'ArrowLeft') { idx = (idx - 1 + list.length) % list.length; fill(); } });
+  $('#dsNext').onclick = () => { idx = (idx + 1) % list.length; fill(); }; $('#dsPrev').onclick = () => { idx = (idx - 1 + list.length) % list.length; fill(); };
+  let y0 = null; sheet.querySelector('.dsp').addEventListener('touchstart', e => { y0 = e.touches[0].clientY; }, { passive: true });
+  sheet.querySelector('.dsp').addEventListener('touchend', e => { if (y0 !== null && e.changedTouches[0].clientY - y0 > 90 && sheet.querySelector('.dsp').scrollTop <= 0) close(); y0 = null; });
+  $('#dsMake').onclick = () => { const d = list[idx]; close(); window.sipBuild && window.sipBuild.load(d); };
 })();
 
 /* the builder */
@@ -680,7 +825,40 @@ $('#t2').innerHTML = band(['Sweet', 'Fizzy', 'Creamy', 'Made your way', 'Since w
     const txt = `${C.sizes[st.size][1]}: ${$('#recipe').textContent} (${$('#price').textContent})`;
     (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(() => toast('Copied. Read it at the window or paste it when you order.'), () => toast(txt));
   });
-  $('#reset').addEventListener('click', () => { st.size = 0; st.base = null; ['syr', 'cre', 'pur', 'top'].forEach(k => st[k].clear()); $$('#steps .opts button').forEach(x => x.setAttribute('aria-pressed', x.closest('[data-k="size"]') && x.dataset.i === '0')); render(); });
+  const sync = () => { $$('#steps .step').forEach(s => { const k = s.dataset.k; s.querySelectorAll('.opts button').forEach(b => { const i = +b.dataset.i; b.setAttribute('aria-pressed', k === 'size' ? i === st.size : k === 'base' ? i === st.base : st[k].has(i)); }); }); };
+  const clear = () => { st.size = 0; st.base = null; ['syr', 'cre', 'pur', 'top'].forEach(k => st[k].clear()); };
+  $('#reset').addEventListener('click', () => { clear(); sync(); render(); });
+  const fi = (list, name) => list.findIndex(([n]) => n.toLowerCase() === name);
+  const BASES = { 'coke': 'coke', 'pepsi': 'pepsi', 'dr pepper': 'dr pepper', 'root beer': 'mug root beer', 'sprite': 'sprite', 'fresca': 'fresca', 'mountain dew': 'mountain dew', 'lemonade': 'minute maid lemonade', 'water': 'water', 'fuze tea': 'fuze tea', 'sprite or lemonade': 'sprite' };
+  const TOPS = { lemon: 'lemon wedge', lime: 'lime wedge', orange: 'orange slice', 'maraschino cherry': 'maraschino cherry', 'strawberry chunks': 'strawberry chunks', 'mango chunks': 'mango chunks' };
+  const load = d => {
+    clear(); st.size = 2; const miss = [];
+    d[2].split(', ').forEach((raw, k) => {
+      let x = raw.toLowerCase().replace('passionfruit', 'passion fruit').replace('sugar-free ', '').replace('toasted ', '');
+      if (k === 0) { const b = fi(C.bases, BASES[x] || x); if (b >= 0) st.base = b; else miss.push(raw); return; }
+      let i;
+      if (x === 'half & half') st.cre.add(fi(C.creamers, 'half & half'));
+      else if (/creamer$/.test(x) && (i = fi(C.creamers, x)) >= 0) st.cre.add(i);
+      else if (/puree$/.test(x) && (i = fi(C.purees, x)) >= 0) st.pur.add(i);
+      else if (TOPS[x] && (i = fi(C.toppings, TOPS[x])) >= 0) st.top.add(i);
+      else if ((i = fi(C.syrups, x)) >= 0) st.syr.add(i);
+      else miss.push(raw);
+    });
+    $$('#steps .opts.more').forEach(o => { o.classList.add('open'); o.nextElementSibling.textContent = 'Show less'; });
+    sync(); render();
+    const go = () => toast(`${d[0]} is in the cup. Change anything you like.` + (miss.length ? ` Ask us for: ${miss.join(', ')}.` : ''));
+    window.sipLenis ? window.sipLenis.scrollTo('#build', { offset: -70, onComplete: go }) : ($('#build').scrollIntoView({ behavior: still ? 'auto' : 'smooth' }), setTimeout(go, 600));
+  };
+  const surprise = () => {
+    clear(); const r = n => Math.random() * n | 0; st.size = 1 + r(3); st.base = r(C.bases.length);
+    const ns = 1 + r(3); while (st.syr.size < ns) st.syr.add(r(C.syrups.length));
+    if (Math.random() < .55) st.cre.add(r(C.creamers.length)); if (Math.random() < .35) st.pur.add(r(C.purees.length)); if (Math.random() < .5) st.top.add(r(C.toppings.length));
+    $('#liq').style.transition = 'none'; $('#liq').style.transform = 'translateY(230px)'; void $('#liq').offsetWidth; $('#liq').style.transition = '';
+    sync(); requestAnimationFrame(render);
+  };
+  $('#copy').insertAdjacentHTML('beforebegin', '<button type="button" class="btn aq" id="surp">Surprise me</button>');
+  $('#surp').addEventListener('click', surprise);
+  window.sipBuild = { load };
   render();
 })();
 
@@ -728,12 +906,56 @@ $$('.up, .split').forEach(el => io.observe(el));
   addEventListener('scroll', () => { v = Math.min(4, v + Math.abs(scrollY - y0) / 60); y0 = scrollY; if (!raf) raf = requestAnimationFrame(tick); }, { passive: true }); })();
 
 /* nav: clear over the hero, solid after, tucks away on the way down */
-(() => { const nav = $('#nav'); let y0 = scrollY; const f = () => { const y = scrollY; nav.classList.toggle('solid', y > 40); if (Math.abs(y - y0) > 6) { nav.classList.toggle('hide', y > y0 && y > 300); y0 = y; } }; addEventListener('scroll', f, { passive: true }); f(); })();
+(() => { const nav = $('#nav'); let y0 = scrollY; const f = () => { const y = scrollY; nav.classList.toggle('solid', y > 40);  }; addEventListener('scroll', f, { passive: true }); f(); })();
+
+/* phone menu */
+(() => {
+  const m = $('#mnav'), b = $('#mbtn');
+  const set = on => { m.classList.toggle('on', on); b.setAttribute('aria-expanded', on); document.body.style.overflow = on ? 'hidden' : ''; if (window.sipLenis) on ? window.sipLenis.stop() : window.sipLenis.start(); if (on) $('#mclose').focus(); };
+  b.addEventListener('click', () => set(true)); $('#mclose').addEventListener('click', () => { set(false); b.focus(); });
+  m.addEventListener('click', e => { const a = e.target.closest('a[href^="#"]'); if (!a) return; e.preventDefault(); set(false); const el = document.querySelector(a.getAttribute('href')); setTimeout(() => window.sipLenis ? window.sipLenis.scrollTo(el, { offset: -60 }) : el.scrollIntoView({ behavior: still ? 'auto' : 'smooth' }), 250); });
+  addEventListener('keydown', e => { if (e.key === 'Escape' && m.classList.contains('on')) set(false); });
+})();
+
+/* where am I: progress bar, active section in the nav and phone menu, back to top */
+(() => {
+  const ids = ['menu', 'how', 'build', 'picks', 'catering', 'visit', 'story'], secs = ids.map(i => document.getElementById(i)), nav = $('#nav'), tt = $('#totop');
+  const links = $$('.links a, .mnav a');
+  const f = () => {
+    const h = D.scrollHeight - innerHeight; nav.style.setProperty('--p', h > 0 ? (scrollY / h).toFixed(4) : 0);
+    let cur = null; const mid = innerHeight * .35; secs.forEach((s, i) => { if (s && s.getBoundingClientRect().top < mid) cur = ids[i]; });
+    links.forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#' + cur));
+    tt.classList.toggle('on', scrollY > innerHeight * 1.2);
+  };
+  addEventListener('scroll', () => requestAnimationFrame(f), { passive: true }); f();
+  tt.addEventListener('click', () => window.sipLenis ? window.sipLenis.scrollTo(0) : scrollTo({ top: 0, behavior: still ? 'auto' : 'smooth' }));
+})();
+
+/* the scene: scroll pours The 804 */
+(() => {
+  const how = $('#how'), steps = $$('#hsteps li'), sg = $('.hstage'); steps.forEach((li, i) => li.dataset.n = i + 1);
+  const setP = p => {
+    const k = (a, b) => Math.min(1, Math.max(0, (p - a) / (b - a)));
+    const pour = k(.12, .5), syr = k(.32, .55), ice = k(.55, .72), lime = k(.7, .84), nm = k(.86, .97);
+    sg.style.setProperty('--fill', (100 - pour * 60).toFixed(2));
+    sg.style.setProperty('--st', pour > 0 && pour < 1 ? 1 : 0); sg.style.setProperty('--sh', (100 - pour * 60).toFixed(1));
+    sg.style.setProperty('--syr', (Math.sin(syr * Math.PI) * .9 + syr * .25).toFixed(3));
+    sg.style.setProperty('--ice', (1 - ice).toFixed(3)); sg.style.setProperty('--lime', (1 - lime).toFixed(3));
+    sg.style.setProperty('--cup', (1 - k(.5, .62)).toFixed(3)); sg.style.setProperty('--nm', nm.toFixed(3));
+    const s = p < .12 ? 0 : p < .32 ? 1 : p < .55 ? 2 : p < .7 ? 3 : p < .86 ? 4 : 5;
+    steps.forEach((li, i) => li.classList.toggle('on', i === s));
+  };
+  if (still || !window.gsap || !window.ScrollTrigger) { setP(1); steps.forEach(li => li.classList.add('on')); return; }
+  gsap.registerPlugin(ScrollTrigger);
+  ScrollTrigger.create({ trigger: how, start: 'top top', end: () => '+=' + Math.round(innerHeight * (innerWidth < 900 ? 2.2 : 2.6)), pin: true, scrub: true, anticipatePin: 1, onUpdate: s => setP(s.progress) });
+  setP(0);
+})();
 
 /* smooth scroll on mouse and trackpad */
 if (!still && window.Lenis) {
-  const lenis = new Lenis({ duration: 1.1, easing: t => 1 - Math.pow(1 - t, 3.2) });
-  const raf = tm => { lenis.raf(tm); requestAnimationFrame(raf); }; requestAnimationFrame(raf);
+  const lenis = new Lenis({ duration: 1.1, easing: t => 1 - Math.pow(1 - t, 3.2) }); window.sipLenis = lenis;
+  if (window.gsap && window.ScrollTrigger) { lenis.on('scroll', ScrollTrigger.update); gsap.ticker.add(tm => lenis.raf(tm * 1000)); gsap.ticker.lagSmoothing(0); }
+  else { const raf = tm => { lenis.raf(tm); requestAnimationFrame(raf); }; requestAnimationFrame(raf); }
   if (D.classList.contains('opening')) { lenis.stop(); addEventListener('introdone', () => lenis.start(), { once: true }); }
   document.addEventListener('click', e => { const a = e.target.closest('a[href^="#"]'); if (!a || a.target) return; const el = a.getAttribute('href').length > 1 && document.querySelector(a.getAttribute('href')); if (!el) return; e.preventDefault(); lenis.scrollTo(el, { offset: -(parseFloat(getComputedStyle(D).getPropertyValue('--nav')) || 60) - 8 }); });
 }
