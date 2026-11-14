@@ -292,6 +292,27 @@
       .cd { gap: 12px; }
       .g-box { height: min(60vh, 470px); }
     }
+    /* the ribbon-cutting gate (the tap that turns the sound on) */
+    .gate { position: fixed; inset: 0; z-index: 210; display: grid; place-items: center; overflow: hidden; background: var(--cream) radial-gradient(rgba(94, 59, 37, .12) 1.4px, transparent 1.8px) 0 0 / 16px 16px; text-align: center; }
+    .gate[hidden] { display: none; }
+    .g-in { width: 100%; padding: 0 var(--pad); }
+    .g-logo { width: min(170px, 42vw); height: auto; margin: 0 auto; }
+    .g-k { margin: 14px 0 0; font: 700 clamp(1.375rem, 1.1rem + 1vw, 1.875rem)/1 var(--hand); color: var(--bean); }
+    .g-h { margin: 6px 0 0; font: 400 clamp(3.25rem, 2rem + 6vw, 6.5rem)/.9 var(--display); text-transform: uppercase; color: var(--ink); }
+    .ribbon { position: relative; height: 58px; margin: 26px calc(var(--pad) * -1 - 10px) 0; }
+    .ribbon .rl, .ribbon .rr { position: absolute; top: 0; bottom: 0; width: 51%; background: linear-gradient(var(--bean) 0 18%, #7a4a28 18% 26%, var(--bean) 26% 74%, #7a4a28 74% 82%, var(--bean) 82%); border-block: 3px solid var(--ink); }
+    .ribbon .rl { left: 0; transform-origin: 0 50%; } .ribbon .rr { right: 0; transform-origin: 100% 50%; }
+    .bow { position: absolute; left: 50%; top: 50%; width: 120px; height: 80px; margin: -40px 0 0 -60px; }
+    .bow b { position: absolute; top: 6px; width: 58px; height: 68px; border: 3px solid var(--ink); background: var(--latte); border-radius: 50% 10% 50% 10%; }
+    .bow b:first-child { left: 0; transform: rotate(-20deg); } .bow b:nth-child(2) { right: 0; transform: rotate(20deg) scaleX(-1); }
+    .bow i { position: absolute; left: 44px; top: 22px; width: 32px; height: 36px; border: 3px solid var(--ink); border-radius: 10px; background: var(--bean); }
+    .g-btn { margin-top: 26px; height: 58px; padding: 0 30px; border: 3px solid var(--ink); border-radius: 999px; background: var(--ink); color: var(--cream); box-shadow: 6px 6px 0 var(--bean); font: 400 1.375rem/1 var(--display); text-transform: uppercase; letter-spacing: .04em; white-space: nowrap; animation: bob 1.8s var(--ease) infinite; }
+    .g-s { margin: 16px 0 0; font: 600 .9375rem/1.3 var(--sans); color: var(--muted); }
+    .g-quiet { margin-top: 8px; padding: 6px 10px; font: 600 .8125rem/1 var(--sans); color: var(--muted); text-decoration: underline; text-underline-offset: 3px; }
+    .burst-bean { position: fixed; width: 34px; height: 35px; z-index: 220; pointer-events: none; }
+    .mute { position: fixed; right: 14px; bottom: 14px; z-index: 175; width: 52px; height: 52px; border: 3px solid var(--ink); border-radius: 50%; background: var(--cream); box-shadow: 4px 4px 0 var(--ink); font-size: 1.375rem; line-height: 1; }
+    .mute[hidden] { display: none; }
+    .jk-stamp em { display: block; margin-top: 2px; font: 700 clamp(1rem, .9rem + .5vw, 1.375rem)/1 var(--hand); font-style: normal; color: var(--bean); }
     /* the fake opening, then the gag */
     .openstk { position: fixed; left: 50%; top: 18%; z-index: 168; display: grid; justify-items: center; gap: 6px; padding: 16px 28px 14px; border: 4px solid var(--ink); border-radius: 22px; background: var(--bean); color: var(--cream); box-shadow: 9px 9px 0 var(--ink); text-align: center; pointer-events: none; translate: -50% 0; }
     .openstk[hidden] { display: none; }
@@ -644,8 +665,20 @@
   </div>
 
   <div class="pour" data-pour aria-hidden="true"><div class="pw-top"><svg viewBox="0 0 1200 56" preserveAspectRatio="none"><path d="M0 56 V28 Q75 4 150 28 T300 28 T450 28 T600 28 T750 28 T900 28 T1050 28 T1200 28 V56Z" fill="#3a2418"/></svg><svg viewBox="0 0 1200 56" preserveAspectRatio="none"><path d="M0 56 V28 Q75 4 150 28 T300 28 T450 28 T600 28 T750 28 T900 28 T1050 28 T1200 28 V56Z" fill="#d2b08e"/></svg></div><div class="pw-body"><img src="img/bean-light.webp" width="360" height="367" alt=""></div><div class="pw-top pw-bot"><svg viewBox="0 0 1200 56" preserveAspectRatio="none"><path d="M0 56 V28 Q75 4 150 28 T300 28 T450 28 T600 28 T750 28 T900 28 T1050 28 T1200 28 V56Z" fill="#3a2418"/></svg></div></div>
-  <div class="openstk" data-openstk hidden aria-hidden="true"><b>We're Open!</b><span>come on in</span></div>
-  <div class="jk" data-jkgag hidden aria-hidden="true"><div class="jk-dim"></div><div class="jk-stamp"><b>Just Kidding.</b><span>It's not open yet</span></div></div>
+  <div class="gate" data-gate hidden>
+    <div class="g-in">
+      <img class="g-logo" src="img/logo.webp" width="1200" height="776" alt="Coffee Talks">
+      <p class="g-k">psst. the new site is here.</p>
+      <h2 class="g-h">Grand<br>Opening</h2>
+      <div class="ribbon" aria-hidden="true"><i class="rl" data-rl></i><i class="rr" data-rr></i><span class="bow" data-bow><b></b><b></b><i></i></span></div>
+      <button class="g-btn" type="button" data-cut>✂ Cut The Ribbon</button>
+      <p class="g-s">turn your sound on for this one 🔊</p>
+      <button class="g-quiet" type="button" data-quiet>no sound, just watch</button>
+    </div>
+  </div>
+  <div class="openstk" data-openstk hidden aria-hidden="true"><b>We're Open!</b><span>come on in!!</span></div>
+  <div class="jk" data-jkgag hidden aria-hidden="true"><div class="jk-dim"></div><div class="jk-stamp"><b>Just Kidding.</b><span>It's not open yet</span><em>(we had to)</em></div></div>
+  <button class="mute" type="button" data-mute hidden aria-label="Turn sound off">🔊</button>
   <div class="teaser dark" data-teaser hidden data-lenis-prevent>
     <div class="t-bg" aria-hidden="true"><div class="t-row"><span>Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ </span><span>Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ </span></div><div class="t-row"><span>Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ </span><span>Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ </span></div><div class="t-row"><span>Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ </span><span>Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ </span></div><div class="t-row"><span>Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ </span><span>Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ </span></div><div class="t-row"><span>Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ </span><span>Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ Coming Soon ✦ Coffee Talks ✦ </span></div></div>
     <div class="t-wrap">
@@ -1160,6 +1193,32 @@
   const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
   const TEASER = document.documentElement.classList.contains('teaser');
+  // sound for the teaser: decoded ahead of time, plays only after the visitor taps (browser rule)
+  const SFX = (() => {
+    const names = ['snip', 'partyhorn', 'thud', 'crack', 'pour', 'stamp', 'whoosh', 'fanfare', 'airhorn', 'scratch', 'impact', 'sadtrombone', 'boing', 'flood', 'flip', 'pop', 'drop', 'chime', 'splat', 'womp', 'ding', 'loop'];
+    let ctx = null, master = null, musicG = null, music = null, on = true, hushUntil = 0; const bufs = {};
+    const init = () => {
+      if (ctx || !TEASER) return; const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return;
+      try { ctx = new AC(); } catch (e) { return; }
+      master = ctx.createGain(); master.connect(ctx.destination); musicG = ctx.createGain(); musicG.gain.value = 0; musicG.connect(master);
+      names.forEach(n => fetch(`snd/${n}.mp3`).then(r => r.arrayBuffer()).then(b => new Promise((ok, no) => ctx.decodeAudioData(b, ok, no))).then(b => { bufs[n] = b; }).catch(() => {}));
+      document.addEventListener('visibilitychange', () => { if (!ctx) return; document.hidden ? ctx.suspend() : ctx.resume(); });
+    };
+    const unlock = () => { if (ctx && ctx.state !== 'running') ctx.resume().catch(() => {}); };
+    const play = (n, g = 1, rate = 1, at = 0) => {
+      if (window.__sfxlog) window.__sfxlog.push([Math.round(performance.now() + at * 1000), n, !!(on && ctx && bufs[n] && performance.now() >= hushUntil)]);
+      if (!on || !ctx || !bufs[n] || performance.now() < hushUntil) return;
+      const src = ctx.createBufferSource(), v = ctx.createGain(); src.buffer = bufs[n]; src.playbackRate.value = rate; v.gain.value = g;
+      src.connect(v); v.connect(master); src.start(ctx.currentTime + at);
+    };
+    const startMusic = () => {
+      if (!ctx || music || !bufs.loop) { if (ctx && !bufs.loop) setTimeout(startMusic, 400); return; }
+      music = ctx.createBufferSource(); music.buffer = bufs.loop; music.loop = true; music.connect(musicG); music.start();
+      musicG.gain.setValueAtTime(0, ctx.currentTime); musicG.gain.linearRampToValueAtTime(.32, ctx.currentTime + 2.5);
+    };
+    const setOn = v => { on = v; if (master) master.gain.setTargetAtTime(v ? 1 : 0, ctx.currentTime, .05); };
+    return { init, unlock, play, startMusic, setOn, get on() { return on; }, hush: ms => { hushUntil = performance.now() + ms; } };
+  })();
   const store = { get(k, d) { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch (e) { return d; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} } };
   const onScreen = (el, cb, margin = '200px') => new IntersectionObserver(([e]) => cb(e.isIntersecting), { rootMargin: margin }).observe(el);
   if (HAS_G) gsap.registerPlugin(ScrollTrigger);
@@ -1305,6 +1364,18 @@
   })();
 
 
+  const beanBurst = (x, y, n = 16) => {
+    if (!ANIM) return;
+    for (let i = 0; i < n; i++) {
+      const b = document.createElement('img'); b.className = 'burst-bean'; b.src = i % 3 ? 'img/bean.webp' : 'img/bean-light.webp'; b.alt = ''; document.body.appendChild(b);
+      const a = -Math.PI / 2 + (Math.random() - .5) * 2.6, d = 160 + Math.random() * 260;
+      gsap.set(b, { left: x - 17, top: y - 17 });
+      gsap.timeline({ onComplete: () => b.remove() })
+        .to(b, { x: Math.cos(a) * d, y: Math.sin(a) * d, rotation: (Math.random() - .5) * 720, duration: .55, ease: 'power2.out' })
+        .to(b, { y: '+=' + (innerHeight * .9), rotation: '+=' + (Math.random() - .5) * 540, opacity: 0, duration: 1.1, ease: 'power1.in' });
+    }
+  };
+
   /* =============================================================
      TEASER: the opening plays, the site starts to show... just kidding.
      Coming soon, a countdown to Sunday 10 PM Eastern and a latte to stack.
@@ -1326,7 +1397,8 @@
     const open = () => {
       clearInterval(timer);
       const g = $('[data-jkgag]') || document.body.appendChild(Object.assign(document.createElement('div'), { className: 'jk', innerHTML: '<div class="jk-dim"></div><div class="jk-stamp"><b></b><span></span></div>' }));
-      g.hidden = false; $('b', g).textContent = "We're Open."; $('span', g).textContent = 'Come on in';
+      g.hidden = false; $('b', g).textContent = "We're Open."; $('span', g).textContent = 'Come on in'; const em = $('em', g); if (em) em.textContent = 'for real this time';
+      SFX.play('fanfare'); SFX.play('airhorn', .8, 1, .25);
       const go = () => { try { sessionStorage.removeItem('ct2-intro'); } catch (e) {} location.replace(location.pathname + (testing ? '?preview' + (window.__KEY ? '&k=' + encodeURIComponent(window.__KEY) : '') : '')); };
       if (!ANIM) { go(); return; }
       gsap.timeline().fromTo($('.jk-stamp', g), { scale: 3, rotation: 20, opacity: 0 }, { scale: 1, rotation: 6, opacity: 1, duration: .55, ease: 'back.out(2.6)' }).add(() => pour(go, { hold: 2 }), '+=1.2');
@@ -1334,6 +1406,9 @@
     const show = () => {
       if (shown) return; shown = true;
       T.hidden = false; tick(); timer = setInterval(tick, 250); game.init();
+      const mute = $('[data-mute]'); mute.hidden = false; mute.textContent = SFX.on ? '🔊' : '🔇';
+      mute.onclick = () => { SFX.setOn(!SFX.on); mute.textContent = SFX.on ? '🔊' : '🔇'; mute.setAttribute('aria-label', SFX.on ? 'Turn sound off' : 'Turn sound on'); if (SFX.on) SFX.startMusic(); };
+      [0, 1, 2, 3].forEach(i => SFX.play('flip', .7, 1 + i * .06, .7 + i * .08)); SFX.play('ding', .6, 1, 1.25); setTimeout(SFX.startMusic, 1600);
       if (!ANIM) { tFill.lvl = 42; return; }
       gsap.from($$('[data-tin]', T), { y: 46, opacity: 0, rotation: () => gsap.utils.random(-4, 4), duration: .8, ease: 'back.out(1.7)', stagger: .07, delay: .3 });
       gsap.from($$('.cd > div', T), { scale: .4, rotation: () => gsap.utils.random(-14, 14), duration: .7, ease: 'back.out(2.4)', stagger: .08, delay: .7 });
@@ -1343,6 +1418,8 @@
     // the site "opens": a WE'RE OPEN stamp slams onto the hero and holds, then the gag
     const fakeOpen = () => {
       const o = $('[data-openstk]'); o.hidden = false;
+      SFX.play('fanfare'); SFX.play('stamp', 1, 1, .08); SFX.play('airhorn', .75, 1, .55);
+      setTimeout(() => { const r = o.getBoundingClientRect(); beanBurst(r.left + r.width / 2, r.top + r.height / 2, 20); }, 120);
       gsap.timeline()
         .fromTo(o, { scale: 3.2, rotation: 18, opacity: 0 }, { scale: 1, rotation: -6, opacity: 1, duration: .55, ease: 'back.out(2.6)' })
         .fromTo($('span', o), { y: 14, opacity: 0 }, { y: 0, opacity: 1, duration: .35 }, .45)
@@ -1353,12 +1430,14 @@
     const gag = () => {
       const g = $('[data-jkgag]'), o = $('[data-openstk]'); g.hidden = false;
       if (!o.hidden) gsap.to(o, { y: innerHeight * .9, rotation: 38, opacity: 0, duration: .7, ease: 'power2.in', onComplete: () => { o.hidden = true; } });
+      SFX.play('scratch', 1); SFX.play('boing', .7, 1, .12); SFX.play('impact', .9, 1, .14); SFX.play('sadtrombone', 1, 1, .55); setTimeout(() => SFX.play('flood', .9), 3000);
       gsap.timeline()
         .to('main', { x: 9, duration: .045, yoyo: true, repeat: 7, ease: 'none', clearProps: 'x' })
         .fromTo($('.jk-dim', g), { opacity: 0 }, { opacity: 1, duration: .25 }, 0)
         .fromTo($('.jk-stamp', g), { scale: 3.4, rotation: -26, opacity: 0 }, { scale: 1, rotation: -7, opacity: 1, duration: .5, ease: 'back.out(2.6)' }, .1)
         .fromTo($('.jk-stamp span', g), { y: 16, opacity: 0 }, { y: 0, opacity: 1, duration: .35 }, .5)
         .to($('.jk-stamp', g), { rotation: -4, scale: 1.04, duration: .9, ease: 'sine.inOut' }, .65)
+        .to({}, { duration: 2.2 })
         .add(() => pour(() => { g.hidden = true; show(); }, { hold: .15 }), '+=.2');
     };
 
@@ -1408,12 +1487,13 @@
       };
       const drop = () => {
         const top = stack[stack.length - 1], y = yOf(stack.length - 1) - LH, l = Math.max(cur.x, top.x), r = Math.min(cur.x + cur.w, top.x + top.w), ov = r - l;
-        if (ov <= 2) { bits.push({ x: cur.x, y, w: cur.w, c: cur.c, vx: cur.dir * 80, vy: -60, r: 0, vr: cur.dir * 2.4, t: 0 }); cur = null; over(); return; }
-        if (Math.abs(cur.x - top.x) < 5) { streak++; const grow = streak >= 2 ? Math.min(8, w0 - top.w) : 0; stack.push({ x: top.x - grow / 2, w: top.w + grow, c: cur.c }); pops.push({ x: top.x + top.w / 2, y: y - 6, s: streak > 1 ? `Perfect Pour x${streak}` : 'Perfect Pour', t: 0 }); }
-        else { streak = 0; if (cur.x < top.x) bits.push({ x: cur.x, y, w: top.x - cur.x, c: cur.c, vx: -70, vy: -40, r: 0, vr: -2.2, t: 0 }); else bits.push({ x: r, y, w: cur.x + cur.w - r, c: cur.c, vx: 70, vy: -40, r: 0, vr: 2.2, t: 0 }); stack.push({ x: l, w: ov, c: cur.c }); }
+        if (ov <= 2) { bits.push({ x: cur.x, y, w: cur.w, c: cur.c, vx: cur.dir * 80, vy: -60, r: 0, vr: cur.dir * 2.4, t: 0 }); cur = null; SFX.play('splat'); SFX.play('womp', .7, 1, .3); over(); return; }
+        SFX.play('drop', .8, 1 + Math.min(.8, score * .035));
+        if (Math.abs(cur.x - top.x) < 5) { streak++; const grow = streak >= 2 ? Math.min(8, w0 - top.w) : 0; stack.push({ x: top.x - grow / 2, w: top.w + grow, c: cur.c }); pops.push({ x: top.x + top.w / 2, y: y - 6, s: streak > 1 ? `Perfect Pour x${streak}` : 'Perfect Pour', t: 0 }); SFX.play('chime', .7, 1 + Math.min(.5, streak * .08)); }
+        else { streak = 0; SFX.play('splat', .35, 1.4); if (cur.x < top.x) bits.push({ x: cur.x, y, w: top.x - cur.x, c: cur.c, vx: -70, vy: -40, r: 0, vr: -2.2, t: 0 }); else bits.push({ x: r, y, w: cur.x + cur.w - r, c: cur.c, vx: 70, vy: -40, r: 0, vr: 2.2, t: 0 }); stack.push({ x: l, w: ov, c: cur.c }); }
         score++; camT = Math.max(0, stack.length * LH - (H - BASE) * .5); spawn();
       };
-      const press = e => { if (e) e.preventDefault(); if (!ready) return; if (state !== 'play') { ui.hidden = true; reset(); state = 'play'; kick(); return; } drop(); kick(); };
+      const press = e => { if (e) e.preventDefault(); if (!ready) return; if (state !== 'play') { SFX.unlock(); SFX.play('pop'); ui.hidden = true; reset(); state = 'play'; kick(); return; } drop(); kick(); };
       const init = () => {
         if (ready) return; ready = true; size(); reset(); draw();
         addEventListener('resize', () => { const w = W; size(); if (Math.abs(w - W) > 2) { reset(); if (state === 'play') { state = 'idle'; ui.hidden = false; } } draw(); });
@@ -1779,7 +1859,7 @@
     gsap.set(ib, { x: bx, y: by, scale: bigS, transformOrigin: '50% 50%' });
     gsap.set('[data-empty], [data-fill]', { scale: .35, opacity: 0, transformOrigin: '50% 55%' });
     gsap.set('[data-istamp]', { scale: 2.4, rotation: -14 });
-    const itl = gsap.timeline({ onComplete: () => { intro.remove(); heroIn.play(); if (TEASER) gsap.delayedCall(1.0, teaser.fakeOpen); } });
+    const itl = gsap.timeline({ paused: TEASER, onComplete: () => { intro.remove(); heroIn.play(); if (TEASER) gsap.delayedCall(1.0, teaser.fakeOpen); } });
     itl.from(ib, { y: by - innerHeight * .7, rotation: -25, duration: .45, ease: 'power3.in' })
       .to(ib, { scaleY: bigS * .9, scaleX: bigS * 1.06, duration: .07, yoyo: true, repeat: 1 })
       .to(ib, { rotation: 7, duration: .06, yoyo: true, repeat: 3, ease: 'sine.inOut' }, '+=.04')
@@ -1798,9 +1878,32 @@
       .to('[data-istamp]', { opacity: 1, scale: 1, rotation: -5, duration: .35, ease: 'back.out(3)' }, 'pour+=1.05')
       .to(stage, { x: 5, duration: .05, yoyo: true, repeat: 3 }, 'pour+=1.12')
       .to([stage, '[data-istamp]'], { opacity: 0, y: -24, duration: .35, ease: 'expo.in' }, '+=.45')
-      .to(intro, { clipPath: 'inset(0 0 100% 0)', duration: .7, ease: 'expo.inOut' }, '-=.1');
+      .to(intro, { clipPath: 'inset(0 0 100% 0)', duration: .7, ease: 'expo.inOut' }, '-=.1')
+      .add(() => SFX.play('whoosh', .6), '<');
+    // sounds on the beats of the opening (teaser only; silent everywhere else)
+    itl.add(() => SFX.play('whoosh', .45, .8), .05).add(() => SFX.play('thud'), .44).add(() => SFX.play('crack'), 'open').add(() => SFX.play('pop', .7), 'open+=.06')
+      .add(() => SFX.play('pour', .9), 'pour').add(() => SFX.play('stamp'), 'pour+=1.07');
     gsap.set(intro, { clipPath: 'inset(0 0 0% 0)' });
-    $('[data-skip]').addEventListener('click', () => itl.progress(1));
+    $('[data-skip]').addEventListener('click', () => { SFX.hush(400); itl.progress(1); });
+    if (TEASER) {
+      // GRAND OPENING: cutting the ribbon is the tap that lets the browser play sound
+      SFX.init();
+      const gate = $('[data-gate]'); gate.hidden = false;
+      const go = withSound => {
+        if (gate.dataset.done) return; gate.dataset.done = 1; SFX.unlock(); SFX.setOn(withSound);
+        SFX.play('snip'); SFX.play('partyhorn', .9, 1, .12);
+        const bow = $('[data-bow]').getBoundingClientRect(); beanBurst(bow.left + bow.width / 2, bow.top + bow.height / 2, 22);
+        gsap.timeline({ onComplete: () => { gate.remove(); itl.play(); } })
+          .to('[data-rl]', { rotation: -24, y: 260, opacity: 0, duration: .8, ease: 'power2.in' }, 0)
+          .to('[data-rr]', { rotation: 24, y: 260, opacity: 0, duration: .8, ease: 'power2.in' }, 0)
+          .to('[data-bow]', { y: -120, rotation: 200, scale: .6, opacity: 0, duration: .7, ease: 'power2.out' }, 0)
+          .to(['.g-btn', '.g-s', '.g-quiet'], { opacity: 0, y: 20, duration: .25 }, 0)
+          .to('.g-h', { scale: 1.15, duration: .18, yoyo: true, repeat: 1 }, .05)
+          .to(gate, { opacity: 0, duration: .35 }, .75);
+      };
+      $('[data-cut]').addEventListener('click', () => go(true));
+      $('[data-quiet]').addEventListener('click', () => go(false));
+    }
   }
 
   // brewed: pin + scrub
