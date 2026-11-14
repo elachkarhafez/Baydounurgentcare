@@ -15,6 +15,14 @@ When the user says a business doesn't want its site (or "said no", "passed", "no
 
 Do NOT build a generic concept, deploy anything new, or `git rm` the folder any more. The older process in `references/declined.md` (concept rebuild) is retired unless the user asks for it.
 
+## Standing rule: every site opens with an insanely well animated logo opening (newest)
+
+The user said: "Make sure for every website you do an insanely well animated logo opening".
+- Build it from the business's real logo, vectorised (potrace the logo into SVG paths) so it can be drawn, not a generic shape or a static image fade.
+- Choreograph several beats: the mark draws itself in strokes, then fills; the wordmark letters rise one by one; a shine or light sweep crosses it; brand-specific motion around it (steam, bubbles, sparks, petals, whatever fits the business); then a transition that hands off into the page (the logo flies to the nav brand position, or the curtain splits or pours away).
+- Keep it to about 2 to 2.5 seconds, play it once per visit (sessionStorage), let a tap or any key skip it, and skip it completely with prefers-reduced-motion. Lock scroll while it plays and release it at the end.
+- QA it with timed screenshots (about 4 frames) on phone and desktop before shipping.
+
 ## Standing rule: Sketchfab models are CC0 only
 
 The user said: "use only free ones tht dont need credits shown". Only free CC0 (public domain) Sketchfab models, never CC-BY, NonCommercial or paid. `kit/library/find.py` hides the rest and `fetch.py` re-checks the live license and refuses anything else. Downloads need `SKETCHFAB_TOKEN` (the user hasn't added it yet).
