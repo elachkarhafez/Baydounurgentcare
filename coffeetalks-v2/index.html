@@ -620,7 +620,7 @@
     footer .wrap { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 20px; margin-top: 30px; padding-top: 18px; border-top: 2px solid var(--ink); font-size: 13px; color: var(--muted); }
     @media (min-width: 1000px) { .sign-off { padding-bottom: 30px; } .closing { padding: 80px 0 72px; } footer .wrap { justify-content: space-between; } }
   </style>
-  <script>document.documentElement.classList.add('js');if(matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('rm');if(matchMedia('(hover: hover) and (pointer: fine)').matches)document.documentElement.classList.add('fine');try{if(sessionStorage.getItem('ct2-intro')&&!/[?&]intro/.test(location.search))document.documentElement.classList.add('seen')}catch(e){}(function(){var q=location.search,L=Date.parse('2026-11-16T03:00:00Z'),t=/[?&]in=(\d+)/.exec(q);if(t)L=Date.now()+t[1]*1000;window.__LAUNCH=L;if(t||/[?&]teaser/.test(q)||(Date.now()<L&&!/[?&]preview/.test(q)))document.documentElement.classList.add('teaser')})()</script>
+  <script>document.documentElement.classList.add('js');if(matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('rm');if(matchMedia('(hover: hover) and (pointer: fine)').matches)document.documentElement.classList.add('fine');try{if(sessionStorage.getItem('ct2-intro')&&!/[?&]intro/.test(location.search))document.documentElement.classList.add('seen')}catch(e){}(function(){var q=location.search,m=/[?&]k=([^&]+)/.exec(q),f=function(s){for(var x=2166136261,i=0;i<s.length;i++){x^=s.charCodeAt(i);x=Math.imul(x,16777619)>>>0}return x.toString(16)},ok=/^(127\.0\.0\.1|localhost)$/.test(location.hostname)||!!(m&&f(decodeURIComponent(m[1]))==='bd965712');window.__KEY=ok&&m?m[1]:'';var L=Date.parse('2026-11-16T03:00:00Z'),t=ok&&/[?&]in=(\d+)/.exec(q);if(t)L=Date.now()+t[1]*1000;window.__LAUNCH=L;if(t||(ok&&/[?&]teaser/.test(q))||(Date.now()<L&&!(ok&&/[?&]preview/.test(q))))document.documentElement.classList.add('teaser')})()</script>
 </head>
 <body>
   <div class="beans-bg" data-beans aria-hidden="true"></div>
@@ -1305,7 +1305,7 @@
      ============================================================= */
   const teaser = (() => {
     if (!TEASER) return null;
-    const T = $('[data-teaser]'), LAUNCH = window.__LAUNCH, testing = /[?&](in|teaser)/.test(location.search);
+    const T = $('[data-teaser]'), LAUNCH = window.__LAUNCH, testing = /[?&](in|teaser)/.test(location.search) && (!!window.__KEY || /^(127\.0\.0\.1|localhost)$/.test(location.hostname));
     let skew = 0, prev = [], opened = false, timer = 0, shown = false;
     fetch(location.pathname, { method: 'HEAD', cache: 'no-store' }).then(r => { const d = Date.parse(r.headers.get('date')); if (d && !/[?&]in=/.test(location.search)) skew = d - Date.now(); }).catch(() => {});
     const cells = ['d', 'h', 'm', 's'].map(k => $(`[data-cd${k}]`, T)), two = n => String(n).padStart(2, '0');
@@ -1321,7 +1321,7 @@
       clearInterval(timer);
       const g = $('[data-jkgag]') || document.body.appendChild(Object.assign(document.createElement('div'), { className: 'jk', innerHTML: '<div class="jk-dim"></div><div class="jk-stamp"><b></b><span></span></div>' }));
       g.hidden = false; $('b', g).textContent = "We're Open."; $('span', g).textContent = 'Come on in';
-      const go = () => { try { sessionStorage.removeItem('ct2-intro'); } catch (e) {} location.replace(location.pathname + (testing ? '?preview' : '')); };
+      const go = () => { try { sessionStorage.removeItem('ct2-intro'); } catch (e) {} location.replace(location.pathname + (testing ? '?preview' + (window.__KEY ? '&k=' + encodeURIComponent(window.__KEY) : '') : '')); };
       if (!ANIM) { go(); return; }
       gsap.timeline().fromTo($('.jk-stamp', g), { scale: 3, rotation: 20, opacity: 0 }, { scale: 1, rotation: 6, opacity: 1, duration: .55, ease: 'back.out(2.6)' }).add(() => pour(go, { hold: 2 }), '+=1.2');
     };
