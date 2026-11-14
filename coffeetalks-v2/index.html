@@ -299,14 +299,18 @@
     .g-logo { width: min(170px, 42vw); height: auto; margin: 0 auto; }
     .g-k { margin: 14px 0 0; font: 700 clamp(1.375rem, 1.1rem + 1vw, 1.875rem)/1 var(--hand); color: var(--bean); }
     .g-h { margin: 6px 0 0; font: 400 clamp(3.25rem, 2rem + 6vw, 6.5rem)/.9 var(--display); text-transform: uppercase; color: var(--ink); }
-    .ribbon { position: relative; height: 58px; margin: 26px calc(var(--pad) * -1 - 10px) 0; }
-    .ribbon .rl, .ribbon .rr { position: absolute; top: 0; bottom: 0; width: 51%; background: linear-gradient(var(--bean) 0 18%, #7a4a28 18% 26%, var(--bean) 26% 74%, #7a4a28 74% 82%, var(--bean) 82%); border-block: 3px solid var(--ink); }
-    .ribbon .rl { left: 0; transform-origin: 0 50%; } .ribbon .rr { right: 0; transform-origin: 100% 50%; }
-    .bow { position: absolute; left: 50%; top: 50%; width: 120px; height: 80px; margin: -40px 0 0 -60px; }
-    .bow b { position: absolute; top: 6px; width: 58px; height: 68px; border: 3px solid var(--ink); background: var(--latte); border-radius: 50% 10% 50% 10%; }
-    .bow b:first-child { left: 0; transform: rotate(-20deg); } .bow b:nth-child(2) { right: 0; transform: rotate(20deg) scaleX(-1); }
-    .bow i { position: absolute; left: 44px; top: 22px; width: 32px; height: 36px; border: 3px solid var(--ink); border-radius: 10px; background: var(--bean); }
-    .g-btn { margin-top: 26px; height: 58px; padding: 0 30px; border: 3px solid var(--ink); border-radius: 999px; background: var(--ink); color: var(--cream); box-shadow: 6px 6px 0 var(--bean); font: 400 1.375rem/1 var(--display); text-transform: uppercase; letter-spacing: .04em; white-space: nowrap; animation: bob 1.8s var(--ease) infinite; }
+    .shop { display: block; height: min(56svh, 560px); width: auto; max-width: 100%; margin: 14px auto 0; overflow: visible; }
+    .shop .bulb { fill: #ffe7a6; stroke: #15100c; stroke-width: 1.5; animation: twinkle 1.6s ease-in-out infinite; }
+    @keyframes twinkle { 50% { fill: #fff8e0; filter: drop-shadow(0 0 6px #ffd98a); } }
+    .shop .bln { transform-box: fill-box; transform-origin: 50% 100%; animation: bob 3.2s ease-in-out infinite; }
+    .shop .hang { transform-box: view-box; transform-origin: 200px 0; animation: sway 4s ease-in-out infinite; }
+    @keyframes sway { 50% { transform: rotate(1.6deg); } }
+    .shop .beam { transform-box: view-box; mix-blend-mode: screen; opacity: .55; animation: sweep 5s ease-in-out infinite alternate; }
+    .shop .beam.bl { transform-origin: 60px 560px; } .shop .beam.br { transform-origin: 340px 560px; animation-delay: -2.5s; }
+    @keyframes sweep { from { transform: rotate(-9deg); } to { transform: rotate(9deg); } }
+    html.rm .shop * { animation: none !important; }
+    @media (min-width: 700px) { .g-h br { display: none; } .gate .g-h { font-size: clamp(3rem, 2rem + 3vw, 4.75rem); } }
+    .g-btn { margin-top: 18px; height: 58px; padding: 0 30px; border: 3px solid var(--ink); border-radius: 999px; background: var(--ink); color: var(--cream); box-shadow: 6px 6px 0 var(--bean); font: 400 1.375rem/1 var(--display); text-transform: uppercase; letter-spacing: .04em; white-space: nowrap; animation: bob 1.8s var(--ease) infinite; }
     .g-s { margin: 16px 0 0; font: 600 .9375rem/1.3 var(--sans); color: var(--muted); }
     .g-quiet { margin-top: 8px; padding: 6px 10px; font: 600 .8125rem/1 var(--sans); color: var(--muted); text-decoration: underline; text-underline-offset: 3px; }
     .burst-bean { position: fixed; width: 34px; height: 35px; z-index: 220; pointer-events: none; }
@@ -667,10 +671,32 @@
   <div class="pour" data-pour aria-hidden="true"><div class="pw-top"><svg viewBox="0 0 1200 56" preserveAspectRatio="none"><path d="M0 56 V28 Q75 4 150 28 T300 28 T450 28 T600 28 T750 28 T900 28 T1050 28 T1200 28 V56Z" fill="#3a2418"/></svg><svg viewBox="0 0 1200 56" preserveAspectRatio="none"><path d="M0 56 V28 Q75 4 150 28 T300 28 T450 28 T600 28 T750 28 T900 28 T1050 28 T1200 28 V56Z" fill="#d2b08e"/></svg></div><div class="pw-body"><img src="img/bean-light.webp" width="360" height="367" alt=""></div><div class="pw-top pw-bot"><svg viewBox="0 0 1200 56" preserveAspectRatio="none"><path d="M0 56 V28 Q75 4 150 28 T300 28 T450 28 T600 28 T750 28 T900 28 T1050 28 T1200 28 V56Z" fill="#3a2418"/></svg></div></div>
   <div class="gate" data-gate hidden>
     <div class="g-in">
-      <img class="g-logo" src="img/logo.webp" width="1200" height="776" alt="Coffee Talks">
       <p class="g-k">psst. the new site is here.</p>
-      <h2 class="g-h">Grand<br>Opening</h2>
-      <div class="ribbon" aria-hidden="true"><i class="rl" data-rl></i><i class="rr" data-rr></i><span class="bow" data-bow><b></b><b></b><i></i></span></div>
+      <h2 class="g-h">Grand<br> Opening</h2>
+      <svg class="shop" viewBox="0 0 400 560" data-shop aria-hidden="true">
+        <defs>
+          <linearGradient id="gGlow" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffefcf"/><stop offset="1" stop-color="#e3c39b"/></linearGradient>
+          <radialGradient id="gIn" cx=".5" cy=".55" r=".7"><stop offset="0" stop-color="#fff6e4"/><stop offset="1" stop-color="#f1c98f"/></radialGradient>
+          <linearGradient id="gBeam" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#fff3d6" stop-opacity=".75"/><stop offset="1" stop-color="#fff3d6" stop-opacity="0"/></linearGradient>
+        </defs>
+        <path class="beam bl" d="M60 560 L-40 0 L130 0 Z" fill="url(#gBeam)"/><path class="beam br" d="M340 560 L270 0 L440 0 Z" fill="url(#gBeam)"/>
+        <g class="hang" data-sign><path d="M150 0 V44 M250 0 V44" stroke="#15100c" stroke-width="3"/><rect x="108" y="40" width="184" height="98" rx="16" fill="#5e3b25" stroke="#15100c" stroke-width="4"/><image href="img/logo-light.webp" x="127" y="47" width="146" height="94"/></g>
+        <rect x="34" y="176" width="332" height="352" fill="#3a2418" stroke="#15100c" stroke-width="4"/>
+        <path d="M34 214 H366" stroke="#15100c" stroke-width="3" opacity=".6"/>
+        <rect x="52" y="262" width="96" height="140" rx="8" fill="url(#gGlow)" stroke="#efe2d0" stroke-width="6"/><path d="M100 262 V402 M52 332 H148" stroke="#efe2d0" stroke-width="4"/><path d="M66 388 h22 l-3 -24 h-16 z M110 388 h22 l-3 -24 h-16 z" fill="#5e3b25" opacity=".55"/><path d="M62 300 q14 -16 30 0 M108 296 q14 -16 30 0" stroke="#5e3b25" stroke-width="3" fill="none" opacity=".35"/><rect x="252" y="262" width="96" height="140" rx="8" fill="url(#gGlow)" stroke="#efe2d0" stroke-width="6"/><path d="M300 262 V402 M252 332 H348" stroke="#efe2d0" stroke-width="4"/><path d="M266 388 h22 l-3 -24 h-16 z M310 388 h22 l-3 -24 h-16 z" fill="#5e3b25" opacity=".55"/><path d="M262 300 q14 -16 30 0 M308 296 q14 -16 30 0" stroke="#5e3b25" stroke-width="3" fill="none" opacity=".35"/>
+        <rect x="150" y="248" width="100" height="280" fill="url(#gIn)" data-inside/>
+        <g data-doorl><rect x="150" y="248" width="50" height="280" fill="#5e3b25" stroke="#15100c" stroke-width="4"/><rect x="159" y="264" width="32" height="128" rx="5" fill="#d2b08e" opacity=".5"/><rect x="159" y="404" width="32" height="104" rx="5" fill="none" stroke="#15100c" stroke-width="2.5" opacity=".6"/><circle cx="192" cy="398" r="4.5" fill="#efe2d0" stroke="#15100c" stroke-width="1.5"/></g>
+        <g data-doorr><rect x="200" y="248" width="50" height="280" fill="#5e3b25" stroke="#15100c" stroke-width="4"/><rect x="209" y="264" width="32" height="128" rx="5" fill="#d2b08e" opacity=".5"/><rect x="209" y="404" width="32" height="104" rx="5" fill="none" stroke="#15100c" stroke-width="2.5" opacity=".6"/><circle cx="208" cy="398" r="4.5" fill="#efe2d0" stroke="#15100c" stroke-width="1.5"/></g>
+        <g data-osign><path d="M184 288 L200 272 L216 288" stroke="#15100c" stroke-width="2.5" fill="none"/><rect x="162" y="286" width="76" height="34" rx="6" fill="#f7f3ec" stroke="#15100c" stroke-width="3" data-osignbg/><text x="200" y="310" text-anchor="middle" font-family="Anton, Impact, sans-serif" font-size="19" letter-spacing="1" fill="#15100c" data-osigntxt>CLOSED</text></g>
+        <rect x="16" y="142" width="368" height="10" rx="3" fill="#15100c"/>
+        <rect x="20" y="150" width="30" height="44" fill="#5e3b25"/><circle cx="35" cy="194" r="15" fill="#5e3b25"/><rect x="50" y="150" width="30" height="44" fill="#f7f3ec"/><circle cx="65" cy="194" r="15" fill="#f7f3ec"/><rect x="80" y="150" width="30" height="44" fill="#5e3b25"/><circle cx="95" cy="194" r="15" fill="#5e3b25"/><rect x="110" y="150" width="30" height="44" fill="#f7f3ec"/><circle cx="125" cy="194" r="15" fill="#f7f3ec"/><rect x="140" y="150" width="30" height="44" fill="#5e3b25"/><circle cx="155" cy="194" r="15" fill="#5e3b25"/><rect x="170" y="150" width="30" height="44" fill="#f7f3ec"/><circle cx="185" cy="194" r="15" fill="#f7f3ec"/><rect x="200" y="150" width="30" height="44" fill="#5e3b25"/><circle cx="215" cy="194" r="15" fill="#5e3b25"/><rect x="230" y="150" width="30" height="44" fill="#f7f3ec"/><circle cx="245" cy="194" r="15" fill="#f7f3ec"/><rect x="260" y="150" width="30" height="44" fill="#5e3b25"/><circle cx="275" cy="194" r="15" fill="#5e3b25"/><rect x="290" y="150" width="30" height="44" fill="#f7f3ec"/><circle cx="305" cy="194" r="15" fill="#f7f3ec"/><rect x="320" y="150" width="30" height="44" fill="#5e3b25"/><circle cx="335" cy="194" r="15" fill="#5e3b25"/><rect x="350" y="150" width="30" height="44" fill="#f7f3ec"/><circle cx="365" cy="194" r="15" fill="#f7f3ec"/><path d="M20 150 V194 A15 15 0 0 0 50 194 A15 15 0 0 0 80 194 A15 15 0 0 0 110 194 A15 15 0 0 0 140 194 A15 15 0 0 0 170 194 A15 15 0 0 0 200 194 A15 15 0 0 0 230 194 A15 15 0 0 0 260 194 A15 15 0 0 0 290 194 A15 15 0 0 0 320 194 A15 15 0 0 0 350 194 A15 15 0 0 0 380 194 V150 Z" fill="none" stroke="#15100c" stroke-width="3.5" stroke-linejoin="round"/>
+        <path d="M34 214 Q200 262 366 214" fill="none" stroke="#15100c" stroke-width="2"/><circle class="bulb" style="animation-delay:-0.00s" cx="49.1" cy="218.2" r="6.5"/><circle class="bulb" style="animation-delay:-0.37s" cx="79.3" cy="225.3" r="6.5"/><circle class="bulb" style="animation-delay:-0.74s" cx="109.5" cy="230.9" r="6.5"/><circle class="bulb" style="animation-delay:-1.11s" cx="139.6" cy="234.8" r="6.5"/><circle class="bulb" style="animation-delay:-1.48s" cx="169.8" cy="237.2" r="6.5"/><circle class="bulb" style="animation-delay:-1.85s" cx="200.0" cy="238.0" r="6.5"/><circle class="bulb" style="animation-delay:-2.22s" cx="230.2" cy="237.2" r="6.5"/><circle class="bulb" style="animation-delay:-2.59s" cx="260.4" cy="234.8" r="6.5"/><circle class="bulb" style="animation-delay:-2.96s" cx="290.5" cy="230.9" r="6.5"/><circle class="bulb" style="animation-delay:-3.33s" cx="320.7" cy="225.3" r="6.5"/><circle class="bulb" style="animation-delay:-3.70s" cx="350.9" cy="218.2" r="6.5"/>
+        <rect x="0" y="528" width="400" height="32" fill="#d2b08e" stroke="#15100c" stroke-width="3"/><rect x="138" y="518" width="124" height="12" rx="3" fill="#efe2d0" stroke="#15100c" stroke-width="3"/>
+        <g data-bl><g class="bln" style="animation-delay:-0s"><path d="M34 289 q-2 40 4 90 t4 140" fill="none" stroke="#15100c" stroke-width="1.6"/><ellipse cx="34" cy="262" rx="21" ry="27" fill="#d2b08e" stroke="#15100c" stroke-width="3"/><path d="M25 250 q4 -8 12 -9" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" opacity=".8"/><path d="M29 289 h10 l-5 7 z" fill="#d2b08e" stroke="#15100c" stroke-width="2"/></g><g class="bln" style="animation-delay:-0.7s"><path d="M62 255 q-2 40 4 90 t4 140" fill="none" stroke="#15100c" stroke-width="1.6"/><ellipse cx="62" cy="228" rx="21" ry="27" fill="#f7f3ec" stroke="#15100c" stroke-width="3"/><path d="M53 216 q4 -8 12 -9" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" opacity=".8"/><path d="M57 255 h10 l-5 7 z" fill="#f7f3ec" stroke="#15100c" stroke-width="2"/></g><g class="bln" style="animation-delay:-1.3s"><path d="M28 227 q-2 40 4 90 t4 140" fill="none" stroke="#15100c" stroke-width="1.6"/><ellipse cx="28" cy="200" rx="21" ry="27" fill="#5e3b25" stroke="#15100c" stroke-width="3"/><path d="M19 188 q4 -8 12 -9" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" opacity=".8"/><path d="M23 227 h10 l-5 7 z" fill="#5e3b25" stroke="#15100c" stroke-width="2"/></g></g><g data-br><g class="bln" style="animation-delay:-0.4s"><path d="M366 289 q-10 40 -4 90 t-4 140" fill="none" stroke="#15100c" stroke-width="1.6"/><ellipse cx="366" cy="262" rx="21" ry="27" fill="#d2b08e" stroke="#15100c" stroke-width="3"/><path d="M357 250 q4 -8 12 -9" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" opacity=".8"/><path d="M361 289 h10 l-5 7 z" fill="#d2b08e" stroke="#15100c" stroke-width="2"/></g><g class="bln" style="animation-delay:-1.1s"><path d="M338 255 q-10 40 -4 90 t-4 140" fill="none" stroke="#15100c" stroke-width="1.6"/><ellipse cx="338" cy="228" rx="21" ry="27" fill="#5e3b25" stroke="#15100c" stroke-width="3"/><path d="M329 216 q4 -8 12 -9" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" opacity=".8"/><path d="M333 255 h10 l-5 7 z" fill="#5e3b25" stroke="#15100c" stroke-width="2"/></g><g class="bln" style="animation-delay:-1.8s"><path d="M372 227 q-10 40 -4 90 t-4 140" fill="none" stroke="#15100c" stroke-width="1.6"/><ellipse cx="372" cy="200" rx="21" ry="27" fill="#f7f3ec" stroke="#15100c" stroke-width="3"/><path d="M363 188 q4 -8 12 -9" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" opacity=".8"/><path d="M367 227 h10 l-5 7 z" fill="#f7f3ec" stroke="#15100c" stroke-width="2"/></g></g>
+        <g data-rl><rect x="-6" y="410" width="206" height="24" fill="#5e3b25" stroke="#15100c" stroke-width="3"/><path d="M-6 416 H200 M-6 428 H200" stroke="#7a4a28" stroke-width="2.5"/></g>
+        <g data-rr><rect x="200" y="410" width="206" height="24" fill="#5e3b25" stroke="#15100c" stroke-width="3"/><path d="M200 416 H406 M200 428 H406" stroke="#7a4a28" stroke-width="2.5"/></g>
+        <g data-bow><path d="M200 422 C176 396 156 404 160 424 C164 444 186 440 200 422 Z M200 422 C224 396 244 404 240 424 C236 444 214 440 200 422 Z" fill="#d2b08e" stroke="#15100c" stroke-width="3"/><path d="M194 426 L184 458 L194 452 L198 462 Z M206 426 L216 458 L206 452 L202 462 Z" fill="#d2b08e" stroke="#15100c" stroke-width="2.5"/><rect x="191" y="413" width="18" height="20" rx="5" fill="#5e3b25" stroke="#15100c" stroke-width="3"/></g>
+      </svg>
       <button class="g-btn" type="button" data-cut>✂ Cut The Ribbon</button>
       <p class="g-s">turn your sound on for this one 🔊</p>
       <button class="g-quiet" type="button" data-quiet>no sound, just watch</button>
@@ -1195,7 +1221,7 @@
   const TEASER = document.documentElement.classList.contains('teaser');
   // sound for the teaser: decoded ahead of time, plays only after the visitor taps (browser rule)
   const SFX = (() => {
-    const names = ['snip', 'partyhorn', 'thud', 'crack', 'pour', 'stamp', 'whoosh', 'fanfare', 'airhorn', 'scratch', 'impact', 'sadtrombone', 'boing', 'flood', 'flip', 'pop', 'drop', 'chime', 'splat', 'womp', 'ding', 'loop'];
+    const names = ['snip', 'partyhorn', 'thud', 'crack', 'pour', 'stamp', 'whoosh', 'fanfare', 'congrats', 'scratch', 'impact', 'sadtrombone', 'failed', 'boing', 'flood', 'flip', 'pop', 'drop', 'chime', 'splat', 'womp', 'gameover', 'newbest', 'ding', 'loop'];
     let ctx = null, master = null, musicG = null, music = null, on = true, hushUntil = 0; const bufs = {};
     const init = () => {
       if (ctx || !TEASER) return; const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return;
@@ -1214,7 +1240,7 @@
     const startMusic = () => {
       if (!ctx || music || !bufs.loop) { if (ctx && !bufs.loop) setTimeout(startMusic, 400); return; }
       music = ctx.createBufferSource(); music.buffer = bufs.loop; music.loop = true; music.connect(musicG); music.start();
-      musicG.gain.setValueAtTime(0, ctx.currentTime); musicG.gain.linearRampToValueAtTime(.32, ctx.currentTime + 2.5);
+      musicG.gain.setValueAtTime(0, ctx.currentTime); musicG.gain.linearRampToValueAtTime(.55, ctx.currentTime + 3);
     };
     const setOn = v => { on = v; if (master) master.gain.setTargetAtTime(v ? 1 : 0, ctx.currentTime, .05); };
     return { init, unlock, play, startMusic, setOn, get on() { return on; }, hush: ms => { hushUntil = performance.now() + ms; } };
@@ -1398,7 +1424,7 @@
       clearInterval(timer);
       const g = $('[data-jkgag]') || document.body.appendChild(Object.assign(document.createElement('div'), { className: 'jk', innerHTML: '<div class="jk-dim"></div><div class="jk-stamp"><b></b><span></span></div>' }));
       g.hidden = false; $('b', g).textContent = "We're Open."; $('span', g).textContent = 'Come on in'; const em = $('em', g); if (em) em.textContent = 'for real this time';
-      SFX.play('fanfare'); SFX.play('airhorn', .8, 1, .25);
+      SFX.play('fanfare'); SFX.play('congrats', 1, 1, .5);
       const go = () => { try { sessionStorage.removeItem('ct2-intro'); } catch (e) {} location.replace(location.pathname + (testing ? '?preview' + (window.__KEY ? '&k=' + encodeURIComponent(window.__KEY) : '') : '')); };
       if (!ANIM) { go(); return; }
       gsap.timeline().fromTo($('.jk-stamp', g), { scale: 3, rotation: 20, opacity: 0 }, { scale: 1, rotation: 6, opacity: 1, duration: .55, ease: 'back.out(2.6)' }).add(() => pour(go, { hold: 2 }), '+=1.2');
@@ -1418,7 +1444,7 @@
     // the site "opens": a WE'RE OPEN stamp slams onto the hero and holds, then the gag
     const fakeOpen = () => {
       const o = $('[data-openstk]'); o.hidden = false;
-      SFX.play('fanfare'); SFX.play('stamp', 1, 1, .08); SFX.play('airhorn', .75, 1, .55);
+      SFX.play('fanfare'); SFX.play('stamp', 1, 1, .06); SFX.play('congrats', 1, 1, .7);
       setTimeout(() => { const r = o.getBoundingClientRect(); beanBurst(r.left + r.width / 2, r.top + r.height / 2, 20); }, 120);
       gsap.timeline()
         .fromTo(o, { scale: 3.2, rotation: 18, opacity: 0 }, { scale: 1, rotation: -6, opacity: 1, duration: .55, ease: 'back.out(2.6)' })
@@ -1430,7 +1456,7 @@
     const gag = () => {
       const g = $('[data-jkgag]'), o = $('[data-openstk]'); g.hidden = false;
       if (!o.hidden) gsap.to(o, { y: innerHeight * .9, rotation: 38, opacity: 0, duration: .7, ease: 'power2.in', onComplete: () => { o.hidden = true; } });
-      SFX.play('scratch', 1); SFX.play('boing', .7, 1, .12); SFX.play('impact', .9, 1, .14); SFX.play('sadtrombone', 1, 1, .55); setTimeout(() => SFX.play('flood', .9), 3000);
+      SFX.play('scratch', 1); SFX.play('boing', .6, 1, .12); SFX.play('impact', 1, 1, .14); SFX.play('sadtrombone', 1, 1, .5); SFX.play('failed', 1, 1, 1.55); setTimeout(() => SFX.play('flood', .9), 3000);
       gsap.timeline()
         .to('main', { x: 9, duration: .045, yoyo: true, repeat: 7, ease: 'none', clearProps: 'x' })
         .fromTo($('.jk-dim', g), { opacity: 0 }, { opacity: 1, duration: .25 }, 0)
@@ -1487,8 +1513,8 @@
       };
       const drop = () => {
         const top = stack[stack.length - 1], y = yOf(stack.length - 1) - LH, l = Math.max(cur.x, top.x), r = Math.min(cur.x + cur.w, top.x + top.w), ov = r - l;
-        if (ov <= 2) { bits.push({ x: cur.x, y, w: cur.w, c: cur.c, vx: cur.dir * 80, vy: -60, r: 0, vr: cur.dir * 2.4, t: 0 }); cur = null; SFX.play('splat'); SFX.play('womp', .7, 1, .3); over(); return; }
-        SFX.play('drop', .8, 1 + Math.min(.8, score * .035));
+        if (ov <= 2) { bits.push({ x: cur.x, y, w: cur.w, c: cur.c, vx: cur.dir * 80, vy: -60, r: 0, vr: cur.dir * 2.4, t: 0 }); cur = null; SFX.play('splat'); SFX.play('womp', .8, 1, .25); SFX.play(score > best ? 'newbest' : 'gameover', 1, 1, 1.1); over(); return; }
+        SFX.play('drop', .9, .9 + Math.min(.5, score * .025) + Math.random() * .08);
         if (Math.abs(cur.x - top.x) < 5) { streak++; const grow = streak >= 2 ? Math.min(8, w0 - top.w) : 0; stack.push({ x: top.x - grow / 2, w: top.w + grow, c: cur.c }); pops.push({ x: top.x + top.w / 2, y: y - 6, s: streak > 1 ? `Perfect Pour x${streak}` : 'Perfect Pour', t: 0 }); SFX.play('chime', .7, 1 + Math.min(.5, streak * .08)); }
         else { streak = 0; SFX.play('splat', .35, 1.4); if (cur.x < top.x) bits.push({ x: cur.x, y, w: top.x - cur.x, c: cur.c, vx: -70, vy: -40, r: 0, vr: -2.2, t: 0 }); else bits.push({ x: r, y, w: cur.x + cur.w - r, c: cur.c, vx: 70, vy: -40, r: 0, vr: 2.2, t: 0 }); stack.push({ x: l, w: ov, c: cur.c }); }
         score++; camT = Math.max(0, stack.length * LH - (H - BASE) * .5); spawn();
@@ -1891,15 +1917,32 @@
       const gate = $('[data-gate]'); gate.hidden = false;
       const go = withSound => {
         if (gate.dataset.done) return; gate.dataset.done = 1; SFX.unlock(); SFX.setOn(withSound);
-        SFX.play('snip'); SFX.play('partyhorn', .9, 1, .12);
-        const bow = $('[data-bow]').getBoundingClientRect(); beanBurst(bow.left + bow.width / 2, bow.top + bow.height / 2, 22);
-        gsap.timeline({ onComplete: () => { gate.remove(); itl.play(); } })
-          .to('[data-rl]', { rotation: -24, y: 260, opacity: 0, duration: .8, ease: 'power2.in' }, 0)
-          .to('[data-rr]', { rotation: 24, y: 260, opacity: 0, duration: .8, ease: 'power2.in' }, 0)
-          .to('[data-bow]', { y: -120, rotation: 200, scale: .6, opacity: 0, duration: .7, ease: 'power2.out' }, 0)
+        const shop = $('[data-shop]'), bow = $('[data-bow]').getBoundingClientRect();
+        SFX.play('snip'); SFX.play('partyhorn', 1, 1, .15); SFX.play('ding', .9, 1, .95); SFX.play('flip', 1, 1, .5); SFX.play('whoosh', .7, .9, 1.5);
+        beanBurst(bow.left + bow.width / 2, bow.top + bow.height / 2, 24);
+        const t = gsap.timeline({ onComplete: () => { gate.remove(); itl.play(); } });
+        if (!ANIM) { t.to(gate, { opacity: 0, duration: .3 }); return; }
+        t.to('[data-rl]', { rotation: -28, y: 160, opacity: 0, duration: .8, ease: 'power2.in', svgOrigin: '0 422' }, 0)
+          .to('[data-rr]', { rotation: 28, y: 160, opacity: 0, duration: .8, ease: 'power2.in', svgOrigin: '400 422' }, 0)
+          .to('[data-bow]', { y: -260, rotation: 260, scale: .5, opacity: 0, duration: .8, ease: 'power2.out', svgOrigin: '200 430' }, 0)
           .to(['.g-btn', '.g-s', '.g-quiet'], { opacity: 0, y: 20, duration: .25 }, 0)
-          .to('.g-h', { scale: 1.15, duration: .18, yoyo: true, repeat: 1 }, .05)
-          .to(gate, { opacity: 0, duration: .35 }, .75);
+          .to('.g-h', { scale: 1.12, duration: .16, yoyo: true, repeat: 1 }, .05)
+          // the sign flips from CLOSED to OPEN
+          .to('[data-osign]', { scaleX: 0, duration: .14, ease: 'power2.in', svgOrigin: '200 303' }, .45)
+          .add(() => { $('[data-osigntxt]').textContent = 'OPEN!'; $('[data-osignbg]').setAttribute('fill', '#d2b08e'); }, .59)
+          .to('[data-osign]', { scaleX: 1, duration: .3, ease: 'back.out(3)', svgOrigin: '200 303' }, .59)
+          // the doors swing open, the balloons go up, the lights pop
+          .to('[data-doorl]', { scaleX: .1, duration: .55, ease: 'power3.inOut', svgOrigin: '150 388' }, .95)
+          .to('[data-doorr]', { scaleX: .1, duration: .55, ease: 'power3.inOut', svgOrigin: '250 388' }, .95)
+          .to('[data-osign]', { y: -30, opacity: 0, duration: .3 }, 1.0)
+          .set('.shop .bln', { animation: 'none' }, .88)
+          .to('[data-bl] .bln, [data-br] .bln', { y: -760, x: () => gsap.utils.random(-60, 60), rotation: () => gsap.utils.random(-30, 30), duration: 1.6, ease: 'power1.in', stagger: .06 }, .9)
+          .to('.shop .bulb', { attr: { r: 9 }, duration: .12, yoyo: true, repeat: 3, stagger: .02 }, .95)
+          // fly through the doors into the shop
+          .to(['.g-k', '.g-h'], { opacity: 0, y: -30, duration: .35, stagger: .04 }, 1.45)
+          .to(shop, { scale: 7, duration: 1.05, ease: 'power3.in', transformOrigin: '50% 69.6%' }, 1.55)
+          .to(gate, { backgroundColor: '#f7f3ec', duration: .3 }, 2.2)
+          .to(gate, { opacity: 0, duration: .3 }, 2.45);
       };
       $('[data-cut]').addEventListener('click', () => go(true));
       $('[data-quiet]').addEventListener('click', () => go(false));
