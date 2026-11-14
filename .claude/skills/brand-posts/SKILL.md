@@ -1,16 +1,17 @@
 ---
 name: brand-posts
-description: Make high quality social posts for a brand, as still images and animated videos (feed posts, carousels, reels/stories) with motion and sound, built from the brand's own photos, logo, colors, fonts and words. Use when the user types /brand-posts <brand>, or asks for posts, content, animated posts, reels, promo graphics or "example posts" for a business or brand, including to show a client. Covers finding the brand, pulling real assets, writing the post set, animating, rendering MP4s with sound, QA and delivery.
+description: Make high quality social posts for a brand (from its website and straight from its Instagram), as still images and animated videos (feed posts, carousels, reels/stories) with motion and sound, built from the brand's own photos, logo, colors, fonts and words. Use when the user types /brand-posts <brand>, or asks for posts, content, animated posts, reels, promo graphics or "example posts" for a business or brand, including to show a client. Covers finding the brand, pulling real assets, writing the post set, animating, rendering MP4s with sound, QA and delivery.
 ---
 
 # Brand posts: stills and animated videos from the brand's real assets
 
-`/brand-posts <brand name or website> [what they want]`, for example `/brand-posts Big Wiss Matcha` or `/brand-posts elevatedshots.com 3 reels for the new menu`.
+`/brand-posts <brand name, website or @instagram> [what they want]`, for example `/brand-posts Big Wiss Matcha`, `/brand-posts @whatatastematcha` or `/brand-posts elevatedshots.com 3 reels for the new menu`.
 
 Output: 6 to 8 posts unless the user says otherwise, each as a PNG still **and** an MP4 with motion and sound. The default mix is 6 feed posts (1080×1350) plus 1 or 2 reels (1080×1920). Send everything back in chat with `SendUserFile` (contact sheet first). Speed matters: the user wants something to show a client fast, so aim for 15 to 25 minutes, no pitches or questions unless the brand can't be found.
 
 Everything lives in `kit/`:
 - `kit/grab.py`: pulls a website's images, colors, fonts and copy.
+- `kit/ig.mjs`: pulls an Instagram account's latest posts (full-size images, captions, dates, carousel slides, reel videos and stills from them) through Instagram's public embed pages.
 - `kit/template.html`: the starting point for a posts page, with the animation helpers.
 - `kit/render.mjs`: renders the stills, the videos and the sound mix.
 - `kit/snd/`: CC0 sound effects and a CC0 lofi music bed. No credit is needed for any of them.
@@ -29,7 +30,23 @@ Everything lives in `kit/`:
    - **Colors:** their CSS tokens, the logo and the colors on their packaging. Never another client's.
    - **Fonts:** their own (`brief.json` `fonts`, loaded from Google Fonts). Use their fonts even when that's Inter, since the brand's own type beats the house ban list. If they have none, pick a pairing that fits the product.
    - **Marks:** the logo file plus any signature detail (Big Wiss: the red heart on the lid, the gold foil script).
-5. No website? Ask the user for an Instagram link or a few photos. Instagram itself usually can't be scraped from here. Never invent a brand's look.
+5. **Instagram, always when they have one** (from the user, the site's links in `brief.json` `instagram`, or a search):
+   ```bash
+   node kit/ig.mjs <handle> <scratchpad>/<brand>/
+   ```
+   It writes the following, next to the website files:
+   - `ig.json`: the name, bio line, follower and post counts, and each post's caption, date, link and reel flag.
+   - `img/ig-<n>.jpg`: the largest image Instagram offers for each post, plus every slide of a carousel.
+   - `vid/ig-<n>.mp4`: the video for reels that allow it, with three stills from each video (`img/ig-<n>-frame<k>.jpg`).
+   - `ig-sheet.jpg`: a contact sheet of all of it. **Look at it.**
+
+   Notes on what it can and can't get:
+   - **Freshest facts:** Instagram usually has the newest dates, locations, flavors and specials. Captions count as real facts, quoted as written. When the site and Instagram disagree, the newest post wins.
+   - **Only the latest posts:** the public embed shows about 6 recent posts. For the full feed, the client can give an Instagram Graph API token. Run with `IG_GRAPH_TOKEN=<token>` and it uses the official API instead.
+   - **Reels with licensed music:** Instagram doesn't share the video for these, so you get the cover image only.
+   - **Private or renamed accounts:** the embed fails (the script exits with code 2). Then ask the user for screenshots or photos.
+   - **No workarounds:** never use the private app API, logins or cookies.
+6. No website and no Instagram? Ask the user for a few photos and their logo. Never invent a brand's look.
 
 ## 2. Plan the set (2 min)
 
@@ -46,7 +63,7 @@ Write one line per post: format · idea · the real fact or photo it uses. Cover
 | Engagement | A vote, "what should we drop next", this-or-that. Mark invented options as suggestions in your reply |
 | Reel (9:16) | A fast product run (one product per beat), a countdown, or a before/after. 8 to 12 s |
 
-Facts come only from their site and posts. Anything you had to make up (a date, a price, vote options) goes into a bracket-free, natural placeholder in the post, **and you list it in your reply** so the user can check it with the client.
+Facts come only from their site and their Instagram posts (captions, flyers in their images). Anything you had to make up (a date, a price, vote options) goes into a bracket-free, natural placeholder in the post, **and you list it in your reply** so the user can check it with the client.
 
 ## 3. Build `posts.html` (8 to 12 min)
 
