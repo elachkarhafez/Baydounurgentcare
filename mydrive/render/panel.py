@@ -7,7 +7,7 @@ import numpy as np
 
 argv = sys.argv[sys.argv.index('--') + 1:] if '--' in sys.argv else []
 OUT = argv[0] if argv else '/tmp/panel'
-F0 = int(argv[1]) if len(argv) > 1 else 1
+F0 = int(argv[1]) if len(argv) > 1 and argv[1].isdigit() else 1
 F1 = int(argv[2]) if len(argv) > 2 else 72
 SPP = int(argv[3]) if len(argv) > 3 else 48
 W = int(argv[4]) if len(argv) > 4 else 1280
@@ -162,6 +162,31 @@ try: sc.view_settings.look = 'AgX - Medium High Contrast'
 except Exception: pass
 sc.render.image_settings.file_format = 'PNG'; sc.render.image_settings.color_mode = 'RGB'
 sc.render.use_persistent_data = True; sc.cycles.seed = 11
+
+def pair_state(before, dent, haze, faded):
+    """One side of a before/after pair. Same camera and lights on both sides."""
+    set_dent(dent if before else 0.0)
+    nt.nodes['damage'].outputs[0].default_value = haze if before else 0.0
+    nt.nodes['primer'].outputs[0].default_value = 0.0
+    nt.nodes['sweep'].outputs[0].default_value = -9.0 if before else 9.0
+    srough.inputs['To Min'].default_value = 0.62 if (before and faded) else 0.4
+    scol.inputs['A'].default_value = (0.03, 0.06, 0.12, 1) if (before and faded) else NAVY
+
+PAIRS = {
+    # name: camera, target, glide x, glide strength, rake, dent, haze, faded
+    'dent':  ((-1.30, -1.70, 0.20), (-0.35, 0.0, -0.12), -0.55, 16, 300, 0.06, 1.0, False),
+    'panel': ((-2.70, -2.75, 0.32), (0.05, 0.0, -0.05), -0.2, 22, 300, 0.06, 1.0, False),
+    'paint': ((-2.10, -2.20, -0.05), (0.4, 0.0, 0.1), 0.9, 20, 220, 0.0, 0.0, True),
+}
+if argv[1:2] == ['pairs']:
+    for name, (cl, tl, gx, gs, rkE, dent, haze, faded) in PAIRS.items():
+        cam.location = cl; tgt.location = tl
+        glide.location = (gx, -3.0, 0.4); glide_e.inputs['Strength'].default_value = gs; rk.energy = rkE
+        for side in ('before', 'after'):
+            pair_state(side == 'before', dent, haze, faded)
+            sc.render.filepath = os.path.join(OUT, f'{name}-{side}.png')
+            bpy.ops.render.render(write_still=True)
+    raise SystemExit(0)
 
 for f in range(F0, F1 + 1):
     pose(f); sc.frame_set(f)
