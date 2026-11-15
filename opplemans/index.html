@@ -194,6 +194,24 @@
     .q span { display: block; margin-top: 14px; color: var(--gold-l); font: 700 .8rem/1 var(--sans); letter-spacing: .2em; text-transform: uppercase; }
     @media (min-width: 900px) { .quotes { grid-auto-flow: row; grid-template-columns: repeat(4, 1fr); gap: 30px; margin: 34px 0 0; padding: 0; overflow: visible; } }
 
+    /* billboard: the face drops onto the frame, swings to rest, then the catwalk lights come on */
+    .bb-stage { position: relative; margin: 14px auto 0; max-width: 760px; padding-top: 22px; clip-path: inset(0 -80px -80px -80px); }
+    .bb-rig { position: relative; z-index: 2; }
+    .bb-board { position: relative; border: 5px solid #1d1d20; outline: 1px solid rgba(242,239,232,.08); background: #222; box-shadow: 0 24px 50px -20px rgba(0,0,0,.9); transform-origin: 50% 0; overflow: hidden; }
+    .bb-board img { width: 100%; height: auto; }
+    .bb-glow { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(60% 90% at 18% 115%, rgba(255,236,190,.22), transparent 70%), radial-gradient(60% 90% at 50% 115%, rgba(255,236,190,.22), transparent 70%), radial-gradient(60% 90% at 82% 115%, rgba(255,236,190,.22), transparent 70%); mix-blend-mode: screen; }
+    .bb-sheen { position: absolute; inset: -20% auto -20% -40%; width: 30%; pointer-events: none; background: linear-gradient(100deg, transparent, rgba(255,255,255,.22), transparent); transform: skewX(-18deg); opacity: 0; }
+    .bb-walk { position: relative; height: 10px; margin: 0 2%; background: repeating-linear-gradient(90deg, #2a2a2e 0 3px, #141416 3px 9px); border-top: 2px solid #34343a; }
+    .bb-walk i { position: absolute; top: -4px; width: 14px; height: 7px; border-radius: 3px 3px 0 0; background: #3a3a40; }
+    .bb-walk i::after { content: ""; position: absolute; left: 3px; right: 3px; top: -2px; height: 2px; border-radius: 2px; background: #fff3d1; box-shadow: 0 0 10px 3px rgba(255,236,190,.55); opacity: var(--lamp, 1); }
+    .bb-walk i:nth-child(1) { left: 16%; } .bb-walk i:nth-child(2) { left: calc(50% - 7px); } .bb-walk i:nth-child(3) { right: 16%; }
+    .bb-pole { position: relative; z-index: 1; width: 9%; min-width: 26px; height: clamp(60px, 12vw, 130px); margin: 0 auto; background: linear-gradient(90deg, #111113, #2b2b30 45%, #151517); transform-origin: 50% 100%; }
+    .bb-pole::after { content: ""; position: absolute; left: -80%; right: -80%; bottom: -4px; height: 4px; border-radius: 50%; background: rgba(0,0,0,.6); filter: blur(3px); }
+    .bb-acts { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 26px; }
+    .bb-acts .btn { padding: 14px 18px; font-size: .72rem; }
+    .bb .lead { margin-left: auto; margin-right: auto; }
+    .bb-head { text-align: center; }
+
     /* locations */
     .loc-grid { display: grid; gap: 16px; margin-top: 28px; }
     .loc { border: 1px solid var(--line); background: var(--char); display: grid; overflow: hidden; }
@@ -384,6 +402,24 @@
           <div class="q"><p>Jesse and John are great to do business with! Every worker he has hired for the counter has always made me feel right at home.</p><span>Tim</span></div>
           <div class="q"><p>Very clean and organized! I was completely amazed at how knowledgeable the staff was, and extremely helpful.</p><span>Melissa</span></div>
         </div>
+      </div>
+    </section>
+
+    <section class="bb sec" id="billboard" aria-labelledby="bbH" style="padding-top:0">
+      <div class="wrap">
+        <div class="bb-head">
+          <span class="kick">On the road</span>
+          <h2 id="bbH" style="margin-top:16px">Seen the billboard? <span class="gold">You're close.</span></h2>
+          <p class="lead">Cash for your stuff, at two stores a few minutes apart.</p>
+        </div>
+        <div class="bb-stage" id="bbStage">
+          <div class="bb-rig">
+            <div class="bb-board" id="bbBoard"><img src="media/billboard.webp" alt="The Opplemans billboard: GoldCashGuns.com, Opplemans, cash for your stuff. Guns, guitars, gold and silver and more. BBB A+ rating and $25 FFL transfers. Southgate 7 minutes, Allen Park 9 minutes." width="1600" height="731" loading="lazy"><span class="bb-glow" aria-hidden="true"></span><span class="bb-sheen" aria-hidden="true"></span></div>
+            <div class="bb-walk" aria-hidden="true"><i></i><i></i><i></i></div>
+          </div>
+          <div class="bb-pole" aria-hidden="true"></div>
+        </div>
+        <div class="bb-acts"><a class="btn gold-b" href="https://www.google.com/maps/dir/?api=1&amp;destination=14160+Pennsylvania+Rd+Southgate+MI+48195" target="_blank" rel="noopener">Directions to Southgate</a><a class="btn" href="https://www.google.com/maps/dir/?api=1&amp;destination=17037+Ecorse+Rd+Allen+Park+MI+48101" target="_blank" rel="noopener">Directions to Allen Park</a></div>
       </div>
     </section>
 
@@ -617,7 +653,7 @@
       gsap.to(".hero-in", { yPercent: -10, autoAlpha: 0, ease: "none", scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true } });
 
       /* reveals */
-      $$(".cat-head > *, .about-grid > div:last-child > .kick, .pillar, .rev-head > *, .pb, #pawn > .wrap > .kick, #pawn h2, #pawn .lead, #contact .kick, #contact h2, .contact-grid > div > *").forEach(el => gsap.from(el, { y: 40, autoAlpha: 0, duration: 1.1, ease: "expo.out", scrollTrigger: { trigger: el, start: "top 88%" } }));
+      $$(".cat-head > *, .about-grid > div:last-child > .kick, .pillar, .rev-head > *, .pb, #pawn > .wrap > .kick, #pawn h2, #pawn .lead, .bb-head > *, #contact .kick, #contact h2, .contact-grid > div > *").forEach(el => gsap.from(el, { y: 40, autoAlpha: 0, duration: 1.1, ease: "expo.out", scrollTrigger: { trigger: el, start: "top 88%" } }));
       gsap.from(".cat", { y: 70, autoAlpha: 0, duration: 1.2, stagger: .07, ease: "expo.out", scrollTrigger: { trigger: "#rail", start: "top 88%" } });
       gsap.from(".loc", { y: 60, autoAlpha: 0, duration: 1.2, stagger: .12, ease: "expo.out", scrollTrigger: { trigger: "#locs", start: "top 85%" } });
       gsap.from(".q", { y: 40, autoAlpha: 0, duration: 1, stagger: .1, ease: "power3.out", scrollTrigger: { trigger: ".quotes", start: "top 88%" } });
@@ -628,6 +664,20 @@
       gsap.to(".spin2", { rotate: 360, svgOrigin: "50 50", duration: 30, ease: "none", repeat: -1 });
       gsap.to(".about .big .w", { opacity: 1, stagger: .05, ease: "none", scrollTrigger: { trigger: ".about .big", start: "top 80%", end: "bottom 50%", scrub: true } });
       $$(".count").forEach(el => { const to = +el.dataset.to, from = +(el.dataset.from || 0), suf = el.dataset.suffix || "", o = { v: from }; ScrollTrigger.create({ trigger: el, start: "top 92%", once: true, onEnter: () => gsap.to(o, { v: to, duration: 1.8, ease: "power2.out", onUpdate: () => el.textContent = Math.round(o.v) + suf }) }); });
+
+      /* billboard: pole rises, the face drops in and swings to rest, lights flicker on, one sheen */
+      gsap.set(".bb-board", { yPercent: -125 }); gsap.set(".bb-walk", { autoAlpha: 0 });
+      gsap.set(".bb-pole", { scaleY: 0 });
+      gsap.set(".bb-glow", { autoAlpha: 0 }); gsap.set(".bb-walk i", { "--lamp": 0 });
+      gsap.timeline({ scrollTrigger: { trigger: "#bbStage", start: "top 78%", once: true } })
+        .to(".bb-pole", { scaleY: 1, duration: .55, ease: "power3.out" })
+        .to(".bb-walk", { autoAlpha: 1, duration: .3 }, .3)
+        .to(".bb-board", { yPercent: 0, duration: .55, ease: "power2.in" }, .35)
+        .fromTo(".bb-board", { rotate: 0 }, { keyframes: [{ rotate: -1.8, duration: .16, ease: "power1.out" }, { rotate: 1.2, duration: .26, ease: "sine.inOut" }, { rotate: -.7, duration: .26, ease: "sine.inOut" }, { rotate: .25, duration: .24, ease: "sine.inOut" }, { rotate: 0, duration: .22, ease: "sine.out" }] }, .9)
+        .to(".bb-walk i", { keyframes: [{ "--lamp": 1, duration: .05 }, { "--lamp": .2, duration: .08 }, { "--lamp": 1, duration: .05 }, { "--lamp": .4, duration: .1 }, { "--lamp": 1, duration: .1 }], stagger: .12 }, 1.6)
+        .to(".bb-glow", { keyframes: [{ autoAlpha: 1, duration: .05 }, { autoAlpha: .3, duration: .08 }, { autoAlpha: 1, duration: .3 }] }, 1.65)
+        .fromTo(".bb-sheen", { left: "-40%", autoAlpha: 1 }, { left: "120%", duration: 1.1, ease: "power2.inOut" }, 2.1)
+        .set(".bb-sheen", { autoAlpha: 0 });
 
       /* FFL band parallax + price punch */
       gsap.fromTo(".ffl .bg", { yPercent: -8 }, { yPercent: 8, ease: "none", scrollTrigger: { trigger: ".ffl", start: "top bottom", end: "bottom top", scrub: true } });
