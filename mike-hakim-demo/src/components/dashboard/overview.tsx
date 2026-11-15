@@ -36,7 +36,7 @@ export function Overview() {
           <motion.div key={m.k} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}>
             <Link href={m.href} className="group block h-full rounded-lg border bg-card p-4 transition hover:border-gold/60 hover:shadow-soft md:p-5">
               <div className="flex items-center justify-between"><span className="text-[12.5px] font-semibold text-muted-foreground">{m.k}</span><m.icon className="size-4 text-gold" /></div>
-              <motion.p key={m.v} initial={{ opacity: 0.3, y: 6 }} animate={{ opacity: 1, y: 0 }} className="mt-2 font-display text-[36px] font-medium leading-none tabular" data-testid={`metric-${i}`}>{m.v}</motion.p>
+              <motion.p key={m.v} initial={{ opacity: 0.3, y: 6 }} animate={{ opacity: 1, y: 0 }} className="mt-2 text-[36px] font-extrabold leading-none tabular" data-testid={`metric-${i}`}>{m.v}</motion.p>
               <p className="mt-2 text-[12px] text-muted-foreground">{m.note}</p>
             </Link>
           </motion.div>
@@ -70,7 +70,7 @@ export function Overview() {
             {events.map((e) => (
               <li key={e.id}>
                 <Link href={`/dashboard/calendar?event=${e.id}`} className="flex items-center gap-3 px-4 py-3 hover:bg-muted/50">
-                  <span className="grid w-12 shrink-0 text-center"><span className="text-[11px] font-bold uppercase text-gold">{formatDate(e.start).split(",")[0]}</span><span className="font-display text-[18px] font-medium leading-tight">{formatTime(e.start)}</span></span>
+                  <span className="grid w-12 shrink-0 text-center"><span className="text-[11px] font-bold uppercase text-gold">{formatDate(e.start).split(",")[0]}</span><span className="text-[18px] font-extrabold leading-tight">{formatTime(e.start)}</span></span>
                   <span className="min-w-0 flex-1"><span className="block truncate text-[14px] font-semibold">{e.title}</span><span className="text-[12.5px] text-muted-foreground">{formatDate(e.start)}</span></span>
                   <span className={`rounded-full px-2 py-0.5 text-[11px] font-semibold ${e.status === "tentative" ? "border border-dashed border-amber-400 bg-amber-50 text-amber-900" : "bg-emerald/10 text-emerald"}`}>{e.status === "tentative" ? "Tentative" : "Confirmed"}</span>
                 </Link>

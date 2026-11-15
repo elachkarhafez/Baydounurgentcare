@@ -19,7 +19,7 @@ export function RequestView({ refCode }: { refCode: string }) {
   if (!sh) return (
     <div className="mx-auto grid max-w-md place-items-center px-4 py-24 text-center">
       <SearchX className="size-8 text-gold" />
-      <h1 className="mt-4 text-[26px] font-medium">Request not found</h1>
+      <h1 className="mt-4 text-[26px]">Request not found</h1>
       <p className="mt-2 text-[14px] text-muted-foreground">Demo requests live in this browser only. It may have been cleared by Reset Demo.</p>
       <Button asChild className="mt-6"><Link href="/homes">Browse homes</Link></Button>
     </div>
@@ -32,7 +32,7 @@ export function RequestView({ refCode }: { refCode: string }) {
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 md:px-6 md:py-12">
       <p className="eyebrow">Showing request · {sh.ref}</p>
-      <h1 className="mt-2 text-[28px] font-medium leading-tight md:text-[38px]">Here&apos;s what happens after a buyer hits submit</h1>
+      <h1 className="mt-2 text-[28px] leading-tight md:text-[38px]">Here&apos;s what happens after a buyer hits submit</h1>
       <p className="mt-2 max-w-2xl text-[15px] text-muted-foreground">No typing, no copying and pasting. The request goes everywhere it needs to on its own. (In this demo nothing actually leaves the page.)</p>
       <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_380px]">
         <div className="grid min-w-0 grid-cols-1 gap-6">
@@ -46,7 +46,7 @@ export function RequestView({ refCode }: { refCode: string }) {
             </motion.div>
           )}
           {email ? (
-            <div><h2 className="mb-3 text-[20px] font-medium">Email Mike would receive</h2><EmailPreview email={email} /></div>
+            <div><h2 className="mb-3 text-[20px]">Email Mike would receive</h2><EmailPreview email={email} /></div>
           ) : (
             <div className="rounded-lg border border-dashed p-6 text-center text-[14px] text-muted-foreground">The email preview appears once that step finishes.</div>
           )}
@@ -55,7 +55,7 @@ export function RequestView({ refCode }: { refCode: string }) {
           <div className="overflow-hidden rounded-lg border bg-card">
             <div className="relative aspect-[16/10]"><Image src={l.photos[0]} alt={l.headline} fill sizes="380px" className="object-cover" /></div>
             <div className="p-4">
-              <p className="font-display text-[22px] font-medium tabular">{usd(l.price)}</p>
+              <p className="text-[22px] font-extrabold tabular">{usd(l.price)}</p>
               <p className="text-[14px] font-semibold">{l.address}</p>
               <p className="text-[13px] text-muted-foreground">{l.city}, MI {l.zip}</p>
             </div>

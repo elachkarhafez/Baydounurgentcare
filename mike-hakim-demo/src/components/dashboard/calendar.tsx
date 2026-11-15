@@ -84,7 +84,7 @@ export function CalendarPage() {
           <Button variant="outline" size="icon-sm" onClick={() => step(-1)} aria-label="Previous"><ChevronLeft /></Button>
           <Button variant="outline" size="sm" onClick={() => setAnchor(today)}>Today</Button>
           <Button variant="outline" size="icon-sm" onClick={() => step(1)} aria-label="Next"><ChevronRight /></Button>
-          <h2 className="ml-1 font-display text-[20px] font-medium" aria-live="polite">{title}</h2>
+          <h2 className="ml-1 text-[20px] font-extrabold" aria-live="polite">{title}</h2>
         </div>
         <div className="inline-flex rounded-md border bg-card p-0.5" role="tablist" aria-label="Calendar view">
           {(["month", "week", "day"] as View[]).map((v) => <button key={v} role="tab" aria-selected={view === v} onClick={() => setView(v)} className={cn("rounded px-3 py-1.5 text-[13px] font-semibold capitalize", view === v ? "bg-primary text-primary-foreground" : "text-muted-foreground")}>{v}</button>)}
@@ -120,7 +120,7 @@ export function CalendarPage() {
             <div className="overflow-x-auto rounded-lg border bg-card">
               <div className={cn("grid", view === "week" ? "min-w-[760px] grid-cols-[56px_repeat(7,1fr)]" : "grid-cols-[56px_1fr]")}>
                 <div className="border-b" />
-                {weekDays.map((d) => <div key={d} className={cn("border-b border-l px-2 py-2 text-center", d === today && "bg-primary/5")}><p className="text-[11px] font-bold uppercase tracking-[0.1em] text-muted-foreground">{ymdLabel(d, { weekday: "short" })}</p><p className={cn("font-display text-[18px] font-medium", d === today && "text-gold")}>{+d.slice(8)}</p></div>)}
+                {weekDays.map((d) => <div key={d} className={cn("border-b border-l px-2 py-2 text-center", d === today && "bg-primary/5")}><p className="text-[11px] font-bold uppercase tracking-[0.1em] text-muted-foreground">{ymdLabel(d, { weekday: "short" })}</p><p className={cn("text-[18px] font-extrabold", d === today && "text-gold")}>{+d.slice(8)}</p></div>)}
                 <div className="relative">{HOURS.map((h) => <div key={h} style={{ height: HOUR_PX }} className="border-b pr-1.5 pt-0.5 text-right text-[11px] text-muted-foreground tabular">{((h + 11) % 12) + 1}{h < 12 ? "a" : "p"}</div>)}</div>
                 {weekDays.map((d) => (
                   <div key={d} className="relative border-l">
@@ -154,7 +154,7 @@ export function CalendarPage() {
                   <span className={cn("rounded-full border px-2 py-0.5 text-[11.5px] font-bold", tone(evt))}>{evt.status === "tentative" ? "Tentative" : evt.status === "cancelled" ? "Cancelled" : "Confirmed"}</span>
                   <span className="rounded-full bg-gold/15 px-2 py-0.5 text-[11px] font-bold text-[#6b5126]">Demo</span>
                 </div>
-                <DialogTitle className="mt-2 font-display text-[22px] font-medium">{evt.title}</DialogTitle>
+                <DialogTitle className="mt-2 text-[22px] font-extrabold">{evt.title}</DialogTitle>
                 <DialogDescription className="text-[14px]">{formatDateLong(evt.start)} · {formatTime(evt.start)} to {formatTime(evt.end)} {formatTz(evt.start)}</DialogDescription>
               </DialogHeader>
               <div className="grid gap-2.5 text-[14px]">

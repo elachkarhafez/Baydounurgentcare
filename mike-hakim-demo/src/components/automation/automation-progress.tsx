@@ -21,7 +21,7 @@ export function AutomationProgress({ run }: { run: AutomationRun }) {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <p className="eyebrow">Happening automatically</p>
-          <h2 className="mt-1 text-[22px] font-medium">{run.done ? "All steps complete" : "Sending it to you…"}</h2>
+          <h2 className="mt-1 text-[22px]">{run.done ? "All steps complete" : "Sending it to you…"}</h2>
         </div>
         <span className="rounded-full bg-muted px-3 py-1 text-[12.5px] font-semibold tabular">{doneCount} / {run.steps.length}</span>
       </div>

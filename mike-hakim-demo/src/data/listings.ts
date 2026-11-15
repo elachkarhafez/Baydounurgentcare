@@ -54,6 +54,9 @@ const B: Base[] = [
   { n: 30, street: "3317 Harwood Blvd", city: "Royal Oak", zip: "48073", price: 549000, beds: 4, baths: 3, sqft: 2240, lot: 0.17, year: 2018, type: "Single Family", days: 17, cover: 4, headline: "Modern farmhouse with a dramatic roofline", hook: "Soaring ceilings in the living room, a big mudroom and an upstairs laundry.", garage: "Attached 2-car" },
 ];
 
+// sample price reductions: listing n -> [amount, days ago]
+const CUTS: Record<number, [number, number]> = { 2: [5000, 4], 9: [6700, 13], 13: [10000, 6], 18: [9000, 9], 22: [15000, 3], 26: [11000, 8] };
+
 const pad2 = (n: number) => String(n).padStart(2, "0");
 const LIV = 22, KIT = 2, BATH = 4, BED = 4;
 
@@ -132,6 +135,7 @@ function build(b: Base, i: number): Listing {
     hoa: b.hoa,
     taxesYearly: Math.round(b.price * (b.city === "Detroit" ? 0.021 : 0.0165) / 10) * 10,
     featured: b.featured,
+    priceCut: CUTS[b.n] ? { amount: CUTS[b.n][0], daysAgo: CUTS[b.n][1] } : undefined,
   };
 }
 

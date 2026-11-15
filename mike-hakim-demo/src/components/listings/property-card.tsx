@@ -1,73 +1,82 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "motion/react";
-import { Bath, BedDouble, CalendarDays, Ruler } from "lucide-react";
+import { useRef, useState } from "react";
 import type { Listing } from "@/lib/types";
-import { usd, num } from "@/lib/format";
+import { usd, num, usdShort } from "@/lib/format";
 import { ymdLabel, hmLabel } from "@/lib/time";
-import { CompareToggle, FavoriteButton } from "@/components/listings/listing-actions";
+import { FavoriteButton } from "@/components/listings/listing-actions";
 import { cn } from "cn";
 
-export function StatusBadge({ l, className }: { l: Listing; className?: string }) {
-  const tone = l.status === "Active" ? "bg-emerald text-white" : l.status === "Coming Soon" ? "bg-gold text-ink" : "bg-white text-ink";
-  return <span className={cn("rounded px-2 py-1 text-[10.5px] font-bold uppercase tracking-[0.12em]", tone, className)}>{l.status}</span>;
+const TYPE_WORD: Record<Listing["type"], string> = { "Single Family": "House", Ranch: "House", Condo: "Condo", Townhouse: "Townhouse", "Multi-Family": "Multi-family" };
+export function saleLabel(l: Listing) {
+  if (l.status === "Coming Soon") return `${TYPE_WORD[l.type]} coming soon`;
+  if (l.status === "Pending") return "Pending";
+  return `${TYPE_WORD[l.type]} for sale`;
+}
+const shortHm = (hm: string) => hmLabel(hm).replace(":00", "").replace(" ", "").toLowerCase();
+export function openLabel(l: Listing) {
+  if (!l.openHouse) return null;
+  return `Open: ${ymdLabel(l.openHouse.date, { weekday: "short" })} ${shortHm(l.openHouse.start)}–${shortHm(l.openHouse.end)}`;
+}
+export function cardBadge(l: Listing): { text: string; tone: string } | null {
+  const open = openLabel(l);
+  if (open) return { text: open, tone: "bg-white text-ink" };
+  if (l.priceCut) return { text: `Price cut: ${usdShort(l.priceCut.amount)}`, tone: "bg-white text-[#b23b2e]" };
+  if (l.status === "Coming Soon") return { text: "Coming soon", tone: "bg-gold text-ink" };
+  if (l.daysListed <= 3) return { text: "New listing", tone: "bg-white text-ink" };
+  return null;
 }
 
-export function PropertyCard({ l, layout = "grid", highlighted = false, onHover, priority = false }: { l: Listing; layout?: "grid" | "list"; highlighted?: boolean; onHover?: (id: string | null) => void; priority?: boolean }) {
-  const list = layout === "list";
+export function PropertyCard({ l, highlighted = false, onHover, priority = false, compact = false }: { l: Listing; highlighted?: boolean; onHover?: (id: string | null) => void; priority?: boolean; compact?: boolean }) {
+  const strip = useRef<HTMLDivElement>(null);
+  const [slide, setSlide] = useState(0);
+  const photos = l.photos.slice(0, 4);
+  const badge = cardBadge(l);
   return (
-    <motion.article
-      layout
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, scale: 0.97 }}
-      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+    <article
       onMouseEnter={() => onHover?.(l.id)}
       onMouseLeave={() => onHover?.(null)}
       id={`card-${l.id}`}
-      className={cn("group relative overflow-hidden rounded-lg bg-card shadow-soft hairline transition-shadow duration-300 hover:shadow-lift", highlighted && "ring-2 ring-gold", list && "sm:grid sm:grid-cols-[minmax(0,300px)_1fr]")}
       data-listing={l.id}
+      className={cn("group relative overflow-hidden rounded-xl bg-card shadow-[0_1px_3px_rgba(13,22,36,.08),0_8px_24px_-16px_rgba(13,22,36,.25)] ring-1 ring-black/5 transition hover:shadow-[0_2px_6px_rgba(13,22,36,.1),0_18px_40px_-20px_rgba(13,22,36,.35)]", highlighted && "ring-2 ring-gold")}
     >
-      <Link href={`/homes/${l.id}`} className="absolute inset-0 z-[1]" aria-label={`${l.address}, ${l.city}. ${usd(l.price)}`} />
-      <div className={cn("relative overflow-hidden bg-muted", list ? "aspect-[4/3] sm:aspect-auto sm:h-full" : "aspect-[4/3]")}>
-        <Image src={l.photos[0]} alt={`${l.headline}, ${l.city}`} fill sizes={list ? "(min-width: 640px) 300px, 100vw" : "(min-width: 1280px) 400px, (min-width: 640px) 50vw, 100vw"} className="object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(.16,1,.3,1)] group-hover:scale-[1.05]" priority={priority} />
-        <div className="absolute inset-x-0 top-0 flex items-start justify-between p-3">
-          <div className="flex flex-col items-start gap-1.5">
-            <StatusBadge l={l} />
-            {l.openHouse && <span className="inline-flex items-center gap-1 rounded bg-white/95 px-2 py-1 text-[10.5px] font-bold uppercase tracking-[0.1em] text-ink"><CalendarDays className="size-3" /> Open {ymdLabel(l.openHouse.date, { weekday: "short" })} {hmLabel(l.openHouse.start).replace(":00", "")}</span>}
-          </div>
-          <div className="relative z-[2]"><FavoriteButton id={l.id} /></div>
+      <Link href={`/homes/${l.id}`} className="absolute inset-0 z-[1]" aria-label={`${usd(l.price)}, ${l.address}, ${l.city}`} />
+      <div className="relative aspect-[16/11] bg-muted">
+        <div ref={strip} onScroll={(e) => setSlide(Math.round(e.currentTarget.scrollLeft / e.currentTarget.clientWidth))} className="relative z-[2] flex h-full snap-x snap-mandatory overflow-x-auto no-scrollbar">
+          {photos.map((p, i) => (
+            <Link key={p} href={`/homes/${l.id}`} tabIndex={-1} aria-hidden="true" className="relative h-full w-full shrink-0 snap-center">
+              <Image src={p} alt="" fill sizes={compact ? "320px" : "(min-width: 1024px) 380px, (min-width: 640px) 50vw, 100vw"} className="object-cover" priority={priority && i === 0} draggable={false} />
+            </Link>
+          ))}
         </div>
-        <div className="absolute bottom-3 left-3 z-[2]"><CompareToggle id={l.id} /></div>
+        {badge && <span className={cn("pointer-events-none absolute left-3 top-3 z-[3] rounded-md px-2.5 py-1 text-[12.5px] font-bold shadow-sm", badge.tone)}>{badge.text}</span>}
+        <div className="absolute right-3 top-3 z-[3]"><FavoriteButton id={l.id} /></div>
+        {photos.length > 1 && (
+          <>
+            <div className="pointer-events-none absolute bottom-2.5 left-1/2 z-[3] flex -translate-x-1/2 gap-1.5 rounded-full bg-black/25 px-2 py-1">
+              {photos.map((_, i) => <span key={i} className={cn("size-1.5 rounded-full transition", i === slide ? "bg-white" : "bg-white/50")} />)}
+            </div>
+            <button type="button" aria-label="Next photo" onClick={(e) => { e.preventDefault(); const el = strip.current!; el.scrollTo({ left: ((slide + 1) % photos.length) * el.clientWidth, behavior: "smooth" }); }}
+              className="absolute right-2 top-1/2 z-[3] hidden size-8 -translate-y-1/2 place-items-center rounded-full bg-white/90 text-ink opacity-0 shadow transition group-hover:opacity-100 md:grid">›</button>
+          </>
+        )}
       </div>
-      <div className="p-4 md:p-5">
-        <div className="flex items-baseline justify-between gap-3">
-          <p className="font-display text-[24px] font-medium tracking-[-0.02em] tabular">{usd(l.price)}</p>
-          <span className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">{l.daysListed === 0 ? "New" : `${l.daysListed}d listed`}</span>
-        </div>
-        <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[13.5px] font-semibold text-foreground/85">
-          <span className="inline-flex items-center gap-1.5"><BedDouble className="size-4 text-gold" />{l.beds} bd</span>
-          <span className="inline-flex items-center gap-1.5"><Bath className="size-4 text-gold" />{l.baths} ba</span>
-          <span className="inline-flex items-center gap-1.5"><Ruler className="size-4 text-gold" />{num(l.sqft)} sq ft</span>
-        </div>
-        <p className="mt-2.5 truncate text-[14px] text-muted-foreground">{l.address}, {l.city}, MI {l.zip}</p>
-        {list && <p className="mt-2 line-clamp-2 text-[14px] text-foreground/75">{l.headline}. {l.description}</p>}
-        <p className="mt-3 text-[11px] text-muted-foreground/80">{l.type} · {l.id} · Sample listing</p>
+      <div className="px-4 pb-4 pt-3">
+        <p className="text-[22px] font-extrabold tracking-[-0.02em] tabular">{usd(l.price)}</p>
+        <p className="mt-0.5 text-[14px] text-foreground/85"><b className="font-bold">{l.beds}</b> bds <span className="text-muted-foreground/60">|</span> <b className="font-bold">{l.baths}</b> ba <span className="text-muted-foreground/60">|</span> <b className="font-bold">{num(l.sqft)}</b> sqft <span className="text-muted-foreground/60">|</span> {saleLabel(l)}</p>
+        <p className="mt-0.5 truncate text-[14px] text-foreground/85">{l.address}, {l.city}, MI {l.zip}</p>
+        <p className="mt-1.5 text-[11px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">Mike Hakim · eXp Realty</p>
       </div>
-    </motion.article>
+    </article>
   );
 }
 
 export function PropertyCardSkeleton() {
   return (
-    <div className="overflow-hidden rounded-lg bg-card hairline">
-      <div className="aspect-[4/3] animate-pulse bg-muted" />
-      <div className="space-y-3 p-5">
-        <div className="h-6 w-1/2 animate-pulse rounded bg-muted" />
-        <div className="h-4 w-3/4 animate-pulse rounded bg-muted" />
-        <div className="h-4 w-2/3 animate-pulse rounded bg-muted" />
-      </div>
+    <div className="overflow-hidden rounded-xl bg-card ring-1 ring-black/5">
+      <div className="aspect-[16/11] animate-pulse bg-muted" />
+      <div className="space-y-2.5 p-4"><div className="h-6 w-1/3 animate-pulse rounded bg-muted" /><div className="h-4 w-3/4 animate-pulse rounded bg-muted" /><div className="h-4 w-2/3 animate-pulse rounded bg-muted" /></div>
     </div>
   );
 }

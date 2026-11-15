@@ -8,7 +8,7 @@ import { cn } from "cn";
 export function PageHead({ title, sub, children }: { title: string; sub?: string; children?: React.ReactNode }) {
   return (
     <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
-      <div><h1 className="text-[26px] font-medium leading-tight md:text-[32px]">{title}</h1>{sub && <p className="mt-1 text-[14px] text-muted-foreground">{sub}</p>}</div>
+      <div><h1 className="text-[26px] leading-tight md:text-[32px]">{title}</h1>{sub && <p className="mt-1 text-[14px] text-muted-foreground">{sub}</p>}</div>
       {children && <div className="flex flex-wrap gap-2">{children}</div>}
     </div>
   );

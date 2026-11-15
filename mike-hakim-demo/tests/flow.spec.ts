@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { fresh, resetStore, submitRequest } from "./helpers";
+import { fresh, resetStore, submitRequest, tourButton } from "./helpers";
 
 test.beforeEach(async ({ page }) => { await fresh(page); await resetStore(page); });
 
@@ -8,32 +8,28 @@ const pdf = () => ({ name: "sample-letter.pdf", mimeType: "application/pdf", buf
 
 test("8-10. date/time selection, validation and file checks", async ({ page }) => {
   await page.goto("/homes/MH-24005");
-  await page.getByRole("button", { name: "Request a Showing" }).first().click();
+  await tourButton(page).click();
   const dlg = page.getByRole("dialog");
-  await dlg.getByRole("button", { name: "Continue" }).click();
-  await dlg.getByRole("button", { name: "Continue" }).click();
-  await expect(dlg.getByText("Pick a date for the showing")).toBeVisible();
-  // past days are disabled
-  await expect(dlg.locator("[data-slot=calendar] button[data-day][disabled]").first()).toBeAttached();
-  const days = dlg.locator("[data-slot=calendar] button[data-day]:not([disabled])");
-  await days.nth(1).click();
-  await dlg.getByRole("button", { name: "Continue" }).click();
+  await dlg.getByRole("button", { name: "Next" }).click();
+  await expect(dlg.getByText("Pick a day for your tour")).toBeVisible();
+  await dlg.locator('[id^="d1-day-"]').first().click();
+  await dlg.getByRole("button", { name: "Next" }).click();
   await expect(dlg.getByText("Pick a time slot")).toBeVisible();
   await dlg.locator('[role=radio][id^="t1-"]:not([disabled])').first().click();
   await expect(dlg.getByText(/Detroit time/)).toBeVisible();
-  await dlg.getByRole("button", { name: "Continue" }).click();
-  await dlg.getByRole("button", { name: "Continue" }).click();
-  for (const m of ["Enter your first name", "Enter your last name", "Enter your email", "Enter a 10-digit phone number", "Choose where you are in your search", "Choose your financing status"]) await expect(dlg.getByText(m)).toBeVisible();
+  // backup time must be complete
+  await dlg.getByRole("button", { name: "Add a backup time" }).click();
+  await dlg.locator('[id^="d2-day-"]').nth(1).click();
+  await dlg.getByRole("button", { name: "Next" }).click();
+  await expect(dlg.getByText(/Pick a day and a time for the backup/)).toBeVisible();
+  await dlg.getByRole("button", { name: "Remove" }).click();
+  await dlg.getByRole("button", { name: "Next" }).click();
+  await dlg.getByRole("button", { name: "Request tour" }).click();
+  for (const m of ["Enter your first name", "Enter your last name", "Enter your email", "Enter a 10-digit phone number", "Let Mike know how you're paying"]) await expect(dlg.getByText(m)).toBeVisible();
   await dlg.getByLabel("Email").fill("not-an-email");
   await dlg.getByLabel("Email").blur();
   await expect(dlg.getByText("That email doesn't look right")).toBeVisible();
-  await dlg.getByLabel("First name").fill("A"); await dlg.getByLabel("Last name").fill("B");
-  await dlg.getByLabel("Email").fill("a.b@example.com"); await dlg.getByLabel("Phone").fill("313 555 0101");
-  await dlg.getByRole("radio", { name: "Just exploring" }).click(); await dlg.getByRole("radio", { name: "Cash buyer" }).click();
-  await dlg.getByRole("button", { name: "Continue" }).click();
   await expect(dlg.getByText("Demo only — please use a sample document, not your actual pre-approval letter.")).toBeVisible();
-  await dlg.getByRole("button", { name: "Continue" }).click();
-  await expect(dlg.getByText("Attach a sample document or choose Skip for now")).toBeVisible();
   await dlg.getByTestId("file-input").setInputFiles({ name: "notes.txt", mimeType: "text/plain", buffer: Buffer.from("hello") });
   await expect(dlg.getByText("That file type isn't supported. Use a PDF, JPG or PNG.")).toBeVisible();
   await dlg.getByTestId("file-input").setInputFiles({ name: "huge.pdf", mimeType: "application/pdf", buffer: Buffer.alloc(11 * 1024 * 1024, 1) });
@@ -43,8 +39,12 @@ test("8-10. date/time selection, validation and file checks", async ({ page }) =
   await expect(dlg.getByTestId("doc-selected")).toContainText("PNG");
   await dlg.getByRole("button", { name: "Remove document" }).click();
   await expect(dlg.getByTestId("doc-selected")).toHaveCount(0);
-  await dlg.getByRole("button", { name: "Skip for now" }).click();
-  await expect(dlg.getByTestId("review")).toContainText("Skipped");
+  // pre-approval letter is optional
+  await dlg.getByLabel("First name").fill("A"); await dlg.getByLabel("Last name").fill("B");
+  await dlg.getByLabel("Email").fill("a.b@example.com"); await dlg.getByLabel("Phone").fill("313 555 0101");
+  await dlg.getByRole("radio", { name: "Cash buyer" }).click();
+  await dlg.getByRole("button", { name: "Request tour" }).click();
+  await expect(dlg.getByTestId("success")).toBeVisible();
 });
 
 test("11-18. full journey: submit, automation, email, CRM, calendar, dashboard, persistence", async ({ page }) => {
@@ -65,7 +65,7 @@ test("11-18. full journey: submit, automation, email, CRM, calendar, dashboard, 
   expect(Object.keys(sh.document)).toEqual(["name", "type", "size"]);
 
   // 13. automation completes
-  await page.getByRole("link", { name: "View the automation" }).click();
+  await page.getByRole("link", { name: "See what Mike receives" }).click();
   await expect(page).toHaveURL(new RegExp(`/requests/${ref}`));
   await expect(page.getByText("All steps complete")).toBeVisible({ timeout: 15000 });
   await expect(page.locator("[data-step][data-status=done]")).toHaveCount(5);
@@ -208,10 +208,11 @@ test("one button runs the guided demo end to end", async ({ page }) => {
   await page.goto("/homes");
   await page.getByTestId("run-demo").click();
   const card = page.locator("[data-tour-overlay] [role=dialog]");
-  const titles = ["Here's what your new website does for you", "Buyers search your listings", "Every home gets a full page", "They pick a time that works", "Pre-approval comes with it", "One tap to send", "Now watch what happens for you", "The email you'd get", "Your dashboard", "The buyer, ready to call", "On your calendar", "That's the whole thing"];
+  const titles = ["Here's what your new website does for you", "Buyers search homes", "They tap a home", "They pick a day and time", "Pre-approval comes with it", "One tap to send", "Now watch what happens for you", "The email you'd get", "Your dashboard", "The buyer, ready to call", "On your calendar", "That's the whole thing"];
   for (let i = 0; i < titles.length; i++) {
     await expect(card.getByRole("heading", { name: titles[i] })).toBeVisible();
     if (i === 1) await expect(page.getByTestId("result-count")).not.toHaveText("30");
+    if (i === 3) await expect(page.locator('[role=radio][aria-checked=true][id^="t1-"]')).toHaveCount(1);
     if (i === 4) await expect(page.getByTestId("doc-selected")).toContainText("sample-preapproval-letter.pdf");
     if (i === 6) await expect(page.getByText("All steps complete")).toBeVisible({ timeout: 15000 });
     if (i === 7) await expect(page.getByTestId("email-subject")).toHaveText("New Showing Request — 4182 Larkmoor Ct");
@@ -227,12 +228,10 @@ test("sample showing request link prefills everything", async ({ page }) => {
   await page.goto("/homes/MH-24001?request=sample");
   const dlg = page.getByRole("dialog");
   await expect(dlg.locator('[role=radio][aria-checked=true][id^="t1-"]')).toHaveCount(1);
-  await dlg.getByRole("button", { name: "Continue" }).click();
+  await dlg.getByRole("button", { name: "Next" }).click();
   await expect(dlg.getByLabel("First name")).toHaveValue("Alex");
-  await dlg.getByRole("button", { name: "Continue" }).click();
   await dlg.getByRole("button", { name: "Use a generated sample PDF" }).click();
   await expect(dlg.getByTestId("doc-selected")).toBeVisible();
-  await dlg.getByRole("button", { name: "Continue" }).click();
-  await dlg.getByRole("button", { name: "Submit Showing Request" }).click();
-  await expect(dlg.getByTestId("success")).toContainText("Simulated request");
+  await dlg.getByRole("button", { name: "Request tour" }).click();
+  await expect(dlg.getByTestId("success")).toContainText("simulated");
 });

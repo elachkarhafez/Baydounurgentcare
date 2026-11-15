@@ -34,15 +34,15 @@ export function MortgageCalculator({ listing }: { listing: Listing }) {
     ...(r.hoa ? [{ k: "HOA", v: r.hoa, c: "bg-muted-foreground" }] : []),
   ];
   return (
-    <div className="rounded-lg border bg-card p-5 md:p-6" id="calculator">
+    <div id="calculator">
       <div className="flex flex-wrap items-end justify-between gap-2">
         <div>
-          <h2 className="text-[22px] font-medium">Payment estimate</h2>
-          <p className="mt-1 text-[13px] text-muted-foreground">Adjust the numbers to see an estimated monthly payment.</p>
+          <h2 className="text-[20px]">Monthly payment</h2>
+          <p className="mt-1 text-[13px] text-muted-foreground">Estimated, with {downPct}% down at {rate}%.</p>
         </div>
         <div className="text-right">
-          <p className="font-display text-[34px] font-medium leading-none tracking-[-0.02em] tabular" data-testid="monthly-payment">{usd(r.total)}</p>
-          <p className="mt-1 text-[12px] text-muted-foreground">estimated per month</p>
+          <p className="text-[30px] font-extrabold leading-none tracking-[-0.02em] tabular" data-testid="monthly-payment">{usd(r.total)}</p>
+          <p className="mt-1 text-[12px] text-muted-foreground">per month</p>
         </div>
       </div>
       <div className="mt-5 flex h-2.5 overflow-hidden rounded-full bg-muted" aria-hidden>
@@ -51,7 +51,9 @@ export function MortgageCalculator({ listing }: { listing: Listing }) {
       <dl className="mt-3 grid grid-cols-2 gap-x-6 gap-y-1.5 text-[13px] sm:grid-cols-4">
         {parts.map((p) => <div key={p.k}><dt className="flex items-center gap-1.5 text-muted-foreground"><span className={`size-2 rounded-full ${p.c}`} />{p.k}</dt><dd className="font-semibold tabular">{usd(p.v)}</dd></div>)}
       </dl>
-      <div className="mt-6 grid gap-5 md:grid-cols-2">
+      <details className="group mt-5 rounded-xl border bg-card">
+      <summary className="flex cursor-pointer list-none items-center justify-between px-4 py-3 text-[14px] font-semibold">Customize estimate <span className="text-muted-foreground transition group-open:rotate-180">⌄</span></summary>
+      <div className="grid gap-5 border-t p-4 md:grid-cols-2">
         <div className="grid gap-2 md:col-span-2">
           <div className="flex justify-between text-[12.5px]"><Label htmlFor="down" className="text-muted-foreground">Down payment</Label><span className="font-semibold tabular">{downPct}% · {usd(r.down)}</span></div>
           <Slider id="down" value={[downPct]} min={0} max={50} step={1} onValueChange={([v]) => setDownPct(v)} aria-label="Down payment percent" />
@@ -67,7 +69,8 @@ export function MortgageCalculator({ listing }: { listing: Listing }) {
         <NumField id="tax" label="Property tax (per year)" value={tax} onChange={setTax} prefix="$" step={100} />
         <NumField id="ins" label="Home insurance (per year)" value={ins} onChange={setIns} prefix="$" step={50} />
       </div>
-      <p className="mt-4 text-[12px] leading-relaxed text-muted-foreground">Estimate only, for illustration. It isn&apos;t a loan offer or a rate quote. Taxes and insurance are rough estimates for sample listings. Talk to a lender for real numbers.</p>
+      </details>
+      <p className="mt-4 text-[12px] leading-relaxed text-muted-foreground">Estimate only. Not a loan offer or rate quote; taxes and insurance are rough figures. Mike can connect you with a lender for real numbers.</p>
     </div>
   );
 }

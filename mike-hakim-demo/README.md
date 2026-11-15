@@ -32,7 +32,7 @@ npx playwright test --trace off            # starts `next start` on :3100 automa
 BASE_URL=https://your-deploy.vercel.app npx playwright test --trace off   # test a deployed copy
 ```
 
-They cover search, combined filters, sorting, favorites, compare, the map, the gallery, the mortgage math, the whole showing wizard (validation, date and time, file type and size checks), a check that uploaded file bytes never reach storage, the automation run, the email preview, the CRM lead, the tentative calendar event, dashboard counts, status changes surviving a reload, Reset Demo, blocked storage, the guided tour, mobile navigation and forms, broken links and images, and bot blocking.
+They cover search, combined filters, sorting, favorites, the map, the gallery, the mortgage math, the whole showing wizard (validation, date and time, file type and size checks), a check that uploaded file bytes never reach storage, the automation run, the email preview, the CRM lead, the tentative calendar event, dashboard counts, status changes surviving a reload, Reset Demo, blocked storage, the guided tour, mobile navigation and forms, broken links and images, and bot blocking.
 
 The site blocks AI crawlers, scrapers and headless browsers by User-Agent (`src/middleware.ts`), so the tests send a normal browser User-Agent.
 
@@ -77,7 +77,7 @@ src/
   integrations/production/ inert placeholders that throw until implemented
   integrations/index.ts    registry gated by DEMO_MODE
   components/              site, listings, showing wizard, automation, dashboard, tour
-  app/                     routes: /, /homes, /homes/[id], /compare, /requests/[ref], /dashboard/*
+  app/                     routes: / (search), /homes, /homes/[id], /requests/[ref], /dashboard/*
 ```
 
 To go live with an integration, implement the adapter server-side (route handler plus secrets), add it to the registry and deliberately change `DEMO_MODE`. Nothing in this build can call a real service.

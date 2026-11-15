@@ -1,25 +1,23 @@
 import { test, expect } from "@playwright/test";
-import { fresh, prices, resetStore } from "./helpers";
+import { fresh, openCard, prices, resetStore, tourButton } from "./helpers";
 
 test.beforeEach(async ({ page }) => { await fresh(page); });
 
-test("1. homepage loads with hero, search and featured homes", async ({ page }) => {
+test("1. homepage opens on the map and list search", async ({ page }) => {
   const errors: string[] = [];
   page.on("pageerror", (e) => errors.push(e.message));
   await page.goto("/");
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("Find Your Place.");
-  await expect(page.getByRole("search", { name: "Search homes" })).toBeVisible();
-  await expect(page.locator("article[data-listing]")).toHaveCount(6);
-  await expect(page.getByText("Why work with Mike")).toBeVisible();
-  await expect(page.getByRole("heading", { name: "From search to showing in four steps" })).toBeAttached();
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("homes for sale");
+  await expect(page.getByLabel(/Search by city/)).toBeVisible();
+  await expect(page.getByTestId("result-count")).toHaveText("30");
+  await expect(page.locator(".mh-pin").first()).toBeVisible();
   expect(errors).toEqual([]);
 });
 
-test("hero search hands filters to the results page", async ({ page }) => {
+test("search from the homepage", async ({ page }) => {
   await page.goto("/");
-  await page.getByLabel("City or ZIP code").fill("Canton");
-  await page.getByRole("button", { name: "Explore Homes" }).click();
-  await expect(page).toHaveURL(/\/homes\?q=Canton/);
+  await page.getByLabel(/Search by city/).fill("Canton");
+  await expect(page).toHaveURL(/q=Canton/);
   await expect(page.getByTestId("result-count")).toHaveText("3");
 });
 
@@ -68,21 +66,12 @@ test("4. sorting works", async ({ page }) => {
   await expect(page).toHaveURL(/sort=price_asc/);
 });
 
-test("grid/list, favorites and compare", async ({ page }) => {
+test("favorites", async ({ page }) => {
   await resetStore(page);
   await page.goto("/homes");
-  await page.getByRole("button", { name: "List view" }).click();
-  await expect(page).toHaveURL(/view=list/);
-  const first = page.locator("article[data-listing]").first();
-  await first.getByRole("button", { name: "Save this home" }).click();
+  await page.locator("article[data-listing]").first().getByRole("button", { name: "Save this home" }).click();
   await page.goto("/homes?saved=1");
   await expect(page.getByTestId("result-count")).toHaveText("3"); // 2 seeded + 1
-  await page.goto("/homes");
-  await page.locator("article[data-listing]").nth(0).getByRole("button", { name: "Compare" }).click();
-  await page.locator("article[data-listing]").nth(1).getByRole("button", { name: "Compare" }).click();
-  await page.getByRole("link", { name: "Compare 2" }).click();
-  await expect(page.getByRole("heading", { name: "Side by side" })).toBeVisible();
-  await expect(page.locator("table thead th")).toHaveCount(3);
 });
 
 test("map toggles and marker highlights a listing", async ({ page }) => {
@@ -98,21 +87,20 @@ test("5. property cards navigate to detail; 6. gallery; 7. mortgage calculator",
   await page.goto("/homes?sort=price_asc");
   const card = page.locator("article[data-listing]").first();
   const id = await card.getAttribute("data-listing");
-  await card.locator("a").first().click();
+  await openCard(card);
   await expect(page).toHaveURL(new RegExp(`/homes/${id}$`));
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
-  await expect(page.getByText("1 / 6")).toBeVisible();
-  await page.getByRole("button", { name: "Next photo" }).first().click();
-  await expect(page.getByText(/2 \/ 6/).first()).toBeVisible();
-  await page.getByRole("tab", { name: /Show Bathroom/ }).click();
-  await expect(page.getByText(/5 \/ 6/).first()).toBeVisible();
-  await page.getByRole("button", { name: "Fullscreen" }).click();
-  await expect(page.getByRole("button", { name: "Close gallery" })).toBeVisible();
+  await expect(tourButton(page)).toContainText("Request a tour");
+  await page.getByRole("button", { name: "See all 6 photos" }).click();
+  await expect(page.getByText(/1 \/ 6 ·/)).toBeVisible();
+  await page.getByRole("button", { name: "Next photo" }).click();
+  await expect(page.getByText(/2 \/ 6 ·/)).toBeVisible();
   await page.keyboard.press("ArrowRight");
-  await expect(page.getByText(/6 \/ 6/).first()).toBeVisible();
+  await expect(page.getByText(/3 \/ 6 ·/)).toBeVisible();
   await page.getByRole("button", { name: "Close gallery" }).click();
   const pay = page.getByTestId("monthly-payment");
   const before = await pay.textContent();
+  await page.getByText("Customize estimate").click();
   await page.getByLabel("Interest rate").fill("9");
   await expect(pay).not.toHaveText(before!);
   const after9 = +(await pay.textContent())!.replace(/[^\d]/g, "");
@@ -126,22 +114,22 @@ test("5. property cards navigate to detail; 6. gallery; 7. mortgage calculator",
 
 test("mortgage math matches the amortization formula", async ({ page }) => {
   await page.goto("/homes/MH-24002");
-  // 238,500, 10% down, 6.5%, 30y -> P&I 1,356.75; plus defaults for tax and insurance
+  await page.getByText("Customize estimate").click();
   await page.getByLabel("Property tax (per year)").fill("0");
   await page.getByLabel("Home insurance (per year)").fill("0");
   await expect(page.getByTestId("monthly-payment")).toHaveText("$1,357");
 });
 
-test("ask a question creates a lead", async ({ page }) => {
+test("contact Mike creates a lead", async ({ page }) => {
   await resetStore(page);
   await page.goto("/homes/MH-24003");
-  await page.getByRole("button", { name: "Ask Mike a Question" }).first().click();
-  await page.getByRole("button", { name: "Send question (demo)" }).click();
+  await page.locator('button[aria-label="Contact Mike"]:visible').first().click();
+  await page.getByRole("button", { name: "Send message" }).click();
   await expect(page.getByText("Enter your name")).toBeVisible();
   await page.getByLabel("Name").fill("Quinn Sample");
   await page.getByLabel("Email").fill("quinn.sample@example.com");
-  await page.getByRole("button", { name: "Send question (demo)" }).click();
-  await expect(page.getByText("Question saved to the demo dashboard")).toBeVisible();
+  await page.getByRole("button", { name: "Send message" }).click();
+  await expect(page.getByText("Message sent to Mike")).toBeVisible();
   await page.goto("/dashboard/leads");
   await expect(page.getByText("Quinn Sample").first()).toBeVisible();
 });

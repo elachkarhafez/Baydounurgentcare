@@ -24,7 +24,7 @@ export function RescheduleDialog({ open, onOpenChange, currentStart, onConfirm, 
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-h-[92dvh] overflow-y-auto sm:max-w-2xl">
         <DialogHeader>
-          <DialogTitle className="font-display text-[22px] font-medium">{title}</DialogTitle>
+          <DialogTitle className="text-[22px] font-extrabold">{title}</DialogTitle>
           <DialogDescription>Pick a new date and a sample time slot (Detroit time). In this demo the change updates the request and the calendar. Nobody is notified.</DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 md:grid-cols-[auto_1fr]">

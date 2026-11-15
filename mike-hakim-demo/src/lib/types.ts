@@ -37,6 +37,8 @@ export interface Listing {
   hoa?: number;
   taxesYearly: number;
   featured?: boolean;
+  /** Sample price reduction, for the card badge. */
+  priceCut?: { amount: number; daysAgo: number };
 }
 
 export type LeadStage =

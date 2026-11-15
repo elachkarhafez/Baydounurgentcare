@@ -3,7 +3,7 @@ import { fresh } from "./helpers";
 
 test("22. no broken internal links or images on key pages", async ({ page, request }) => {
   await fresh(page);
-  const pages = ["/", "/homes", "/homes/MH-24011", "/compare", "/dashboard", "/dashboard/leads", "/dashboard/showings", "/dashboard/calendar", "/dashboard/automations"];
+  const pages = ["/", "/homes", "/homes/MH-24011", "/dashboard", "/dashboard/leads", "/dashboard/showings", "/dashboard/calendar", "/dashboard/automations"];
   const links = new Set<string>();
   const bad: string[] = [];
   for (const p of pages) {

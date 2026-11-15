@@ -26,7 +26,7 @@ export function validateFile(f: { name: string; type: string; size: number }): {
 
 export const SAMPLE_DOC: DocumentMeta = { name: "sample-preapproval-letter.pdf", type: "PDF", size: 184_320 };
 
-export function Uploader({ value, onChange, onSkip, skipped, error, sampleSignal }: { value: DocumentMeta | null; onChange: (m: DocumentMeta | null) => void; onSkip: () => void; skipped: boolean; error?: string; sampleSignal?: number }) {
+export function Uploader({ value, onChange, onSkip, skipped, error, sampleSignal }: { value: DocumentMeta | null; onChange: (m: DocumentMeta | null) => void; onSkip?: () => void; skipped?: boolean; error?: string; sampleSignal?: number }) {
   const input = useRef<HTMLInputElement>(null);
   const [drag, setDrag] = useState(false);
   const [progress, setProgress] = useState<number | null>(null);
@@ -63,10 +63,10 @@ export function Uploader({ value, onChange, onSkip, skipped, error, sampleSignal
   const Icon = value?.type === "PDF" ? FileText : ImageIcon;
   return (
     <div className="grid gap-3">
-      <div className="flex items-start gap-2.5 rounded-md border border-gold/40 bg-gold/10 px-3 py-2.5 text-[13px] leading-snug text-[#6b5126]" role="note">
-        <TriangleAlert className="mt-0.5 size-4 shrink-0" />
-        <span><b>Demo only — please use a sample document, not your actual pre-approval letter.</b> Only the file name, type and size are kept. The file itself never leaves this page.</span>
-      </div>
+      <p className="flex items-start gap-2 text-[12px] leading-snug text-[#6b5126]" role="note">
+        <TriangleAlert className="mt-0.5 size-3.5 shrink-0" />
+        <span>Demo only — please use a sample document, not your actual pre-approval letter.</span>
+      </p>
       <AnimatePresence mode="wait" initial={false}>
         {value ? (
           <motion.div key="done" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} className="flex items-center gap-3 rounded-lg border border-emerald/30 bg-emerald/5 p-4" data-testid="doc-selected">
@@ -97,12 +97,12 @@ export function Uploader({ value, onChange, onSkip, skipped, error, sampleSignal
             onDragOver={(e) => { e.preventDefault(); setDrag(true); }}
             onDragLeave={() => setDrag(false)}
             onDrop={(e) => { e.preventDefault(); setDrag(false); handle(e.dataTransfer.files?.[0]); }}
-            className={cn("grid place-items-center gap-2 rounded-lg border-2 border-dashed px-4 py-9 text-center transition-colors", drag ? "border-gold bg-gold/10" : "border-border bg-card hover:border-gold/60", (err || error) && "border-destructive/60")}
+            className={cn("grid place-items-center gap-1.5 rounded-xl border-2 border-dashed px-4 py-6 text-center transition-colors", drag ? "border-gold bg-gold/10" : "border-border bg-card hover:border-gold/60", (err || error) && "border-destructive/60")}
             data-tour="wizard-upload"
           >
-            <FileUp className="size-8 text-gold" strokeWidth={1.5} />
-            <span className="text-[15px] font-semibold">Drag a file here or <span className="text-gold underline underline-offset-2">browse</span></span>
-            <span className="text-[12.5px] text-muted-foreground">PDF, JPG or PNG · up to 10 MB</span>
+            <FileUp className="size-6 text-primary" strokeWidth={1.7} />
+            <span className="text-[14.5px] font-semibold">Attach your pre-approval letter</span>
+            <span className="text-[12.5px] text-muted-foreground">Optional · PDF, JPG or PNG up to 10 MB</span>
           </motion.button>
         )}
       </AnimatePresence>
@@ -110,8 +110,8 @@ export function Uploader({ value, onChange, onSkip, skipped, error, sampleSignal
       {(err || error) && <p className="text-[13px] font-medium text-destructive" role="alert">{err || error}</p>}
       {!value && progress === null && (
         <div className="flex flex-wrap items-center gap-2">
-          <Button type="button" variant="outline" size="sm" onClick={() => accept(SAMPLE_DOC)}><FileText /> Use a generated sample PDF</Button>
-          <Button type="button" variant={skipped ? "secondary" : "ghost"} size="sm" onClick={onSkip} aria-pressed={skipped}>{skipped ? "Skipped, you can add it later" : "Skip for now"}</Button>
+          <Button type="button" variant="ghost" size="sm" className="text-muted-foreground" onClick={() => accept(SAMPLE_DOC)}><FileText /> Use a generated sample PDF</Button>
+          {onSkip && <Button type="button" variant={skipped ? "secondary" : "ghost"} size="sm" onClick={onSkip} aria-pressed={skipped}>{skipped ? "Skipped, you can add it later" : "Skip for now"}</Button>}
         </div>
       )}
     </div>

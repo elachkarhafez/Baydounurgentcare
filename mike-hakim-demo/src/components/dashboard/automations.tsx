@@ -28,7 +28,7 @@ export function AutomationsPage() {
       <PageHead title="Emails & sync" sub="Everything your website sent for you. Each request goes to your email, Follow Up Boss and your calendar." />
       <div className="mb-6 grid gap-3 sm:grid-cols-3">
         {[{ i: Mail, t: "Emails to you", n: s.emails.length, d: "one for every request" }, { i: Users, t: "Follow Up Boss updates", n: s.crmLogs.length, d: "new leads, stages and notes" }, { i: CalendarClock, t: "Calendar holds", n: s.events.filter((e) => e.kind === "showing").length, d: "showings on your calendar" }].map((c) => (
-          <div key={c.t} className="rounded-lg border bg-card p-4"><div className="flex items-center justify-between"><c.i className="size-5 text-gold" /><SimBadge label="Demo" /></div><p className="mt-3 font-display text-[28px] font-medium leading-none tabular">{c.n}</p><p className="mt-1 text-[13px] font-semibold">{c.t}</p><p className="text-[12px] text-muted-foreground">{c.d}</p></div>
+          <div key={c.t} className="rounded-lg border bg-card p-4"><div className="flex items-center justify-between"><c.i className="size-5 text-gold" /><SimBadge label="Demo" /></div><p className="mt-3 text-[28px] font-extrabold leading-none tabular">{c.n}</p><p className="mt-1 text-[13px] font-semibold">{c.t}</p><p className="text-[12px] text-muted-foreground">{c.d}</p></div>
         ))}
       </div>
       <Tabs defaultValue={emailId ? "email" : "runs"}>

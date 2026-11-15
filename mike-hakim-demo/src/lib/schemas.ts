@@ -7,7 +7,7 @@ export const documentMetaSchema = z.object({ name: z.string().min(1).max(200), t
 
 export const showingSchema = z
   .object({
-    date: z.string().min(1, "Pick a date for the showing"),
+    date: z.string().min(1, "Pick a day for your tour"),
     time: z.string().min(1, "Pick a time slot"),
     altDate: z.string().optional().default(""),
     altTime: z.string().optional().default(""),
@@ -15,19 +15,17 @@ export const showingSchema = z
     lastName: z.string().trim().min(1, "Enter your last name").max(60),
     email: z.string().trim().min(1, "Enter your email").email("That email doesn't look right"),
     phone: z.string().trim().refine((v) => phoneDigits(v).length === 10, "Enter a 10-digit phone number"),
-    buyerStatus: z.enum(["first_time", "searching", "ready", "exploring"], { message: "Choose where you are in your search" }),
-    financing: z.enum(["pre_approved", "cash", "not_yet"], { message: "Choose your financing status" }),
-    notes: z.string().max(1000, "Keep notes under 1,000 characters").optional().default(""),
+    buyerStatus: z.enum(["first_time", "searching", "ready", "exploring"]).optional(),
+    financing: z.enum(["pre_approved", "cash", "not_yet"], { message: "Let Mike know how you're paying" }),
+    notes: z.string().max(1000, "Keep your message under 1,000 characters").optional().default(""),
     document: documentMetaSchema.nullable(),
-    docSkipped: z.boolean(),
   })
   .superRefine((v, ctx) => {
     const today = detroitYmd();
     if (v.date && v.date < today) ctx.addIssue({ code: "custom", path: ["date"], message: "Pick a date that hasn't passed" });
     if (v.date && v.time && detroitToUtc(v.date, v.time).getTime() < Date.now()) ctx.addIssue({ code: "custom", path: ["time"], message: "That time has already passed" });
-    if ((v.altDate && !v.altTime) || (!v.altDate && v.altTime)) ctx.addIssue({ code: "custom", path: ["altTime"], message: "Pick both a date and a time for the backup, or leave both empty" });
+    if ((v.altDate && !v.altTime) || (!v.altDate && v.altTime)) ctx.addIssue({ code: "custom", path: ["altTime"], message: "Pick a day and a time for the backup, or remove it" });
     if (v.altDate && v.altTime && v.altDate === v.date && v.altTime === v.time) ctx.addIssue({ code: "custom", path: ["altTime"], message: "The backup time should be different from your first choice" });
-    if (!v.document && !v.docSkipped) ctx.addIssue({ code: "custom", path: ["document"], message: "Attach a sample document or choose Skip for now" });
   });
 
 export type ShowingForm = z.input<typeof showingSchema>;

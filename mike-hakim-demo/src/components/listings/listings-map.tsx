@@ -29,10 +29,14 @@ export function ListingsMap({ listings, activeId, onSelect, className, single = 
       let errs = 0;
       tiles.on("tileerror", () => { if (++errs > 6) setTileError(true); });
       map.current = m;
+      const ro = new ResizeObserver(() => m.invalidateSize());
+      ro.observe(el.current);
+      (m as unknown as { _ro?: ResizeObserver })._ro = ro;
       setReady(true);
     });
     return () => {
       cancelled = true;
+      (map.current as unknown as { _ro?: ResizeObserver } | null)?._ro?.disconnect();
       map.current?.remove();
       map.current = null;
       mks.clear();
@@ -66,7 +70,7 @@ export function ListingsMap({ listings, activeId, onSelect, className, single = 
   }, [activeId, listings, ready]);
 
   return (
-    <div className={cn("relative overflow-hidden rounded-lg bg-[#e8e3d8] hairline", className)}>
+    <div className={cn("relative isolate z-0 overflow-hidden rounded-lg bg-[#e8e3d8] hairline", className)}>
       <div ref={el} className="absolute inset-0" role="region" aria-label="Map of sample listings" />
       {!ready && <div className="absolute inset-0 grid place-items-center text-sm text-muted-foreground">Loading map…</div>}
       {tileError && <div className="absolute left-3 top-3 z-[500] rounded bg-card px-2.5 py-1.5 text-[12px] shadow-soft">Map tiles couldn&apos;t load. Pins still work.</div>}

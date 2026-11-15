@@ -29,11 +29,11 @@ const L = `/homes/${TOUR_LISTING_ID}`;
 const STEPS: Step[] = [
   { center: true, route: () => "/", title: "Here's what your new website does for you", body: "This takes about two minutes. We'll play a buyer, send you a showing request, and then switch to your side to see where it lands. Just press the button and follow along.",
     bullets: ["Buyers find homes and book showings on their own, any time of day", "Every request reaches your email, Follow Up Boss and your calendar automatically", "Pre-approval letters come attached, so you know who's serious"], nextLabel: "Start" },
-  { title: "Buyers search your listings", body: "They type a city or ZIP and narrow it down by price, beds, baths and more. We searched Dearborn with 3+ bedrooms for you.", route: () => "/homes?q=Dearborn&beds=3", target: "filters" },
-  { title: "Every home gets a full page", body: "Photos, details, a map and a monthly payment estimate. And right there, a button to book a showing with you.", route: () => L, target: "request-showing" },
-  { title: "They pick a time that works", body: "Buyers choose a day and a time, plus a backup. You never have to play phone tag to set it up. We filled in a sample buyer for you.", route: () => L, target: "wizard-datetime", enter: () => emitTour({ type: "open-wizard", listingId: TOUR_LISTING_ID, step: 1, sample: true }) },
-  { title: "Pre-approval comes with it", body: "Buyers attach their pre-approval letter right in the request, so you know who's ready before you ever leave the office.", route: () => L, target: "wizard-upload", enter: () => { emitTour({ type: "wizard-step", step: 3 }); setTimeout(() => emitTour({ type: "wizard-sample-doc" }), 350); } },
-  { title: "One tap to send", body: "They check everything and hit submit. Press Send and we'll send this sample request to you.", route: () => L, target: "wizard-submit", nextLabel: "Send", enter: () => emitTour({ type: "wizard-step", step: 4 }),
+  { title: "Buyers search homes", body: "A map and a list, the way buyers already know. They type a city or ZIP and filter by price, beds and baths. We searched Dearborn with 3+ bedrooms for you.", route: () => "/homes?q=Dearborn&beds=3", target: "filters" },
+  { title: "They tap a home", body: "Photos, price, the key facts and a map. The Request a tour button is always right there at the bottom, just like the apps buyers already use.", route: () => L, target: "request-showing" },
+  { title: "They pick a day and time", body: "Two taps: a day, then a time. They can add a backup time too. We filled in a sample buyer for you.", route: () => L, target: "wizard-datetime", enter: () => emitTour({ type: "open-wizard", listingId: TOUR_LISTING_ID, step: 0, sample: true }) },
+  { title: "Pre-approval comes with it", body: "Their contact info, how they're paying, and their pre-approval letter, all on one screen. You know who's serious before you call.", route: () => L, target: "wizard-upload", enter: () => { emitTour({ type: "wizard-step", step: 1 }); setTimeout(() => emitTour({ type: "wizard-sample-doc" }), 350); } },
+  { title: "One tap to send", body: "That's it for the buyer. Press Send and we'll send this sample request to you.", route: () => L, target: "wizard-submit", nextLabel: "Send", enter: () => emitTour({ type: "wizard-step", step: 1 }),
     next: () => new Promise<void>((resolve) => { const off = onSubmitted(() => { off(); resolve(); }); emitTour({ type: "wizard-submit" }); setTimeout(() => { off(); resolve(); }, 6000); }) },
   { title: "Now watch what happens for you", body: "Within seconds you get an email, the buyer is added to Follow Up Boss, and the showing goes on your calendar. Nobody has to type anything in.", route: (c) => (c.last ? `/requests/${c.last.ref}` : "/dashboard"), target: "automation", enter: () => emitTour({ type: "close-wizard" }) },
   { title: "The email you'd get", body: "Every detail in one place: who it is, which home, when they want to see it, how they're paying, and their pre-approval.", route: null, target: "email-preview" },
@@ -103,7 +103,7 @@ function useTargetRect(target: string | undefined, dep: unknown) {
     if (!target) return;
     let raf = 0, scrolled = false;
     const tick = () => {
-      const el = document.querySelector<HTMLElement>(`[data-tour="${target}"]`);
+      const el = Array.from(document.querySelectorAll<HTMLElement>(`[data-tour="${target}"]`)).find((x) => { const b = x.getBoundingClientRect(); return b.width > 0 && b.height > 0; });
       if (el) {
         const r = el.getBoundingClientRect();
         if (r.width > 0) {
@@ -176,7 +176,7 @@ function TourOverlay({ step, index, total, path, busy, onNext, onPrev, onClose, 
           <span className="eyebrow inline-flex items-center gap-1.5"><Sparkles className="size-3.5" /> {step.center ? (index === 0 ? "Guided demo" : "Finished") : `Step ${stepNumber(index)} of ${COUNTED}`}</span>
           <button onClick={onClose} className="-m-1 rounded p-1 text-muted-foreground hover:bg-muted hover:text-foreground" aria-label="Exit the guided demo"><X className="size-4" /></button>
         </div>
-        <h2 className={`mt-2 font-medium leading-tight ${step.center ? "text-[26px]" : "text-[20px]"}`}>{step.title}</h2>
+        <h2 className={`mt-2 leading-tight ${step.center ? "text-[26px]" : "text-[20px]"}`}>{step.title}</h2>
         <p className="mt-2 text-[14.5px] leading-relaxed text-muted-foreground">{step.body}</p>
         {step.bullets && <ul className="mt-4 grid gap-2.5">{step.bullets.map((b) => <li key={b} className="flex gap-2.5 text-[14.5px] font-medium"><Check className="mt-0.5 size-4 shrink-0 text-gold" />{b}</li>)}</ul>}
         <div className="mt-4 flex items-center gap-1" aria-hidden>

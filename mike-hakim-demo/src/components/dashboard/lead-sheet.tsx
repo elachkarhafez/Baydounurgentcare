@@ -34,9 +34,9 @@ export function LeadSheet({ leadId, onClose }: { leadId: string | null; onClose:
           <>
             <SheetHeader className="border-b p-5">
               <div className="flex items-center gap-3">
-                <span className="grid size-12 shrink-0 place-items-center rounded-full bg-primary font-display text-[18px] text-primary-foreground">{initials(lead.firstName, lead.lastName)}</span>
+                <span className="grid size-12 shrink-0 place-items-center rounded-full bg-primary text-[18px] text-primary-foreground">{initials(lead.firstName, lead.lastName)}</span>
                 <div className="min-w-0">
-                  <SheetTitle className="font-display text-[22px] font-medium">{lead.firstName} {lead.lastName}</SheetTitle>
+                  <SheetTitle className="text-[22px] font-extrabold">{lead.firstName} {lead.lastName}</SheetTitle>
                   <SheetDescription className="text-[13px]">Source: {lead.source} · Added {relativeTime(lead.createdAt)} {lead.sample ? "· Sample lead" : ""}</SheetDescription>
                 </div>
               </div>
