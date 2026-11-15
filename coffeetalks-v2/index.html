@@ -146,6 +146,15 @@
     .intro .ibean img { position: absolute; inset: 0; width: 100%; height: 100%; }
     .intro .stream { position: absolute; left: 46.6%; bottom: 0; width: 1.5%; height: 120vh; border-radius: 0 0 8px 8px; background: linear-gradient(90deg, #3b2314, #6b4429 45%, #3b2314); transform: scaleY(0); transform-origin: top; }
     .intro .stamp { position: absolute; left: 50%; top: 72%; translate: -50% 0; padding: 10px 18px; border: 3px solid var(--ink); border-radius: 12px; background: var(--bean); color: var(--cream); box-shadow: var(--shadow); font: 400 clamp(20px, 5.6vw, 34px)/1 var(--display); text-transform: uppercase; white-space: nowrap; opacity: 0; }
+    .intro .enter:not([hidden]) { position: absolute; inset: 0; z-index: 5; display: grid; place-content: center; justify-items: center; gap: 14px; background: var(--cream); text-align: center; padding: 24px; }
+    .intro .e-go { position: relative; width: 168px; height: 168px; border-radius: 50%; border: 3px solid var(--ink); background: var(--bean); box-shadow: var(--shadow); display: grid; place-content: center; justify-items: center; gap: 6px; cursor: pointer; color: var(--cream); }
+    .intro .e-go img { width: 54px; height: auto; animation: ebob 1.6s ease-in-out infinite; }
+    .intro .e-go span { font: 400 21px/1 var(--display); letter-spacing: .05em; text-transform: uppercase; }
+    .intro .e-go::after { content: ""; position: absolute; inset: -10px; border-radius: 50%; border: 2.5px solid var(--bean); animation: ering 1.8s ease-out infinite; pointer-events: none; }
+    .intro .e-s { margin: 4px 0 0; font: 700 1.3rem/1 var(--hand); color: var(--bean); }
+    .intro .e-quiet { padding: 8px 10px; font: 600 13px/1 var(--sans); color: var(--muted); text-decoration: underline; text-underline-offset: 3px; }
+    @keyframes ebob { 50% { transform: translateY(-6px) rotate(8deg); } }
+    @keyframes ering { 0% { transform: scale(.92); opacity: .9; } 100% { transform: scale(1.25); opacity: 0; } }
     .intro .skip { position: absolute; right: 14px; bottom: 14px; padding: 10px 14px; font: 700 11px/1 var(--sans); letter-spacing: .2em; text-transform: uppercase; color: var(--muted); }
     html:not(.js) .intro, html.rm .intro, html.seen .intro { display: none; }
 
@@ -722,6 +731,11 @@
       <div class="ibean" data-ibean><img src="img/bean-l.webp" width="360" height="367" alt="" data-bl><img src="img/bean-r.webp" width="360" height="367" alt="" data-br></div>
     </div>
     <div class="stamp" data-istamp>Hi, Welcome To Coffee Talks</div>
+    <div class="enter" data-enter hidden>
+      <button class="e-go" type="button" data-entergo><img src="img/bean-light.webp" width="120" height="122" alt=""><span>Tap To Pour</span></button>
+      <p class="e-s">Sound on for this one</p>
+      <button class="e-quiet" type="button" data-enterquiet>Enter without sound</button>
+    </div>
     <button class="skip" type="button" data-skip>Skip</button>
   </div>
 
@@ -2056,7 +2070,7 @@
     gsap.set(ib, { x: bx, y: by, scale: bigS, transformOrigin: '50% 50%' });
     gsap.set('[data-empty], [data-fill]', { scale: .35, opacity: 0, transformOrigin: '50% 55%' });
     gsap.set('[data-istamp]', { scale: 2.4, rotation: -14 });
-    const itl = gsap.timeline({ paused: TEASER, onComplete: () => { intro.remove(); heroIn.play(); if (TEASER) gsap.delayedCall(1.0, teaser.fakeOpen); } });
+    const itl = gsap.timeline({ paused: true, onComplete: () => { intro.remove(); heroIn.play(); if (TEASER) gsap.delayedCall(1.0, teaser.fakeOpen); } });
     itl.from(ib, { y: by - innerHeight * .7, rotation: -25, duration: .45, ease: 'power3.in' })
       .to(ib, { scaleY: bigS * .9, scaleX: bigS * 1.06, duration: .07, yoyo: true, repeat: 1 })
       .to(ib, { rotation: 7, duration: .06, yoyo: true, repeat: 3, ease: 'sine.inOut' }, '+=.04')
@@ -2078,12 +2092,12 @@
       .add(() => SFX.play('whoosh', .6), '<');
     // sounds on the beats of the opening (teaser only; silent everywhere else)
     itl.add(() => SFX.play('whoosh', .45, .8), .05).add(() => SFX.play('thud'), .44).add(() => SFX.play('crack'), 'open').add(() => SFX.play('pop', .7), 'open+=.06')
-      .add(() => SFX.play('pour', .9), 'pour').add(() => SFX.play('stamp'), 'pour+=1.32');
+      .add(() => SFX.play('pour', .9), 'pour').add(() => SFX.play('drop', .35, 1.2), 'pour+=.3').add(() => SFX.play('drip', .45), 'pour+=1.05').add(() => SFX.play('stamp'), 'pour+=1.32');
     gsap.set(intro, { clipPath: 'inset(0 0 0% 0)' });
     $('[data-skip]').addEventListener('click', () => { SFX.hush(400); itl.progress(1); });
     if (TEASER) {
       // GRAND OPENING: cutting the ribbon is the tap that lets the browser play sound
-      SFX.init(TEASER ? null : ['pop', 'flip', 'chime', 'drop', 'pour', 'whoosh', 'ding', 'stamp', 'grind', 'tamp', 'drip', 'steam', 'jazz']);
+      SFX.init(TEASER ? null : ['pop', 'flip', 'chime', 'drop', 'pour', 'whoosh', 'ding', 'stamp', 'grind', 'tamp', 'drip', 'steam', 'jazz', 'thud', 'crack']);
       const gate = $('[data-gate]'); gate.hidden = false;
       const go = withSound => {
         if (gate.dataset.done) return; gate.dataset.done = 1; SFX.unlock(); SFX.setOn(withSound);
@@ -2116,6 +2130,20 @@
       };
       $('[data-cut]').addEventListener('click', () => go(true));
       $('[data-quiet]').addEventListener('click', () => go(false));
+    } else {
+      // TAP TO POUR: the tap starts the opening, its sounds and the music together
+      SFX.init(['pop', 'flip', 'chime', 'drop', 'pour', 'whoosh', 'ding', 'stamp', 'grind', 'tamp', 'drip', 'steam', 'jazz', 'thud', 'crack']);
+      const en = $('[data-enter]'); en.hidden = false; gsap.from(en.children, { y: 24, opacity: 0, duration: .6, ease: 'back.out(1.8)', stagger: .08 });
+      const go = withSound => {
+        if (en.dataset.done) return; en.dataset.done = 1; SFX.unlock();
+        if (withSound) { SFX.setOn(true); if (store.get('ct-music', true)) { SFX.startMusic('jazz', .26); document.dispatchEvent(new Event('ct-music')); } }
+        else { SFX.setOn(false); window.__ctMute = true; }
+        gsap.to(en, { opacity: 0, scale: 1.04, duration: .35, ease: 'power2.in', onComplete: () => { en.remove(); itl.play(); } });
+      };
+      $('[data-entergo]').addEventListener('click', () => go(true));
+      $('[data-enterquiet]').addEventListener('click', e => { e.stopPropagation(); go(false); });
+      en.addEventListener('click', e => { if (e.target === en) go(true); });
+      addEventListener('keydown', e => { if (!en.dataset.done && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); go(true); } });
     }
   }
 
@@ -2136,8 +2164,9 @@
     if (TEASER) return () => {};
     const mBtn = $('[data-music]'); let musicOn = store.get('ct-music', true), started = false;
     const showMusic = () => { if (!mBtn) return; mBtn.setAttribute('aria-pressed', String(musicOn && started)); mBtn.setAttribute('aria-label', musicOn && started ? 'Pause the jazz' : 'Play the jazz'); };
-    const wake = e => { SFX.init(['pop', 'flip', 'chime', 'drop', 'pour', 'whoosh', 'ding', 'stamp', 'grind', 'tamp', 'drip', 'steam', 'jazz']); SFX.unlock(); if (e && e.target && e.target.closest && e.target.closest('[data-music]')) return; if (!started && musicOn) { started = true; SFX.startMusic('jazz', .26); showMusic(); } };
-    if (mBtn) mBtn.addEventListener('click', e => { e.stopPropagation(); if (!started) { started = true; musicOn = true; SFX.startMusic('jazz', .26); } else { musicOn = !musicOn; SFX.setMusic(musicOn); } store.set('ct-music', musicOn); showMusic(); });
+    const wake = e => { SFX.init(['pop', 'flip', 'chime', 'drop', 'pour', 'whoosh', 'ding', 'stamp', 'grind', 'tamp', 'drip', 'steam', 'jazz', 'thud', 'crack']); SFX.unlock(); if (e && e.target && e.target.closest && e.target.closest('[data-music], [data-enter]')) return; if (window.__ctMute) return; if (!started && musicOn) { started = true; SFX.startMusic('jazz', .26); showMusic(); } };
+    document.addEventListener('ct-music', () => { started = true; musicOn = true; showMusic(); });
+    if (mBtn) mBtn.addEventListener('click', e => { e.stopPropagation(); if (window.__ctMute) { window.__ctMute = false; SFX.setOn(true); started = false; musicOn = true; } if (!started) { started = true; musicOn = true; SFX.startMusic('jazz', .26); } else { musicOn = !musicOn; SFX.setMusic(musicOn); } store.set('ct-music', musicOn); showMusic(); });
     ['pointerdown', 'pointerup', 'touchend', 'click', 'keydown'].forEach(ev => addEventListener(ev, wake, { capture: true, passive: true }));
     const last = {};
     return (n, g = 1, r = 1, at = 0) => { if (!SFX.live) return; const t = performance.now(); if (!at && last[n] && t - last[n] < 60) return; last[n] = t; SFX.play(n, g, r, at); };
