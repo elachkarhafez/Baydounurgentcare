@@ -1,5 +1,5 @@
 import { json, env, sign, verify, safeEq, letterLink, siteUrl, fmtSlot } from './_lib.js';
-import { listRequests, readRequest, saveRequest } from './_store.js';
+import { listRequests, readRequest, saveRequest, del } from './_store.js';
 // Mike's private dashboard. Served only at /<DASHBOARD_SLUG> (set in env, not in the repo)
 // and only after the password in DASHBOARD_PASSWORD.
 const COOKIE = 'mh_desk';
@@ -40,6 +40,12 @@ export async function POST(req) {
     r.status = b.status; r.statusNote = String(b.note || '').slice(0, 300); r.updatedAt = new Date().toISOString();
     await saveRequest(r);
     return json({ request: view(r) });
+  }
+  if (b.action === 'delete') {
+    const r = await readRequest(String(b.id || ''));
+    if (!r) return json({ error: 'not found' }, 404);
+    await del([`requests/${r.id}.json`, ...(r.letter && !r.letter.deleted ? [r.letter.pathname] : [])]);
+    return json({ ok: true });
   }
   return json({ error: 'unknown action' }, 400);
 }
@@ -92,11 +98,12 @@ return '<article class="req" data-id="'+q.id+'"><div class="top"><div><h2>'+esc(
 +(q.message?'<p class="msg">'+esc(q.message)+'</p>':'')
 +'<div class="links"><a href="tel:'+esc(tel)+'">Call</a><a href="sms:'+esc(tel)+'">Text</a><a href="mailto:'+esc(q.email)+'">Email</a>'+(l?(l.link?'<a class="letter" href="'+esc(l.link)+'" target="_blank" rel="noopener noreferrer">Pre-approval letter</a>':'<a aria-disabled="true">Letter deleted (90 days)</a>'):'<a aria-disabled="true">No letter</a>')+'</div>'
 +'<div class="acts"><input class="note" placeholder="Note, e.g. moved to Sat 2pm" value="'+esc(q.statusNote)+'" aria-label="Note"><button class="btn solid" data-s="confirmed">Confirmed</button><button class="btn" data-s="rescheduled">Rescheduled</button></div>'
-+'<p class="meta">'+esc(q.email)+' · '+esc(q.phone)+' · sent '+new Date(q.createdAt).toLocaleString('en-US',{timeZone:'America/Detroit',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})+(q.notify?' · email '+esc(q.notify.email?.status||'?')+' · FUB '+esc(q.notify.fub?.status||'?'):'')+(q.status!=='new'?' · <a href="#" data-s="new">mark as new</a>':'')+'</p></article>';}
++'<p class="meta">'+esc(q.email)+' · '+esc(q.phone)+' · sent '+new Date(q.createdAt).toLocaleString('en-US',{timeZone:'America/Detroit',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})+(q.notify?' · email '+esc(q.notify.email?.status||'?')+' · FUB '+esc(q.notify.fub?.status||'?'):'')+(q.status!=='new'?' · <a href="#" data-s="new">mark as new</a>':'')+' · <a href="#" data-del>delete</a></p></article>';}
 function render(){const n=s=>all.filter(q=>s==='all'||q.status===s).length;const list=all.filter(q=>filter==='all'||q.status===filter);
 app.innerHTML='<header><div><b>Showing requests</b><small>Mike Hakim · REALTOR®</small></div><button class="btn l" id="out">Sign out</button></header><main class="wrap"><div class="tabs" role="group" aria-label="Filter">'+['new','confirmed','rescheduled','all'].map(s=>'<button data-f="'+s+'" aria-pressed="'+(filter===s)+'">'+s[0].toUpperCase()+s.slice(1)+' ('+n(s)+')</button>').join('')+'</div>'+(list.length?list.map(card).join(''):'<p class="empty">Nothing here yet.</p>')+'</main>';
 app.querySelector('#out').onclick=async()=>{await api({action:'logout'});login();};
 app.querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{filter=b.dataset.f;render();});
+app.querySelectorAll('[data-del]').forEach(b=>b.onclick=async e=>{e.preventDefault();if(!confirm('Delete this request and its letter for good?'))return;const id=b.closest('.req').dataset.id;const r=await api({action:'delete',id});if(r.s===401)return login();if(r.j.ok){all=all.filter(q=>q.id!==id);render();}});
 app.querySelectorAll('[data-s]').forEach(b=>b.onclick=async e=>{e.preventDefault();const el=b.closest('.req');b.disabled=true;const r=await api({action:'status',id:el.dataset.id,status:b.dataset.s,note:el.querySelector('.note').value});if(r.s===401)return login();if(r.j.request){all=all.map(q=>q.id===r.j.request.id?r.j.request:q);render();}else{b.disabled=false;alert(r.j.error||'Could not save');}});}
 load();
 </script></body></html>`;
