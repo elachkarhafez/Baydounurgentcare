@@ -7,21 +7,21 @@ import { cn } from "cn";
 
 const ICON: Record<StepKey, typeof Mail> = { recorded: Inbox, email: Mail, crm: Users, calendar: CalendarClock, dashboard: LayoutDashboard };
 const SUB: Record<StepKey, string> = {
-  recorded: "Saved in this browser as demo data",
-  email: "Business email notification, simulated, not sent",
-  crm: "Follow Up Boss style lead, simulated, no API call",
-  calendar: "Google Calendar style tentative hold, simulated",
-  dashboard: "Leads, showings and calendar refreshed",
+  recorded: "The buyer's request is in",
+  email: "An email lands in your inbox with every detail",
+  crm: "The buyer is added to Follow Up Boss as a new lead",
+  calendar: "A tentative hold goes on your Google Calendar",
+  dashboard: "Your dashboard shows the new request",
 };
 
 export function AutomationProgress({ run }: { run: AutomationRun }) {
   const doneCount = run.steps.filter((s) => s.status === "done").length;
   return (
-    <div className="rounded-lg border bg-card p-5 md:p-6" data-tour="automation" data-testid="automation">
+    <div className="min-w-0 rounded-lg border bg-card p-5 md:p-6" data-tour="automation" data-testid="automation">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <p className="eyebrow">Automation · Demo simulation</p>
-          <h2 className="mt-1 text-[22px] font-medium">{run.done ? "All steps complete" : "Running the workflow…"}</h2>
+          <p className="eyebrow">Happening automatically</p>
+          <h2 className="mt-1 text-[22px] font-medium">{run.done ? "All steps complete" : "Sending it to you…"}</h2>
         </div>
         <span className="rounded-full bg-muted px-3 py-1 text-[12.5px] font-semibold tabular">{doneCount} / {run.steps.length}</span>
       </div>
@@ -43,7 +43,7 @@ export function AutomationProgress({ run }: { run: AutomationRun }) {
                   )}
                 </AnimatePresence>
               </span>
-              <div className="min-w-0 pt-1">
+              <div className="min-w-0 flex-1 pt-1 [overflow-wrap:anywhere]">
                 <p className={cn("text-[15px] font-semibold transition-colors", s.status === "pending" && "text-muted-foreground")}>{s.status === "done" ? "✓ " : ""}{s.label}</p>
                 <p className="text-[13px] text-muted-foreground">{SUB[s.key]}</p>
                 <AnimatePresence>{s.status === "done" && s.detail && <motion.p initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} className="mt-1 text-[12.5px] font-medium text-foreground/80">{s.detail}{s.at ? ` · ${formatTime(s.at)}` : ""}</motion.p>}</AnimatePresence>

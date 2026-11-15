@@ -33,16 +33,16 @@ export function RequestView({ refCode }: { refCode: string }) {
     <div className="mx-auto max-w-6xl px-4 py-8 md:px-6 md:py-12">
       <p className="eyebrow">Showing request · {sh.ref}</p>
       <h1 className="mt-2 text-[28px] font-medium leading-tight md:text-[38px]">Here&apos;s what happens after a buyer hits submit</h1>
-      <p className="mt-2 max-w-2xl text-[15px] text-muted-foreground">In production each step would hand the request to a real service. In this demo every step is simulated, labeled as such, and stays inside this browser.</p>
-      <div className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1fr)_380px]">
-        <div className="grid gap-6">
+      <p className="mt-2 max-w-2xl text-[15px] text-muted-foreground">No typing, no copying and pasting. The request goes everywhere it needs to on its own. (In this demo nothing actually leaves the page.)</p>
+      <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_380px]">
+        <div className="grid min-w-0 grid-cols-1 gap-6">
           {run && <AutomationProgress run={run} />}
           {run?.done && (
             <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="grid gap-3 sm:grid-cols-2">
-              <Button asChild variant="outline" size="lg" className="justify-start"><Link href={`/dashboard/leads?lead=${sh.leadId}`}><Users /> Open the CRM lead</Link></Button>
+              <Button asChild variant="outline" size="lg" className="justify-start"><Link href={`/dashboard/leads?lead=${sh.leadId}`}><Users /> Open the lead</Link></Button>
               <Button asChild variant="outline" size="lg" className="justify-start"><Link href={evt ? `/dashboard/calendar?event=${evt.id}` : "/dashboard/calendar"}><CalendarClock /> See the calendar hold</Link></Button>
-              <Button asChild variant="outline" size="lg" className="justify-start"><Link href={`/dashboard/automations?email=${email?.id ?? ""}`}><Mail /> Automation log</Link></Button>
-              <Button asChild size="lg" className="justify-start"><Link href="/dashboard"><LayoutDashboard /> Open the Realtor Dashboard</Link></Button>
+              <Button asChild variant="outline" size="lg" className="justify-start"><Link href={`/dashboard/automations?email=${email?.id ?? ""}`}><Mail /> All emails</Link></Button>
+              <Button asChild size="lg" className="justify-start"><Link href="/dashboard"><LayoutDashboard /> Open your dashboard</Link></Button>
             </motion.div>
           )}
           {email ? (
@@ -51,7 +51,7 @@ export function RequestView({ refCode }: { refCode: string }) {
             <div className="rounded-lg border border-dashed p-6 text-center text-[14px] text-muted-foreground">The email preview appears once that step finishes.</div>
           )}
         </div>
-        <aside className="grid content-start gap-4">
+        <aside className="grid min-w-0 content-start gap-4">
           <div className="overflow-hidden rounded-lg border bg-card">
             <div className="relative aspect-[16/10]"><Image src={l.photos[0]} alt={l.headline} fill sizes="380px" className="object-cover" /></div>
             <div className="p-4">

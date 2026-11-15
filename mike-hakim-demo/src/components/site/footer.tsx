@@ -18,7 +18,6 @@ export function Footer() {
             <li><Link className="hover:text-white" href="/homes">Search homes</Link></li>
             <li><Link className="hover:text-white" href="/homes?open=1">Open houses</Link></li>
             <li><Link className="hover:text-white" href="/homes?saved=1">Saved homes</Link></li>
-            <li><Link className="hover:text-white" href="/compare">Compare</Link></li>
           </ul>
         </div>
         <div>
@@ -45,8 +44,7 @@ export function Footer() {
           <p>© {new Date().getFullYear()} {BRAND.name}. Demonstration website. Listings are sample data and are not offered for sale.</p>
           <p className="flex flex-wrap gap-x-4 gap-y-1">
             <span>Equal Housing Opportunity</span>
-            <Link href="/dashboard/settings" className="hover:text-white">Demo &amp; integrations</Link>
-            <Link href="/dashboard" className="hover:text-white">Realtor view</Link>
+            <Link href="/dashboard" className="hover:text-white">Mike&apos;s dashboard</Link>
           </p>
         </div>
       </div>

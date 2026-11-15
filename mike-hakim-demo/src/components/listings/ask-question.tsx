@@ -26,7 +26,7 @@ export function AskQuestion({ listing, open, onOpenChange }: { listing: Listing;
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="font-display text-[22px] font-medium">Ask Mike a question</DialogTitle>
-          <DialogDescription>About {listing.address}. In this demo your question shows up as a lead in the Realtor View, and nothing is sent.</DialogDescription>
+          <DialogDescription>About {listing.address}. In this demo your question shows up as a new lead on your dashboard. Nothing is sent.</DialogDescription>
         </DialogHeader>
         <form onSubmit={submit} className="grid gap-3" noValidate>
           <div className="grid gap-1.5"><Label htmlFor="q-name">Name</Label><Input id="q-name" autoComplete="name" {...register("name")} />{err(errors.name?.message)}</div>

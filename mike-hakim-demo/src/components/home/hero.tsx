@@ -1,12 +1,10 @@
 "use client";
 import Image from "next/image";
-import Link from "next/link";
 import { motion, useReducedMotion } from "motion/react";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { HeroSearch } from "@/components/home/hero-search";
 import { useTour } from "@/components/tour/tour-provider";
-import { TOUR_LISTING_ID } from "@/data/listings";
 
 const ease = [0.16, 1, 0.3, 1] as const;
 export function Hero() {
@@ -29,10 +27,8 @@ export function Hero() {
         </motion.p>
         <motion.div {...rise(0.45)} className="mt-7 md:mt-10"><HeroSearch /></motion.div>
         <motion.div {...rise(0.55)} className="mt-5 flex flex-wrap gap-2.5">
-          <Button variant="gold" onClick={() => start()}><Sparkles /> Take the Demo Tour</Button>
-          <Button asChild variant="outline" className="border-white/30 bg-white/5 text-white hover:bg-white/15 hover:text-white">
-            <Link href={`/homes/${TOUR_LISTING_ID}?request=sample`}>Try a Sample Showing Request <ArrowRight /></Link>
-          </Button>
+          <Button variant="gold" size="lg" onClick={() => start()}><Play className="fill-current" /> Run the demo</Button>
+          <span className="self-center text-[13px] text-white/70">About two minutes. We&apos;ll guide you through it.</span>
         </motion.div>
       </div>
     </section>

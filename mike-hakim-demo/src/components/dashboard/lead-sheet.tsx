@@ -40,7 +40,7 @@ export function LeadSheet({ leadId, onClose }: { leadId: string | null; onClose:
                   <SheetDescription className="text-[13px]">Source: {lead.source} · Added {relativeTime(lead.createdAt)} {lead.sample ? "· Sample lead" : ""}</SheetDescription>
                 </div>
               </div>
-              <div className="mt-3 flex flex-wrap items-center gap-2"><StageBadge stage={lead.stage} /><SimBadge label="CRM record (simulated)" /></div>
+              <div className="mt-3 flex flex-wrap items-center gap-2"><StageBadge stage={lead.stage} /><SimBadge label="In Follow Up Boss (demo)" /></div>
             </SheetHeader>
             <div className="grid gap-6 p-5">
               <section className="grid gap-2 text-[14px]">
@@ -78,7 +78,7 @@ export function LeadSheet({ leadId, onClose }: { leadId: string | null; onClose:
                       </li>
                     ))}
                   </ul>
-                  {email && <Button asChild variant="outline" size="sm" className="mt-2"><Link href={`/dashboard/automations?email=${email.id}`}><Mail /> View simulated email</Link></Button>}
+                  {email && <Button asChild variant="outline" size="sm" className="mt-2"><Link href={`/dashboard/automations?email=${email.id}`}><Mail /> View the email</Link></Button>}
                 </section>
               )}
 
@@ -102,7 +102,7 @@ export function LeadSheet({ leadId, onClose }: { leadId: string | null; onClose:
               </section>
 
               <section>
-                <h3 className="text-[12px] font-bold uppercase tracking-[0.14em] text-muted-foreground">CRM sync log (simulated)</h3>
+                <h3 className="text-[12px] font-bold uppercase tracking-[0.14em] text-muted-foreground">Follow Up Boss history</h3>
                 <ul className="mt-2 grid gap-1.5 text-[12.5px]">
                   {logs.slice(0, 8).map((c) => <li key={c.id} className="flex justify-between gap-3 rounded border px-3 py-2"><span>{c.summary}</span><span className="shrink-0 text-muted-foreground">{relativeTime(c.at)}</span></li>)}
                 </ul>

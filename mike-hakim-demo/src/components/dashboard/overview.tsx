@@ -2,7 +2,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "motion/react";
-import { ArrowRight, CalendarClock, CalendarDays, CheckCircle2, Inbox, Settings, Sparkles, Users, Workflow, BellRing } from "lucide-react";
+import { ArrowRight, CalendarClock, CalendarDays, CheckCircle2, Inbox, Sparkles, Users, Workflow, BellRing } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useDemoState } from "@/lib/use-demo";
 import { getListing } from "@/data/listings";
@@ -30,9 +30,7 @@ export function Overview() {
   const max = Math.max(1, ...STAGES.map((st) => s.leads.filter((l) => l.stage === st.key).length));
   return (
     <div>
-      <PageHead title="Welcome back, Mike." sub="Here's what came in from the website. All data is demo data stored in this browser.">
-        <Button variant="outline" onClick={() => start()}><Sparkles className="text-gold" /> Take the Demo Tour</Button>
-      </PageHead>
+      <PageHead title="Welcome back, Mike." sub="Here's everything that came in from your website." />
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4 md:gap-4" data-tour="metrics">
         {metrics.map((m, i) => (
           <motion.div key={m.k} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}>
@@ -109,15 +107,14 @@ export function Overview() {
           </ul>
         </Panel>
         <div className="grid min-w-0 content-start gap-6">
-          <Panel title="Automation activity" action={<Link href="/dashboard/automations" className="text-[12.5px] font-semibold text-gold hover:underline">Logs</Link>}>
+          <Panel title="Sent automatically" action={<Link href="/dashboard/automations" className="text-[12.5px] font-semibold text-gold hover:underline">View all</Link>}>
             <ul className="divide-y">
               {s.runs.slice(0, 4).map((r) => {
                 const sh = s.showings.find((x) => x.id === r.showingId);
-                const done = r.steps.filter((x) => x.status === "done").length;
                 return (
                   <li key={r.id} className="flex items-center gap-3 px-4 py-3">
                     {r.done ? <CheckCircle2 className="size-5 shrink-0 text-emerald" /> : <Workflow className="size-5 shrink-0 animate-pulse text-gold" />}
-                    <div className="min-w-0 flex-1"><p className="truncate text-[13.5px] font-semibold">{sh ? getListing(sh.listingId)?.address : "Request"}</p><p className="text-[12px] text-muted-foreground">{done}/{r.steps.length} steps · simulated · {relativeTime(r.createdAt)}</p></div>
+                    <div className="min-w-0 flex-1"><p className="truncate text-[13.5px] font-semibold">{sh ? getListing(sh.listingId)?.address : "Request"}</p><p className="text-[12px] text-muted-foreground">Email, Follow Up Boss, calendar · {relativeTime(r.createdAt)}</p></div>
                   </li>
                 );
               })}
@@ -127,8 +124,7 @@ export function Overview() {
             <div className="grid gap-2 p-4">
               <Button asChild variant="outline" className="justify-between"><Link href="/dashboard/showings?status=requested">Review new requests <ArrowRight /></Link></Button>
               <Button asChild variant="outline" className="justify-between"><Link href="/dashboard/calendar">Open calendar <CalendarDays /></Link></Button>
-              <Button asChild variant="outline" className="justify-between"><Link href="/dashboard/settings">Integrations &amp; reset <Settings /></Link></Button>
-              <Button asChild className="justify-between"><Link href="/homes/MH-24001?request=sample">Send a sample request <Sparkles /></Link></Button>
+              <Button className="justify-between" onClick={() => start()}>Run the guided demo <Sparkles /></Button>
             </div>
           </Panel>
         </div>

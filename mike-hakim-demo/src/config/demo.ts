@@ -15,7 +15,7 @@ export const BRAND = {
   agent: "Mike Hakim",
   instagram: "@mikehakimrealtor",
   instagramUrl: "https://www.instagram.com/mikehakimrealtor/",
-  brokerageNote: "Mike works with eXp Realty and has IDX access through eXp and BoldTrail.",
+  brokerageNote: "REALTOR® with eXp Realty.",
   // Placeholder contact details for the demo. Replace before launch.
   phone: "(555) 010-0199",
   phoneHref: "tel:+15550100199",

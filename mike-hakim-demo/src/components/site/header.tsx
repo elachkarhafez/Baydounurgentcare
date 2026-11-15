@@ -2,26 +2,22 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Heart, LayoutDashboard, Menu, Scale, Sparkles } from "lucide-react";
+import { Heart, LayoutDashboard, Menu, Scale } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Logo } from "@/components/site/logo";
 import { useDemoState } from "@/lib/use-demo";
-import { useTour } from "@/components/tour/tour-provider";
 import { cn } from "cn";
 
 const NAV = [
   { href: "/homes", label: "Find a Home" },
   { href: "/homes?saved=1", label: "Saved" },
-  { href: "/compare", label: "Compare" },
-  { href: "/#why", label: "Why Mike" },
   { href: "/#contact", label: "Contact" },
 ];
 
 export function Header() {
   const path = usePathname();
   const s = useDemoState();
-  const { start } = useTour();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   useEffect(() => {
@@ -50,11 +46,8 @@ export function Header() {
           ))}
         </nav>
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" className="hidden md:inline-flex" onClick={() => start()} data-tour="tour-button">
-            <Sparkles className="text-gold" /> Take the Demo Tour
-          </Button>
           <Button asChild size="sm" className="hidden sm:inline-flex">
-            <Link href="/dashboard"><LayoutDashboard /> Realtor View</Link>
+            <Link href="/dashboard"><LayoutDashboard /> Mike&apos;s Dashboard</Link>
           </Button>
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
@@ -72,8 +65,7 @@ export function Header() {
                 ))}
               </nav>
               <div className="grid gap-2 border-t p-4">
-                <Button variant="outline" onClick={() => { setOpen(false); start(); }}><Sparkles className="text-gold" /> Take the Demo Tour</Button>
-                <Button asChild><Link href="/dashboard"><LayoutDashboard /> Realtor View</Link></Button>
+                <Button asChild><Link href="/dashboard"><LayoutDashboard /> Mike&apos;s Dashboard</Link></Button>
               </div>
             </SheetContent>
           </Sheet>

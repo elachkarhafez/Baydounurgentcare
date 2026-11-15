@@ -35,7 +35,7 @@ export function LeadsPage() {
   if (!s) return <DashSkeleton />;
   return (
     <div>
-      <PageHead title="Leads" sub="A Follow Up Boss style view of every buyer who reached out. Simulated CRM, demo data.">
+      <PageHead title="Leads" sub="Every buyer who reached out through your website, already in Follow Up Boss.">
         <div className="inline-flex rounded-md border bg-card p-0.5">
           <button onClick={() => setParam("view", null)} className={cn("inline-flex items-center gap-1.5 rounded px-3 py-1.5 text-[13px] font-semibold", view === "table" ? "bg-primary text-primary-foreground" : "text-muted-foreground")} aria-pressed={view === "table"}><Table2 className="size-4" /> List</button>
           <button onClick={() => setParam("view", "pipeline")} className={cn("inline-flex items-center gap-1.5 rounded px-3 py-1.5 text-[13px] font-semibold", view === "pipeline" ? "bg-primary text-primary-foreground" : "text-muted-foreground")} aria-pressed={view === "pipeline"}><Columns3 className="size-4" /> Pipeline</button>

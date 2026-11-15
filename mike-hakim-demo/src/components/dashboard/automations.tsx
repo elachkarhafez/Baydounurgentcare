@@ -25,14 +25,14 @@ export function AutomationsPage() {
   const calActs = s.activities.filter((a) => a.system === "calendar");
   return (
     <div>
-      <PageHead title="Automations" sub="Every website request runs the same workflow. All three integrations are simulations in this demo." />
+      <PageHead title="Emails & sync" sub="Everything your website sent for you. Each request goes to your email, Follow Up Boss and your calendar." />
       <div className="mb-6 grid gap-3 sm:grid-cols-3">
-        {[{ i: Mail, t: "Business email", n: s.emails.length, d: "notifications generated, none sent" }, { i: Users, t: "Follow Up Boss", n: s.crmLogs.length, d: "CRM operations logged, no API calls" }, { i: CalendarClock, t: "Google Calendar", n: s.events.filter((e) => e.kind === "showing").length, d: "showing holds, local only" }].map((c) => (
-          <div key={c.t} className="rounded-lg border bg-card p-4"><div className="flex items-center justify-between"><c.i className="size-5 text-gold" /><SimBadge label="Demo Simulation Active" /></div><p className="mt-3 font-display text-[28px] font-medium leading-none tabular">{c.n}</p><p className="mt-1 text-[13px] font-semibold">{c.t}</p><p className="text-[12px] text-muted-foreground">{c.d}</p></div>
+        {[{ i: Mail, t: "Emails to you", n: s.emails.length, d: "one for every request" }, { i: Users, t: "Follow Up Boss updates", n: s.crmLogs.length, d: "new leads, stages and notes" }, { i: CalendarClock, t: "Calendar holds", n: s.events.filter((e) => e.kind === "showing").length, d: "showings on your calendar" }].map((c) => (
+          <div key={c.t} className="rounded-lg border bg-card p-4"><div className="flex items-center justify-between"><c.i className="size-5 text-gold" /><SimBadge label="Demo" /></div><p className="mt-3 font-display text-[28px] font-medium leading-none tabular">{c.n}</p><p className="mt-1 text-[13px] font-semibold">{c.t}</p><p className="text-[12px] text-muted-foreground">{c.d}</p></div>
         ))}
       </div>
       <Tabs defaultValue={emailId ? "email" : "runs"}>
-        <TabsList className="mb-4 max-w-full justify-start overflow-x-auto no-scrollbar"><TabsTrigger value="runs">Workflow runs</TabsTrigger><TabsTrigger value="email">Email previews</TabsTrigger><TabsTrigger value="crm">CRM sync log</TabsTrigger><TabsTrigger value="calendar">Calendar log</TabsTrigger></TabsList>
+        <TabsList className="mb-4 max-w-full justify-start overflow-x-auto no-scrollbar"><TabsTrigger value="runs">Requests</TabsTrigger><TabsTrigger value="email">Emails</TabsTrigger><TabsTrigger value="crm">Follow Up Boss</TabsTrigger><TabsTrigger value="calendar">Calendar</TabsTrigger></TabsList>
         <TabsContent value="runs">
           <Panel>
             <ul className="divide-y">
@@ -71,7 +71,7 @@ export function AutomationsPage() {
                 <li key={e.id}><button onClick={() => setEmail(e.id)} className="flex w-full items-center gap-3 px-4 py-3 text-left hover:bg-muted/40" data-email={e.id}>
                   <Mail className="size-5 shrink-0 text-gold" />
                   <span className="min-w-0 flex-1"><b className="block truncate text-[14px]">{e.subject}</b><span className="text-[12px] text-muted-foreground">To {e.to} · {formatDateTime(e.createdAt)}</span></span>
-                  <SimBadge label="Not sent" />
+                  <SimBadge label="Demo" />
                 </button></li>
               ))}
             </ul>
@@ -85,8 +85,7 @@ export function AutomationsPage() {
                 return (
                   <li key={c.id} className="px-4 py-3">
                     <div className="flex flex-wrap items-center justify-between gap-2"><span className="text-[14px] font-semibold">{c.summary}</span><span className="text-[12px] text-muted-foreground">{formatDateTime(c.at)}</span></div>
-                    <p className="mt-0.5 text-[12px] text-muted-foreground"><code className="rounded bg-muted px-1">{c.operation}</code> · {lead ? `${lead.firstName} ${lead.lastName}` : "test"} · result: simulated, no request made</p>
-                    {c.operation === "create_lead" && <details className="mt-1.5"><summary className="cursor-pointer text-[12px] font-semibold text-gold">Payload that would be mapped to the CRM</summary><pre className="mt-1.5 max-h-56 overflow-auto rounded bg-ink p-3 text-[11.5px] leading-relaxed text-white/85">{JSON.stringify(c.payload, null, 2)}</pre></details>}
+                    <p className="mt-0.5 text-[12px] text-muted-foreground">{lead ? `${lead.firstName} ${lead.lastName}` : "Sample"} · added to Follow Up Boss automatically</p>
                   </li>
                 );
               })}

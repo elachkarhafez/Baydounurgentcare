@@ -93,7 +93,7 @@ export function ShowingWizard({ listingId, open, onOpenChange, initialStep = 0, 
   const [sampleDoc, setSampleDoc] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const form = useForm<ShowingForm>({ resolver: zodResolver(showingSchema), defaultValues: sample ? sampleValues() : EMPTY, mode: "onTouched" });
-  const { register, control, handleSubmit, trigger, watch, setValue, reset, formState: { errors } } = form;
+  const { register, control, handleSubmit, trigger, watch, setValue, getValues, reset, formState: { errors } } = form;
   const v = watch();
   const today = detroitYmd();
 
@@ -134,11 +134,12 @@ export function ShowingWizard({ listingId, open, onOpenChange, initialStep = 0, 
   });
 
   useEffect(() => onTour((a) => {
-    if (a.type === "wizard-step") setStep(a.step);
+    const ensureDoc = () => { if (!getValues("document")) { setValue("document", SAMPLE_DOC); setValue("docSkipped", false); } };
+    if (a.type === "wizard-step") { if (a.step >= 4) ensureDoc(); setStep(a.step); }
     if (a.type === "wizard-sample-doc") { setValue("docSkipped", false); setSampleDoc((n) => n + 1); }
-    if (a.type === "wizard-submit") onSubmit();
+    if (a.type === "wizard-submit") { ensureDoc(); onSubmit(); }
     if (a.type === "close-wizard") onOpenChange(false);
-  }), [setValue, onSubmit, onOpenChange]);
+  }), [setValue, getValues, onSubmit, onOpenChange]);
 
   const pct = done ? 100 : ((step + 1) / STEPS.length) * 100;
 

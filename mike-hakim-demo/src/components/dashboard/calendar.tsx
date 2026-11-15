@@ -78,7 +78,7 @@ export function CalendarPage() {
 
   return (
     <div>
-      <PageHead title="Calendar" sub="A Google Calendar style view. Website requests appear as tentative holds until you confirm them. Times in Detroit time." />
+      <PageHead title="Calendar" sub="Website requests land here as tentative until you confirm them. Same events as your Google Calendar." />
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           <Button variant="outline" size="icon-sm" onClick={() => step(-1)} aria-label="Previous"><ChevronLeft /></Button>
@@ -152,7 +152,7 @@ export function CalendarPage() {
               <DialogHeader>
                 <div className="flex flex-wrap items-center gap-2">
                   <span className={cn("rounded-full border px-2 py-0.5 text-[11.5px] font-bold", tone(evt))}>{evt.status === "tentative" ? "Tentative" : evt.status === "cancelled" ? "Cancelled" : "Confirmed"}</span>
-                  <span className="rounded-full bg-gold/15 px-2 py-0.5 text-[11px] font-bold text-[#6b5126]">Simulated calendar</span>
+                  <span className="rounded-full bg-gold/15 px-2 py-0.5 text-[11px] font-bold text-[#6b5126]">Demo</span>
                 </div>
                 <DialogTitle className="mt-2 font-display text-[22px] font-medium">{evt.title}</DialogTitle>
                 <DialogDescription className="text-[14px]">{formatDateLong(evt.start)} · {formatTime(evt.start)} to {formatTime(evt.end)} {formatTz(evt.start)}</DialogDescription>

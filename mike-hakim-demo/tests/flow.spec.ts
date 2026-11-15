@@ -82,7 +82,7 @@ test("11-18. full journey: submit, automation, email, CRM, calendar, dashboard, 
   await expect(email).toContainText("Automated test request");
 
   // 15. CRM lead
-  await page.getByRole("link", { name: "Open the CRM lead" }).click();
+  await page.getByRole("link", { name: "Open the lead" }).click();
   const sheet = page.locator("[data-tour=lead-detail]");
   await expect(sheet.getByText("Test Buyer").first()).toBeVisible();
   await expect(sheet.getByText("Showing Requested").first()).toBeVisible();
@@ -137,9 +137,9 @@ test("11-18. full journey: submit, automation, email, CRM, calendar, dashboard, 
 
   // automations log + email list
   await page.goto("/dashboard/automations");
-  await page.getByRole("tab", { name: "Email previews" }).click();
+  await page.getByRole("tab", { name: "Emails" }).click();
   await expect(page.getByText("New Showing Request — 4182 Larkmoor Ct").first()).toBeVisible();
-  await page.getByRole("tab", { name: "CRM sync log" }).click();
+  await page.getByRole("tab", { name: "Follow Up Boss" }).click();
   await expect(page.getByText(/Lead Test Buyer created/).first()).toBeVisible();
 });
 
@@ -163,28 +163,27 @@ test("leads search and filter", async ({ page }) => {
   await expect(page.locator("tr[data-lead]")).toHaveCount(2);
 });
 
-test("calendar month/week/day views and integrations simulation", async ({ page }) => {
+test("calendar views; setup details are not exposed", async ({ page }) => {
   await page.goto("/dashboard/calendar");
   await expect(page.locator("[data-event]").first()).toBeVisible();
   await page.getByRole("tab", { name: "week" }).click();
   await page.getByRole("tab", { name: "day" }).click();
   await page.getByRole("tab", { name: "month" }).click();
   await page.goto("/dashboard/settings");
-  await expect(page.getByText("Demo Simulation Active").first()).toBeVisible();
-  await expect(page.getByText(/^Connected$/)).toHaveCount(0);
-  await page.locator("[data-integration=email]").getByRole("button", { name: "Simulate Integration" }).click();
-  await expect(page.getByTestId("email-preview")).toBeVisible();
-  await page.keyboard.press("Escape");
-  await page.locator("[data-integration=crm]").getByRole("button", { name: "Simulate Integration" }).click();
-  await expect(page.getByText("Test CRM sync logged (simulated)")).toBeVisible();
+  await expect(page).toHaveURL(/\/dashboard$/);
+  for (const u of ["/", "/dashboard", "/dashboard/automations"]) {
+    await page.goto(u);
+    const text = await page.locator("body").innerText();
+    for (const w of ["API key", "OAuth", "Payload", "Production setup", "DEMO_MODE", "Integrations"]) expect(text, `${w} on ${u}`).not.toContain(w);
+  }
 });
 
 test("19. Reset Demo restores seed data", async ({ page }) => {
   const ref = await submitRequest(page, "MH-24010");
-  await page.goto("/dashboard/settings");
+  await page.goto("/dashboard");
   await page.getByTestId("reset-demo").click();
-  await page.getByRole("button", { name: "Reset Demo" }).last().click();
-  await expect(page.getByText("Demo reset to the original sample data")).toBeVisible();
+  await page.getByRole("button", { name: "Reset Demo" }).click();
+  await expect(page.getByText("Demo reset")).toBeVisible();
   const s = await page.evaluate(() => JSON.parse(localStorage.getItem("mh-demo")!));
   expect(s.showings.some((x: { ref: string }) => x.ref === ref)).toBe(false);
   expect(s.leads).toHaveLength(12);
@@ -200,30 +199,32 @@ test("storage unavailable does not crash the app", async ({ page }) => {
   page.on("pageerror", (e) => errors.push(e.message));
   await page.goto("/dashboard");
   await expect(page.getByText("Welcome back, Mike.")).toBeVisible();
-  await page.goto("/dashboard/settings");
-  await expect(page.getByText(/memory, storage is blocked/)).toBeVisible();
+  await page.goto("/homes/MH-24001");
+  await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   expect(errors).toEqual([]);
 });
 
-test("guided demo tour runs all 10 steps end to end", async ({ page }) => {
-  await page.goto("/");
-  await page.getByRole("button", { name: "Take the Demo Tour" }).first().click();
+test("one button runs the guided demo end to end", async ({ page }) => {
+  await page.goto("/homes");
+  await page.getByTestId("run-demo").click();
   const card = page.locator("[data-tour-overlay] [role=dialog]");
-  const titles = ["Search the way buyers already do", "MLS-style filters", "A full listing page", "Request a showing", "Attach a pre-approval letter", "Review and submit", "Watch the automation run", "Mike's dashboard", "The new lead, ready to work", "Tentative on the calendar"];
+  const titles = ["Here's what your new website does for you", "Buyers search your listings", "Every home gets a full page", "They pick a time that works", "Pre-approval comes with it", "One tap to send", "Now watch what happens for you", "The email you'd get", "Your dashboard", "The buyer, ready to call", "On your calendar", "That's the whole thing"];
   for (let i = 0; i < titles.length; i++) {
     await expect(card.getByRole("heading", { name: titles[i] })).toBeVisible();
+    if (i === 1) await expect(page.getByTestId("result-count")).not.toHaveText("30");
     if (i === 4) await expect(page.getByTestId("doc-selected")).toContainText("sample-preapproval-letter.pdf");
     if (i === 6) await expect(page.getByText("All steps complete")).toBeVisible({ timeout: 15000 });
-    if (i === 8) await expect(page.locator("[data-tour=lead-detail]").getByText("Alex Morgan").first()).toBeVisible();
-    if (i === 9) { await expect(page.locator("[data-tour=event-detail]")).toContainText("4182 Larkmoor Ct"); }
+    if (i === 7) await expect(page.getByTestId("email-subject")).toHaveText("New Showing Request — 4182 Larkmoor Ct");
+    if (i === 9) await expect(page.locator("[data-tour=lead-detail]").getByText("Alex Morgan").first()).toBeVisible();
+    if (i === 10) await expect(page.locator("[data-tour=event-detail]")).toContainText("4182 Larkmoor Ct");
     await card.locator("[data-tour-next]").click();
   }
   await expect(card).toHaveCount(0);
+  await expect(page.getByTestId("run-demo")).toBeVisible();
 });
 
-test("try a sample showing request prefills everything", async ({ page }) => {
-  await page.goto("/");
-  await page.getByRole("link", { name: /Try a Sample Showing Request/ }).click();
+test("sample showing request link prefills everything", async ({ page }) => {
+  await page.goto("/homes/MH-24001?request=sample");
   const dlg = page.getByRole("dialog");
   await expect(dlg.locator('[role=radio][aria-checked=true][id^="t1-"]')).toHaveCount(1);
   await dlg.getByRole("button", { name: "Continue" }).click();

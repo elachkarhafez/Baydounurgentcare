@@ -75,7 +75,6 @@ export function ListingDetail({ l }: { l: Listing }) {
         <FavoriteButton id={l.id} label className="min-w-[8rem] flex-1" />
         <Button variant="outline" className="h-10 min-w-[8rem] flex-1" onClick={share}><Share2 /> Share</Button>
       </div>
-      <button onClick={() => setWizard({ open: true, step: 1, sample: true })} className="mt-3 w-full text-center text-[12.5px] font-semibold text-gold hover:underline">Try a sample showing request</button>
     </div>
   );
 
