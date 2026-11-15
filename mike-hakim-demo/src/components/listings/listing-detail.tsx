@@ -35,7 +35,7 @@ export function ListingDetail({ l }: { l: Listing }) {
     if (params.get("request") === "sample") { setWizard({ open: true, step: 1, sample: true }); router.replace(`/homes/${l.id}`, { scroll: false }); }
     else if (params.get("request") === "1") { setWizard({ open: true, step: 0, sample: false }); router.replace(`/homes/${l.id}`, { scroll: false }); }
   }, [params, l.id, router]);
-  useEffect(() => onTour((a) => { if (a.type === "open-wizard" && a.listingId === l.id) setWizard({ open: true, step: a.step ?? 0, sample: !!a.sample }); }), [l.id]);
+  useEffect(() => onTour((a) => { if (a.type === "open-wizard" && a.listingId === l.id) { setWizard({ open: true, step: a.step ?? 0, sample: !!a.sample }); return true; } }), [l.id]);
 
   const share = async () => {
     const url = window.location.href.split("?")[0];

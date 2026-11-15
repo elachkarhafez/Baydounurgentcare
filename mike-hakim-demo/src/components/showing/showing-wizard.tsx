@@ -135,11 +135,14 @@ export function ShowingWizard({ listingId, open, onOpenChange, initialStep = 0, 
 
   useEffect(() => onTour((a) => {
     const ensureDoc = () => { if (!getValues("document")) { setValue("document", SAMPLE_DOC); setValue("docSkipped", false); } };
+    if (a.type === "open-wizard") return false;
+    if (!open) return false; // wait until the form is actually open
     if (a.type === "wizard-step") { if (a.step >= 4) ensureDoc(); setStep(a.step); }
     if (a.type === "wizard-sample-doc") { setValue("docSkipped", false); setSampleDoc((n) => n + 1); }
     if (a.type === "wizard-submit") { ensureDoc(); onSubmit(); }
     if (a.type === "close-wizard") onOpenChange(false);
-  }), [setValue, getValues, onSubmit, onOpenChange]);
+    return true;
+  }), [open, setValue, getValues, onSubmit, onOpenChange]);
 
   const pct = done ? 100 : ((step + 1) / STEPS.length) * 100;
 
