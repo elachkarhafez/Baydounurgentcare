@@ -649,12 +649,36 @@
     .sign-off .logo-big { width: min(360px, 64vw); margin: 0 auto; }
     /* names on my cups */
     .regs { padding: 36px 0 28px; overflow: hidden; }
-    .r-rail { list-style: none; margin: 14px calc(-1 * var(--pad)) 0; padding: 10px var(--pad) 16px; display: grid; grid-auto-flow: column; grid-template-rows: repeat(2, auto); grid-auto-columns: 30%; gap: 14px 12px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+    .r-rail { list-style: none; margin: 0 calc(-1 * var(--pad)) 0; padding: 34px var(--pad) 16px; display: grid; grid-auto-flow: column; grid-template-rows: repeat(2, auto); grid-auto-columns: 30%; gap: 40px 12px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
     .r-rail::-webkit-scrollbar { display: none; }
     .r-cup { position: relative; scroll-snap-align: start; transform: rotate(var(--r)); transition: transform .35s var(--spring); }
     .r-cup svg { display: block; width: 100%; height: auto; filter: drop-shadow(3px 4px 0 rgba(21,16,12,.9)); }
     .r-name { position: absolute; left: 6%; right: 6%; top: 58%; transform: translateY(-50%) rotate(-5deg); display: flex; align-items: center; justify-content: center; min-height: 34%; padding: 5px 4px 6px; text-align: center; background: #ffffff; border: 2px solid var(--ink); border-radius: 8px; box-shadow: 2px 2px 0 var(--ink); font: 400 clamp(13px, 3.7vw, 15.5px)/1.02 var(--display); letter-spacing: .03em; text-transform: uppercase; color: var(--ink); }
     .r-cup:nth-child(even) .r-name { transform: translateY(-50%) rotate(4deg); }
+    .r-body { position: relative; transform-origin: 50% 96%; }
+    .r-steam { position: absolute; left: 24%; width: 52%; top: -21%; height: 22%; overflow: visible; pointer-events: none; }
+    .r-steam path { fill: none; stroke: rgba(94,59,37,.45); stroke-width: 2.4; stroke-linecap: round; opacity: 0; }
+    .r-cup { cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    .regs.live .r-body { animation: rsway 3.6s ease-in-out var(--d, 0s) infinite; }
+    .regs.live .r-steam path { animation: rsteam 3s ease-in-out infinite; }
+    .regs.live .r-steam path:nth-child(2) { animation-delay: calc(var(--d, 0s) + 1s); }
+    .regs.live .r-steam path:nth-child(3) { animation-delay: calc(var(--d, 0s) + 2s); }
+    .regs.live .r-steam path:nth-child(1) { animation-delay: var(--d, 0s); }
+    @keyframes rsway { 0%, 100% { transform: rotate(-1.6deg); } 50% { transform: rotate(1.6deg) translateY(-2px); } }
+    @keyframes rsteam { 0% { opacity: 0; transform: translateY(8px); } 30% { opacity: 1; } 100% { opacity: 0; transform: translateY(-14px); } }
+    .r-ctrl { display: flex; align-items: center; gap: 10px; margin-top: 4px; }
+    .r-btn { flex: none; width: 44px; height: 44px; display: grid; place-items: center; border: 2.5px solid var(--ink); border-radius: 50%; background: var(--paper); color: var(--ink); box-shadow: 3px 3px 0 var(--ink); cursor: pointer; transition: transform .2s var(--spring), opacity .2s; }
+    .r-btn svg { width: 18px; height: 18px; }
+    .r-btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--ink); }
+    .r-btn[disabled] { opacity: .3; cursor: default; }
+    .r-btn.next:not([disabled]) { background: var(--ink); color: var(--cream); animation: rpulse 1.8s ease-in-out infinite; }
+    @keyframes rpulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+    .r-track { flex: 1; height: 8px; border: 2px solid var(--ink); border-radius: 99px; background: var(--paper); overflow: hidden; }
+    .r-track i { display: block; height: 100%; width: 20%; background: var(--bean); border-radius: 99px; transition: width .15s linear; }
+    .r-count { flex: none; min-width: 52px; text-align: center; font: 400 15px/1 var(--display); letter-spacing: .04em; }
+    .r-rail { -webkit-mask-image: linear-gradient(90deg, #000 82%, transparent); mask-image: linear-gradient(90deg, #000 82%, transparent); }
+    .r-rail.at-end { -webkit-mask-image: none; mask-image: none; }
+    @media (prefers-reduced-motion: reduce) { .regs.live .r-body, .regs.live .r-steam path, .r-btn.next:not([disabled]) { animation: none; } }
     .r-more { margin: 10px 0 0; font-size: .9375rem; color: var(--muted); }
     .r-more a { color: var(--bean); font-weight: 600; }
     @media (hover: hover) and (pointer: fine) { .r-cup:hover { transform: rotate(0deg) translateY(-8px) scale(1.04); } }
@@ -665,9 +689,11 @@
       .r-cup { max-width: 132px; justify-self: center; width: 100%; }
       .r-name { font-size: 16px; }
       .r-more { text-align: center; margin-top: 26px; font-size: 1rem; }
+      .r-ctrl { display: none; }
+      .r-rail { -webkit-mask-image: none; mask-image: none; }
     }
-    @media (min-width: 1000px) { .r-rail { display: flex; flex-wrap: wrap; justify-content: center; gap: 28px 30px; } .r-cup { flex: 0 0 calc((100% - 6 * 30px) / 7); } }
-    @media (min-width: 1200px) { .r-rail { max-width: 1140px; gap: 28px 22px; } .r-cup { flex-basis: calc((100% - 8 * 22px) / 9); } .r-name { font-size: 15px; } }
+    @media (min-width: 1000px) { .r-rail { display: flex; flex-wrap: wrap; justify-content: center; gap: 46px 30px; padding-top: 30px; } .r-cup { flex: 0 0 calc((100% - 6 * 30px) / 7); } }
+    @media (min-width: 1200px) { .r-rail { max-width: 1140px; gap: 46px 22px; } .r-cup { flex-basis: calc((100% - 8 * 22px) / 9); } .r-name { font-size: 15px; } }
     footer .wrap { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 20px; margin-top: 30px; padding-top: 18px; border-top: 2px solid var(--ink); font-size: 13px; color: var(--muted); }
     @media (min-width: 1000px) { .sign-off { padding-bottom: 30px; } .closing { padding: 80px 0 72px; } footer .wrap { justify-content: space-between; } }
   </style>
@@ -1056,6 +1082,12 @@
           <li class="r-cup" style="--c1:#ffffff;--c2:#efe2d0;--r:4deg"><svg viewBox="0 0 80 110" aria-hidden="true"><use href="#papercup"/></svg><span class="r-name">Prenatal Specialists</span></li>
           <li class="r-cup" style="--c1:#efe2d0;--c2:#d2b08e;--r:-3deg"><svg viewBox="0 0 80 110" aria-hidden="true"><use href="#papercup"/></svg><span class="r-name">Nail Techs</span></li>
         </ul>
+        <div class="r-ctrl" data-rctrl>
+          <button class="r-btn" type="button" data-rprev aria-label="Back to the earlier cups"><svg viewBox="0 0 16 16" aria-hidden="true" style="transform:scaleX(-1)"><use href="#i-arrow"/></svg></button>
+          <div class="r-track" aria-hidden="true"><i data-rbar></i></div>
+          <span class="r-count" data-rcount aria-live="polite">6 / 29</span>
+          <button class="r-btn next" type="button" data-rnext aria-label="See more cups"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+        </div>
         <p class="r-more">And the list keeps growing. Don't see yours? <a data-sms href="#">Text me</a> and you'll be the next name on a cup.</p>
       </div>
     </section>
@@ -1284,11 +1316,11 @@
   const SFX = (() => {
     const names = ['snip', 'partyhorn', 'thud', 'crack', 'pour', 'stamp', 'whoosh', 'fanfare', 'congrats', 'scratch', 'impact', 'sadtrombone', 'failed', 'boing', 'flood', 'flip', 'pop', 'drop', 'chime', 'splat', 'womp', 'gameover', 'newbest', 'ding', 'loop'];
     let ctx = null, master = null, musicG = null, music = null, on = true, hushUntil = 0; const bufs = {};
-    const init = () => {
-      if (ctx || !TEASER) return; const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return;
+    const init = list => {
+      if (ctx) return; const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return;
       try { ctx = new AC(); } catch (e) { return; }
       master = ctx.createGain(); master.connect(ctx.destination); musicG = ctx.createGain(); musicG.gain.value = 0; musicG.connect(master);
-      names.forEach(n => fetch(`snd/${n}.mp3`).then(r => r.arrayBuffer()).then(b => new Promise((ok, no) => ctx.decodeAudioData(b, ok, no))).then(b => { bufs[n] = b; }).catch(() => {}));
+      (list || names).forEach(n => fetch(`snd/${n}.mp3`).then(r => r.arrayBuffer()).then(b => new Promise((ok, no) => ctx.decodeAudioData(b, ok, no))).then(b => { bufs[n] = b; }).catch(() => {}));
       document.addEventListener('visibilitychange', () => { if (!ctx) return; document.hidden ? ctx.suspend() : ctx.resume(); });
     };
     const unlock = () => { if (ctx && ctx.state !== 'running') ctx.resume().catch(() => {}); };
@@ -1974,7 +2006,7 @@
     $('[data-skip]').addEventListener('click', () => { SFX.hush(400); itl.progress(1); });
     if (TEASER) {
       // GRAND OPENING: cutting the ribbon is the tap that lets the browser play sound
-      SFX.init();
+      SFX.init(TEASER ? null : ['pop', 'flip', 'chime', 'drop']);
       const gate = $('[data-gate]'); gate.hidden = false;
       const go = withSound => {
         if (gate.dataset.done) return; gate.dataset.done = 1; SFX.unlock(); SFX.setOn(withSound);
@@ -2022,6 +2054,49 @@
   // names on my cups: cups drop onto the counter, then the name gets written on each sleeve
   if (ANIM) { const cupsEls = $$('.r-cup'); gsap.set($$('.r-name'), { scale: .3, opacity: 0 });
     ScrollTrigger.batch(cupsEls, { start: 'top 92%', once: true, onEnter: b => { gsap.from(b, { y: -60, opacity: 0, rotation: () => gsap.utils.random(-25, 25), duration: .7, ease: 'back.out(1.8)', stagger: .06, clearProps: 'transform,opacity' }); gsap.to(b.map(c => $('.r-name', c)), { scale: 1, opacity: 1, duration: .5, ease: 'back.out(2.6)', stagger: .06, delay: .5, clearProps: 'scale,opacity' }); } }); }
+  // names on my cups: steam, sway, tap-to-wobble, scroll controls and quiet sounds
+  (() => {
+    const sec = $('#clients'), rail = $('[data-regs]', sec), cups = $$('.r-cup', rail); if (!rail) return;
+    const steam = '<svg class="r-steam" viewBox="0 0 40 20" aria-hidden="true"><path d="M10 20 C 6 14, 14 10, 10 2"/><path d="M20 20 C 16 13, 24 9, 20 0"/><path d="M30 20 C 26 14, 34 10, 30 2"/></svg>';
+    cups.forEach((c, i) => { const b = document.createElement('div'); b.className = 'r-body'; while (c.firstChild) b.appendChild(c.firstChild); b.insertAdjacentHTML('afterbegin', steam); c.appendChild(b); c.style.setProperty('--d', (-(i * .37) % 3.6).toFixed(2) + 's'); c.tabIndex = 0; c.setAttribute('role', 'button'); c.setAttribute('aria-label', $('.r-name', c).textContent); });
+    onScreen(sec, v => sec.classList.toggle('live', v), '0px');
+    // sounds start after the visitor's first tap or key press (browsers block sound before that)
+    let heard = TEASER;
+    if (!TEASER) { const first = () => { if (heard) return; heard = true; SFX.init(['pop', 'flip', 'chime', 'drop']); SFX.unlock(); }; addEventListener('pointerdown', first, { capture: true, passive: true }); addEventListener('keydown', first, { capture: true }); }
+    const play = (n, g, r) => { if (heard) SFX.play(n, g, r); };
+    // tap a cup: it hops, wobbles and the sticker spins a little
+    const wobble = c => {
+      const b = $('.r-body', c), nm = $('.r-name', c); play('pop', .32, .9 + Math.random() * .3); play('chime', .1, 1.2 + Math.random() * .3);
+      if (!ANIM) return;
+      gsap.timeline().to(b, { y: -22, scaleY: 1.06, scaleX: .96, duration: .18, ease: 'power2.out' }).to(b, { y: 0, scaleY: .94, scaleX: 1.05, duration: .2, ease: 'power2.in' })
+        .to(b, { scaleY: 1, scaleX: 1, duration: .35, ease: 'elastic.out(1, .4)' }).fromTo(b, { rotation: -7 }, { rotation: 0, duration: .7, ease: 'elastic.out(1.2, .3)', clearProps: 'transform' }, .2);
+      gsap.fromTo(nm, { rotation: '+=0' }, { rotation: '+=360', duration: .55, ease: 'back.out(1.4)', clearProps: 'transform' });
+    };
+    cups.forEach(c => { c.addEventListener('click', () => wobble(c)); c.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); wobble(c); } }); });
+    // scroll controls: progress, count, arrows, a soft tick as each column passes
+    const bar = $('[data-rbar]', sec), count = $('[data-rcount]', sec), prev = $('[data-rprev]', sec), next = $('[data-rnext]', sec), N = cups.length;
+    let lastCol = -1;
+    const colW = () => cups.length > 2 ? cups[2].offsetLeft - cups[0].offsetLeft : rail.clientWidth;
+    const update = () => {
+      const max = rail.scrollWidth - rail.clientWidth, x = rail.scrollLeft, vis = Math.max(1, Math.floor((rail.clientWidth - 20) / colW()));
+      const col = Math.round(x / colW()), seen = Math.min(N, (col + vis) * 2);
+      bar.style.width = Math.max(8, Math.min(100, seen / N * 100)) + '%'; count.textContent = `${seen} / ${N}`;
+      prev.disabled = x < 4; next.disabled = x > max - 4; rail.classList.toggle('at-end', x > max - 4);
+      if (col !== lastCol) { if (lastCol >= 0) play('flip', .12, 1.15 + Math.random() * .15); lastCol = col; }
+    };
+    rail.addEventListener('scroll', update, { passive: true }); addEventListener('resize', update); update();
+    const page = dir => { rail.scrollBy({ left: dir * Math.max(colW(), rail.clientWidth - colW()), behavior: RM ? 'auto' : 'smooth' }); play('drop', .14, 1.3); };
+    prev.addEventListener('click', () => page(-1)); next.addEventListener('click', () => page(1));
+    // once, as the section arrives on a phone: the rail slides a little to show there is more
+    if (ANIM) onScreen(rail, v => {
+      if (!v || rail.dataset.nudged || rail.scrollWidth <= rail.clientWidth + 4) return; rail.dataset.nudged = 1;
+      const o = { x: 0 }; rail.style.scrollSnapType = 'none';
+      gsap.timeline({ delay: 1.6, onComplete: () => { rail.style.scrollSnapType = ''; } })
+        .to(o, { x: Math.min(140, colW() * 1.2), duration: .7, ease: 'power2.inOut', onUpdate: () => { rail.scrollLeft = o.x; } })
+        .to(o, { x: 0, duration: .8, ease: 'power2.inOut', onUpdate: () => { rail.scrollLeft = o.x; } }, '+=.25');
+    }, '-120px');
+  })();
+
   // ghost words drift sideways with scroll
   $$('[data-ghost]').forEach(gw => gsap.fromTo(gw, { xPercent: 10 }, { xPercent: -30, ease: 'none', scrollTrigger: { trigger: gw.parentElement, start: 'top bottom', end: 'bottom top', scrub: .5 } }));
   // parallax for polaroids and the collage
