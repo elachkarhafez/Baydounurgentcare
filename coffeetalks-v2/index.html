@@ -620,11 +620,29 @@
     .mycard .vibe { position: relative; z-index: 2; margin-top: 10px; font: 600 14px/1.35 var(--sans); color: rgba(255,250,242,.82); }
     .mycard .tagline { position: relative; z-index: 2; margin-top: 12px; font: 700 10.5px/1 var(--sans); letter-spacing: .18em; text-transform: uppercase; color: rgba(255,250,242,.55); }
     .mycard .big-bean { position: absolute; right: -40px; top: -30px; width: 200px; opacity: .9; rotate: 18deg; }
+    .board { aspect-ratio: auto; max-height: none; padding: 16px 14px 14px; gap: 0; background: #1c130d radial-gradient(120% 80% at 50% 0%, #3a2418, #1c130d 70%); }
+    .board .b-top { display: flex; align-items: center; justify-content: space-between; }
+    .board .lg { width: 74px; padding: 0; background: none; }
+    .board .b-tk { font: 700 12px/1 var(--mono); letter-spacing: .08em; color: var(--latte); }
+    .board .b-head { display: flex; align-items: center; gap: 10px; margin: 12px 0 8px; font: 400 13px/1 var(--display); letter-spacing: .22em; text-transform: uppercase; color: #e8b04a; }
+    .board .b-head i { flex: 1; height: 2px; background: repeating-linear-gradient(90deg, #e8b04a 0 6px, transparent 6px 10px); opacity: .6; }
+    .board .b-row { margin-top: 8px; }
+    .board .b-l { display: block; margin-bottom: 4px; font: 700 10px/1 var(--sans); letter-spacing: .2em; text-transform: uppercase; color: rgba(255,250,242,.5); }
+    .cells { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 2px; perspective: 300px; }
+    .cells + .cells { margin-top: 2px; }
+    .cell { position: relative; aspect-ratio: 3 / 4.2; border-radius: 3px; background: linear-gradient(#2a201a 0 49%, #120c08 49% 51%, #241b15 51%); box-shadow: inset 0 1px 0 rgba(255,255,255,.06), 0 1px 2px rgba(0,0,0,.5); overflow: hidden; display: grid; place-items: center; }
+    .cell i { font: 400 clamp(13px, 3.9vw, 17px)/1 var(--display); font-style: normal; color: #f7f3ec; transform-origin: 50% 50%; }
+    .cell::after { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: rgba(0,0,0,.65); }
+    .cell.f i { animation: flap .07s linear; }
+    .cells[data-cells="t1"] .cell i, .cells[data-cells="t2"] .cell i { color: #e8b04a; }
+    @keyframes flap { from { transform: rotateX(-80deg) scaleY(.6); filter: brightness(.5); } to { transform: none; filter: none; } }
+    .board .vibe { margin-top: 12px; min-height: 3.2em; font: 500 13.5px/1.4 var(--sans); }
+    .board .tagline { margin-top: 10px; }
     .mycard .holo { position: absolute; inset: 0; z-index: 1; pointer-events: none; mix-blend-mode: color-dodge; opacity: .55; background: radial-gradient(circle at var(--hx, 30%) var(--hy, 20%), rgba(255,236,190,.55), transparent 40%), linear-gradient(115deg, transparent 20%, rgba(201,162,122,.35) 35%, rgba(255,210,140,.25) 45%, transparent 60%) var(--hx, 30%) 0 / 250% 100%; }
     @media (min-width: 900px) {
       .card-sec { padding: 72px 0 56px; }
       .c-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .8fr); gap: 40px; align-items: center; }
-      .cardbox { margin: 0 auto; width: 340px; } .mycard { max-height: 440px; }
+      .cardbox { margin: 0 auto; width: 380px; } .mycard { max-height: 440px; } .board { max-height: none; padding: 20px 18px 16px; } .cell i { font-size: 19px; } .board .vibe { font-size: 14.5px; }
     }
 
     /* ---------- meet noor ---------- */
@@ -1170,20 +1188,20 @@
       <div class="wrap c-grid">
         <div>
           <h2 data-split>What's Your <span class="hl">Coffee Order?</span></h2>
-          <p class="lede">Tell me your order and I'll tell you what kind of poster you are. Save the card, post it and tag @_coffeetalks.</p>
+          <p class="lede">Pick your usual and watch the board decide what kind of creator you are. Save it, post it and tag @_coffeetalks.</p>
           <div class="step"><span class="lbl"><b>1</b>Your Name</span><input class="inp" data-cname placeholder="e.g. Maya" maxlength="16" aria-label="Your name"></div>
           <div class="step"><span class="lbl"><b>2</b>Your Order</span><div class="chips" data-corders></div></div>
-          <div class="acts" style="grid-template-columns:1fr"><button class="btn solid" type="button" data-csave>Save My Card <svg aria-hidden="true"><use href="#i-arrow"/></svg></button></div>
+          <div class="acts" style="grid-template-columns:1fr"><button class="btn solid" type="button" data-csave>Save My Board <svg aria-hidden="true"><use href="#i-arrow"/></svg></button></div>
         </div>
         <div class="cardbox" data-cardbox data-cur="TILT">
-          <div class="mycard" data-mycard>
-            <div class="holo" aria-hidden="true"></div>
-            <img class="big-bean" src="img/bean-light.webp" alt="" width="360" height="367">
-            <img class="lg" src="img/logo.webp" alt="Coffee Talks" width="1200" height="776">
-            <span class="who" data-cwho>Your Order</span>
-            <span class="what" data-cwhat>Iced Latte</span>
-            <span class="vibe" data-cvibe></span>
-            <span class="tagline">@_coffeetalks · Let's talk over coffee</span>
+          <div class="mycard board" data-mycard>
+            <div class="b-top"><img class="lg" src="img/logo-light.webp" alt="Coffee Talks" width="1200" height="776"><span class="b-tk" data-ctk>No. 0001</span></div>
+            <div class="b-head"><span>Orders Up</span><i></i></div>
+            <div class="b-row"><span class="b-l">Name</span><div class="cells" data-cells="name"></div></div>
+            <div class="b-row"><span class="b-l">Order</span><div class="cells" data-cells="order"></div></div>
+            <div class="b-row"><span class="b-l">You Are</span><div class="cells" data-cells="t1"></div><div class="cells" data-cells="t2"></div></div>
+            <p class="vibe" data-cvibe aria-live="polite"></p>
+            <span class="tagline">@_coffeetalks</span>
           </div>
         </div>
       </div>
@@ -1313,12 +1331,12 @@
     size: [{ v: 'One-Time', d: 'A single project' }, { v: 'Monthly', d: 'A few posts a week' }, { v: 'Full Service', d: 'Posting most days' }],
     shots: ['Reels', 'Stories', 'Photography', 'Captions & Hashtags', 'Grand Opening', 'Instagram Audit', 'Strategy Session'],
     orders: [
-      { o: 'Iced Latte', v: 'Posts every day, plans never. Your camera roll is 90% drinks.' },
-      { o: 'Cappuccino', v: 'Classic feed, perfect grid, color palette chosen in 2019 and still loyal to it.' },
-      { o: 'Americano', v: 'No filter, no fuss. You talk straight to the camera and people love it.' },
-      { o: 'Matcha', v: 'Aesthetic first. Soft light, slow Reels and a caption that\'s one emoji.' },
-      { o: 'Chai', v: 'Storyteller. Your captions are longer than your Reels and nobody minds.' },
-      { o: 'Cold Brew', v: 'Batch filmer. Ten Reels in one afternoon, scheduled till next month.' }
+      { o: 'Iced Latte', t: 'The Regular', v: 'You\'re always out and you always have your phone up. Your feed is a diary people actually follow.' },
+      { o: 'Cappuccino', t: 'The Classic', v: 'Your grid has looked the same for years and that\'s the point. People know it\'s you before they see the name.' },
+      { o: 'Americano', t: 'The Straight Shooter', v: 'No script and no filter. You talk to the camera the way you talk to your friends.' },
+      { o: 'Matcha', t: 'The Aesthetic', v: 'You care how it looks. The light, the cup, the angle all have to be right before you post.' },
+      { o: 'Chai', t: 'The Storyteller', v: 'Your captions run long and people read every word.' },
+      { o: 'Cold Brew', t: 'The Planner', v: 'You film a month of content in one afternoon and schedule it before dinner.' }
     ],
     clients: { now: [], before: [], love: [] },
     testimonials: []
@@ -1937,34 +1955,89 @@
   })();
 
   /* =============================================================
-     WHAT'S YOUR COFFEE ORDER? A holo card that tilts, saved as a PNG
+     WHAT'S YOUR COFFEE ORDER? A split-flap order board that decides what kind of creator you are
      ============================================================= */
   (() => {
     const O = CONFIG.orders, row = $('[data-corders]'), name = $('[data-cname]'), card = $('[data-mycard]'), cbox = $('[data-cardbox]');
     row.innerHTML = O.map((o, i) => `<label class="chip"><input type="radio" name="corder" value="${i}"${i ? '' : ' checked'}><span>${esc(o.o)}</span></label>`).join('');
     const cur = () => O[+(($('input[name="corder"]:checked', row) || {}).value || 0)];
-    const draw = anim => { const o = cur(), n = name.value.trim(); $('[data-cwho]').textContent = n ? `${n}'s Order` : 'Your Order'; $('[data-cwhat]').textContent = o.o; $('[data-cvibe]').textContent = o.v; if (anim && ANIM) gsap.fromTo(card, { rotationY: -180 }, { rotationY: 0, duration: .8, ease: 'back.out(1.4)' }); };
-    row.addEventListener('change', () => draw(true)); name.addEventListener('input', () => draw(false)); draw(false);
+    const COLS = 12, CH = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789&';
+    const rows = {}; $$('[data-cells]', card).forEach(el => { el.innerHTML = Array.from({ length: COLS }, () => '<span class="cell"><i> </i></span>').join(''); rows[el.dataset.cells] = $$('.cell', el); });
+    const wrap = t => { const w = t.toUpperCase().split(' '), out = ['']; w.forEach(x => { const l = out[out.length - 1]; if (!l) out[out.length - 1] = x; else if ((l + ' ' + x).length <= COLS) out[out.length - 1] = l + ' ' + x; else out.push(x); }); return out; };
+    const pad = t => (t + ' '.repeat(COLS)).slice(0, COLS);
+    // flipping: each cell runs through random letters, then lands on its letter
+    const live = new Set(); let raf = 0, lastTick = 0;
+    const setCh = (c, ch) => { const i = c.firstChild; if (i.textContent === ch) return; i.textContent = ch; c.classList.remove('f'); void c.offsetWidth; c.classList.add('f'); };
+    const loop = now => {
+      raf = 0; let flipped = false;
+      live.forEach(c => { if (now >= c._end) { setCh(c, c._to); live.delete(c); flipped = true; } else if (now >= c._next) { setCh(c, CH[Math.floor(Math.random() * CH.length)]); c._next = now + 55 + Math.random() * 25; flipped = true; } });
+      if (flipped && now - lastTick > 45) { lastTick = now; if (typeof S === 'function') S('flip', .05, 1.6 + Math.random() * .4); }
+      if (live.size) raf = requestAnimationFrame(loop);
+    };
+    const flipTo = (key, text, delay, spin) => {
+      const now = performance.now();
+      rows[key].forEach((c, i) => {
+        const to = text[i] || ' ';
+        if (!ANIM) { c.firstChild.textContent = to; return; }
+        if (c.firstChild.textContent === to && !spin) return;
+        c._to = to; c._next = now + delay; c._end = now + delay + (spin || 380) + i * 60 + Math.random() * 120; live.add(c);
+      });
+      if (ANIM && !raf) raf = requestAnimationFrame(loop);
+    };
+    let tk = 1 + Math.floor(Math.random() * 400), shown = false;
+    const draw = (big) => {
+      const o = cur(), n = name.value.trim().replace(/[^a-z0-9 &]/gi, '').slice(0, COLS) || 'You', t = wrap(o.t);
+      flipTo('name', pad(n.toUpperCase()), 0, big ? 500 : 0);
+      flipTo('order', pad(o.o.toUpperCase()), big ? 120 : 0, big ? 650 : 420);
+      flipTo('t1', pad(t[0] || ''), big ? 300 : 100, big ? 1500 : 1100);
+      flipTo('t2', pad(t[1] || ''), big ? 380 : 160, big ? 1700 : 1300);
+      const v = $('[data-cvibe]'); v.textContent = '';
+      clearTimeout(draw._t); draw._t = setTimeout(() => { v.textContent = o.v; if (ANIM) gsap.fromTo(v, { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: .4 }); if (typeof S === 'function') S('ding', .12, 1.3); }, ANIM ? (big ? 2700 : 2200) : 0);
+      $('[data-ctk]').textContent = 'No. ' + String(tk).padStart(4, '0');
+    };
+    row.addEventListener('change', () => { tk++; draw(false); });
+    let nt = 0; name.addEventListener('input', () => { clearTimeout(nt); nt = setTimeout(() => { const n = name.value.trim().replace(/[^a-z0-9 &]/gi, '').slice(0, COLS) || 'You'; flipTo('name', pad(n.toUpperCase()), 0, 260); }, 250); });
+    // the first time the board comes into view it does the full spin
+    onScreen(cbox, v => { if (v && !shown) { shown = true; draw(true); } }, '-60px');
     let rx = 0, ry = 0, trx = 0, try_ = 0, hover = false, t0 = 0;
-    cbox.addEventListener('pointermove', e => { const r = cbox.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height; hover = true; trx = (x - .5) * 26; try_ = -(y - .5) * 22; card.style.setProperty('--hx', (x * 100).toFixed(1) + '%'); card.style.setProperty('--hy', (y * 100).toFixed(1) + '%'); });
+    cbox.addEventListener('pointermove', e => { const r = cbox.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height; hover = true; trx = (x - .5) * 14; try_ = -(y - .5) * 12; });
     cbox.addEventListener('pointerleave', () => { hover = false; });
     let vis = false; onScreen(cbox, v => vis = v);
-    if (ANIM) gsap.ticker.add((t, d) => { if (!vis || gsap.isTweening(card)) return; t0 += d / 1000; if (!hover) { trx = Math.sin(t0 * .9) * 10; try_ = Math.cos(t0 * .7) * 6; card.style.setProperty('--hx', (50 + trx * 3) + '%'); } rx += (trx - rx) * .12; ry += (try_ - ry) * .12; card.style.transform = `rotateY(${rx.toFixed(2)}deg) rotateX(${ry.toFixed(2)}deg)`; });
+    if (ANIM) gsap.ticker.add((t, d) => { if (!vis) return; t0 += d / 1000; if (!hover) { trx = Math.sin(t0 * .6) * 5; try_ = Math.cos(t0 * .5) * 3; } rx += (trx - rx) * .1; ry += (try_ - ry) * .1; card.style.transform = `rotateY(${rx.toFixed(2)}deg) rotateX(${ry.toFixed(2)}deg)`; });
+    // SAVE: the same board as a 1080x1350 poster
     $('[data-csave]').addEventListener('click', async () => {
-      const o = cur(), n = name.value.trim(), W = 1080, H = 1350, c = document.createElement('canvas'); c.width = W; c.height = H; const x = c.getContext('2d');
-      const load = s => new Promise(r => { const i = new Image(); i.onload = () => r(i); i.onerror = () => r(null); i.src = s; });
-      const [logo, bean] = await Promise.all([load('img/logo.webp'), load('img/bean-light.webp')]); await document.fonts.ready;
-      x.fillStyle = '#15100c'; x.fillRect(0, 0, W, H);
-      if (bean) { x.save(); x.translate(900, 160); x.rotate(.3); x.drawImage(bean, -260, -260, 520, 530); x.restore(); }
-      x.fillStyle = '#f7f3ec'; x.beginPath(); x.roundRect ? x.roundRect(80, 80, 260, 180, 26) : x.rect(80, 80, 260, 180); x.fill(); if (logo) x.drawImage(logo, 100, 92, 220, 142);
-      x.fillStyle = '#c9a27a'; x.font = '700 78px Caveat'; x.fillText(n ? `${n}'s Order` : 'My Order', 80, 820);
-      x.fillStyle = '#ffffff'; x.font = '180px Anton'; const words = o.o.toUpperCase().split(' '); words.forEach((w, i) => x.fillText(w, 76, 990 + i * 170 - (words.length - 1) * 170));
-      x.fillStyle = 'rgba(255,250,242,.82)'; x.font = '600 40px "Instrument Sans"'; const lines = []; let ln = ''; o.v.split(' ').forEach(w => { if (x.measureText(ln + w).width > 900) { lines.push(ln); ln = ''; } ln += w + ' '; }); lines.push(ln); lines.forEach((l, i) => x.fillText(l.trim(), 80, 1090 + i * 54));
-      x.fillStyle = 'rgba(255,250,242,.55)'; x.font = '700 30px "Instrument Sans"'; x.fillText('@_COFFEETALKS · LET\'S TALK OVER COFFEE', 80, 1280);
-      c.toBlob(async b => {
-        const file = new File([b], 'my-coffee-talks-order.png', { type: 'image/png' });
+      const o = cur(), n = (name.value.trim().replace(/[^a-z0-9 &]/gi, '').slice(0, COLS) || 'You').toUpperCase(), t = wrap(o.t);
+      const W = 1080, H = 1350, c = document.createElement('canvas'); c.width = W; c.height = H; const x = c.getContext('2d');
+      const load = src => new Promise(r => { const i = new Image(); i.onload = () => r(i); i.onerror = () => r(null); i.src = src; });
+      const [logo, bean] = await Promise.all([load('img/logo-light.webp'), load('img/bean-light.webp')]); await document.fonts.ready;
+      const rr = (X, Y, w, h, r) => { x.beginPath(); x.roundRect ? x.roundRect(X, Y, w, h, r) : x.rect(X, Y, w, h); };
+      let g = x.createRadialGradient(W / 2, -100, 50, W / 2, 200, 1300); g.addColorStop(0, '#4a2c19'); g.addColorStop(.55, '#1c130d'); g.addColorStop(1, '#110b07'); x.fillStyle = g; x.fillRect(0, 0, W, H);
+      if (bean) { x.save(); x.globalAlpha = .1; x.translate(W - 120, H - 170); x.rotate(-.35); x.drawImage(bean, -330, -335, 660, 672); x.restore(); }
+      // frame
+      x.strokeStyle = 'rgba(232,176,74,.35)'; x.lineWidth = 3; rr(40, 40, W - 80, H - 80, 28); x.stroke();
+      if (logo) x.drawImage(logo, 84, 86, 210, 136);
+      x.fillStyle = '#d2b08e'; x.font = '700 34px "Courier Prime"'; x.textAlign = 'right'; x.fillText('No. ' + String(tk).padStart(4, '0'), W - 84, 160); x.textAlign = 'left';
+      x.fillStyle = '#e8b04a'; x.font = '44px Anton'; x.fillText('ORDERS UP', 84, 300);
+      x.setLineDash([18, 12]); x.strokeStyle = 'rgba(232,176,74,.6)'; x.lineWidth = 4; x.beginPath(); x.moveTo(340, 285); x.lineTo(W - 84, 285); x.stroke(); x.setLineDash([]);
+      const cw = (W - 168 - 11 * 8) / 12, chh = cw * 1.4;
+      const board = (label, lines, y, gold) => {
+        x.fillStyle = 'rgba(255,250,242,.5)'; x.font = '700 24px "Instrument Sans"'; x.fillText(label.split('').join(String.fromCharCode(8202)), 84, y);
+        lines.forEach((ln, r) => { const t = pad(ln); for (let i = 0; i < COLS; i++) {
+          const X = 84 + i * (cw + 8), Y = y + 18 + r * (chh + 8);
+          const cg = x.createLinearGradient(0, Y, 0, Y + chh); cg.addColorStop(0, '#2c221b'); cg.addColorStop(.49, '#2a201a'); cg.addColorStop(.5, '#0e0906'); cg.addColorStop(.51, '#241b15'); cg.addColorStop(1, '#1d1510');
+          x.fillStyle = cg; rr(X, Y, cw, chh, 8); x.fill();
+          x.fillStyle = gold ? '#e8b04a' : '#f7f3ec'; x.font = `${Math.round(chh * .62)}px Anton`; x.textAlign = 'center'; x.fillText(t[i], X + cw / 2, Y + chh * .73); x.textAlign = 'left';
+          x.fillStyle = 'rgba(0,0,0,.6)'; x.fillRect(X, Y + chh / 2 - 1, cw, 2);
+        } });
+        return y + 18 + lines.length * (chh + 8);
+      };
+      let y = 380; y = board('NAME', [n], y) + 50; y = board('ORDER', [o.o.toUpperCase()], y) + 50; y = board('YOU ARE', [t[0] || '', t[1] || ''], y, true) + 60;
+      x.fillStyle = 'rgba(255,250,242,.86)'; x.font = '500 38px "Instrument Sans"'; const lines = []; let ln = ''; o.v.split(' ').forEach(w => { if (x.measureText(ln + w).width > W - 180) { lines.push(ln); ln = ''; } ln += w + ' '; }); lines.push(ln); lines.forEach((l, i) => x.fillText(l.trim(), 84, y + i * 52));
+      x.fillStyle = '#d2b08e'; x.font = '700 30px "Instrument Sans"'; x.fillText('@_COFFEETALKS', 84, H - 92); x.fillStyle = 'rgba(255,250,242,.5)'; x.textAlign = 'right'; x.fillText('COFFEETALKSBUSINESS.COM', W - 84, H - 92); x.textAlign = 'left';
+      c.toBlob(async bl => {
+        const file = new File([bl], 'my-coffee-talks-order.png', { type: 'image/png' });
         if (navigator.canShare && navigator.canShare({ files: [file] })) { try { await navigator.share({ files: [file], text: 'My Coffee Talks order @_coffeetalks' }); return; } catch (e) {} }
-        const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = file.name; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+        const a = document.createElement('a'); a.href = URL.createObjectURL(bl); a.download = file.name; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
       }, 'image/png');
     });
   })();
