@@ -1693,7 +1693,8 @@
           let y = y0 + 40; c.textBaseline = 'alphabetic';
           if (L.title) { c.textAlign = 'center'; c.fillStyle = ink2; c.font = sh ? SF.fr6(60) : FT.anton(66); c.fillText(String(L.title), 0, y + 56); y += 90; c.fillStyle = soft; c.fillRect(x0 + 60, y - 6, w - 120, 2); y += 10; }
           const today = new Date().toLocaleDateString('en-US', { weekday: 'long', timeZone: 'America/Detroit' }).toLowerCase();
-          rows.forEach(([d, tm], i) => { const ry = y + i * 96, on = L.today !== false && d.toLowerCase().startsWith(today.slice(0, 3)), mid = ry + 48;
+          const hl = L.hl || (L.today === false ? 'none' : 'today'), pick = hl === 'today' ? today : hl.toLowerCase();
+          rows.forEach(([d, tm], i) => { const ry = y + i * 96, on = hl !== 'none' && d.trim().toLowerCase() === pick || (hl === 'today' && d.toLowerCase().startsWith(today.slice(0, 3))), mid = ry + 48;
             if (on) { c.save(); rr(c, x0 + 30, ry + 6, w - 60, 84, 42); c.fillStyle = acc; c.fill(); c.restore(); }
             const fc = on ? (lum(acc) < .55 ? '#fff' : (sh ? SH.navy : INK)) : ink2; c.fillStyle = fc; c.font = (sh ? SF.man : FT.osw)(40); c.textAlign = 'left'; const dw = c.measureText(d).width; c.fillText(d, x0 + 66, mid + 14);
             c.textAlign = 'right'; c.font = (sh ? SF.man8 : FT.anton)(40); const tw = c.measureText(tm).width; c.fillText(tm, w / 2 - 66, mid + 14);
@@ -2389,7 +2390,7 @@
       if (L.k === 'list') h += togRow([['check', 'Tick boxes', L.check]]);
       if (L.k === 'pointer') h += togRow([['flip', 'Curve the other way', L.flip]]);
       if (L.k === 'rule') h += chipRow('Icon', [['snow', 'Snowflake'], ['leaf', 'Leaf'], ['none', 'None']], 'licon', L.icon || 'snow');
-      if (L.k === 'hours') h += togRow([['today', 'Highlight today', L.today !== false], ['dark', 'Dark card', L.dark]]);
+      if (L.k === 'hours') { const days = String(L.tx || '').split('\n').map(x => x.trim()).filter(Boolean).map(x => { const m = x.match(/^(.*?)\s+((?:\d|closed|hours|open).*)$/i); return (m ? m[1] : x).trim(); }).filter(Boolean); h += chipRow('Highlight', [['today', 'Today']].concat(days.map(d => [d, d])).concat([['none', 'None']]), 'lhl', L.hl || (L.today === false ? 'none' : 'today')); h += togRow([['dark', 'Dark card', L.dark]]); }
       if (L.k === 'pill') h += togRow([['line', 'Outline', L.line]]);
       if (L.k === 'list') h += togRow([['circ', 'Circle the last item', L.circ !== false]]);
       if (L.k === 'sign') h += togRow([['hang', 'Door sign', L.hang]]);
@@ -2479,6 +2480,7 @@
       if ((b = t.closest('[data-lside]'))) return set('side', b.dataset.lside);
       if ((b = t.closest('[data-larrow]'))) return set('arrow', b.dataset.larrow);
       if ((b = t.closest('[data-licon]'))) return set('icon', b.dataset.licon);
+      if ((b = t.closest('[data-lhl]'))) return set('hl', b.dataset.lhl);
       if ((b = t.closest('[data-ldd]'))) return set('d', b.dataset.ldd);
       if ((b = t.closest('[data-lshape]'))) return set('shape', b.dataset.lshape);
       if ((b = t.closest('[data-lc]'))) return set(COLK[L.k], b.dataset.lc);
