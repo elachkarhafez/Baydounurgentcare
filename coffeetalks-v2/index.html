@@ -152,6 +152,13 @@
     /* ---------- header, scroll cup, phone dock ---------- */
     header { position: fixed; left: 0; right: 0; top: 0; z-index: 60; transition: background .3s, box-shadow .3s; }
     header.scrolled { background: var(--cream); box-shadow: 0 2.5px 0 var(--ink); }
+    .mus { width: 36px; height: 36px; flex: none; display: inline-flex; align-items: flex-end; justify-content: center; gap: 2.5px; padding: 0 0 10px; border: 2px solid var(--ink); border-radius: 50%; background: var(--paper); cursor: pointer; }
+    .mus span { width: 3px; height: 4px; border-radius: 2px; background: var(--ink); transition: height .3s; }
+    .mus[aria-pressed="true"] { background: var(--bean); border-color: var(--ink); }
+    .mus[aria-pressed="true"] span { background: var(--cream); animation: eq 1s ease-in-out infinite; }
+    .mus[aria-pressed="true"] span:nth-child(2) { animation-delay: -.3s; } .mus[aria-pressed="true"] span:nth-child(3) { animation-delay: -.6s; } .mus[aria-pressed="true"] span:nth-child(4) { animation-delay: -.15s; }
+    @keyframes eq { 0%, 100% { height: 4px; } 50% { height: 14px; } }
+    @media (prefers-reduced-motion: reduce) { .mus[aria-pressed="true"] span { animation: none; height: 10px; } }
     header .wrap { height: 56px; display: flex; justify-content: space-between; align-items: center; gap: 12px; max-width: none; }
     header .logo img { height: 32px; width: auto; }
     header nav { display: none; }
@@ -793,6 +800,7 @@
       <a class="logo" href="#top" aria-label="Coffee Talks, back to top"><img src="img/logo.webp" width="1200" height="776" alt="Coffee Talks"></a>
       <nav aria-label="Sections"><a href="#about">Meet Noor</a><a href="#menu">The Menu</a><a href="#brewed">How It's Brewed</a><a href="#machine">Content Machine</a><a href="#feed">The Feed</a></nav>
       <div class="right">
+        <button class="mus" type="button" data-music aria-pressed="false" aria-label="Play the jazz"><span></span><span></span><span></span><span></span></button>
         <svg class="pcup" viewBox="0 0 26 32" aria-hidden="true"><defs><clipPath id="pcc"><path d="M4 9 H22 L20 29 Q20 30.5 18.5 30.5 H7.5 Q6 30.5 6 29 Z"/></clipPath></defs><g data-psteam fill="none" stroke="#15100c" stroke-width="1.6" stroke-linecap="round" opacity="0"><path d="M10 6 q-2 -2 0 -4"/><path d="M15 6 q-2 -2 0 -4"/></g><rect x="0" y="31" width="26" height="24" fill="#5e3b25" clip-path="url(#pcc)" data-pfill/><path d="M4 9 H22 L20 29 Q20 30.5 18.5 30.5 H7.5 Q6 30.5 6 29 Z" fill="none" stroke="#15100c" stroke-width="2" stroke-linejoin="round"/><path d="M22 13 q4 1 3 5 q-1 3 -4 3" fill="none" stroke="#15100c" stroke-width="2"/></svg>
         <a class="btn sm solid" href="#package">Let's Talk</a>
       </div>
@@ -1333,13 +1341,15 @@
       const src = ctx.createBufferSource(), v = ctx.createGain(); src.buffer = bufs[n]; src.playbackRate.value = rate; v.gain.value = g;
       src.connect(v); v.connect(master); src.start(ctx.currentTime + at);
     };
-    const startMusic = () => {
-      if (!ctx || music || !bufs.loop) { if (ctx && !bufs.loop) setTimeout(startMusic, 400); return; }
-      music = ctx.createBufferSource(); music.buffer = bufs.loop; music.loop = true; music.connect(musicG); music.start();
-      musicG.gain.setValueAtTime(0, ctx.currentTime); musicG.gain.linearRampToValueAtTime(.55, ctx.currentTime + 3);
+    let musicVol = .55;
+    const startMusic = (name = 'loop', vol = .55) => {
+      if (!ctx || music || !bufs[name]) { if (ctx && !bufs[name]) setTimeout(() => startMusic(name, vol), 400); return; }
+      musicVol = vol; music = ctx.createBufferSource(); music.buffer = bufs[name]; music.loop = true; music.connect(musicG); music.start();
+      musicG.gain.setValueAtTime(0, ctx.currentTime); musicG.gain.linearRampToValueAtTime(vol, ctx.currentTime + 4);
     };
+    const setMusic = v => { if (ctx && musicG) { musicG.gain.cancelScheduledValues(ctx.currentTime); musicG.gain.setTargetAtTime(v ? musicVol : 0, ctx.currentTime, .35); } };
     const setOn = v => { on = v; if (master) master.gain.setTargetAtTime(v ? 1 : 0, ctx.currentTime, .05); };
-    return { init, unlock, play, startMusic, setOn, get on() { return on; }, get live() { return !!ctx && ctx.state === 'running'; }, hush: ms => { hushUntil = performance.now() + ms; } };
+    return { init, unlock, play, startMusic, setMusic, setOn, get on() { return on; }, get live() { return !!ctx && ctx.state === 'running'; }, hush: ms => { hushUntil = performance.now() + ms; } };
   })();
   const store = { get(k, d) { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch (e) { return d; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} } };
   const onScreen = (el, cb, margin = '200px') => new IntersectionObserver(([e]) => cb(e.isIntersecting), { rootMargin: margin }).observe(el);
@@ -2073,7 +2083,7 @@
     $('[data-skip]').addEventListener('click', () => { SFX.hush(400); itl.progress(1); });
     if (TEASER) {
       // GRAND OPENING: cutting the ribbon is the tap that lets the browser play sound
-      SFX.init(TEASER ? null : ['pop', 'flip', 'chime', 'drop', 'pour', 'whoosh', 'ding', 'stamp']);
+      SFX.init(TEASER ? null : ['pop', 'flip', 'chime', 'drop', 'pour', 'whoosh', 'ding', 'stamp', 'grind', 'tamp', 'drip', 'steam', 'jazz']);
       const gate = $('[data-gate]'); gate.hidden = false;
       const go = withSound => {
         if (gate.dataset.done) return; gate.dataset.done = 1; SFX.unlock(); SFX.setOn(withSound);
@@ -2124,7 +2134,10 @@
   // site-wide sound: quiet effects on the animations, once the visitor has tapped or pressed a key
   const S = (() => {
     if (TEASER) return () => {};
-    const wake = () => { SFX.init(['pop', 'flip', 'chime', 'drop', 'pour', 'whoosh', 'ding', 'stamp']); SFX.unlock(); };
+    const mBtn = $('[data-music]'); let musicOn = store.get('ct-music', true), started = false;
+    const showMusic = () => { if (!mBtn) return; mBtn.setAttribute('aria-pressed', String(musicOn && started)); mBtn.setAttribute('aria-label', musicOn && started ? 'Pause the jazz' : 'Play the jazz'); };
+    const wake = e => { SFX.init(['pop', 'flip', 'chime', 'drop', 'pour', 'whoosh', 'ding', 'stamp', 'grind', 'tamp', 'drip', 'steam', 'jazz']); SFX.unlock(); if (e && e.target && e.target.closest && e.target.closest('[data-music]')) return; if (!started && musicOn) { started = true; SFX.startMusic('jazz', .26); showMusic(); } };
+    if (mBtn) mBtn.addEventListener('click', e => { e.stopPropagation(); if (!started) { started = true; musicOn = true; SFX.startMusic('jazz', .26); } else { musicOn = !musicOn; SFX.setMusic(musicOn); } store.set('ct-music', musicOn); showMusic(); });
     ['pointerdown', 'pointerup', 'touchend', 'click', 'keydown'].forEach(ev => addEventListener(ev, wake, { capture: true, passive: true }));
     const last = {};
     return (n, g = 1, r = 1, at = 0) => { if (!SFX.live) return; const t = performance.now(); if (!at && last[n] && t - last[n] < 60) return; last[n] = t; SFX.play(n, g, r, at); };
@@ -2220,7 +2233,22 @@
     document.addEventListener('click', e => { if (e.target.closest('.pin, .spot')) S('pop', .24, 1.1); });
     $('[data-builder]')?.addEventListener('change', () => S('drop', .18, 1.2));
     const tk = $('[data-ticket]'); if (tk) onScreen(tk, v => { if (v && !tk.dataset.snd) { tk.dataset.snd = 1; for (let k = 0; k < 9; k++) S('flip', .1, 1.4, k * .12); } }, '-80px');
-    const bt = $('[data-bt]'); if (bt) new MutationObserver(() => S('flip', .16, 1.05)).observe(bt, { childList: true });
+    const bt = $('[data-bt]'); if (bt) new MutationObserver(() => S('flip', .1, 1.05)).observe(bt, { childList: true });
+    // the espresso machine: grinder while the beans grind, a tamp, the shot dripping, the steam wand, and a ding when it's served
+    if (ANIM && $('[data-brew]')) { let lp = 0, last = 0, fired = {};
+      ScrollTrigger.create({ trigger: '[data-brew]', start: 'top top', end: '+=260%', onUpdate: st => {
+        const p = st.progress, now = performance.now(), moving = Math.abs(p - lp) > .0005, fwd = p > lp;
+        if (moving && now - last > 300) {
+          if (p > .02 && p < .25) { S('grind', .16, .95 + Math.random() * .1); last = now; }
+          else if (p > .52 && p < .74) { S('drip', .2, .95 + Math.random() * .1); last = now; }
+        }
+        [['tamp', .38, 'tamp', .34], ['steam', .78, 'steam', .2], ['ding', .97, 'ding', .16]].forEach(([k, at, n, g]) => {
+          if (fwd && lp < at && p >= at && !fired[k]) { fired[k] = 1; S(n, g); }
+          if (p < at - .06) fired[k] = 0;
+        });
+        lp = p;
+      } });
+    }
     if (!ANIM) return;
     $$('main h2[data-split]').forEach(h => ScrollTrigger.create({ trigger: h, start: 'top 88%', once: true, onEnter: () => S('whoosh', .1, 1.2) }));
     const once = (trig, fn, start = 'top 82%') => { if ($(trig)) ScrollTrigger.create({ trigger: trig, start, once: true, onEnter: fn }); };
