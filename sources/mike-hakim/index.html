@@ -295,12 +295,78 @@
     footer a:hover { color: var(--white); }
     footer .disc { flex-basis: 100%; font-size: 12px; color: rgba(255,253,249,.45); max-width: 110ch; }
 
+    .card .book { margin-top: auto; height: 48px; width: 100%; font-size: 14px; }
+    .card ul { margin-bottom: 20px; }
+    .card .acts { margin-top: 8px; padding-top: 0; }
+    .card .acts .btn { height: 44px; border-color: var(--line); }
+    .more { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px 24px; margin-top: 26px; }
+    .more-btns [hidden] { display: none !important; }
+    .more .note { margin: 0; max-width: 56ch; }
+    .more-btns { display: flex; flex-wrap: wrap; gap: 10px; }
+    .more-btns .btn { height: 50px; font-size: 14.5px; }
+
+    /* ---------- showing request sheet (phone: bottom sheet, desktop: centered) ---------- */
+    dialog.sheet { width: 100%; max-width: 100%; max-height: 92svh; margin: auto 0 0; padding: 0; border: 0; border-radius: 22px 22px 0 0; background: var(--white); color: var(--ink); box-shadow: 0 -20px 60px -20px rgba(12,21,34,.5); overflow: hidden; }
+    dialog.sheet[open] { display: flex; flex-direction: column; animation: sheet-up .45s var(--ease-out); }
+    dialog.sheet::backdrop { background: rgba(12,21,34,.55); }
+    @keyframes sheet-up { from { transform: translateY(40px); opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) { dialog.sheet[open] { animation: none; } }
+    .sh-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 16px 12px; border-bottom: 1px solid var(--line); }
+    .sh-head h2 { font-size: 22px; line-height: 1.1; letter-spacing: -.01em; }
+    .sh-head p { margin: 4px 0 0; font-size: 13.5px; color: var(--muted); }
+    .sh-x { flex: none; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; background: var(--paper); }
+    .sh-x svg { width: 18px; height: 18px; }
+    .sh-body { overflow-y: auto; overscroll-behavior: contain; padding: 16px 16px 20px; -webkit-overflow-scrolling: touch; }
+    form.req { display: grid; gap: 14px; }
+    form.req fieldset { border: 0; margin: 0; padding: 0; display: grid; gap: 10px; min-width: 0; }
+    form.req legend, form.req label > span { display: block; font: 700 11.5px/1.2 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+    form.req legend { margin-bottom: 8px; }
+    form.req label { display: grid; gap: 7px; min-width: 0; }
+    form.req input:not([type=checkbox]):not([type=file]), form.req select, form.req textarea { width: 100%; min-width: 0; height: 48px; border-radius: 12px; border: 0; box-shadow: inset 0 0 0 1.5px var(--line); background: var(--paper); padding: 0 14px; font: 600 16px/1.2 var(--sans); color: var(--ink); transition: box-shadow .25s; }
+    form.req textarea { height: 76px; padding: 12px 14px; resize: vertical; font-weight: 500; line-height: 1.45; }
+    form.req input:focus, form.req select:focus, form.req textarea:focus { outline: none; box-shadow: inset 0 0 0 2px var(--navy); }
+    form.req .bad input, form.req .bad select, form.req .bad textarea, form.req .bad .drop { box-shadow: inset 0 0 0 2px var(--brick); }
+    form.req .two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .prop-card { display: flex; align-items: center; gap: 12px; padding: 10px; border-radius: 14px; background: var(--paper); }
+    .prop-card img { width: 64px; height: 46px; border-radius: 9px; object-fit: cover; flex: none; }
+    .prop-card b { display: block; font: 700 14.5px/1.25 var(--sans); }
+    .prop-card small { display: block; margin-top: 2px; font: 500 13px/1.2 var(--mono); color: var(--muted); }
+    .prop-card button { margin-left: auto; flex: none; font: 700 13px/1 var(--sans); color: var(--navy); text-decoration: underline; text-underline-offset: 3px; padding: 8px 4px; }
+    .slot { display: grid; grid-template-columns: 26px 1fr 1fr; gap: 8px; align-items: center; }
+    .slot i { font: 500 13px/1 var(--mono); font-style: normal; color: var(--gold); }
+    .drop { position: relative; display: flex; align-items: center; gap: 12px; padding: 14px; border-radius: 14px; background: var(--paper); box-shadow: inset 0 0 0 1.5px dashed var(--line); outline: 1.5px dashed rgba(12,21,34,.25); outline-offset: -1.5px; cursor: pointer; }
+    .drop input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; }
+    .drop svg { width: 26px; height: 26px; flex: none; color: var(--navy); }
+    form.req .drop > span { font: 500 14px/1.3 var(--sans); letter-spacing: 0; text-transform: none; color: var(--ink); min-width: 0; }
+    .drop b { display: block; font: 700 14.5px/1.25 var(--sans); overflow-wrap: anywhere; }
+    .drop small { display: block; margin-top: 2px; font-size: 12.5px; color: var(--muted); }
+    .drop.has { outline-color: var(--gold); background: #f8f1e2; }
+    .drop .rm { position: relative; z-index: 2; margin-left: auto; flex: none; font: 700 13px/1 var(--sans); text-decoration: underline; padding: 8px 4px; }
+    .consent { display: flex !important; grid-template-columns: none; align-items: flex-start; gap: 10px !important; font-size: 13.5px; line-height: 1.45; color: #3a4252; }
+    .consent input { flex: none; width: 20px; height: 20px; margin: 1px 0 0; accent-color: var(--navy); }
+    form.req [hidden], .consent[hidden] { display: none !important; }
+    .hp { position: absolute !important; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+    form.req .err { min-height: 1.3em; margin: 0; font-size: 14px; color: var(--brick); }
+    form.req .go { height: 52px; width: 100%; font-size: 15px; }
+    form.req .go[disabled] { opacity: .7; pointer-events: none; }
+    form.req .fine2 { margin: -4px 0 0; font-size: 12px; line-height: 1.5; color: var(--muted); }
+    .done { text-align: center; padding: 18px 6px 8px; }
+    .done svg { width: 56px; height: 56px; margin: 0 auto; color: var(--gold); }
+    .done h3 { margin-top: 14px; font: 500 24px/1.15 var(--serif); }
+    .done p { margin: 10px auto 0; max-width: 34ch; color: var(--muted); font-size: 15px; }
+    .done .btn { margin-top: 20px; height: 48px; }
+    @media (max-width: 380px) { form.req .two { grid-template-columns: 1fr; } }
+    @media (min-width: 720px) {
+      dialog.sheet { width: min(560px, calc(100% - 40px)); max-height: min(88vh, 860px); margin: auto; border-radius: 24px; box-shadow: 0 40px 100px -30px rgba(12,21,34,.6); }
+      .sh-head { padding: 20px 26px 16px; } .sh-head h2 { font-size: 26px; } .sh-body { padding: 20px 26px 26px; }
+    }
     /* sticky phone bar */
     .mbar { display: none; }
     @media (max-width: 760px) {
-      .mbar { position: fixed; left: 10px; right: 10px; bottom: 10px; z-index: 90; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 8px; border-radius: 22px; background: rgba(12,21,34,.9); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); box-shadow: 0 20px 40px -14px rgba(0,0,0,.5); transform: translateY(140%); transition: transform .6s var(--ease-out); }
+      .mbar { position: fixed; left: 10px; right: 10px; bottom: 10px; z-index: 90; display: grid; grid-template-columns: 1.7fr 1fr 1fr; gap: 6px; padding: 8px; border-radius: 22px; background: rgba(12,21,34,.9); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); box-shadow: 0 20px 40px -14px rgba(0,0,0,.5); transform: translateY(140%); transition: transform .6s var(--ease-out); }
       .mbar.on { transform: none; }
-      .mbar .btn { height: 50px; font-size: 14.5px; border: 0; }
+      .mbar .btn { height: 50px; padding: 0 10px; font-size: 14px; border: 0; }
+      @media (max-width: 374px) { .mbar { grid-template-columns: 2fr 1fr 1fr; gap: 4px; padding: 6px; } .mbar .btn { padding: 0 6px; font-size: 13.5px; } }
       body { padding-bottom: 0; }
       footer .wrap { padding-bottom: 100px; }
     }
@@ -423,7 +489,10 @@
           <button class="chip" type="button" data-f="o300" aria-pressed="false">$300K+</button>
         </div>
         <div class="grid" data-grid></div>
-        <p class="note">Homes move fast and prices change. Text “INFO” and I’ll tell you what’s still available, plus what’s coming soon before it hits the market.</p>
+        <div class="more">
+          <p class="note">Homes move fast and prices change. Saw a different house you like? Send me the address and two times that work for you.</p>
+          <div class="more-btns"><button class="btn solid" type="button" data-book>Request a showing</button><a class="btn" data-idx href="#contact" hidden>Search every home on the MLS</a></div>
+        </div>
       </div>
     </section>
 
@@ -493,7 +562,7 @@
           <span class="kick">Let’s talk</span>
           <h2 style="margin-top:18px"><span class="line"><span>Call, text or</span></span><span class="line"><span><em>comment “INFO”.</em></span></span></h2>
           <a class="big-tel" data-tel href="#contact" data-phone-text>(313) 652-9488</a>
-          <div class="ctas" style="display:flex;flex-wrap:wrap;gap:12px;margin-top:26px"><a class="btn solid" data-tel href="#contact">Call now</a><a class="btn" data-sms href="#contact">Text “INFO”</a><a class="btn" data-mail href="#contact">Email</a></div>
+          <div class="ctas" style="display:flex;flex-wrap:wrap;gap:12px;margin-top:26px"><button class="btn solid" type="button" data-book>Request a showing</button><a class="btn" data-tel href="#contact">Call now</a><a class="btn" data-sms href="#contact">Text “INFO”</a><a class="btn" data-mail href="#contact">Email</a></div>
         </div>
         <dl class="c-rows">
           <div><dt>Brokerage</dt><dd>eXp Realty</dd></div>
@@ -529,7 +598,42 @@
     </section>
   </main>
 
-  <nav class="mbar" aria-label="Quick contact" data-mbar><a class="btn gold" data-tel href="#contact">Call</a><a class="btn ghost-l" data-sms href="#contact">Text “INFO”</a></nav>
+  <!-- SHOWING REQUEST -->
+  <dialog class="sheet" aria-labelledby="sh-t" data-sheet>
+    <div class="sh-head">
+      <div><h2 id="sh-t">Request a showing</h2><p>Pick two times. I’ll text you to confirm.</p></div>
+      <button class="sh-x" type="button" aria-label="Close" data-close><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    </div>
+    <div class="sh-body">
+      <form class="req" novalidate data-req>
+        <div data-prop-pick></div>
+        <label data-f="property" data-prop-free><span>Property address</span><input name="address" autocomplete="off" placeholder="Street, city"></label>
+        <fieldset data-f="slots">
+          <legend>Two times that work for you</legend>
+          <div class="slot"><i>01</i><input type="date" name="d1" aria-label="First choice date"><select name="t1" aria-label="First choice time"></select></div>
+          <div class="slot"><i>02</i><input type="date" name="d2" aria-label="Second choice date"><select name="t2" aria-label="Second choice time"></select></div>
+        </fieldset>
+        <label data-f="name"><span>Your name</span><input name="name" autocomplete="name" placeholder="First and last"></label>
+        <div class="two">
+          <label data-f="phone"><span>Phone</span><input name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="(313) 555-0100"></label>
+          <label data-f="email"><span>Email</span><input name="email" type="email" autocomplete="email" inputmode="email" placeholder="you@email.com"></label>
+        </div>
+        <label><span>Message (optional)</span><textarea name="message" maxlength="2000" placeholder="Anything I should know? Cash, FHA, how soon you want to move…"></textarea></label>
+        <div data-f="letter">
+          <span style="display:block;font:700 11.5px/1.2 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:7px">Pre-approval letter</span>
+          <label class="drop" data-drop><input type="file" name="letter" accept=".pdf,.jpg,.jpeg,.png,.heic,.heif,application/pdf,image/jpeg,image/png,image/heic,image/heif" aria-label="Attach your pre-approval letter"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M12 18v-6M9 15l3-3 3 3"/></svg><span><b data-drop-t>Attach your letter</b><small data-drop-s>PDF, JPG, PNG or HEIC, up to 10 MB. Optional, but sellers like to see it.</small></span></label>
+        </div>
+        <label class="consent" data-f="consent" data-consent hidden><input type="checkbox" name="consent"><span style="font:500 13.5px/1.45 var(--sans);letter-spacing:0;text-transform:none;color:#3a4252">I’m OK with Mike keeping my letter in private storage to set up showings. Only Mike can open it, and it’s deleted after 90 days.</span></label>
+        <div class="hp" aria-hidden="true"><label>Website<input name="website" tabindex="-1" autocomplete="off"></label></div>
+        <div data-ts></div>
+        <p class="err" role="alert" data-req-err></p>
+        <button class="btn solid go" type="submit" data-go>Send request</button>
+        <p class="fine2">Times are Detroit time. Sending this doesn’t lock in a showing; I’ll confirm with you by text or call.</p>
+      </form>
+    </div>
+  </dialog>
+
+  <nav class="mbar" aria-label="Quick contact" data-mbar><button class="btn gold" type="button" data-book>Request a showing</button><a class="btn ghost-l" data-tel href="#contact">Call</a><a class="btn ghost-l" data-sms href="#contact">Text</a></nav>
 
   <script src="assets/lib/gsap.min.js"></script>
   <script src="assets/lib/ScrollTrigger.min.js"></script>
@@ -546,7 +650,13 @@
     office: '2220 N Telegraph Rd, Suite 2, Dearborn, MI 48126',
     instagram: { handle: '@mikehakimrealtor', url: 'https://www.instagram.com/mikehakimrealtor/' },
     downDefault: 3,
+    // Mike's BoldTrail (kvCORE) IDX search URL. Leave empty until we have it; the
+    // "Search every home on the MLS" button stays hidden while this is blank.
+    idxUrl: '',
     areas: ['Dearborn', 'Dearborn Heights', 'Detroit', 'Allen Park', 'Lincoln Park', 'Livonia', 'Canton', 'Westland', 'Farmington Hills', 'Novi', 'Northville', 'Troy', 'West Bloomfield'],
+    // Phase 2: an IDX feed (BoldTrail/Realcomp) can replace this array. Keep the same
+    // shape per home: id, img, price, title, city, beds, baths, sqft, plus mls/address/url
+    // from the feed, and the cards, filters and "Request a showing" keep working.
     listings: [
       { id: 'quad', img: 'h1', reel: 'DeDB0dDSLrv', price: 799000, title: 'Updated quad-level', city: 'Dearborn Heights', beds: 4, baths: '3', sqft: '3,352 finished', commute: '20 min to Downtown Detroit · 20 min to DTW', hl: ['Private backyard basketball court', 'Heated attached 2-car garage', 'Whole-house generator + water filtration'] },
       { id: 'tri', img: 'h2', reel: 'DeAdD7cySBe', price: 230000, title: 'Brick tri-level, huge 4-car garage', city: 'Dearborn', beds: 3, baths: '1.5', sqft: '1,343', commute: 'West Dearborn · 15 min to Downtown Detroit', hl: ['Detached 4-car garage, about 800 sq ft', 'Garage insulated, drywalled, with power', 'Hardwood floors'] },
@@ -602,7 +712,8 @@
         <div class="loc">${esc(h.city)}, MI · ${esc(h.commute)}</div>
         <div class="specs"><span><b>${h.beds}</b> bd</span><span><b>${esc(h.baths)}</b> ba</span>${h.sqft ? `<span><b>${esc(h.sqft)}</b> sq ft</span>` : ''}</div>
         <ul>${h.hl.map(x => `<li>${esc(x)}</li>`).join('')}</ul>
-        <div class="acts"><a class="btn solid" href="${SMS(`INFO: ${k(h.price)} ${h.title}, ${h.city}`) || '#contact'}">Text “INFO”</a><a class="btn" href="https://www.instagram.com/reel/${h.reel}/" target="_blank" rel="noopener">Watch tour</a></div>
+        <button class="btn solid book" type="button" data-book="${h.id}">Request a showing</button>
+        <div class="acts"><a class="btn" href="${SMS(`INFO: ${k(h.price)} ${h.title}, ${h.city}`) || '#contact'}">Text “INFO”</a><a class="btn" href="https://www.instagram.com/reel/${h.reel}/" target="_blank" rel="noopener">Watch tour</a></div>
       </div>
     </article>`).join('');
   $('[data-reels]').innerHTML = L.map((h, i) => `<a class="reel" href="https://www.instagram.com/reel/${h.reel}/" target="_blank" rel="noopener" aria-label="Watch the ${esc(h.title)} tour on Instagram"><img src="img/r${i + 1}.webp" width="480" height="852" alt="" loading="lazy"><span class="pl"><svg viewBox="0 0 12 14" fill="currentColor"><path d="M0 0l12 7-12 7z"/></svg></span></a>`).join('');
@@ -741,6 +852,7 @@
   hs(); addEventListener('scroll', hs, { passive: true });
   let lenis = null;
   if (ANIM && window.Lenis) { lenis = new Lenis({ duration: 1.2, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true }); lenis.on('scroll', ScrollTrigger.update); gsap.ticker.add(t => lenis.raf(t * 1000)); gsap.ticker.lagSmoothing(0); }
+  window.__lenis = lenis;
   function go(t) { const off = -header.offsetHeight - 20; if (lenis) lenis.scrollTo(t, { duration: 1.4, offset: t === 0 ? 0 : off }); else if (t === 0) scrollTo({ top: 0 }); else scrollTo({ top: t.getBoundingClientRect().top + scrollY + off, behavior: RM ? 'auto' : 'smooth' }); }
   document.addEventListener('click', e => { const a = e.target.closest('a[href^="#"]'); if (!a || a.hasAttribute('data-match')) return; const id = a.getAttribute('href'); if (id === '#') return; const t = id === '#top' ? 0 : $(id); if (t === null) return; e.preventDefault(); go(t); });
 
@@ -812,6 +924,140 @@
   if (FINE) $$('.btn').forEach(b => { if (b.closest('.card')) return; const mx = gsap.quickTo(b, 'x', { duration: .6, ease: 'power3' }), my = gsap.quickTo(b, 'y', { duration: .6, ease: 'power3' }); b.addEventListener('pointermove', e => { const r = b.getBoundingClientRect(); mx((e.clientX - r.left - r.width / 2) * .25); my((e.clientY - r.top - r.height / 2) * .35); }); b.addEventListener('pointerleave', () => { mx(0); my(0); }); });
   addEventListener('load', () => ScrollTrigger.refresh());
   document.fonts && document.fonts.ready.then(() => ScrollTrigger.refresh());
+  })();
+  </script>
+  <script>
+  /* =============================================================
+     SHOWING REQUESTS: two times, contact info, optional letter.
+     Flow: /api/ticket (spam checks) → letter goes straight to private
+     Blob storage (/api/upload) → /api/showing validates and notifies.
+     ============================================================= */
+  (() => {
+  'use strict';
+  const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const sheet = $('[data-sheet]'), form = $('[data-req]'), err = $('[data-req-err]'), go = $('[data-go]');
+  const pick = $('[data-prop-pick]'), free = $('[data-prop-free]'), drop = $('[data-drop]'), file = form.letter, consent = $('[data-consent]');
+  const MAX = 10 * 1024 * 1024, OK = { pdf: 'application/pdf', jpg: 'image/jpeg', jpeg: 'image/jpeg', png: 'image/png', heic: 'image/heic', heif: 'image/heif' };
+  let current = null, opened = 0, cfg = null, tsId = null;
+
+  if (CONFIG.idxUrl) $$('[data-idx]').forEach(a => { a.href = CONFIG.idxUrl; a.target = '_blank'; a.rel = 'noopener'; a.hidden = false; });
+
+  // time slots, 9:00 AM to 7:30 PM
+  const times = []; for (let m = 9 * 60; m <= 19 * 60 + 30; m += 30) { const h = Math.floor(m / 60), mm = m % 60; times.push([`${String(h).padStart(2, '0')}:${String(mm).padStart(2, '0')}`, `${(h + 11) % 12 + 1}:${String(mm).padStart(2, '0')} ${h < 12 ? 'AM' : 'PM'}`]); }
+  ['t1', 't2'].forEach((n, i) => { form[n].innerHTML = times.map(([v, l]) => `<option value="${v}"${v === (i ? '17:30' : '17:00') ? ' selected' : ''}>${l}</option>`).join(''); });
+  const ymd = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  const day = n => { const d = new Date(); d.setDate(d.getDate() + n); return d; };
+  ['d1', 'd2'].forEach((n, i) => { form[n].min = ymd(day(0)); form[n].max = ymd(day(90)); form[n].value = ymd(day(i + 1)); });
+
+  function setProp(h) {
+    current = h || null;
+    if (h) {
+      pick.innerHTML = `<div class="prop-card"><img src="img/${h.img}.webp" width="640" height="400" alt=""><span><b>${esc(h.title)}</b><small>${esc(h.city)}, MI · $${h.price.toLocaleString('en-US')}</small></span><button type="button" data-other>Other home</button></div>`;
+      free.hidden = true; $('[data-other]').onclick = () => { setProp(null); form.address.focus(); };
+    } else { pick.innerHTML = ''; free.hidden = false; }
+  }
+  function open(id) {
+    setProp(CONFIG.listings.find(h => h.id === id));
+    err.textContent = ''; $$('.bad', form).forEach(x => x.classList.remove('bad'));
+    if (form.hidden) reset();
+    opened = Date.now();
+    window.__lenis && window.__lenis.stop(); document.documentElement.style.overflow = 'hidden';
+    sheet.showModal(); setTimeout(() => $('.sh-body').scrollTop = 0);
+    loadCfg();
+  }
+  function close() { sheet.close(); }
+  sheet.addEventListener('close', () => { window.__lenis && window.__lenis.start(); document.documentElement.style.overflow = ''; });
+  sheet.addEventListener('click', e => { if (e.target === sheet) close(); });
+  $('[data-close]').onclick = close;
+  document.addEventListener('click', e => { const b = e.target.closest('[data-book]'); if (!b) return; e.preventDefault(); open(b.dataset.book); });
+
+  async function loadCfg() {
+    if (cfg) return; cfg = await fetch('/api/config').then(r => r.json()).catch(() => ({}));
+    if (cfg.turnstileSiteKey) {
+      const s = document.createElement('script'); s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit'; s.async = true;
+      s.onload = () => { tsId = turnstile.render('[data-ts]', { sitekey: cfg.turnstileSiteKey, size: 'flexible', appearance: 'interaction-only' }); };
+      document.head.appendChild(s);
+    }
+  }
+
+  // letter picker: check type and size before anything is sent
+  function showFile() {
+    const f = file.files[0];
+    if (!f) { drop.classList.remove('has'); $('[data-drop-t]').textContent = 'Attach your letter'; $('[data-drop-s]').textContent = 'PDF, JPG, PNG or HEIC, up to 10 MB. Optional, but sellers like to see it.'; consent.hidden = true; $('.rm', drop)?.remove(); return; }
+    const ext = (f.name.split('.').pop() || '').toLowerCase();
+    if (!OK[ext]) { file.value = ''; showFile(); bad(['letter'], 'That file type won’t work. Use a PDF, JPG, PNG or HEIC.'); return; }
+    if (f.size > MAX) { file.value = ''; showFile(); bad(['letter'], 'That file is over 10 MB. A PDF or a smaller photo works.'); return; }
+    drop.classList.add('has'); $('[data-drop-t]').textContent = f.name; $('[data-drop-s]').textContent = (f.size / 1048576).toFixed(1) + ' MB · ready to send';
+    if (!$('.rm', drop)) { const x = document.createElement('button'); x.type = 'button'; x.className = 'rm'; x.textContent = 'Remove'; x.onclick = e => { e.preventDefault(); file.value = ''; showFile(); }; drop.appendChild(x); }
+    consent.hidden = false; err.textContent = ''; $('[data-f="letter"]').classList.remove('bad');
+  }
+  file.addEventListener('change', showFile);
+
+  function bad(fields, msg) {
+    $$('.bad', form).forEach(x => x.classList.remove('bad'));
+    fields.forEach(f => { const el = $(`[data-f="${f}"]`, form); if (el) el.classList.add('bad'); });
+    err.textContent = msg || '';
+    const first = fields.map(f => $(`[data-f="${f}"]`, form)).find(Boolean); first && first.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  }
+  form.addEventListener('input', e => { const f = e.target.closest('[data-f]'); f && f.classList.remove('bad'); });
+
+  function collect() {
+    const v = n => form.elements[n].value.trim();
+    const property = current ? { id: current.id, address: `${current.title}, ${current.city}, MI`, title: current.title, city: current.city, price: current.price, url: `https://www.instagram.com/reel/${current.reel}/` } : { address: v('address') };
+    return { name: v('name'), phone: v('phone'), email: v('email'), message: form.message.value.trim(), property, slots: [{ date: v('d1'), time: v('t1') }, { date: v('d2'), time: v('t2') }], consent: form.consent.checked, website: form.website.value };
+  }
+  function check(d) {
+    const e = [];
+    if (d.property.address.length < 4) e.push('property');
+    if (!d.slots.every(s => s.date && s.time) || (d.slots[0].date === d.slots[1].date && d.slots[0].time === d.slots[1].time)) e.push('slots');
+    if (d.name.length < 2) e.push('name');
+    if (d.phone.replace(/\D/g, '').length < 10) e.push('phone');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(d.email)) e.push('email');
+    if (file.files[0] && !d.consent) e.push('consent');
+    return e;
+  }
+  const post = (u, b) => fetch(u, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(b) }).then(async r => ({ ok: r.ok, j: await r.json().catch(() => ({})) }));
+
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    const d = collect(), e2 = check(d);
+    if (e2.length) return bad(e2, e2.includes('slots') ? 'Pick two different times.' : e2.includes('consent') ? 'Tick the box so I can keep your letter.' : 'Check the highlighted fields.');
+    go.disabled = true; err.textContent = ''; go.textContent = 'Sending…';
+    try {
+      const turnstileToken = tsId !== null && window.turnstile ? turnstile.getResponse(tsId) : '';
+      const t = await post('/api/ticket', { website: d.website, elapsed: Date.now() - opened, turnstile: turnstileToken });
+      if (!t.ok) throw new Error(t.j.error || 'Something went wrong.');
+      let letter = null;
+      const f = file.files[0];
+      if (f) {
+        go.textContent = 'Uploading letter…';
+        const { upload } = await import('./assets/lib/blob-upload.js');
+        const ext = f.name.split('.').pop().toLowerCase();
+        const safe = f.name.replace(/\.[^.]+$/, '').replace(/[^\w-]+/g, '-').slice(0, 40) || 'letter';
+        const b = await upload(`letters/${t.j.id}/${safe}.${ext}`, f, { access: 'private', handleUploadUrl: '/api/upload', clientPayload: t.j.ticket, contentType: OK[ext], multipart: f.size > 5 * 1048576 });
+        letter = { pathname: b.pathname, name: f.name };
+        go.textContent = 'Sending…';
+      }
+      const r = await post('/api/showing', { ...d, ticket: t.j.ticket, letter });
+      if (!r.ok) { if (r.j.fields) bad(r.j.fields, r.j.error); else throw new Error(r.j.error || 'Something went wrong.'); return; }
+      done(d);
+    } catch (x) {
+      err.textContent = (x && x.message && x.message.length < 140 ? x.message : 'Something went wrong.') + ' You can also text me at ' + CONFIG.phone + '.';
+    } finally {
+      go.disabled = false; go.textContent = 'Send request';
+      if (tsId !== null && window.turnstile) turnstile.reset(tsId);
+    }
+  });
+
+  function done(d) {
+    form.hidden = true;
+    const box = document.createElement('div'); box.className = 'done'; box.setAttribute('data-done', '');
+    box.innerHTML = `<svg viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="28" cy="28" r="25"/><path d="M17 29l7 7 15-16"/></svg><h3>Got it, ${esc(d.name.split(' ')[0])}.</h3><p>Your request is with me. I’ll text you at ${esc(d.phone)} to lock in a time.</p><button class="btn solid" type="button" data-close2>Done</button>`;
+    $('.sh-body').appendChild(box); $('[data-close2]').onclick = close;
+  }
+  function reset() { form.reset(); form.hidden = false; $('[data-done]')?.remove(); showFile(); ['d1', 'd2'].forEach((n, i) => form[n].value = ymd(day(i + 1))); form.t1.value = '17:00'; form.t2.value = '17:30'; }
+  sheet.addEventListener('close', () => { if (form.hidden) setTimeout(reset, 300); });
   })();
   </script>
 </body>

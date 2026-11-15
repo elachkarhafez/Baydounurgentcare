@@ -27,6 +27,18 @@
       }
     },
     {
+      "src": "/(desk-[a-z0-9]+)/?",
+      "dest": "/api/desk?slug=$1"
+    },
+    {
+      "src": "/api/(.*)",
+      "headers": {
+        "cache-control": "no-store",
+        "X-Robots-Tag": "noindex, nofollow"
+      },
+      "continue": true
+    },
+    {
       "src": "/(.*)",
       "headers": {
         "X-Robots-Tag": "noai, noimageai, noarchive",
@@ -36,6 +48,17 @@
         "Referrer-Policy": "strict-origin-when-cross-origin"
       },
       "continue": true
+    }
+  ],
+  "functions": {
+    "api/*.js": {
+      "maxDuration": 30
+    }
+  },
+  "crons": [
+    {
+      "path": "/api/cleanup",
+      "schedule": "17 8 * * *"
     }
   ]
 }
