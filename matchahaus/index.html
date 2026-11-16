@@ -45,7 +45,7 @@ img,svg,canvas{display:block;max-width:100%}
 a{color:inherit}
 button,input,select{font:inherit;color:inherit}
 .wrap{width:min(1140px,100% - 2*var(--pad));margin-inline:auto}
-.wm{font-family:var(--hd);font-weight:900;font-variation-settings:'wdth' 84;letter-spacing:-.015em;line-height:.86;text-transform:uppercase}
+.wm{font-family:var(--hd);font-weight:900;font-variation-settings:'wdth' 76;letter-spacing:-.015em;line-height:.86;text-transform:uppercase}
 h1,h2,h3{font-family:var(--hd);font-weight:800;font-variation-settings:'wdth' 88;letter-spacing:-.015em;line-height:1.02}
 h1{font-size:clamp(1.8rem,1.2rem + 2.6vw,3.1rem)}
 h2{font-size:clamp(1.45rem,1.05rem + 1.7vw,2.4rem)}
@@ -155,6 +155,45 @@ footer .wm{font-size:28px;color:var(--ink)}
 .rv{opacity:0;transform:translateY(16px);transition:opacity .7s ease,transform .7s ease}
 .rv.in{opacity:1;transform:none}
 
+/* ---------- the can film: 72 Cycles frames, scroll-driven, glides to the scroll position ---------- */
+(function film() {
+  const sec = $('#film'), cv = $('#fcv'); if (!sec) return;
+  const ctx = cv.getContext('2d', { alpha: false }), N = 72, BG = '#efeeea', img = new Array(N).fill(null), wide = matchMedia('(min-width:900px)');
+  const caps = $$('.fcap', sec).map(el => ({ el, a: +el.dataset.a, b: +el.dataset.b, v: -1 })), bars = $$('.fcount b', sec);
+  let dirty = true, shown = -1, started = false;
+  const load = i => { if (img[i] !== null) return; img[i] = false; const im = new Image(); im.src = `media/film/f${String(i).padStart(2, '0')}.webp`; im.decode().then(() => { img[i] = im; dirty = true; }).catch(() => { img[i] = null; }); };
+  const order = [...Array(N).keys()].sort((a, b) => ((a % 8 ? 1 : 0) - (b % 8 ? 1 : 0)) || ((a % 2 ? 1 : 0) - (b % 2 ? 1 : 0)) || a - b);
+  function start() { if (started) return; started = true; let q = 0; (function pump() { for (let n = 0; n < 6 && q < N; n++) load(order[q++]); if (q < N) setTimeout(pump, 90); })(); }
+  load(0); new IntersectionObserver(e => { if (e[0].isIntersecting) start(); }, { rootMargin: '1200px 0px' }).observe(sec);
+  const size = () => { const d = Math.min(devicePixelRatio || 1, 2); cv.width = Math.round(cv.clientWidth * d); cv.height = Math.round(cv.clientHeight * d); dirty = true; };
+  addEventListener('resize', size); size();
+  function nearest(i) { if (img[i]) return i; for (let d = 1; d < N; d++) { if (img[i - d]) return i - d; if (img[i + d]) return i + d; } return -1; }
+  function draw(t) {
+    const k = nearest(Math.round(t * (N - 1))); if (k < 0 || (k === shown && !dirty)) return; shown = k; dirty = false;
+    const A = img[k], W = cv.width, H = cv.height, iw = A.naturalWidth, ih = A.naturalHeight;
+    ctx.fillStyle = BG; ctx.fillRect(0, 0, W, H);
+    if (wide.matches) { const s = Math.min(H * .98 / ih, W * .5 / iw), dw = iw * s, dh = ih * s; ctx.drawImage(A, Math.min(W - dw, W * .64 - dw / 2), (H - dh) / 2, dw, dh); }
+    else { const s = Math.min(W / iw, H * .7 / ih), dw = iw * s, dh = ih * s; ctx.drawImage(A, (W - dw) / 2, H - dh - H * .07, dw, dh); }
+  }
+  wide.addEventListener('change', () => { dirty = true; });
+  const progress = () => { const r = sec.getBoundingClientRect(), span = sec.offsetHeight - (innerHeight - nav()); return Math.min(1, Math.max(0, (nav() - r.top) / Math.max(1, span))); };
+  const nav = () => parseFloat(getComputedStyle(D).getPropertyValue('--nav')) || 56;
+  function ui(t) {
+    caps.forEach(c => {
+      const f = .045, v = Math.max(0, Math.min(1, (t - c.a) / f, (c.b - t) / f)), q = Math.round(v * 100) / 100;
+      if (q === c.v) return; c.v = q; c.el.style.opacity = q;       c.el.style.translate = `0 ${((1 - q) * 14).toFixed(1)}px`; c.el.classList.toggle('on', q > .5);
+    });
+    bars.forEach((b, i) => { const c = caps[i]; b.style.transform = `scaleX(${Math.max(0, Math.min(1, (t - c.a) / (Math.min(c.b, 1) - c.a))).toFixed(3)})`; });
+  }
+  let cur = progress(), prev = performance.now(), vis = false;
+  new IntersectionObserver(e => { vis = e[0].isIntersecting; }, { rootMargin: '200px 0px' }).observe(sec);
+  (function tick(now) {
+    const dt = Math.min(.05, (now - prev) / 1000); prev = now;
+    if (vis || dirty) { const p = progress(); cur = RM ? p : cur + (p - cur) * (1 - Math.exp(-dt * 9)); if (Math.abs(p - cur) < .0004) cur = p; draw(cur); ui(cur); }
+    requestAnimationFrame(tick);
+  })(prev);
+})();
+
 /* ---------- logo opening ---------- */
 .intro{display:none}
 html.opening .intro{display:block;position:fixed;inset:0;z-index:300;cursor:pointer;overflow:hidden;background:var(--bg)}
@@ -173,6 +212,28 @@ html.opening .brand{opacity:0}
 .inv .ilock .ey{color:#e2ead0}
 .iskip{position:absolute;left:50%;bottom:calc(26px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:6;font:600 12px/1 var(--f);letter-spacing:.06em;color:rgba(17,17,16,.45)}
 .bub{position:absolute;border-radius:50%;background:rgba(255,255,255,.35);z-index:5;pointer-events:none}
+
+/* the can film: scroll moves the camera from the pull ring, down the can to the H., then round it */
+.film{position:relative;height:300vh;background:var(--bg)}
+.fstage{position:sticky;top:var(--nav);height:calc(100svh - var(--nav));overflow:hidden}
+.fstage canvas{position:absolute;inset:0;width:100%;height:100%}
+.fcap{position:absolute;left:var(--pad);right:var(--pad);top:22px;text-align:center;opacity:0;will-change:opacity,translate;pointer-events:none}
+.fcap.on{pointer-events:auto}
+.fcap h2{font-size:clamp(1.4rem,1.1rem + 1.4vw,2.3rem);max-width:16ch;margin:0 auto}
+.fcap p{color:var(--mut);font-size:14.5px;max-width:36ch;margin:8px auto 0}
+.fcap .cta{justify-content:center;margin-top:14px}
+.fcount{position:absolute;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));transform:translateX(-50%);display:flex;gap:6px}
+.fcount i{width:22px;height:3px;border-radius:2px;background:var(--line);overflow:hidden;position:relative}
+.fcount i b{position:absolute;inset:0;background:var(--ink);transform-origin:0 50%;transform:scaleX(0)}
+.ilock .h,.big .haus{font-weight:500;font-variation-settings:'wdth' 100;letter-spacing:0}
+.brand span{font-weight:500;font-size:12px;letter-spacing:.04em}
+@media (min-width:900px){
+  .film{height:340vh}
+  .fcap{left:max(var(--pad),calc(50% - 570px));right:auto;top:50%;width:min(40%,440px);text-align:left;transform:translateY(-50%)}
+  .fcap h2,.fcap p{margin-left:0}
+  .fcap .cta{justify-content:flex-start}
+  .fcount{left:max(var(--pad),calc(50% - 570px));transform:none;bottom:40px}
+}
 
 @media (min-width:700px){
   :root{--pad:28px;--nav:64px}
@@ -208,7 +269,7 @@ html.opening .brand{opacity:0}
 <div class="intro" id="intro" aria-hidden="true">
   <div class="ilock" id="ilock"><span class="ey">Coffee &amp; Matcha Catering</span><span class="m wm" id="im"></span><span class="h wm">Haus</span></div>
   <div class="pour" id="pour"><svg viewBox="0 0 800 26" preserveAspectRatio="none" aria-hidden="true"><path d="M0 14C50 2 150 2 200 14S350 26 400 14 550 2 600 14 750 26 800 14V26H0Z" fill="#5c8a2a"/></svg></div>
-  <div class="inv" id="inv"><div class="ilock"><span class="ey" style="opacity:1">Coffee &amp; Matcha Catering</span><span class="m wm"><span style="opacity:1;font-variation-settings:'wdth' 84,'wght' 900">MATCHA</span></span><span class="h wm" style="opacity:1">Haus</span></div></div>
+  <div class="inv" id="inv"><div class="ilock"><span class="ey" style="opacity:1">Coffee &amp; Matcha Catering</span><span class="m wm"><span style="opacity:1;font-variation-settings:'wdth' 76,'wght' 900">MATCHA</span></span><span class="h wm" style="opacity:1">Haus</span></div></div>
   <div class="iskip">Tap to skip</div>
 </div>
 
@@ -231,6 +292,17 @@ html.opening .brand{opacity:0}
       <p class="lede">Weddings, bridal showers, birthdays and corporate days. We bring the cart, the cans come cold, and your guests take one and go.</p>
       <div class="cta" id="heroCta"><a class="btn" href="#plan">Plan your bar</a><a class="btn o" href="#menu">See the four flavors</a></div>
     </div>
+  </div>
+</section>
+
+<section class="film" id="film" aria-label="A closer look at the can">
+  <div class="fstage">
+    <canvas id="fcv" aria-hidden="true"></canvas>
+    <div class="fcap" data-a="0" data-b=".2"><h2>Sealed cold until someone cracks it.</h2><p>Every drink comes sealed in its own can, so it stays cold in the cooler until a guest pulls the tab.</p></div>
+    <div class="fcap" data-a=".3" data-b=".5"><h2>Look for the H.</h2><p>Clear can, white H. on the front. That's how your guests know it's ours.</p></div>
+    <div class="fcap" data-a=".58" data-b=".8"><h2>Bright green all the way down.</h2><p>You can see the matcha right through the can. Give it a shake before you open it.</p></div>
+    <div class="fcap" data-a=".88" data-b="1.01"><h2>Four flavors, one cart.</h2><div class="cta"><a class="btn" href="#plan">Plan your bar</a><a class="btn o" href="#menu">See the flavors</a></div></div>
+    <div class="fcount" aria-hidden="true"><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i></div>
   </div>
 </section>
 
@@ -413,7 +485,7 @@ const dio = new IntersectionObserver(es => { es.forEach(e => e.isIntersecting ? 
     Tm(() => s.animate([
       { opacity: 0, transform: 'translateY(-38%) scaleY(1.25)', fontVariationSettings: "'wdth' 125, 'wght' 100" },
       { opacity: 1, transform: 'translateY(4%) scaleY(.94)', fontVariationSettings: "'wdth' 80, 'wght' 900", offset: .62 },
-      { opacity: 1, transform: 'none', fontVariationSettings: "'wdth' 84, 'wght' 900" }
+      { opacity: 1, transform: 'none', fontVariationSettings: "'wdth' 76, 'wght' 900" }
     ], { duration: 560, easing: 'cubic-bezier(.2,.7,.2,1)', fill: 'forwards' }), 120 + i * 85);
   });
   Tm(() => $('.ey', lk).animate([{ opacity: 0, letterSpacing: '.6em' }, { opacity: 1, letterSpacing: '.2em' }], { duration: 600, easing: 'ease-out', fill: 'forwards' }), 700);

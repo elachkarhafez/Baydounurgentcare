@@ -5,7 +5,7 @@
 import bpy, bmesh, math, random, sys, os
 import numpy as np
 from math import sin, cos, pi, radians, sqrt
-from mathutils import Vector
+from mathutils import Vector, Matrix
 from bpe_assets import asset
 
 argv = sys.argv[sys.argv.index('--') + 1:] if '--' in sys.argv else []
@@ -170,10 +170,27 @@ def make_can(fl, x=0., turn=0.):
     lid = [(0., H + .0003), (RN - .0062, H + .0003), (RN - .0050, H + .0009), (RN - .0040, H + .0034), (RN - .0016, H + .0046),
            (RN + .0006, H + .0046), (RN + .0011, H + .0030), (RN + .0010, H - .0012), (RN + .0003, H - .0036), (RN - .0004, H - .0040)]
     lo = lathe('lid_' + fl, lid, parent=root); lo.data.materials.append(ALU)
-    bm = bmesh.new(); bmesh.ops.create_cube(bm, size=1.)
-    bmesh.ops.scale(bm, vec=(.019, .011, .0007), verts=bm.verts)
-    tab = obj('tab_' + fl, bm_mesh('tab', bm, False), root); tab.location = (.004, -.004, H + .0012); tab.rotation_euler = (0, 0, radians(30))
-    bv = tab.modifiers.new('bv', 'BEVEL'); bv.width = .0016; bv.segments = 5; tab.data.materials.append(ALU)
+    # the pull ring: an oval ring, its tongue riveted to the centre, and the scored opening beside it (like their real cans)
+    def torus_obj(name, R_, r_, loc, sy=1., rot=0., sz=1.):
+        bm_ = bmesh.new(); vs_ = []; NU_, NV_ = 64, 12
+        for i in range(NU_):
+            a = 2 * pi * i / NU_
+            for j in range(NV_):
+                b_ = 2 * pi * j / NV_
+                vs_.append(bm_.verts.new(((R_ + r_ * cos(b_)) * cos(a), (R_ + r_ * cos(b_)) * sin(a) * sy, r_ * sin(b_) * sz)))
+        for i in range(NU_):
+            for j in range(NV_):
+                a0, a1 = i * NV_ + j, ((i + 1) % NU_) * NV_ + j
+                bm_.faces.new((vs_[a0], vs_[a1], vs_[((i + 1) % NU_) * NV_ + (j + 1) % NV_], vs_[i * NV_ + (j + 1) % NV_]))
+        o_ = obj(name, bm_mesh(name, bm_), root); o_.location = loc; o_.rotation_euler = (0, 0, rot); o_.data.materials.append(ALU); return o_
+    torus_obj('ring_' + fl, .0072, .0012, (-.0055 * cos(radians(30)), -.0055 * sin(radians(30)), H + .0012), .78, radians(-30), .45)
+    torus_obj('score_' + fl, .0062, .0002, (.0135 * cos(radians(-30)), .0135 * sin(radians(-30)), H + .0002), .72, radians(-30), .5)
+    bm = bmesh.new(); bmesh.ops.create_cube(bm, size=1.); bmesh.ops.scale(bm, vec=(.0085, .0055, .0007), verts=bm.verts)
+    tab = obj('tab_' + fl, bm_mesh('tab', bm, False), root); tab.location = (0., 0., H + .0012); tab.rotation_euler = (0, 0, radians(-30))
+    tab.data.materials.append(ALU)
+    for e_ in tab.data.edges: e_.use_edge_sharp = False
+    bm = bmesh.new(); bmesh.ops.create_cone(bm, cap_ends=True, segments=24, radius1=.0017, radius2=.0013, depth=.001)
+    rv = obj('rivet_' + fl, bm_mesh('rivet', bm), root); rv.location = (0., 0., H + .0016); rv.data.materials.append(ALU)
     # liquid
     zb = .0030 + WALL + .0004; rw = lambda z: r_side(z) - WALL - .0005
     lp = [(0., zb), (.012, zb), (rw(.006) - .002, zb + .0006), (rw(.008), .008)]
@@ -181,7 +198,7 @@ def make_can(fl, x=0., turn=0.):
     lp += [(rw(FL) - .0005, FL + .0007), (rw(FL) - .003, FL + .0001), (0., FL)]
     lq = lathe('liq_' + fl, lp, parent=root, closed=True); lq.data.materials.append(drink(fl))
     # the white H. printed on the front, wrapped on the wall
-    LW, LH, ZL = .036, .036, .060
+    LW, LH, ZL = .046, .046, .066          # their H. is big: about a third of the can across
     span = LW / R; a0 = -pi / 2 - span / 2
     bm = bmesh.new(); uvl = bm.loops.layers.uv.new('UVMap'); NU, NV = 48, 12; g = []
     for i in range(NU + 1):
@@ -197,10 +214,10 @@ def make_can(fl, x=0., turn=0.):
     # a light sweat below the fill line
     bm = bmesh.new(); t = bmesh.new(); bmesh.ops.create_uvsphere(t, u_segments=10, v_segments=6, radius=1.)
     tv = [v.co.copy() for v in t.verts]; tf = [[v.index for v in f.verts] for f in t.faces]; t.free()
-    for k in range(260):
+    for k in range(int(os.environ.get('MH_DROPS', '1500'))):
         z = random.uniform(.012, FL - .006); a = random.uniform(-pi, pi)
         if abs(((a + pi / 2 + pi) % (2 * pi)) - pi) < span * .6 and abs(z - ZL) < LH * .55: continue   # keep the print clean
-        r0 = .0003 + .0009 * random.random() ** 2.6
+        r0 = .00025 + .0008 * random.random() ** 2.8
         n_ = Vector((cos(a), sin(a), 0)); tu = Vector((-sin(a), cos(a), 0)); tz = Vector((0, 0, 1))
         base = Vector((R * cos(a), R * sin(a), z)) - n_ * .0001
         vs = [bm.verts.new(base + tu * c.x * r0 + tz * c.y * r0 * random.uniform(1., 1.25) + n_ * max(c.z, 0) * r0 * .75) for c in tv]
@@ -257,6 +274,7 @@ wo = wn.nodes.new('ShaderNodeOutputWorld'); wn.links.new(env.outputs[0], bg.inpu
 cd = bpy.data.cameras.new('cam'); cd.sensor_fit = 'VERTICAL'; cd.sensor_height = 24.; cd.clip_start = .01
 cd.dof.use_dof = True; cd.dof.aperture_fstop = 9.
 cam = obj('cam', cd); scn.camera = cam
+FILM = os.environ.get('MH_FILM')
 if WHAT == 'lineup':
     cd.sensor_fit = 'HORIZONTAL'; cd.sensor_width = 36.; cd.lens = 62.; el = radians(6.); dist = 1.02; tz = .082
 else:
@@ -275,6 +293,47 @@ scn.view_settings.view_transform = os.environ.get('MH_VT', 'Khronos PBR Neutral'
 scn.view_settings.exposure = float(os.environ.get('MH_EV', '-3.85'))
 for o_ in bpy.data.objects:
     if any(o_.name.startswith(h) for h in filter(None, os.environ.get('MH_HIDE', '').split(','))): o_.hide_render = True
-r.filepath = OUT
-bpy.ops.render.render(write_still=True)
-print('done', OUT)
+# ------------------------------------------------------------------ the scroll film: macro on the pull ring, down the sweat to the H., orbit out to the hero
+KEYS = [  # t, target (x, y, z), azimuth deg (0 = front, the print side), elevation deg, distance, lens, f-stop
+    (0.00, (-.004, .002, H + .002), -48., 52., .105, 90., 2.4),
+    (0.20, (0., -.01, H - .006), -26., 24., .13, 90., 2.6),
+    (0.42, (0., -R, .070), 8., 4., .12, 85., 2.8),
+    (0.62, (0., 0., .082), 120., 9., .30, 75., 4.),
+    (0.82, (0., 0., .082), 270., 8., .46, 70., 6.),
+    (1.00, (0., 0., .082), 360., 5.5, .60, 70., 9.)]
+def camkey(t):
+    for i in range(1, len(KEYS)):
+        if t <= KEYS[i][0]:
+            a, b_ = KEYS[i - 1], KEYS[i]; u = smooth((t - a[0]) / (b_[0] - a[0])); break
+    else: a = b_ = KEYS[-1]; u = 1.
+    L = lambda x, y: x + (y - x) * u
+    tg = Vector(tuple(L(a[1][k], b_[1][k]) for k in range(3)))
+    return tg, radians(L(a[2], b_[2])), radians(L(a[3], b_[3])), L(a[4], b_[4]), L(a[5], b_[5]), L(a[6], b_[6])
+CANROOT = bpy.data.objects.get('can_' + WHAT)
+def place(t):
+    # turntable: the can turns under a camera that only drifts a little, so the studio light and the sweep stay put
+    tg, az, el, dist, lens, fs = camkey(t)
+    ca = az * .12; spin = az - ca
+    CANROOT.rotation_euler = (0, 0, radians(TURN) - spin)
+    tg = Matrix.Rotation(-spin, 4, 'Z') @ tg
+    cam.location = tg + Vector((sin(ca) * cos(el), -cos(ca) * cos(el), sin(el))) * dist
+    cam.rotation_euler = (tg - cam.location).to_track_quat('-Z', 'Y').to_euler()
+    cd.lens = lens; cd.dof.aperture_fstop = fs; cd.dof.focus_distance = (cam.location - tg).length
+if FILM:
+    r.film_transparent = True; cy.film_transparent_glass = True; r.image_settings.color_mode = 'RGBA'
+    sweep.is_shadow_catcher = True
+    for o_ in bpy.data.objects:      # only the can may shade the catcher, or the black flags print grey slabs on the page
+        if o_.name.startswith('flag'): o_.visible_shadow = False
+    NF = int(os.environ.get('MH_N', '84')); sel = os.environ.get('MH_FRAMES', 'all')
+    frames = range(NF) if sel == 'all' else [int(x) for x in sel.split(',')]
+    os.makedirs(OUT, exist_ok=True)
+    for f in frames:
+        fp = os.path.join(OUT, 'f%03d.png' % f)
+        if sel == 'all' and os.path.exists(fp): continue
+        place(f / (NF - 1)); r.filepath = fp
+        bpy.ops.render.render(write_still=True)
+    print('done film')
+else:
+    r.filepath = OUT
+    bpy.ops.render.render(write_still=True)
+    print('done', OUT)
