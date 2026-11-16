@@ -177,7 +177,7 @@ footer a{color:var(--ink)}
 .intro{display:none}
 html.opening .intro{display:block;position:fixed;inset:0;z-index:300;cursor:pointer;overflow:hidden;background:radial-gradient(120% 80% at 50% 40%,#fdf3f5,#f7dde2)}
 html.opening .brand svg{opacity:0}
-.env{position:absolute;left:50%;top:52%;width:min(84vw,380px);aspect-ratio:1.45;transform:translate(-50%,-50%);perspective:900px}
+.env{position:absolute;left:50%;top:52%;width:min(84vw,440px);aspect-ratio:1.45;transform:translate(-50%,-50%);perspective:900px}
 .env .back{position:absolute;inset:0;background:#f1c7cf;border-radius:10px}
 .env .card{position:absolute;left:6%;right:6%;top:6%;bottom:6%;background:var(--cream);border-radius:8px;box-shadow:0 6px 18px rgba(86,44,52,.15);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4%;padding:6%}
 .env .card svg{width:34%;color:var(--gold)}
@@ -407,39 +407,46 @@ const dio = new IntersectionObserver(es => { es.forEach(e => e.isIntersecting ? 
   $$('#imark .ln').forEach(p => p.setAttribute('pathLength', '1'));
   const wl = $('#iwl'); 'ALEL & PETALS'.split('').forEach(ch => { const s = document.createElement('span'); s.textContent = ch === ' ' ? ' ' : ch; if (ch === '&') s.style.color = 'var(--rose)'; wl.appendChild(s); });
   // the envelope floats in, the seal wiggles and pops
-  env.animate([{ transform: 'translate(-50%,-40%) rotate(-4deg)', opacity: 0 }, { transform: 'translate(-50%,-50%) rotate(-1.5deg)', opacity: 1 }], { duration: 420, easing: 'cubic-bezier(.2,.8,.2,1)', fill: 'forwards' });
-  Tm(() => seal.animate([{ transform: 'rotate(0)' }, { transform: 'rotate(-12deg)' }, { transform: 'rotate(10deg)' }, { transform: 'rotate(0)' }], { duration: 300 }), 380);
-  Tm(() => seal.animate([{ transform: 'scale(1)', opacity: 1 }, { transform: 'scale(1.35)', opacity: 1, offset: .4 }, { transform: 'scale(.2) translateY(-60px)', opacity: 0 }], { duration: 380, easing: 'ease-in', fill: 'forwards' }), 680);
-  // the flap opens backwards, the card slides up out of the envelope
-  Tm(() => { flap.animate([{ transform: 'rotateX(0)' }, { transform: 'rotateX(180deg)' }], { duration: 420, easing: 'cubic-bezier(.4,0,.2,1)', fill: 'forwards' }); flap.style.zIndex = 0; }, 820);
-  Tm(() => card.animate([{ transform: 'translateY(0)' }, { transform: 'translateY(-46%) scale(1.04)' }], { duration: 560, easing: 'cubic-bezier(.2,.8,.2,1)', fill: 'forwards' }), 1080);
+  env.animate([{ transform: 'translate(-50%,-40%) rotate(-4deg)', opacity: 0 }, { transform: 'translate(-50%,-50%) rotate(-1.5deg)', opacity: 1 }], { duration: 380, easing: 'cubic-bezier(.2,.8,.2,1)', fill: 'forwards' });
+  Tm(() => seal.animate([{ transform: 'rotate(0)' }, { transform: 'rotate(-12deg)' }, { transform: 'rotate(10deg)' }, { transform: 'rotate(0)' }], { duration: 260 }), 300);
+  Tm(() => seal.animate([{ transform: 'scale(1)', opacity: 1 }, { transform: 'scale(1.35)', opacity: 1, offset: .4 }, { transform: 'scale(.2) translateY(-60px)', opacity: 0 }], { duration: 340, easing: 'ease-in', fill: 'forwards' }), 560);
+  // the flap opens backwards and the card slides up out of the pocket
+  Tm(() => { flap.animate([{ transform: 'rotateX(0)' }, { transform: 'rotateX(180deg)' }], { duration: 380, easing: 'cubic-bezier(.4,0,.2,1)', fill: 'forwards' }); flap.style.zIndex = 0; }, 660);
+  Tm(() => card.animate([{ transform: 'translateY(0)' }, { transform: 'translateY(-62%)' }], { duration: 380, easing: 'cubic-bezier(.3,.7,.3,1)', fill: 'forwards' }), 860);
+  // once it is clear of the pocket the card comes to the front and the envelope drops away, so nothing sits over the rose
+  Tm(() => {
+    card.style.zIndex = 6;
+    card.animate([{ transform: 'translateY(-62%)' }, { transform: 'translateY(-6%) scale(1.12)' }], { duration: 460, easing: 'cubic-bezier(.2,.8,.2,1)', fill: 'forwards' });
+    $$('.back,.front', env).forEach(el => el.animate([{ transform: 'translateY(0)', opacity: 1 }, { transform: 'translateY(55%)', opacity: 0 }], { duration: 420, easing: 'cubic-bezier(.5,0,.6,1)', fill: 'forwards' }));
+    flap.animate([{ transform: 'rotateX(180deg)', opacity: 1 }, { transform: 'translateY(55%) rotateX(180deg)', opacity: 0 }], { duration: 420, easing: 'cubic-bezier(.5,0,.6,1)', fill: 'forwards' });
+  }, 1220);
   // the rose draws itself in gold, the leaves fill, the name settles letter by letter
   Tm(() => {
-    $$('#imark .ln').forEach((p, i) => p.animate([{ strokeDashoffset: 1 }, { strokeDashoffset: 0 }], { duration: 520, delay: i * 45, easing: 'ease-in-out', fill: 'forwards' }));
-    $$('#imark .lf').forEach((p, i) => p.animate([{ opacity: 0, transform: 'scale(.6)' }, { opacity: 1, transform: 'none' }], { duration: 380, delay: 420 + i * 90, easing: 'cubic-bezier(.3,1.5,.5,1)', fill: 'forwards' }));
-    $$('#iwl span').forEach((s, i) => s.animate([{ opacity: 0, transform: 'translateY(60%)' }, { opacity: 1, transform: 'none' }], { duration: 360, delay: 260 + i * 40, easing: 'cubic-bezier(.2,.8,.2,1)', fill: 'forwards' }));
-  }, 1120);
-  // petals spill out
+    $$('#imark .ln').forEach((p, i) => p.animate([{ strokeDashoffset: 1 }, { strokeDashoffset: 0 }], { duration: 480, delay: i * 38, easing: 'ease-in-out', fill: 'forwards' }));
+    $$('#imark .lf').forEach((p, i) => p.animate([{ opacity: 0, transform: 'scale(.6)' }, { opacity: 1, transform: 'none' }], { duration: 360, delay: 380 + i * 80, easing: 'cubic-bezier(.3,1.5,.5,1)', fill: 'forwards' }));
+    $$('#iwl span').forEach((s, i) => s.animate([{ opacity: 0, transform: 'translateY(60%)' }, { opacity: 1, transform: 'none' }], { duration: 320, delay: 220 + i * 32, easing: 'cubic-bezier(.2,.8,.2,1)', fill: 'forwards' }));
+  }, 1260);
+  // petals spill out around the card
   Tm(() => {
-    if (RM) return; const r = env.getBoundingClientRect(), cols = ['#f6c4cf', '#ee9fb0', '#fde6a8', '#fff', '#c61f3b'];
+    if (RM) return; const r = card.getBoundingClientRect(), cols = ['#f6c4cf', '#ee9fb0', '#fde6a8', '#fff', '#c61f3b'];
     for (let i = 0; i < 22; i++) {
-      const p = document.createElement('i'); p.className = 'petal'; p.style.background = cols[i % 5]; p.style.left = (r.left + r.width / 2) + 'px'; p.style.top = (r.top + r.height * .25) + 'px'; p.style.zIndex = 5; box.appendChild(p);
-      const a = -Math.PI / 2 + (Math.random() - .5) * 2.6, d = 120 + Math.random() * 180;
-      p.animate([{ transform: 'translate(0,0) rotate(0)', opacity: 1 }, { transform: `translate(${Math.cos(a) * d}px,${Math.sin(a) * d}px) rotate(${(Math.random() - .5) * 500}deg)`, opacity: 1, offset: .5 }, { transform: `translate(${Math.cos(a) * d * 1.2}px,${Math.sin(a) * d + 220}px) rotate(${(Math.random() - .5) * 800}deg)`, opacity: 0 }], { duration: 1300 + Math.random() * 500, easing: 'cubic-bezier(.2,.7,.4,1)', fill: 'forwards' });
+      const p = document.createElement('i'); p.className = 'petal'; p.style.background = cols[i % 5]; p.style.left = (r.left + r.width / 2) + 'px'; p.style.top = (r.top + r.height * .5) + 'px'; p.style.zIndex = 1; box.appendChild(p);
+      const a = -Math.PI / 2 + (Math.random() - .5) * 3.4, d = 150 + Math.random() * 170;
+      p.animate([{ transform: 'translate(0,0) rotate(0)', opacity: 1 }, { transform: `translate(${Math.cos(a) * d}px,${Math.sin(a) * d}px) rotate(${(Math.random() - .5) * 500}deg)`, opacity: 1, offset: .5 }, { transform: `translate(${Math.cos(a) * d * 1.2}px,${Math.sin(a) * d + 220}px) rotate(${(Math.random() - .5) * 800}deg)`, opacity: 0 }], { duration: 1200 + Math.random() * 400, easing: 'cubic-bezier(.2,.7,.4,1)', fill: 'forwards' });
     }
-  }, 1700);
+  }, 1380);
   function end() { if (done) return; done = true; timers.forEach(clearTimeout); D.classList.remove('opening'); box.remove(); }
   function leave() {
     $('.iskip').remove();
     // the rose flies up into the nav while the envelope drops away and the blush fades
     const m = $('#imark').getBoundingClientRect(), b = $('#navLogo').getBoundingClientRect();
     $('#imark').animate([{ transform: 'none' }, { transform: `translate(${b.left + b.width / 2 - (m.left + m.width / 2)}px,${b.top + b.height / 2 - (m.top + m.height / 2)}px) scale(${b.width / m.width})` }], { duration: 700, easing: 'cubic-bezier(.65,0,.25,1)', fill: 'forwards' });
-    $$('.back,.front,.flap,#iwl', env).forEach(el => el.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 300, fill: 'forwards' }));
+    $('#iwl').animate([{ opacity: 1 }, { opacity: 0 }], { duration: 300, fill: 'forwards' });
     card.animate([{ background: 'var(--cream)', boxShadow: '0 6px 18px rgba(86,44,52,.15)' }, { background: 'transparent', boxShadow: '0 0 0 rgba(0,0,0,0)' }], { duration: 300, fill: 'forwards' });
     box.animate([{ background: getComputedStyle(box).background }, { opacity: 0 }], { duration: 500, delay: 300, fill: 'forwards' });
     Tm(end, 820);
   }
-  Tm(leave, 2420);
+  Tm(leave, 2300);
   const skip = () => { if (done) return; timers.forEach(clearTimeout); box.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 220, fill: 'forwards' }); setTimeout(end, 220); };
   box.addEventListener('click', skip);
   addEventListener('keydown', skip, { once: true });
