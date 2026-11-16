@@ -155,45 +155,6 @@ footer .wm{font-size:28px;color:var(--ink)}
 .rv{opacity:0;transform:translateY(16px);transition:opacity .7s ease,transform .7s ease}
 .rv.in{opacity:1;transform:none}
 
-/* ---------- the can film: 72 Cycles frames, scroll-driven, glides to the scroll position ---------- */
-(function film() {
-  const sec = $('#film'), cv = $('#fcv'); if (!sec) return;
-  const ctx = cv.getContext('2d', { alpha: false }), N = 72, BG = '#efeeea', img = new Array(N).fill(null), wide = matchMedia('(min-width:900px)');
-  const caps = $$('.fcap', sec).map(el => ({ el, a: +el.dataset.a, b: +el.dataset.b, v: -1 })), bars = $$('.fcount b', sec);
-  let dirty = true, shown = -1, started = false;
-  const load = i => { if (img[i] !== null) return; img[i] = false; const im = new Image(); im.src = `media/film/f${String(i).padStart(2, '0')}.webp`; im.decode().then(() => { img[i] = im; dirty = true; }).catch(() => { img[i] = null; }); };
-  const order = [...Array(N).keys()].sort((a, b) => ((a % 8 ? 1 : 0) - (b % 8 ? 1 : 0)) || ((a % 2 ? 1 : 0) - (b % 2 ? 1 : 0)) || a - b);
-  function start() { if (started) return; started = true; let q = 0; (function pump() { for (let n = 0; n < 6 && q < N; n++) load(order[q++]); if (q < N) setTimeout(pump, 90); })(); }
-  load(0); new IntersectionObserver(e => { if (e[0].isIntersecting) start(); }, { rootMargin: '1200px 0px' }).observe(sec);
-  const size = () => { const d = Math.min(devicePixelRatio || 1, 2); cv.width = Math.round(cv.clientWidth * d); cv.height = Math.round(cv.clientHeight * d); dirty = true; };
-  addEventListener('resize', size); size();
-  function nearest(i) { if (img[i]) return i; for (let d = 1; d < N; d++) { if (img[i - d]) return i - d; if (img[i + d]) return i + d; } return -1; }
-  function draw(t) {
-    const k = nearest(Math.round(t * (N - 1))); if (k < 0 || (k === shown && !dirty)) return; shown = k; dirty = false;
-    const A = img[k], W = cv.width, H = cv.height, iw = A.naturalWidth, ih = A.naturalHeight;
-    ctx.fillStyle = BG; ctx.fillRect(0, 0, W, H);
-    if (wide.matches) { const s = Math.min(H * .98 / ih, W * .5 / iw), dw = iw * s, dh = ih * s; ctx.drawImage(A, Math.min(W - dw, W * .64 - dw / 2), (H - dh) / 2, dw, dh); }
-    else { const s = Math.min(W / iw, H * .7 / ih), dw = iw * s, dh = ih * s; ctx.drawImage(A, (W - dw) / 2, H - dh - H * .07, dw, dh); }
-  }
-  wide.addEventListener('change', () => { dirty = true; });
-  const progress = () => { const r = sec.getBoundingClientRect(), span = sec.offsetHeight - (innerHeight - nav()); return Math.min(1, Math.max(0, (nav() - r.top) / Math.max(1, span))); };
-  const nav = () => parseFloat(getComputedStyle(D).getPropertyValue('--nav')) || 56;
-  function ui(t) {
-    caps.forEach(c => {
-      const f = .045, v = Math.max(0, Math.min(1, (t - c.a) / f, (c.b - t) / f)), q = Math.round(v * 100) / 100;
-      if (q === c.v) return; c.v = q; c.el.style.opacity = q;       c.el.style.translate = `0 ${((1 - q) * 14).toFixed(1)}px`; c.el.classList.toggle('on', q > .5);
-    });
-    bars.forEach((b, i) => { const c = caps[i]; b.style.transform = `scaleX(${Math.max(0, Math.min(1, (t - c.a) / (Math.min(c.b, 1) - c.a))).toFixed(3)})`; });
-  }
-  let cur = progress(), prev = performance.now(), vis = false;
-  new IntersectionObserver(e => { vis = e[0].isIntersecting; }, { rootMargin: '200px 0px' }).observe(sec);
-  (function tick(now) {
-    const dt = Math.min(.05, (now - prev) / 1000); prev = now;
-    if (vis || dirty) { const p = progress(); cur = RM ? p : cur + (p - cur) * (1 - Math.exp(-dt * 9)); if (Math.abs(p - cur) < .0004) cur = p; draw(cur); ui(cur); }
-    requestAnimationFrame(tick);
-  })(prev);
-})();
-
 /* ---------- logo opening ---------- */
 .intro{display:none}
 html.opening .intro{display:block;position:fixed;inset:0;z-index:300;cursor:pointer;overflow:hidden;background:var(--bg)}
@@ -222,7 +183,7 @@ html.opening .brand{opacity:0}
 .fcap h2{font-size:clamp(1.4rem,1.1rem + 1.4vw,2.3rem);max-width:16ch;margin:0 auto}
 .fcap p{color:var(--mut);font-size:14.5px;max-width:36ch;margin:8px auto 0}
 .fcap .cta{justify-content:center;margin-top:14px}
-.fcount{position:absolute;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));transform:translateX(-50%);display:flex;gap:6px}
+.fcount{position:absolute;left:50%;bottom:calc(14px + env(safe-area-inset-bottom));transform:translateX(-50%);display:flex;gap:6px}
 .fcount i{width:22px;height:3px;border-radius:2px;background:var(--line);overflow:hidden;position:relative}
 .fcount i b{position:absolute;inset:0;background:var(--ink);transform-origin:0 50%;transform:scaleX(0)}
 .ilock .h,.big .haus{font-weight:500;font-variation-settings:'wdth' 100;letter-spacing:0}
@@ -251,7 +212,7 @@ html.opening .brand{opacity:0}
   .hero{padding:30px 0 40px}
   .hero .wrap{display:grid;grid-template-columns:1.1fr .9fr;grid-template-areas:"ey stage" "big stage" "copy stage";align-items:center;column-gap:40px}
   .hero .ey{grid-area:ey;text-align:left;align-self:end}
-  .big{grid-area:big;text-align:left;font-size:clamp(130px,13vw,190px);margin-top:4px}
+  .big{grid-area:big;justify-self:start;text-align:center;font-size:clamp(130px,13vw,190px);margin-top:4px}
   .stage{grid-area:stage;width:min(100%,400px);margin:0 auto;font-size:16px}
   .hero .copy{grid-area:copy;text-align:left;margin-top:18px;align-self:start}
   .hero h1,.hero .lede{margin-left:0;text-align:left}
@@ -471,7 +432,46 @@ const rio = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersectin
 $$('.rv').forEach(el => rio.observe(el));
 const seen = new Set(), dock = $('#dock');
 const dio = new IntersectionObserver(es => { es.forEach(e => e.isIntersecting ? seen.add(e.target) : seen.delete(e.target)); dock.classList.toggle('hide', seen.size > 0); });
-['#heroCta', '#closeCta'].forEach(s => dio.observe($(s)));
+['#heroCta', '#closeCta', '.fstage'].forEach(s => dio.observe($(s)));
+
+/* ---------- the can film: 72 Cycles frames, scroll-driven, glides to the scroll position ---------- */
+(function film() {
+  const sec = $('#film'), cv = $('#fcv'); if (!sec) return;
+  const ctx = cv.getContext('2d', { alpha: false }), N = 72, BG = '#efeeea', img = new Array(N).fill(null), wide = matchMedia('(min-width:900px)');
+  const caps = $$('.fcap', sec).map(el => ({ el, a: +el.dataset.a, b: +el.dataset.b, v: -1 })), bars = $$('.fcount b', sec);
+  let dirty = true, shown = -1, started = false;
+  const load = i => { if (img[i] !== null) return; img[i] = false; const im = new Image(); im.src = `media/film/f${String(i).padStart(2, '0')}.webp`; im.decode().then(() => { img[i] = im; dirty = true; }).catch(() => { img[i] = null; }); };
+  const order = [...Array(N).keys()].sort((a, b) => ((a % 8 ? 1 : 0) - (b % 8 ? 1 : 0)) || ((a % 2 ? 1 : 0) - (b % 2 ? 1 : 0)) || a - b);
+  function start() { if (started) return; started = true; let q = 0; (function pump() { for (let n = 0; n < 6 && q < N; n++) load(order[q++]); if (q < N) setTimeout(pump, 90); })(); }
+  load(0); new IntersectionObserver(e => { if (e[0].isIntersecting) start(); }, { rootMargin: '1200px 0px' }).observe(sec);
+  const size = () => { const d = Math.min(devicePixelRatio || 1, 2); cv.width = Math.round(cv.clientWidth * d); cv.height = Math.round(cv.clientHeight * d); dirty = true; };
+  addEventListener('resize', size); size();
+  function nearest(i) { if (img[i]) return i; for (let d = 1; d < N; d++) { if (img[i - d]) return i - d; if (img[i + d]) return i + d; } return -1; }
+  function draw(t) {
+    const k = nearest(Math.round(t * (N - 1))); if (k < 0 || (k === shown && !dirty)) return; shown = k; dirty = false;
+    const A = img[k], W = cv.width, H = cv.height, iw = A.naturalWidth, ih = A.naturalHeight;
+    ctx.fillStyle = BG; ctx.fillRect(0, 0, W, H);
+    if (wide.matches) { const s = Math.min(H * .98 / ih, W * .5 / iw), dw = iw * s, dh = ih * s; ctx.drawImage(A, Math.min(W - dw, W * .64 - dw / 2), (H - dh) / 2, dw, dh); }
+    else { const s = Math.min(W * 1.2 / iw, H * .72 / ih), dw = iw * s, dh = ih * s; ctx.drawImage(A, (W - dw) / 2, H - dh - H * .035, dw, dh); }
+  }
+  wide.addEventListener('change', () => { dirty = true; });
+  const progress = () => { const r = sec.getBoundingClientRect(), span = sec.offsetHeight - (innerHeight - nav()); return Math.min(1, Math.max(0, (nav() - r.top) / Math.max(1, span))); };
+  const nav = () => parseFloat(getComputedStyle(D).getPropertyValue('--nav')) || 56;
+  function ui(t) {
+    caps.forEach(c => {
+      const f = .045, v = Math.max(0, Math.min(1, (t - c.a) / f, (c.b - t) / f)), q = Math.round(v * 100) / 100;
+      if (q === c.v) return; c.v = q; c.el.style.opacity = q;       c.el.style.translate = `0 ${((1 - q) * 14).toFixed(1)}px`; c.el.classList.toggle('on', q > .5);
+    });
+    bars.forEach((b, i) => { const c = caps[i]; b.style.transform = `scaleX(${Math.max(0, Math.min(1, (t - c.a) / (Math.min(c.b, 1) - c.a))).toFixed(3)})`; });
+  }
+  let cur = progress(), prev = performance.now(), vis = false;
+  new IntersectionObserver(e => { vis = e[0].isIntersecting; }, { rootMargin: '200px 0px' }).observe(sec);
+  (function tick(now) {
+    const dt = Math.min(.05, (now - prev) / 1000); prev = now;
+    if (vis || dirty) { const p = progress(); cur = RM ? p : cur + (p - cur) * (1 - Math.exp(-dt * 9)); if (Math.abs(p - cur) < .0004) cur = p; draw(cur); ui(cur); }
+    requestAnimationFrame(tick);
+  })(prev);
+})();
 
 /* ---------- logo opening ---------- */
 (function intro() {
