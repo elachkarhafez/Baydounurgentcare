@@ -2363,7 +2363,7 @@
     once('[data-closing]', () => { S('pour', .22); S('chime', .2, 1, .8); }, 'center 50%');
   })();
 
-  // CONTENT THAT CONVERTS: CON stays, TENT flips away, VERTS flips in, the growth chart builds, the results keep popping
+  // CONTENT THAT CONVERTS: CON sits alone, VERTS flips in, the growth chart builds, the results keep popping
   (() => {
     const box = $('[data-cvword]'); if (!box) return;
     const FROM = 'CONTENT', TO = 'CONVERTS.';
@@ -2371,20 +2371,17 @@
       'More Memberships', 'Email Sign-Ups', 'Customer Referrals', 'Collaboration Opportunities', 'More DMs', 'New Subscribers', 'Bigger Waitlists', 'Repeat Purchases',
       'Lasting Brand Loyalty', 'New Bookings', 'Store Visits', 'More Inquiries', 'Repeat Customers'];
     const mk = (ch, cls) => { const e = document.createElement('span'); e.className = 'lt' + (cls ? ' ' + cls : ''); e.textContent = ch; return e; };
-    const keep = [...FROM.slice(0, 3)].map(c => mk(c)), old = [...FROM.slice(3)].map(c => mk(c)), nw = [...TO.slice(3)].map(c => mk(c, 'nw'));
+    const keep = [...FROM.slice(0, 3)].map(c => mk(c)), nw = [...TO.slice(3)].map(c => mk(c, 'nw'));
     const sec = $('[data-conv]'), line = $('.cv-line', sec), tip = $('.cv-tip', sec), bars = $$('.cv-bars rect', sec), dots = $$('.cv-dots circle', sec), axis = $('.cv-axis', sec), pings = $$('.cv-n', sec);
     if (!ANIM) { box.replaceChildren(...keep, ...nw); return; }
-    box.replaceChildren(...keep, ...old);
+    box.replaceChildren(...keep, ...nw); gsap.set(nw, { rotationX: -90, opacity: 0, y: 12 });
     const dash = el => { const l = el.getTotalLength(); gsap.set(el, { strokeDasharray: l, strokeDashoffset: l }); };
     [line, tip, axis].forEach(dash); gsap.set([line, tip], { opacity: 0 });
     gsap.set(bars, { scaleY: 0 }); gsap.set(dots, { scale: 0, transformOrigin: '50% 50%' }); gsap.set(pings, { scale: 0, opacity: 0 });
     const tl = gsap.timeline({ paused: true });
     tl.from(['.cv-1', '.cv-2', box], { y: 40, opacity: 0, duration: .6, ease: 'back.out(1.8)', stagger: .1 })
       .to(axis, { strokeDashoffset: 0, duration: .6, ease: 'power2.inOut' }, .2)
-      .to(old, { rotationX: 90, opacity: 0, y: -10, duration: .22, ease: 'power2.in', stagger: .07 }, '+=.25')
-      .add(() => { old.forEach((o, i) => S('flip', .14, 1.2 + i * .08)); }, '<')
-      .add(() => { box.replaceChildren(...keep, ...nw); gsap.set(nw, { rotationX: -90, opacity: 0, y: 12 }); })
-      .to(nw, { rotationX: 0, opacity: 1, y: 0, duration: .34, ease: 'back.out(2.4)', stagger: .08 })
+      .to(nw, { rotationX: 0, opacity: 1, y: 0, duration: .34, ease: 'back.out(2.4)', stagger: .08 }, '+=.2')
       .add(() => { nw.forEach((o, i) => S('flip', .14, 1.5 + i * .07, i * .08)); }, '<')
       .to(bars, { scaleY: 1, duration: .5, ease: 'back.out(1.7)', stagger: .09 }, '-=.35')
       .add(() => bars.forEach((o, i) => S('drop', .1, 1 + i * .1, i * .09)), '<')
