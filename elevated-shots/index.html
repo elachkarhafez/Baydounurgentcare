@@ -2060,11 +2060,11 @@
     const fog = z => Math.max(0, Math.min(1, 1 - (z - 50) / 30));
     const vib = ms => { try { navigator.vibrate && navigator.vibrate(ms); } catch (e) {} };
 
-    const reset = () => Object.assign(G, { t: 0, ms: 0, dist: 0, v: 11, lane: 0, x: 0, cam: 0, y: 0, vy: 0, air: false, slide: 0, qslide: false, objs: [], parts: [], pops: [], nextRow: 6, bottles: 0, boosts: 0, boost: 0, stumble: 0, gap: 1.4, gapT: 1.9, over: false, overT: 0, run: 0, shx: 0, shy: 0, shake: 0, lean: 0, cd: 1.95, playing: false, flash: 0 });
+    const reset = () => Object.assign(G, { t: 0, ms: 0, dist: 0, v: 10, lane: 0, x: 0, cam: 0, y: 0, vy: 0, air: false, slide: 0, qslide: false, objs: [], parts: [], pops: [], nextRow: 6, bottles: 0, boosts: 0, boost: 0, stumble: 0, gap: 1.4, gapT: 1.9, over: false, overT: 0, run: 0, shx: 0, shy: 0, shake: 0, lean: 0, cd: 1.95, playing: false, flash: 0 });
 
     // rows: up to two lanes get something in the way, at least one lane always stays clear
     const spawnRow = z => { const lanes = [-1, 0, 1], free = lanes[Math.floor(rnd() * 3)];
-      const n = rnd() < Math.min(.62, .2 + G.t / 110) ? 2 : 1, blocked = lanes.filter(l => l !== free).sort(() => rnd() - .5).slice(0, n), types = {};
+      const n = rnd() < Math.min(.5, .14 + G.t / 140) ? 2 : 1, blocked = lanes.filter(l => l !== free).sort(() => rnd() - .5).slice(0, n), types = {};
       blocked.forEach(l => { const r = rnd(), k = r < .38 ? 'low' : r < .72 ? 'high' : 'bin'; types[l] = k; G.objs.push({ k, lane: l, z, t: rnd() * 6 }); });
       if (rnd() < .72) { const arc = blocked.find(l => types[l] === 'low' && rnd() < .4), l = arc != null ? arc : free;
         for (let i = 0; i < 5; i++) G.objs.push({ k: 'shot', lane: l, z: z - 4 + i * 2, y: arc != null ? .55 + Math.sin(i / 4 * Math.PI) * 1.35 : .55, f: FL[(i + (z | 0)) % 3].k, t: i * .7 }); }
@@ -2086,7 +2086,7 @@
       if (G.flash > 0) G.flash -= dt;
       if (!G.playing) { G.cd -= dt; G.run += dt * 6; G.gap += (1.4 - G.gap) * Math.min(1, dt * 3); if (G.cd <= 0) G.playing = true; return; }
       if (G.over) { G.overT += dt; G.gap += (G.gapT - G.gap) * Math.min(1, dt * 5); G.v *= .9; if (G.overT > 1.25 && !G.shown) { G.shown = true; gameOver(); } }
-      else { G.t += dt; G.ms += dt * 1000; G.v = Math.min(30, 11 + G.t * .19) * (G.stumble > 5.2 ? .72 : 1); }
+      else { G.t += dt; G.ms += dt * 1000; G.v = Math.min(26, 10 + G.t * .15) * (G.stumble > 5.2 ? .72 : 1); }
       const dz = G.v * dt; G.dist += G.over ? 0 : dz;
       const tx = G.lane * LW; G.x += (tx - G.x) * Math.min(1, dt * 13); G.lean += ((tx - G.x) * -14 - G.lean) * Math.min(1, dt * 10); G.cam += (G.x * .45 - G.cam) * Math.min(1, dt * 6);
       if (G.air) { G.vy -= 24 * dt; G.y += G.vy * dt; if (G.y <= 0) { G.y = 0; G.vy = 0; G.air = false; G.land = .2; if (G.qslide) { G.slide = .62; G.qslide = false; } dust(); } }
@@ -2095,14 +2095,15 @@
       G.run += dt * (5 + G.v * .42);
       if (!G.air && !G.over && G.slide <= 0) { G.pt = (G.pt || 0) + dt; if (G.pt > .085) { G.pt = 0; const [px, py] = P(G.x, 0, 0); G.parts.push({ k: 'puff', x: px + (rnd() - .5) * 24, y: py - 3, vx: (rnd() - .5) * 50, vy: -18 - rnd() * 26, g: 0, r: 7 + rnd() * 6, vr: 34, a: .32, c: '255,238,205' }); } }
       for (const o of G.objs) { o.z -= G.over ? 0 : dz; o.t += dt; if (o.smash) o.smash += dt; }
-      if (!G.over) { G.nextRow -= dz; if (G.nextRow <= 0) { spawnRow(78); G.nextRow = Math.max(9.5, 17.5 - G.v * .27); } }
+      if (!G.over) { G.nextRow -= dz; if (G.nextRow <= 0) { spawnRow(78); G.nextRow = Math.max(11, 19.5 - G.v * .27); } }
       if (!G.over) for (const o of G.objs) {
-        if (o.hit || Math.abs(o.z) > .6 || Math.abs(o.lane * LW - G.x) > LW * .55) continue;
+        const near = o.k === 'shot' || o.k === 'gold' ? 1 : .82;
+        if (o.hit || Math.abs(o.z) > .6 * near || Math.abs(o.lane * LW - G.x) > LW * .55 * near) continue;
         if (o.k === 'shot' || o.k === 'gold') { const top = G.y + (G.slide > 0 && !G.air ? .8 : 1.6); if (o.y < G.y - .3 || o.y > top) continue; o.hit = true;
           if (o.k === 'shot') { G.bottles++; burst(o, (FK[o.f] || FL[0]).c); pop('+10', o); vib(8); }
           else { G.boosts++; G.boost = 6; G.gapT = 3.4; G.flash = .35; pop('Immunity boost!', o, true); burst(o, '#fff3a0'); vib(30); }
           continue; }
-        let hit = o.k === 'low' ? G.y < .66 : o.k === 'high' ? !(G.slide > 0 && !G.air) : true;
+        let hit = o.k === 'low' ? G.y < .5 : o.k === 'high' ? !(G.slide > 0 && !G.air) : true;
         if (!hit) continue; o.hit = true;
         if (G.boost > 0) { o.smash = .001; pop('Smash!', o); G.shake = .22; vib(20); continue; }
         if (G.stumble > 0) { o.smash = .001; caught(); break; }
