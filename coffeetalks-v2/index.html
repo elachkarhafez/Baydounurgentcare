@@ -771,7 +771,11 @@
     .socials a svg { width: 20px; height: 20px; }
     .confetti { position: absolute; inset: 0; pointer-events: none; }
     .sign-off { background: var(--cream); text-align: center; padding: 40px 0 90px; }
-    .sign-off .logo-box { display: inline-block; padding: 22px 30px; border: 3px solid var(--ink); border-radius: 22px; background: var(--paper); box-shadow: 6px 6px 0 var(--bean); }
+    .sign-off .hang { position: relative; display: inline-block; padding-top: 54px; cursor: pointer; -webkit-tap-highlight-color: transparent; outline: none; }
+    .sign-off .hang .pin { position: absolute; left: 50%; top: 0; width: 38px; height: 44px; margin-left: -19px; z-index: 3; pointer-events: none; }
+    .sign-off .swing { position: relative; transform-origin: 50% -42px; }
+    .sign-off .cord { position: absolute; left: 0; top: -46px; width: 100%; height: 52px; overflow: visible; z-index: 0; }
+    .sign-off .logo-box { position: relative; z-index: 1; display: inline-block; padding: 22px 30px; border: 3px solid var(--ink); border-radius: 22px; background: var(--paper); box-shadow: 6px 6px 0 var(--bean); }
     .sign-off .logo-big { display: block; width: min(300px, 58vw); margin: 0 auto; }
     /* names on my cups */
     .regs { padding: 36px 0 28px; overflow: hidden; }
@@ -1233,7 +1237,13 @@
     </section>
   </main>
   <div class="sign-off">
-    <div class="logo-box"><img class="logo-big" src="img/logo.webp" width="1200" height="776" alt="Coffee Talks" loading="lazy"></div>
+    <div class="hang" data-hang data-cur="SWING" role="button" tabindex="0" aria-label="Coffee Talks logo, hanging from a pin. Tap to give it a swing.">
+      <div class="swing" data-swing>
+        <svg class="cord" viewBox="0 0 100 60" preserveAspectRatio="none" aria-hidden="true"><path d="M16 60 L50 6 L84 60" fill="none" stroke="#15100c" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/></svg>
+        <div class="logo-box"><img class="logo-big" src="img/logo.webp" width="1200" height="776" alt="Coffee Talks" loading="lazy"></div>
+      </div>
+      <svg class="pin" viewBox="0 0 40 46" aria-hidden="true"><ellipse cx="22" cy="42" rx="9" ry="3" fill="rgba(21,16,12,.18)"/><path d="M20 26 L21.6 41 L18.4 41 Z" fill="#8a8178" stroke="#15100c" stroke-width="1.2" stroke-linejoin="round"/><path d="M11 22 Q20 28 29 22 L27 17 Q20 20 13 17 Z" fill="#4a2e1c" stroke="#15100c" stroke-width="2" stroke-linejoin="round"/><circle cx="20" cy="12" r="10.5" fill="#5e3b25" stroke="#15100c" stroke-width="2.2"/><ellipse cx="16.5" cy="8.5" rx="3.6" ry="2.4" fill="#a8764c" transform="rotate(-30 16.5 8.5)"/></svg>
+    </div>
     <footer><div class="wrap"><span>© 2018 Coffee Talks</span><span class="f-contact"><a href="tel:+13132893399">📞 313-289-3399</a><a data-mail-plain href="#">✉️ coffeetalksbusiness@gmail.com</a></span></div></footer>
   </div>
   <div class="dock" data-dock><a class="btn solid" href="#package">Build Your Package</a><a class="btn" data-sms href="#">Text</a><a class="btn" data-dm href="#" target="_blank" rel="noopener">DM</a></div>
@@ -2427,6 +2437,21 @@
   (() => {
     const io = new IntersectionObserver(es => es.forEach(e => e.target.classList.toggle('zz', !e.isIntersecting)), { rootMargin: '120px 0px' });
     $$('main > section, main > div, footer, .sign-off').forEach(el => io.observe(el));
+  })();
+  // the sign-off logo hangs from a pin; a tap gives it a slow swing that settles
+  (() => {
+    const hang = $('[data-hang]'), sw = $('[data-swing]'); if (!hang || !sw) return;
+    let tl = null;
+    const swing = () => {
+      if (!ANIM) return;
+      S('whoosh', .06, .7);
+      const from = gsap.getProperty(sw, 'rotation') || 0, dir = from > 0 ? -1 : 1, amps = [7, 5.4, 4, 2.8, 1.8, 1, .45, 0];
+      if (tl) tl.kill();
+      tl = gsap.timeline();
+      amps.forEach((a, i) => tl.to(sw, { rotation: a * (i % 2 ? -dir : dir), duration: i === 0 ? 1.4 : 2.1 - i * .12, ease: 'sine.inOut' }));
+    };
+    hang.addEventListener('click', swing);
+    hang.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); swing(); } });
   })();
   addEventListener('load', () => ScrollTrigger.refresh());
   })();
