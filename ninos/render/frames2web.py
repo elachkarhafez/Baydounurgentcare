@@ -35,5 +35,7 @@ for i, f in enumerate(files):
     o = Image.fromarray(np.clip(flatten(a), 0, 255).round().astype(np.uint8))
     o.save(os.path.join(site, 'media/film/f%02d.webp' % i), 'WEBP', quality=84, method=6)
     if i == len(files) - 1:
-        o.save(os.path.join(site, 'media/cup.webp'), 'WEBP', quality=88, method=6)
+        w, h = o.size; cw, ch = int(w * .62), int(w * .62 * 1.25)       # the hero still: cropped in on the cup, same 4:5 shape
+        x0, y0 = (w - cw) // 2, int(h * .61 - ch / 2)
+        o.crop((x0, y0, x0 + cw, y0 + ch)).save(os.path.join(site, 'media/cup.webp'), 'WEBP', quality=88, method=6)
 print(len(files), 'frames')
