@@ -53,7 +53,7 @@
       --shadow: 5px 5px 0 var(--ink);
       --display: "Anton", Impact, sans-serif;
       --sans: "Instrument Sans", system-ui, sans-serif;
-      --hand: "Caveat", cursive;
+      --hand: "Caveat", cursive; /* Noor's rule: any font she asks to change uses this one (the Hi My Name Is Noor font) */
       --note: "Cormorant Garamond", Georgia, serif;
       --mono: "Courier Prime", "Courier New", monospace;
       --pad: clamp(16px, 4.5vw, 48px);
@@ -543,10 +543,35 @@
     .note.q { background: var(--espresso); color: var(--cream); box-shadow: 6px 6px 0 var(--bean); width: min(80vw, 380px); }
     .note.q::before { display: none; }
     .note.q p { font: italic 600 1rem/1.45 var(--sans); margin: 0; }
+    .quick { padding: 40px 0 44px; }
     .q-intro { margin-top: 14px; }
-    .q-intro p { margin: 0; font: italic 600 1.0625rem/1.4 var(--sans); color: var(--ink); }
-    .q-intro small { display: block; margin-top: 6px; font: 700 11px/1 var(--sans); letter-spacing: .18em; text-transform: uppercase; color: var(--bean); }
-    @media (min-width: 900px) { .q-intro p { font-size: 1.25rem; } .q-intro small { font-size: 12px; } }
+    .q-intro p { margin: 0; font: 700 1.6rem/1.1 var(--hand); color: var(--ink); }
+    .q-intro small { display: block; margin-top: 4px; font: 700 1.25rem/1 var(--hand); color: var(--bean); }
+    @media (min-width: 900px) { .quick { padding: 64px 0; } .q-intro p { font-size: 2.1rem; } .q-intro small { font-size: 1.5rem; } }
+    /* the book */
+    .book { position: relative; width: min(84vw, 380px); aspect-ratio: 5 / 4; margin: 26px auto 0; perspective: 1600px; touch-action: pan-y; user-select: none; -webkit-user-select: none; cursor: pointer; }
+    .book::before, .book::after { content: ""; position: absolute; inset: 0; border: 3px solid var(--ink); border-radius: 4px 14px 14px 4px; background: #efe2d0; }
+    .book::before { transform: translate(10px, 10px); background: var(--bean); }
+    .book::after { transform: translate(5px, 5px); }
+    .book .spine { position: absolute; left: -12px; top: -6px; bottom: -6px; width: 22px; z-index: 50; border: 3px solid var(--ink); border-radius: 10px; background: var(--bean); box-shadow: inset -4px 0 0 rgba(0,0,0,.18); }
+    .pages { position: absolute; inset: 0; z-index: 2; perspective: 1600px; }
+    .quick .days span { cursor: pointer; }
+    .pg { position: absolute; inset: 0; padding: 20px 20px 18px 30px; overflow: hidden; border: 3px solid var(--ink); border-radius: 4px 14px 14px 4px; transform-origin: 0 50%; backface-visibility: hidden; -webkit-backface-visibility: hidden; will-change: transform;
+      background: #fffdf8 repeating-linear-gradient(transparent 0 33px, rgba(201,162,122,.35) 33px 35px) 0 52px / 100% 100% no-repeat; box-shadow: inset 18px 0 20px -16px rgba(21,16,12,.35); }
+    .pg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(21,16,12,.0), rgba(21,16,12,.28)); opacity: var(--shade, 0); pointer-events: none; }
+    .pg .day { display: block; font: 700 1.35rem/1 var(--hand); color: var(--bean); }
+    .pg b { display: block; margin-top: 4px; font: 700 2.35rem/1 var(--hand); color: var(--ink); }
+    .pg p { margin: 10px 0 0; font: 600 1.4rem/1.25 var(--hand); color: var(--ink); }
+    .pg .pno { position: absolute; right: 16px; bottom: 10px; font: 700 1.1rem/1 var(--hand); color: var(--muted); }
+    .pg .done { position: absolute; right: 14px; top: 14px; padding: 4px 10px; border: 3px solid #5e3b25; border-radius: 8px; color: #5e3b25; font: 400 1rem/1 var(--display); letter-spacing: .04em; rotate: 10deg; opacity: 0; }
+    .pg.q { padding: 26px 24px 22px 34px; background: var(--espresso); color: var(--cream); display: flex; flex-direction: column; justify-content: center; }
+    .pg.q p { margin: 0; font: italic 600 1rem/1.45 var(--sans); color: var(--cream); }
+    .pg.q .by { display: block; margin-top: 12px; font: 700 1.9rem/1 var(--hand); color: var(--latte); }
+    .book-nav { display: flex; align-items: center; justify-content: center; gap: 18px; margin-top: 26px; }
+    .book-nav button { display: grid; place-items: center; width: 46px; height: 46px; border: 2.5px solid var(--ink); border-radius: 50%; background: var(--paper); color: var(--ink); box-shadow: 3px 3px 0 var(--bean); font: 400 1.5rem/1 var(--display); cursor: pointer; }
+    .book-nav button[disabled] { opacity: .35; cursor: default; }
+    .book-nav span { min-width: 74px; text-align: center; font: 700 1.5rem/1 var(--hand); color: var(--bean); }
+    @media (min-width: 900px) { .book { width: 460px; } .pg { padding: 26px 28px 22px 38px; } .pg b { font-size: 2.8rem; } .pg p { font-size: 1.6rem; } .pg.q p { font-size: 1.15rem; } }
     .note.q small.by { font-size: 14px; letter-spacing: .16em; }
     .note.q small { display: block; margin-top: 10px; font: 700 11px/1 var(--sans); letter-spacing: .18em; text-transform: uppercase; color: var(--latte); }
     .note.vid { padding: 8px; width: min(40vw, 180px); background: var(--ink); }
@@ -1079,50 +1104,18 @@
       <svg class="drip" data-drip viewBox="0 0 400 62" preserveAspectRatio="none" aria-hidden="true"></svg>
     </section>
 
-    <!-- IT'S JUST A QUICK VIDEO -->
+    <!-- IT'S JUST A QUICK VIDEO: her week as a little notebook you flip through -->
     <section class="quick" id="quick" data-quick>
-      <div class="quick-pin" data-quickpin>
-        <div class="wrap">
-          <h2 data-split>“It's Just A <span class="hl">Quick Video…”</span></h2>
-          <span class="stamp" data-qstamp>Quick To Watch.</span>
-          <div class="days" data-days><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span></div>
-          <div class="q-intro"><p>“A video that goes up Friday starts way before Friday.”</p><small>Here's my week for one Reel</small></div>
-        </div>
-        <div class="rail" data-rail><div class="track" data-track></div></div>
-        <span class="cue quick-cue" data-quickcue>Scroll To Move Through The Week <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2v11M4 9l4 4 4-4" fill="none" stroke="currentColor" stroke-width="2.2"/></svg></span>
-      </div>
-    </section>
-
-    <!-- WHERE I'VE BEEN -->
-    <section class="places" id="places">
-      <span class="ghost" data-ghost>Dearborn</span>
       <div class="wrap">
-        <div class="sec-head"><h2 data-split>Where I've <span class="hl">Been.</span></h2><span class="hand">Tap a bean to see the spot.</span></div>
-        <div class="p-grid">
-          <div class="map" data-map>
-            <svg viewBox="0 0 400 300" aria-label="A hand-drawn map of places Noor has filmed around Metro Detroit" role="img">
-              <rect width="400" height="300" fill="#f3ead9"/>
-              <path d="M300 0 C 320 80, 360 150, 400 190 V 300 H 340 C 330 240, 300 210, 290 160 C 282 110, 280 40, 270 0 Z" fill="#e3cfb6" stroke="#15100c" stroke-width="2"/>
-              <text transform="translate(346 200) rotate(66)" text-anchor="middle" font-family="Anton" font-size="11" fill="#5e3b25" letter-spacing="1">DETROIT RIVER</text>
-              <g fill="none" stroke="#15100c" stroke-linecap="round">
-                <path d="M0 214 C 120 206, 220 196, 300 190" stroke-width="5" stroke="#ffffff"/><path d="M0 214 C 120 206, 220 196, 300 190" stroke-width="1.5" stroke-dasharray="6 5"/>
-                <path d="M0 160 H 290" stroke-width="5" stroke="#ffffff"/><path d="M0 160 H 290" stroke-width="1.5"/>
-                <path d="M0 120 C 100 122, 200 118, 284 112" stroke-width="5" stroke="#ffffff"/><path d="M0 120 C 100 122, 200 118, 284 112" stroke-width="1.5"/>
-                <path d="M180 300 C 182 200, 176 100, 170 0" stroke-width="7" stroke="#ffffff"/><path d="M180 300 C 182 200, 176 100, 170 0" stroke-width="2"/>
-              </g>
-              <g font-family="Anton" font-size="10" fill="#6c5d50" letter-spacing=".8"><text x="8" y="210">I-94</text><text x="8" y="156">MICHIGAN AVE</text><text x="8" y="116">WARREN AVE</text><text x="184" y="290">SOUTHFIELD FWY</text></g>
-              <g font-family="Anton" font-size="18" fill="#15100c" letter-spacing="1" opacity=".18"><text x="196" y="150">DEARBORN</text><text x="24" y="98">DEARBORN HTS</text></g>
-              <path d="M200 110 C 210 70, 230 40, 240 6" fill="none" stroke="#15100c" stroke-width="2" stroke-dasharray="3 5"/>
-              <g transform="translate(232 6)"><rect x="-68" y="0" width="136" height="22" rx="11" fill="#ffffff" stroke="#15100c" stroke-width="2"/><text x="0" y="15" text-anchor="middle" font-family="Anton" font-size="10.5" letter-spacing=".6">↑ ROCHESTER HILLS · 35 MI</text></g>
-              <path d="M92 112 C 130 150, 180 96, 222 118 C 250 132, 238 160, 262 168" fill="none" stroke="#5e3b25" stroke-width="5" stroke-linecap="round" data-route/>
-              <g data-pins></g>
-              <g data-car><circle r="10" fill="#15100c"/><path d="M-5 -3 H5 L4 5 H-4 Z" fill="#ffffff"/></g>
-            </svg>
-            <span class="note-s">Not to scale</span>
-          </div>
-          <div class="cue-row phone-only" style="justify-content:flex-start"><span class="cue x">Swipe For More Spots <svg viewBox="0 0 16 16" aria-hidden="true"><use href="#i-arrow"/></svg></span></div>
-          <div class="spots" data-spots></div>
+        <h2 data-split>“It's Just A <span class="hl">Quick Video…”</span></h2>
+        <span class="stamp" data-qstamp>Quick To Watch.</span>
+        <div class="days" data-days><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span></div>
+        <div class="q-intro"><p>A video that goes up Friday starts way before Friday.</p><small>Here's my week for one Reel</small></div>
+        <div class="book" data-book data-cur="FLIP" role="group" aria-roledescription="book" aria-label="Noor's week for one Reel">
+          <span class="spine" aria-hidden="true"></span>
+          <div class="pages" data-pages></div>
         </div>
+        <div class="book-nav"><button type="button" data-bprev aria-label="Previous page">‹</button><span data-bcount aria-live="polite"></span><button type="button" data-bnext aria-label="Next page">›</button></div>
       </div>
     </section>
 
@@ -1732,37 +1725,60 @@
      "IT'S JUST A QUICK VIDEO": her week slides past, Mon → Fri
      ============================================================= */
   const quick = (() => {
-    const track = $('[data-track]'), days = $$('[data-days] span');
-    track.innerHTML = CONFIG.week.map(w => `<div class="note" data-day><span class="hand">${esc(w.d)} · ${esc(w.h)}</span><b>${esc(w.t)}</b><p>${esc(w.p)}</p><span class="done">DONE ✓</span></div>`).join('')
-      + `<div class="note q"><p>“A 30-second video represents hours of planning, creativity, production and attention to detail. You're investing in the work behind every second.”</p><small class="by">Noor</small></div>`;
-    const notes = $$('[data-day]', track);
-    const set = () => { const mid = innerWidth / 2; let active = -1;
-      notes.forEach((n, i) => { const r = n.getBoundingClientRect(); if (r.left + r.width * .3 < mid) active = i; n.classList.toggle('ok', r.right < mid + 20); });
-      days.forEach((d, i) => d.classList.toggle('on', i <= active)); };
-    return { set, track };
-  })();
-
-  /* =============================================================
-     WHERE I'VE BEEN: pins drop, the route draws, a little cup drives it
-     ============================================================= */
-  const map = (() => {
-    const P = CONFIG.places, pins = $('[data-pins]'), list = $('[data-spots]'), route = $('[data-route]'), car = $('[data-car]'), L = route.getTotalLength();
-    pins.innerHTML = P.map((p, i) => `<g class="pin" data-i="${i}" data-cur="TAP" transform="translate(${p.x} ${p.y})" tabindex="0" role="button" aria-label="${esc(p.n)}"><g data-drop><circle class="halo" r="15" fill="#c9a27a" opacity=".35"/><circle r="11" fill="#ffffff" stroke="#15100c" stroke-width="2.5"/><image href="img/bean.webp" x="-8" y="-8" width="16" height="16"/><text y="-19" text-anchor="middle" font-family="Anton" font-size="11" letter-spacing=".5" paint-order="stroke" stroke="#f3ead9" stroke-width="4">${i + 1}</text></g></g>`).join('');
-    list.innerHTML = P.map((p, i) => `<button type="button" class="spot" data-i="${i}"><img src="${esc(p.img)}" width="720" height="1280" alt="" loading="lazy"><span><b>${i + 1}. ${esc(p.n)}</b><small>${esc(p.a)}</small><span>${esc(p.w)}</span></span></button>`).join('');
-    route.style.strokeDasharray = L; route.style.strokeDashoffset = L;
-    const drive = p => { route.style.strokeDashoffset = L * (1 - p); const pt = route.getPointAtLength(L * p); car.setAttribute('transform', `translate(${pt.x.toFixed(1)} ${pt.y.toFixed(1)})`); };
-    drive(ANIM ? 0 : 1);
-    const pick = (i, scroll) => {
-      $$('.spot', list).forEach((s, k) => s.classList.toggle('on', k === i));
-      $$('.pin', pins).forEach((g, k) => { const h = $('.halo', g); h.setAttribute('r', k === i ? 22 : 15); h.setAttribute('opacity', k === i ? .7 : .35); });
-      if (ANIM) gsap.fromTo($$('[data-drop]', pins)[i], { y: -14 }, { y: 0, duration: .6, ease: 'bounce.out' });
-      if (scroll && !WIDE()) { const s = $$('.spot', list)[i]; list.scrollTo({ left: s.offsetLeft - list.offsetLeft - 16, behavior: RM ? 'auto' : 'smooth' }); }
+    const book = $('[data-book]'), wrap = $('[data-pages]'), days = $$('[data-days] span'), count = $('[data-bcount]'), prev = $('[data-bprev]'), next = $('[data-bnext]');
+    const W = CONFIG.week, N = W.length + 1;
+    wrap.innerHTML = W.map((w, i) => `<article class="pg" data-pg><span class="day">${esc(w.d)} · ${esc(w.h)}</span><b>${esc(w.t)}</b><p>${esc(w.p)}</p><span class="done">DONE ✓</span><span class="pno">${i + 1}</span></article>`).join('')
+      + `<article class="pg q" data-pg><p>“A 30-second video represents hours of planning, creativity, production and attention to detail. You're investing in the work behind every second.”</p><span class="by">Noor</span></article>`;
+    const pages = $$('[data-pg]', wrap);
+    let cur = 0, busy = false;
+    pages.forEach((pg, k) => { pg.style.zIndex = N - k; gsap.set(pg, { rotationY: 0 }); });
+    const ui = () => {
+      count.textContent = cur < W.length ? W[cur].d : 'Noor';
+      days.forEach((d, i) => d.classList.toggle('on', i <= cur));
+      prev.disabled = cur === 0; next.disabled = cur === N - 1;
     };
-    pins.addEventListener('click', e => { const g = e.target.closest('.pin'); if (g) pick(+g.dataset.i, true); });
-    pins.addEventListener('keydown', e => { const g = e.target.closest('.pin'); if (g && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); pick(+g.dataset.i, true); } });
-    list.addEventListener('click', e => { const s = e.target.closest('.spot'); if (s) pick(+s.dataset.i, false); });
-    pick(0, false);
-    return { drive };
+    // forward: today's page gets its DONE stamp, then turns over the spine
+    const fwd = (fast) => new Promise(res => {
+      if (cur >= N - 1) return res();
+      const pg = pages[cur], done = $('.done', pg);
+      if (!ANIM) { gsap.set(done, { opacity: 1 }); gsap.set(pg, { rotationY: -180 }); cur++; ui(); return res(); }
+      const tl = gsap.timeline({ onComplete: () => { cur++; ui(); res(); } });
+      if (done && !fast) tl.fromTo(done, { opacity: 0, scale: 2.2 }, { opacity: 1, scale: 1, duration: .22, ease: 'back.out(3)' }).add(() => S('stamp', .16, 1.2), '<').to({}, { duration: .12 });
+      else if (done) tl.set(done, { opacity: 1 });
+      tl.add(() => S('flip', .2, .9 + Math.random() * .2))
+        .to(pg, { rotationY: -180, duration: fast ? .38 : .75, ease: 'power2.inOut' })
+        .fromTo(pg, { '--shade': 0 }, { '--shade': 1, duration: fast ? .19 : .37, ease: 'power1.in' }, '<');
+    });
+    const back = (fast) => new Promise(res => {
+      if (cur <= 0) return res();
+      const pg = pages[cur - 1];
+      if (!ANIM) { gsap.set(pg, { rotationY: 0 }); cur--; ui(); return res(); }
+      S('flip', .2, 1.1);
+      gsap.timeline({ onComplete: () => { cur--; ui(); res(); } })
+        .to(pg, { rotationY: 0, duration: fast ? .38 : .7, ease: 'power2.inOut' })
+        .fromTo(pg, { '--shade': 1 }, { '--shade': 0, duration: fast ? .19 : .35, ease: 'power1.out' }, '<');
+    });
+    const run = async fn => { if (busy) return; busy = true; await fn(); busy = false; };
+    const goTo = i => run(async () => { while (cur < i) await fwd(true); while (cur > i) await back(true); });
+    next.addEventListener('click', () => run(() => fwd(false)));
+    prev.addEventListener('click', () => run(() => back(false)));
+    days.forEach((d, i) => { d.setAttribute('role', 'button'); d.tabIndex = 0; d.addEventListener('click', () => goTo(i)); d.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goTo(i); } }); });
+    // tap the right side (or swipe left) for the next page, the left side (or swipe right) to go back
+    let sx = null, sy = 0;
+    book.addEventListener('pointerdown', e => { sx = e.clientX; sy = e.clientY; });
+    book.addEventListener('pointerup', e => {
+      if (sx === null) return; const dx = e.clientX - sx, dy = e.clientY - sy; sx = null;
+      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) run(() => dx < 0 ? fwd(false) : back(false));
+      else if (Math.abs(dx) < 8 && Math.abs(dy) < 8) { const r = book.getBoundingClientRect(); run(() => e.clientX > r.left + r.width * .35 ? fwd(false) : back(false)); }
+    });
+    book.addEventListener('pointercancel', () => { sx = null; });
+    book.tabIndex = 0;
+    book.addEventListener('keydown', e => { if (e.key === 'ArrowRight') run(() => fwd(false)); if (e.key === 'ArrowLeft') run(() => back(false)); });
+    // the first time it's seen, the corner lifts a little so people know it turns
+    if (ANIM) onScreen(book, v => { if (!v || book.dataset.peeked) return; book.dataset.peeked = 1;
+      gsap.timeline({ delay: .7 }).to(pages[0], { rotationY: -24, duration: .45, ease: 'power2.out' }).to(pages[0], { rotationY: 0, duration: .6, ease: 'elastic.out(1, .5)' }); }, '-80px');
+    ui();
+    return { set: () => {} };
   })();
 
   /* =============================================================
@@ -2140,10 +2156,6 @@
 
   // brewed: pin + scrub
   ScrollTrigger.create({ trigger: '[data-brew]', start: 'top top', end: '+=260%', pin: '[data-brewpin]', scrub: .6, onUpdate: s => { brew.set(s.progress); $('[data-brewcue]').classList.toggle('gone', s.progress > .94); } });
-  // quick video: pin + sideways
-  (() => { const tr = quick.track, dist = () => Math.max(0, tr.scrollWidth - innerWidth + 24);
-    gsap.to(tr, { x: () => -dist(), ease: 'none', scrollTrigger: { trigger: '[data-quick]', start: 'top top', end: () => '+=' + (dist() + innerHeight * .4), pin: '[data-quickpin]', scrub: .6, invalidateOnRefresh: true, onUpdate: s => { quick.set(); $('[data-quickcue]').classList.toggle('gone', s.progress > .94); } } });
-    quick.set(); })();
   // headings: letters bounce up one by one
   $$('main h2[data-split]').forEach(h => { const ch = $$('.ch', h); gsap.from(ch, { yPercent: 110, rotation: () => gsap.utils.random(-25, 25), opacity: 0, duration: .7, ease: 'back.out(2)', stagger: .025, scrollTrigger: { trigger: h, start: 'top 88%' } }); });
 
@@ -2274,7 +2286,6 @@
     const once = (trig, fn, start = 'top 82%') => { if ($(trig)) ScrollTrigger.create({ trigger: trig, start, once: true, onEnter: fn }); };
     once('[data-qstamp]', () => S('stamp', .28));
 
-    once('.map', () => [0, 1, 2, 3, 4].forEach(k => S('drop', .14, 1 + k * .08, .2 + k * .15)), 'top 70%');
     once('.sign-off', () => S('ding', .2), 'top 85%');
     once('[data-closing]', () => { S('pour', .22); S('chime', .2, 1, .8); }, 'center 50%');
   })();
@@ -2335,12 +2346,9 @@
   $$('[data-par]').forEach(el => gsap.fromTo(el, { y: () => -el.dataset.par * .5 }, { y: () => +el.dataset.par * .5, ease: 'none', scrollTrigger: { trigger: el.closest('section'), start: 'top bottom', end: 'bottom top', scrub: .6 } }));
   if (FINE) { const q = $$('.hero .collage .stk').map(p => [gsap.quickTo(p, 'xPercent', { duration: .8, ease: 'power3' }), gsap.quickTo(p, 'yPercent', { duration: .8, ease: 'power3' })]); addEventListener('pointermove', e => { const x = e.clientX / innerWidth - .5, y = e.clientY / innerHeight - .5; q.forEach(([qx, qy], i) => { qx(x * (8 + i * 5)); qy(y * (6 + i * 4)); }); }, { passive: true }); }
   const pop = (sel, trig, st = .07, tilt = 8) => { if (!$(trig)) return; gsap.from(sel, { y: tilt ? 60 : 36, rotation: () => gsap.utils.random(-tilt, tilt), opacity: 0, duration: tilt ? .8 : .6, ease: tilt ? 'back.out(1.6)' : 'power3.out', stagger: st, scrollTrigger: { trigger: trig, start: 'top 85%' } }); };
-  pop('.mi', '.menu-list', .06, 0); gsap.from('.spot', { y: 36, opacity: 0, duration: .6, ease: 'power3.out', stagger: .08, clearProps: 'transform,opacity', scrollTrigger: { trigger: '.spots', start: 'top 85%' } }); pop('.biz button', '.biz', .05); pop('.slot', '.slot');
+  pop('.mi', '.menu-list', .06, 0); pop('.biz button', '.biz', .05); pop('.slot', '.slot');
   gsap.from('[data-qstamp]', { scale: 3, opacity: 0, rotation: -30, duration: .5, ease: 'back.out(2.5)', scrollTrigger: { trigger: '[data-qstamp]', start: 'top 82%' } });
   gsap.from('.logo-big', { y: 40, scale: .9, opacity: 0, duration: 1, ease: 'back.out(1.5)', scrollTrigger: { trigger: '.sign-off', start: 'top 85%' } });
-  gsap.from('.map', { y: 60, rotation: -2, opacity: 0, duration: .9, ease: 'back.out(1.4)', scrollTrigger: { trigger: '.map', start: 'top 85%' } });
-  gsap.from('[data-drop]', { y: -60, opacity: 0, duration: .7, ease: 'bounce.out', stagger: .15, scrollTrigger: { trigger: '.map', start: 'top 70%' } });
-  ScrollTrigger.create({ trigger: '.map', start: 'top 75%', end: 'bottom 35%', scrub: .6, onUpdate: s => map.drive(s.progress) });
   // drips stretch as their section leaves
   $$('[data-drip]').forEach(svg => gsap.fromTo($$('rect', svg).slice(1), { scaleY: .25 }, { scaleY: 1, ease: 'none', stagger: { each: .02, from: 'random' }, scrollTrigger: { trigger: svg, start: 'top bottom', end: 'bottom 40%', scrub: .6 } }));
 
