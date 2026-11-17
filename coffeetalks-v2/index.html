@@ -672,13 +672,21 @@
     .cv-3 { display: inline-flex; perspective: 600px; }
     .cv-3 .lt { display: inline-block; transform-origin: 50% 50%; backface-visibility: hidden; }
     .cv-3 .lt.nw { color: var(--bean); }
-    .cv-arrow { display: block; width: min(58%, 340px); height: auto; margin: 2px 0 0 4%; overflow: visible; }
+    .cv-graph { display: block; width: min(60%, 360px); height: auto; margin: 10px 0 0; overflow: visible; }
+    .cv-bars rect { fill: #d2b08e; stroke: #15100c; stroke-width: 2.5; transform-box: fill-box; transform-origin: 50% 100%; }
+    .cv-bars rect:nth-child(even) { fill: #efe2d0; }
+    .cv-bars rect:last-child { fill: #5e3b25; }
+    .cv-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
     .cv-pings { position: absolute; inset: 0; pointer-events: none; }
+    .cv-n b { font-weight: 600; line-height: 1.15; }
+    @media (max-width: 899px) { .cv-pings .cv-n { white-space: normal; max-width: 41vw; } }
+    .cv-n i { flex: none; }
     .cv-n { position: absolute; display: inline-flex; align-items: center; gap: 7px; padding: 8px 12px 8px 9px; border: 2px solid var(--ink); border-radius: 999px; background: var(--paper); box-shadow: 3px 3px 0 var(--ink); font: 600 12.5px/1 var(--sans); white-space: nowrap; }
     .cv-n i { width: 18px; height: 18px; border-radius: 50%; background: var(--bean) url(img/bean-light.webp) center / 12px no-repeat; }
     .cv-n.n1 { right: 0; top: 2%; rotate: 4deg; } .cv-n.n2 { right: 0; top: 23%; rotate: -3deg; } .cv-n.n3 { right: 0; top: 55%; rotate: 3deg; }
-    .cv-p { max-width: 46ch; margin: 14px 0 0; color: var(--muted); font-size: .9375rem; }
-    @media (min-width: 900px) { .convert { padding: 64px 0 48px; } .cv-arrow { width: min(78%, 340px); } .cv-n { font-size: 15px; padding: 10px 16px 10px 11px; } .cv-n.n1 { right: 14%; top: 6%; } .cv-n.n2 { right: 4%; top: 34%; } .cv-n.n3 { right: 18%; top: 60%; } .cv-p { font-size: 1.0625rem; } }
+    .cv-p { margin: 16px 0 0; font: 400 clamp(1.15rem, .9rem + 1.2vw, 1.75rem)/1.1 var(--display); text-transform: uppercase; letter-spacing: .02em; color: var(--ink); }
+    .cv-p span { display: inline-block; } .cv-p span:last-child { color: var(--bean); }
+    @media (min-width: 900px) { .convert { padding: 64px 0 48px; } .cv-graph { width: min(46%, 400px); } .cv-n { font-size: 15px; padding: 10px 16px 10px 11px; } .cv-n.n1 { right: 14%; top: 6%; } .cv-n.n2 { right: 4%; top: 34%; } .cv-n.n3 { right: 18%; top: 60%; } .cv-graph { width: min(46%, 440px); } }
     .noor { padding: 36px 0; overflow: hidden; }
     .n-grid { display: grid; gap: 24px; }
     .collage { position: relative; height: min(46svh, 380px); }
@@ -906,16 +914,27 @@
       <div class="wrap cv-wrap">
         <h2 class="cv-h" aria-label="Content that converts.">
           <span class="cv-1" aria-hidden="true">Content</span>
-          <span class="cv-2" aria-hidden="true">that</span>
+          <span class="cv-2" aria-hidden="true">That</span>
           <span class="cv-3" aria-hidden="true" data-cvword></span>
         </h2>
-        <svg class="cv-arrow" viewBox="0 0 320 90" aria-hidden="true"><path class="cv-line" d="M8 80 C 70 78, 120 70, 165 52 S 250 18, 300 10" fill="none" stroke="#5e3b25" stroke-width="7" stroke-linecap="round"/><path class="cv-tip" d="M272 4 L304 9 L290 38" fill="none" stroke="#5e3b25" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg class="cv-graph" viewBox="0 0 340 170" aria-hidden="true">
+          <g class="cv-grid" stroke="rgba(21,16,12,.12)" stroke-width="2" stroke-dasharray="4 6"><path d="M20 40 H330"/><path d="M20 80 H330"/><path d="M20 120 H330"/></g>
+          <g class="cv-bars">
+            <rect x="34" y="122" width="30" height="34" rx="5"/><rect x="82" y="108" width="30" height="48" rx="5"/><rect x="130" y="112" width="30" height="44" rx="5"/>
+            <rect x="178" y="86" width="30" height="70" rx="5"/><rect x="226" y="62" width="30" height="94" rx="5"/><rect x="274" y="30" width="30" height="126" rx="5"/>
+          </g>
+          <path class="cv-axis" d="M20 10 V156 H332" fill="none" stroke="#15100c" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path class="cv-line" d="M49 112 L97 98 L145 102 L193 74 L241 48 L289 16" fill="none" stroke="#5e3b25" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+          <g class="cv-dots" fill="#f7f3ec" stroke="#5e3b25" stroke-width="4"><circle cx="49" cy="112" r="6"/><circle cx="97" cy="98" r="6"/><circle cx="145" cy="102" r="6"/><circle cx="193" cy="74" r="6"/><circle cx="241" cy="48" r="6"/><circle cx="289" cy="16" r="7"/></g>
+          <path class="cv-tip" d="M300 6 L318 -2 L314 18" fill="none" stroke="#5e3b25" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
         <div class="cv-pings" aria-hidden="true">
-          <span class="cv-n n1"><i></i>New order</span>
-          <span class="cv-n n2"><i></i>New follower</span>
-          <span class="cv-n n3"><i></i>Saved your Reel</span>
+          <span class="cv-n n1"><i></i><b>New Orders</b></span>
+          <span class="cv-n n2"><i></i><b>Sold-Out Launches</b></span>
+          <span class="cv-n n3"><i></i><b>New Followers</b></span>
         </div>
-        <p class="cv-p">Pretty posts are nice. Posts that bring people through your door are better, and that's what every Reel I plan is for.</p>
+        <p class="cv-p"><span>More Clicks.</span> <span>More Customers.</span> <span>More Growth.</span></p>
+        <p class="cv-sr">Content that brings sold-out launches, fully booked calendars, more reservations, new clients, product sellouts, event ticket sales, more memberships, email sign-ups, customer referrals, collaboration opportunities, more DMs, new subscribers, bigger waitlists, repeat purchases, lasting brand loyalty, new bookings, store visits, more inquiries and repeat customers.</p>
       </div>
     </section>
 
@@ -2369,33 +2388,56 @@
     once('[data-closing]', () => { S('pour', .22); S('chime', .2, 1, .8); }, 'center 50%');
   })();
 
-  // CONTENT THAT CONVERTS: CON stays, TENT flips away, VERTS flips in, the arrow draws, the pings pop
+  // CONTENT THAT CONVERTS: CON stays, TENT flips away, VERTS flips in, the growth chart builds, the results keep popping
   (() => {
     const box = $('[data-cvword]'); if (!box) return;
     const FROM = 'CONTENT', TO = 'CONVERTS.';
+    const WINS = ['New Orders', 'Sold-Out Launches', 'New Followers', 'Fully Booked Calendars', 'More Reservations', 'New Clients', 'Product Sellouts', 'Event Ticket Sales',
+      'More Memberships', 'Email Sign-Ups', 'Customer Referrals', 'Collaboration Opportunities', 'More DMs', 'New Subscribers', 'Bigger Waitlists', 'Repeat Purchases',
+      'Lasting Brand Loyalty', 'New Bookings', 'Store Visits', 'More Inquiries', 'Repeat Customers'];
     const mk = (ch, cls) => { const e = document.createElement('span'); e.className = 'lt' + (cls ? ' ' + cls : ''); e.textContent = ch; return e; };
     const keep = [...FROM.slice(0, 3)].map(c => mk(c)), old = [...FROM.slice(3)].map(c => mk(c)), nw = [...TO.slice(3)].map(c => mk(c, 'nw'));
-    const line = $('.cv-line'), tip = $('.cv-tip'), pings = $$('.cv-n');
-    const final = () => { box.replaceChildren(...keep, ...nw); };
-    if (!ANIM) { final(); return; }
+    const sec = $('[data-conv]'), line = $('.cv-line', sec), tip = $('.cv-tip', sec), bars = $$('.cv-bars rect', sec), dots = $$('.cv-dots circle', sec), axis = $('.cv-axis', sec), pings = $$('.cv-n', sec);
+    if (!ANIM) { box.replaceChildren(...keep, ...nw); return; }
     box.replaceChildren(...keep, ...old);
-    const len = line.getTotalLength(), tl2 = tip.getTotalLength();
-    gsap.set(line, { strokeDasharray: len, strokeDashoffset: len, opacity: 0 }); gsap.set(tip, { strokeDasharray: tl2, strokeDashoffset: tl2, opacity: 0 });
-    gsap.set(pings, { scale: 0, opacity: 0 });
+    const dash = el => { const l = el.getTotalLength(); gsap.set(el, { strokeDasharray: l, strokeDashoffset: l }); };
+    [line, tip, axis].forEach(dash); gsap.set([line, tip], { opacity: 0 });
+    gsap.set(bars, { scaleY: 0 }); gsap.set(dots, { scale: 0, transformOrigin: '50% 50%' }); gsap.set(pings, { scale: 0, opacity: 0 });
     const tl = gsap.timeline({ paused: true });
     tl.from(['.cv-1', '.cv-2', box], { y: 40, opacity: 0, duration: .6, ease: 'back.out(1.8)', stagger: .1 })
-      .to(old, { rotationX: 90, opacity: 0, y: -10, duration: .22, ease: 'power2.in', stagger: .07 }, '+=.55')
+      .to(axis, { strokeDashoffset: 0, duration: .6, ease: 'power2.inOut' }, .2)
+      .to(old, { rotationX: 90, opacity: 0, y: -10, duration: .22, ease: 'power2.in', stagger: .07 }, '+=.25')
       .add(() => { old.forEach((o, i) => S('flip', .14, 1.2 + i * .08)); }, '<')
       .add(() => { box.replaceChildren(...keep, ...nw); gsap.set(nw, { rotationX: -90, opacity: 0, y: 12 }); })
       .to(nw, { rotationX: 0, opacity: 1, y: 0, duration: .34, ease: 'back.out(2.4)', stagger: .08 })
-      .add(() => { nw.forEach((o, i) => S('flip', .14, 1.5 + i * .07, i * .08)); S('ding', .18, 1.1, .5); }, '<')
-      .set([line, tip], { opacity: 1 }, '-=.15').to(line, { strokeDashoffset: 0, duration: .7, ease: 'power2.inOut' }, '<')
+      .add(() => { nw.forEach((o, i) => S('flip', .14, 1.5 + i * .07, i * .08)); }, '<')
+      .to(bars, { scaleY: 1, duration: .5, ease: 'back.out(1.7)', stagger: .09 }, '-=.35')
+      .add(() => bars.forEach((o, i) => S('drop', .1, 1 + i * .1, i * .09)), '<')
+      .set([line, tip], { opacity: 1 })
+      .to(line, { strokeDashoffset: 0, duration: .8, ease: 'power1.inOut' }, '-=.1')
       .add(() => S('whoosh', .14, 1.3), '<')
+      .to(dots, { scale: 1, duration: .3, ease: 'back.out(3)', stagger: .12 }, '<')
       .to(tip, { strokeDashoffset: 0, duration: .25, ease: 'power2.out' })
+      .add(() => S('ding', .18, 1.15), '<')
       .to(pings, { scale: 1, opacity: 1, duration: .5, ease: 'back.out(2.6)', stagger: .22 }, '-=.1')
-      .add(() => pings.forEach((p, i) => S('pop', .2, 1 + i * .12, i * .22)), '<');
+      .add(() => { pings.forEach((p, i) => S('pop', .16, 1 + i * .12, i * .22)); }, '<')
+      .add(() => startCycle(), '+=.8');
+    // the results keep coming: one bubble at a time swaps to the next win
+    let next = 3, slot = 0, timer = 0, vis = false;
+    onScreen(sec, v => { vis = v; }, '0px');
+    const swap = () => {
+      if (vis && !document.hidden) {
+        const p = pings[slot], label = $('b', p), text = WINS[next % WINS.length]; next++; slot = (slot + 1) % pings.length;
+        gsap.timeline().to(p, { scale: .5, opacity: 0, duration: .22, ease: 'power2.in' })
+          .add(() => { label.textContent = text; S('pop', .09, 1.05 + Math.random() * .3); })
+          .to(p, { scale: 1, opacity: 1, duration: .45, ease: 'back.out(2.8)' })
+          .fromTo(p, { rotation: '+=0' }, { rotation: `+=${gsap.utils.random(-4, 4)}`, duration: .3 }, '<');
+      }
+      timer = setTimeout(swap, 1300 + Math.random() * 500);
+    };
+    const startCycle = () => { if (!timer) timer = setTimeout(swap, 600); };
     pings.forEach((p, i) => gsap.to(p, { y: -6, duration: 1.6 + i * .3, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: 3 + i * .2 }));
-    ScrollTrigger.create({ trigger: '[data-conv]', start: 'top 72%', once: true, onEnter: () => tl.play() });
+    ScrollTrigger.create({ trigger: sec, start: 'top 72%', once: true, onEnter: () => tl.play() });
   })();
 
   // ghost words drift sideways with scroll
