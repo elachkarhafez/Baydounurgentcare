@@ -543,6 +543,11 @@
     .note.q { background: var(--espresso); color: var(--cream); box-shadow: 6px 6px 0 var(--bean); width: min(80vw, 380px); }
     .note.q::before { display: none; }
     .note.q p { font: italic 600 1rem/1.45 var(--sans); margin: 0; }
+    .q-intro { margin-top: 14px; }
+    .q-intro p { margin: 0; font: italic 600 1.0625rem/1.4 var(--sans); color: var(--ink); }
+    .q-intro small { display: block; margin-top: 6px; font: 700 11px/1 var(--sans); letter-spacing: .18em; text-transform: uppercase; color: var(--bean); }
+    @media (min-width: 900px) { .q-intro p { font-size: 1.25rem; } .q-intro small { font-size: 12px; } }
+    .note.q small.by { font-size: 14px; letter-spacing: .16em; }
     .note.q small { display: block; margin-top: 10px; font: 700 11px/1 var(--sans); letter-spacing: .18em; text-transform: uppercase; color: var(--latte); }
     .note.vid { padding: 8px; width: min(40vw, 180px); background: var(--ink); }
     .note.vid::before { display: none; }
@@ -1080,6 +1085,7 @@
           <h2 data-split>“It's Just A <span class="hl">Quick Video…”</span></h2>
           <span class="stamp" data-qstamp>Quick To Watch.</span>
           <div class="days" data-days><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span></div>
+          <div class="q-intro"><p>“A video that goes up Friday starts way before Friday.”</p><small>Here's my week for one Reel</small></div>
         </div>
         <div class="rail" data-rail><div class="track" data-track></div></div>
         <span class="cue quick-cue" data-quickcue>Scroll To Move Through The Week <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2v11M4 9l4 4 4-4" fill="none" stroke="currentColor" stroke-width="2.2"/></svg></span>
@@ -1726,9 +1732,8 @@
      ============================================================= */
   const quick = (() => {
     const track = $('[data-track]'), days = $$('[data-days] span');
-    track.innerHTML = `<div class="note q"><p>“A video that goes up Friday starts way before Friday.”</p><small>Here's my week for one Reel</small></div>`
-      + CONFIG.week.map(w => `<div class="note" data-day><span class="hand">${esc(w.d)} · ${esc(w.h)}</span><b>${esc(w.t)}</b><p>${esc(w.p)}</p><span class="done">DONE ✓</span></div>`).join('')
-      + `<div class="note q"><p>“A 30-second video represents hours of planning, creativity, production and attention to detail. You're investing in the work behind every second.”</p><small>Noor, on her own Reel</small></div>`;
+    track.innerHTML = CONFIG.week.map(w => `<div class="note" data-day><span class="hand">${esc(w.d)} · ${esc(w.h)}</span><b>${esc(w.t)}</b><p>${esc(w.p)}</p><span class="done">DONE ✓</span></div>`).join('')
+      + `<div class="note q"><p>“A 30-second video represents hours of planning, creativity, production and attention to detail. You're investing in the work behind every second.”</p><small class="by">Noor</small></div>`;
     const notes = $$('[data-day]', track);
     const set = () => { const mid = innerWidth / 2; let active = -1;
       notes.forEach((n, i) => { const r = n.getBoundingClientRect(); if (r.left + r.width * .3 < mid) active = i; n.classList.toggle('ok', r.right < mid + 20); });
