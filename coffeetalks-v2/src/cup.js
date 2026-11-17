@@ -27,6 +27,7 @@ export async function mountCup(canvas, o = {}) {
   const SPEED = +(new URLSearchParams(location.search).get('cupspeed') || 1);
   const FINE = matchMedia('(hover: hover) and (pointer: fine)').matches;
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
+  renderer.debug.checkShaderErrors = false; // skips a sync GPU readback per shader
   renderer.setPixelRatio(Math.min(devicePixelRatio || 1, SMALL ? 1.5 : 1.75));
   renderer.toneMapping = THREE.NeutralToneMapping; renderer.toneMappingExposure = 1.02;
   renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -209,7 +210,7 @@ export async function mountCup(canvas, o = {}) {
   const step = (d, fn, done) => ({ d, fn, done });
   const lerpOf = (key, to, e = ease) => { let from; return t => { if (from === undefined) from = st[key]; st[key] = from + (to - from) * e(t); }; };
   const poseTo = (o, e = ease) => { let from; return t => { if (!from) from = { ...pose }; for (const k in o) if (typeof o[k] === 'number') pose[k] = from[k] + (o[k] - from[k]) * e(t); else pose[k] = o[k]; }; };
-  const simRun = (phase, nominal) => { let last = 0; return (t, dt) => { const n = Math.max(1, Math.ceil(dt / (1 / 50))); for (let k = 1; k <= n; k++) { const tt = last + (t - last) * k / n; const p = pourAt(phase, tt, st.leaves); sim.step(Math.min(dt / n, 1 / 50) || nominal / 60, p); if (phase !== 'base') { pose.px = p.x; pose.py = p.y; } } last = t; simDirty = true; }; };
+  const simRun = (phase, nominal) => { let last = 0; return (t, dt) => { const n = Math.min(2, Math.max(1, Math.ceil(dt / (1 / 50)))); /* 1 at 60 fps; a slow frame no longer piles on more sim work */ for (let k = 1; k <= n; k++) { const tt = last + (t - last) * k / n; const p = pourAt(phase, tt, st.leaves); sim.step(Math.min(dt / n, 1 / 50) || nominal / 60, p); if (phase !== 'base') { pose.px = p.x; pose.py = p.y; } } last = t; simDirty = true; }; };
   const ESP = FLOOR + .16;
   let want = { base: false, size: 0, shots: 0 }, hasEsp = false;
   function set(w) {
@@ -281,6 +282,10 @@ export async function mountCup(canvas, o = {}) {
   new IntersectionObserver(([e]) => { visible = e.isIntersecting; start(); }).observe(canvas);
   document.addEventListener('visibilitychange', start);
   paint(); placeSurface(); placeCam();
-  renderer.compile(scene, camera); renderer.render(scene, camera); start();
+  // compile every shader now, including the pitcher, cocoa and surface that only appear mid-pour,
+  // so the first pour doesn't stall on a shader compile while the canvas is still hidden
+  const late = [surface, pitcher, cocoa], was = late.map(o => o.visible);
+  late.forEach(o => { o.visible = true; }); renderer.compile(scene, camera); renderer.shadowMap.needsUpdate = true; renderer.render(scene, camera);
+  late.forEach((o, i) => { o.visible = was[i]; }); renderer.shadowMap.needsUpdate = true; renderer.render(scene, camera); start();
   return { set, state: st, pose, renderer };
 }

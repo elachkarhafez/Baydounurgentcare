@@ -4,13 +4,15 @@
    rosetta; a quick pull-through drags them into leaves. Semi-Lagrangian advection
    plus a little anti-diffusion keeps the edges crisp. */
 export function makeLatte(N = 320) {
-  const D = new Float32Array(N * N), T = new Float32Array(N * N), M = new Float32Array(N * N), inside = new Uint8Array(N * N);
+  const D = new Float32Array(N * N), T = new Float32Array(N * N), M = new Float32Array(N * N), inside = new Uint8Array(N * N), WF = new Float64Array(N * N), NX = new Float64Array(N * N), NY = new Float64Array(N * N);
   // crema mottling + radial darkening, fixed per cup
   for (let j = 0; j < N; j++) for (let i = 0; i < N; i++) {
     const x = (i + .5) / N - .5, y = (j + .5) / N - .5, r = Math.hypot(x, y) * 2, k = j * N + i;
     inside[k] = r < 1.02 ? 1 : 0;
     const tiger = Math.sin(i * .21 + Math.sin(j * .09) * 3.1) * Math.cos(j * .17 + Math.sin(i * .07) * 2.3);
     M[k] = .55 + .45 * (1 - r * r) + .12 * tiger + (Math.random() - .5) * .1;
+    const len = Math.hypot(x, y) || 1, rr = Math.hypot(x, y) * 2;
+    if (rr > .9) { WF[k] = 1 - Math.max(0, (1 - rr) / .1); NX[k] = x / len; NY[k] = y / len; }
   }
   const sample = (A, x, y) => {
     // bilinear, x/y in cell units
@@ -24,22 +26,28 @@ export function makeLatte(N = 320) {
     fade(k) { for (let i = 0; i < D.length; i++) D[i] *= k; },
     // one sim step. p: { x, y, Q (source strength), inj (foam/s), ri (radius), vx, vy (pour-point velocity for drag), drag }
     step(dt, p) {
-      const r0 = .018, ri2 = p.ri * p.ri, dg = .028 * .028;
+      // same maths as before, with the per-cell constants (wall normals) precomputed and the
+      // gaussians skipped where they're below 1e-15 (no visible difference, a lot less work)
+      const r00 = .018 * .018, iri2 = 1 / (p.ri * p.ri), idg = 1 / (.028 * .028), CUT = 34.5;
+      const Q = p.Q, px = p.x, py = p.y, drag = p.drag, vx = p.vx, vy = p.vy, hasC = p.c !== undefined, c = p.c;
+      const cK = hasC ? 1 - Math.exp(-dt * 45) : 0, inj = !hasC && p.inj ? p.inj * dt : 0, ad = 2.2 * dt, NN = N - 1.001;
       for (let j = 0; j < N; j++) {
-        const y = (j + .5) / N;
+        const y = (j + .5) / N, dy = y - py, dy2 = dy * dy;
         for (let i = 0; i < N; i++) {
           const k = j * N + i; if (!inside[k]) { T[k] = 0; continue; }
-          const x = (i + .5) / N, dx = x - p.x, dy = y - p.y, r2 = dx * dx + dy * dy;
-          let u = p.Q * dx / (r2 + r0 * r0), v = p.Q * dy / (r2 + r0 * r0);
-          if (p.drag) { const w = p.drag * Math.exp(-r2 / dg); u += p.vx * w; v += p.vy * w; }
+          const x = (i + .5) / N, dx = x - px, r2 = dx * dx + dy2, q = Q / (r2 + r00);
+          let u = q * dx, v = q * dy;
+          if (drag) { const e = r2 * idg; if (e < CUT) { const w = drag * Math.exp(-e); u += vx * w; v += vy * w; } }
           // the cup wall stops outward flow
-          const cx = x - .5, cy = y - .5, rr = Math.hypot(cx, cy) * 2;
-          if (rr > .9) { const s = Math.max(0, (1 - rr) / .1); const dot = (u * cx + v * cy) / (Math.hypot(cx, cy) || 1); if (dot > 0) { u -= (1 - s) * dot * cx / (Math.hypot(cx, cy) || 1); v -= (1 - s) * dot * cy / (Math.hypot(cx, cy) || 1); } }
-          let d = sample(D, (x - u * dt) * N - .5, (y - v * dt) * N - .5);
-          if (p.c !== undefined) { const g = Math.exp(-r2 / ri2); d += (p.c - d) * (1 - Math.exp(-dt * 45)) * g; }
-          else if (p.inj) d += p.inj * dt * Math.exp(-r2 / ri2);
+          const wf = WF[k]; if (wf > 0) { const nx = NX[k], ny = NY[k], dot = u * nx + v * ny; if (dot > 0) { u -= wf * dot * nx; v -= wf * dot * ny; } }
+          let sx = (x - u * dt) * N - .5, sy = (y - v * dt) * N - .5;
+          if (sx < 0) sx = 0; if (sy < 0) sy = 0; if (sx > NN) sx = NN; if (sy > NN) sy = NN;
+          const ii = sx | 0, jj = sy | 0, fa = sx - ii, fb = sy - jj, kk = jj * N + ii;
+          let d = (D[kk] * (1 - fa) + D[kk + 1] * fa) * (1 - fb) + (D[kk + N] * (1 - fa) + D[kk + N + 1] * fa) * fb;
+          if (hasC) { const e = r2 * iri2; if (e < CUT) d += (c - d) * cK * Math.exp(-e); }
+          else if (inj) { const e = r2 * iri2; if (e < CUT) d += inj * Math.exp(-e); }
           // anti-diffusion: microfoam holds a crisp edge against the crema
-          d += 2.2 * dt * (d - .42) * d * (1.15 - d);
+          d += ad * (d - .42) * d * (1.15 - d);
           T[k] = d < 0 ? 0 : d > 1.15 ? 1.15 : d;
         }
       }
