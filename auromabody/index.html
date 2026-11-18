@@ -414,7 +414,7 @@ footer .fs{text-align:center;font-size:.6875rem;letter-spacing:.2em;text-transfo
 }
 
 /* intro: logo, then the sprayer mists you into the site */
-#intro{position:fixed;inset:0;z-index:200;background:radial-gradient(90% 70% at 50% 40%,#231b12,#070605 70%);display:grid;place-items:center;overflow:hidden;cursor:pointer}
+#intro{position:fixed;inset:0;z-index:200;display:grid;place-items:center;overflow:hidden;cursor:pointer}
 .nointro #intro{display:none}
 #intro canvas{position:absolute;inset:0;width:100%;height:100%}
 #intro .lg{position:relative;display:flex;flex-direction:column;align-items:center;z-index:2}
@@ -434,7 +434,9 @@ footer .fs{text-align:center;font-size:.6875rem;letter-spacing:.2em;text-transfo
 #intro .sprayer .s-nocap,#intro .sprayer .s-cap{opacity:0}
 #intro .sprayer .s-mist{position:absolute;left:-314.4%;top:-121.74%;width:728.16%;height:341.61%;pointer-events:none;z-index:2}
 #intro .sprayer .s-cap{filter:none;transform-origin:50% 20%}
-#intro .flash{position:absolute;left:var(--fx,50%);top:var(--fy,60%);width:220vmax;height:220vmax;margin:-110vmax 0 0 -110vmax;border-radius:50%;background:radial-gradient(circle,rgba(255,248,230,1) 0,rgba(250,236,200,.96) 30%,rgba(236,212,154,.55) 48%,rgba(236,212,154,0) 64%);opacity:0;transform:scale(.02);z-index:4;pointer-events:none}
+#intro .ibg{position:absolute;inset:0;background:radial-gradient(90% 70% at 50% 40%,#231b12,#070605 70%)}
+#intro .flash{position:absolute;inset:0;background:radial-gradient(120% 95% at var(--fx,60%) var(--fy,40%),rgba(252,244,226,.92),rgba(238,224,192,.78) 55%,rgba(222,204,166,.72));opacity:0;z-index:4;pointer-events:none}
+#intro .sprayer .s-mist{-webkit-mask-image:radial-gradient(48% 50% at 50% 50%,#000 62%,transparent 100%);mask-image:radial-gradient(48% 50% at 50% 50%,#000 62%,transparent 100%)}
 #intro .skip{position:absolute;bottom:calc(14px + env(safe-area-inset-bottom));left:0;right:0;text-align:center;font-size:.6875rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(236,212,154,.45);z-index:5}
 @media (prefers-reduced-motion:reduce){#intro{display:none}.rv{opacity:1;transform:none;transition:none}.stage .b,.gal img.rb,.spot .bottle img.rb,.spot .ring{animation:none}}
 </style>
@@ -448,6 +450,7 @@ footer .fs{text-align:center;font-size:.6875rem;letter-spacing:.2em;text-transfo
 </defs></svg>
 
 <div id="intro" aria-hidden="true">
+  <div class="ibg"></div>
   <div class="lg" id="ilg">
     <svg class="mono" viewBox="0 0 200 150"><text class="mf" x="100" y="118" text-anchor="middle" textLength="170" lengthAdjust="spacingAndGlyphs">AB</text><text class="ms" x="100" y="118" text-anchor="middle" textLength="170" lengthAdjust="spacingAndGlyphs">AB</text><line class="bar" pathLength="1" x1="100" y1="10" x2="100" y2="140"/></svg>
     <div class="wd" aria-label="AUROMA BODY"><span>A</span><span>U</span><span>R</span><span>O</span><span>M</span><span>A</span><span class="sp"></span><span>B</span><span>O</span><span>D</span><span>Y</span></div>
@@ -813,9 +816,9 @@ function finish(){if(done)return;done=true;cancelAnimationFrame(raf);anims.forEa
 spr.innerHTML='<img class="s-full" src="media/b/intro-full.webp" alt=""><img class="s-nocap" src="media/b/intro-nocap.webp" alt=""><img class="s-cap" src="media/b/intro-cap.webp" alt="">';
 /* the mist is a Blender render (render/spray.py) from the bottle's own camera: 20 frames played inside the bottle layer */
 var NX=0,NY=0,NXF=.4948,NYF=.1836;function nozzle(){var r=spr.getBoundingClientRect();NX=r.left+r.width*NXF;NY=r.top+r.height*NYF;}
-var mc=document.createElement('canvas');mc.className='s-mist';mc.width=900;mc.height=660;spr.appendChild(mc);var mx=mc.getContext('2d');
+var mc=document.createElement('canvas');mc.className='s-mist';mc.width=720;mc.height=528;spr.appendChild(mc);var mx=mc.getContext('2d');
 var FR=[],NF=20,FPS=25;for(var i=0;i<NF;i++){var im=new Image();im.decoding='async';im.src='media/spray/'+(i<10?'0':'')+i+'.webp';FR.push(im);if(im.decode)im.decode().catch(function(){});}
-var t0=0,lastF=-1;function play(t){if(done)return;if(!t0)t0=t;var f=Math.min(NF-1,Math.floor((t-t0)/1000*FPS));if(f!==lastF&&FR[f].complete&&FR[f].naturalWidth){mx.clearRect(0,0,900,660);mx.drawImage(FR[f],0,0,900,660);lastF=f;}if(f<NF-1)raf=requestAnimationFrame(play);}
+var t0=0,lastF=-1;function play(t){if(done)return;if(!t0)t0=t;var f=Math.min(NF-1,Math.floor((t-t0)/1000*FPS));if(f!==lastF&&FR[f].complete&&FR[f].naturalWidth){mx.clearRect(0,0,720,528);mx.drawImage(FR[f],0,0,720,528);lastF=f;}if(f<NF-1)raf=requestAnimationFrame(play);}
 var bar=qi('.mono .bar');
 A(qi('.mono .ms'),[{strokeDashoffset:600},{strokeDashoffset:0}],{duration:900,delay:120});
 A(qi('.mono .mf'),[{opacity:0},{opacity:1}],{duration:400,delay:850});
@@ -832,10 +835,10 @@ A(sNo,[{opacity:0},{opacity:0,offset:.99},{opacity:1}],{duration:2880,easing:'li
 A(sCap,[{opacity:0,transform:'none'},{opacity:1,transform:'none',offset:.01},{opacity:1,transform:'translate(18%,-26%) rotate(24deg)',offset:.6},{opacity:0,transform:'translate(34%,-46%) rotate(38deg)'}],{duration:560,delay:2880,easing:O});
 A(sNo,[{transform:'none'},{transform:'translateY(1.2%) scaleY(.992)',offset:.35},{transform:'translateY(1.2%) scaleY(.992)',offset:.7},{transform:'none'}],{duration:520,delay:3320});
 setTimeout(function(){if(!done){nozzle();raf=requestAnimationFrame(play);var f=qi('.flash');f.style.setProperty('--fx',(NX+innerWidth*.12)+'px');f.style.setProperty('--fy',(NY-innerHeight*.04)+'px');}},3440);
-A(qi('.flash'),[{opacity:0,transform:'scale(.02)'},{opacity:.85,transform:'scale(.35)',offset:.4},{opacity:1,transform:'scale(1)',offset:.72},{opacity:0,transform:'scale(1.15)'}],{duration:1100,delay:3900,easing:'cubic-bezier(.5,0,.3,1)'});
-A(intro,[{backgroundColor:'rgba(7,6,5,1)'},{backgroundColor:'rgba(7,6,5,0)'}],{duration:600,delay:4350});
+A(qi('.flash'),[{opacity:0},{opacity:.8,offset:.45},{opacity:.8,offset:.6},{opacity:0}],{duration:1050,delay:3880,easing:'cubic-bezier(.45,0,.35,1)'});
+A(qi('.ibg'),[{opacity:1},{opacity:0}],{duration:520,delay:4280});
 A(qi('#ilg'),[{opacity:1},{opacity:0}],{duration:400,delay:4000});
-A(spr,[{opacity:1},{opacity:0}],{duration:450,delay:4300});
+A(spr,[{opacity:1},{opacity:0}],{duration:420,delay:4240});
 A(qi('.skip'),[{opacity:1},{opacity:0}],{duration:200,delay:3600});
 setTimeout(finish,4950);
 intro.addEventListener('click',finish);addEventListener('keydown',function k(){finish();removeEventListener('keydown',k);});
