@@ -1,0 +1,446 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>GlycoBay | Diabetic-Friendly Vending for Healthcare Facilities</title>
+<meta name="description" content="GlycoBay brings low-glycemic snacks, sugar-free drinks and better-for-you options into hospitals, clinics, universities and airports. We install, stock and manage everything. Zero operational burden for your facility.">
+<meta name="theme-color" content="#030605">
+<link rel="icon" href="media/icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="media/film/f_000.webp">
+<script>
+(function(){var d=document.documentElement,s=0;try{s=sessionStorage.getItem('gbIntro')}catch(e){}
+if(s||matchMedia('(prefers-reduced-motion: reduce)').matches)d.classList.add('nointro');})();
+</script>
+<style>
+:root{
+  --ink:#030605; --ink2:#07100c; --card:#0b1611; --mint:#00f58a; --mintD:#00b865; --fg:#eafff3; --mute:#9db8aa; --line:rgba(234,255,243,.1);
+  --paper:#f3f7f5; --text:#0b1a13; --tmute:#4d6358; --pad:16px; --ease:cubic-bezier(.4,0,.2,1); --out:cubic-bezier(.16,1,.3,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{background:var(--ink);color:var(--fg);font-family:Manrope,system-ui,sans-serif;font-size:.9375rem;line-height:1.55;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body.lock{overflow:hidden;touch-action:none}
+img{display:block;max-width:100%;height:auto}
+a{color:inherit}
+.wrap{width:min(1160px,100% - 2*var(--pad));margin:0 auto}
+h1,h2,h3{font-family:Sora,sans-serif;font-weight:600;letter-spacing:-.02em;line-height:1.08}
+h1{font-size:clamp(1.75rem,7.6vw,1.875rem)}
+h2{font-size:clamp(1.375rem,6vw,1.5rem)}
+h3{font-size:1.0625rem}
+p{max-width:58ch}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:46px;padding:0 20px;border-radius:999px;font:700 .875rem/1 Manrope,sans-serif;text-decoration:none;white-space:nowrap;border:0;cursor:pointer;transition:transform .25s var(--out),background .2s,box-shadow .25s}
+.btn svg{width:17px;height:17px;flex:none}
+.btn-mint{background:var(--mint);color:#02140b;box-shadow:0 0 0 0 rgba(0,245,138,.0)}
+.btn-mint:hover{transform:translateY(-1px);box-shadow:0 8px 28px rgba(0,245,138,.35)}
+.btn-ghost{background:rgba(234,255,243,.08);color:var(--fg);box-shadow:inset 0 0 0 1px var(--line)}
+.btn-ghost:hover{background:rgba(234,255,243,.14)}
+.ctas{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+
+/* nav */
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:56px;transition:background .35s,border-color .35s;border-bottom:1px solid transparent}
+.nav.solid{background:rgba(3,6,5,.9);border-color:var(--line)}
+.nav .wrap{height:100%;display:flex;align-items:center;gap:14px}
+.brand{display:flex;align-items:center;gap:9px;text-decoration:none;flex:none}
+.brand svg{width:38px;height:26px;display:block}
+.brand b{font:600 1.0625rem Sora,sans-serif;letter-spacing:-.01em}
+.brand b span{color:var(--mint)}
+.links{display:none;gap:26px;margin-left:auto}
+.links a{text-decoration:none;font-size:.875rem;font-weight:600;color:var(--mute);transition:color .2s}
+.links a:hover{color:var(--fg)}
+.nav .btn{margin-left:auto;height:36px;padding:0 14px;font-size:.8125rem}
+
+/* film */
+.film{position:relative;height:460svh;background:#000}
+.stage{position:sticky;top:0;height:100svh;overflow:hidden;background:#000}
+.stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.cap{position:absolute;left:var(--pad);right:var(--pad);top:calc(70px + env(safe-area-inset-top));opacity:0;transform:translateY(14px);filter:blur(6px);transition:opacity .55s var(--ease),transform .7s var(--out),filter .55s var(--ease);pointer-events:none}
+.cap.on{opacity:1;transform:none;filter:none;pointer-events:auto}
+.cap h1,.cap h2{max-width:16ch}
+.cap p{color:var(--mute);margin-top:10px;font-size:.9375rem}
+.cap .chip{display:inline-flex;align-items:center;gap:8px;font-size:.75rem;font-weight:700;color:var(--mint);letter-spacing:.02em;margin-bottom:12px}
+.cap .chip i{width:7px;height:7px;border-radius:50%;background:var(--mint);box-shadow:0 0 12px var(--mint);animation:pulse 2s ease-in-out infinite}
+.hint{position:absolute;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translateX(-50%);font-size:.75rem;color:var(--mute);display:flex;align-items:center;gap:8px;transition:opacity .4s}
+.hint.off{opacity:0}
+.hint i{width:18px;height:28px;border-radius:10px;border:1.5px solid rgba(234,255,243,.35);position:relative}
+.hint i::after{content:"";position:absolute;left:50%;top:6px;width:3px;height:6px;margin-left:-1.5px;border-radius:2px;background:var(--mint);animation:wheel 1.6s ease-in-out infinite}
+.progress{position:absolute;left:var(--pad);right:var(--pad);bottom:calc(14px + env(safe-area-inset-bottom));height:2px;background:rgba(234,255,243,.08);border-radius:2px;overflow:hidden;display:none}
+.progress b{display:block;height:100%;width:100%;transform-origin:0 50%;transform:scaleX(0);background:var(--mint)}
+
+/* statement */
+.state{padding:56px 0 30px;background:var(--ink)}
+.words{font:600 clamp(1.375rem,6.4vw,1.5rem)/1.25 Sora,sans-serif;letter-spacing:-.02em;max-width:24ch}
+.words span{color:rgba(234,255,243,.16);transition:color .35s}
+.words span.lit{color:var(--fg)}
+.words span.lit.m{color:var(--mint)}
+
+/* grow still */
+.growbox{padding:10px 0 40px}
+#grow{overflow:hidden;border-radius:28px;transform-origin:50% 0;will-change:transform}
+#grow img{width:100%;aspect-ratio:4/3;object-fit:cover;object-position:46% 50%}
+.growcap{display:flex;justify-content:space-between;gap:12px;margin-top:12px;color:var(--mute);font-size:.8125rem}
+
+/* bento */
+.bento{padding:12px 0 48px}
+.bento h2{max-width:18ch}
+.bento .lead{color:var(--mute);margin-top:10px}
+.tiles{display:grid;gap:12px;margin-top:22px}
+.tile{position:relative;background:var(--card);border:1px solid var(--line);border-radius:24px;overflow:hidden;padding:18px}
+.tile h3{margin-bottom:6px}
+.tile p{color:var(--mute);font-size:.875rem}
+.tile.pic{padding:0}
+.tile.pic img{width:100%;aspect-ratio:16/10;object-fit:cover}
+.tile.pic div{padding:14px 18px 18px}
+.stat{display:flex;gap:12px}
+.stat .tile{flex:1}
+.num{font:600 2.25rem/1 Sora,sans-serif;letter-spacing:-.03em;color:var(--mint);margin-bottom:8px}
+.status{list-style:none;display:grid;gap:8px;margin-top:12px}
+.status li{display:flex;align-items:center;gap:10px;font-size:.875rem;font-weight:600;background:rgba(0,245,138,.06);border:1px solid rgba(0,245,138,.16);border-radius:12px;padding:9px 12px}
+.status li i{width:8px;height:8px;border-radius:50%;background:var(--mint);box-shadow:0 0 10px var(--mint);flex:none}
+.status li span{margin-left:auto;color:var(--mute);font-weight:500;font-size:.75rem}
+.tile .glow{position:absolute;right:-40px;top:-40px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(0,245,138,.25),transparent 70%);pointer-events:none}
+
+/* light half: specs + steps */
+.paper{background:var(--paper);color:var(--text)}
+.specs{padding:44px 0 36px}
+.specs .lead,.steps .lead{color:var(--tmute);margin-top:10px}
+dl.rows{display:grid;gap:0;margin-top:20px;border-top:1px solid rgba(11,26,19,.12)}
+.rows div{display:grid;grid-template-columns:110px 1fr;gap:12px;padding:13px 0;border-bottom:1px solid rgba(11,26,19,.12);font-size:.875rem}
+.rows dt{font-weight:800}
+.rows dd{color:var(--tmute)}
+.steps{padding:12px 0 48px}
+.steps ol{list-style:none;display:grid;grid-auto-flow:column;grid-auto-columns:82%;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;margin:20px calc(-1*var(--pad)) 0;padding:0 var(--pad) 4px;scrollbar-width:none;counter-reset:s}
+.steps ol::-webkit-scrollbar{display:none}
+.steps li{scroll-snap-align:start;background:#fff;border-radius:22px;padding:18px;box-shadow:0 1px 0 rgba(11,26,19,.06),0 10px 30px rgba(11,26,19,.06)}
+.steps li::before{counter-increment:s;content:"0" counter(s);display:block;font:600 .8125rem Sora,sans-serif;color:var(--mintD);margin-bottom:22px}
+.steps li p{color:var(--tmute);font-size:.875rem;margin-top:6px}
+.dots{display:flex;justify-content:center;gap:6px;margin-top:12px}
+.dots i{width:7px;height:7px;border-radius:50%;background:rgba(11,26,19,.18);transition:all .25s}
+.dots i.on{width:18px;border-radius:4px;background:var(--mintD)}
+.fit{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.fit span{font-size:.8125rem;font-weight:700;background:#fff;border-radius:999px;padding:6px 12px;box-shadow:inset 0 0 0 1px rgba(11,26,19,.1)}
+
+/* contact */
+.contact{padding:52px 0 56px;background:radial-gradient(90% 60% at 50% 0,rgba(0,245,138,.12),transparent 70%),var(--ink);text-align:center}
+.contact h2{margin:0 auto;max-width:18ch}
+.contact .lead{color:var(--mute);margin:10px auto 0}
+form{display:grid;gap:10px;margin:22px auto 0;max-width:560px;text-align:left}
+.fl{display:grid;gap:10px}
+input,textarea{width:100%;font:500 .9375rem Manrope,sans-serif;color:var(--fg);background:rgba(234,255,243,.05);border:1px solid var(--line);border-radius:14px;padding:13px 14px;transition:border-color .2s,background .2s}
+textarea{min-height:96px;resize:vertical}
+input:focus,textarea:focus{outline:none;border-color:rgba(0,245,138,.6);background:rgba(0,245,138,.05)}
+input::placeholder,textarea::placeholder{color:#6f8a7c}
+form .btn{width:100%;height:50px}
+.direct{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 18px;margin-top:18px;font-size:.875rem;color:var(--mute)}
+.direct a{color:var(--fg);font-weight:700;text-decoration:none}
+.direct a:hover{color:var(--mint)}
+footer{border-top:1px solid var(--line);padding:22px 0 96px;font-size:.75rem;color:var(--mute)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:10px 18px;justify-content:space-between}
+footer nav{display:flex;gap:16px}
+footer a{text-decoration:none;color:var(--fg)}
+
+/* dock */
+.dock{position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom));z-index:45;display:flex;gap:8px;padding:7px;border-radius:22px;background:rgba(7,16,12,.94);border:1px solid var(--line);transition:transform .4s var(--out),opacity .3s}
+.dock.off{transform:translateY(140%);opacity:0;pointer-events:none}
+.dock .btn{flex:1;height:44px}
+
+.rv{opacity:0;transform:translateY(18px);transition:opacity .7s var(--ease),transform .9s var(--out)}
+.rv.in{opacity:1;transform:none}
+@keyframes pulse{50%{opacity:.4}}
+@keyframes wheel{0%{transform:translateY(0);opacity:1}70%{transform:translateY(9px);opacity:0}100%{opacity:0}}
+
+@media (min-width:640px){
+  .stat .tile{padding:22px}
+  .steps ol{grid-auto-columns:46%}
+  .fl{grid-template-columns:1fr 1fr}
+}
+@media (min-width:900px){
+  :root{--pad:32px}
+  body{font-size:1rem}
+  h1{font-size:clamp(2.5rem,3.9vw,3.25rem)}
+  h2{font-size:clamp(1.75rem,2.7vw,2.375rem)}
+  .links{display:flex}
+  .nav .btn{margin-left:10px}
+  .film{height:520vh}
+  .cap{left:max(var(--pad),calc(50vw - 580px));right:auto;top:50%;width:min(38vw,470px);transform:translateY(calc(-50% + 14px))}
+  .cap.on{transform:translateY(-50%)}
+  .cap p{font-size:1.0625rem}
+  .progress{display:block;left:max(var(--pad),calc(50vw - 580px));right:auto;width:200px;bottom:36px}
+  .hint{left:max(var(--pad),calc(50vw - 580px));transform:none;bottom:52px}
+  .state{padding:110px 0 50px}
+  .words{font-size:clamp(2rem,3.4vw,2.75rem);max-width:26ch}
+  .growbox{padding:20px 0 80px}
+  #grow img{aspect-ratio:16/8}
+  .bento{padding:20px 0 96px}
+  .tiles{grid-template-columns:repeat(6,1fr);grid-auto-rows:minmax(0,auto)}
+  .tiles .a{grid-column:span 4}
+  .tiles .b{grid-column:span 2}
+  .tiles .c{grid-column:span 2}
+  .tiles .d{grid-column:span 2}
+  .tiles .e{grid-column:span 2}
+  .tile{padding:26px}
+  .tile.pic div{padding:18px 26px 24px}
+  .tiles .b.pic img{aspect-ratio:4/5}
+  .stat{flex-direction:column}
+  .specs{padding:96px 0 40px}
+  .sgrid{display:grid;grid-template-columns:.8fr 1.2fr;gap:64px;align-items:start}
+  .rows div{grid-template-columns:150px 1fr;padding:15px 0;font-size:.9375rem}
+  .steps{padding:40px 0 100px}
+  .steps ol{grid-auto-flow:row;grid-template-columns:repeat(3,1fr);grid-auto-columns:auto;overflow:visible;margin:28px 0 0;padding:0}
+  .steps li{padding:26px}
+  .dots{display:none}
+  .contact{padding:110px 0}
+  footer{padding-bottom:28px}
+  .dock{display:none}
+}
+
+/* intro */
+#intro{position:fixed;inset:0;z-index:100;display:grid;place-items:center;cursor:pointer}
+.nointro #intro{display:none}
+#intro .half{position:absolute;left:0;right:0;height:50.5%;background:#020504}
+#intro .half.t{top:0}#intro .half.b{bottom:0}
+#intro .hex{position:absolute;inset:0;opacity:0}
+#intro .hex path{fill:none;stroke:rgba(0,245,138,.1);stroke-width:1}
+#intro .lock{position:relative;display:flex;flex-direction:column;align-items:center;gap:14px}
+#intro .mk{width:clamp(160px,46vw,260px);height:auto;overflow:visible}
+#intro .mk .gp,#intro .mk .bp{fill:none;stroke:var(--mint);stroke-width:17;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1 1;stroke-dashoffset:1;filter:drop-shadow(0 0 10px rgba(0,245,138,.55))}
+#intro .mk .lf{fill:var(--mint);opacity:0}
+#intro .wm{font:600 clamp(1.25rem,6vw,1.75rem) Sora,sans-serif;letter-spacing:.14em;color:var(--fg);display:flex;overflow:hidden;padding:4px 0}
+#intro .wm span{display:inline-block;transform:translateY(110%);opacity:0}
+#intro .wm span.m{color:var(--mint)}
+#intro .ekg{width:min(70vw,360px);height:46px;overflow:visible}
+#intro .ekg path{fill:none;stroke:var(--mint);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1 1;stroke-dashoffset:1;opacity:.85}
+#intro .sweep{position:absolute;top:-30%;bottom:-30%;width:150px;left:0;background:linear-gradient(90deg,transparent,rgba(200,255,228,.26) 50%,transparent);-webkit-mask-image:linear-gradient(180deg,transparent,#000 30%,#000 70%,transparent);mask-image:linear-gradient(180deg,transparent,#000 30%,#000 70%,transparent);mix-blend-mode:screen;opacity:0;transform:translateX(-200px) skewX(-14deg);filter:blur(6px)}
+#intro .skip{position:absolute;bottom:calc(18px + env(safe-area-inset-bottom));left:0;right:0;text-align:center;font-size:.75rem;color:rgba(234,255,243,.4)}
+@media (prefers-reduced-motion:reduce){#intro{display:none}.rv{opacity:1;transform:none;transition:none}.cap{transition:none}}
+</style>
+</head>
+<body class="lock">
+<div id="intro" aria-hidden="true">
+  <div class="half t"></div><div class="half b"></div>
+  <svg class="hex" viewBox="0 0 400 800" preserveAspectRatio="xMidYMid slice"><path d="M-13.0,-22.5 -26.0,0.0 -52.0,0.0 -65.0,-22.5 -52.0,-45.0 -26.0,-45.0Z"/><path d="M65.0,-22.5 52.0,0.0 26.0,0.0 13.0,-22.5 26.0,-45.0 52.0,-45.0Z"/><path d="M143.0,-22.5 130.0,0.0 104.0,0.0 91.0,-22.5 104.0,-45.0 130.0,-45.0Z"/><path d="M221.0,-22.5 208.0,0.0 182.0,0.0 169.0,-22.5 182.0,-45.0 208.0,-45.0Z"/><path d="M299.0,-22.5 286.0,0.0 260.0,0.0 247.0,-22.5 260.0,-45.0 286.0,-45.0Z"/><path d="M377.0,-22.5 364.0,0.0 338.0,0.0 325.0,-22.5 338.0,-45.0 364.0,-45.0Z"/><path d="M455.0,-22.5 442.0,0.0 416.0,0.0 403.0,-22.5 416.0,-45.0 442.0,-45.0Z"/><path d="M533.0,-22.5 520.0,0.0 494.0,0.0 481.0,-22.5 494.0,-45.0 520.0,-45.0Z"/><path d="M611.0,-22.5 598.0,0.0 572.0,0.0 559.0,-22.5 572.0,-45.0 598.0,-45.0Z"/><path d="M689.0,-22.5 676.0,0.0 650.0,0.0 637.0,-22.5 650.0,-45.0 676.0,-45.0Z"/><path d="M767.0,-22.5 754.0,0.0 728.0,0.0 715.0,-22.5 728.0,-45.0 754.0,-45.0Z"/><path d="M-52.0,0.0 -65.0,22.5 -91.0,22.5 -104.0,0.0 -91.0,-22.5 -65.0,-22.5Z"/><path d="M26.0,0.0 13.0,22.5 -13.0,22.5 -26.0,0.0 -13.0,-22.5 13.0,-22.5Z"/><path d="M104.0,0.0 91.0,22.5 65.0,22.5 52.0,0.0 65.0,-22.5 91.0,-22.5Z"/><path d="M182.0,0.0 169.0,22.5 143.0,22.5 130.0,0.0 143.0,-22.5 169.0,-22.5Z"/><path d="M260.0,0.0 247.0,22.5 221.0,22.5 208.0,0.0 221.0,-22.5 247.0,-22.5Z"/><path d="M338.0,0.0 325.0,22.5 299.0,22.5 286.0,0.0 299.0,-22.5 325.0,-22.5Z"/><path d="M416.0,0.0 403.0,22.5 377.0,22.5 364.0,0.0 377.0,-22.5 403.0,-22.5Z"/><path d="M494.0,0.0 481.0,22.5 455.0,22.5 442.0,0.0 455.0,-22.5 481.0,-22.5Z"/><path d="M572.0,0.0 559.0,22.5 533.0,22.5 520.0,0.0 533.0,-22.5 559.0,-22.5Z"/><path d="M650.0,0.0 637.0,22.5 611.0,22.5 598.0,0.0 611.0,-22.5 637.0,-22.5Z"/><path d="M728.0,0.0 715.0,22.5 689.0,22.5 676.0,0.0 689.0,-22.5 715.0,-22.5Z"/><path d="M-13.0,22.5 -26.0,45.0 -52.0,45.0 -65.0,22.5 -52.0,0.0 -26.0,0.0Z"/><path d="M65.0,22.5 52.0,45.0 26.0,45.0 13.0,22.5 26.0,0.0 52.0,0.0Z"/><path d="M143.0,22.5 130.0,45.0 104.0,45.0 91.0,22.5 104.0,0.0 130.0,0.0Z"/><path d="M221.0,22.5 208.0,45.0 182.0,45.0 169.0,22.5 182.0,0.0 208.0,0.0Z"/><path d="M299.0,22.5 286.0,45.0 260.0,45.0 247.0,22.5 260.0,0.0 286.0,0.0Z"/><path d="M377.0,22.5 364.0,45.0 338.0,45.0 325.0,22.5 338.0,0.0 364.0,0.0Z"/><path d="M455.0,22.5 442.0,45.0 416.0,45.0 403.0,22.5 416.0,0.0 442.0,0.0Z"/><path d="M533.0,22.5 520.0,45.0 494.0,45.0 481.0,22.5 494.0,0.0 520.0,0.0Z"/><path d="M611.0,22.5 598.0,45.0 572.0,45.0 559.0,22.5 572.0,0.0 598.0,0.0Z"/><path d="M689.0,22.5 676.0,45.0 650.0,45.0 637.0,22.5 650.0,0.0 676.0,0.0Z"/><path d="M767.0,22.5 754.0,45.0 728.0,45.0 715.0,22.5 728.0,0.0 754.0,0.0Z"/><path d="M-52.0,45.0 -65.0,67.5 -91.0,67.5 -104.0,45.0 -91.0,22.5 -65.0,22.5Z"/><path d="M26.0,45.0 13.0,67.5 -13.0,67.5 -26.0,45.0 -13.0,22.5 13.0,22.5Z"/><path d="M104.0,45.0 91.0,67.5 65.0,67.5 52.0,45.0 65.0,22.5 91.0,22.5Z"/><path d="M182.0,45.0 169.0,67.5 143.0,67.5 130.0,45.0 143.0,22.5 169.0,22.5Z"/><path d="M260.0,45.0 247.0,67.5 221.0,67.5 208.0,45.0 221.0,22.5 247.0,22.5Z"/><path d="M338.0,45.0 325.0,67.5 299.0,67.5 286.0,45.0 299.0,22.5 325.0,22.5Z"/><path d="M416.0,45.0 403.0,67.5 377.0,67.5 364.0,45.0 377.0,22.5 403.0,22.5Z"/><path d="M494.0,45.0 481.0,67.5 455.0,67.5 442.0,45.0 455.0,22.5 481.0,22.5Z"/><path d="M572.0,45.0 559.0,67.5 533.0,67.5 520.0,45.0 533.0,22.5 559.0,22.5Z"/><path d="M650.0,45.0 637.0,67.5 611.0,67.5 598.0,45.0 611.0,22.5 637.0,22.5Z"/><path d="M728.0,45.0 715.0,67.5 689.0,67.5 676.0,45.0 689.0,22.5 715.0,22.5Z"/><path d="M-13.0,67.5 -26.0,90.1 -52.0,90.1 -65.0,67.5 -52.0,45.0 -26.0,45.0Z"/><path d="M65.0,67.5 52.0,90.1 26.0,90.1 13.0,67.5 26.0,45.0 52.0,45.0Z"/><path d="M143.0,67.5 130.0,90.1 104.0,90.1 91.0,67.5 104.0,45.0 130.0,45.0Z"/><path d="M221.0,67.5 208.0,90.1 182.0,90.1 169.0,67.5 182.0,45.0 208.0,45.0Z"/><path d="M299.0,67.5 286.0,90.1 260.0,90.1 247.0,67.5 260.0,45.0 286.0,45.0Z"/><path d="M377.0,67.5 364.0,90.1 338.0,90.1 325.0,67.5 338.0,45.0 364.0,45.0Z"/><path d="M455.0,67.5 442.0,90.1 416.0,90.1 403.0,67.5 416.0,45.0 442.0,45.0Z"/><path d="M533.0,67.5 520.0,90.1 494.0,90.1 481.0,67.5 494.0,45.0 520.0,45.0Z"/><path d="M611.0,67.5 598.0,90.1 572.0,90.1 559.0,67.5 572.0,45.0 598.0,45.0Z"/><path d="M689.0,67.5 676.0,90.1 650.0,90.1 637.0,67.5 650.0,45.0 676.0,45.0Z"/><path d="M767.0,67.5 754.0,90.1 728.0,90.1 715.0,67.5 728.0,45.0 754.0,45.0Z"/><path d="M-52.0,90.1 -65.0,112.6 -91.0,112.6 -104.0,90.1 -91.0,67.5 -65.0,67.5Z"/><path d="M26.0,90.1 13.0,112.6 -13.0,112.6 -26.0,90.1 -13.0,67.5 13.0,67.5Z"/><path d="M104.0,90.1 91.0,112.6 65.0,112.6 52.0,90.1 65.0,67.5 91.0,67.5Z"/><path d="M182.0,90.1 169.0,112.6 143.0,112.6 130.0,90.1 143.0,67.5 169.0,67.5Z"/><path d="M260.0,90.1 247.0,112.6 221.0,112.6 208.0,90.1 221.0,67.5 247.0,67.5Z"/><path d="M338.0,90.1 325.0,112.6 299.0,112.6 286.0,90.1 299.0,67.5 325.0,67.5Z"/><path d="M416.0,90.1 403.0,112.6 377.0,112.6 364.0,90.1 377.0,67.5 403.0,67.5Z"/><path d="M494.0,90.1 481.0,112.6 455.0,112.6 442.0,90.1 455.0,67.5 481.0,67.5Z"/><path d="M572.0,90.1 559.0,112.6 533.0,112.6 520.0,90.1 533.0,67.5 559.0,67.5Z"/><path d="M650.0,90.1 637.0,112.6 611.0,112.6 598.0,90.1 611.0,67.5 637.0,67.5Z"/><path d="M728.0,90.1 715.0,112.6 689.0,112.6 676.0,90.1 689.0,67.5 715.0,67.5Z"/><path d="M-13.0,112.6 -26.0,135.1 -52.0,135.1 -65.0,112.6 -52.0,90.1 -26.0,90.1Z"/><path d="M65.0,112.6 52.0,135.1 26.0,135.1 13.0,112.6 26.0,90.1 52.0,90.1Z"/><path d="M143.0,112.6 130.0,135.1 104.0,135.1 91.0,112.6 104.0,90.1 130.0,90.1Z"/><path d="M221.0,112.6 208.0,135.1 182.0,135.1 169.0,112.6 182.0,90.1 208.0,90.1Z"/><path d="M299.0,112.6 286.0,135.1 260.0,135.1 247.0,112.6 260.0,90.1 286.0,90.1Z"/><path d="M377.0,112.6 364.0,135.1 338.0,135.1 325.0,112.6 338.0,90.1 364.0,90.1Z"/><path d="M455.0,112.6 442.0,135.1 416.0,135.1 403.0,112.6 416.0,90.1 442.0,90.1Z"/><path d="M533.0,112.6 520.0,135.1 494.0,135.1 481.0,112.6 494.0,90.1 520.0,90.1Z"/><path d="M611.0,112.6 598.0,135.1 572.0,135.1 559.0,112.6 572.0,90.1 598.0,90.1Z"/><path d="M689.0,112.6 676.0,135.1 650.0,135.1 637.0,112.6 650.0,90.1 676.0,90.1Z"/><path d="M767.0,112.6 754.0,135.1 728.0,135.1 715.0,112.6 728.0,90.1 754.0,90.1Z"/><path d="M-52.0,135.1 -65.0,157.6 -91.0,157.6 -104.0,135.1 -91.0,112.6 -65.0,112.6Z"/><path d="M26.0,135.1 13.0,157.6 -13.0,157.6 -26.0,135.1 -13.0,112.6 13.0,112.6Z"/><path d="M104.0,135.1 91.0,157.6 65.0,157.6 52.0,135.1 65.0,112.6 91.0,112.6Z"/><path d="M182.0,135.1 169.0,157.6 143.0,157.6 130.0,135.1 143.0,112.6 169.0,112.6Z"/><path d="M260.0,135.1 247.0,157.6 221.0,157.6 208.0,135.1 221.0,112.6 247.0,112.6Z"/><path d="M338.0,135.1 325.0,157.6 299.0,157.6 286.0,135.1 299.0,112.6 325.0,112.6Z"/><path d="M416.0,135.1 403.0,157.6 377.0,157.6 364.0,135.1 377.0,112.6 403.0,112.6Z"/><path d="M494.0,135.1 481.0,157.6 455.0,157.6 442.0,135.1 455.0,112.6 481.0,112.6Z"/><path d="M572.0,135.1 559.0,157.6 533.0,157.6 520.0,135.1 533.0,112.6 559.0,112.6Z"/><path d="M650.0,135.1 637.0,157.6 611.0,157.6 598.0,135.1 611.0,112.6 637.0,112.6Z"/><path d="M728.0,135.1 715.0,157.6 689.0,157.6 676.0,135.1 689.0,112.6 715.0,112.6Z"/><path d="M-13.0,157.6 -26.0,180.1 -52.0,180.1 -65.0,157.6 -52.0,135.1 -26.0,135.1Z"/><path d="M65.0,157.6 52.0,180.1 26.0,180.1 13.0,157.6 26.0,135.1 52.0,135.1Z"/><path d="M143.0,157.6 130.0,180.1 104.0,180.1 91.0,157.6 104.0,135.1 130.0,135.1Z"/><path d="M221.0,157.6 208.0,180.1 182.0,180.1 169.0,157.6 182.0,135.1 208.0,135.1Z"/><path d="M299.0,157.6 286.0,180.1 260.0,180.1 247.0,157.6 260.0,135.1 286.0,135.1Z"/><path d="M377.0,157.6 364.0,180.1 338.0,180.1 325.0,157.6 338.0,135.1 364.0,135.1Z"/><path d="M455.0,157.6 442.0,180.1 416.0,180.1 403.0,157.6 416.0,135.1 442.0,135.1Z"/><path d="M533.0,157.6 520.0,180.1 494.0,180.1 481.0,157.6 494.0,135.1 520.0,135.1Z"/><path d="M611.0,157.6 598.0,180.1 572.0,180.1 559.0,157.6 572.0,135.1 598.0,135.1Z"/><path d="M689.0,157.6 676.0,180.1 650.0,180.1 637.0,157.6 650.0,135.1 676.0,135.1Z"/><path d="M767.0,157.6 754.0,180.1 728.0,180.1 715.0,157.6 728.0,135.1 754.0,135.1Z"/><path d="M-52.0,180.1 -65.0,202.6 -91.0,202.6 -104.0,180.1 -91.0,157.6 -65.0,157.6Z"/><path d="M26.0,180.1 13.0,202.6 -13.0,202.6 -26.0,180.1 -13.0,157.6 13.0,157.6Z"/><path d="M104.0,180.1 91.0,202.6 65.0,202.6 52.0,180.1 65.0,157.6 91.0,157.6Z"/><path d="M182.0,180.1 169.0,202.6 143.0,202.6 130.0,180.1 143.0,157.6 169.0,157.6Z"/><path d="M260.0,180.1 247.0,202.6 221.0,202.6 208.0,180.1 221.0,157.6 247.0,157.6Z"/><path d="M338.0,180.1 325.0,202.6 299.0,202.6 286.0,180.1 299.0,157.6 325.0,157.6Z"/><path d="M416.0,180.1 403.0,202.6 377.0,202.6 364.0,180.1 377.0,157.6 403.0,157.6Z"/><path d="M494.0,180.1 481.0,202.6 455.0,202.6 442.0,180.1 455.0,157.6 481.0,157.6Z"/><path d="M572.0,180.1 559.0,202.6 533.0,202.6 520.0,180.1 533.0,157.6 559.0,157.6Z"/><path d="M650.0,180.1 637.0,202.6 611.0,202.6 598.0,180.1 611.0,157.6 637.0,157.6Z"/><path d="M728.0,180.1 715.0,202.6 689.0,202.6 676.0,180.1 689.0,157.6 715.0,157.6Z"/><path d="M-13.0,202.6 -26.0,225.2 -52.0,225.2 -65.0,202.6 -52.0,180.1 -26.0,180.1Z"/><path d="M65.0,202.6 52.0,225.2 26.0,225.2 13.0,202.6 26.0,180.1 52.0,180.1Z"/><path d="M143.0,202.6 130.0,225.2 104.0,225.2 91.0,202.6 104.0,180.1 130.0,180.1Z"/><path d="M221.0,202.6 208.0,225.2 182.0,225.2 169.0,202.6 182.0,180.1 208.0,180.1Z"/><path d="M299.0,202.6 286.0,225.2 260.0,225.2 247.0,202.6 260.0,180.1 286.0,180.1Z"/><path d="M377.0,202.6 364.0,225.2 338.0,225.2 325.0,202.6 338.0,180.1 364.0,180.1Z"/><path d="M455.0,202.6 442.0,225.2 416.0,225.2 403.0,202.6 416.0,180.1 442.0,180.1Z"/><path d="M533.0,202.6 520.0,225.2 494.0,225.2 481.0,202.6 494.0,180.1 520.0,180.1Z"/><path d="M611.0,202.6 598.0,225.2 572.0,225.2 559.0,202.6 572.0,180.1 598.0,180.1Z"/><path d="M689.0,202.6 676.0,225.2 650.0,225.2 637.0,202.6 650.0,180.1 676.0,180.1Z"/><path d="M767.0,202.6 754.0,225.2 728.0,225.2 715.0,202.6 728.0,180.1 754.0,180.1Z"/><path d="M-52.0,225.2 -65.0,247.7 -91.0,247.7 -104.0,225.2 -91.0,202.6 -65.0,202.6Z"/><path d="M26.0,225.2 13.0,247.7 -13.0,247.7 -26.0,225.2 -13.0,202.6 13.0,202.6Z"/><path d="M104.0,225.2 91.0,247.7 65.0,247.7 52.0,225.2 65.0,202.6 91.0,202.6Z"/><path d="M182.0,225.2 169.0,247.7 143.0,247.7 130.0,225.2 143.0,202.6 169.0,202.6Z"/><path d="M260.0,225.2 247.0,247.7 221.0,247.7 208.0,225.2 221.0,202.6 247.0,202.6Z"/><path d="M338.0,225.2 325.0,247.7 299.0,247.7 286.0,225.2 299.0,202.6 325.0,202.6Z"/><path d="M416.0,225.2 403.0,247.7 377.0,247.7 364.0,225.2 377.0,202.6 403.0,202.6Z"/><path d="M494.0,225.2 481.0,247.7 455.0,247.7 442.0,225.2 455.0,202.6 481.0,202.6Z"/><path d="M572.0,225.2 559.0,247.7 533.0,247.7 520.0,225.2 533.0,202.6 559.0,202.6Z"/><path d="M650.0,225.2 637.0,247.7 611.0,247.7 598.0,225.2 611.0,202.6 637.0,202.6Z"/><path d="M728.0,225.2 715.0,247.7 689.0,247.7 676.0,225.2 689.0,202.6 715.0,202.6Z"/><path d="M-13.0,247.7 -26.0,270.2 -52.0,270.2 -65.0,247.7 -52.0,225.2 -26.0,225.2Z"/><path d="M65.0,247.7 52.0,270.2 26.0,270.2 13.0,247.7 26.0,225.2 52.0,225.2Z"/><path d="M143.0,247.7 130.0,270.2 104.0,270.2 91.0,247.7 104.0,225.2 130.0,225.2Z"/><path d="M221.0,247.7 208.0,270.2 182.0,270.2 169.0,247.7 182.0,225.2 208.0,225.2Z"/><path d="M299.0,247.7 286.0,270.2 260.0,270.2 247.0,247.7 260.0,225.2 286.0,225.2Z"/><path d="M377.0,247.7 364.0,270.2 338.0,270.2 325.0,247.7 338.0,225.2 364.0,225.2Z"/><path d="M455.0,247.7 442.0,270.2 416.0,270.2 403.0,247.7 416.0,225.2 442.0,225.2Z"/><path d="M533.0,247.7 520.0,270.2 494.0,270.2 481.0,247.7 494.0,225.2 520.0,225.2Z"/><path d="M611.0,247.7 598.0,270.2 572.0,270.2 559.0,247.7 572.0,225.2 598.0,225.2Z"/><path d="M689.0,247.7 676.0,270.2 650.0,270.2 637.0,247.7 650.0,225.2 676.0,225.2Z"/><path d="M767.0,247.7 754.0,270.2 728.0,270.2 715.0,247.7 728.0,225.2 754.0,225.2Z"/><path d="M-52.0,270.2 -65.0,292.7 -91.0,292.7 -104.0,270.2 -91.0,247.7 -65.0,247.7Z"/><path d="M26.0,270.2 13.0,292.7 -13.0,292.7 -26.0,270.2 -13.0,247.7 13.0,247.7Z"/><path d="M104.0,270.2 91.0,292.7 65.0,292.7 52.0,270.2 65.0,247.7 91.0,247.7Z"/><path d="M182.0,270.2 169.0,292.7 143.0,292.7 130.0,270.2 143.0,247.7 169.0,247.7Z"/><path d="M260.0,270.2 247.0,292.7 221.0,292.7 208.0,270.2 221.0,247.7 247.0,247.7Z"/><path d="M338.0,270.2 325.0,292.7 299.0,292.7 286.0,270.2 299.0,247.7 325.0,247.7Z"/><path d="M416.0,270.2 403.0,292.7 377.0,292.7 364.0,270.2 377.0,247.7 403.0,247.7Z"/><path d="M494.0,270.2 481.0,292.7 455.0,292.7 442.0,270.2 455.0,247.7 481.0,247.7Z"/><path d="M572.0,270.2 559.0,292.7 533.0,292.7 520.0,270.2 533.0,247.7 559.0,247.7Z"/><path d="M650.0,270.2 637.0,292.7 611.0,292.7 598.0,270.2 611.0,247.7 637.0,247.7Z"/><path d="M728.0,270.2 715.0,292.7 689.0,292.7 676.0,270.2 689.0,247.7 715.0,247.7Z"/><path d="M-13.0,292.7 -26.0,315.2 -52.0,315.2 -65.0,292.7 -52.0,270.2 -26.0,270.2Z"/><path d="M65.0,292.7 52.0,315.2 26.0,315.2 13.0,292.7 26.0,270.2 52.0,270.2Z"/><path d="M143.0,292.7 130.0,315.2 104.0,315.2 91.0,292.7 104.0,270.2 130.0,270.2Z"/><path d="M221.0,292.7 208.0,315.2 182.0,315.2 169.0,292.7 182.0,270.2 208.0,270.2Z"/><path d="M299.0,292.7 286.0,315.2 260.0,315.2 247.0,292.7 260.0,270.2 286.0,270.2Z"/><path d="M377.0,292.7 364.0,315.2 338.0,315.2 325.0,292.7 338.0,270.2 364.0,270.2Z"/><path d="M455.0,292.7 442.0,315.2 416.0,315.2 403.0,292.7 416.0,270.2 442.0,270.2Z"/><path d="M533.0,292.7 520.0,315.2 494.0,315.2 481.0,292.7 494.0,270.2 520.0,270.2Z"/><path d="M611.0,292.7 598.0,315.2 572.0,315.2 559.0,292.7 572.0,270.2 598.0,270.2Z"/><path d="M689.0,292.7 676.0,315.2 650.0,315.2 637.0,292.7 650.0,270.2 676.0,270.2Z"/><path d="M767.0,292.7 754.0,315.2 728.0,315.2 715.0,292.7 728.0,270.2 754.0,270.2Z"/><path d="M-52.0,315.2 -65.0,337.7 -91.0,337.7 -104.0,315.2 -91.0,292.7 -65.0,292.7Z"/><path d="M26.0,315.2 13.0,337.7 -13.0,337.7 -26.0,315.2 -13.0,292.7 13.0,292.7Z"/><path d="M104.0,315.2 91.0,337.7 65.0,337.7 52.0,315.2 65.0,292.7 91.0,292.7Z"/><path d="M182.0,315.2 169.0,337.7 143.0,337.7 130.0,315.2 143.0,292.7 169.0,292.7Z"/><path d="M260.0,315.2 247.0,337.7 221.0,337.7 208.0,315.2 221.0,292.7 247.0,292.7Z"/><path d="M338.0,315.2 325.0,337.7 299.0,337.7 286.0,315.2 299.0,292.7 325.0,292.7Z"/><path d="M416.0,315.2 403.0,337.7 377.0,337.7 364.0,315.2 377.0,292.7 403.0,292.7Z"/><path d="M494.0,315.2 481.0,337.7 455.0,337.7 442.0,315.2 455.0,292.7 481.0,292.7Z"/><path d="M572.0,315.2 559.0,337.7 533.0,337.7 520.0,315.2 533.0,292.7 559.0,292.7Z"/><path d="M650.0,315.2 637.0,337.7 611.0,337.7 598.0,315.2 611.0,292.7 637.0,292.7Z"/><path d="M728.0,315.2 715.0,337.7 689.0,337.7 676.0,315.2 689.0,292.7 715.0,292.7Z"/><path d="M-13.0,337.7 -26.0,360.3 -52.0,360.3 -65.0,337.7 -52.0,315.2 -26.0,315.2Z"/><path d="M65.0,337.7 52.0,360.3 26.0,360.3 13.0,337.7 26.0,315.2 52.0,315.2Z"/><path d="M143.0,337.7 130.0,360.3 104.0,360.3 91.0,337.7 104.0,315.2 130.0,315.2Z"/><path d="M221.0,337.7 208.0,360.3 182.0,360.3 169.0,337.7 182.0,315.2 208.0,315.2Z"/><path d="M299.0,337.7 286.0,360.3 260.0,360.3 247.0,337.7 260.0,315.2 286.0,315.2Z"/><path d="M377.0,337.7 364.0,360.3 338.0,360.3 325.0,337.7 338.0,315.2 364.0,315.2Z"/><path d="M455.0,337.7 442.0,360.3 416.0,360.3 403.0,337.7 416.0,315.2 442.0,315.2Z"/><path d="M533.0,337.7 520.0,360.3 494.0,360.3 481.0,337.7 494.0,315.2 520.0,315.2Z"/><path d="M611.0,337.7 598.0,360.3 572.0,360.3 559.0,337.7 572.0,315.2 598.0,315.2Z"/><path d="M689.0,337.7 676.0,360.3 650.0,360.3 637.0,337.7 650.0,315.2 676.0,315.2Z"/><path d="M767.0,337.7 754.0,360.3 728.0,360.3 715.0,337.7 728.0,315.2 754.0,315.2Z"/><path d="M-52.0,360.3 -65.0,382.8 -91.0,382.8 -104.0,360.3 -91.0,337.7 -65.0,337.7Z"/><path d="M26.0,360.3 13.0,382.8 -13.0,382.8 -26.0,360.3 -13.0,337.7 13.0,337.7Z"/><path d="M104.0,360.3 91.0,382.8 65.0,382.8 52.0,360.3 65.0,337.7 91.0,337.7Z"/><path d="M182.0,360.3 169.0,382.8 143.0,382.8 130.0,360.3 143.0,337.7 169.0,337.7Z"/><path d="M260.0,360.3 247.0,382.8 221.0,382.8 208.0,360.3 221.0,337.7 247.0,337.7Z"/><path d="M338.0,360.3 325.0,382.8 299.0,382.8 286.0,360.3 299.0,337.7 325.0,337.7Z"/><path d="M416.0,360.3 403.0,382.8 377.0,382.8 364.0,360.3 377.0,337.7 403.0,337.7Z"/><path d="M494.0,360.3 481.0,382.8 455.0,382.8 442.0,360.3 455.0,337.7 481.0,337.7Z"/><path d="M572.0,360.3 559.0,382.8 533.0,382.8 520.0,360.3 533.0,337.7 559.0,337.7Z"/><path d="M650.0,360.3 637.0,382.8 611.0,382.8 598.0,360.3 611.0,337.7 637.0,337.7Z"/><path d="M728.0,360.3 715.0,382.8 689.0,382.8 676.0,360.3 689.0,337.7 715.0,337.7Z"/><path d="M-13.0,382.8 -26.0,405.3 -52.0,405.3 -65.0,382.8 -52.0,360.3 -26.0,360.3Z"/><path d="M65.0,382.8 52.0,405.3 26.0,405.3 13.0,382.8 26.0,360.3 52.0,360.3Z"/><path d="M143.0,382.8 130.0,405.3 104.0,405.3 91.0,382.8 104.0,360.3 130.0,360.3Z"/><path d="M221.0,382.8 208.0,405.3 182.0,405.3 169.0,382.8 182.0,360.3 208.0,360.3Z"/><path d="M299.0,382.8 286.0,405.3 260.0,405.3 247.0,382.8 260.0,360.3 286.0,360.3Z"/><path d="M377.0,382.8 364.0,405.3 338.0,405.3 325.0,382.8 338.0,360.3 364.0,360.3Z"/><path d="M455.0,382.8 442.0,405.3 416.0,405.3 403.0,382.8 416.0,360.3 442.0,360.3Z"/><path d="M533.0,382.8 520.0,405.3 494.0,405.3 481.0,382.8 494.0,360.3 520.0,360.3Z"/><path d="M611.0,382.8 598.0,405.3 572.0,405.3 559.0,382.8 572.0,360.3 598.0,360.3Z"/><path d="M689.0,382.8 676.0,405.3 650.0,405.3 637.0,382.8 650.0,360.3 676.0,360.3Z"/><path d="M767.0,382.8 754.0,405.3 728.0,405.3 715.0,382.8 728.0,360.3 754.0,360.3Z"/><path d="M-52.0,405.3 -65.0,427.8 -91.0,427.8 -104.0,405.3 -91.0,382.8 -65.0,382.8Z"/><path d="M26.0,405.3 13.0,427.8 -13.0,427.8 -26.0,405.3 -13.0,382.8 13.0,382.8Z"/><path d="M104.0,405.3 91.0,427.8 65.0,427.8 52.0,405.3 65.0,382.8 91.0,382.8Z"/><path d="M182.0,405.3 169.0,427.8 143.0,427.8 130.0,405.3 143.0,382.8 169.0,382.8Z"/><path d="M260.0,405.3 247.0,427.8 221.0,427.8 208.0,405.3 221.0,382.8 247.0,382.8Z"/><path d="M338.0,405.3 325.0,427.8 299.0,427.8 286.0,405.3 299.0,382.8 325.0,382.8Z"/><path d="M416.0,405.3 403.0,427.8 377.0,427.8 364.0,405.3 377.0,382.8 403.0,382.8Z"/><path d="M494.0,405.3 481.0,427.8 455.0,427.8 442.0,405.3 455.0,382.8 481.0,382.8Z"/><path d="M572.0,405.3 559.0,427.8 533.0,427.8 520.0,405.3 533.0,382.8 559.0,382.8Z"/><path d="M650.0,405.3 637.0,427.8 611.0,427.8 598.0,405.3 611.0,382.8 637.0,382.8Z"/><path d="M728.0,405.3 715.0,427.8 689.0,427.8 676.0,405.3 689.0,382.8 715.0,382.8Z"/><path d="M-13.0,427.8 -26.0,450.3 -52.0,450.3 -65.0,427.8 -52.0,405.3 -26.0,405.3Z"/><path d="M65.0,427.8 52.0,450.3 26.0,450.3 13.0,427.8 26.0,405.3 52.0,405.3Z"/><path d="M143.0,427.8 130.0,450.3 104.0,450.3 91.0,427.8 104.0,405.3 130.0,405.3Z"/><path d="M221.0,427.8 208.0,450.3 182.0,450.3 169.0,427.8 182.0,405.3 208.0,405.3Z"/><path d="M299.0,427.8 286.0,450.3 260.0,450.3 247.0,427.8 260.0,405.3 286.0,405.3Z"/><path d="M377.0,427.8 364.0,450.3 338.0,450.3 325.0,427.8 338.0,405.3 364.0,405.3Z"/><path d="M455.0,427.8 442.0,450.3 416.0,450.3 403.0,427.8 416.0,405.3 442.0,405.3Z"/><path d="M533.0,427.8 520.0,450.3 494.0,450.3 481.0,427.8 494.0,405.3 520.0,405.3Z"/><path d="M611.0,427.8 598.0,450.3 572.0,450.3 559.0,427.8 572.0,405.3 598.0,405.3Z"/><path d="M689.0,427.8 676.0,450.3 650.0,450.3 637.0,427.8 650.0,405.3 676.0,405.3Z"/><path d="M767.0,427.8 754.0,450.3 728.0,450.3 715.0,427.8 728.0,405.3 754.0,405.3Z"/></svg>
+  <div class="lock">
+    <svg class="mk" viewBox="0 0 240 160"><path class="gp" pathLength="1" d="M120 42 A56 56 0 1 0 124 116 L124 92 L100 92"/><path class="bp" pathLength="1" d="M152 136 L152 24 L178 24 A26 26 0 0 1 178 76 L140 76 M152 76 L183 76 A30 30 0 0 1 183 136 L152 136"/><path class="lf" d="M120 66 C122 52 134 44 146 44 C145 57 134 66 120 66 Z"/></svg>
+    <div class="wm"><span>G</span><span>L</span><span>Y</span><span>C</span><span>O</span><span class="m">B</span><span class="m">A</span><span class="m">Y</span></div>
+    <svg class="ekg" viewBox="0 0 360 46"><path pathLength="1" d="M0 23 H96 L106 23 L114 6 L124 40 L134 12 L142 30 L150 23 H360"/></svg>
+    <div class="sweep"></div>
+  </div>
+  <div class="skip">Tap to skip</div>
+</div>
+
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="GlycoBay home"><svg id="navLogo" viewBox="0 0 240 160" aria-hidden="true"><g fill="none" stroke="#00f58a" stroke-width="19" stroke-linecap="round" stroke-linejoin="round"><path d="M120 42 A56 56 0 1 0 124 116 L124 92 L100 92"/><path d="M152 136 L152 24 L178 24 A26 26 0 0 1 178 76 L140 76 M152 76 L183 76 A30 30 0 0 1 183 136 L152 136"/></g><path d="M120 66 C122 52 134 44 146 44 C145 57 134 66 120 66 Z" fill="#00f58a"/></svg><b>Glyco<span>Bay</span></b></a>
+    <nav class="links" aria-label="Sections"><a href="#machine">The machine</a><a href="#specs">Specs</a><a href="#how">How it works</a><a href="#contact">Contact</a></nav>
+    <a class="btn btn-mint" href="#contact">Request a demo</a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="film" id="film" aria-label="The GlycoBay machine coming online as you scroll: the shelves light up, the screen wakes up and the tap-to-pay reader glows">
+    <div class="stage">
+      <canvas id="cv"></canvas>
+      <div class="cap on" id="c0">
+        <span class="chip"><i></i>Diabetic-friendly vending</span>
+        <h1>A smarter vending machine for blood-sugar-conscious spaces.</h1>
+        <p>GlycoBay installs, stocks and runs it for clinics, hospitals, universities, airports and wellness spaces. You approve the spot.</p>
+        <div class="ctas"><a class="btn btn-mint" href="#contact">Request a demo<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><a class="btn btn-ghost" href="tel:+13133006898"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2Z"/></svg>313-300-6898</a></div>
+      </div>
+      <div class="cap" id="c1"><h2>Thirty slots of better choices.</h2><p>Low-glycemic snacks, sugar-free drinks, protein options, nuts and seeds, lit shelf by shelf behind the glass.</p></div>
+      <div class="cap" id="c2"><h2>A screen that makes the better pick easy.</h2><p>The display handles product selection, payment prompts and machine messages, so nobody has to guess what fits.</p></div>
+      <div class="cap" id="c3"><h2>Tap to pay and go.</h2><p>A cashless card reader with tap-to-pay keeps it quick for patients, visitors, students and staff.</p></div>
+      <div class="cap" id="c4"><h2>We run it. You approve the spot.</h2><p>Installation, stocking, cleaning, repairs and product rotation are all on us.</p><div class="ctas"><a class="btn btn-mint" href="#contact">See if it fits your location</a></div></div>
+      <div class="hint" id="hint"><i></i>Scroll to power it on</div>
+      <div class="progress"><b id="bar"></b></div>
+    </div>
+  </section>
+
+  <section class="state" id="machine">
+    <div class="wrap"><p class="words" id="words">Diabetic-friendly options are hard to find when people need them, so GlycoBay puts them inside the places people already visit.</p></div>
+  </section>
+
+  <div class="growbox"><div class="wrap"><figure id="grow"><img src="media/still-shelves.webp" width="1600" height="900" loading="lazy" alt="Close up of the lit GlycoBay shelves with snack bags, bars, water and sparkling cans behind the glass"></figure>
+  <div class="growcap"><span>Rendered GlycoBay machine</span><span>30 curated slots</span></div></div></div>
+
+  <section class="bento">
+    <div class="wrap">
+      <h2 class="rv">Built for the places that care about blood sugar.</h2>
+      <p class="lead rv">Everything a facility usually has to manage, we manage. Here's what's inside the cabinet.</p>
+      <div class="tiles">
+        <article class="tile pic a rv"><img src="media/still-screen.webp" width="1600" height="900" loading="lazy" alt="The GlycoBay touch screen showing the menu: nuts and seeds, protein snacks, sparkling water, low-glycemic bites, sugar-free drinks and bars"><div><h3>Smart digital display</h3><p>A clean medical-tech interface for picking a product and paying.</p></div></article>
+        <article class="tile b rv"><div class="glow"></div><h3>Real-time monitoring</h3><p>We see stock, temperature, payments and machine status remotely.</p>
+          <ul class="status"><li><i></i>Machine online<span>live</span></li><li><i></i>Stock tracking active<span>live</span></li><li><i></i>Temperature visible<span>live</span></li><li><i></i>Payments connected<span>live</span></li></ul></article>
+        <article class="tile pic c rv"><img src="media/still-drinks.webp" width="1600" height="900" loading="lazy" alt="Bottled water and sparkling cans on the lower GlycoBay shelves"><div><h3>Temperature-controlled storage</h3><p>A cooling zone keeps drinks and select products ready all day.</p></div></article>
+        <article class="tile pic d rv"><img src="media/still-reader.webp" width="1600" height="900" loading="lazy" alt="The GlycoBay tap-to-pay card reader glowing green"><div><h3>Fast cashless checkout</h3><p>Tap-to-pay style purchasing at the card reader.</p></div></article>
+        <div class="stat e rv"><article class="tile"><div class="num">1&ndash;2</div><h3>Months</h3><p>Typical placement after facility approval.</p></article><article class="tile"><div class="num">0</div><h3>Facility lift</h3><p>No inventory, repairs or cleaning on your staff.</p></article></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="paper">
+    <section class="specs" id="specs">
+      <div class="wrap sgrid">
+        <div><h2 class="rv">Facility-ready specs.</h2><p class="lead rv">The short version of what goes in your lobby or break room.</p></div>
+        <dl class="rows rv">
+          <div><dt>Product focus</dt><dd>Low-glycemic snacks, sugar-free drinks, proteins, nuts, seeds and better-for-you choices</dd></div>
+          <div><dt>Interior</dt><dd>Temperature-aware storage for drinks and select stocked products</dd></div>
+          <div><dt>Checkout</dt><dd>Cashless card reader and tap-to-pay style payment</dd></div>
+          <div><dt>Display</dt><dd>Digital screen for product selection, payment prompts and machine messaging</dd></div>
+          <div><dt>Monitoring</dt><dd>Inventory, temperature, payment and machine-status visibility</dd></div>
+          <div><dt>Operations</dt><dd>Installed, stocked, cleaned, repaired and maintained by GlycoBay</dd></div>
+          <div><dt>Timeline</dt><dd>Typical placement in 1&ndash;2 months after facility approval</dd></div>
+        </dl>
+      </div>
+    </section>
+    <section class="steps" id="how">
+      <div class="wrap">
+        <h2 class="rv">Three steps to a machine on site.</h2>
+        <p class="lead rv">You approve the placement. GlycoBay handles the rest.</p>
+        <ol id="rail">
+          <li><h3>Send us your facility</h3><p>Your facility name and contact info is all we need to start.</p></li>
+          <li><h3>We plan the placement</h3><p>We follow up about the spot, the timeline and the next steps.</p></li>
+          <li><h3>We install and run it</h3><p>We stock, clean, repair and rotate products from then on.</p></li>
+        </ol>
+        <div class="dots" id="dots"><i class="on"></i><i></i><i></i></div>
+        <div class="fit rv"><span>Clinics</span><span>Hospitals</span><span>Universities</span><span>Airports</span><span>Wellness spaces</span></div>
+      </div>
+    </section>
+  </div>
+
+  <section class="contact" id="contact">
+    <div class="wrap">
+      <h2 class="rv">See if GlycoBay fits your location.</h2>
+      <p class="lead rv">Send your facility name and contact info. We'll follow up about placement, timeline and next steps.</p>
+      <form class="rv" action="https://formsubmit.co/glycobayinquiries@gmail.com" method="POST">
+        <input type="hidden" name="_subject" value="New GlycoBay Demo Request">
+        <input type="hidden" name="_captcha" value="false">
+        <div class="fl"><input name="name" placeholder="Name" autocomplete="name" required aria-label="Name"><input type="email" name="email" placeholder="Email" autocomplete="email" required aria-label="Email"></div>
+        <input name="facility" placeholder="Facility / organization" required aria-label="Facility or organization">
+        <textarea name="message" placeholder="Location type or anything helpful" aria-label="Message"></textarea>
+        <button class="btn btn-mint" type="submit">Request a demo<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+      </form>
+      <div class="direct"><span>Or reach Hafez Elachkar, founder</span><a href="tel:+13133006898">313-300-6898</a><a href="mailto:glycobayinquiries@gmail.com">glycobayinquiries@gmail.com</a></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© <span id="yr">2026</span> GlycoBay. Diabetic-friendly vending options. GlycoBay does not provide medical advice.</span>
+    <nav aria-label="Legal"><a href="/privacy-policy">Privacy</a><a href="/terms">Terms</a></nav>
+  </div>
+</footer>
+
+<div class="dock" id="dock"><a class="btn btn-mint" href="#contact">Request a demo</a><a class="btn btn-ghost" href="tel:+13133006898"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2Z"/></svg>Call</a></div>
+
+<script>
+/* ScrollFilm: the house player for Apple-style scroll-driven render films. Inline it into each site (single-file rule).
+   - frames: array of URLs in film order (render with Blender, encode webp q74–80, 1280×720)
+   - pinned <section> (height = scroll length) containing a sticky stage with a <canvas>
+   - scroll sets a target position; the picture glides to it (no snapping), frames are decoded ahead,
+     the canvas repaints only when the frame changes, resolution is capped (DPR ≤ 1.5, width ≤ 1600)
+   - focus: [[t, x0..1], ...] keeps the subject in frame when phones crop a 16:9 film to portrait
+   - onProgress(p, t): drive captions / UI from the same progress (0..1) and film time
+   Usage: ScrollFilm({ section, canvas, frames, focus, mobileStep: 2, onProgress }) */
+function ScrollFilm(o) {
+  const RM = matchMedia('(prefers-reduced-motion: reduce)').matches, small = matchMedia('(max-width: 760px)').matches;
+  const all = o.frames, step = small ? (o.mobileStep || 2) : 1, idx = all.map((_, i) => i).filter(i => i % step === 0 || i === all.length - 1);
+  const cv = o.canvas, ctx = cv.getContext('2d', { alpha: false }), sec = o.section, N = all.length;
+  const img = new Array(N).fill(null); let dirty = true, shown = -1;
+  const load = i => { if (img[i] !== null) return; img[i] = false; const im = new Image(); im.src = all[i]; im.decode().then(() => { img[i] = im; dirty = true; }).catch(() => { img[i] = null; }); };
+  // coarse first (every 8th), then finer: the film is watchable quickly and fills in
+  const order = [...idx].sort((a, b) => ((a % 8 ? 1 : 0) - (b % 8 ? 1 : 0)) || ((a % 4 ? 1 : 0) - (b % 4 ? 1 : 0)) || a - b);
+  let q = 0; (function pump() { for (let n = 0; n < 6 && q < order.length; n++) load(order[q++]); if (q < order.length) setTimeout(pump, 100); })();
+  const size = () => { const d = Math.min(devicePixelRatio || 1, 1.5), w = Math.min(cv.clientWidth * d, 1600); cv.width = Math.round(w); cv.height = Math.round(w * cv.clientHeight / cv.clientWidth); dirty = true; };
+  addEventListener('resize', size); size();
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const focusAt = t => { const P = o.focus || [[0, .5], [1, .5]]; for (let i = 1; i < P.length; i++) if (t <= P[i][0]) return lerp(P[i - 1][1], P[i][1], (t - P[i - 1][0]) / ((P[i][0] - P[i - 1][0]) || 1)); return P[P.length - 1][1]; };
+  function nearest(i) { if (img[i]) return i; for (let d = 1; d < N; d++) { if (img[i - d]) return i - d; if (img[i + d]) return i + d; } return -1; }
+  function draw(t) {               // t = 0..1 film position
+    const k = nearest(Math.round(t * (N - 1))); if (k < 0) return; if (k === shown && !dirty) return; shown = k; dirty = false;
+    const A = img[k], W = cv.width, H = cv.height, fill = small ? (o.phoneFill || 1) : 1;
+    // phones: the film fills the lower part of a tall screen (frames are black-backed), so more of the subject shows and captions sit on black
+    const s = Math.max(W / A.naturalWidth, H * fill / A.naturalHeight), dw = A.naturalWidth * s, dh = A.naturalHeight * s;
+    if (fill < 1) { ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H); }
+    ctx.drawImage(A, Math.min(0, Math.max(W - dw, W / 2 - focusAt(t) * dw)), fill < 1 ? H - dh : (H - dh) / 2, dw, dh);
+  }
+  const progress = () => { const r = sec.getBoundingClientRect(), span = sec.offsetHeight - innerHeight; return Math.min(1, Math.max(0, -r.top / Math.max(1, span))); };
+  let cur = progress(), prev = performance.now(), lastP = -1;
+  (function tick(now) {
+    const dt = Math.min(.05, (now - prev) / 1000); prev = now; const p = progress();
+    cur = RM ? p : cur + (p - cur) * (1 - Math.exp(-dt * 8)); if (Math.abs(p - cur) < .0004) cur = p;
+    draw(cur);
+    if (o.onProgress && Math.abs(p - lastP) > .0003) { lastP = p; o.onProgress(p, cur); }
+    requestAnimationFrame(tick);
+  })(prev);
+  return { progress };
+}
+/* Apple-style helpers */
+// scroll-linked scale-up: an element grows from `from` to 1 (and its corner radius eases) while it crosses the viewport
+function ScrollGrow(el, from = .84) {
+  const f = () => { const r = el.getBoundingClientRect(), k = Math.min(1, Math.max(0, (innerHeight - r.top) / (innerHeight * .9))); el.style.transform = `scale(${(from + (1 - from) * k).toFixed(4)})`; el.style.borderRadius = `${(28 * (1 - k) + 14).toFixed(1)}px`; };
+  addEventListener('scroll', () => requestAnimationFrame(f), { passive: true }); f();
+}
+// statement text that lights up word by word as it scrolls through the middle of the screen
+function ScrollWords(el) {
+  const words = el.textContent.trim().split(/\s+/); el.innerHTML = words.map(w => `<span>${w}</span>`).join(' '); const spans = [...el.children];
+  const f = () => { const r = el.getBoundingClientRect(), k = Math.min(1, Math.max(0, (innerHeight * .78 - r.top) / (r.height + innerHeight * .35))); const n = Math.round(k * spans.length); spans.forEach((s, i) => s.classList.toggle('lit', i < n)); };
+  addEventListener('scroll', () => requestAnimationFrame(f), { passive: true }); f();
+}
+
+(function(){
+var d=document.documentElement,body=document.body,$=function(s){return document.querySelector(s)};
+$('#yr').textContent=new Date().getFullYear();
+var N=120,frames=[];for(var i=0;i<N;i++)frames.push('media/film/f_'+('00'+i).slice(-3)+'.webp');
+var BEATS=[['#c0',-1,.09],['#c1',.17,.38],['#c2',.43,.6],['#c3',.64,.8],['#c4',.88,2]];
+ScrollFilm({section:$('#film'),canvas:$('#cv'),frames:frames,mobileStep:2,phoneFill:.64,focus:[[0, 0.6], [1, 0.6]],
+  onProgress:function(p){BEATS.forEach(function(b){$(b[0]).classList.toggle('on',p>b[1]&&p<b[2]);});$('#hint').classList.toggle('off',p>.02);$('#bar').style.transform='scaleX('+p.toFixed(4)+')';}});
+ScrollGrow($('#grow'),.86);
+var words=$('#words');ScrollWords(words);[].forEach.call(words.children,function(s){if(/GlycoBay/.test(s.textContent))s.classList.add('m');});
+var nav=$('#nav'),film=$('#film');
+function navSync(){nav.classList.toggle('solid',scrollY>film.offsetTop+film.offsetHeight-innerHeight-4);}
+addEventListener('scroll',navSync,{passive:true});addEventListener('resize',navSync);navSync();
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{rootMargin:'0px 0px -8% 0px'});
+document.querySelectorAll('.rv').forEach(function(el){io.observe(el);});
+var rail=$('#rail'),dots=[].slice.call(document.querySelectorAll('#dots i'));
+rail.addEventListener('scroll',function(){var w=rail.firstElementChild.getBoundingClientRect().width+12,k=Math.round(rail.scrollLeft/w);dots.forEach(function(x,i){x.classList.toggle('on',i===Math.min(k,dots.length-1));});},{passive:true});
+var dock=$('#dock');new IntersectionObserver(function(es){es.forEach(function(e){dock.classList.toggle('off',e.isIntersecting);});},{threshold:.15}).observe($('#contact'));
+
+/* intro: the GB mark draws, the leaf grows, GLYCOBAY rises, a glucose line settles flat, a sweep, then the curtain splits */
+var intro=$('#intro');
+if(d.classList.contains('nointro')||!intro){if(intro)intro.remove();body.classList.remove('lock');return;}
+try{sessionStorage.setItem('gbIntro','1')}catch(e){}
+var q=function(s){return intro.querySelector(s)},qa=function(s){return [].slice.call(intro.querySelectorAll(s))};
+var anims=[],done=false,E='cubic-bezier(.65,0,.35,1)',O='cubic-bezier(.16,1,.3,1)';
+function A(el,k,o){if(!el)return;var a=el.animate(k,Object.assign({fill:'both',easing:E},o));anims.push(a);return a;}
+function finish(){if(done)return;done=true;anims.forEach(function(a){try{a.cancel()}catch(e){}});intro.remove();body.classList.remove('lock');}
+A(q('.hex'),[{opacity:0},{opacity:1}],{duration:900,delay:100});
+A(q('.gp'),[{strokeDashoffset:1},{strokeDashoffset:0}],{duration:640,delay:150});
+A(q('.bp'),[{strokeDashoffset:1},{strokeDashoffset:0}],{duration:620,delay:430});
+var lf=q('.lf');lf.style.transformBox='fill-box';lf.style.transformOrigin='0% 100%';
+A(lf,[{opacity:0,transform:'scale(0) rotate(-30deg)'},{opacity:1,transform:'scale(1.15) rotate(4deg)',offset:.7},{opacity:1,transform:'none'}],{duration:480,delay:900,easing:O});
+qa('.wm span').forEach(function(s,i){A(s,[{transform:'translateY(110%)',opacity:0},{transform:'none',opacity:1}],{duration:520,delay:980+i*45,easing:O});});
+A(q('.ekg path'),[{strokeDashoffset:1},{strokeDashoffset:0}],{duration:760,delay:1100,easing:'cubic-bezier(.4,0,.6,1)'});
+A(q('.ekg path'),[{d:'path("M0 23 H96 L106 23 L114 6 L124 40 L134 12 L142 30 L150 23 H360")'},{d:'path("M0 23 H96 L106 23 L114 23 L124 23 L134 23 L142 23 L150 23 H360")'}],{duration:420,delay:1720,easing:O});
+A(q('.sweep'),[{opacity:0,transform:'translateX(-200px) skewX(-14deg)'},{opacity:1,offset:.2},{opacity:1,offset:.8},{opacity:0,transform:'translateX(420px) skewX(-14deg)'}],{duration:620,delay:1500,easing:'ease-in-out'});
+setTimeout(function(){
+  if(done)return;
+  var mk=q('.mk'),a=mk.getBoundingClientRect(),t=document.getElementById('navLogo').getBoundingClientRect();
+  mk.style.transformOrigin='0 0';
+  A(mk,[{transform:'none'},{transform:'translate('+(t.left-a.left)+'px,'+(t.top-a.top)+'px) scale('+(t.width/a.width)+')'}],{duration:480,easing:'cubic-bezier(.7,0,.2,1)'});
+  A(q('.wm'),[{opacity:1,transform:'none'},{opacity:0,transform:'translateY(-10px)'}],{duration:260});
+  A(q('.ekg'),[{opacity:1},{opacity:0}],{duration:220});
+  A(q('.hex'),[{opacity:1},{opacity:0}],{duration:300});
+  A(q('.half.t'),[{transform:'none'},{transform:'translateY(-101%)'}],{duration:620,delay:120,easing:'cubic-bezier(.7,0,.2,1)'});
+  A(q('.half.b'),[{transform:'none'},{transform:'translateY(101%)'}],{duration:620,delay:120,easing:'cubic-bezier(.7,0,.2,1)'});
+  A(q('.skip'),[{opacity:1},{opacity:0}],{duration:150});
+  setTimeout(finish,700);
+},1950);
+intro.addEventListener('click',finish);addEventListener('keydown',finish,{once:true});setTimeout(finish,3400);
+})();
+</script>
+</body>
+</html>
