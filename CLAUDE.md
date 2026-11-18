@@ -42,7 +42,11 @@ The user said: "The designs ur making are coming out as generic ai concepts i do
 - Before building, write the concept in one line ("the page is X because they do Y") and check it couldn't be swapped onto another client.
 - Still professional, mobile first, fast and honest with facts. Formatting, copy, bot blocking and QA rules still apply.
 
-## Standing rule: coffee and matcha sites reuse the 3D cup renders (newest)
+## Standing rule: the 3D cup only when the user says "use Blender" (newest, overrides the cup rule below)
+
+The user said: "The standing rule isn't to always use that cup ... only if I say use Blender, then you use that cup ... Not everything has to use that cup, and I low-key don't like the design of the cup. I think it looks pretty cheap." For coffee and matcha sites, don't render or reuse the luma cup unless the user explicitly says to use Blender. Instead match the business's own branding and the way they do their pictures and ads, with strong animation built from that (their type, colours, doodles, photo style).
+
+## Older rule (only when the user says to use Blender): coffee and matcha sites reuse the 3D cup renders
 
 The user said: "Whenever its anything to do w matcha or coffee use the wiss approach but reuse whatever we made already while just changing the logo so we dont have to re render stuff everytime, i want this done in 15 mins tops", then clarified: "I meant for the 3d renders ... keep their branding colors the focus of the website".
 - **Reuse the 3D cup scene, swap only the logo.** `luma/render/cup.py` (the Buzz'n Brew iced cup: PET, condensation, cream top, ice) takes the sticker from `tex/label.png` (1600x740, transparent outside the sticker; make it with `scratchpad/lumalabel.mjs` or any 1600x740 PNG). `LUMA_MATCHA=1` turns the latte into iced matcha. Copy the script into the new site's `render/`, drop in their label, and render 2 stills through bpe: `bpe run <site>/render/cup.py -m final -- <out> 112 150 96 1` (latte, ~110 s) and `LUMA_MATCHA=1 ... 98 150 96 1` (matcha). Crop 864x864+0+130. No new modelling.
