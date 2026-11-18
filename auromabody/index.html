@@ -329,6 +329,21 @@ footer .fs{text-align:center;font-size:.6875rem;letter-spacing:.2em;text-transfo
 .fcols a{display:block;padding:3px 0}.fcols a:hover{color:var(--goldL)}
 .legal{border-top:1px solid var(--lineD);margin-top:26px;padding-top:16px;font-size:.75rem;display:flex;flex-wrap:wrap;gap:8px 18px;justify-content:space-between}
 
+/* visit */
+.visit{background:radial-gradient(100% 120% at 0 0,#2c2217,var(--black) 62%);color:var(--champ)}
+.visit .wrap{padding:34px 0 38px}
+.vgrid{display:grid;gap:18px}
+.vvid{position:relative;border-radius:6px;overflow:hidden;aspect-ratio:3/4;max-height:52svh;margin:0 auto;width:100%;max-width:390px;box-shadow:0 24px 50px rgba(0,0,0,.5)}
+.vvid video{width:100%;height:100%;object-fit:cover;display:block}
+.vtag{position:absolute;left:10px;bottom:10px;background:rgba(13,11,9,.75);color:var(--goldL);font-size:.6875rem;letter-spacing:.14em;text-transform:uppercase;padding:5px 10px;border-radius:2px}
+.vtag::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:#e04a3a;margin-right:7px;vertical-align:1px;animation:pulse 1.6s ease-in-out infinite}
+.vrows{display:grid;margin-top:14px;border-top:1px solid var(--lineD)}
+.vrows div{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--lineD);font-size:.875rem}
+.vrows dt{color:#a99c86}.vrows dd{font-weight:600;text-align:right}
+.kgrid{display:grid;grid-auto-flow:column;grid-auto-columns:46%;gap:10px;overflow-x:auto;scrollbar-width:none;margin:22px calc(-1*var(--pad)) 0;padding:0 var(--pad)}
+.kgrid::-webkit-scrollbar{display:none}
+.kgrid img{border-radius:4px;aspect-ratio:3/4;object-fit:cover;width:100%}
+@keyframes pulse{50%{opacity:.35}}
 /* toast + dock */
 .toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));z-index:90;transform:translate(-50%,20px);opacity:0;background:var(--black);color:var(--champ);padding:12px 16px;border-radius:4px;font-size:.875rem;display:flex;gap:10px;align-items:center;box-shadow:0 14px 30px rgba(0,0,0,.3);transition:all .45s var(--out);pointer-events:none;white-space:nowrap}
 .toast.on{opacity:1;transform:translate(-50%,0)}
@@ -391,6 +406,10 @@ footer .fs{text-align:center;font-size:.6875rem;letter-spacing:.2em;text-transfo
   .fcols{grid-template-columns:repeat(4,1fr)}
   footer .wrap{padding-bottom:30px}
   .dock{display:none}
+  .visit .wrap{padding:72px 0}
+  .vgrid{grid-template-columns:.8fr 1.2fr;gap:56px;align-items:center}
+  .vvid{max-height:70svh;max-width:none}
+  .kgrid{grid-auto-flow:row;grid-template-columns:repeat(4,1fr);margin:36px 0 0;padding:0}
   .tray{border-radius:8px;margin:0;bottom:16px}
 }
 
@@ -476,7 +495,7 @@ footer .fs{text-align:center;font-size:.6875rem;letter-spacing:.2em;text-transfo
       <div><b>Shop</b><a href="#/discovery">Discovery Fragrances</a><a href="#/premium">Premium Fragrances</a><a href="#/body">Botanical Body Care</a><a href="#/mood">Shop by Mood</a><a href="#/bundle">Build a Bundle</a></div>
       <div><b>Brand</b><a href="#/about">About AUROMA BODY</a><a href="#/spotlight">Let Me Put You On</a><a href="#/favorites">Favorites</a></div>
       <div><b>Help</b><a href="#/help/faq">FAQs</a><a href="#/help/shipping">Shipping</a><a href="#/help/returns">Returns</a><a href="#/help/contact">Contact</a></div>
-      <div><b>Follow</b><a href="https://www.instagram.com/auroma.body/" target="_blank" rel="noopener">Instagram @auroma.body</a></div>
+      <div><b>Visit</b><a href="https://www.google.com/maps/search/?api=1&amp;query=Franklin+Park+Mall+Toledo+OH" target="_blank" rel="noopener">Franklin Park Mall, Toledo, OH</a><a href="https://www.instagram.com/auroma.body/" target="_blank" rel="noopener">Instagram @auroma.body</a></div>
     </div>
     <div class="legal"><span>© <span id="yr">2026</span> AUROMA BODY. Fragrance oils for personal use. Inspired-by scents are our own blends and aren't affiliated with the original houses.</span><span><a href="#/help/privacy">Privacy</a> · <a href="#/help/terms">Terms</a></span></div>
   </div>
@@ -499,12 +518,14 @@ var money=function(n){return '$'+(Math.round(n*100)/100).toFixed(n%1?2:0)};
 var RULES={
   D:{name:'Discovery bundle',list:20,price:function(n){if(n<=0)return 0;if(n<=2)return 20*n;if(n===3)return 50;if(n<=5)return 65;return 65+10*(n-5);}},
   P:{name:'Premium ½ oz bundle',list:50,price:function(n){var t={0:0,1:50,2:80};return 99*Math.floor(n/3)+t[n%3];}},
-  O:{name:'1 oz pair deal',list:100,price:function(n){return 150*Math.floor(n/2)+100*(n%2);}}
+  O:{name:'1 oz pair deal',list:100,price:function(n){return 150*Math.floor(n/2)+100*(n%2);}},
+  B:{name:'Whipped body butter deal',list:45,price:function(n){return 80*Math.floor(n/2)+45*(n%2);}}
 };
 function nudge(g,n){
   if(g==='D'){if(n===1)return 'Add 2 more and pay $50 for 3.';if(n===2)return 'Add 1 more for just $10: 3 for $50.';if(n===3)return 'Add 2 more items for only $15: 5 for $65.';if(n===4)return 'Your 5th item is free. Add one more.';return 'Every item after 5 is just $10.';}
   if(g==='P'){var r=n%3;if(r===1)return 'Add a 2nd ½ oz for $30 more: 2 for $80.';if(r===2)return 'Add a 3rd ½ oz for $19 more: 3 for $99.';return 'Bundle complete: 3 for $99. Start another set any time.';}
   if(g==='O'){return n%2?'Add another 1 oz and it\'s 50% off.':'Pair deal applied: second bottle 50% off.';}
+  if(g==='B'){return n%2?'Add a 2nd body butter: 2 for $80.':'Body butter deal applied: 2 for $80.';}
   return '';
 }
 
@@ -532,9 +553,10 @@ var P=[
  {id:'milk-honey-oil',n:'Milk & Honey',sub:'Bath, Body & Massage Oil · 4 oz',t:'body',cat:'oils',img:'oil-milk-honey',m:[],sz:[{k:'4oz',label:'4 oz',price:18}],ing:'Shea butter, coconut oil, raw honey, frankincense, clove, vitamin E, ginger, sandalwood, grapefruit seed extract, sunflower and bergamot oils.'},
  {id:'oats-aloe-oil',n:'Oats & Aloe',sub:'Bath, Body & Massage Oil · 4 oz',t:'body',cat:'oils',img:'oil-oats-aloe',m:[],sz:[{k:'4oz',label:'4 oz',price:18}],ing:'Oats, shea butter, cocoa butter, vitamin E, aloe vera, sunflower oil and grapefruit seed extract.'},
  {id:'mango-oil',n:'Mango Butter',sub:'Bath, Body & Massage Oil · 4 oz',t:'body',cat:'oils',img:'oil-mango',m:[],sz:[{k:'4oz',label:'4 oz',price:18}],ing:'Shea butter, mango butter, almond oil, olive oil, frankincense, vitamin E, grapefruit seed extract and essential oils.'},
- {id:'sea-moss-butter',n:'Sea Moss Whipped Shea Butter with Elderberry',sub:'Whipped Shea Butter · 8 oz',t:'body',cat:'butters',img:'butter-sea-moss',m:[],best:1,sz:[{k:'8oz',label:'8 oz Jar',price:28}],ing:'Shea butter, sea moss extract, elderberry fruit extract, cocoa seed butter and an essential oil blend. Made in the USA.'},
- {id:'mango-butter',n:'Mango Whipped Shea Butter',sub:'With Tea Tree & Aloe Vera · 8 oz',t:'body',cat:'butters',img:'butter-mango',m:[],sz:[{k:'8oz',label:'8 oz Jar',price:28}],ing:'Shea butter, mango butter, tea tree extract, aloe vera gel, cocoa butter, coconut, olive and argan oils and natural fragrance.'},
- {id:'botanical-soap',n:'Botanical Bar Soap',sub:'Rotating scents · Bundle eligible',t:'body',cat:'soaps',img:'stack-sea-moss',m:[],sz:[{k:'bar',label:'1 Bar',price:20,g:'D'}],ing:'Handmade botanical bar. Ask us which scents are on the counter this week.'}
+ {id:'sea-moss-butter',n:'Sea Moss Whipped Shea Butter with Elderberry',sub:'Whipped Shea Butter · 8 oz',t:'body',cat:'butters',img:'butter-sea-moss',m:[],best:1,sz:[{k:'8oz',label:'8 oz Jar',price:45,g:'B'}],ing:'Shea butter, sea moss extract, elderberry fruit extract, cocoa seed butter and an essential oil blend. Made in the USA.'},
+ {id:'mango-butter',n:'Mango Whipped Shea Butter',sub:'With Tea Tree & Aloe Vera · 8 oz',t:'body',cat:'butters',img:'butter-mango',m:[],sz:[{k:'8oz',label:'8 oz Jar',price:45,g:'B'}],ing:'Shea butter, mango butter, tea tree extract, aloe vera gel, cocoa butter, coconut, olive and argan oils and natural fragrance.'},
+ {id:'cherry-almond-soap',n:'Cherry Almond Soap',sub:'With Illite & Kaolin Clay · approx. 4 oz · Bundle eligible',t:'body',cat:'soaps',img:'soap-cherry',m:[],best:1,sz:[{k:'bar',label:'1 Bar',price:20,g:'D'}],ing:'Handcrafted shea butter and goat milk based soap with illite and kaolin clay, made with all natural ingredients. Approx. 4 oz / 113.4 g.'},
+ {id:'botanical-soap',n:'Shea Butter & Goat Milk Soap',sub:'More scents at the counter · Bundle eligible',t:'body',cat:'soaps',img:'soaps-display',m:[],sz:[{k:'bar',label:'1 Bar',price:20,g:'D'}],ing:'Organic and vegan shea butter and goat milk based soaps for face, body and hair. Natural and organic ingredients, made in the USA. Ask us which bars are on the counter this week.'}
 ];
 var BYID={};P.forEach(function(p){BYID[p.id]=p;});
 var MOODS=[
@@ -610,13 +632,17 @@ V.home=function(){
      '<a class="col rv" href="#/body"><div class="art"><img src="media/butter-sea-moss.webp" alt="" loading="lazy"></div><div class="tx"><h3>Botanical</h3><div class="s">Body oils · Whipped shea · Soaps</div><b>From $18</b><span class="btn btn-gold sm">Shop now</span></div></a>'+
    '</div></div></section>'+
    spotlight(true)+
-   '<section class="sec"><div class="wrap"><div class="sec-h rv"><div><h2>Best sellers</h2><p>The ones people come back for.</p></div><a href="#/discovery">See all</a></div><div class="grid">'+best.slice(0,8).map(card).join('')+'</div></div></section>'+
+   '<section class="sec"><div class="wrap"><div class="sec-h rv"><div><h2>Best sellers</h2><p>The ones people come back for. At the counter, ask for our #1 seller.</p></div><a href="#/discovery">See all</a></div><div class="grid">'+best.slice(0,8).map(card).join('')+'</div></div></section>'+
    '<section class="sec" style="background:var(--champ)"><div class="wrap"><div class="sec-h rv"><div><h2>Shop by mood</h2><p>Find your scent by how you want to feel.</p></div><a href="#/mood">All moods</a></div><div class="moods">'+MOODS.slice(0,4).map(moodTile).join('')+'</div></div></section>'+
    '<section class="sec"><div class="wrap"><div class="bban on-dark rv"><div><div class="caps" style="color:var(--goldL)">Mix &amp; match</div><h2 style="margin-top:8px;color:var(--champ)">Build your own bundle</h2><p style="color:#bfae8f;margin-top:8px">Pick any 7 mL fragrances and soaps. The price drops as you add, no codes needed.</p><div style="margin-top:14px"><a class="btn btn-gold" href="#/bundle">Start building '+ARROW+'</a></div></div>'+tiersD()+'</div></div></section>'+
-   '<section class="sec" style="padding-top:0"><div class="wrap"><div class="sec-h rv"><div><h2>At the counter</h2><p>Every bottle on this site is on our real counter.</p></div></div><div class="cols">'+
-     ['counter-rollons','counter-squares','counter-trio','counter-oils'].map(function(k,i){return '<div class="col rv"><div class="art" style="height:200px"><img src="media/'+k+'.webp" alt="AUROMA BODY products on the counter" loading="lazy"></div></div>';}).join('')+
-   '</div></div></section>';
+   visit(true);
 };
+var MAPS='https://www.google.com/maps/search/?api=1&query=Franklin+Park+Mall+Toledo+OH';
+function visit(home){return '<section class="visit on-dark"><div class="wrap"><div class="vgrid"><div class="vvid rv"><video src="media/kiosk.mp4" poster="media/kiosk-poster.webp" muted loop playsinline autoplay preload="metadata" aria-label="Walking past the AUROMA BODY counter at Franklin Park Mall"></video><span class="vtag">Live at Franklin Park Mall</span></div>'+
+  '<div class="rv"><div class="caps" style="color:var(--goldL)">Visit the counter</div><h2 style="margin-top:8px;color:var(--champ)">Come smell them in person.</h2><p style="color:#d9ccb4;margin-top:10px">Find us at Franklin Park Mall in Toledo, in front of the Apple store. Test any of our 140+ scents, pick up soaps and body butters, and ask for our #1 seller.</p>'+
+  '<dl class="vrows"><div><dt>Where</dt><dd>Franklin Park Mall, Toledo, OH</dd></div><div><dt>Spot</dt><dd>In front of the Apple store</dd></div><div><dt>Hours</dt><dd>Mall hours</dd></div></dl>'+
+  '<div class="ctas" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px"><a class="btn btn-gold" href="'+MAPS+'" target="_blank" rel="noopener">Get directions</a><a class="btn btn-line" href="https://www.instagram.com/auroma.body/" target="_blank" rel="noopener">@auroma.body</a></div></div></div>'+
+  '<div class="kgrid">'+['kiosk-sign','kiosk-soaps','kiosk-front','kiosk-wide'].map(function(k){return '<figure class="rv"><img src="media/'+k+'.webp" width="720" height="960" loading="lazy" alt="The AUROMA BODY counter at Franklin Park Mall"></figure>';}).join('')+'</div></div></section>';}
 function moodTile(m){var ps=P.filter(function(p){return p.m.indexOf(m.id)>=0}).slice(0,3);return '<a class="mood rv" href="#/mood/'+m.id+'"><div class="bg" style="background:'+m.bg+'"></div><div class="bts">'+ps.map(function(p){return p.t==='roll'?roll(p,'x'):square(p,'x')}).join('')+'</div><div><b>'+m.n+'</b><span>'+m.s+'</span></div></a>';}
 function spotlight(home){var p=BYID[SPOT.id];var bars='';for(var i=0;i<34;i++)bars+='<i style="height:'+(25+Math.round(Math.abs(Math.sin(i*1.7))*75))+'%;animation-delay:'+(i*.05)+'s"></i>';
   return '<section class="spot on-dark"><div class="wrap"><div class="rv"><div class="caps" style="color:var(--goldL)">'+SPOT.week+'</div><h2 style="margin-top:8px">Let me put you on!</h2><p class="k">Handpicked favorites. Real talk. New obsessions.</p>'+
@@ -634,7 +660,7 @@ function coll(title,sub,blurb,filterFn,chips,tiers,cr){
 }
 V.discovery=coll('Discovery Fragrances','7 mL Roll-Ons','Long-lasting fragrance oils. Mix and match your favorites with eligible soaps.',function(p){return p.t==='roll'},['Sweet','Fresh','Gourmand','Floral','Sexy','Clean'],tiersD(),'Discovery Fragrances');
 V.premium=coll('Premium Fragrances','½ oz and 1 oz Bottles','Rich, long-lasting oils in our square glass bottles.',function(p){return p.t==='square'},['Sexy','Warm','Woody','Fresh','Floral','Clean'],tiersP()+'<p class="note" style="text-align:center">1 oz bottles: $100, and the second one is 50% off.</p>','Premium Fragrances');
-V.body=coll('Botanical Body Care','Oils · Whipped Shea · Soaps','Nourish your skin with the oils and butters from our counter. Soaps count toward your Discovery bundle.',function(p){return p.t==='body'},['Oils','Butters','Soaps'],null,'Botanical Body Care');
+V.body=coll('Botanical Body Care','Oils · Whipped Shea · Soaps','Organic shea butter and goat milk soaps, whipped body butters and bath, body and massage oils. Soaps count toward your Discovery bundle, and body butters are 2 for $80.',function(p){return p.t==='body'},['Oils','Butters','Soaps'],null,'Botanical Body Care');
 V.mood=function(id){
   if(id){var m=MOODS.filter(function(x){return x.id===id})[0];if(!m)return V.mood();var list=P.filter(function(p){return p.m.indexOf(id)>=0});
     return '<section class="on-dark" style="background:'+m.bg+';color:#fff"><div class="wrap"><div class="ph1" style="padding-bottom:26px"><div class="crumb" style="color:rgba(255,255,255,.7)"><a href="#/" style="color:inherit">Home</a> / <a href="#/mood" style="color:inherit">Shop by Mood</a> / '+m.n+'</div><h1>'+m.n+'</h1><p style="color:rgba(255,255,255,.8)">'+m.s+'</p></div></div></section>'+
@@ -676,22 +702,25 @@ V.bag=function(){if(!bag.length)return '<div class="wrap"><div class="ph1">'+cru
 };
 V.checkout=function(){var r=priceBag(bag);return '<div class="wrap"><div class="ph1">'+crumb('Checkout')+'<h1>Checkout</h1><p>This is a preview of the store. Secure card, Apple Pay and Google Pay checkout connects at launch.</p></div><div class="prose" style="padding-top:0"><div class="sum"><div class="r"><span>Items ('+r.count+')</span><span>'+money(r.list)+'</span></div>'+(r.save>0?'<div class="r save"><span>Bundle savings</span><span>−'+money(r.save)+'</span></div>':'')+'<div class="r t"><span>Subtotal</span><span>'+money(r.total)+'</span></div></div><div style="margin-top:16px;text-align:center"><a class="btn btn-dark" href="#/bag">Back to bag</a></div></div></div>';};
 V.favorites=function(){var l=favs.map(function(id){return BYID[id]}).filter(Boolean);return '<div class="wrap"><div class="ph1">'+crumb('Favorites')+'<h1>Your favorites</h1><p>Tap the heart on anything to save it here.</p></div>'+(l.length?'<div class="grid">'+l.map(card).join('')+'</div>':'<div class="empty">Nothing saved yet.</div>')+'<div style="height:40px"></div></div>';};
-V.about=function(){return '<div class="wrap"><div class="ph1">'+crumb('About')+'<h1>About AUROMA BODY</h1><div class="s">Elevate your aura</div></div><div class="prose"><p>AUROMA BODY started at a counter full of roll-ons, square glass bottles and amber jars, and a simple idea: smelling good should feel like a ritual, not a splurge.</p><h2>Our fragrance oils</h2><p>Our oils are imported from Dubai and poured without alcohol or water, so they sit close to the skin and last. With more than 140 scents, many inspired by the world\'s most loved fragrances, there\'s one for every mood.</p><h2>Our body care</h2><p>Bath, body and massage oils, whipped shea butters and botanical soaps, made with shea, sea moss, honey, oats, aloe and mango butter.</p><h2>Mix and match</h2><p>Everything in the Discovery collection works together. Pick three for $50, four for $65 and the fifth is on us.</p><div style="margin-top:20px"><a class="btn btn-gold" href="#/discovery">Find your scent</a></div></div></div>';};
+V.about=function(){return '<div class="wrap"><div class="ph1">'+crumb('About')+'<h1>About AUROMA BODY</h1><div class="s">Elevate your aura</div></div><div class="prose"><p>AUROMA BODY started at a counter full of roll-ons, square glass bottles and amber jars, and a simple idea: smelling good should feel like a ritual, not a splurge.</p><h2>Our fragrance oils</h2><p>Our oils are imported from Dubai and poured without alcohol or water, so they sit close to the skin and last. With more than 140 scents, many inspired by the world\'s most loved fragrances, there\'s one for every mood.</p><h2>Our body care</h2><p>Bath, body and massage oils, whipped shea butters and botanical soaps, made with shea, sea moss, honey, oats, aloe and mango butter.</p><h2>Mix and match</h2><p>Everything in the Discovery collection works together. Pick three for $50, four for $65 and the fifth is on us.</p><h2>Visit us</h2><p>Our counter is at Franklin Park Mall in Toledo, in front of the Apple store.</p><div style="margin-top:20px"><a class="btn btn-gold" href="#/discovery">Find your scent</a></div></div></div>'+visit(false);};
 var HELP={
- faq:['FAQs','<div class="faq">'+[['How do the bundles work?','Add any 7 mL fragrances and eligible soaps to your bag. 1 is $20, 3 are $50, 4 are $65 and the 5th is free. After five, each extra item is $10. Premium ½ oz bottles are 2 for $80 and 3 for $99. The prices apply on their own.'],['Are your oils alcohol-free?','Yes. Our fragrance oils have no alcohol and no water.'],['Can I mix fragrances and soaps?','Yes. Eligible soaps count toward the same Discovery bundle as the 7 mL roll-ons.'],['Do you have more scents than what\'s online?','We carry 140+ scents. If you don\'t see yours, send us a message.'],['Are these the designer perfumes?','No. Inspired-by scents are our own fragrance oil blends and aren\'t affiliated with the original houses.']].map(function(q){return '<details><summary>'+q[0]+'</summary><p>'+q[1]+'</p></details>';}).join('')+'</div>'],
+ faq:['FAQs','<div class="faq">'+[['How do the bundles work?','Add any 7 mL fragrances and eligible soaps to your bag. 1 is $20, 3 are $50, 4 are $65 and the 5th is free. After five, each extra item is $10. Premium ½ oz bottles are 2 for $80 and 3 for $99. The prices apply on their own.'],['Are your oils alcohol-free?','Yes. Our fragrance oils have no alcohol and no water.'],['Can I mix fragrances and soaps?','Yes. Eligible soaps count toward the same Discovery bundle as the 7 mL roll-ons.'],['Do you have more scents than what\'s online?','We carry 140+ scents. If you don\'t see yours, send us a message or stop by our counter at Franklin Park Mall in Toledo.'],['What are your soaps made with?','Our soaps are organic and vegan, shea butter and goat milk based, for face, body and hair. Natural and organic ingredients, made in the USA.'],['Are these the designer perfumes?','No. Inspired-by scents are our own fragrance oil blends and aren\'t affiliated with the original houses.']].map(function(q){return '<details><summary>'+q[0]+'</summary><p>'+q[1]+'</p></details>';}).join('')+'</div>'],
  shipping:['Shipping','<p>Shipping rates are calculated at checkout from your address. Free-shipping thresholds and delivery times will be listed here at launch.</p>'],
  returns:['Returns','<p>Because fragrance and body care are personal care items, opened products can\'t be returned. If something arrives damaged, contact us within 7 days with a photo and we\'ll make it right. Final policy details will be listed here at launch.</p>'],
  privacy:['Privacy Policy','<p>We collect the details you give us at checkout or when you join our list, and use them to fill orders and send updates you\'ve agreed to. Card details are handled by our payment processor and never stored on our server. We don\'t sell your data.</p>'],
  terms:['Terms','<p>Prices, bundles and availability can change. Inspired-by scents are our own blends and aren\'t affiliated with the original fragrance houses. Product information isn\'t medical advice. Patch test on sensitive skin.</p>'],
- contact:['Contact','<p>Questions about a scent, an order or wholesale? Send us a message on <a href="https://www.instagram.com/auroma.body/" target="_blank" rel="noopener" style="text-decoration:underline">Instagram @auroma.body</a>.</p><form class="form" id="cform"><input placeholder="Name" required aria-label="Name"><input type="email" placeholder="Email" required aria-label="Email"><textarea placeholder="Message" aria-label="Message"></textarea><button class="btn btn-gold" type="submit">Send</button><p class="note" id="cnote"></p></form>']
+ contact:['Contact','<p>Visit our counter at Franklin Park Mall in Toledo, in front of the Apple store, or send us a message on <a href="https://www.instagram.com/auroma.body/" target="_blank" rel="noopener" style="text-decoration:underline">Instagram @auroma.body</a>.</p><form class="form" id="cform"><input placeholder="Name" required aria-label="Name"><input type="email" placeholder="Email" required aria-label="Email"><textarea placeholder="Message" aria-label="Message"></textarea><button class="btn btn-gold" type="submit">Send</button><p class="note" id="cnote"></p></form>']
 };
 V.help=function(t){var h=HELP[t]||HELP.faq;return '<div class="wrap"><div class="ph1">'+crumb(h[0])+'<h1>'+h[0]+'</h1></div><div class="prose">'+h[1]+'<p style="margin-top:22px;font-size:.8125rem">More help: '+Object.keys(HELP).map(function(k){return '<a href="#/help/'+k+'" style="text-decoration:underline">'+HELP[k][0]+'</a>'}).join(' · ')+'</p></div></div>';};
 V.notfound=function(){return '<div class="wrap"><div class="empty"><h1>Not found</h1><p style="margin-top:8px"><a href="#/" style="text-decoration:underline">Back home</a></p></div></div>';};
 
 /* ------------------------------------------------------------------ router */
 var app=$('#app'),curView='';
+function vids(){var vs=app.querySelectorAll('video');if(!vs.length)return;var rm=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var io='IntersectionObserver' in window?new IntersectionObserver(function(es){es.forEach(function(e){var v=e.target;if(e.isIntersecting&&!rm){v.muted=true;var p=v.play();p&&p.catch&&p.catch(function(){});}else v.pause();});},{threshold:.2}):null;
+  vs.forEach(function(v){v.muted=true;if(rm){v.removeAttribute('autoplay');v.pause();}if(io)io.observe(v);});}
 function route(){var h=location.hash.replace(/^#\/?/,'')||'';var parts=h.split('/');var v=parts[0]||'home',arg=parts.slice(1).join('/');if(!V[v])v='notfound';
-  var html=V[v](arg);var go=function(){app.innerHTML=html;curView=v;window.scrollTo(0,0);app.classList.remove('enter');void app.offsetWidth;app.classList.add('enter');mount(v,arg);paintNav(v);};
+  var html=V[v](arg);var go=function(){app.innerHTML=html;curView=v;window.scrollTo(0,0);app.classList.remove('enter');void app.offsetWidth;app.classList.add('enter');mount(v,arg);paintNav(v);vids();};
   if(document.startViewTransition&&!RM&&curView)document.startViewTransition(go);else go();
   document.title=(v==='home'?'AUROMA BODY | Luxury Fragrance Oils and Botanical Body Care':(v==='p'&&BYID[arg]?BYID[arg].n+' | AUROMA BODY':($('h1',app)?$('h1',app).textContent+' | AUROMA BODY':'AUROMA BODY')));
 }
