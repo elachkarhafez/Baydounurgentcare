@@ -1130,7 +1130,7 @@
     <!-- NAMES ON MY CUPS: the kinds of clients Noor has worked with or works with now -->
     <section class="regs" id="clients">
       <div class="wrap">
-        <div class="sec-head"><h2 data-split>Clients I've Worked With <span class="hl">Or Currently Working With.</span></h2><span class="hand">Tap a cup to pour it. Your name could be next.</span></div>
+        <div class="sec-head"><h2 data-split>Clients I've Worked With <span class="hl">Or Currently Working With.</span></h2><span class="hand">Your name could be next.</span></div>
         <div class="cue-row phone-only" style="justify-content:flex-start"><span class="cue x">Swipe For More <svg viewBox="0 0 16 16" aria-hidden="true"><use href="#i-arrow"/></svg></span></div>
         <ul class="r-rail" data-regs aria-label="Kinds of businesses Noor has worked with">
           <li class="r-cup" style="--c1:#ffffff;--c2:#d2b08e;--r:-4deg"><svg viewBox="0 0 80 110" aria-hidden="true"><use href="#papercup"/></svg><span class="r-name">Makeup Artists</span></li>
@@ -1531,7 +1531,7 @@
       items.forEach(x => { if (x !== it && x.classList.contains('open')) set(x, false, true); });
       set(it, open, true);
     });
-    set(items[0], true, false);
+    items.forEach(it => set(it, false, false));
   })();
 
 
@@ -2234,10 +2234,10 @@
       const bd = document.createElement('div'); bd.className = 'r-body'; while (c.firstChild) bd.appendChild(c.firstChild);
       bd.insertAdjacentHTML('afterbegin', steam + cupSvg); c.appendChild(bd);
       c.style.setProperty('--d', (-(i * .37) % 3.6).toFixed(2) + 's'); c.tabIndex = 0; c.setAttribute('role', 'button');
-      c.setAttribute('aria-label', `${$('.r-name', c).textContent}: tap to pour`); c.setAttribute('aria-pressed', 'false');
+      c.setAttribute('aria-label', $('.r-name', c).textContent); c.setAttribute('aria-pressed', 'false');
     });
     onScreen(sec, v => sec.classList.toggle('live', v), '0px');
-    const tap = c => {
+    const tap = (c, quiet) => {
       const liq = $('.r-liq', c), lid = $('.r-lid', c), stream = $('.r-stream', c), wave = $('.r-wave', c), bd = $('.r-body', c), full = !c.classList.contains('full');
       c.classList.toggle('full', full); c.setAttribute('aria-pressed', String(full));
       gsap.killTweensOf([liq, lid, stream, wave]);
@@ -2246,7 +2246,7 @@
       const lvl = () => liq.setAttribute('transform', `translate(0 ${o.y.toFixed(2)})`);
       gsap.fromTo(wave, { x: 0 }, { x: -20, duration: .5, ease: 'none', repeat: 5 });
       if (full) {
-        S('pop', .22, 1.2); S('pour', .32, 1.08, .18); S('chime', .16, 1.15, 1.35); S('pop', .2, .9, 1.45);
+        if (!quiet) { S('pop', .22, 1.2); S('pour', .32, 1.08, .18); S('chime', .16, 1.15, 1.35); S('pop', .2, .9, 1.45); }
         gsap.timeline()
           .to(lid, { y: -14, rotation: -24, svgOrigin: '70 12', duration: .22, ease: 'power2.out' })
           .to(stream, { attr: { height: EMPTY + 14 }, duration: .25, ease: 'power2.in' }, .15)
@@ -2261,6 +2261,21 @@
         gsap.fromTo(bd, { rotation: -6 }, { rotation: 0, duration: .8, ease: 'elastic.out(1.1, .35)', clearProps: 'transform' });
       }
     };
+    // each set of cups pours by itself the first time it's on screen (first the ones you scroll down to, then each swipe of the rail)
+    const poured = new Set(); let queue = [], timer = 0, first = true;
+    const reveal = c => { const n = $('.r-name', c); if (n && +getComputedStyle(n).opacity < .5) gsap.to(n, { scale: 1, opacity: 1, duration: .4, ease: 'back.out(2.4)', clearProps: 'scale,opacity' }); if (+getComputedStyle(c).opacity < .5) gsap.to(c, { opacity: 1, duration: .3, clearProps: 'opacity' }); };
+    const flush = () => {
+      const c = queue.shift(); if (!c) { timer = 0; first = true; return; }
+      reveal(c);
+      if (!c.classList.contains('full')) tap(c, !first);
+      first = false; timer = setTimeout(flush, 140);
+    };
+    const io = new IntersectionObserver(es => es.forEach(e => {
+      if (!e.isIntersecting || poured.has(e.target) || rail.dataset.nudging) return; // not during the little hint nudge
+      poured.add(e.target); queue.push(e.target);
+      if (!timer) timer = setTimeout(flush, 900);
+    }), { threshold: .6 });
+    cups.forEach(c => io.observe(c));
     cups.forEach(c => { c.addEventListener('click', () => tap(c)); c.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); tap(c); } }); });
     // scroll controls: progress, count, arrows, a soft tick as each column passes
     const bar = $('[data-rbar]', sec), count = $('[data-rcount]', sec), prev = $('[data-rprev]', sec), next = $('[data-rnext]', sec), N = cups.length;
@@ -2279,7 +2294,7 @@
     if (ANIM) onScreen(rail, v => {
       if (!v || rail.dataset.nudged || rail.scrollWidth <= rail.clientWidth + 4) return; rail.dataset.nudged = 1;
       const o = { x: 0 }; rail.style.scrollSnapType = 'none';
-      gsap.timeline({ delay: 1.6, onComplete: () => { rail.style.scrollSnapType = ''; } })
+      gsap.timeline({ delay: 1.6, onStart: () => { rail.dataset.nudging = '1'; }, onComplete: () => { rail.style.scrollSnapType = ''; delete rail.dataset.nudging; } })
         .to(o, { x: Math.min(140, colW() * 1.2), duration: .7, ease: 'power2.inOut', onUpdate: () => { rail.scrollLeft = o.x; } })
         .to(o, { x: 0, duration: .8, ease: 'power2.inOut', onUpdate: () => { rail.scrollLeft = o.x; } }, '+=.25');
     }, '-120px');
