@@ -1410,7 +1410,12 @@
       try { ctx = new AC(); } catch (e) { return; }
       master = ctx.createGain(); master.connect(ctx.destination); musicG = ctx.createGain(); musicG.gain.value = 0; musicG.connect(master);
       (list || names).filter(n => !MUSIC.includes(n)).forEach(n => fetch(`snd/${n}.mp3`).then(r => r.arrayBuffer()).then(b => new Promise((ok, no) => ctx.decodeAudioData(b, ok, no))).then(b => { bufs[n] = b; }).catch(() => {}));
-      document.addEventListener('visibilitychange', () => { if (!ctx) return; document.hidden ? ctx.suspend() : ctx.resume(); });
+      // leaving the browser (home screen, app switch, lock) stops everything; coming back picks the jazz up again if sound is on
+      let resumeMusic = false;
+      const away = () => { if (!ctx) return; ctx.suspend().catch(() => {}); if (music && music.pause) { if (!music.paused) resumeMusic = true; music.pause(); } };
+      const back = () => { if (!ctx || document.hidden) return; ctx.resume().catch(() => {}); if (music && music.play && resumeMusic && on) { music.play().catch(() => {}); } resumeMusic = false; };
+      document.addEventListener('visibilitychange', () => { document.hidden ? away() : back(); });
+      addEventListener('pagehide', away); addEventListener('pageshow', back);
     };
     const unlock = () => { if (ctx && ctx.state !== 'running') ctx.resume().catch(() => {}); };
     const play = (n, g = 1, rate = 1, at = 0) => {
