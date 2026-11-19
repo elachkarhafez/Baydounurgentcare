@@ -10,14 +10,14 @@
 <meta property="og:url" content="https://roosttx.vercel.app/">
 <meta property="og:title" content="Roost Chicken Salad &amp; Deli · Tyler, Longview &amp; Athens, TX">
 <meta property="og:description" content="Nine scratch-made chicken salads, deli sandwiches, Southern salads and breakfast all day. Four East Texas locations in Tyler, Longview and Athens, open daily 6 AM to 9 PM. Order online or book catering.">
-<meta property="og:image" content="https://roosttx.vercel.app/media/og.jpg?v=mwmzpy25">
+<meta property="og:image" content="https://roosttx.vercel.app/media/og.jpg?v=mwn3hry8">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Roost Chicken Salad &amp; Deli · Tyler, Longview &amp; Athens, TX">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Roost Chicken Salad &amp; Deli · Tyler, Longview &amp; Athens, TX">
 <meta name="twitter:description" content="Nine scratch-made chicken salads, deli sandwiches, Southern salads and breakfast all day. Four East Texas locations in Tyler, Longview and Athens, open daily 6 AM to 9 PM. Order online or book catering.">
-<meta name="twitter:image" content="https://roosttx.vercel.app/media/og.jpg?v=mwmzpy25">
+<meta name="twitter:image" content="https://roosttx.vercel.app/media/og.jpg?v=mwn3hry8">
 <link rel="apple-touch-icon" href="https://roosttx.vercel.app/media/apple-touch-icon.png">
 <meta name="robots" content="noai, noimageai">
 <meta name="theme-color" content="#f5efe2">
@@ -2561,7 +2561,7 @@ $$('button',mt).forEach(function(b,i){b.addEventListener('click',function(){cur=
 drawMenu();
 
 /* ---------- scoop counter */
-var N=1,sel=['roost'],sand=false,fl=$('#flv'),zg=document.getElementById('scoopz');
+var N=1,sel=['roost'],dflt=true,sand=false,fl=$('#flv'),zg=document.getElementById('scoopz');
 var groups={};FLAV.forEach(function(f){(groups[f.g]=groups[f.g]||[]).push(f)});
 fl.innerHTML=Object.keys(groups).map(function(g){return '<div class="fg" role="group" aria-label="'+g+'"><span class="lab">'+g+'</span>'+groups[g].map(function(f){return '<button class="chip" type="button" data-f="'+f.id+'" aria-pressed="false"><i style="background:'+f.c+'"></i>'+f.n+'<span class="n"></span></button>'}).join('')+'</div>'}).join('');
 var byId={};FLAV.forEach(function(f){byId[f.id]=f});
@@ -2584,7 +2584,7 @@ function render(added){
 }
 $$('.sizes button').forEach(function(b){b.addEventListener('click',function(){N=+b.dataset.n;$$('.sizes button').forEach(function(x){x.setAttribute('aria-pressed',x===b)});if(sel.length>N)sel=sel.slice(0,N);render();});});
 $$('.chip',fl).forEach(function(b){b.addEventListener('click',function(){var f=byId[b.dataset.f];$('#fdesc').innerHTML='<b>'+f.n+':</b> '+f.d;
-  var idx;if(sel.length<N){sel.push(f.id);idx=sel.length-1}else{sel[sel.length-1]=f.id;idx=sel.length-1}render(idx);});});
+  if(dflt){sel=[];dflt=false}var idx;if(sel.length<N){sel.push(f.id);idx=sel.length-1}else{sel[sel.length-1]=f.id;idx=sel.length-1}render(idx);});});
 var sw=$('#sand');sw.addEventListener('click',function(){sand=!sand;sw.setAttribute('aria-checked',sand);$('#breadw').classList.toggle('on',sand);render();});
 $('#breadsel').addEventListener('change',function(){render()});
 render();
