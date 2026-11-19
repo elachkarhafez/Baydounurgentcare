@@ -4,7 +4,7 @@ random.seed(11)
 NV = '#0d1b2e'
 
 def interior(item):
-    o = 'stroke="%s" stroke-width="3" stroke-linejoin="round"' % NV
+    o = 'stroke="%s" stroke-width="1.8" stroke-linejoin="round"' % NV
     g = ['<defs><clipPath id="vclip"><circle cx="260" cy="260" r="194"/></clipPath>'
          '<radialGradient id="vbg" cx="50%" cy="38%" r="70%"><stop offset="0" stop-color="#5a3d1c"/><stop offset=".6" stop-color="#2c1d0e"/><stop offset="1" stop-color="#140d06"/></radialGradient>'
          '<linearGradient id="beam" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe3a1" stop-opacity=".55"/><stop offset="1" stop-color="#ffe3a1" stop-opacity="0"/></linearGradient>'

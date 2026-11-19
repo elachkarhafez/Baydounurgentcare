@@ -2,7 +2,7 @@
 import math, random
 random.seed(4)
 NV = '#0d1b2e'  # outline navy
-OL = 'stroke="%s" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"' % NV
+OL = 'stroke="%s" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"' % NV
 
 def wave(y, amp, length, w=1700, x0=-130):
     pts = ['M%.0f %.0f' % (x0, y)]
@@ -14,9 +14,9 @@ def wave(y, amp, length, w=1700, x0=-130):
 
 def hero():
     s = ['<svg class="scene" viewBox="0 0 1440 720" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>'
-         '<linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1e3563"/><stop offset=".45" stop-color="#5c5a8e"/><stop offset=".75" stop-color="#e99a7a"/><stop offset="1" stop-color="#ffd59a"/></linearGradient>'
+         '<linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0e1b30"/><stop offset=".42" stop-color="#2f3458"/><stop offset=".74" stop-color="#9c6a72"/><stop offset="1" stop-color="#e2ae84"/></linearGradient>'
          '<radialGradient id="sunG"><stop offset="0" stop-color="#fff3cf"/><stop offset=".35" stop-color="#ffd27a" stop-opacity=".9"/><stop offset="1" stop-color="#ffb35c" stop-opacity="0"/></radialGradient>'
-         '<linearGradient id="riv" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3d86d1"/><stop offset="1" stop-color="#1d4f91"/></linearGradient>'
+         '<linearGradient id="riv" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a5784"/><stop offset="1" stop-color="#11294a"/></linearGradient>'
          '<radialGradient id="doorG" cx="50%" cy="70%"><stop offset="0" stop-color="#fff1c4"/><stop offset=".6" stop-color="#ffc861"/><stop offset="1" stop-color="#e3953a"/></radialGradient>'
          '<radialGradient id="spill" cx="50%" cy="0%" r="80%"><stop offset="0" stop-color="#ffd27a" stop-opacity=".75"/><stop offset="1" stop-color="#ffd27a" stop-opacity="0"/></radialGradient>'
          '</defs><rect width="1440" height="720" fill="url(#sky)"/>']
@@ -24,10 +24,10 @@ def hero():
     for i in range(26):
         x, y = random.uniform(20, 1420), random.uniform(16, 200)
         s.append('<circle class="star" cx="%.0f" cy="%.0f" r="%.1f" fill="#fff6dc" opacity="%.2f"/>' % (x, y, random.uniform(1, 2.2), random.uniform(.3, .8)))
-    s.append('<g id="sun"><circle cx="300" cy="410" r="190" fill="url(#sunG)"/><circle cx="300" cy="410" r="62" fill="#ffe3a1" stroke="#ffcf7a" stroke-width="6"/></g>')
+    s.append('<g id="sun"><circle cx="300" cy="410" r="190" fill="url(#sunG)"/><circle cx="300" cy="410" r="58" fill="#ffe3b0"/></g>')
     # clouds
     def cloud(x, y, sc, cls):
-        return ('<g class="%s" transform="translate(%d %d) scale(%.2f)"><path d="M0 40 q0 -28 30 -28 q8 -26 40 -24 q24 -22 52 0 q30 -6 36 22 q26 2 26 30 z" fill="#fde7d3" %s/></g>' % (cls, x, y, sc, OL))
+        return ('<g class="%s" transform="translate(%d %d) scale(%.2f)"><path d="M0 40 q0 -28 30 -28 q8 -26 40 -24 q24 -22 52 0 q30 -6 36 22 q26 2 26 30 z" fill="#d9b3a6" fill-opacity=".85" %s/></g>' % (cls, x, y, sc, OL))
     s += [cloud(140, 120, 1.1, 'cl c1'), cloud(820, 70, .9, 'cl c2'), cloud(1150, 160, 1.25, 'cl c3'), cloud(520, 210, .7, 'cl c4')]
     # far shore: Walpole Island, low trees
     sh = ['M-20 452']
@@ -36,10 +36,10 @@ def hero():
         w = random.uniform(26, 58); h = random.uniform(10, 26)
         sh.append('q%.0f %.0f %.0f 0' % (w / 2, -h * 2, w)); x += w
     sh.append('V470H-20Z')
-    s.append('<path d="%s" fill="#2b4a5a" %s/>' % (' '.join(sh), OL.replace('4', '3', 1)))
+    s.append('<path d="%s" fill="#1a2c3a" %s/>' % (' '.join(sh), OL.replace('4', '3', 1)))
     # the freighter (a Great Lakes laker)
     s.append('<g id="ship"><g transform="translate(0 404)">'
-             '<path d="M0 30 L330 30 L318 52 L14 52 Z" fill="#b8322c" ' + OL + '/>'
+             '<path d="M0 30 L330 30 L318 52 L14 52 Z" fill="#7e2a27" ' + OL + '/>'
              '<rect x="6" y="22" width="320" height="10" fill="#e9e3d6" ' + OL + '/>'
              '<rect x="248" y="-6" width="64" height="30" rx="3" fill="#f6ecd9" ' + OL + '/>'
              '<rect x="258" y="-22" width="40" height="18" rx="2" fill="#f6ecd9" ' + OL + '/>'
@@ -49,18 +49,18 @@ def hero():
              '</g></g>')
     # river with three rolling wave layers
     s.append('<rect y="460" width="1440" height="260" fill="url(#riv)"/>')
-    s.append('<path class="w w1" d="%s" fill="#4f97dc" %s/>' % (wave(486, 9, 120), OL.replace('4', '3', 1)))
-    s.append('<path class="w w2" d="%s" fill="#3b7fc8" %s/>' % (wave(520, 11, 150), OL.replace('4', '3', 1)))
+    s.append('<path class="w w1" d="%s" fill="#30608f" %s/>' % (wave(486, 9, 120), OL.replace('4', '3', 1)))
+    s.append('<path class="w w2" d="%s" fill="#244d77" %s/>' % (wave(520, 11, 150), OL.replace('4', '3', 1)))
     # sun glitter on the water
     for i in range(16):
         x, y = 210 + random.uniform(-60, 60) + i * 2, 476 + i * 9
         s.append('<rect class="gl" x="%.0f" y="%.0f" width="%.0f" height="4" rx="2" fill="#ffe3a1" style="animation-delay:-%.1fs"/>' % (x + random.uniform(-40, 40), y, random.uniform(18, 46), random.uniform(0, 3)))
     # gulls
     for i, (x, y, sc) in enumerate([(560, 300, 1), (640, 270, .8), (1010, 240, .9)]):
-        s.append('<g class="gull g%d" transform="translate(%d %d) scale(%.1f)"><path d="M-18 0 q9 -12 18 0 q9 -12 18 0" fill="none" stroke="%s" stroke-width="4" stroke-linecap="round"/></g>' % (i, x, y, sc, NV))
+        s.append('<g class="gull g%d" transform="translate(%d %d) scale(%.1f)"><path d="M-18 0 q9 -12 18 0 q9 -12 18 0" fill="none" stroke="%s" stroke-width="2.4" stroke-linecap="round"/></g>' % (i, x, y, sc, NV))
     # near bank: grass + boardwalk
-    s.append('<path d="M-20 600 Q360 572 720 590 T1460 584 V740 H-20Z" fill="#3d6b4a" ' + OL + '/>')
-    s.append('<path d="M-20 636 Q360 612 720 628 T1460 622 V740 H-20Z" fill="#d9c4a0" ' + OL + '/>')
+    s.append('<path d="M-20 600 Q360 572 720 590 T1460 584 V740 H-20Z" fill="#22392f" ' + OL + '/>')
+    s.append('<path d="M-20 636 Q360 612 720 628 T1460 622 V740 H-20Z" fill="#a88e68" ' + OL + '/>')
     # the bank building, centred so phones keep it
     B = ['<g class="shift"><g id="bankp"><g id="bank" transform="translate(720 600)">']
     B.append('<path d="M-250 0 h500 v-18 h-500 z" fill="#d8ccb4" ' + OL + '/>')       # steps
@@ -69,7 +69,7 @@ def hero():
     # windows between columns, they light up
     for wx in (-176, -100, 64, 140):
         B.append('<rect class="win" x="%d" y="-196" width="38" height="70" rx="19" fill="#ffd27a" %s/>' % (wx, OL))
-        B.append('<path d="M%d -161 h38 M%d -196 v70" stroke="%s" stroke-width="3"/>' % (wx, wx + 19, NV))
+        B.append('<path d="M%d -161 h38 M%d -196 v70" stroke="%s" stroke-width="1.8"/>' % (wx, wx + 19, NV))
     # the door, glowing
     B.append('<path d="M-46 -32 v-110 a46 46 0 0 1 92 0 v110 z" fill="#3a2a17" ' + OL + '/>')
     B.append('<path class="door" d="M-38 -32 v-104 a38 38 0 0 1 76 0 v104 z" fill="url(#doorG)"/>')
@@ -83,17 +83,17 @@ def hero():
     B.append('<rect class="signbg" x="-170" y="-268" width="340" height="28" rx="4" fill="#0d1b2e"/>')
     B.append('<text class="signtx" x="0" y="-247" text-anchor="middle" font-family="Marcellus,serif" font-size="20" letter-spacing="5" fill="#ecd3a0">THE RIVER BANK</text>')
     B.append('<path d="M-256 -276 L0 -352 L256 -276 Z" fill="#f1e6cf" ' + OL + '/>')    # pediment
-    B.append('<path d="M-200 -286 L0 -340 L200 -286 Z" fill="none" stroke="%s" stroke-width="3" opacity=".5"/>' % NV)
+    B.append('<path d="M-200 -286 L0 -340 L200 -286 Z" fill="none" stroke="%s" stroke-width="1.5" opacity=".5"/>' % NV)
     B.append('<circle cx="0" cy="-306" r="15" fill="#d9b36c" ' + OL + '/><path d="M-8 -306 q4 -6 8 0 t8 0" fill="none" stroke="%s" stroke-width="3"/>' % NV)
     # flag on the roof
-    B.append('<path d="M0 -352 V-410" stroke="%s" stroke-width="4"/><path class="flag" d="M2 -408 q20 -6 40 2 q-20 6 -40 18 z" fill="#3d86d1" %s/>' % (NV, OL))
+    B.append('<path d="M0 -352 V-410" stroke="%s" stroke-width="2.4"/><path class="flag" d="M2 -408 q20 -6 40 2 q-20 6 -40 18 z" fill="#b98b3e" %s/>' % (NV, OL))
     B.append('</g></g></g>')
     s += B
     # boardwalk railing in front
-    rail = ['<g id="rail">', '<path d="M-20 664 H1460" stroke="%s" stroke-width="5"/>' % NV, '<path d="M-20 690 H1460" stroke="%s" stroke-width="4"/>' % NV]
-    for x in range(0, 1460, 46): rail.append('<path d="M%d 664 V720" stroke="%s" stroke-width="4"/>' % (x, NV))
+    rail = ['<g id="rail">', '<path d="M-20 664 H1460" stroke="%s" stroke-width="3"/>' % NV, '<path d="M-20 690 H1460" stroke="%s" stroke-width="2"/>' % NV]
+    for x in range(0, 1460, 46): rail.append('<path d="M%d 664 V720" stroke="%s" stroke-width="2"/>' % (x, NV))
     for x in (120, 470, 1000, 1330):
-        rail.append('<g class="lamp"><path d="M%d 664 V560" stroke="%s" stroke-width="6"/><rect x="%d" y="532" width="22" height="30" rx="4" fill="#ffd27a" %s/><path d="M%d 528 h30" stroke="%s" stroke-width="5" stroke-linecap="round"/></g>' % (x, NV, x - 11, OL, x - 15, NV))
+        rail.append('<g class="lamp"><path d="M%d 664 V560" stroke="%s" stroke-width="3"/><rect x="%d" y="532" width="22" height="30" rx="4" fill="#ffd27a" %s/><path d="M%d 528 h30" stroke="%s" stroke-width="3" stroke-linecap="round"/></g>' % (x, NV, x - 11, OL, x - 15, NV))
     rail.append('</g>')
     s += rail
     s.append('</svg>')
@@ -107,8 +107,8 @@ def vault():
     v.append(interior.interior(item))
     v.append('</svg>')
     v.append('<div class="vdoorw" id="vdoorw"><svg class="vsvg" viewBox="0 0 520 520" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">')
-    v.append('<g id="vdoor"><circle cx="260" cy="260" r="200" fill="#9fb0c3" %s/>' % OL)
-    v.append('<circle cx="260" cy="260" r="168" fill="#b9c7d6" %s/>' % OL)
+    v.append('<g id="vdoor"><circle cx="260" cy="260" r="200" fill="#8d9cae" %s/>' % OL)
+    v.append('<circle cx="260" cy="260" r="168" fill="#a9b6c5" %s/>' % OL)
     for i in range(12):
         a = math.radians(i * 30); x, y = 260 + 184 * math.cos(a), 260 + 184 * math.sin(a)
         v.append('<circle cx="%.1f" cy="%.1f" r="7" fill="#e2c27e" %s/>' % (x, y, OL.replace('4', '3', 1)))
