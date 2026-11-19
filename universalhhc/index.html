@@ -10,14 +10,14 @@
 <meta property="og:url" content="https://universal-home-health-care.vercel.app/">
 <meta property="og:title" content="Universal Home Health Care · Home health care in Southfield, MI">
 <meta property="og:description" content="Skilled nursing, therapy, home health aides and social work brought to your home in Southfield, Michigan and the tri-county area. An on-call registered nurse 24 hours a day, 7 days a week. Call 800-733-1659.">
-<meta property="og:image" content="https://universal-home-health-care.vercel.app/media/og.jpg?v=mwnw83po">
+<meta property="og:image" content="https://universal-home-health-care.vercel.app/media/og.jpg?v=mwnw9z1s">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Universal Home Health Care · Home health care in Southfield, MI">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Universal Home Health Care · Home health care in Southfield, MI">
 <meta name="twitter:description" content="Skilled nursing, therapy, home health aides and social work brought to your home in Southfield, Michigan and the tri-county area. An on-call registered nurse 24 hours a day, 7 days a week. Call 800-733-1659.">
-<meta name="twitter:image" content="https://universal-home-health-care.vercel.app/media/og.jpg?v=mwnw83po">
+<meta name="twitter:image" content="https://universal-home-health-care.vercel.app/media/og.jpg?v=mwnw9z1s">
 <link rel="apple-touch-icon" href="https://universal-home-health-care.vercel.app/media/apple-touch-icon.png">
 <meta name="robots" content="noai, noimageai">
 <meta name="theme-color" content="#04130e">
@@ -1192,16 +1192,17 @@ who();setInterval(who,30000);
 var rb=$('#roles'),rc=$('#rcard');
 rb.innerHTML=ROLES.map(function(r,i){return '<button type="button" aria-pressed="'+(i===0)+'" data-i="'+i+'"><i>'+r.ab+'</i>'+r.n+'</button>'}).join('');
 var W=$('#walker'),door=$('#door'),glow=$('.house-glow');
-function showRole(i,anim){var r=ROLES[i];
+var curRole=0;function showRole(i,anim){var r=ROLES[i];curRole=i;
   rc.innerHTML='<h3>'+r.n+'</h3><p>'+r.d+'</p>'+(r.l&&r.l.length?'<ul>'+r.l.map(function(x){return '<li>'+x+'</li>'}).join('')+'</ul>':'');
   $$('button',rb).forEach(function(b){b.setAttribute('aria-pressed',+b.dataset.i===i)});
   $('#wlab').textContent=r.ab;
   if(window.gsap&&!RM&&anim){gsap.fromTo(rc,{opacity:0,y:8},{opacity:1,y:0,duration:.35});
     gsap.timeline().set(W,{x:-170,opacity:1}).to(W,{x:0,duration:1.1,ease:'power2.inOut'}).to(door,{scaleX:.15,transformOrigin:'0% 50%',duration:.25},'-=.2').to(W,{opacity:0,scale:.6,transformOrigin:'50% 100%',duration:.3}).to(glow,{opacity:1,duration:.3},'<').to(door,{scaleX:1,duration:.3}).to(glow,{opacity:.35,duration:.8});}
 }
-$$('button',rb).forEach(function(b){b.addEventListener('click',function(){showRole(+b.dataset.i,true)})});
+$$('button',rb).forEach(function(b){b.addEventListener('click',function(){ioT.disconnect();showRole(+b.dataset.i,true)})});
 showRole(0,false);
-var ioT=new IntersectionObserver(function(es){if(es[0].isIntersecting){showRole(0,true);ioT.disconnect()}},{threshold:.5});ioT.observe($('#team .stage'));
+var ioT=new IntersectionObserver(function(es){if(es[0].isIntersecting){showRole(curRole,true);ioT.disconnect()}},{threshold:.5});ioT.observe($('#team .stage'));
+
 
 /* ---------- two doors */
 var tabs=[['tfam','dfam'],['tpro','dpro']];
