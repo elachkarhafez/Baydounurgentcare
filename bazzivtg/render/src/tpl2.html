@@ -120,14 +120,25 @@ footer a{color:var(--ink2);text-decoration:none}
 .no-motion .rv{opacity:1;transform:none}.no-motion .mw .w>span{transform:none}
 
 /* intro */
-#intro{position:fixed;inset:0;z-index:100;display:none;background:var(--bg);overflow:hidden}
+#intro{position:fixed;inset:0;z-index:100;display:none;overflow:hidden;--seam:40%;color:#ece5d6}
 .js-intro #intro{display:block}
-#intro .ib{position:absolute;left:-5%;right:-5%;top:28%;height:20px}
-#intro .ib path{fill:none;stroke:var(--ink);stroke-width:3;stroke-linecap:round}
-#intro .stage{position:absolute;left:50%;top:28%;width:min(82vw,500px);transform:translateX(-50%)}
+.js-intro .brand svg{opacity:0}
+#intro .ct{position:absolute;left:0;right:0;background:#0d0c0a;will-change:transform}
+#intro .ct.t{top:0;height:calc(var(--seam) + 1px)}
+#intro .ct.b{top:var(--seam);bottom:0}
+#intro .beam{position:absolute;left:50%;top:0;width:min(150vw,1200px);height:100%;transform:translateX(-50%);opacity:0;pointer-events:none;
+  background:radial-gradient(ellipse 34% 56% at 50% var(--seam),rgba(255,222,160,.20),rgba(255,214,140,.06) 55%,transparent 72%),linear-gradient(rgba(255,226,170,.10),rgba(255,226,170,0) 70%);
+  clip-path:polygon(44% 0,56% 0,92% 100%,8% 100%)}
+#intro .pool{position:absolute;left:50%;top:calc(var(--seam) + min(60vw,370px));width:min(110vw,820px);height:120px;transform:translate(-50%,-50%);opacity:0;pointer-events:none;
+  background:radial-gradient(ellipse 50% 50% at 50% 50%,rgba(255,214,140,.13),transparent 70%)}
+#intro canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+#intro .vig{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 62% 75% at 50% 42%,transparent 38%,rgba(13,12,10,.88) 74%,#0d0c0a 100%)}
+#intro .stage{position:absolute;left:calc(50% - min(41vw,250px));top:calc(45% - min(82vw,500px)*.3077);width:min(82vw,500px);transform-origin:0 0}
 #intro .stage svg{width:100%;height:auto;overflow:visible}
-#intro .skip{position:absolute;left:0;right:0;bottom:calc(26px + env(safe-area-inset-bottom));text-align:center;color:var(--ink3)}
-
+#intro .live{position:absolute;left:0;right:0;top:calc(45% + min(82vw,500px)*.3077 + 18px);display:flex;justify-content:center;align-items:center;gap:10px;font-size:.6875rem;font-weight:600;letter-spacing:.32em;text-transform:uppercase;opacity:0}
+#intro .live i{width:7px;height:7px;border-radius:50%;background:#ff4a3d;box-shadow:0 0 0 0 rgba(255,74,61,.6);animation:lv 1.1s infinite}
+@keyframes lv{to{box-shadow:0 0 0 9px rgba(255,74,61,0)}}
+#intro .skip{position:absolute;left:0;right:0;bottom:calc(24px + env(safe-area-inset-bottom));text-align:center;color:rgba(236,229,214,.42)}
 
 /* ---------- sample store */
 .shop .banner{position:relative;overflow:hidden;aspect-ratio:16/9;max-height:38svh;background:var(--card);margin-bottom:16px}
@@ -226,13 +237,17 @@ footer a{color:var(--ink2);text-decoration:none}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 <script>
-(function(){var d=document.documentElement;try{if(matchMedia('(prefers-reduced-motion: reduce)').matches){d.classList.add('no-motion')}else if(!sessionStorage.getItem('bazziIntro2')){d.classList.add('js-intro')}}catch(e){}})();
+(function(){var d=document.documentElement;try{if(matchMedia('(prefers-reduced-motion: reduce)').matches){d.classList.add('no-motion')}else if(!sessionStorage.getItem('bazziIntro3')){d.classList.add('js-intro')}}catch(e){}})();
 </script>
 </head>
 <body>
 <div id="intro" aria-hidden="true">
-  <svg class="ib" viewBox="0 0 1000 20" preserveAspectRatio="none"><path id="ibp" d="M0 10H1000"/></svg>
+  <div class="ct t"></div><div class="ct b"></div>
+  <div class="beam"></div><div class="pool"></div>
+  <canvas id="dust"></canvas>
   <div class="stage" id="istage">{{LOGO_ANIM}}</div>
+  <div class="vig"></div>
+  <div class="live"><i></i><span>Live on Whatnot</span></div>
   <div class="skip lab">Tap to skip</div>
 </div>
 
@@ -372,31 +387,101 @@ addEventListener('keydown',function(e){if(e.key==='Escape')closeAll()});
 $$('.filters button').forEach(function(b){b.addEventListener('click',function(){var c=b.dataset.c;$$('.filters button').forEach(function(x){x.setAttribute('aria-pressed',x===b)});
   $$('.sp').forEach(function(s){s.hidden=!(c==='All'||s.dataset.c===c);if(!s.hidden)s.classList.add('in')})})});
 drawBag();
-/* ---------- logo opening: the hanger drops onto the rail, BAZZI hangs and swings, VTG tag, then it's pulled off the rack */
+/* ---------- logo opening: digging the rack. A rack of tees slides along a gold rail under a work light, parts, the hanger turns
+   to face you, BAZZI is screen-printed by a squeegee pull, the VTG tag stamps on, foil shine, then the curtain splits on the rail
+   and the wordmark flies into the nav */
 var intro=$('#intro'),G=window.gsap;
 if(!html.classList.contains('js-intro')||!G){html.classList.remove('js-intro');arm();return;}
 document.body.classList.add('lock');
-var done=false;
-function finish(){if(done)return;done=true;try{sessionStorage.setItem('bazziIntro2','1')}catch(e){}document.body.classList.remove('lock');intro.style.display='none';html.classList.remove('js-intro');}
-var bp=$('#ibp'),BL=bp.getTotalLength();bp.style.strokeDasharray=BL;bp.style.strokeDashoffset=BL;
-G.set('#lg-hanger',{y:-260,rotation:-22,svgOrigin:'260 18'});
-var L=$$('#istage .lg-l');L.forEach(function(l){var b=l.getBBox();G.set(l,{y:-170,opacity:0,rotation:-12,svgOrigin:(b.x+b.width/2)+' '+b.y})});
-G.set('#lg-vtg',{scale:2.2,opacity:0,rotation:-14,svgOrigin:'260 262'});
+var done=false,raf=0,armed=false;
+function go(){if(!armed){armed=true;arm()}}
+function finish(){if(done)return;done=true;cancelAnimationFrame(raf);try{sessionStorage.setItem('bazziIntro3','1')}catch(e){}
+  document.body.classList.remove('lock');intro.style.display='none';html.classList.remove('js-intro');go();}
+var stage=$('#istage'),svg=$('svg',stage);
+/* the curtain seam sits exactly on the rail */
+function seam(){var m=svg.getScreenCTM();if(m)intro.style.setProperty('--seam',(m.f+24*m.d)+'px')}
+seam();
+/* dust in the work light */
+var cv=$('#dust'),cx=cv.getContext('2d'),dpr=Math.min(devicePixelRatio||1,1.5),W=0,H=0,motes=[],gust=0;
+function dsize(){W=innerWidth;H=innerHeight;cv.width=W*dpr;cv.height=H*dpr;cx.setTransform(dpr,0,0,dpr,0,0)}
+dsize();
+function mote(x,y,vx,vy,life){motes.push({x:x,y:y,vx:vx,vy:vy,r:.5+Math.random()*1.5,a:0,t:0,life:life||(3+Math.random()*3),ph:Math.random()*6.3})}
+for(var i=0;i<54;i++){var yy=H*(.12+Math.random()*.8),spread=(.06+(yy/H)*.36)*W;mote(W/2+(Math.random()*2-1)*spread,yy,(Math.random()-.5)*6,-4-Math.random()*8)}
+var light={v:0},last=performance.now();
+function tick(now){var dt=Math.min(.05,(now-last)/1000);last=now;cx.clearRect(0,0,W,H);cx.globalCompositeOperation='lighter';
+  for(var i=motes.length-1;i>=0;i--){var m=motes[i];m.t+=dt;m.vx+=(gust*-160-m.vx*.9)*dt*(m.r/1.4);m.x+=m.vx*dt+Math.sin(m.t*1.3+m.ph)*.12;m.y+=m.vy*dt;m.vy*=.995;
+    var fade=Math.min(1,m.t*2)*Math.min(1,(m.life-m.t)*1.5);if(fade<=0){motes.splice(i,1);continue}
+    var cone=1-Math.min(1,Math.abs(m.x-W/2)/((.08+(m.y/H)*.4)*W));
+    var a=fade*light.v*(.25+.75*cone)*(.55+.45*Math.sin(m.t*4+m.ph));if(a<.02)continue;
+    cx.fillStyle='rgba(255,226,168,'+a.toFixed(3)+')';cx.beginPath();cx.arc(m.x,m.y,m.r,0,6.283);cx.fill()}
+  raf=requestAnimationFrame(tick)}
+raf=requestAnimationFrame(tick);
+/* parts */
+var rail=$('#lg-rail'),slv=$$('.lg-s',svg),outs=$$('.lg-o',svg),fill=$('#lg-fill'),fb=fill.getBBox();
+outs.forEach(function(o){var l=o.getTotalLength();o.style.strokeDasharray=l;o.style.strokeDashoffset=l});
+G.set('#lg-railg',{scaleX:0,svgOrigin:'260 24'});
+G.set('#lg-rack',{x:1150});
+slv.forEach(function(s){G.set(s,{rotation:-16,svgOrigin:'260 22'});if(+s.dataset.i===0)s.id='lg-s0'});
+G.set('#lg-hanger',{scaleX:.04,opacity:0,svgOrigin:'260 24'});
+G.set(outs,{y:34,opacity:0});G.set('#intro .live',{y:10});
+G.set('#lg-sqr',{attr:{x:fb.x-8,width:0}});G.set('#lg-bar',{x:fb.x-8});
+G.set('#lg-vtg',{scale:2.3,opacity:0,rotation:-18,svgOrigin:'260 262'});
 var tl=G.timeline({onComplete:finish});
-tl.to(bp,{strokeDashoffset:0,duration:.6,ease:'expo.out'},0)
-  .to('#lg-hanger',{y:0,duration:.5,ease:'power3.in'},.25)
-  .to('#lg-hanger',{rotation:0,duration:1.4,ease:'elastic.out(1.1,.32)'},.75);
-L.forEach(function(l,i){tl.to(l,{y:0,opacity:1,duration:.4,ease:'power3.in'},.7+i*.08).to(l,{rotation:0,duration:1.2,ease:'elastic.out(1.2,.3)'},1.1+i*.08)});
-tl.to('#lg-vtg',{scale:1,opacity:1,rotation:-6,duration:.3,ease:'power4.in'},1.4)
-  .fromTo('#istage',{y:0},{y:6,duration:.08,yoyo:true,repeat:1},1.7)
-  .to('#intro .skip',{opacity:0,duration:.2},2.05)
-  .to('#istage',{y:-innerHeight*1.1,duration:.55,ease:'power3.in'},2.2)
-  .to('#intro .ib',{scaleX:0,duration:.45,ease:'power3.in'},2.25)
-  .add(function(){arm()},2.55)
-  .to('#intro',{opacity:0,duration:.3},2.6);
-function skip(){if(done)return;tl.kill();arm();finish();}
+/* 1. the work light flickers on, the rail draws out from the middle, a glint runs it */
+tl.to('#intro .beam',{keyframes:[{opacity:.7,duration:.06},{opacity:.25,duration:.05},{opacity:1,duration:.22}]},0)
+  .to(light,{v:1,duration:.4},0)
+  .to('#intro .pool',{opacity:1,duration:.5},.1)
+  .to('#lg-railg',{scaleX:1,duration:.7,ease:'expo.out'},.04)
+  .fromTo('#lg-gl',{attr:{cx:-500},opacity:1},{immediateRender:false,attr:{cx:1050},duration:.75,ease:'power2.inOut'},.12)
+  .to('#lg-gl',{opacity:0,duration:.15},.75)
+/* 2. digging: the rack slides through, every tee swinging, dust kicks up */
+  .to('#lg-rack',{x:0,duration:.9,ease:'power4.out'},.06)
+  .to({},{duration:.5,onStart:function(){gust=1},onComplete:function(){gust=0}},.06);
+slv.forEach(function(s){var i=+s.dataset.i;tl.to(s,{rotation:0,duration:1.1,ease:'elastic.out(1,.35)'},.42+Math.abs(i)*.012)});
+/* 3. the rack parts, the find turns to face you */
+slv.forEach(function(s){var i=+s.dataset.i;if(i===0)return;var d=i<0?-1:1;
+  tl.to(s,{x:d*(150+Math.abs(i)*8),rotation:d*9,opacity:Math.abs(i)<5?.5:.25,duration:.5,ease:'power3.inOut'},.78)
+    .to(s,{rotation:0,duration:.8,ease:'elastic.out(1,.4)'},1.2)});
+tl.to('#lg-s0',{scaleX:0,opacity:0,duration:.22,ease:'power2.in',svgOrigin:'260 22'},.8)
+  .to('#lg-hanger',{opacity:1,duration:.08},.95)
+  .to('#lg-hanger',{scaleX:1,duration:.55,ease:'back.out(1.6)'},.95)
+/* 4. BAZZI rises in gold outline, letter by letter */
+  .to(outs,{y:0,opacity:1,duration:.42,ease:'power3.out',stagger:.055},.92)
+  .to(outs,{strokeDashoffset:0,duration:.5,ease:'power2.inOut',stagger:.055},.92)
+/* 5. the squeegee pull prints it */
+  .to('#lg-bar',{opacity:1,duration:.08},1.2)
+  .to('#lg-bar',{x:fb.x+fb.width+8,duration:.38,ease:'power2.inOut'},1.22)
+  .to('#lg-sqr',{attr:{width:fb.width+16},duration:.38,ease:'power2.inOut'},1.22)
+  .to('#lg-bar',{opacity:0,y:-8,duration:.14},1.58)
+  .to(outs,{opacity:0,duration:.3},1.55)
+/* 6. the VTG tag stamps, dust puffs off it, foil shine */
+  .to('#lg-vtg',{scale:1,opacity:1,rotation:-6,duration:.2,ease:'power4.in'},1.5)
+  .add(function(){var m=svg.getScreenCTM();if(!m)return;var x=m.e+260*m.a,y=m.f+266*m.d;
+    for(var i=0;i<22;i++){var a=Math.PI+Math.random()*Math.PI,s=60+Math.random()*140;mote(x+(Math.random()-.5)*60,y,Math.cos(a)*s,Math.sin(a)*s*.5-10,.6+Math.random()*.7)}},1.7)
+  .fromTo('#lg-ring',{opacity:.9,scale:.6,svgOrigin:'260 263'},{immediateRender:false,opacity:0,scale:2.1,duration:.5,ease:'power2.out'},1.7)
+  .fromTo(svg,{y:0},{y:5,duration:.06,yoyo:true,repeat:1,ease:'power1.out'},1.7)
+  .fromTo('#lg-shine',{attr:{x:-140},opacity:1},{immediateRender:false,attr:{x:620},duration:.5,ease:'power2.inOut'},1.62)
+  .to('#intro .live',{opacity:1,y:0,duration:.35,ease:'power3.out'},1.72)
+  .to('#intro .skip',{opacity:0,duration:.2},1.85);
+/* 7. handoff: the curtain splits on the rail, the light goes, the wordmark flies to the nav */
+tl.add(function(){
+  seam();var nl=$('.brand svg > g'),nt=$('.brand svg > g:last-of-type'),r2=nl.getBoundingClientRect(),r1=fill.getBoundingClientRect(),o=stage.getBoundingClientRect();
+  var s=r2.width/r1.width,X=r2.left-(o.left+s*(r1.left-o.left)),Y=r2.top-(o.top+s*(r1.top-o.top));
+  var k=o.width/520,t2=nt.getBoundingClientRect(),ox=o.left+X,oy=o.top+Y;
+  var ux=(t2.left+t2.width/2-ox)/(k*s),uy=(t2.top+t2.height/2-oy)/(k*s),ts=(t2.width/1.02)/(130*k*s);
+  G.to(stage,{x:X,y:Y,scale:s,duration:.55,ease:'power3.inOut'});
+  G.to('#lg-vtgw',{x:ux-260,y:uy-263,scale:ts,svgOrigin:'260 263',duration:.55,ease:'power3.inOut'});
+  go();
+},2.0)
+  .to(['#intro .beam','#intro .pool','#intro .vig','#dust','#intro .live','#lg-railg'],{opacity:0,duration:.25},2.0)
+  .to(['#lg-hanger','#lg-rack'],{opacity:0,duration:.2},2.0)
+  .to('#intro .ct.t',{yPercent:-101,duration:.62,ease:'power4.inOut'},2.12)
+  .to('#intro .ct.b',{yPercent:101,duration:.62,ease:'power4.inOut'},2.12)
+  .to('.brand svg',{opacity:1,duration:.22},2.46)
+  .to(stage,{opacity:0,duration:.22},2.48);
+function skip(){if(done)return;tl.kill();finish();}
 intro.addEventListener('pointerdown',skip);addEventListener('keydown',function k(){removeEventListener('keydown',k);skip()});
-setTimeout(function(){if(!done){arm();finish()}},4800);
+setTimeout(function(){if(!done)finish()},5200);
 });
 </script>
 </body>

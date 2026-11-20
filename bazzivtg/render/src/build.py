@@ -33,7 +33,40 @@ def logo(anim, mid=''):
            ''.join('<path d="%s" fill="%s"/>' % (d, INK) for d in VTG) + '</g>')
     return ('<svg viewBox="0 0 520 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Bazzi VTG">' + DEFS.replace('lgwear', 'lgwear' + mid).replace('lgm"', 'lgm%s"' % mid).replace('url(#lgwear)', 'url(#lgwear%s)' % mid) +
             HANGER.replace('id="lg-hanger"', 'id="lg-hanger%s"' % mid) + '<g mask="url(#lgm%s)"><g fill="%s">%s</g>%s</g></svg>' % (mid, BONE, letters, vtg))
-LOGO_ANIM = logo(True)
+def intro_logo():
+    # the opening: a rack of tees seen edge-on slides along a gold rail, parts, and the hanger turns to face you;
+    # BAZZI is outlined, then screen-printed by a squeegee pull, the VTG tag stamps on, a foil shine crosses it
+    import random
+    rnd = random.Random(11)
+    TEES = ['#26241f', '#33302b', '#3f3c36', '#55514a', '#6c675e', '#8a8377', '#b3ab9b', '#1d1c19', '#4a3f36', '#3a4048', '#5b3b36', '#2e3a33']
+    HOOKD = 'M260 58c0-10 14-12 14-26a14 14 0 0 0-28 0'
+    rack = []
+    for i in range(-20, 21):
+        dx = i * 34
+        w = rnd.uniform(9, 14); h = rnd.uniform(170, 215)
+        slab = 'M%.1f 62h%.1fl%.1f %.1fq0 4-4 4h-%.1fq-4 0-4-4z' % (260 - w / 2, w, 3, h, w - 2)
+        rack.append('<g transform="translate(%d 0)"><g class="lg-s" data-i="%d"><path d="%s" fill="none" stroke="#9b9486" stroke-width="4" stroke-linecap="round"/>'
+                    '<path d="%s" fill="%s"/><path d="M%.1f 66v%.1f" stroke="rgba(255,236,200,.16)" stroke-width="1.2"/></g></g>'
+                    % (dx, i, HOOKD, slab, rnd.choice(TEES), 260 - w / 2 + 1.2, h - 6))
+    clip_letters = ''.join('<path d="%s"/>' % d for d in L)
+    vtg = ('<g id="lg-vtgw"><g id="lg-vtg" transform="rotate(-6 260 262)"><rect x="196" y="236" width="128" height="54" rx="8" fill="%s"/>' % SUN +
+           ''.join('<path d="%s" fill="%s"/>' % (d, INK) for d in VTG) + '</g></g>')
+    defs = (DEFS[:-7] +
+            '<linearGradient id="lgrail" gradientUnits="userSpaceOnUse" x1="-1300" x2="1820" y1="0" y2="0"><stop offset="0" stop-color="#f0c24b" stop-opacity="0"/><stop offset=".5" stop-color="#f5d27a"/><stop offset="1" stop-color="#f0c24b" stop-opacity="0"/></linearGradient>'
+            '<radialGradient id="lgglint"><stop offset="0" stop-color="#fff8e6"/><stop offset=".4" stop-color="#f7d98a" stop-opacity=".8"/><stop offset="1" stop-color="#f0c24b" stop-opacity="0"/></radialGradient>'
+            '<linearGradient id="lgsh" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#fff6dc" stop-opacity="0"/><stop offset=".5" stop-color="#fff6dc" stop-opacity=".95"/><stop offset="1" stop-color="#fff6dc" stop-opacity="0"/></linearGradient>'
+            '<clipPath id="lgtc">%s</clipPath><clipPath id="lgsq"><rect id="lg-sqr" x="0" y="80" width="0" height="220"/></clipPath></defs>' % clip_letters)
+    return ('<svg viewBox="0 0 520 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Bazzi VTG">' + defs +
+            '<g id="lg-railg"><path id="lg-rail" d="M-1300 24H1820" stroke="url(#lgrail)" stroke-width="2.4"/><ellipse id="lg-gl" cx="0" cy="24" rx="46" ry="2.4" fill="url(#lgglint)" opacity="0"/></g>'
+            '<g id="lg-rack">%s</g>' % ''.join(rack) +
+            HANGER.replace('#111110', '#d9d2c3') +
+            '<g id="lg-out" fill="none" stroke="#f0c24b" stroke-width="1.5" stroke-linejoin="round">%s</g>' % ''.join('<path class="lg-o" d="%s"/>' % d for d in L) +
+            '<g mask="url(#lgm)"><g clip-path="url(#lgsq)"><g id="lg-fill" fill="#ece5d6">%s</g></g>%s</g>' % (''.join('<path class="lg-l" d="%s"/>' % d for d in L), vtg) +
+            '<g id="lg-bar" opacity="0"><rect x="-5" y="112" width="10" height="168" rx="4" fill="#f0c24b"/><rect x="-1.5" y="112" width="3" height="168" fill="#fff3cf" opacity=".7"/></g>'
+            '<g clip-path="url(#lgtc)"><rect id="lg-shine" x="-140" y="90" width="120" height="200" fill="url(#lgsh)" transform="skewX(-18)" opacity=".0"/></g>'
+            '<circle id="lg-ring" cx="260" cy="263" r="46" fill="none" stroke="#f0c24b" stroke-width="2" opacity="0"/>'
+            '</svg>')
+LOGO_ANIM = intro_logo()
 # nav: wordmark without the hanger, one line
 NW = word('BAZZI', 100, 150, 100, 4)
 NV = word('VTG', 30, 335, 92, 3)
