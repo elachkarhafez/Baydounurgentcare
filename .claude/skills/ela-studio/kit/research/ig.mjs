@@ -31,16 +31,18 @@ if (!brief.posts.length) {
   const p = await b.newPage({ userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128 Safari/537.36', viewport: { width: 600, height: 1400 } });
   await p.goto(`https://www.instagram.com/${handle}/embed/`, { waitUntil: 'networkidle', timeout: 45000 }).catch(() => {});
   await p.waitForTimeout(2500);
-  const em = await p.evaluate(() => ({ text: document.body.innerText.slice(0, 600), imgs: [...document.querySelectorAll('img')].map(i => i.src).filter(s => /scontent|fbcdn/.test(s)) }));
+  const em = await p.evaluate(() => ({ text: document.body.innerText.slice(0, 600), imgs: [...document.querySelectorAll('img')].map(i => i.src).filter(s => /scontent|fbcdn/.test(s)), links: [...new Set([...document.querySelectorAll('a[href*="/p/"],a[href*="/reel/"]')].map(a => (a.href.match(/\/(?:p|reel)\/([\w-]+)/) || [])[1]).filter(Boolean))] }));
   const lines = em.text.split('\n').map(s => s.trim()).filter(Boolean); brief.name = brief.name || lines[1] || ''; if (!brief.counts) brief.counts = lines.slice(2, 5).join(' ');
   const A = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
   for (const src of em.imgs) {
     const m = src.match(/ig_cache_key=([^&]+)/); if (!m) { brief.avatar = src; continue; }
     const k = decodeURIComponent(m[1]).split('.')[0], id = Buffer.from(k + '='.repeat((4 - k.length % 4) % 4), 'base64').toString();
-    let n = BigInt(id.slice(0, 19)), code = ''; while (n > 0n) { code = A[Number(n % 64n)] + code; n /= 64n; }
+    let code = em.links[brief.posts.length] || '';
+    if (!code) { try { let n = BigInt(id.slice(0, 19)); while (n > 0n) { code = A[Number(n % 64n)] + code; n /= 64n; } } catch { code = ''; } }
     brief.posts.push({ code, img: src, caption: '' });
   }
   for (const post of brief.posts) {
+    if (!post.code) continue;
     await p.goto(`https://www.instagram.com/p/${post.code}/embed/captioned/`, { waitUntil: 'networkidle', timeout: 40000 }).catch(() => {});
     await p.waitForTimeout(1200);
     post.caption = (await p.evaluate(() => (document.querySelector('.Caption') || {}).innerText || '').catch(() => '')).replace(/^\S+\s/, '').replace(/View all \d+ comments?$/, '').trim();
