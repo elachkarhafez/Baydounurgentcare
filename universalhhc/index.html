@@ -10,14 +10,14 @@
 <meta property="og:url" content="https://universal-home-health-care.vercel.app/">
 <meta property="og:title" content="Universal Home Health Care · Home health care in Southfield, MI">
 <meta property="og:description" content="Skilled nursing, therapy, home health aides and social work brought to your home in Southfield, Michigan and the tri-county area. An on-call registered nurse 24 hours a day, 7 days a week. Call 800-733-1659.">
-<meta property="og:image" content="https://universal-home-health-care.vercel.app/media/og.jpg?v=mwo9c9er">
+<meta property="og:image" content="https://universal-home-health-care.vercel.app/media/og.jpg?v=mwo9ohln">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Universal Home Health Care · Home health care in Southfield, MI">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Universal Home Health Care · Home health care in Southfield, MI">
 <meta name="twitter:description" content="Skilled nursing, therapy, home health aides and social work brought to your home in Southfield, Michigan and the tri-county area. An on-call registered nurse 24 hours a day, 7 days a week. Call 800-733-1659.">
-<meta name="twitter:image" content="https://universal-home-health-care.vercel.app/media/og.jpg?v=mwo9c9er">
+<meta name="twitter:image" content="https://universal-home-health-care.vercel.app/media/og.jpg?v=mwo9ohln">
 <link rel="apple-touch-icon" href="https://universal-home-health-care.vercel.app/media/apple-touch-icon.png">
 <meta name="robots" content="noai, noimageai">
 <meta name="theme-color" content="#04150f">
@@ -1152,15 +1152,15 @@ var mesh=$('.mesh');new IntersectionObserver(function(es){if(!$('.hero').classLi
   var canvas=$('#gl'),gl=canvas.getContext('webgl',{antialias:false,premultipliedAlpha:false});
   if(!gl){canvas.remove();return;}
   var vs='attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
-  var fs='precision mediump float;uniform vec2 r;uniform float t;uniform vec2 m;uniform float beat;'+
-   'float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}'+
+  var fs='#ifdef GL_FRAGMENT_PRECISION_HIGH\nprecision highp float;\n#else\nprecision mediump float;\n#endif\nuniform vec2 r;uniform float t;uniform vec2 m;uniform float beat;'+
+   'float h(vec2 p){vec3 q=fract(vec3(p.xyx)*.1031);q+=dot(q,q.yzx+33.33);return fract((q.x+q.y)*q.z);}'+
    'float n(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(h(i),h(i+vec2(1,0)),f.x),mix(h(i+vec2(0,1)),h(i+vec2(1,1)),f.x),f.y);}'+
-   'float fbm(vec2 p){float v=0.,a=.5;for(int i=0;i<4;i++){v+=a*n(p);p=p*2.03+7.1;a*=.5;}return v;}'+
-   'void main(){vec2 p=(gl_FragCoord.xy-.5*r)/r.y;float tt=t*.05;'+
+   'float fbm(vec2 p){float v=0.,a=.5;for(int i=0;i<5;i++){v+=a*n(p);p=p*2.03+7.1;a*=.5;}return v;}'+
+   'void main(){vec2 p=(gl_FragCoord.xy-.5*r)/min(r.x,r.y)*1.15;float tt=t*.05;'+
    'float q=fbm(p*1.5+tt);float f=fbm(p*1.2+vec2(q*1.9,q*1.4)+vec2(tt*1.6,-tt));'+
    'vec3 deep=vec3(.008,.036,.03),green=vec3(0.,.32,.24),emer=vec3(.06,.54,.4),mist=vec3(.66,.9,.78);'+
-   'vec3 c=mix(deep,green,smoothstep(.2,.7,f));c=mix(c,emer,smoothstep(.52,.88,f));c+=mist*pow(smoothstep(.64,.98,f),2.)*.34;'+
-   'vec2 mm=(m-.5*r)/r.y;float glow=exp(-4.5*length(p-mm));c+=mist*glow*(.12+.22*beat);'+
+   'vec3 c=mix(deep,green,smoothstep(.2,.7,f));c=mix(c,emer,smoothstep(.52,.88,f));c+=mist*pow(smoothstep(.64,.98,f),2.)*.34;float rg=1.-abs(fract(f*4.)*2.-1.);c+=mist*pow(rg,18.)*.07*smoothstep(.3,.7,f);'+
+   'vec2 mm=(m-.5*r)/min(r.x,r.y)*1.15;float glow=exp(-4.5*length(p-mm));c+=mist*glow*(.12+.22*beat);'+
    'c*=.45+.6*smoothstep(1.5,.1,length(p-vec2(.4,.3)));c*=1.+beat*.06;gl_FragColor=vec4(c,1.);}';
   function sh(type,src){var s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);return s;}
   var prog=gl.createProgram();gl.attachShader(prog,sh(gl.VERTEX_SHADER,vs));gl.attachShader(prog,sh(gl.FRAGMENT_SHADER,fs));gl.linkProgram(prog);
@@ -1170,7 +1170,7 @@ var mesh=$('.mesh');new IntersectionObserver(function(es){if(!$('.hero').classLi
   var loc=gl.getAttribLocation(prog,'p');gl.enableVertexAttribArray(loc);gl.vertexAttribPointer(loc,2,gl.FLOAT,false,0,0);
   var U=function(k){return gl.getUniformLocation(prog,k)},ur=U('r'),ut=U('t'),um=U('m'),ub=U('beat');
   var mx,my,tx,ty,visible=true,last=0,K=1;
-  function size(){var w=canvas.clientWidth,h=canvas.clientHeight,sc=Math.min(1,360/Math.max(w,h));K=sc;canvas.width=Math.max(2,Math.round(w*sc));canvas.height=Math.max(2,Math.round(h*sc));gl.viewport(0,0,canvas.width,canvas.height);}
+  function size(){var w=canvas.clientWidth,h=canvas.clientHeight,d=Math.min(window.devicePixelRatio||1,2),sc=Math.min(d*.6,Math.sqrt(540000/(w*h)));K=sc;canvas.width=Math.max(2,Math.round(w*sc));canvas.height=Math.max(2,Math.round(h*sc));gl.viewport(0,0,canvas.width,canvas.height);}
   size();mx=tx=canvas.width*.72;my=ty=canvas.height*.7;addEventListener('resize',size);
   addEventListener('pointermove',function(e){var b=canvas.getBoundingClientRect();tx=(e.clientX-b.left)*K;ty=(b.height-(e.clientY-b.top))*K;},{passive:true});
   new IntersectionObserver(function(en){visible=en[0].isIntersecting},{rootMargin:'-30% 0px 0px 0px'}).observe(canvas);
