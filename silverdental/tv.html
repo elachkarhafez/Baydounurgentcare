@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, noai, noimageai">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Silver Dental · Waiting room TV</title>
+<meta name="theme-color" content="#0d0f12">
+<link rel="icon" type="image/svg+xml" href="media/icon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&family=Urbanist:wght@500;600;700&display=block" rel="stylesheet">
+<style>
+/* Waiting room TV loop. Each .tv is one 1920x1080 ad with its own paused GSAP timeline.
+   Opened as a file (render.mjs) the slides stack for export; served over http it scales to the screen and loops. */
+:root{--night:#0d0f12;--night2:#15181d;--night3:#1d2128;--chrome:#d6dbe1;--steel:#8a929c;--mist:#eef2f6;--navy:#1e2f6b;--navy2:#14204d;--blue:#3d6cf2;--sky:#9cc3ff;
+  --foil:linear-gradient(180deg,#ffffff 0%,#e2e6eb 38%,#8d949d 52%,#f0f3f6 66%,#a8afb8 100%)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000;font-family:Urbanist,sans-serif;color:#fff;-webkit-font-smoothing:antialiased}
+body:not(.live) .tv{margin-bottom:40px}
+body.solo .tv{margin:0}
+.tv{position:relative;width:1920px;height:1080px;overflow:hidden;background:var(--night)}
+.chrome{background:var(--foil);-webkit-background-clip:text;background-clip:text;color:transparent}
+.os{font-family:Oswald,sans-serif;font-weight:500;text-transform:uppercase;line-height:.98;letter-spacing:.01em}
+.abs{position:absolute}
+.ph{position:absolute;overflow:hidden;border-radius:36px;box-shadow:0 40px 90px -30px rgba(0,0,0,.7)}
+.ph img{width:100%;height:100%;object-fit:cover;display:block}
+.body{font-size:46px;line-height:1.3;font-weight:500}
+.bar{position:absolute;left:0;right:0;bottom:0;height:104px;display:flex;align-items:center;justify-content:space-between;padding:0 120px;background:rgba(13,15,18,.92);border-top:1px solid rgba(214,219,225,.14);font-size:34px;font-weight:600}
+.bar .lg{display:flex;align-items:center;gap:18px;white-space:nowrap;font-family:Oswald,sans-serif;font-weight:500;letter-spacing:.16em;font-size:38px}
+.bar .lg svg{width:46px;height:46px}
+.bar .ad{color:#aab1ba;white-space:nowrap}.bar .tel{font-family:Oswald,sans-serif;font-weight:500;font-size:44px;letter-spacing:.04em}
+.light .bar{background:var(--navy);border:0;color:#fff}.light .bar .ad{color:#c7d2f0}
+.light{background:var(--mist);color:var(--navy)}
+.chip{display:inline-flex;align-items:center;gap:16px;padding:18px 34px;border-radius:999px;font-size:40px;font-weight:700;background:rgba(255,255,255,.08);box-shadow:inset 0 0 0 2px rgba(214,219,225,.22)}
+.chip i{width:44px;height:44px;border-radius:50%;background:#3ccf8e;display:grid;place-items:center;flex:none}
+.chip i svg{width:26px;height:26px}
+.glow{position:absolute;border-radius:50%;pointer-events:none}
+/* live mode */
+body.live{overflow:hidden;width:100vw;height:100vh;cursor:none}
+body.live #stage{position:absolute;left:50%;top:50%;width:1920px;height:1080px;transform-origin:0 0}
+body.live .tv{position:absolute;inset:0;opacity:0;visibility:hidden}
+body.live .tv.on{visibility:visible}
+#hint{display:none}
+body.live #hint{display:block;position:fixed;left:50%;bottom:24px;transform:translateX(-50%);font:600 14px Urbanist,sans-serif;color:rgba(255,255,255,.55);background:rgba(0,0,0,.5);padding:8px 14px;border-radius:999px;transition:opacity .6s}
+body.live.idle #hint{opacity:0}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <linearGradient id="chr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".4" stop-color="#dfe3e8"/><stop offset=".52" stop-color="#868d96"/><stop offset=".66" stop-color="#eef1f4"/><stop offset="1" stop-color="#a3aab3"/></linearGradient>
+  <linearGradient id="gl" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".95"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+</defs></svg>
+<div id="stage">
+
+<!-- 1 · brand open -->
+<section class="tv" data-post id="s1">
+  <div class="glow" style="left:-300px;top:-200px;width:1400px;height:1400px;background:radial-gradient(closest-side,rgba(76,125,255,.28),transparent)"></div>
+  <div class="ph" style="right:120px;top:70px;width:600px;height:830px"><img src="media/ext-low.webp" alt=""></div>
+  <div class="abs" data-tooth="chr:7" style="left:120px;top:150px;width:200px"></div>
+  <div class="abs os chrome" data-word style="left:116px;top:400px;font-size:146px;letter-spacing:.06em;white-space:nowrap">SILVER DENTAL</div>
+  <div class="abs body" data-a style="left:122px;top:610px;font-size:62px;font-weight:600">Now open on Ford Rd</div>
+  <div class="abs" data-a style="left:122px;top:720px"><span class="chip"><i>{{CHECK}}</i>Accepting new patients</span></div>
+  {{BAR}}
+</section>
+
+<!-- 2 · $99 -->
+<section class="tv" data-post id="s2" style="background:radial-gradient(110% 120% at 0% 0%,#26346a,#0d0f12 62%)">
+  <div class="ph" style="right:120px;top:70px;width:600px;height:830px"><img src="media/xray.webp" alt=""></div>
+  <div class="abs os" data-a style="left:120px;top:110px;font-size:84px;color:#c9d0d8">No insurance?</div>
+  <div class="abs os chrome" style="left:108px;top:200px;font-size:420px;line-height:1"><span>$</span><span data-n>99</span></div>
+  <div class="abs body" data-a style="left:122px;top:650px;font-size:56px;font-weight:600">Exam, X-rays and cleaning</div>
+  <div class="abs" style="left:120px;top:760px;display:flex;gap:18px" data-chips><span class="chip"><i>{{CHECK}}</i>Exam</span><span class="chip"><i>{{CHECK}}</i>X-rays</span><span class="chip"><i>{{CHECK}}</i>Cleaning</span></div>
+  {{BAR}}
+</section>
+
+<!-- 3 · Medicaid -->
+<section class="tv light" data-post id="s3">
+  <div class="glow" style="right:-300px;top:-300px;width:1300px;height:1300px;background:radial-gradient(closest-side,rgba(61,108,242,.16),transparent)"></div>
+  <div class="abs os" data-a style="left:120px;top:150px;font-size:150px;width:900px">We accept Medicaid</div>
+  <div class="abs body" data-a style="left:124px;top:480px;font-size:60px;color:#4a5a86;font-weight:600">and most major insurances</div>
+  <div class="abs body" data-a style="left:124px;top:640px;width:820px;color:#33406b">Not sure about your plan? Call us and we'll check it before you come in.</div>
+  <div class="abs" data-card style="left:1110px;top:150px;width:690px;height:400px;border-radius:36px;padding:50px;background:linear-gradient(135deg,#2a3f8f,#14204d);color:#fff;box-shadow:0 40px 80px -30px rgba(20,32,77,.6)">
+    <div class="os" style="font-size:44px;letter-spacing:.14em;color:#9cc3ff">Medicaid</div><div class="os" style="font-size:120px;margin-top:30px">Accepted</div><div style="position:absolute;right:50px;top:50px;width:84px;height:84px;border-radius:50%;background:#3ccf8e;display:grid;place-items:center">{{CHECKB}}</div></div>
+  <div class="abs" data-card style="left:1110px;top:500px;width:690px;height:330px;border-radius:36px;padding:50px;background:linear-gradient(160deg,#fff,#cfd6de);color:var(--navy);box-shadow:0 40px 80px -30px rgba(20,32,77,.5)">
+    <div class="os" style="font-size:44px;letter-spacing:.14em;color:#5b6a93">Insurance</div><div class="os" style="font-size:104px;margin-top:26px">Most plans</div></div>
+  {{BAR}}
+</section>
+
+<!-- 4 · fluoride -->
+<section class="tv light" data-post id="s4" style="background:radial-gradient(90% 100% at 25% 45%,#ffffff,#e3ebf5 70%)">
+  <svg class="abs" viewBox="0 0 64 64" style="left:200px;top:150px;width:640px;overflow:visible" data-fl>
+    <g data-drops fill="#3d6cf2"><path d="M20 -30c0 0-4 5-4 8a4 4 0 0 0 8 0c0-3-4-8-4-8z"/><path d="M33 -44c0 0-4 5-4 8a4 4 0 0 0 8 0c0-3-4-8-4-8z"/><path d="M45 -26c0 0-4 5-4 8a4 4 0 0 0 8 0c0-3-4-8-4-8z"/></g>
+    <path d="M32 10c-6-5-15-5-20 1-5 6-4 16 0 24 3 6 4 13 6 19 1 3 5 3 6 0l4-12c1-3 5-3 6 0l4 12c1 3 5 3 6 0 2-6 3-13 6-19 4-8 5-18 0-24-5-6-14-6-20-1z" fill="#fff" stroke="#1e2f6b" stroke-width="2" stroke-linejoin="round"/>
+    <path data-enamel d="M32 10c-6-5-15-5-20 1-5 6-4 16 0 24 3 6 4 13 6 19 1 3 5 3 6 0l4-12c1-3 5-3 6 0l4 12c1 3 5 3 6 0 2-6 3-13 6-19 4-8 5-18 0-24-5-6-14-6-20-1z" fill="none" stroke="#3d6cf2" stroke-width="3.6" stroke-linejoin="round" stroke-linecap="round"/>
+    <clipPath id="tclip"><path d="M32 10c-6-5-15-5-20 1-5 6-4 16 0 24 3 6 4 13 6 19 1 3 5 3 6 0l4-12c1-3 5-3 6 0l4 12c1 3 5 3 6 0 2-6 3-13 6-19 4-8 5-18 0-24-5-6-14-6-20-1z"/></clipPath>
+    <g clip-path="url(#tclip)"><rect data-shine x="-40" y="0" width="14" height="64" fill="url(#gl)" transform="skewX(-16)"/></g>
+    <g data-spark fill="#3d6cf2"><path d="M54 12l1.4 3.6L59 17l-3.6 1.4L54 22l-1.4-3.6L49 17l3.6-1.4z"/><path d="M10 40l1 2.6 2.6 1-2.6 1-1 2.6-1-2.6-2.6-1 2.6-1z"/></g>
+  </svg>
+  <div class="abs os" data-a style="left:1000px;top:170px;font-size:126px;width:820px">Fluoride makes enamel stronger</div>
+  <div class="abs body" data-a style="left:1004px;top:560px;width:800px;color:#33406b">It helps teeth fight off cavities, for kids and adults.</div>
+  <div class="abs" data-a style="left:1004px;top:730px"><span class="chip" style="background:var(--navy);color:#fff;box-shadow:none">Ask about it at your next cleaning</span></div>
+  {{BAR}}
+</section>
+
+<!-- 5 · brush 2 minutes -->
+<section class="tv" data-post id="s5" style="background:radial-gradient(100% 110% at 100% 0%,#22305f,#0d0f12 60%)">
+  <svg class="abs" viewBox="0 0 200 200" style="left:150px;top:130px;width:700px">
+    <circle cx="100" cy="100" r="86" fill="none" stroke="rgba(214,219,225,.12)" stroke-width="10"/>
+    <circle data-ring cx="100" cy="100" r="86" fill="none" stroke="url(#chr)" stroke-width="10" stroke-linecap="round" transform="rotate(-90 100 100)"/>
+  </svg>
+  <div class="abs os chrome" data-clock style="left:150px;top:370px;width:700px;text-align:center;font-size:200px">2:00</div>
+  <div class="abs os" data-a style="left:1000px;top:190px;font-size:150px;width:820px">Brush for 2 minutes</div>
+  <div class="abs os chrome" data-a style="left:1000px;top:520px;font-size:110px">Twice a day</div>
+  <div class="abs body" data-a style="left:1004px;top:680px;width:780px;color:#c3c9d0">Morning and night, with a fluoride toothpaste.</div>
+  {{BAR}}
+</section>
+
+<!-- 6 · new toothbrush -->
+<section class="tv light" data-post id="s6">
+  <svg class="abs" viewBox="0 0 400 120" style="left:120px;top:150px;width:860px;overflow:visible">
+    <rect x="120" y="54" width="270" height="22" rx="11" fill="#1e2f6b"/><rect x="40" y="50" width="110" height="30" rx="14" fill="#1e2f6b"/>
+    <g data-bristles stroke="#3d6cf2" stroke-width="8" stroke-linecap="round"></g>
+  </svg>
+  <div class="abs" data-months style="left:120px;top:520px;display:flex;gap:20px"></div>
+  <div class="abs os" data-a style="left:1080px;top:150px;font-size:112px;width:740px">New toothbrush every 3 to 4 months</div>
+  <div class="abs body" data-a style="left:1084px;top:630px;width:720px;color:#33406b">Sooner if the bristles look frayed. Worn bristles don't clean as well.</div>
+  {{BAR}}
+</section>
+
+<!-- 7 · floss -->
+<section class="tv" data-post id="s7" style="background:linear-gradient(160deg,#22357a,#14204d)">
+  <svg class="abs" viewBox="0 0 600 260" style="left:120px;top:200px;width:900px;overflow:visible">
+    <rect x="0" y="0" width="600" height="96" rx="48" fill="#f29bb0"/><g fill="#fff" data-teeth></g>
+    <path data-floss d="" fill="none" stroke="#9cc3ff" stroke-width="5" stroke-linecap="round"/>
+  </svg>
+  <div class="abs os" data-a style="left:1120px;top:190px;font-size:136px;width:700px">Floss once a day</div>
+  <div class="abs body" data-a style="left:1124px;top:500px;width:680px;color:#c7d2f0">Your brush misses the spaces between your teeth. Floss gets in there.</div>
+  {{BAR}}
+</section>
+
+<!-- 8 · services -->
+<section class="tv" data-post id="s8" style="background:radial-gradient(90% 90% at 50% 0%,#1f2a4f,#0d0f12 65%)">
+  <div class="abs os" data-a style="left:120px;top:90px;font-size:110px">Everything <span class="chrome">under one roof</span></div>
+  <div class="abs" data-grid style="left:120px;right:120px;top:280px;display:grid;grid-template-columns:repeat(4,1fr);gap:26px"></div>
+  {{BAR}}
+</section>
+
+<!-- 9 · emergency -->
+<section class="tv" data-post id="s9" style="background:radial-gradient(90% 110% at 30% 40%,#4c7dff,#1e3fb5 55%,#14204d)">
+  <div class="glow" data-pulse style="left:1330px;top:250px;width:420px;height:420px;box-shadow:0 0 0 6px rgba(255,255,255,.5)"></div>
+  <div class="glow" data-pulse style="left:1330px;top:250px;width:420px;height:420px;box-shadow:0 0 0 6px rgba(255,255,255,.5)"></div>
+  <div class="abs" style="left:1380px;top:300px;width:320px;height:320px;border-radius:50%;background:#fff;display:grid;place-items:center"><svg viewBox="0 0 24 24" style="width:150px" fill="none" stroke="#1e3fb5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg></div>
+  <div class="abs" data-q1 style="left:120px;top:150px"><div class="os" style="font-size:200px">Emergency?</div><div class="os chrome" style="font-size:200px;margin-top:10px">We got you.</div></div>
+  <div class="abs" data-q2 style="left:120px;top:150px;opacity:0"><div class="os" style="font-size:200px">Walk-ins?</div><div class="os chrome" style="font-size:200px;margin-top:10px">Come on in.</div></div>
+  <div class="abs os" data-a style="left:124px;top:690px;font-size:110px;letter-spacing:.03em">313-600-4555</div>
+  {{BAR}}
+</section>
+
+<!-- 10 · the twins -->
+<section class="tv" data-post id="s10">
+  <div class="glow" style="right:-200px;top:-200px;width:1200px;height:1200px;background:radial-gradient(closest-side,rgba(76,125,255,.22),transparent)"></div>
+  <div class="ph" style="left:120px;top:80px;width:900px;height:775px"><img src="media/twins.webp" alt=""></div>
+  <div class="abs os" data-a style="left:1110px;top:150px;font-size:124px;white-space:nowrap">Twin dentists</div>
+  <div class="abs os chrome" data-a style="left:1110px;top:290px;font-size:124px;white-space:nowrap">One office</div>
+  <div class="abs body" data-a style="left:1114px;top:500px;width:690px;font-size:56px;font-weight:600">Dr. Yahya and Dr. Adam</div>
+  <div class="abs body" data-a style="left:1114px;top:600px;width:690px;color:#aab1ba">A brand new office on Ford Rd. Come say hi.</div>
+  {{BAR}}
+</section>
+
+<!-- 11 · giveaway (drops out of the loop after the drawing) -->
+<section class="tv" data-post id="s11" data-until="2026-11-25T23:59:00" style="background:radial-gradient(120% 140% at 100% 0%,#2a3c78,#0d0f12 60%)">
+  <div class="ph" style="left:120px;top:70px;width:640px;height:830px"><img src="media/giveaway.webp" alt="" style="object-position:50% 30%"></div>
+  <div class="abs os" data-a style="left:860px;top:90px;font-size:56px;letter-spacing:.12em;color:#9cc3ff">Thanksgiving giveaway</div>
+  <div class="abs os" data-a style="left:860px;top:170px;font-size:140px">Two winners</div>
+  <div class="abs" data-prizes style="left:860px;top:350px;width:960px;display:flex;flex-wrap:wrap;gap:16px"><span class="chip">13" MacBook Neo</span><span class="chip">AirPods Pro 3</span><span class="chip">$150 Amazon gift card</span><span class="chip">Stanley Cup</span><span class="chip">Oral-B Series 3</span></div>
+  <div class="abs body" data-a style="left:864px;top:660px;width:940px;font-size:42px;color:#c3c9d0">Follow @silverdentaldearborn, like the post and tag 3 friends.</div>
+  <div class="abs os chrome" data-a style="left:860px;top:810px;font-size:68px">Live drawing Wed, Nov 25</div>
+  {{BAR}}
+</section>
+</div>
+<div id="hint">Click for full screen</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script>
+var TL = {}, CUES = {};
+(function () {
+  var $ = function (s, c) { return (c || document).querySelector(s) }, $$ = function (s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)) };
+  var TOOTH = ['M32 10c-6-5-15-5-20 1-5 6-4 16 0 24 3 6 4 13 6 19 1 3 5 3 6 0l4-12c1-3 5-3 6 0l4 12c1 3 5 3 6 0 2-6 3-13 6-19 4-8 5-18 0-24-5-6-14-6-20-1z', 'M22 18c6-3 14 0 14 7s-8 9-12 14'];
+  function tooth(stroke, w) { return '<svg viewBox="4 2 56 58" style="width:100%;overflow:visible"><g fill="none" stroke="' + stroke + '" stroke-width="' + w + '" stroke-linecap="round" stroke-linejoin="round">' + TOOTH.map(function (d) { return '<path d="' + d + '"/>' }).join('') + '</g></svg>' }
+  var CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="#0d0f12" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5 9-10"/></svg>';
+  var BAR = '<div class="bar"><div class="lg">' + tooth('url(#chr)', 3.4) + '<span class="chrome">SILVER DENTAL</span></div><div class="ad">18730 Ford Rd · serving Dearborn, Dearborn Heights and Detroit</div><div class="tel">313-600-4555</div></div>';
+  document.getElementById('stage').innerHTML = document.getElementById('stage').innerHTML
+    .split('{{BAR}}').join(BAR).split('{{CHECKB}}').join('<svg viewBox="0 0 24 24" style="width:48px" fill="none" stroke="#0d0f12" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5 9-10"/></svg>').split('{{CHECK}}').join(CHECK);
+  $$('[data-tooth]').forEach(function (el) { var a = el.dataset.tooth.split(':'); el.innerHTML = tooth(a[0] === 'chr' ? 'url(#chr)' : a[0], a[1]) });
+  // drawn pieces
+  var br = $('#s6 [data-bristles]'), bh = ''; for (var i = 0; i < 9; i++) bh += '<line x1="' + (52 + i * 11) + '" y1="48" x2="' + (52 + i * 11) + '" y2="10"/>'; br.innerHTML = bh;
+  $('#s6 [data-months]').innerHTML = [1, 2, 3, 4].map(function (m) { return '<div data-m style="width:196px;height:220px;border-radius:28px;background:#fff;box-shadow:inset 0 0 0 3px #c9d3e6;display:grid;place-items:center;text-align:center;color:#1e2f6b"><div><div class="os" style="font-size:110px">' + m + '</div><div style="font-size:30px;font-weight:700;color:#5b6a93">month' + (m > 1 ? 's' : '') + '</div></div></div>' }).join('');
+  var teeth = '', gaps = []; for (var k = 0; k < 6; k++) { var x = 12 + k * 98; teeth += '<rect x="' + x + '" y="40" width="88" height="200" rx="38"/>'; if (k) gaps.push(x - 5) } $('#s7 [data-teeth]').innerHTML = teeth;
+  var SV = [['Cleanings and exams', 'M12 3c-3-2-7-2-9 1s-1 8 1 11c1 2 1 5 2 7h2l2-5 2 5h2c1-2 1-5 2-7 2-3 3-8 1-11s-6-3-9-1'], ['Fillings', 'M12 3c-3-2-7-2-9 1s-1 8 1 11c1 2 1 5 2 7h2l2-5 2 5h2c1-2 1-5 2-7 2-3 3-8 1-11s-6-3-9-1M10 8h4v3h-4z'], ['Root canals', 'M12 3c-3-2-7-2-9 1s-1 8 1 11c1 2 1 5 2 7h2l2-5 2 5h2c1-2 1-5 2-7 2-3 3-8 1-11s-6-3-9-1M9 9v8M15 9v8'], ['Implants', 'M7 3h10c0 4-2 6-5 6S7 7 7 3zM10 9h4M10 12h4M10 15h4M11 18h2M12 9v12'], ['Extractions', 'M12 4c-2-1-5-1-6 1s-1 5 1 7l2 7h1l1-3 1 3h1l2-7c2-2 2-5 1-7s-4-2-6-1M18 3l3 3M21 3l-3 3'], ['Wisdom teeth', 'M12 3c-3-2-7-2-9 1s-1 8 1 11c1 2 1 5 2 7h2l2-5 2 5h2c1-2 1-5 2-7 2-3 3-8 1-11s-6-3-9-1M19 2v4M17 4h4'], ['Veneers', 'M4 9c2-2 4-2 5 0 1-2 3-2 4 0 1-2 3-2 4 0 1-2 3-2 4 0M4 9v6c2 2 4 2 5 0 1 2 3 2 4 0 1 2 3 2 4 0 1 2 3 2 4 0V9'], ['Invisalign', 'M3 10c3-3 15-3 18 0v4c-3 3-15 3-18 0zM7 9v6M12 8v8M17 9v6']];
+  $('#s8 [data-grid]').innerHTML = SV.map(function (s) { return '<div data-t style="height:270px;border-radius:30px;padding:40px;background:linear-gradient(160deg,#1d2128,#15181d);box-shadow:inset 0 0 0 2px rgba(214,219,225,.12);display:flex;flex-direction:column;justify-content:space-between"><svg viewBox="0 0 24 24" style="width:96px" fill="none" stroke="url(#chr)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="' + s[1] + '"/></svg><div class="os" style="font-size:52px">' + s[0] + '</div></div>' }).join('');
+
+  var G = gsap, E = 'power3.out';
+  function ins(tl, sel, at, st) { return tl.from(sel, { y: 50, opacity: 0, duration: .8, ease: E, stagger: st || .12 }, at) }
+  function photo(tl, s, d) { var im = $(s + ' .ph img'); if (im) tl.fromTo(im, { scale: 1.16 }, { scale: 1, duration: d, ease: 'none' }, 0); var ph = $(s + ' .ph'); if (ph) tl.from(ph, { clipPath: 'inset(0 0 100% 0 round 36px)', duration: 1.1, ease: 'power3.inOut' }, 0) }
+  function bar(tl, s) { tl.from(s + ' .bar', { yPercent: 100, duration: .7, ease: E }, .2) }
+
+  // 1 brand open: the tooth draws in chrome, the name rises letter by letter, a glint crosses it
+  (function () { var s = '#s1', tl = TL.s1 = G.timeline({ paused: true }); photo(tl, s, 8);
+    var ps = $$(s + ' [data-tooth] path'); ps.forEach(function (p) { var L = p.getTotalLength(); p.style.strokeDasharray = L; }); tl.fromTo(ps, { strokeDashoffset: function (i, p) { return p.getTotalLength() } }, { strokeDashoffset: 0, duration: 1.3, ease: 'power2.inOut', stagger: .2 }, .2);
+    var w = $(s + ' [data-word]'); w.innerHTML = w.textContent.split('').map(function (c) { return '<span style="display:inline-block" class="chrome">' + (c === ' ' ? '&nbsp;' : c) + '</span>' }).join(''); w.classList.remove('chrome');
+    tl.from($$('span', w), { yPercent: 80, opacity: 0, duration: .7, ease: E, stagger: .045 }, .7);
+    ins(tl, s + ' [data-a]', 1.6, .2); bar(tl, s); tl.to({}, { duration: 8 }, 0) })();
+  // 2 $99 counts up
+  (function () { var s = '#s2', tl = TL.s2 = G.timeline({ paused: true }); photo(tl, s, 8); var n = $(s + ' [data-n]'), o = { v: 0 };
+    tl.from(s + ' .os.chrome', { y: 60, opacity: 0, duration: .8, ease: E }, .2).to(o, { v: 99, duration: 1.4, ease: 'power2.out', onUpdate: function () { n.textContent = Math.round(o.v) } }, .3);
+    ins(tl, s + ' [data-a]', .1, .9); tl.from(s + ' [data-chips] .chip', { scale: .6, opacity: 0, duration: .55, ease: 'back.out(2)', stagger: .22 }, 1.9); bar(tl, s); tl.to({}, { duration: 8 }, 0) })();
+  // 3 Medicaid: two cards flip in
+  (function () { var s = '#s3', tl = TL.s3 = G.timeline({ paused: true }); ins(tl, s + ' [data-a]', .2, .3);
+    G.set(s + ' [data-card]', { transformPerspective: 1600 }); tl.from(s + ' [data-card]', { rotationY: -70, x: 160, opacity: 0, duration: 1.1, ease: E, stagger: .35 }, .6);
+    tl.to(s + ' [data-card]', { y: -10, duration: 1.6, ease: 'sine.inOut', yoyo: true, repeat: 2, stagger: .4 }, 2.2); bar(tl, s); tl.to({}, { duration: 8 }, 0) })();
+  // 4 fluoride: drops fall, enamel draws round the tooth, a shine sweeps it
+  (function () { var s = '#s4', tl = TL.s4 = G.timeline({ paused: true }), en = $(s + ' [data-enamel]'), L = en.getTotalLength(); en.style.strokeDasharray = L;
+    tl.from(s + ' [data-fl]', { scale: .9, opacity: 0, duration: .8, ease: E, transformOrigin: '50% 60%' }, 0);
+    tl.fromTo(s + ' [data-drops] path', { y: -30, opacity: 0 }, { y: 44, opacity: 1, duration: .9, ease: 'power2.in', stagger: .25 }, .4).to(s + ' [data-drops] path', { opacity: 0, scale: .4, duration: .2, transformOrigin: '50% 100%', stagger: .25 }, 1.3);
+    tl.fromTo(en, { strokeDashoffset: L }, { strokeDashoffset: 0, duration: 1.4, ease: 'power2.inOut' }, 1.4);
+    tl.fromTo(s + ' [data-shine]', { attr: { x: -40 } }, { attr: { x: 90 }, duration: 1, ease: 'power2.inOut' }, 2.8);
+    tl.from(s + ' [data-spark] path', { scale: 0, rotation: -90, svgOrigin: '32 32', transformOrigin: '50% 50%', duration: .6, ease: 'back.out(3)', stagger: .15 }, 3.2);
+    ins(tl, s + ' [data-a]', .5, .35); bar(tl, s); tl.to({}, { duration: 8 }, 0) })();
+  // 5 two minute timer, run fast
+  (function () { var s = '#s5', tl = TL.s5 = G.timeline({ paused: true }), r = $(s + ' [data-ring]'), C = 2 * Math.PI * 86, ck = $(s + ' [data-clock]'), o = { t: 120 };
+    r.style.strokeDasharray = C; tl.fromTo(r, { strokeDashoffset: 0 }, { strokeDashoffset: C, duration: 5, ease: 'none' }, .8)
+      .to(o, { t: 0, duration: 5, ease: 'none', onUpdate: function () { var t = Math.ceil(o.t); ck.textContent = Math.floor(t / 60) + ':' + ('0' + t % 60).slice(-2) } }, .8)
+      .to(ck, { scale: 1.08, duration: .25, yoyo: true, repeat: 1, ease: 'power2.out' }, 5.8);
+    ins(tl, s + ' [data-a]', .3, .35); bar(tl, s); tl.to({}, { duration: 8 }, 0) })();
+  // 6 months fill in, the bristles fray as they go
+  (function () { var s = '#s6', tl = TL.s6 = G.timeline({ paused: true }), ms = $$(s + ' [data-m]'), ls = $$(s + ' [data-bristles] line');
+    tl.from(s + ' svg', { x: -120, opacity: 0, duration: .9, ease: E }, .1).from(ms, { y: 40, opacity: 0, duration: .6, ease: E, stagger: .12 }, .5);
+    ms.forEach(function (m, i) { var at = 1.4 + i * .9; tl.to(m, { backgroundColor: i < 2 ? '#3d6cf2' : '#1e2f6b', color: '#fff', boxShadow: 'inset 0 0 0 0 #c9d3e6', duration: .4 }, at).to(m.querySelector('div div:last-child'), { color: '#dbe4ff', duration: .4 }, at);
+      if (i >= 2) tl.to(ls, { rotation: function (k) { return (k - 4) * (i === 2 ? 3 : 7) }, svgOrigin: function (k, l) { return l.getAttribute('x1') + ' 48' }, stroke: i === 2 ? '#6f8fe6' : '#9aa6c4', duration: .6, ease: 'power2.out' }, at) });
+    ins(tl, s + ' [data-a]', .3, .35); bar(tl, s); tl.to({}, { duration: 8 }, 0) })();
+  // 7 the floss slides into each gap
+  (function () { var s = '#s7', tl = TL.s7 = G.timeline({ paused: true }), f = $(s + ' [data-floss]'), o = { x: gaps[0], d: 0 };
+    function draw() { f.setAttribute('d', 'M' + (o.x - 70) + ' -60 L' + o.x + ' ' + (20 + o.d) + ' L' + (o.x + 70) + ' -60') }
+    draw(); tl.from(s + ' [data-teeth] rect', { y: 40, opacity: 0, duration: .6, ease: E, stagger: .07 }, .1).from(f, { opacity: 0, duration: .3 }, .8);
+    gaps.forEach(function (g, i) { var at = 1 + i * 1.15; tl.to(o, { x: g, duration: .35, ease: 'power2.inOut', onUpdate: draw }, at).to(o, { d: 200, duration: .35, ease: 'power2.in', onUpdate: draw }, at + .35).to(o, { d: 0, duration: .35, ease: 'power2.out', onUpdate: draw }, at + .72) });
+    ins(tl, s + ' [data-a]', .3, .35); bar(tl, s); tl.to({}, { duration: 8 }, 0) })();
+  // 8 services tile in
+  (function () { var s = '#s8', tl = TL.s8 = G.timeline({ paused: true }); ins(tl, s + ' [data-a]', .2);
+    tl.from(s + ' [data-t]', { y: 60, opacity: 0, scale: .94, duration: .7, ease: E, stagger: { each: .12, grid: [2, 4], from: 'start' } }, .5);
+    tl.from(s + ' [data-t] path', { strokeDasharray: 120, strokeDashoffset: 120, duration: 1.2, ease: 'power2.out', stagger: .12 }, .7); bar(tl, s); tl.to({}, { duration: 8 }, 0) })();
+  // 9 emergency, then walk-ins
+  (function () { var s = '#s9', tl = TL.s9 = G.timeline({ paused: true }); tl.from(s + ' [data-q1] div', { y: 80, opacity: 0, duration: .8, ease: E, stagger: .25 }, .2)
+      .to(s + ' [data-q1] div', { y: -60, opacity: 0, duration: .5, ease: 'power2.in', stagger: .1 }, 3.6).fromTo(s + ' [data-q2]', { opacity: 1 }, { opacity: 1, duration: .01 }, 4.1)
+      .from(s + ' [data-q2] div', { y: 80, opacity: 0, duration: .8, ease: E, stagger: .25 }, 4.1);
+    $$(s + ' [data-pulse]').forEach(function (p, i) { tl.fromTo(p, { scale: .8, opacity: .9 }, { scale: 1.6, opacity: 0, duration: 2, ease: 'power1.out', repeat: 3 }, .4 + i) });
+    ins(tl, s + ' [data-a]', 1); bar(tl, s); tl.to({}, { duration: 8 }, 0) })();
+  // 10 twins
+  (function () { var s = '#s10', tl = TL.s10 = G.timeline({ paused: true }); photo(tl, s, 8); ins(tl, s + ' [data-a]', .6, .25); bar(tl, s); tl.to({}, { duration: 8 }, 0) })();
+  // 11 giveaway
+  (function () { var s = '#s11', tl = TL.s11 = G.timeline({ paused: true }); photo(tl, s, 8); ins(tl, s + ' [data-a]', .4, .3);
+    tl.from(s + ' [data-prizes] .chip', { scale: .6, opacity: 0, duration: .5, ease: 'back.out(2)', stagger: .18 }, 1.1); bar(tl, s); tl.to({}, { duration: 8 }, 0) })();
+
+  // ---------- live loop (only when served, never in the file:// export)
+  if (location.protocol === 'file:' || /[?&]static/.test(location.search)) return;
+  document.body.classList.add('live');
+  var stage = $('#stage');
+  function fit() { var k = Math.min(innerWidth / 1920, innerHeight / 1080); stage.style.transform = 'translate(' + (-960 * k) + 'px,' + (-540 * k) + 'px) scale(' + k + ')' }
+  addEventListener('resize', fit); fit();
+  var now = new Date();
+  var slides = $$('.tv').filter(function (el) { return !el.dataset.until || now < new Date(el.dataset.until) });
+  var cur = -1, timer;
+  function go(i) { var prev = slides[cur], next = slides[(i + slides.length) % slides.length]; cur = (i + slides.length) % slides.length;
+    next.classList.add('on'); G.set(next, { zIndex: 2 }); if (prev && prev !== next) G.set(prev, { zIndex: 1 });
+    TL[next.id].seek(0).play(); G.fromTo(next, { opacity: 0 }, { opacity: 1, duration: .9, ease: 'power1.inOut', onComplete: function () { if (prev && prev !== next) { prev.classList.remove('on'); G.set(prev, { opacity: 0 }); TL[prev.id].pause() } } });
+    clearTimeout(timer); timer = setTimeout(function () { go(cur + 1) }, (TL[next.id].duration() + .6) * 1000) }
+  go(0);
+  addEventListener('keydown', function (e) { if (e.key === 'ArrowRight') go(cur + 1); if (e.key === 'ArrowLeft') go(cur - 1) });
+  document.addEventListener('click', function () { var d = document.documentElement; if (!document.fullscreenElement && d.requestFullscreen) d.requestFullscreen().catch(function () {}) });
+  var idle; function wake() { document.body.classList.remove('idle'); clearTimeout(idle); idle = setTimeout(function () { document.body.classList.add('idle') }, 2500) } addEventListener('mousemove', wake); wake();
+  // keep the screen awake on TVs and laptops that support it, and reload once a night to pick up changes
+  function lock() { if (navigator.wakeLock) navigator.wakeLock.request('screen').catch(function () {}) } lock(); document.addEventListener('visibilitychange', function () { if (!document.hidden) lock() });
+  setTimeout(function () { location.reload() }, 6 * 3600 * 1000);
+})();
+</script>
+</body>
+</html>
