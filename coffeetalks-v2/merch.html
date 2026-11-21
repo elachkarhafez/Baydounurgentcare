@@ -43,11 +43,27 @@
     .bgfx { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; background: linear-gradient(170deg, #f9f5ef 0%, #f3ebdf 55%, #efe2d0 100%); }
     .bgfx i { position: absolute; display: block; border-radius: 50%; will-change: transform; }
     .bgfx .b1 { width: 120vmax; height: 120vmax; left: -55vmax; top: -60vmax; background: radial-gradient(closest-side, rgba(210,176,142,.7), rgba(210,176,142,0)); animation: d1 20s ease-in-out infinite alternate; }
-    .bgfx .b2 { width: 105vmax; height: 105vmax; right: -50vmax; top: 10vh; background: radial-gradient(closest-side, rgba(94,59,37,.34), rgba(94,59,37,0)); animation: d2 24s ease-in-out infinite alternate; }
+    .bgfx .b2 { width: 105vmax; height: 105vmax; right: -50vmax; top: 10vh; background: radial-gradient(closest-side, rgba(94,59,37,.2), rgba(94,59,37,0)); animation: d2 24s ease-in-out infinite alternate; }
     .bgfx .b3 { width: 95vmax; height: 95vmax; left: -30vmax; bottom: -55vmax; background: radial-gradient(closest-side, rgba(185,138,94,.45), rgba(185,138,94,0)); animation: d3 18s ease-in-out infinite alternate; }
     .bgfx .b4 { width: 70vmax; height: 70vmax; right: -20vmax; bottom: -35vmax; background: radial-gradient(closest-side, rgba(255,253,249,.9), rgba(255,253,249,0)); animation: d4 19s ease-in-out infinite alternate; }
     .bgfx .b5 { width: 60vmax; height: 60vmax; left: 20vw; top: -25vmax; background: radial-gradient(closest-side, rgba(58,36,24,.2), rgba(58,36,24,0)); animation: d2 28s ease-in-out infinite alternate-reverse; }
     .bgfx .swirl { position: absolute; left: 50%; top: 50%; width: 150vmax; height: 150vmax; margin: -75vmax 0 0 -75vmax; opacity: .16; animation: spin 120s linear infinite; }
+    .bgfx { background: var(--cream) radial-gradient(rgba(21,16,12,.12) 1.2px, transparent 1.6px) 0 0 / 11px 11px; }
+    .rows { position: absolute; left: -40vmax; right: -40vmax; top: -30vmax; bottom: -30vmax; display: grid; align-content: space-evenly; rotate: -9deg; }
+    .rows .row { display: flex; width: max-content; font: 400 clamp(5.5rem, 4rem + 8vw, 12rem)/.9 var(--display); text-transform: uppercase; color: transparent; -webkit-text-stroke: 2px rgba(94,59,37,.16); white-space: nowrap; animation: slide 70s linear infinite; will-change: transform; }
+    .rows .row:nth-child(3n+2) { -webkit-text-stroke-color: rgba(185,138,94,.3); }
+    .rows .row.rev { animation-direction: reverse; animation-duration: 85s; }
+    .rows .row span { padding-right: .3em; }
+    @keyframes slide { to { transform: translateX(-50%); } }
+    /* the coffee waves the bottom of the page sits in */
+    .shore { position: relative; z-index: 1; margin-top: 40px; background: var(--latte); }
+    .waves { position: absolute; left: 0; right: 0; bottom: 100%; height: 90px; overflow: hidden; pointer-events: none; }
+    .waves svg { position: absolute; bottom: -1px; left: 0; width: 200%; height: 100%; animation: wave 9s linear infinite; }
+    .waves .w2 { animation-duration: 14s; animation-direction: reverse; bottom: 8px; opacity: .9; }
+    .waves .w3 { animation-duration: 20s; bottom: 18px; opacity: .8; }
+    @keyframes wave { to { transform: translateX(-50%); } }
+    .shore::after { content: ""; position: absolute; inset: 0; background: radial-gradient(rgba(58,36,24,.12) 1.2px, transparent 1.6px) 0 0 / 11px 11px; pointer-events: none; }
+    .shore > * { position: relative; z-index: 1; }
     @keyframes d1 { to { transform: translate(28vmax, 22vmax) scale(1.12); } }
     @keyframes d2 { to { transform: translate(-30vmax, 18vmax) scale(.9); } }
     @keyframes d3 { to { transform: translate(24vmax, -26vmax) scale(1.15); } }
@@ -58,25 +74,25 @@
     header .wrap { height: 60px; display: flex; align-items: center; justify-content: space-between; gap: 10px; max-width: none; }
     header .logo img { height: 34px; width: auto; }
     header .r { display: flex; align-items: center; gap: 8px; }
-    .snd { display: inline-flex; align-items: center; gap: 7px; height: 36px; padding: 0 12px 0 5px; border: 2px solid var(--ink); border-radius: 999px; background: var(--paper); font: 700 1.05rem/1 var(--hand); white-space: nowrap; }
+    .snd { display: inline-flex; align-items: center; gap: 7px; height: 36px; padding: 0 12px 0 5px; border: 2px solid var(--ink); border-radius: 999px; background: var(--paper); font: 400 .8125rem/1 var(--display); letter-spacing: .05em; text-transform: uppercase; white-space: nowrap; }
     .snd .eq { width: 26px; height: 26px; display: inline-flex; align-items: flex-end; justify-content: center; gap: 2px; padding-bottom: 7px; border-radius: 50%; background: var(--ink); }
     .snd .eq span { width: 2.5px; height: 3px; border-radius: 2px; background: var(--cream); }
     .snd[aria-pressed="true"] .eq { background: var(--bean); }
     .snd[aria-pressed="true"] .eq span { animation: eq 1s ease-in-out infinite; }
     .snd[aria-pressed="true"] .eq span:nth-child(2) { animation-delay: -.3s; } .snd[aria-pressed="true"] .eq span:nth-child(3) { animation-delay: -.6s; } .snd[aria-pressed="true"] .eq span:nth-child(4) { animation-delay: -.15s; }
     @keyframes eq { 0%, 100% { height: 3px; } 50% { height: 11px; } }
-    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 48px; padding: 0 24px; border: var(--line); border-radius: 999px; background: var(--paper); box-shadow: 4px 4px 0 var(--ink); font: 700 1.4rem/1 var(--hand); white-space: nowrap; transition: transform .2s, box-shadow .2s; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 48px; padding: 0 24px; border: var(--line); border-radius: 999px; background: var(--paper); box-shadow: 4px 4px 0 var(--ink); font: 400 1rem/1 var(--display); letter-spacing: .04em; text-transform: uppercase; white-space: nowrap; transition: transform .2s, box-shadow .2s; }
     .btn:active { transform: translate(4px, 4px); box-shadow: 0 0 0 var(--ink); }
     @media (hover: hover) { .btn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ink); } }
     .btn.loud { background: var(--bean); color: var(--cream); }
-    .btn.sm { height: 36px; padding: 0 14px; font-size: 1.1rem; border-width: 2px; box-shadow: 3px 3px 0 var(--ink); }
+    .btn.sm { height: 36px; padding: 0 14px; font-size: .875rem; border-width: 2px; box-shadow: 3px 3px 0 var(--ink); }
 
-    main { flex: 1; }
+    main { flex: 1; position: relative; z-index: 1; }
     .hero { padding: 22px 0 10px; text-align: center; }
-    .soon { display: table; margin: 0 auto; padding: 7px 18px 6px; border-radius: 999px; background: var(--espresso); color: var(--foam); font: 700 1.25rem/1 var(--hand); letter-spacing: .02em; box-shadow: 0 8px 22px rgba(58,36,24,.18); }
-    .title { position: relative; display: inline-block; margin: 8px 0 0; font: 700 clamp(4.6rem, 3rem + 9vw, 8.5rem)/.9 var(--hand); color: var(--bean); letter-spacing: -.01em; text-shadow: 0 2px 0 rgba(255,253,249,.7); }
-    .title svg { position: absolute; left: 4%; right: 2%; bottom: -10px; width: 94%; height: 26px; overflow: visible; }
-    .sub { margin: 18px auto 0; font: 600 clamp(1.6rem, 1.2rem + 1.4vw, 2.1rem)/1.15 var(--hand); color: var(--ink-2); }
+    .soon { display: table; margin: 0 auto; padding: 10px 20px 8px; border: var(--line); border-radius: 14px; background: var(--latte); color: var(--ink); box-shadow: 5px 5px 0 var(--ink); font: 400 clamp(1.5rem, 1.2rem + 1.2vw, 2.1rem)/1 var(--display); letter-spacing: .04em; text-transform: uppercase; rotate: -3deg; }
+    .title { position: relative; display: inline-block; margin: 18px 0 0; font: 400 clamp(4.2rem, 2.6rem + 6vw, 6.25rem)/.9 var(--display); color: var(--ink); text-transform: uppercase; letter-spacing: .005em; }
+    .title svg { position: absolute; left: 2%; right: 2%; bottom: -16px; width: 96%; height: 24px; overflow: visible; }
+    .sub { margin: 26px auto 0; font: 600 clamp(1.6rem, 1.2rem + 1.4vw, 2.1rem)/1.15 var(--hand); color: var(--ink-2); }
 
     /* the photos */
     .pics { position: relative; display: flex; justify-content: center; align-items: flex-start; margin: 26px auto 0; padding: 0 2px 18px; }
@@ -87,8 +103,8 @@
     .pic.a { z-index: 2; margin-right: -14px; rotate: -3deg; }
     .pic.b { z-index: 1; margin-top: 44px; rotate: 3.5deg; }
 
-    .dibs { padding: 14px 0 46px; text-align: center; }
-    .dibs h2 { margin: 0; font: 700 clamp(2.6rem, 2rem + 2.6vw, 3.6rem)/1 var(--hand); color: var(--bean); }
+    .dibs { padding: 6px 0 30px; text-align: center; }
+    .dibs h2 { margin: 0; font: 400 clamp(2.4rem, 1.8rem + 2.6vw, 3.6rem)/.95 var(--display); color: var(--ink); text-transform: uppercase; }
     .dibs p { max-width: 27ch; margin: 8px auto 0; text-wrap: balance; font: 600 clamp(1.4rem, 1.15rem + .8vw, 1.7rem)/1.2 var(--hand); }
     .dibs .acts { display: flex; justify-content: center; gap: 12px; margin-top: 20px; }
 
@@ -100,16 +116,17 @@
     @media (min-width: 900px) {
       header .wrap { height: 70px; } header .logo img { height: 40px; }
       .hero { padding: 30px 0 10px; }
-      .pics { margin-top: 36px; } .pic { width: 236px; padding: 9px; border-radius: 26px; } .pic .ph { border-radius: 19px; }
+      .pics { margin-top: 36px; } .pic { width: 214px; padding: 9px; border-radius: 26px; } .pic .ph { border-radius: 19px; }
       .pic.a { margin-right: 34px; } .pic.b { margin-top: 56px; }
       .dibs { padding: 24px 0 64px; }
     }
-    @media (prefers-reduced-motion: reduce) { .bgfx i, .bgfx .swirl { animation: none !important; } }
+    @media (prefers-reduced-motion: reduce) { .bgfx i, .rows .row, .waves svg { animation: none !important; } }
   </style>
 </head>
 <body>
   <div class="bgfx" aria-hidden="true">
-    <i class="b1"></i><i class="b2"></i><i class="b3"></i><i class="b4"></i><i class="b5"></i>
+    <i class="b1"></i><i class="b2"></i><i class="b3"></i><i class="b4"></i>
+    <div class="rows"><div class="row"><span>Coffee Talks ✦ Merch ✦ Coming Soon ✦ Coffee Talks ✦ Merch ✦ Coming Soon ✦ Coffee Talks ✦ Merch ✦ Coming Soon ✦ </span><span>Coffee Talks ✦ Merch ✦ Coming Soon ✦ Coffee Talks ✦ Merch ✦ Coming Soon ✦ Coffee Talks ✦ Merch ✦ Coming Soon ✦ </span></div><div class="row rev"><span>Coffee Talks ✦ Merch ✦ Coming Soon ✦ Coffee Talks ✦ Merch ✦ Coming Soon ✦ Coffee Talks ✦ Merch ✦ Coming Soon ✦ </span><span>Coffee Talks ✦ Merch ✦ Coming Soon ✦ Coffee Talks ✦ Merch ✦ Coming Soon ✦ Coffee Talks ✦ Merch ✦ Coming Soon ✦ </span></div><div class="row"><span>Coffee Talks ✦ Merch ✦ Coming Soon ✦ Coffee Talks ✦ Merch ✦ Coming Soon ✦ Coffee Talks ✦ Merch ✦ Coming Soon ✦ </span><span>Coffee Talks ✦ Merch ✦ Coming Soon ✦ Coffee Talks ✦ Merch ✦ Coming Soon ✦ Coffee Talks ✦ Merch ✦ Coming Soon ✦ </span></div><div class="row rev"><span>Coffee Talks ✦ Merch ✦ Coming Soon ✦ Coffee Talks ✦ Merch ✦ Coming Soon ✦ Coffee Talks ✦ Merch ✦ Coming Soon ✦ </span><span>Coffee Talks ✦ Merch ✦ Coming Soon ✦ Coffee Talks ✦ Merch ✦ Coming Soon ✦ Coffee Talks ✦ Merch ✦ Coming Soon ✦ </span></div><div class="row"><span>Coffee Talks ✦ Merch ✦ Coming Soon ✦ Coffee Talks ✦ Merch ✦ Coming Soon ✦ Coffee Talks ✦ Merch ✦ Coming Soon ✦ </span><span>Coffee Talks ✦ Merch ✦ Coming Soon ✦ Coffee Talks ✦ Merch ✦ Coming Soon ✦ Coffee Talks ✦ Merch ✦ Coming Soon ✦ </span></div><div class="row rev"><span>Coffee Talks ✦ Merch ✦ Coming Soon ✦ Coffee Talks ✦ Merch ✦ Coming Soon ✦ Coffee Talks ✦ Merch ✦ Coming Soon ✦ </span><span>Coffee Talks ✦ Merch ✦ Coming Soon ✦ Coffee Talks ✦ Merch ✦ Coming Soon ✦ Coffee Talks ✦ Merch ✦ Coming Soon ✦ </span></div><div class="row"><span>Coffee Talks ✦ Merch ✦ Coming Soon ✦ Coffee Talks ✦ Merch ✦ Coming Soon ✦ Coffee Talks ✦ Merch ✦ Coming Soon ✦ </span><span>Coffee Talks ✦ Merch ✦ Coming Soon ✦ Coffee Talks ✦ Merch ✦ Coming Soon ✦ Coffee Talks ✦ Merch ✦ Coming Soon ✦ </span></div></div>
   </div>
   <header>
     <div class="wrap">
@@ -123,8 +140,8 @@
   <main>
     <section class="hero">
       <div class="wrap">
-        <span class="soon" data-in>coming soon</span>
-        <h1 class="title" data-in>The Merch<svg viewBox="0 0 300 26" preserveAspectRatio="none" aria-hidden="true"><path data-swash d="M4 18 C 60 6, 120 4, 170 12 S 260 22, 296 8" fill="none" stroke="#d2b08e" stroke-width="7" stroke-linecap="round"/></svg></h1>
+        <span class="soon" data-in>Coming Soon</span>
+        <h1 class="title" data-in>The Merch.<svg viewBox="0 0 300 26" preserveAspectRatio="none" aria-hidden="true"><path data-swash d="M4 18 C 60 6, 120 4, 170 12 S 260 22, 296 8" fill="none" stroke="#d2b08e" stroke-width="7" stroke-linecap="round"/></svg></h1>
         <p class="sub" data-in>Coffee Talks merch is almost&nbsp;here.</p>
         <div class="pics">
           <figure class="pic a" data-pic style="margin-top:0;margin-bottom:0;margin-left:0"><div class="ph"><img src="img/merch-hoodie.webp" width="800" height="1200" alt="Noor at a café table in the navy Coffee Talks hoodie, holding a coffee"><span class="shine"></span></div></figure>
@@ -132,15 +149,18 @@
         </div>
       </div>
     </section>
+  </main>
+  <div class="shore">
+    <div class="waves" aria-hidden="true"><svg class="w3" viewBox="0 0 1200 90" preserveAspectRatio="none"><path d="M0 50 Q75 20 150 50 T300 50 T450 50 T600 50 T750 50 T900 50 T1050 50 T1200 50 V90 H0Z" fill="#5e3b25"/></svg><svg class="w2" viewBox="0 0 1200 90" preserveAspectRatio="none"><path d="M0 50 Q75 20 150 50 T300 50 T450 50 T600 50 T750 50 T900 50 T1050 50 T1200 50 V90 H0Z" fill="#b98a5e"/></svg><svg class="w1" viewBox="0 0 1200 90" preserveAspectRatio="none"><path d="M0 50 Q75 20 150 50 T300 50 T450 50 T600 50 T750 50 T900 50 T1050 50 T1200 50 V90 H0Z" fill="#d2b08e"/></svg></div>
     <section class="dibs">
       <div class="wrap">
-        <h2 data-in>Want first dibs?</h2>
+        <h2 data-in>Want First Dibs?</h2>
         <p data-in>Text me or send a DM and I’ll let you know the second it&nbsp;drops.</p>
         <div class="acts" data-in><a class="btn loud" data-sms href="sms:+13132893399">Text Me</a><a class="btn" href="https://ig.me/m/_coffeetalks" target="_blank" rel="noopener">DM Me</a></div>
       </div>
     </section>
-  </main>
   <footer><div class="wrap"><span>© 2018 Coffee Talks</span><span class="f-contact"><a href="tel:+13132893399">📞 313-289-3399</a><a href="mailto:coffeetalksbusiness@gmail.com">✉️ coffeetalksbusiness@gmail.com</a></span></div></footer>
+  </div>
 
   <script src="assets/lib/gsap.min.js"></script>
   <script>
