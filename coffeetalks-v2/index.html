@@ -1503,6 +1503,9 @@
         musicG.gain.setValueAtTime(0, ctx.currentTime); musicG.gain.linearRampToValueAtTime(vol, ctx.currentTime + 4); return;
       }
       musicVol = vol; music = new Audio(`snd/${name}.mp3`); music.loop = true; music.preload = 'auto'; music.playsInline = true; music.setAttribute('playsinline', '');
+      try { const t0 = +sessionStorage.getItem('ct-jazz-t'); if (t0 > 0) music.addEventListener('loadedmetadata', () => { try { music.currentTime = t0 % (music.duration || 1e9); } catch (e) {} }, { once: true }); } catch (e) {}
+      const saveT = () => { try { if (music && music.currentTime) sessionStorage.setItem('ct-jazz-t', String(music.currentTime)); } catch (e) {} };
+      addEventListener('pagehide', saveT); setInterval(() => { if (music && !music.paused) saveT(); }, 2000);
       try { ctx.createMediaElementSource(music).connect(musicG); } catch (e) { music.volume = vol; }
       musicG.gain.setValueAtTime(0, ctx.currentTime); musicG.gain.linearRampToValueAtTime(vol, ctx.currentTime + 4);
       const p = music.play(); if (p) p.catch(() => { const go = () => { music.play().catch(() => {}); removeEventListener('pointerdown', go); }; addEventListener('pointerdown', go); });
