@@ -799,6 +799,30 @@
     .closing .c-stack { flex-direction: column; flex-wrap: nowrap; align-items: stretch; gap: 12px; width: min(300px, 100%); margin: 22px auto 0; }
     .closing .c-stack .btn { width: 100%; height: 50px; white-space: nowrap; font-size: 1rem; }
     .closing .socials { justify-content: center; }
+    /* the merch sign: opens its own page */
+    .mpeek { padding: 34px 0; }
+    .mp-card { display: grid; grid-template-columns: 132px 1fr; align-items: center; gap: 16px; padding: 18px 16px; border: var(--line); border-radius: 20px; background: var(--paper); box-shadow: var(--shadow); -webkit-tap-highlight-color: transparent; }
+    .mp-pics { position: relative; height: 150px; }
+    .mp-pics img { position: absolute; top: 6px; width: 80px; padding: 4px 4px 14px; border: 2px solid var(--ink); background: #fff; box-shadow: 3px 3px 0 var(--ink); aspect-ratio: auto; transition: transform .45s var(--spring); }
+    .mp-pics .p1 { left: 0; rotate: -8deg; z-index: 2; } .mp-pics .p2 { left: 48px; top: 14px; rotate: 7deg; }
+    .mp-card:hover .p1, .mp-card:focus-visible .p1 { transform: translate(-6px, -4px) rotate(-4deg); }
+    .mp-card:hover .p2, .mp-card:focus-visible .p2 { transform: translate(8px, -2px) rotate(4deg); }
+    .mp-soon { display: inline-block; padding: 6px 11px 5px; border: 2px solid var(--ink); border-radius: 10px; background: var(--latte); font: 400 .8125rem/1 var(--display); letter-spacing: .05em; text-transform: uppercase; rotate: -4deg; }
+    .mp-txt h2 { margin-top: 10px; font-size: clamp(1.75rem, 1.2rem + 2vw, 2.5rem); }
+    .mp-txt .hand { display: block; margin-top: 6px; font: 700 1.1875rem/1.05 var(--hand); color: var(--bean); }
+    .mp-txt .btn { margin-top: 12px; height: 38px; padding: 0 14px; font-size: .875rem; }
+    @media (min-width: 900px) { .mpeek { padding: 56px 0; } .mp-card { grid-template-columns: 260px 1fr; gap: 36px; max-width: 760px; margin: 0 auto; padding: 26px 34px; } .mp-pics { height: 230px; } .mp-pics img { width: 130px; } .mp-pics .p2 { left: 100px; } .mp-txt .hand { font-size: 1.5rem; } .mp-txt .btn { height: 46px; font-size: .9375rem; } }
+    /* kind words from clients (shows once there are quotes in CONFIG.testimonials) */
+    .kind { padding: 36px 0; }
+    .kw-rail { list-style: none; display: grid; grid-auto-flow: column; grid-auto-columns: 84%; gap: 14px; margin: 20px calc(-1 * var(--pad)) 0; padding: 4px var(--pad) 14px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+    .kw-rail::-webkit-scrollbar { display: none; }
+    .kw { scroll-snap-align: start; display: flex; flex-direction: column; padding: 20px 18px 16px; border: var(--line); border-radius: 18px; background: var(--paper); box-shadow: var(--shadow); }
+    .kw:nth-child(odd) { rotate: -1deg; } .kw:nth-child(even) { rotate: 1deg; }
+    .kw q { flex: 1; quotes: none; font-size: .9375rem; line-height: 1.55; text-wrap: pretty; }
+    .kw .who { margin-top: 14px; padding-top: 10px; border-top: 1.5px dashed #8a7a6c; }
+    .kw .who b { display: block; font: 400 1.0625rem/1.1 var(--display); letter-spacing: .03em; text-transform: uppercase; }
+    .kw .who span { font: 700 1.125rem/1.1 var(--hand); color: var(--bean); }
+    @media (min-width: 900px) { .kind { padding: 56px 0; } .kw-rail { grid-auto-flow: row; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 28px 0 0; padding: 0; overflow: visible; gap: 22px; } .kw q { font-size: 1rem; } }
     .hours { position: relative; width: min(360px, 100%); margin: 30px auto 0; padding: 22px 20px 20px; border: var(--line); border-radius: 18px; background: var(--cream); color: var(--ink); box-shadow: 6px 6px 0 var(--latte); text-align: left; }
     .hours h3 { margin: 0; text-align: center; font: 400 1.625rem/1 var(--display); text-transform: uppercase; letter-spacing: .01em; }
     .hours .h-up { margin: 8px 0 0; text-align: center; font: 700 1.375rem/1.1 var(--hand); color: var(--bean); max-width: none; }
@@ -968,7 +992,7 @@
   <header>
     <div class="wrap">
       <a class="logo" href="#top" aria-label="Coffee Talks, back to top"><img src="img/logo.webp" width="1200" height="776" alt="Coffee Talks"></a>
-      <nav aria-label="Sections"><a href="#menu">The Menu</a><a href="#brewed">How It's Brewed</a></nav>
+      <nav aria-label="Sections"><a href="#menu">The Menu</a><a href="#brewed">How It's Brewed</a><a href="/merch">Merch</a></nav>
       <div class="right">
         <button class="snd-lbl" type="button" data-sndlbl aria-label="Turn sound off">Sound On</button>
         <button class="mus" type="button" data-music aria-pressed="false" aria-label="Turn sound on"><span></span><span></span><span></span><span></span></button>
@@ -1218,6 +1242,13 @@
     </section>
 
     <!-- BUILD YOUR PACKAGE -->
+    <section class="kind" id="kind-words" data-kind hidden>
+      <div class="wrap">
+        <div class="sec-head"><h2>Kind <span class="hl">Words.</span></h2><span class="hand">From the people I've worked with.</span></div>
+        <ul class="kw-rail" data-kwrail aria-label="What clients say"></ul>
+      </div>
+    </section>
+
     <section class="order" id="package">
       <span class="ghost" data-ghost>Order Up</span>
       <div class="wrap">
@@ -1273,6 +1304,15 @@
     <section class="extra" data-extra hidden><div class="wrap"><div class="c-cols" data-extracols></div></div></section>
 
     <!-- CLOSING -->
+    <section class="mpeek" id="merch-peek">
+      <div class="wrap">
+        <a class="mp-card" href="/merch" data-mpeek aria-label="Coffee Talks merch, coming soon. Take a peek.">
+          <span class="mp-pics" aria-hidden="true"><img class="p1" src="img/merch-hoodie-sm.webp" width="400" height="600" alt="" loading="lazy" decoding="async"><img class="p2" src="img/merch-crewneck-sm.webp" width="400" height="600" alt="" loading="lazy" decoding="async"></span>
+          <span class="mp-txt"><span class="mp-soon">Coming Soon</span><h2>The <span class="hl">Merch.</span></h2><span class="hand">Hoodies and crewnecks with the logo.</span><span class="btn solid">Take A Peek <svg aria-hidden="true"><use href="#i-arrow"/></svg></span></span>
+        </a>
+      </div>
+    </section>
+
     <section class="closing dark" id="talk" data-closing>
       <div class="wrap" style="position:relative">
         <p class="small">Grab A Coffee.</p>
@@ -1414,6 +1454,7 @@
       { o: 'Cold Brew', t: 'The Planner', v: 'You film a month of content in one afternoon and schedule it before dinner.' }
     ],
     clients: { now: [], before: [], love: [] },
+    // client quotes: { q: 'what they said', n: 'Their name', b: 'Their business' }. The section shows once this has quotes.
     testimonials: []
   };
   </script>
@@ -1539,6 +1580,17 @@
       el.textContent = open ? 'Open Now ☕' : (wd >= 1 && wd <= 6 && h < 10) ? 'Back Today At 10 AM' : (wd === 0 || wd === 6) ? 'Back Monday At 10 AM' : 'Back Tomorrow At 10 AM';
     };
     tick(); setInterval(tick, 60000);
+  })();
+
+  (() => {
+    const T = CONFIG.testimonials || [], sec = $('[data-kind]'); if (!sec || !T.length) return;
+    $('[data-kwrail]', sec).innerHTML = T.map(t => `<li class="kw"><q>${esc(t.q).replace(/ (\S+)$/, '&nbsp;$1')}</q><div class="who"><b>${esc(t.n)}</b>${t.b ? `<span>${esc(t.b)}</span>` : ''}</div></li>`).join('');
+    sec.hidden = false;
+  })();
+  // the merch sign's polaroids fan out the first time it's on screen
+  (() => { const c = $('[data-mpeek]'); if (!c || !ANIM) return; const ims = $$('img', c);
+    gsap.set(ims, { y: 40, opacity: 0, rotation: 0 });
+    onScreen(c, v => { if (!v || c.dataset.seen) return; c.dataset.seen = 1; gsap.to(ims, { y: 0, opacity: 1, rotation: (i) => i ? 7 : -8, duration: .7, ease: 'back.out(1.8)', stagger: .12, clearProps: 'transform' }); }, '-60px');
   })();
 
   /* scroll velocity, shared by everything that sloshes */
@@ -2022,7 +2074,7 @@
   /* clients + testimonials when CONFIG has them */
   (() => {
     const C = CONFIG.clients, cols = [['Working With Now', C.now], ['Worked With Before', C.before], ['Clients I Love', C.love]].filter(c => c[1].length);
-    const T = CONFIG.testimonials; if (!cols.length && !T.length) return;
+    const T = []; if (!cols.length) return;
     $('[data-extracols]').innerHTML = cols.map(([h, l]) => `<div class="c-col"><h3>${esc(h)}</h3><ul>${l.map(x => `<li>${esc(x)}</li>`).join('')}</ul></div>`).join('') + T.map(t => `<figure class="r"><blockquote>“${esc(t.q)}”</blockquote><figcaption>${esc(t.n)}</figcaption></figure>`).join('');
     $('[data-extra]').hidden = false;
   })();
