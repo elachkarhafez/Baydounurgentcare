@@ -13,7 +13,7 @@ TEL = '+96170810021'
 WA = 'https://wa.me/96170810021'
 IG = 'https://www.instagram.com/bravo.shoes_/'
 DM = 'https://ig.me/m/bravo.shoes_'
-GOLD = ('<linearGradient id="%s" x1="0" y1="0" x2=".55" y2="1"><stop offset="0" stop-color="#ead7a4"/>'
+GOLD = ('<linearGradient id="%s" gradientUnits="userSpaceOnUse" x1="120" y1="90" x2="640" y2="1000"><stop offset="0" stop-color="#ead7a4"/>'
         '<stop offset=".42" stop-color="#bb9a5c"/><stop offset=".78" stop-color="#9a7a42"/><stop offset="1" stop-color="#c7a96d"/></linearGradient>')
 
 def defs():
@@ -24,7 +24,7 @@ def defs():
     return s + '</defs></svg>'
 
 def mark(cls, fill='url(#gGold)'):
-    return ('<svg class="%s" viewBox="%s" aria-hidden="true"><g fill="%s"><use href="#lg-B"/><use href="#lg-S"/>'
+    return ('<svg class="%s" viewBox="%s" aria-hidden="true"><g fill="%s"><use href="#lg-all"/><use href="#lg-B"/><use href="#lg-S"/>'
             '<use href="#lg-heel"/><use href="#lg-st0"/><use href="#lg-st1"/></g></svg>') % (cls, MARK_VB, fill)
 
 def pill(letters=True, cls='pl'):
@@ -38,13 +38,14 @@ def pill(letters=True, cls='pl'):
     return s
 
 def lockup(cls):
-    return '<svg class="%s" viewBox="%s" aria-hidden="true"><g fill="url(#gGold)"><use href="#lg-B"/><use href="#lg-S"/><use href="#lg-heel"/><use href="#lg-st0"/><use href="#lg-st1"/></g>%s</svg>' % (cls, LOCK_VB, pill())
+    return '<svg class="%s" viewBox="%s" aria-hidden="true"><g fill="url(#gGold)"><use href="#lg-all"/><use href="#lg-B"/><use href="#lg-S"/><use href="#lg-heel"/><use href="#lg-st0"/><use href="#lg-st1"/></g>%s</svg>' % (cls, LOCK_VB, pill())
 
 def intro():
     s = '<svg id="ilogo" viewBox="%s" aria-hidden="true"><defs>' % LOCK_VB
     s += '<linearGradient id="gSweep" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fffaf0" stop-opacity=".95"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>'
     s += '<mask id="mlogo" maskUnits="userSpaceOnUse" x="0" y="0" width="1100" height="1200"><use href="#lg-all" fill="#fff"/></mask></defs>'
     s += '<g id="imark">'
+    s += '<use id="iall" href="#lg-all" fill="url(#gGold)" opacity="0"/>'
     s += '<use id="ist0" class="star" href="#lg-st0" fill="url(#gGold)"/><use id="ist1" class="star" href="#lg-st1" fill="url(#gGold)"/>'
     s += '<use id="iB" class="dr" href="#lg-B" fill="url(#gGold)"/><use id="iS" class="dr" href="#lg-S" fill="url(#gGold)"/><use id="iheel" class="dr" href="#lg-heel" fill="url(#gGold)"/>'
     hx, hy = L['heelTip']
@@ -76,7 +77,7 @@ assert '{{' not in t, re.findall(r'\{\{\w+\}\}', t)
 open(S + 'index.html', 'w').write(t)
 
 # favicon: the gold mark on their cream, self-contained (no <use>)
-paths = ''.join('<path d="%s"/>' % d for d in [L['B'], L['S'], L['heel']] + L['stars'])
+paths = ''.join('<path d="%s"/>' % d for d in [L['all'], L['B'], L['S'], L['heel']] + L['stars'])
 fav = ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="30 50 890 890"><defs>' + GOLD % 'g' + '</defs>'
        '<rect x="30" y="50" width="890" height="890" rx="200" fill="#f6f1ea"/><g fill="url(#g)">' + paths + '</g></svg>')
 open(S + 'favicon.svg', 'w').write(fav)
