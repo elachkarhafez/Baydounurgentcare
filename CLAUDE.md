@@ -2,6 +2,15 @@
 
 Each folder is a single-file client website built with the `ela-studio` skill (`.claude/skills/ela-studio/`) and deployed to Vercel (team `team_AYB0SFZ1qQkp6TebSji5xEKA`).
 
+## Standing rule: only the brand's own fonts and colours (newest, overrides any font choices elsewhere)
+
+The user said: "The fonts look like AI. The colors are weird... Use their actual font for the fonts, and from now on, only do that. I want you to only use their fonts on the website, not some AI generic fonts. Use only theirs."
+- Before building, identify the business's real typefaces from their logo, signage, menus, posts, packaging and website CSS (check their site's @font-face / Google Fonts / Typekit links first). Match lettering from images by rendering candidate fonts over the crop and comparing; name the font in the report with the evidence.
+- Use only those fonts on the site. If the exact font is free (Google Fonts, Fontsource, open licence), load it. If it's commercial and not available, say so to the user, and use the closest free cut of the same design (same family or a published clone), never a generic pick. Never default to Inter, Geist, Playfair, Bodoni, DM Sans, Fraunces or any "safe AI" pair.
+- Lettering that is part of the logo is traced, not set in a substitute font.
+- Colours come from the brand too: sample them from their logo, packaging, store and photos. No invented palettes.
+- State in the report which fonts and colours were used and where each came from.
+
 ## Standing rule: every site gets a custom link preview (newest)
 
 The user said: "From now on each website should have a custom preview link". When the link is texted or shared (iMessage, WhatsApp, Instagram DMs, Slack), it must unfurl into a designed card, not a blank or generic one.
