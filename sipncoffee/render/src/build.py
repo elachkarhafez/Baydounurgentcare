@@ -92,10 +92,11 @@ O = {'O_WL': '%.1f %.1f' % tuple(WH['wheelL']), 'O_WR': '%.1f %.1f' % tuple(WH['
 # ---------- the cart on the skyline (women + cart + wheels, ink) ----------
 cb = union(CAR)
 CARW, CARH = cb[2] - cb[0], cb[3] - cb[1]
-SKYCART = ('<g id="scar"><g id="scar-in" transform="scale(%.4f) translate(%.1f %.1f)">' % (118 / CARH, -cb[0], -cb[1])
+SKYCART = ('<g id="scar"><g id="scar-in" transform="scale(%.4f) translate(%.1f %.1f)">' % (136 / CARH, -cb[0], -cb[1])
+           + '<g class="halo">' + ''.join('<use href="#k-%s"/>' % k for k in CAR) + '</g>'
            + '<use href="#k-cart"/><use href="#k-women"/><use href="#k-sign"/>'
            + '<g id="swL"><use href="#k-wheelL"/></g><g id="swR"><use href="#k-wheelR"/></g></g></g>')
-SKY_CW = CARW * 118 / CARH
+SKY_CW = CARW * 136 / CARH
 
 def skyline():
     """Chicago in their line style: ground line, Marina City, Willis, Aon, Trump, Hancock, the Water Tower, the Bean,
@@ -241,7 +242,7 @@ og = ('<!doctype html><html><head><meta charset="utf-8"><link href="https://font
       'h1{position:absolute;left:330px;top:70px;width:340px;font:700 50px/1.08 Cinzel;letter-spacing:.01em}'
       'p.s{position:absolute;left:330px;top:258px;width:330px;font:500 25px/1.35 "Albert Sans";color:#3b2a1e}'
       '.loc{position:absolute;left:58px;bottom:54px;display:flex;gap:16px;align-items:center;font:700 24px "Albert Sans"}'
-      '.loc b{background:#16110e;color:#f4ede2;padding:10px 20px;border-radius:999px;font:700 24px Cinzel;letter-spacing:.08em}.loc span{color:#3b2a1e}'
+      '.loc b{background:#3d4a35;color:#f4ede2;padding:10px 20px;border-radius:999px;font:700 24px Cinzel;letter-spacing:.08em}.loc span{color:#3b2a1e}'
       '.ph{position:absolute;overflow:hidden;border:6px solid #fff;box-shadow:0 18px 40px rgba(40,24,12,.3);border-radius:18px}'
       '.ph img{width:100%;height:100%;object-fit:cover;display:block}.a{left:706px;top:44px;width:236px;height:316px;transform:rotate(-3deg)}'
       '.b{left:930px;top:200px;width:230px;height:300px;transform:rotate(3deg)}.c{left:742px;top:380px;width:190px;height:190px;transform:rotate(2deg)}'
