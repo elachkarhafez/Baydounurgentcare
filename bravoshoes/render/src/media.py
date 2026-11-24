@@ -69,7 +69,7 @@ os.makedirs(CL, exist_ok=True)
 for f in glob.glob(CL + '*'): os.remove(f)
 # name, reel, start, length, crop (w:h:x:y in source pixels, 3:4)
 for n, f, ss, t, cr in [('knee', 'reel-knee.mp4', 5.0, 1.6, '576:768:0:200'), ('brown', 'reel-knee.mp4', 7.0, 1.6, '576:768:0:180'),
-                        ('lace', 'reel-takes.mp4', 3.6, 2.7, '480:640:0:128'), ('choc', 'reel-slippers.mp4', 2.0, 1.2, '576:768:0:150'),
+                        ('lace', 'reel-takes.mp4', 3.7, 2.6, '480:640:0:128'), ('choc', 'reel-slippers.mp4', 2.1, 1.1, '576:768:0:150'),
                         ('black', 'reel-slippers.mp4', 5.15, 0.9, '576:768:0:150'), ('sand', 'reel-slippers.mp4', 7.4, 1.2, '576:768:0:200')]:
     vf = 'crop=%s,scale=360:480:flags=lanczos,fps=24' % cr
     subprocess.run(['ffmpeg', '-v', 'error', '-y', '-ss', str(ss), '-t', str(t), '-i', SRC + f, '-an', '-vf', vf, '-c:v', 'libx264', '-profile:v', 'main',
