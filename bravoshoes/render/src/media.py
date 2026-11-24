@@ -51,3 +51,20 @@ for n, f in [('t1', 'v6_016.jpg'), ('t2', 'v6_020.jpg'), ('t3', 'v6_024.jpg')]:
     save(crop(f, P, .5, .56), n + '.webp', 576, 80)
 save(crop('v6_005.jpg', P, .5, .52), 'clapper.webp', 540, 78)
 save(crop('v4_001.jpg', 4 / 3, .5, .62), 'bench.webp', 576, 78)
+
+# ---- v3: cutouts (rembg isnet-general-use, run outside the repo; only the pairs with no hand on them came out clean) ----
+for n, f, w in [('cut-ankle', 'cut/ankle.png', 900), ('cut-knee', 'cut/knee-pair.png', 546), ('cut-suede', 'cut/suede.png', 329)]:
+    im = Image.open(SRC + f).convert('RGBA'); im = im.crop(im.getbbox())
+    im = im.resize((w, round(w * im.size[1] / im.size[0])), Image.LANCZOS)
+    im.save(OUT + n + '.webp', 'WEBP', quality=86, method=6)
+    print(n, im.size, os.path.getsize(OUT + n + '.webp') // 1024, 'KB')
+
+# ---- v3: the 1 / 2 / 3 reel as a scroll sequence: 3.5 s to 6.3 s at 24 fps, 3:4 crop under their own caption ----
+import subprocess, glob
+SEQ = OUT + 'seq/'
+os.makedirs(SEQ, exist_ok=True)
+for f in glob.glob(SEQ + '*'): os.remove(f)
+subprocess.run(['ffmpeg', '-v', 'error', '-y', '-ss', '3.5', '-t', '2.8', '-i', SRC + 'reel-takes.mp4', '-vf', 'fps=24,crop=480:640:0:128',
+                '-c:v', 'libwebp', '-quality', '72', '-compression_level', '6', SEQ + 'f%03d.webp'], check=True)
+fs = sorted(glob.glob(SEQ + '*.webp'))
+print('seq', len(fs), sum(os.path.getsize(f) for f in fs) // 1024, 'KB')

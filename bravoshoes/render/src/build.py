@@ -104,14 +104,13 @@ og = ('<!doctype html><html><head><meta charset="utf-8"><link href="https://font
       '.sw{position:absolute;left:62px;top:478px;width:220px;color:#33251f}'
       '.pl{position:absolute;left:0;right:600px;bottom:0;height:78px;background:#17161b;color:#fff;display:flex;align-items:center;gap:14px;padding:0 60px;font:700 26px Montserrat}'
       '.pl i{font-style:normal;color:#c5b789}'
-      '.wall{position:absolute;left:600px;top:0;width:600px;height:630px;background:#c0bfbd;display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:14px}'
-      '.c{position:relative;overflow:hidden;background:#fff}.c:before{content:"";position:absolute;left:0;right:0;top:0;height:6px;background:#fff;box-shadow:0 0 26px 8px rgba(255,255,255,.85);z-index:2}'
-      '.c img{width:100%;height:100%;object-fit:cover;display:block}'
-      '.c b{position:absolute;left:14px;bottom:12px;z-index:2;font:italic 400 30px Tinos;color:#fff;text-shadow:0 2px 14px rgba(0,0,0,.55)}'
+      '.seam{position:absolute;left:600px;top:0;width:600px;height:630px;background:linear-gradient(180deg,#fff 0%,#f6f6f5 45%,#efeeed 100%)}'
+      '.seam img{position:absolute;left:50%;bottom:70px;height:470px;transform:translateX(-50%);z-index:2}'
+      '.seam i{position:absolute;left:50%;bottom:52px;width:380px;height:44px;transform:translateX(-50%);background:radial-gradient(50% 50% at 50% 50%,rgba(23,22,27,.34),rgba(23,22,27,0) 100%)}'
       '</style></head><body><div class="lg">' + lock + '</div>'
       '<h1>Bravo Shoes</h1><div class="hk">Boots, heels and fur slippers, sizes 36 till 40. Order on WhatsApp.</div>'
       '<svg class="sw" viewBox="0 0 200 16"><path d="M2 12C40 2 80 2 118 8s58 6 80-4" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>'
       '<div class="pl">Beirut, Lebanon <i>·</i> 70/810021</div>'
-      '<div class="wall"><div class="c"><img src="../media/p-ankle-1.webp"><b>Black</b></div><div class="c"><img src="../media/p-choc-1.webp"><b>Chocolate</b></div></div></body></html>')
+      '<div class="seam"><img src="../media/cut-ankle.webp"><i></i></div></body></html>')
 open(D + '../og.html', 'w').write(og)
 print('index', len(t) // 1024, 'KB')
