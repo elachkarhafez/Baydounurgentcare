@@ -59,12 +59,21 @@ for n, f, w in [('cut-ankle', 'cut/ankle.png', 900), ('cut-knee', 'cut/knee-pair
     im.save(OUT + n + '.webp', 'WEBP', quality=86, method=6)
     print(n, im.size, os.path.getsize(OUT + n + '.webp') // 1024, 'KB')
 
-# ---- v3: the 1 / 2 / 3 reel as a scroll sequence: 3.5 s to 6.3 s at 24 fps, 3:4 crop under their own caption ----
+# (v3's scroll-scrubbed reel sequence was removed in v4: nothing on the page follows scroll any more)
 import subprocess, glob
-SEQ = OUT + 'seq/'
-os.makedirs(SEQ, exist_ok=True)
-for f in glob.glob(SEQ + '*'): os.remove(f)
-subprocess.run(['ffmpeg', '-v', 'error', '-y', '-ss', '3.5', '-t', '2.8', '-i', SRC + 'reel-takes.mp4', '-vf', 'fps=24,crop=480:640:0:128',
-                '-c:v', 'libwebp', '-quality', '72', '-compression_level', '6', SEQ + 'f%03d.webp'], check=True)
-fs = sorted(glob.glob(SEQ + '*.webp'))
-print('seq', len(fs), sum(os.path.getsize(f) for f in fs) // 1024, 'KB')
+
+# ---- v4: loupe source (the ankle boot photo at full size) and the autoplay bento clips (muted loops from their reels) ----
+im = Image.open(SRC + 'ankle.jpg').convert('RGB'); im.save(OUT + 'loupe-ankle.webp', 'WEBP', quality=82, method=6)
+CL = OUT + 'clip/'
+os.makedirs(CL, exist_ok=True)
+for f in glob.glob(CL + '*'): os.remove(f)
+# name, reel, start, length, crop (w:h:x:y in source pixels, 3:4)
+for n, f, ss, t, cr in [('knee', 'reel-knee.mp4', 5.0, 1.6, '576:768:0:200'), ('brown', 'reel-knee.mp4', 7.0, 1.6, '576:768:0:180'),
+                        ('lace', 'reel-takes.mp4', 3.6, 2.7, '480:640:0:128'), ('choc', 'reel-slippers.mp4', 2.0, 1.2, '576:768:0:150'),
+                        ('black', 'reel-slippers.mp4', 5.15, 0.9, '576:768:0:150'), ('sand', 'reel-slippers.mp4', 7.4, 1.2, '576:768:0:200')]:
+    vf = 'crop=%s,scale=360:480:flags=lanczos,fps=24' % cr
+    subprocess.run(['ffmpeg', '-v', 'error', '-y', '-ss', str(ss), '-t', str(t), '-i', SRC + f, '-an', '-vf', vf, '-c:v', 'libx264', '-profile:v', 'main',
+                    '-pix_fmt', 'yuv420p', '-crf', '27', '-preset', 'slow', '-movflags', '+faststart', CL + n + '.mp4'], check=True)
+    subprocess.run(['ffmpeg', '-v', 'error', '-y', '-ss', str(ss + .05), '-i', SRC + f, '-frames:v', '1', '-vf', 'crop=%s,scale=360:480:flags=lanczos' % cr,
+                    '-c:v', 'libwebp', '-quality', '78', CL + n + '.webp'], check=True)
+    print('clip', n, os.path.getsize(CL + n + '.mp4') // 1024, 'KB')

@@ -10,17 +10,17 @@
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Tinos:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-<link rel="preload" as="image" href="media/cut-ankle.webp">
+<link rel="preload" as="image" href="media/cut-ankle.webp"><link rel="preload" as="image" href="media/cut-knee.webp"><link rel="preload" as="image" href="media/cut-suede.webp">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"ShoeStore","name":"Bravo Shoes","telephone":"+961-70-810021","address":{"@type":"PostalAddress","addressLocality":"Beirut","addressCountry":"LB"},"sameAs":["https://www.instagram.com/bravo.shoes_/"]}</script>
 <style>
-/* Bravo Shoes. The page is their shop window, presented the way a product page is: one pair at a time on a seamless,
-   their own 1, 2 or 3 reel scrubbed by scroll, and a calm buy page that sends the order to their WhatsApp, because
-   they already sell off their feed by phone and WhatsApp.
+/* Bravo Shoes. The page is their showroom on your phone: their own pairs on a lit stage that changes on its own,
+   their reels playing as tiles, and a buy page that sends the order to their WhatsApp, because they already sell off
+   their feed by phone and WhatsApp. Nothing moves with scroll: motion is time (autoplay, loops) or touch.
    Fonts are theirs: Montserrat is the bold caption on their reels ("Matte Black"), Tinos is the free Times New Roman cut
    they set colour names in ("Black Suede" with the wave under it) and their spaced "boots" label.
-   Colours are sampled from their photos: logo white #ffffff, shop wall #c0bfbd (lightened to #efeeed for the seamless),
-   floor #a9a69f, black leather #17161b, chocolate suede #472b24, brown boot #413d39, sand #a29483, caption ink #33251f,
-   monogram gold #a69461 / #c5b789. */
+   Colours are sampled from their photos: logo white #ffffff, shop wall #c0bfbd (lightened to #efeeed), floor #a9a69f,
+   black leather #17161b, chocolate suede #472b24, brown boot #413d39, suede #1d1e22, sand #a29483, caption ink #33251f,
+   monogram gold #a69461 / #c5b789. Stage tints are those hues mixed into white. */
 :root{--white:#ffffff;--wall:#c0bfbd;--mist:#efeeed;--mist2:#f6f6f5;--floor:#a9a69f;--black:#17161b;--choc:#472b24;--ink:#33251f;--gold:#a69461;--gold2:#c5b789;--sand:#a29483;
   --mute:#6e6b70;--line:rgba(23,22,27,.1);--pad:16px;--ease:cubic-bezier(.28,.11,.32,1);--max:1120px;--m:'Montserrat',sans-serif;--t:'Tinos','Times New Roman',serif}
 *{margin:0;padding:0;box-sizing:border-box}
@@ -68,56 +68,101 @@ p{max-width:52ch}
 .quiet{background:var(--mist2);color:var(--mute);font-size:.6875rem;font-weight:600;text-align:center;height:28px;line-height:28px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 var(--pad)}
 .quiet b{color:var(--black);font-weight:700}
 
-/* reveals: subtle fade and rise */
-.rvl{opacity:0;transform:translateY(22px);transition:opacity 1s var(--ease),transform 1s var(--ease)}.rvl.in{opacity:1;transform:none}
-.d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}
-.no-motion .rvl{opacity:1;transform:none;transition:none}
+/* nothing on this page moves with scroll. Motion is time (autoplay, loops) or touch (taps, drags, hovers). */
+@property --tint{syntax:'<color>';inherits:true;initial-value:#ececed}
+@property --hue{syntax:'<color>';inherits:true;initial-value:#17161b}
 
-/* hero: one pair, big and centred on a seamless */
-.hero{text-align:center;padding:22px 0 0;overflow:hidden}
-.hero .acc{display:block;margin-bottom:6px}
-.hero h1{max-width:12em;margin:0 auto}
-.hero .sub{margin:8px auto 0;color:var(--mute);max-width:30ch}
-.hero .buy{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:14px}
-.hero .price{font-size:.8125rem;color:var(--mute);margin-top:10px}
-.seam{position:relative;margin-top:16px;height:min(380px,45svh);background:linear-gradient(180deg,#fff 0%,var(--mist2) 46%,var(--mist) 100%);overflow:hidden}
-.seam:after{content:"";position:absolute;left:0;right:0;bottom:0;height:34%;background:linear-gradient(180deg,rgba(192,191,189,0),rgba(192,191,189,.16))}
-.seam .prod{position:absolute;left:50%;bottom:9%;height:84%;width:auto;max-width:none;transform:translate3d(-50%,var(--py,0px),0) scale(var(--ps,1));transform-origin:50% 100%;z-index:2;will-change:transform}
-.seam .shadow{position:absolute;left:50%;bottom:7%;width:62%;height:9%;transform:translateX(-50%);background:radial-gradient(50% 50% at 50% 50%,rgba(23,22,27,.34),rgba(23,22,27,.12) 55%,rgba(23,22,27,0) 100%);z-index:1;filter:blur(2px)}
-.seam .note{position:absolute;right:var(--pad);bottom:12px;z-index:3;font-size:.6875rem;color:var(--mute);font-weight:600}
+/* showroom: their cutout pairs on a lit stage, one at a time, on a timer */
+.show{padding:12px 0 6px;text-align:center}
+.show .acc{display:block;font-size:.9375rem}
+.show h1{font-size:1.625rem;margin-top:2px}
+.stage{position:relative;height:min(330px,40svh);margin-top:12px;overflow:hidden;--tint:#ececed;--hue:#17161b;background:var(--tint);transition:--tint 1.1s var(--ease),--hue 1.1s var(--ease);touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.stage .beam{position:absolute;inset:0;background:radial-gradient(48% 78% at 50% -6%,rgba(255,255,255,.95),rgba(255,255,255,0) 72%);pointer-events:none}
+.stage .glow{position:absolute;left:50%;top:14%;width:min(82%,520px);aspect-ratio:1.5;transform:translateX(-50%);background:radial-gradient(closest-side,color-mix(in srgb,var(--hue) 22%,transparent),transparent);pointer-events:none}
+.stage .floor{position:absolute;left:0;right:0;bottom:0;height:24%;background:linear-gradient(180deg,color-mix(in srgb,var(--tint) 88%,#a9a69f) 0%,var(--tint) 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.7)}
+.stage .pool{position:absolute;left:50%;bottom:9%;width:76%;height:26%;transform:translateX(-50%);background:radial-gradient(closest-side,rgba(255,255,255,.95),rgba(255,255,255,0));pointer-events:none}
+.pair{position:absolute;left:50%;bottom:24%;height:var(--h,64%);transform:translateX(-50%);opacity:0;pointer-events:none}
+.pair.on{opacity:1;pointer-events:auto}
+.pair .fig{position:relative;height:100%}
+.pair .fig>img{height:100%;width:auto;max-width:none;display:block;filter:drop-shadow(0 18px 18px rgba(23,22,27,.16))}
+.pair .sheen{position:absolute;inset:0;-webkit-mask-size:100% 100%;mask-size:100% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;overflow:hidden;pointer-events:none}
+.pair .sheen:before{content:"";position:absolute;top:-10%;bottom:-10%;left:-60%;width:46%;background:linear-gradient(100deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.34) 48%,rgba(255,255,255,0) 100%);transform:translateX(0) skewX(-14deg);animation:sheen 5.2s var(--ease) infinite}
+@keyframes sheen{0%,38%{transform:translateX(0) skewX(-14deg)}78%,100%{transform:translateX(460%) skewX(-14deg)}}
+.pair .refl{position:absolute;left:0;top:100%;height:100%;width:auto;max-width:none;transform:scaleY(-1);transform-origin:50% 50%;opacity:.3;-webkit-mask-image:linear-gradient(to top,rgba(0,0,0,.75),rgba(0,0,0,0) 34%);mask-image:linear-gradient(to top,rgba(0,0,0,.75),rgba(0,0,0,0) 34%);pointer-events:none}
+.pair .shadow{position:absolute;left:8%;right:8%;bottom:-7%;height:13%;background:radial-gradient(closest-side,rgba(23,22,27,.42),rgba(23,22,27,.14) 60%,rgba(23,22,27,0));animation:breathe 4.6s ease-in-out infinite;transform-origin:50% 50%}
+@keyframes breathe{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(.93,.9);opacity:.82}}
+.stage.paused .sheen:before,.stage.paused .shadow{animation-play-state:paused}
+.no-motion .pair .sheen:before,.no-motion .pair .shadow{animation:none}
+/* hotspots on the ankle boot */
+.hs{position:absolute;width:30px;height:30px;margin:-15px 0 0 -15px;border-radius:50%;display:grid;place-items:center;z-index:3}
+.hs i{width:12px;height:12px;border-radius:50%;background:#fff;box-shadow:0 0 0 2px var(--black),0 2px 8px rgba(0,0,0,.3);transition:transform .35s var(--ease)}
+.hs:before{content:"";position:absolute;inset:4px;border-radius:50%;border:1.5px solid rgba(255,255,255,.9);animation:ping 2.6s var(--ease) infinite}
+@keyframes ping{0%{transform:scale(.6);opacity:.9}70%,100%{transform:scale(1.6);opacity:0}}
+.hs[aria-expanded=true] i{transform:scale(1.25);background:var(--gold)}
+.no-motion .hs:before{animation:none}
+.call{position:absolute;z-index:6;width:min(240px,70%);background:#fff;border-radius:10px;box-shadow:0 14px 40px rgba(23,22,27,.22);padding:10px;display:flex;gap:10px;align-items:center;text-align:left;opacity:0;transform:translateY(6px) scale(.96);transform-origin:50% 100%;transition:opacity .3s var(--ease),transform .4s var(--ease);pointer-events:none}
+.call.on{opacity:1;transform:none;pointer-events:auto}
+.call .lp{flex:none;width:76px;height:76px;border-radius:50%;background:#ddd url(media/loupe-ankle.webp) no-repeat;filter:brightness(1.5) contrast(1.08);box-shadow:inset 0 0 0 2px #fff,0 0 0 1px rgba(23,22,27,.15)}
+.call b{display:block;font-size:.875rem}.call span{font:italic 400 .9375rem/1.25 var(--t);color:var(--ink)}
+.stage .hint{position:absolute;left:var(--pad);bottom:10px;z-index:4;font-size:.6875rem;font-weight:600;color:var(--mute);transition:opacity .4s}
+/* chips: the colour picker, with an indicator that morphs between them */
+.chips{position:relative;display:inline-flex;gap:4px;margin-top:12px;padding:4px;border-radius:30px;background:var(--mist2);max-width:100%;overflow-x:auto;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chips .ind{position:absolute;top:4px;bottom:4px;left:0;border-radius:26px;background:#fff;box-shadow:0 1px 4px rgba(23,22,27,.14);transition:transform .55s var(--ease),width .55s var(--ease)}
+.chips button{position:relative;z-index:1;display:flex;align-items:center;gap:7px;height:36px;padding:0 12px;border-radius:26px;font-size:.75rem;font-weight:700;color:var(--mute);white-space:nowrap;transition:color .35s}
+.chips button[aria-selected=true]{color:var(--black)}
+.chips .dots2{display:flex}.chips .dots2 i{width:12px;height:12px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(23,22,27,.2)}
+.chips .dots2 i+i{margin-left:-4px}
+.chips .pg{position:absolute;left:12px;right:12px;bottom:4px;height:2px;border-radius:1px;background:rgba(23,22,27,.12);overflow:hidden;opacity:0}
+.chips button[aria-selected=true] .pg{opacity:1}
+.chips .pg b{display:block;height:100%;width:100%;background:var(--black);transform-origin:0 50%;transform:scaleX(0)}
+.info{margin-top:12px}
+.info h2{font-size:1.25rem}
+.info .acc{font-size:.9375rem;display:block;margin-top:2px}
+.info .buy{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:10px}
+.info .buy .btn{height:42px;padding:0 22px}
+.info .buy .pr{font-weight:700}
+.info .note{font-size:.6875rem;color:var(--mute);margin:6px auto 0}
+.hs i{width:10px;height:10px}
+.roll{display:inline-block}
 
-/* pinned: their 1, 2 or 3 reel, scrubbed by scroll */
-.pin{position:relative;height:360vh;background:#fff}
-.pin .stick{position:sticky;top:84px;height:calc(100svh - 84px);display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;padding:12px var(--pad) 16px}
-.pin h2{text-align:center;opacity:var(--ho,1);transform:scale(var(--hs,1));transition:none;max-width:12em}
-.pin .frame{position:relative;margin-top:14px;height:min(46svh,440px);aspect-ratio:3/4;background:var(--mist);overflow:hidden;border-radius:4px}
-.pin canvas{position:absolute;inset:0;width:100%;height:100%}
-.pin .frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.pin .caps{position:relative;height:54px;width:100%;max-width:360px;margin-top:12px}
-.pin .cap{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:12px;opacity:0;transform:translateY(10px);transition:opacity .5s var(--ease),transform .5s var(--ease)}
-.pin .cap.on{opacity:1;transform:none}
-.pin .cap b{font-size:2rem;font-weight:800;letter-spacing:-.04em;line-height:1}
-.pin .cap span{font:italic 400 1.375rem/1.1 var(--t);color:var(--ink)}
-.pin .row{display:flex;align-items:center;gap:14px;margin-top:6px}
-.pin .dots{display:flex;gap:6px}.pin .dots i{width:6px;height:6px;border-radius:3px;background:rgba(23,22,27,.18);transition:width .4s var(--ease),background .4s}
-.pin .dots i.on{width:18px;background:var(--black)}
-.pin .row .btn{height:40px;padding:0 16px}
-.pin.static{height:auto}.pin.static .stick{position:relative;top:0;height:auto;padding:36px var(--pad)}
+/* autoplay bento: their reels, muted, looping */
+.bento{padding:30px 0 6px}
+.bento .head{text-align:center}.bento .head p{margin:6px auto 0;color:var(--mute)}
+.bgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px}
+.bt{position:relative;display:block;width:100%;aspect-ratio:3/4;max-height:46svh;border-radius:8px;overflow:hidden;background:var(--mist);text-align:left;isolation:isolate}
+.bt video,.bt img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.bt:after{content:"";position:absolute;left:0;right:0;bottom:0;height:46%;background:linear-gradient(180deg,rgba(23,22,27,0),rgba(23,22,27,.62));pointer-events:none}
+.bt .cap{position:absolute;left:12px;right:12px;bottom:10px;z-index:2;color:#fff}
+.bt .cap b{display:block;font-size:.875rem;line-height:1.2}
+.bt .cap span{font:italic 400 .875rem/1.2 var(--t)}
+.bt .cap em{display:flex;align-items:center;gap:3px;font-style:normal;font-size:.6875rem;font-weight:700;margin-top:4px;opacity:.9}
+.bt .cap em svg{width:11px;height:11px}
+.bt .lv{position:absolute;right:10px;top:10px;z-index:2;font-size:.5625rem;font-weight:700;letter-spacing:.12em;color:#fff;background:rgba(23,22,27,.38);padding:3px 6px;border-radius:4px}
+.bt.wide{grid-column:1/-1;aspect-ratio:4/3}
+@media (hover:hover){.bt video,.bt img{transition:transform 1.2s var(--ease)}.bt:hover video,.bt:hover img{transform:scale(1.03)}}
 
-/* two feature tiles */
-.tiles{padding:32px 0 8px}
-.tiles .g{display:grid;gap:12px}
-.tile{position:relative;background:var(--mist2);text-align:center;padding:26px 16px 0;overflow:hidden;border-radius:4px}
-.tile h2{font-size:1.375rem}
-.tile .acc{display:block;margin-top:4px}
-.tile .buy{display:flex;justify-content:center;align-items:center;gap:14px;margin-top:12px}
-.tile .buy .btn{height:40px;padding:0 18px}
-.tile .pv{position:relative;height:min(270px,32svh);margin-top:12px}
-.tile .pv img{position:absolute;left:50%;bottom:10%;height:86%;width:auto;max-width:none;transform:translate3d(-50%,var(--py,0px),0);z-index:2}
-.tile .pv .shadow{position:absolute;left:50%;bottom:7%;width:70%;height:10%;transform:translateX(-50%);background:radial-gradient(50% 50% at 50% 50%,rgba(23,22,27,.3),rgba(23,22,27,0) 100%);filter:blur(2px)}
-.tile.photo .pv{margin:14px -16px 0;height:min(300px,36svh)}
-.tile.photo .pv img{left:0;bottom:0;width:100%;height:118%;object-fit:cover;transform:translate3d(0,var(--py,0px),0)}
-.tile .sws{display:flex;justify-content:center;gap:6px;margin-top:10px}
+/* cursor light on product cards (fine pointers) */
+.pc .ph:after{content:"";position:absolute;inset:0;background:radial-gradient(180px circle at var(--lx,50%) var(--ly,50%),rgba(255,255,255,.28),rgba(255,255,255,0) 70%);opacity:0;transition:opacity .4s;pointer-events:none}
+@media (hover:hover){.pc:hover .ph:after{opacity:1}}
+
+/* micro-interactions */
+.flyer{position:fixed;left:0;top:0;z-index:90;pointer-events:none;border-radius:8px;object-fit:contain;will-change:transform}
+.spring{animation:spring .7s cubic-bezier(.3,1.7,.45,1)}
+@keyframes spring{0%{transform:scale(1)}30%{transform:scale(1.28)}55%{transform:scale(.9)}75%{transform:scale(1.06)}100%{transform:scale(1)}}
+.shake{animation:shake .42s ease}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-5px)}40%{transform:translateX(4px)}60%{transform:translateX(-3px)}80%{transform:translateX(2px)}}
+.toast.act{pointer-events:auto}.toast button{color:var(--gold2);font-weight:800;margin-left:6px;text-decoration:underline;text-underline-offset:3px}
+/* size finder */
+.finder{margin-top:12px;border-radius:8px;background:var(--mist2);padding:10px 12px}
+.finder summary{cursor:pointer;font-size:.8125rem;font-weight:700;list-style:none;display:flex;justify-content:space-between}
+.finder summary::-webkit-details-marker{display:none}
+.finder summary:after{content:"+";font-weight:600;color:var(--mute)}.finder[open] summary:after{content:"–"}
+.finder .row{display:flex;align-items:center;gap:8px;margin-top:10px}
+.finder input{width:96px;height:42px;border:0;border-radius:6px;box-shadow:inset 0 0 0 1px rgba(23,22,27,.22);padding:0 10px;font-size:1rem;background:#fff}
+.finder .out{font-size:.875rem;font-weight:700}
+.finder p{font-size:.6875rem;color:var(--mute);margin-top:6px}
+.szs button.fit{box-shadow:inset 0 0 0 2px var(--gold)}
 
 /* the shop */
 .shop{padding:36px 0 10px}
@@ -156,7 +201,7 @@ p{max-width:52ch}
 .bench .head{text-align:center}
 .bench .head p{margin:6px auto 0;color:var(--mute)}
 .bench .photo{position:relative;overflow:hidden;aspect-ratio:4/3;max-height:40svh;background:var(--mist);border-radius:4px}
-.bench .photo img{width:100%;height:118%;object-fit:cover;transform:translate3d(0,var(--py,0px),0)}
+.bench .photo img{width:100%;height:100%;object-fit:cover}
 .rows{border-top:1px solid var(--line)}
 .rowi{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}
 .rowi .ic{flex:none;width:20px;height:20px;color:var(--mute)}.rowi .ic svg{width:20px;height:20px}
@@ -197,7 +242,9 @@ footer .lock{width:78px;height:auto}footer nav{display:flex;flex-wrap:wrap;gap:6
 .sheet.small{height:auto;max-height:86%}
 
 /* buy page */
-.bimg{position:relative;background:var(--mist2)}
+.bimg{position:relative;background:var(--btint,var(--mist2));transition:background-color .9s var(--ease)}
+.bimg .stage img.wipe{z-index:2;transition:none}
+.sheet.instant{transition:none!important}
 .bimg .stage{position:relative;aspect-ratio:1/1;max-height:46svh;width:100%;overflow:hidden}
 .bimg .stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.02);transition:opacity .6s var(--ease),transform .9s var(--ease)}
 .bimg .stage img.on{opacity:1;transform:none}
@@ -222,7 +269,8 @@ footer .lock{width:78px;height:auto}footer nav{display:flex;flex-wrap:wrap;gap:6
 .ch input{width:18px;height:18px;accent-color:var(--black);flex:none}
 .ch .rt{font-size:.75rem;font-weight:700;color:var(--mute)}
 .szs{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:10px}
-.szs button{position:relative;height:58px;border-radius:6px;box-shadow:inset 0 0 0 1px rgba(23,22,27,.18);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;background:#fff;transition:box-shadow .35s var(--ease)}
+.szs button:active{transform:scale(.94)}
+.szs button{position:relative;height:58px;border-radius:6px;box-shadow:inset 0 0 0 1px rgba(23,22,27,.18);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;background:#fff;transition:box-shadow .35s var(--ease),transform .3s cubic-bezier(.3,1.6,.5,1)}
 .szs button b{font-size:1rem;font-weight:800}.szs button span{font-size:.625rem;font-weight:700;color:var(--choc)}
 .szs button[aria-checked=true]{box-shadow:inset 0 0 0 2px var(--black)}
 .szs button.out{color:#b5b3b7;background:var(--mist2);box-shadow:none}.szs button.out span{color:#b5b3b7}
@@ -308,7 +356,7 @@ footer .lock{width:78px;height:auto}footer nav{display:flex;flex-wrap:wrap;gap:6
 .sp{position:absolute;left:0;top:0;width:12px;height:12px;fill:var(--gold);opacity:0}
 .js-intro .brand .nb{opacity:0}
 
-@media (min-width:600px){.grid2{grid-template-columns:repeat(3,1fr)}.tiles .g{grid-template-columns:1fr 1fr}}
+@media (min-width:600px){.grid2{grid-template-columns:repeat(3,1fr)}.bgrid{grid-template-columns:repeat(3,1fr)}.bt{max-height:none}.tiles .g{grid-template-columns:1fr 1fr}}
 @media (min-width:768px){
   :root{--pad:28px}
   h1{font-size:2.75rem}h2{font-size:2rem}
@@ -327,8 +375,10 @@ footer .lock{width:78px;height:auto}footer nav{display:flex;flex-wrap:wrap;gap:6
   .sheet.prod .ft{display:flex;justify-content:center}.sheet.prod .ft>div{width:100%;max-width:980px}
   .toast{bottom:28px}
 }
+@media (min-width:768px){.stage{height:min(460px,46svh)}.show h1{font-size:2.25rem}.info h2{font-size:1.5rem}.bento{padding-top:44px}}
 @media (min-width:1024px){
   body{font-size:.9375rem}
+  .stage{height:clamp(340px,calc(100svh - 380px),560px)}.show h1{font-size:2.75rem}.show .acc{font-size:1.125rem}.info h2{font-size:1.75rem}.bgrid{gap:12px}.bento{padding-top:56px}
   h1{font-size:3.5rem}h2{font-size:2.5rem}
   .bar{height:56px;padding:0 32px}
   .links{display:flex;gap:28px;font-size:.75rem;font-weight:600;color:#3c3a3f}
@@ -351,7 +401,7 @@ footer .lock{width:78px;height:auto}footer nav{display:flex;flex-wrap:wrap;gap:6
 }
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation-duration:.001s!important;animation-iteration-count:1!important;transition-duration:.001s!important}}
 </style>
-<script>(function(){var d=document.documentElement;try{if(matchMedia('(prefers-reduced-motion: reduce)').matches)d.classList.add('no-motion');else if(!sessionStorage.getItem('bravoIntro3'))d.classList.add('js-intro','lock')}catch(e){}})();</script>
+<script>(function(){var d=document.documentElement;try{if(matchMedia('(prefers-reduced-motion: reduce)').matches)d.classList.add('no-motion');else if(!sessionStorage.getItem('bravoIntro4'))d.classList.add('js-intro','lock')}catch(e){}})();</script>
 </head>
 <body>
 {{DEFS}}
@@ -361,47 +411,63 @@ footer .lock{width:78px;height:auto}footer nav{display:flex;flex-wrap:wrap;gap:6
 <header class="top" id="top">
   <div class="bar">
     <a class="brand" href="#" aria-label="Bravo Shoes, back to top">{{NAVMARK}}<span class="nw">BRAVO SHOES</span></a>
-    <nav class="links" aria-label="Sections"><a href="#takes">Lace-up boot</a><a href="#tiles">Boots and slippers</a><a href="#shop">Shop all pairs</a><a href="#bench">Branches</a></nav>
+    <nav class="links" aria-label="Sections"><a href="#bento">Reels</a><a href="#shop">Shop all pairs</a><a href="#bench">Branches</a><a href="#order">Order</a></nav>
     <div class="r"><button class="icb" id="bSearch" aria-label="Filter the shop">{{I_SEARCH}}</button><button class="icb" id="bBag" aria-label="Your bag">{{I_BAG}}<b id="bagN" data-n="0">0</b></button></div>
   </div>
   <div class="quiet">Available @ our branches · Sizes 36 till 40 · For orders <b>70/810021</b></div>
 </header>
 
 <main>
-<section class="hero" aria-labelledby="h1">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="mblur" x="-20%" y="0" width="140%" height="100%"><feGaussianBlur stdDeviation="14 0"/></filter></svg>
+<section class="show" aria-labelledby="h1">
   <div class="wrap">
-    <span class="acc rvl">Black, sizes 36 till 40</span>
-    <h1 id="h1" class="rvl d1">Buckle heel ankle boot</h1>
-    <p class="sub rvl d2">On the shelf at our branches now, or delivered all over Lebanon.</p>
-    <div class="buy rvl d3"><button class="btn k" data-open="ankle:black">Buy</button><span class="mute">$39</span><a class="more" href="#shop">See all pairs {{I_NEXT}}</a></div>
+    <span class="acc">Sizes 36 till 40 · on the shelf in Beirut</span>
+    <h1 id="h1">This winter's pairs</h1>
   </div>
-  <div class="seam" id="hseam"><img class="prod" id="hprod" src="media/cut-ankle.webp" alt="The buckle heel ankle boot in black, on its own" width="900" height="953"><i class="shadow"></i><span class="note">Sample price for preview</span></div>
+  <div class="stage" id="stage" role="region" aria-roledescription="carousel" aria-label="Pairs on the stage">
+    <i class="beam"></i><i class="glow"></i><i class="floor"></i><i class="pool"></i>
+    <div class="pair on" data-i="0" style="--h:62%" aria-hidden="false"><div class="fig"><img src="media/cut-ankle.webp" alt="The buckle heel ankle boot in black" width="900" height="953"><i class="sheen" style="-webkit-mask-image:url(media/cut-ankle.webp);mask-image:url(media/cut-ankle.webp)"></i>
+      <button class="hs" style="left:71.4%;top:24.7%" data-h="0" aria-expanded="false" aria-label="The buckle"><i></i></button>
+      <button class="hs" style="left:88%;top:5.5%" data-h="1" aria-expanded="false" aria-label="The pull tab"><i></i></button>
+      <button class="hs" style="left:85.5%;top:74.7%" data-h="2" aria-expanded="false" aria-label="The block heel"><i></i></button>
+      <button class="hs" style="left:19.1%;top:92.8%" data-h="3" aria-expanded="false" aria-label="The lug sole"><i></i></button>
+      <img class="refl" src="media/cut-ankle.webp" alt="" width="900" height="953"></div><i class="shadow"></i></div>
+    <div class="pair" data-i="1" style="--h:70%" aria-hidden="true"><div class="fig"><img src="media/cut-knee.webp" alt="The riding knee boot in black and in brown" width="546" height="550"><i class="sheen" style="-webkit-mask-image:url(media/cut-knee.webp);mask-image:url(media/cut-knee.webp)"></i><img class="refl" src="media/cut-knee.webp" alt="" width="546" height="550"></div><i class="shadow"></i></div>
+    <div class="pair" data-i="2" style="--h:66%" aria-hidden="true"><div class="fig"><img src="media/cut-suede.webp" alt="The lace-up boot in Black Suede" width="329" height="598"><i class="sheen" style="-webkit-mask-image:url(media/cut-suede.webp);mask-image:url(media/cut-suede.webp)"></i><img class="refl" src="media/cut-suede.webp" alt="" width="329" height="598"></div><i class="shadow"></i></div>
+    <div class="call" id="call" role="dialog" aria-live="polite"><i class="lp" id="lp"></i><div><b id="callT"></b><span id="callS"></span></div></div>
+    <span class="hint" id="shint">Tap a dot to look closer</span>
+  </div>
+  <div class="wrap">
+    <div class="chips" id="chips" role="tablist" aria-label="Choose a pair"><i class="ind" id="ind"></i>
+      <button role="tab" aria-selected="true" data-i="0"><span class="dots2"><i style="background:#17161b"></i></span>Ankle boot<span class="pg"><b></b></span></button>
+      <button role="tab" aria-selected="false" data-i="1"><span class="dots2"><i style="background:#17161b"></i><i style="background:#413d39"></i></span>Knee-high<span class="pg"><b></b></span></button>
+      <button role="tab" aria-selected="false" data-i="2"><span class="dots2"><i style="background:#1d1e22"></i></span>Lace-up<span class="pg"><b></b></span></button>
+    </div>
+    <div class="info" aria-live="polite">
+      <h2 id="sName"><span class="roll">Buckle heel ankle boot</span></h2>
+      <span class="acc" id="sCol"><span class="roll">Black, with the buckle strap</span></span>
+      <div class="buy"><button class="btn k mag" id="sBuy">Buy</button><span class="pr" id="sPr"><span class="roll">$39</span></span><a class="more" href="#shop">All pairs {{I_NEXT}}</a></div>
+      <p class="note">Sample prices for preview. Bravo confirms the real price on WhatsApp.</p>
+    </div>
+  </div>
 </section>
 
-<section class="pin" id="takes" aria-labelledby="h-takes">
-  <div class="stick">
-    <h2 id="h-takes">Which one is your favorite?</h2>
-    <div class="frame"><img id="seqfb" src="media/seq/f012.webp" alt="Their reel: the lace-up boot held up in Matte Black, then Black Shiny, then Black Suede" width="480" height="640"><canvas id="seq"></canvas></div>
-    <div class="caps" aria-live="polite"><div class="cap on" data-i="0"><b>1</b><span>Matte Black</span></div><div class="cap" data-i="1"><b>2</b><span>Black Shiny</span></div><div class="cap" data-i="2"><b>3</b><span>Black Suede</span></div></div>
-    <div class="row"><div class="dots"><i class="on"></i><i></i><i></i></div><button class="btn k" id="seqBuy">Buy · $35</button></div>
-  </div>
-</section>
-
-<section class="tiles" id="tiles" aria-label="Boots and slippers">
-  <div class="wrap g">
-    <article class="tile rvl"><h2>Riding knee boot</h2><span class="acc">In black and in brown.</span>
-      <div class="buy"><button class="btn k" data-open="knee:black">Buy</button><span class="mute">$49</span></div>
-      <div class="sws"><i class="sw" style="background:#17161b"></i><i class="sw" style="background:#413d39"></i></div>
-      <div class="pv par"><img src="media/cut-knee.webp" alt="The riding knee boot in black and in brown, side by side" width="546" height="550" loading="lazy"><i class="shadow"></i></div></article>
-    <article class="tile photo rvl d1"><h2>Fur collar slipper</h2><span class="acc">Chocolate, black and sand.</span>
-      <div class="buy"><button class="btn k" data-open="fur:choc">Buy</button><span class="mute">$22</span></div>
-      <div class="sws"><i class="sw" style="background:#472b24"></i><i class="sw" style="background:#17161b"></i><i class="sw" style="background:#a29483"></i></div>
-      <div class="pv par"><img src="media/p-choc-1.webp" alt="The fur collar slipper in chocolate with cream fur, held up in the shop" width="600" height="800" loading="lazy"></div></article>
+<section class="bento" id="bento" aria-labelledby="h-bento">
+  <div class="wrap">
+    <div class="head"><h2 id="h-bento">Straight from our reels</h2><p>Tap one to shop it.</p></div>
+    <div class="bgrid">
+      <button class="bt" data-k="lace:matte"><video muted loop playsinline preload="metadata" poster="media/clip/lace.webp" aria-hidden="true"><source src="media/clip/lace.mp4" type="video/mp4"></video><span class="lv">REEL</span><span class="cap"><b>Lace-up boot</b><span>Matte, Shiny or Suede</span><em>Shop {{I_NEXT}}</em></span></button>
+      <button class="bt" data-k="knee:black"><video muted loop playsinline preload="metadata" poster="media/clip/knee.webp" aria-hidden="true"><source src="media/clip/knee.mp4" type="video/mp4"></video><span class="lv">REEL</span><span class="cap"><b>Riding knee boot</b><span>Black</span><em>Shop {{I_NEXT}}</em></span></button>
+      <button class="bt" data-k="fur:choc"><video muted loop playsinline preload="metadata" poster="media/clip/choc.webp" aria-hidden="true"><source src="media/clip/choc.mp4" type="video/mp4"></video><span class="lv">REEL</span><span class="cap"><b>Fur collar slipper</b><span>Chocolate</span><em>Shop {{I_NEXT}}</em></span></button>
+      <button class="bt" data-k="knee:brown"><video muted loop playsinline preload="metadata" poster="media/clip/brown.webp" aria-hidden="true"><source src="media/clip/brown.mp4" type="video/mp4"></video><span class="lv">REEL</span><span class="cap"><b>Riding knee boot</b><span>Brown</span><em>Shop {{I_NEXT}}</em></span></button>
+      <button class="bt" data-k="fur:black"><video muted loop playsinline preload="metadata" poster="media/clip/black.webp" aria-hidden="true"><source src="media/clip/black.mp4" type="video/mp4"></video><span class="lv">REEL</span><span class="cap"><b>Fur collar slipper</b><span>Black</span><em>Shop {{I_NEXT}}</em></span></button>
+      <button class="bt" data-k="fur:sand"><video muted loop playsinline preload="metadata" poster="media/clip/sand.webp" aria-hidden="true"><source src="media/clip/sand.mp4" type="video/mp4"></video><span class="lv">REEL</span><span class="cap"><b>Fur collar slipper</b><span>Sand</span><em>Shop {{I_NEXT}}</em></span></button>
+    </div>
   </div>
 </section>
 
 <section class="shop" id="shop" aria-labelledby="h-shop">
-  <div class="wrap head rvl"><h2 id="h-shop">From classic to bold, we have it all</h2><p>Every pair from our latest posts.</p></div>
+  <div class="wrap head"><h2 id="h-shop">From classic to bold, we have it all</h2><p>Every pair from our latest posts.</p></div>
   <div class="fbar">
     <div class="cats" id="cats" role="group" aria-label="Categories"></div>
     <div class="tools"><span class="cnt" id="cnt"></span><button class="fl" id="bFilter">{{I_FILTER}} Filter <b id="fN" class="hide">0</b></button>
@@ -414,8 +480,8 @@ footer .lock{width:78px;height:auto}footer nav{display:flex;flex-wrap:wrap;gap:6
 
 <section class="bench" id="bench" aria-labelledby="h-bench">
   <div class="wrap grid">
-    <div class="photo rvl par"><img src="media/bench.webp" alt="Sand fur slippers tried on with white socks on the grey velvet bench in the shop" width="576" height="432" loading="lazy"></div>
-    <div class="rvl d1">
+    <div class="photo"><img src="media/bench.webp" alt="Sand fur slippers tried on with white socks on the grey velvet bench in the shop" width="576" height="432" loading="lazy"></div>
+    <div>
       <div class="head"><h2 id="h-bench">Try them on at the branch</h2><p>Every pair on our page is at our branches. Call before you pass by and we'll tell you which one has your size.</p></div>
       <div class="rows" style="margin-top:16px">
         <div class="rowi"><span class="ic">{{I_PIN}}</span><span class="tx"><b>Furn el Chebbak</b><span>Beirut</span></span><a class="lk" href="https://www.google.com/maps/search/?api=1&amp;query=Bravo+Shoes+Furn+el+Chebbak" target="_blank" rel="noopener">Map</a></div>
@@ -458,14 +524,15 @@ footer .lock{width:78px;height:auto}footer nav{display:flex;flex-wrap:wrap;gap:6
       <h2 id="pName"></h2>
       <p class="from"><b id="pPrice"></b> <span id="pLbp"></span> · sample price for preview</p>
       <div class="step"><h3>Colour. <span>Which one is yours?</span></h3><div class="ch" id="pCols" role="radiogroup" aria-label="Colour"></div></div>
-      <div class="step"><h3>Size. <span>EU 36 till 40.</span></h3><div class="szs" id="pSizes" role="radiogroup" aria-label="Size"></div><p class="hint" id="pStock"></p></div>
+      <div class="step"><h3>Size. <span>EU 36 till 40.</span></h3><div class="szs" id="pSizes" role="radiogroup" aria-label="Size"></div><p class="hint" id="pStock"></p>
+        <details class="finder"><summary>Not sure of your size?</summary><div class="row"><input id="fitIn" type="text" inputmode="decimal" placeholder="24.2" aria-label="Your foot length in centimetres"><span class="mute">cm</span><span class="out" id="fitOut" aria-live="polite"></span></div><p>Stand on paper, mark your heel and longest toe, and measure. This is a general EU guide, not our own chart, so ask us if you are between sizes.</p></details></div>
       <div class="step"><h3>How do you want it?</h3><div class="ch" id="pWay" role="radiogroup" aria-label="Pick up or delivery">
         <button role="radio" aria-checked="true" data-m="pickup"><span class="tx"><b>Pick it up at a branch</b><span>Furn el Chebbak, Nwayri or Bir el Abed</span></span><span class="rt">Free</span></button>
         <button role="radio" aria-checked="false" data-m="delivery"><span class="tx"><b>Delivery all over Lebanon</b><span>Choose your area at checkout</span></span><span class="rt">From $3</span></button></div></div>
       <div class="bdet"><div><b>Sizes</b><span>36 till 40, ask us if you are between sizes</span></div><div><b>Payment</b><span>Cash when you pick up or on delivery</span></div></div>
     </div>
   </div>
-  <div class="ft"><div><div class="summ"><div class="s" id="pSumm"><b>Pick a size</b>Lace-up boot</div><div class="qty"><button id="pMinus" aria-label="One less">{{I_MINUS}}</button><span id="pQty">1</span><button id="pPlus" aria-label="One more">{{I_PLUS}}</button></div><button class="btn k" id="pAdd">Add to bag</button></div><a class="ask" id="pAsk" href="{{WA}}" target="_blank" rel="noopener">Ask about this pair on WhatsApp</a></div></div>
+  <div class="ft"><div><div class="summ"><div class="s" id="pSumm"><b id="pSummT"><span class="roll">Pick a size</span></b><span id="pSummS"><span class="roll"></span></span></div><div class="qty"><button id="pMinus" aria-label="One less">{{I_MINUS}}</button><span id="pQty">1</span><button id="pPlus" aria-label="One more">{{I_PLUS}}</button></div><button class="btn k" id="pAdd">Add to bag</button></div><a class="ask" id="pAsk" href="{{WA}}" target="_blank" rel="noopener">Ask about this pair on WhatsApp</a></div></div>
 </aside>
 <aside class="sheet small" id="fSheet" role="dialog" aria-modal="true" aria-label="Filter">
   <div class="sh"><b>Filter</b><button class="icb" data-close aria-label="Close">{{I_X}}</button></div>
@@ -493,7 +560,7 @@ var DPR=Math.min(window.devicePixelRatio||1,PHONE?1.5:2);
 var clamp=function(x,a,b){return x<a?a:x>b?b:x},lerp=function(a,b,t){return a+(b-a)*t};
 var QS=new URLSearchParams(location.search),NOGL=QS.has('nogl'),SYNC=QS.has('sync'),PX1=new Uint8Array(4);
 var WA='{{WA}}',RATE=89500;
-window.__perf={seq:[],seqDt:[],dust:[],dustDt:[],scroll:[]};
+window.__perf={stage:[],dust:[],dustDt:[]};
 function perf(k,v){var a=window.__perf[k];a.push(v);if(a.length>400)a.shift()}
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 function usd(n){return '$'+n}
@@ -550,37 +617,160 @@ addEventListener('keydown',function(e){if(e.key==='Escape')closeS()});
 
 
 
-/* ================= the buy page: big image that swaps with the colour, then colour, size and how you want it ================= */
+/* ================= small motion helpers (time and touch only) ================= */
+function anim(el,kf,o){if(REDUCED||!el.animate)return{finished:Promise.resolve(),cancel:function(){}};var a=el.animate(kf,o);return a}
+/* roll a line of text like a counter: old slides up and out, new rises in */
+function roll(el,txt){if(!el)return;var r=el.querySelector('.roll');if(!r){el.innerHTML='<span class="roll"></span>';r=el.querySelector('.roll')}
+  if(r.textContent===txt)return;if(REDUCED||!r.animate){r.textContent=txt;return}
+  var a=r.animate([{transform:'translateY(0)',opacity:1},{transform:'translateY(-55%)',opacity:0}],{duration:170,easing:'cubic-bezier(.4,0,1,1)'});
+  a.onfinish=function(){r.textContent=txt;r.animate([{transform:'translateY(55%)',opacity:0},{transform:'translateY(0)',opacity:1}],{duration:320,easing:'cubic-bezier(.2,.9,.3,1.2)'})}}
+function hueOf(c){return /^#/.test(c.sw)?c.sw:'#17161b'}
+function mixW(hex,k){var n=parseInt(hex.slice(1),16),r=n>>16,g=n>>8&255,b=n&255;function m(v){return Math.round(255*(1-k)+v*k)}return '#'+[m(r),m(g),m(b)].map(function(v){return(v<16?'0':'')+v.toString(16)}).join('')}
+
+/* ================= the buy page: big image, colour wipe, choice cards, rolling summary ================= */
 var cur={L:null,size:null,q:1,img:0},WAY='pickup';try{WAY=localStorage.getItem('bravoWay')==='delivery'?'delivery':'pickup'}catch(e){}
 function setWay(w){WAY=w;CK.mode=w;try{localStorage.setItem('bravoWay',w)}catch(e){}}
-function openP(key,size){var L=find(key);if(!L)return;cur={L:L,size:size||null,q:1,img:0};renderP(true);openS('pSheet');$('#pSheet .bd').scrollTop=0}
-function stageImgs(L,first){var st=$('#pStage'),c=L.c;
+function openP(key,size,instant){var L=find(key);if(!L)return;cur={L:L,size:size||null,q:1,img:0};renderP(true);
+  var sh=$('#pSheet');if(instant)sh.classList.add('instant');openS('pSheet');$('#pSheet .bd').scrollTop=0;if(instant)requestAnimationFrame(function(){requestAnimationFrame(function(){sh.classList.remove('instant')})})}
+function stageImgs(L,first,from){var st=$('#pStage'),c=L.c;
+  $('.bimg').style.setProperty('--btint',mixW(hueOf(c),.09));
   var have=$$('img',st).map(function(i){return i.dataset.n});
   c.imgs.forEach(function(n){if(have.indexOf(n)<0){var im=document.createElement('img');im.src=img(n);im.alt=L.p.name+', '+c.n;im.dataset.n=n;im.width=600;im.height=800;st.appendChild(im)}});
-  var on=c.imgs[cur.img]||c.imgs[0];$$('img',st).forEach(function(i){i.classList.toggle('on',i.dataset.n===on)});
+  var on=c.imgs[cur.img]||c.imgs[0],next=null;
+  $$('img',st).forEach(function(i){if(i.dataset.n===on)next=i});
+  if(from&&next&&!REDUCED&&next.animate){
+    // radial wipe from the swatch that was tapped
+    var r=st.getBoundingClientRect(),x=clamp(from.x-r.left,0,r.width),y=clamp(from.y-r.top,0,r.height),R=Math.hypot(Math.max(x,r.width-x),Math.max(y,r.height-y));
+    next.classList.add('wipe');next.style.opacity=1;next.style.transform='none';
+    var a=next.animate([{clipPath:'circle(0px at '+x+'px '+y+'px)'},{clipPath:'circle('+R+'px at '+x+'px '+y+'px)'}],{duration:720,easing:'cubic-bezier(.65,0,.35,1)'});
+    a.onfinish=function(){next.classList.remove('wipe');next.style.opacity='';next.style.transform='';$$('img',st).forEach(function(i){i.classList.toggle('on',i===next)})}}
+  else $$('img',st).forEach(function(i){i.classList.toggle('on',i.dataset.n===on)});
   $('#pThumbs').innerHTML=c.imgs.map(function(n,i){return '<button aria-pressed="'+(i===cur.img)+'" data-i="'+i+'" aria-label="Photo '+(i+1)+'"><img src="'+img(n)+'" alt="" width="52" height="52"></button>'}).join('');
   $$('#pThumbs button').forEach(function(b){b.onclick=function(){cur.img=+b.dataset.i;stageImgs(cur.L)}})}
-function renderP(first){var L=cur.L,p=L.p,c=L.c;
+function outText(cc){var out=cc.st.filter(function(v){return!v}).length;return out?(out===1?'One size sold out':out+' sizes sold out'):'All sizes in stock'}
+function renderP(first,from){var L=cur.L,p=L.p,c=L.c;
   if(first)$('#pStage').innerHTML='';
   $('#pTop').textContent='Buy '+p.name;$('#pCat').textContent=p.lbl;$('#pName').textContent=p.name;
   $('#pPrice').textContent=usd(p.price);$('#pLbp').textContent='≈ '+lbp(p.price);
-  stageImgs(L,first);
-  $('#pCols').innerHTML=p.cols.map(function(cc,i){var out=cc.st.filter(function(v){return!v}).length;return '<button role="radio" aria-checked="'+(i===L.ci)+'" data-ci="'+i+'"><i class="swb" style="background:'+cc.sw+'"></i><span class="tx"><span class="cn">'+esc(cc.n)+'</span><span>'+(out?(out===1?'One size sold out':out+' sizes sold out'):'All sizes in stock')+'</span></span></button>'}).join('');
-  $$('#pCols button').forEach(function(b){b.onclick=function(){var nl=find(p.id+':'+p.cols[+b.dataset.ci].k);if(nl===cur.L)return;cur.L=nl;cur.img=0;if(cur.size&&stockOf(nl,cur.size)===0)cur.size=null;cur.q=1;renderP()}});
-  $('#pSizes').innerHTML=SIZES.map(function(s){var n=stockOf(L,s);return '<button role="radio" aria-checked="'+(cur.size===s)+'" class="'+(n?'':'out')+'"'+(n?'':' aria-disabled="true"')+' data-s="'+s+'" aria-label="Size '+s+(n?(n<=2?', only '+n+' left':''):', sold out')+'"><b>'+s+'</b><span>'+(n?(n<=2?n+' left':''):'Sold out')+'</span></button>'}).join('');
-  $$('#pSizes button').forEach(function(b){b.onclick=function(){var s=+b.dataset.s;if(!stockOf(cur.L,s)){toast('Size '+s+' is sold out in '+cur.L.c.n);return}cur.size=s;cur.q=1;renderP()}});
+  stageImgs(L,first,from);
+  if(first||!$('#pCols button')){
+    $('#pCols').innerHTML=p.cols.map(function(cc,i){return '<button role="radio" aria-checked="'+(i===L.ci)+'" data-ci="'+i+'"><i class="swb" style="background:'+cc.sw+'"></i><span class="tx"><span class="cn">'+esc(cc.n)+'</span><span class="ol">'+outText(cc)+'</span></span></button>'}).join('');
+    $$('#pCols button').forEach(function(b){b.onclick=function(){var nl=find(p.id+':'+p.cols[+b.dataset.ci].k);if(nl===cur.L)return;var r=b.querySelector('.swb').getBoundingClientRect();
+      cur.L=nl;cur.img=0;if(cur.size&&stockOf(nl,cur.size)===0)cur.size=null;cur.q=1;renderP(false,{x:r.left+r.width/2,y:r.top+r.height/2})}})}
+  $$('#pCols button').forEach(function(b,i){b.setAttribute('aria-checked',i===L.ci)});
+  var szs=$('#pSizes');
+  szs.innerHTML=SIZES.map(function(s){var n=stockOf(L,s);return '<button role="radio" aria-checked="'+(cur.size===s)+'" class="'+(n?'':'out')+(FIT===s?' fit':'')+'"'+(n?'':' aria-disabled="true"')+' data-s="'+s+'" aria-label="Size '+s+(n?(n<=2?', only '+n+' left':''):', sold out')+'"><b>'+s+'</b><span>'+(n?(n<=2?n+' left':''):'Sold out')+'</span></button>'}).join('');
+  $$('#pSizes button').forEach(function(b){b.onclick=function(){var s=+b.dataset.s;
+    if(!stockOf(cur.L,s)){b.classList.remove('shake');void b.offsetWidth;b.classList.add('shake');toast('Size '+s+' is sold out in '+cur.L.c.n);return}
+    cur.size=s;cur.q=1;renderP();var nb=$('#pSizes button[data-s="'+s+'"]');nb&&anim(nb,[{transform:'scale(.9)'},{transform:'scale(1.06)',offset:.55},{transform:'scale(1)'}],{duration:420,easing:'cubic-bezier(.3,1.6,.5,1)'})}});
   $$('#pWay button').forEach(function(b){b.setAttribute('aria-checked',b.dataset.m===WAY);b.onclick=function(){setWay(b.dataset.m);renderP()}});
-  var add=$('#pAdd'),sm=$('#pSumm');
-  if(cur.size){var n=stockOf(L,cur.size);$('#pStock').textContent=n<=2?('Only '+n+' left in '+cur.size+'.'):('In stock in '+cur.size+'.');
-    sm.innerHTML='<b>'+esc(p.name)+', '+esc(c.n)+', size '+cur.size+'</b>'+usd(p.price*cur.q)+(cur.q>1?' for '+cur.q:'')+' · '+(WAY==='pickup'?'pick up':'delivery');add.disabled=false}
-  else{$('#pStock').textContent='Pick your size to see what is left.';sm.innerHTML='<b>'+esc(p.name)+', '+esc(c.n)+'</b>Pick a size · '+usd(p.price);add.disabled=true}
-  $('#pQty').textContent=cur.q;
+  var add=$('#pAdd');
+  if(cur.size){var n=stockOf(L,cur.size);roll($('#pStock'),n<=2?('Only '+n+' left in '+cur.size+'.'):('In stock in '+cur.size+'.'));
+    roll($('#pSummT'),p.name+', '+c.n+', size '+cur.size);roll($('#pSummS'),usd(p.price*cur.q)+(cur.q>1?' for '+cur.q:'')+' · '+(WAY==='pickup'?'pick up':'delivery'));add.disabled=false}
+  else{roll($('#pStock'),outText(c)+'. Pick your size.');roll($('#pSummT'),p.name+', '+c.n);roll($('#pSummS'),'Pick a size · '+usd(p.price));add.disabled=true}
+  roll($('#pQty'),String(cur.q));
   $('#pAsk').href=WA+'?text='+encodeURIComponent('Hi Bravo Shoes, do you have the '+p.name.toLowerCase()+' in '+c.n+(cur.size?' in size '+cur.size:'')+'?');
 }
 $('#pMinus').onclick=function(){cur.q=Math.max(1,cur.q-1);renderP()};
 $('#pPlus').onclick=function(){if(!cur.size)return;var max=stockOf(cur.L,cur.size);if(cur.q<max)cur.q++;else toast('Only '+max+' left in '+cur.size);renderP()};
-$('#pAdd').onclick=function(){if(!cur.size)return;setWay(WAY);addBag(cur.L.key,cur.size,cur.q);toast('Added: '+cur.L.p.name+', '+cur.L.c.n+', '+cur.size);closeS();setTimeout(openBag,40)};
+/* size finder: foot length in cm to EU 36 till 40 (a general guide, not their own chart) */
+var FIT=null,FITS=[[36,22.5,23.0],[37,23.1,23.7],[38,23.8,24.4],[39,24.5,25.1],[40,25.2,25.8]];
+$('#fitIn').addEventListener('input',function(){var v=parseFloat(this.value.replace(',','.')),o=$('#fitOut');FIT=null;
+  if(!(v>0))o.textContent='';else if(v<22.5)o.textContent='Smaller than our 36';else if(v>25.8)o.textContent='Bigger than our 40';
+  else{FITS.forEach(function(f){if(v>=f[1]-.05&&v<=f[2]+.05&&FIT==null)FIT=f[0]});o.textContent=FIT?('Try '+FIT):''}
+  $$('#pSizes button').forEach(function(b){b.classList.toggle('fit',+b.dataset.s===FIT)})});
+/* add to bag: the pair flies along an arc into the bag, the bag springs, the count ticks up */
+function flyToBag(src,from,done){var tgt=$('#bBag'),t=tgt.getBoundingClientRect();
+  if(REDUCED||!document.body.animate||!from){done();return}
+  var f=document.createElement('img');f.className='flyer';f.src=src;var w=Math.min(from.width,from.height)*.55;f.style.width=w+'px';f.style.height=w*1.33+'px';document.body.appendChild(f);
+  var x0=from.left+from.width/2-w/2,y0=from.top+from.height/2-w*.66,x1=t.left+t.width/2-w/2,y1=t.top+t.height/2-w*.66,cx=(x0+x1)/2+(x1>x0?-60:60),cy=Math.min(y0,y1)-160,kf=[];
+  for(var i=0;i<=14;i++){var u=i/14,x=(1-u)*(1-u)*x0+2*(1-u)*u*cx+u*u*x1,y=(1-u)*(1-u)*y0+2*(1-u)*u*cy+u*u*y1,s=1-u*.86;kf.push({transform:'translate('+x.toFixed(1)+'px,'+y.toFixed(1)+'px) scale('+s.toFixed(3)+') rotate('+(u*-16).toFixed(1)+'deg)',opacity:u>.92?0:1})}
+  var a=f.animate(kf,{duration:820,easing:'cubic-bezier(.5,0,.25,1)'});a.onfinish=function(){f.remove();tgt.classList.remove('spring');void tgt.offsetWidth;tgt.classList.add('spring');done()}}
+$('#pAdd').onclick=function(){if(!cur.size)return;setWay(WAY);var key=cur.L.key,size=cur.size,q=cur.q,L=cur.L,im=$('#pStage img.on'),r=im?im.getBoundingClientRect():null,src=im?im.src:img(L.c.imgs[0]);
+  closeS();setTimeout(function(){flyToBag(src,r,function(){addBag(key,size,q);toastAct('Added: '+L.p.name+', '+L.c.n+', '+size,'View bag',openBag)})},REDUCED?0:180)};
+function toastAct(t,label,fn){var el=$('#toast');$('span',el).innerHTML=esc(t)+' <button type="button">'+label+'</button>';el.classList.add('on','act');$('button',el).onclick=function(){el.classList.remove('on','act');fn()};clearTimeout(toast.t);toast.t=setTimeout(function(){el.classList.remove('on','act')},4200)}
 $$('[data-open]').forEach(function(b){b.addEventListener('click',function(){openP(b.dataset.open)})});
+
+/* ================= the showroom stage: autoplay, glide off with motion blur, drop in and settle ================= */
+var STOPS=[{key:'ankle:black',name:'Buckle heel ankle boot',col:'Black, with the buckle strap',pr:39,hue:'#17161b'},
+           {key:'knee:black',name:'Riding knee boot',col:'In black and in brown',pr:49,hue:'#413d39'},
+           {key:'lace:suede',name:'Lace-up boot',col:'Black Suede, also Matte and Shiny',pr:35,hue:'#1d1e22'}];
+var HOTS=[{t:'The buckle',s:'A D-ring buckle on the ankle strap',x:618,y:468},{t:'Pull tab',s:'A loop at the back to pull them on',x:751,y:300},
+          {t:'Block heel',s:'A wide block heel you can walk in',x:705,y:860},{t:'Lug sole',s:'A chunky lug sole with grip',x:235,y:1025}];
+function Stage(){
+  var st=$('#stage'),pairs=$$('.pair',st),chips=$$('#chips button'),ind=$('#ind'),pgs=chips.map(function(c){return c.querySelector('.pg b')});
+  var cur=0,DUR=5200,el=0,last=0,paused=false,hold=0,vis=true,raf=0,busy=false,callOpen=-1;
+  function indTo(i){var c=chips[i],p=c.parentNode.getBoundingClientRect(),r=c.getBoundingClientRect();ind.style.width=r.width+'px';ind.style.transform='translateX('+(r.left-p.left+c.parentNode.scrollLeft)+'px)'}
+  function info(i){var s=STOPS[i];roll($('#sName'),s.name);roll($('#sCol'),s.col);roll($('#sPr'),usd(s.pr));
+    st.style.setProperty('--tint',mixW(s.hue,.1));st.style.setProperty('--hue',s.hue);
+    chips.forEach(function(c,j){c.setAttribute('aria-selected',j===i)});pairs.forEach(function(p,j){p.setAttribute('aria-hidden',j!==i)});indTo(i);
+    $('#shint').style.opacity=i===0?1:0}
+  function go(i,user){i=(i+STOPS.length)%STOPS.length;if(i===cur||busy)return;closeCall();var a=pairs[cur],b=pairs[i];el=0;pgs.forEach(function(g){g.style.transform='scaleX(0)'});
+    if(user)hold=performance.now()+7000;
+    if(REDUCED){a.classList.remove('on');b.classList.add('on');cur=i;info(i);return}
+    busy=true;var dir=user&&i<cur?1:-1;
+    var o=a.animate([{transform:'translateX(-50%)',opacity:1,filter:'none'},{transform:'translateX('+(dir<0?'-110%':'10%')+')',opacity:0,filter:'url(#mblur)'}],{duration:480,easing:'cubic-bezier(.55,0,.8,.2)'});
+    o.onfinish=function(){a.classList.remove('on')};
+    b.classList.add('on');
+    b.animate([{transform:'translate(-50%,-22%) scale(.97)',opacity:0},{transform:'translate(-50%,1.5%) scale(1)',opacity:1,offset:.72},{transform:'translate(-50%,0) scale(1)',opacity:1}],{duration:720,delay:200,easing:'cubic-bezier(.3,.7,.3,1)',fill:'backwards'});
+    var sd=b.querySelector('.shadow');sd.animate([{transform:'scale(.45,.6)',opacity:.1},{transform:'scale(1.16,.76)',opacity:1,offset:.72},{transform:'scale(1)',opacity:1}],{duration:720,delay:200,easing:'cubic-bezier(.3,.7,.3,1)',fill:'backwards'});
+    cur=i;info(i);setTimeout(function(){busy=false},940)}
+  chips.forEach(function(c){c.addEventListener('click',function(){go(+c.dataset.i,true)})});
+  $('#sBuy').onclick=function(){openP(STOPS[cur].key)};
+  // pause while a finger or the cursor is on the stage
+  st.addEventListener('pointerdown',function(){paused=true;st.classList.add('paused')});
+  ['pointerup','pointercancel','pointerleave'].forEach(function(e){st.addEventListener(e,function(){if(paused){paused=false;hold=performance.now()+5000;st.classList.remove('paused')}})});
+  if(FINE)st.addEventListener('pointerenter',function(){hold=performance.now()+1e9});
+  if(FINE)st.addEventListener('pointerleave',function(){hold=performance.now()+2500});
+  // a tap anywhere on the pair (not a hotspot) opens it
+  pairs.forEach(function(p,j){p.querySelector('.fig>img').addEventListener('click',function(){openP(STOPS[j].key)})});
+  // hotspots with a loupe
+  var call=$('#call'),lp=$('#lp');
+  function closeCall(){if(callOpen<0)return;call.classList.remove('on');$$('.hs').forEach(function(h){h.setAttribute('aria-expanded','false')});callOpen=-1}
+  $$('.hs').forEach(function(h){h.addEventListener('click',function(e){e.stopPropagation();var k=+h.dataset.h;if(callOpen===k){closeCall();return}
+    callOpen=k;$$('.hs').forEach(function(x){x.setAttribute('aria-expanded',x===h)});var H=HOTS[k],Z=.78,S=76;
+    lp.style.backgroundSize=(901*Z)+'px '+(1201*Z)+'px';lp.style.backgroundPosition=(-(H.x*Z-S/2))+'px '+(-(H.y*Z-S/2))+'px';
+    $('#callT').textContent=H.t;$('#callS').textContent=H.s;
+    var sr=st.getBoundingClientRect(),hr=h.getBoundingClientRect(),cw=Math.min(240,sr.width*.7),x=clamp(hr.left-sr.left+hr.width/2-cw/2,8,sr.width-cw-8),y=hr.top-sr.top;
+    call.style.width=cw+'px';call.style.left=x+'px';var above=y>110;call.style.top=above?(y-104)+'px':(y+hr.height+8)+'px';call.style.transformOrigin=above?'50% 100%':'50% 0';
+    call.classList.add('on');hold=performance.now()+1e9})});
+  st.addEventListener('click',function(e){if(!e.target.closest('.hs')&&!e.target.closest('.call')){if(callOpen>=0){closeCall();hold=performance.now()+4000}}});
+  function frame(now){raf=0;var dt=last?Math.min(64,now-last):16;last=now;
+    if(!paused&&!busy&&!openSheet&&now>hold&&!REDUCED&&!html.classList.contains('js-intro')){el+=dt;if(el>=DUR){go(cur+1)}}
+    if(!REDUCED)pgs[cur].style.transform='scaleX('+clamp(el/DUR,0,1).toFixed(3)+')';
+    perf('stage',performance.now()-now);if(vis&&!document.hidden)raf=requestAnimationFrame(frame)}
+  function kick(){last=0;if(!raf&&vis&&!document.hidden)raf=requestAnimationFrame(frame)}
+  // paused when off-screen or the tab is hidden (visibility, not scroll position)
+  new IntersectionObserver(function(es){vis=es[0].isIntersecting;st.classList.toggle('paused',!vis);kick()}).observe(st);
+  document.addEventListener('visibilitychange',kick);document.addEventListener('sheetclosed',function(){hold=Math.max(hold,performance.now()+2500);kick()});
+  addEventListener('resize',function(){indTo(cur)});
+  info(0);setTimeout(function(){indTo(0)},300);if(document.fonts)document.fonts.ready.then(function(){indTo(cur)});kick();
+  window.__stage={go:function(i){go(i,true);return 1},state:function(){return{cur:cur,el:Math.round(el),paused:paused,vis:vis}},hot:function(k){$$('.hs')[k].click();return 1}};
+}
+
+/* ================= autoplay bento: muted loops, tap to open with a shared-element transition ================= */
+function Bento(){
+  var tiles=$$('.bt');
+  tiles.forEach(function(t){var v=$('video',t);
+    if(REDUCED){v.removeAttribute('autoplay');v.preload='none'}
+    else new IntersectionObserver(function(es){if(es[0].intersectionRatio>=.6&&!document.hidden){var p=v.play();p&&p.catch(function(){})}else v.pause()},{threshold:[0,.6,1]}).observe(t);
+    t.addEventListener('click',function(){var k=t.dataset.k,src=v.getAttribute('poster');
+      if(REDUCED){openP(k);return}
+      if(document.startViewTransition){t.style.viewTransitionName='pimg';
+        var vt=document.startViewTransition(function(){t.style.viewTransitionName='';openP(k,null,true);var im=$('#pStage img.on');if(im)im.style.viewTransitionName='pimg'});
+        vt.finished.then(function(){var im=$('#pStage img.on');if(im)im.style.viewTransitionName=''}).catch(function(){});return}
+      // FLIP fallback: the poster grows from the tile into the sheet image
+      var r0=t.getBoundingClientRect();openP(k,null,true);var im=$('#pStage img.on');if(!im)return;var r1=im.getBoundingClientRect();
+      var f=document.createElement('img');f.src=src;f.className='flyer';f.style.objectFit='cover';f.style.width=r1.width+'px';f.style.height=r1.height+'px';document.body.appendChild(f);im.style.opacity=0;
+      var a=f.animate([{transform:'translate('+r0.left+'px,'+r0.top+'px) scale('+(r0.width/r1.width)+','+(r0.height/r1.height)+')',borderRadius:'8px'},{transform:'translate('+r1.left+'px,'+r1.top+'px) scale(1,1)',borderRadius:'0px'}],{duration:560,easing:'cubic-bezier(.3,.7,.2,1)'});
+      f.style.transformOrigin='0 0';a.onfinish=function(){im.style.opacity='';f.remove()}})});
+}
+
+/* ================= desktop: magnetic buttons and a cursor light on product cards ================= */
+function Pointer(){if(!FINE||REDUCED)return;
+  $$('.mag,.btn.k,.btn.g').forEach(function(b){b.addEventListener('pointermove',function(e){var r=b.getBoundingClientRect();b.style.transform='translate('+((e.clientX-r.left-r.width/2)*.18).toFixed(1)+'px,'+((e.clientY-r.top-r.height/2)*.28).toFixed(1)+'px)'});b.addEventListener('pointerleave',function(){b.style.transform=''})});
+  $('#grid').addEventListener('pointermove',function(e){var c=e.target.closest('.pc .ph');if(!c)return;var r=c.getBoundingClientRect();c.style.setProperty('--lx',(e.clientX-r.left)+'px');c.style.setProperty('--ly',(e.clientY-r.top)+'px')});
+}
 
 /* ================= the shop grid ================= */
 var F={cat:'all',sort:'feat',sizes:[],fams:[],stock:false},FT={sizes:[],fams:[],stock:false};
@@ -597,11 +787,11 @@ function grid(){var list=LISTS.filter(passes);
   else list.sort(function(a,b){return a.p.order-b.p.order||a.ci-b.ci});
   $('#cnt').textContent=list.length+(list.length===1?' pair':' pairs');
   $('#grid').innerHTML=list.map(function(L){var bd=badgeFor(L),p=L.p,c=L.c;
-    return '<button class="pc rvl" data-k="'+L.key+'"><div class="ph"><img class="a" src="'+img(c.imgs[0])+'" alt="'+esc(p.name+', '+c.n)+'" width="600" height="800" loading="lazy" decoding="async">'+(c.imgs[1]&&FINE?'<img class="b" src="'+img(c.imgs[1])+'" alt="" loading="lazy" decoding="async">':'')+'</div>'+'<span class="st'+(bd&&bd[0]==='New in'?' n':'')+'">'+(bd?bd[0]:'')+'</span>'+
+    return '<button class="pc" data-k="'+L.key+'"><div class="ph"><img class="a" src="'+img(c.imgs[0])+'" alt="'+esc(p.name+', '+c.n)+'" width="600" height="800" loading="lazy" decoding="async">'+(c.imgs[1]&&FINE?'<img class="b" src="'+img(c.imgs[1])+'" alt="" loading="lazy" decoding="async">':'')+'</div>'+'<span class="st'+(bd&&bd[0]==='New in'?' n':'')+'">'+(bd?bd[0]:'')+'</span>'+
       '<h3>'+esc(p.name)+'</h3><span class="cn">'+esc(c.n)+'</span><div class="pr"><b>'+usd(p.price)+'</b><span>≈ '+lbp(p.price)+'</span></div>'+
       '<div class="sws">'+p.cols.map(function(cc){return '<i class="sw" style="background:'+cc.sw+'" title="'+esc(cc.n)+'"></i>'}).join('')+'</div></button>'}).join('');
   $('#noRes').classList.toggle('hide',list.length>0);
-  $$('#grid .pc').forEach(function(b){b.onclick=function(){openP(b.dataset.k,F.sizes.length===1&&stockOf(find(b.dataset.k),F.sizes[0])?F.sizes[0]:null)};io.observe(b)});
+  $$('#grid .pc').forEach(function(b){b.onclick=function(){openP(b.dataset.k,F.sizes.length===1&&stockOf(find(b.dataset.k),F.sizes[0])?F.sizes[0]:null)}});
   var n=F.sizes.length+F.fams.length+(F.stock?1:0),fn=$('#fN');fn.textContent=n;fn.classList.toggle('hide',!n)}
 /* filter sheet */
 function fsheet(){$('#fSize').innerHTML=SIZES.map(function(s){return '<button aria-pressed="'+(FT.sizes.indexOf(s)>=0)+'" data-s="'+s+'">'+s+'</button>'}).join('');
@@ -684,39 +874,6 @@ function bagRender(){var B=$('#bBody'),Ft=$('#bFoot'),T=$('#bTitle');stepsUI();B
 
 
 
-/* ================= the pinned reel: their 1, 2 or 3 scrubbed by scroll ================= */
-var SEQ_N=67,SEQ_CUT=[1,26,47],SEQ_KEYS=['matte','shiny','suede'],seqTake=0;
-function Seq(){
-  var sec=$('#takes'),cv=$('#seq'),fb=$('#seqfb'),caps=$$('.pin .cap'),dots=$$('.pin .dots i'),h2=$('#h-takes'),x=cv.getContext('2d'),frames=new Array(SEQ_N),loaded=0,curF=-1,W=0,H=0,started=false,lastT=0;
-  if(REDUCED){sec.classList.add('static');cv.style.display='none';fb.src='media/seq/f012.webp';return}
-  function size(){var r=cv.getBoundingClientRect();W=r.width;H=r.height;cv.width=Math.round(W*DPR);cv.height=Math.round(H*DPR);curF=-1;draw(true)}
-  function src(i){return 'media/seq/f'+String(i+1).padStart(3,'0')+'.webp'}
-  function get(i){var im=new Image();im.decoding='async';im.onload=function(){var done=function(b){frames[i]=b||im;loaded++;if(i===curF||curF<0)draw(true)};if(window.createImageBitmap)createImageBitmap(im).then(done,function(){done()});else done()};im.src=src(i)}
-  function start(){if(started)return;started=true;var order=[];for(var s=8;s>=1;s=s>>1)for(var i=0;i<SEQ_N;i+=s)if(order.indexOf(i)<0)order.push(i);order.forEach(get)}
-  function nearest(i){if(frames[i])return i;for(var d=1;d<SEQ_N;d++){if(frames[i-d])return i-d;if(frames[i+d])return i+d}return -1}
-  function prog(){var r=sec.getBoundingClientRect(),span=r.height-innerHeight;return clamp(-r.top/Math.max(1,span),0,1)}
-  function draw(force){var a=performance.now(),p=prog();
-    var fp=clamp((p-.08)/.84,0,1),i=Math.round(fp*(SEQ_N-1)),n=nearest(i);
-    var ho=clamp(p/.08,0,1);h2.style.setProperty('--ho',(.25+.75*ho).toFixed(3));h2.style.setProperty('--hs',(.94+.06*ho).toFixed(4));
-    var t=i>=SEQ_CUT[2]?2:i>=SEQ_CUT[1]?1:0;if(t!==seqTake||force){seqTake=t;caps.forEach(function(c,j){c.classList.toggle('on',j===t)});dots.forEach(function(d,j){d.classList.toggle('on',j===t)});$('#seqBuy').textContent='Buy '+['Matte Black','Black Shiny','Black Suede'][t]+' · $35'}
-    if(n<0||(n===curF&&!force))return;curF=n;var f=frames[n],iw=f.width,ih=f.height,s=Math.max(cv.width/iw,cv.height/ih),dw=iw*s,dh=ih*s;
-    x.drawImage(f,(cv.width-dw)/2,(cv.height-dh)/2,dw,dh);if(fb.style.visibility!=='hidden')fb.style.visibility='hidden';
-    var now=performance.now();perf('seq',now-a);if(lastT)perf('seqDt',now-lastT);lastT=now}
-  var raf=0,vis=false;function onS(){if(!raf)raf=requestAnimationFrame(function(){raf=0;if(vis)draw()})}
-  new IntersectionObserver(function(es){vis=es[0].isIntersecting;if(vis){start();onS()}},{rootMargin:'600px 0px'}).observe(sec);
-  addEventListener('scroll',onS,{passive:true});addEventListener('resize',size);size();
-  $('#seqBuy').onclick=function(){openP('lace:'+SEQ_KEYS[seqTake])};
-  window.__seq={state:function(){return{loaded:loaded,cur:curF,take:seqTake,p:prog()}}};
-}
-
-/* ================= parallax: product images drift a little against the scroll ================= */
-function Parallax(){if(REDUCED)return;var hp=$('#hprod'),hs=$('#hseam'),els=$$('.par'),raf=0;
-  function up(){raf=0;var a=performance.now(),vh=innerHeight;
-    var r=hs.getBoundingClientRect();if(r.bottom>0&&r.top<vh){var k=clamp(-r.top/r.height,0,1);hp.style.setProperty('--py',(-k*34).toFixed(1)+'px');hp.style.setProperty('--ps',(1+k*.06).toFixed(4))}
-    els.forEach(function(el){var b=el.getBoundingClientRect();if(b.bottom<0||b.top>vh)return;var c=(b.top+b.height/2-vh/2)/vh;var im=el.querySelector('img');im.style.setProperty('--py',(c*-26).toFixed(1)+'px')});
-    perf('scroll',performance.now()-a)}
-  addEventListener('scroll',function(){if(!raf)raf=requestAnimationFrame(up)},{passive:true});up()}
-
 var VS='attribute vec2 p;varying vec2 v;void main(){v=p*.5+.5;gl_Position=vec4(p,0.,1.);}';
 function sh(gl,type,src){var s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);if(!gl.getShaderParameter(s,gl.COMPILE_STATUS))throw new Error(gl.getShaderInfoLog(s));return s}
 function prog(gl,vs,fs){var p=gl.createProgram();gl.attachShader(p,sh(gl,gl.VERTEX_SHADER,vs));gl.attachShader(p,sh(gl,gl.FRAGMENT_SHADER,fs));gl.linkProgram(p);if(!gl.getProgramParameter(p,gl.LINK_STATUS))throw new Error(gl.getProgramInfoLog(p));gl.useProgram(p);var c={};p.u=function(n){return n in c?c[n]:(c[n]=gl.getUniformLocation(p,n))};return p}
@@ -752,28 +909,26 @@ function Dust(){
   box.addEventListener('pointermove',function(e){var r=box.getBoundingClientRect();ptr.x=(e.clientX-r.left)/r.width*2-1;ptr.y=1-(e.clientY-r.top)/r.height*2;ptr.on=1;kick()});
   box.addEventListener('pointerleave',function(){ptr.on=0});box.addEventListener('pointerup',function(e){if(e.pointerType!=='mouse')ptr.on=0});
   function frame(now){var a=performance.now();if(!t0)t0=now;var t=(now-t0)/1000;if(lastF)perf('dustDt',now-lastF);lastF=now;
-    A=REDUCED?1:clamp(t/2.2,0,1);pon=lerp(pon,ptr.on,.1);
+    var cy=t%10;A=REDUCED?1:cy<2.4?cy/2.4:cy<8.2?1:1-(cy-8.2)/1.8;pon=lerp(pon,ptr.on,.1);
     gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);gl.uniform1f(P.u('uA'),A);gl.uniform1f(P.u('uT'),REDUCED?2:t);gl.uniform2f(P.u('uPtr'),ptr.x,ptr.y);gl.uniform1f(P.u('uPon'),pon);
     gl.drawArrays(gl.POINTS,0,n);if(SYNC)gl.readPixels(0,0,1,1,gl.RGBA,gl.UNSIGNED_BYTE,PX1);perf('dust',performance.now()-a)}
   function loop(now){raf=0;if(!vis||document.hidden){lastF=0;return}frame(now);if(!REDUCED&&!raf)raf=requestAnimationFrame(loop)}
   function kick(){if(!raf&&vis&&!document.hidden)raf=requestAnimationFrame(loop)}
   size();addEventListener('resize',function(){size();kick()});
-  new IntersectionObserver(function(es){vis=es[0].isIntersecting;if(vis&&!armed){armed=true;t0=0}kick()},{threshold:.25}).observe(box);
+  new IntersectionObserver(function(es){vis=es[0].isIntersecting;kick()},{threshold:.05}).observe(box);
   document.addEventListener('visibilitychange',kick);
 }
 
 
 
-/* ================= reveals + dock ================= */
-var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{rootMargin:'0px 0px -6% 0px'});
-$$('.rvl').forEach(function(el){io.observe(el)});
+/* ================= dock (hides at the stage Buy and at the closing call to action) ================= */
 var dv={};function dockUp(){$('#dock').classList.toggle('off',!!(dv.cta||dv.order||openSheet))}
 new IntersectionObserver(function(es){es.forEach(function(e){dv[e.target.id==='order'?'order':'cta']=e.isIntersecting});dockUp()},{threshold:.1}).observe($('#order'));
-new IntersectionObserver(function(es){dv.cta=es[0].isIntersecting;dockUp()}).observe($('.hero .buy'));
+new IntersectionObserver(function(es){dv.cta=es[0].isIntersecting;dockUp()}).observe($('.info .buy'));
 var _close=closeS;closeS=function(){_close();document.dispatchEvent(new Event('sheetclosed'))};
 $('#scrim').onclick=closeS;$$('[data-close]').forEach(function(b){b.onclick=closeS});
 
-CK.mode=WAY;grid();bagUI();Seq();Parallax();Dust();
+CK.mode=WAY;grid();bagUI();Stage();Bento();Pointer();Dust();
 if(location.hash==='#checkout'&&bagCount())openBag();
 window.__shop={openP:openP,openBag:openBag,bag:function(){return JSON.parse(JSON.stringify(BAG))},ck:function(){return{step:CK.step,no:CK.no,wa:CK.wa,mode:CK.mode}}};
 
@@ -784,7 +939,7 @@ var Gs=window.gsap,intro=$('#intro'),ist=$('#istage');
 if(!html.classList.contains('js-intro')||!Gs){html.classList.remove('js-intro','lock');ready();return}
 document.body.classList.add('lock');
 var done=false;
-function finish(){if(done)return;done=true;try{sessionStorage.setItem('bravoIntro3','1')}catch(e){}html.classList.remove('lock');document.body.classList.remove('lock');
+function finish(){if(done)return;done=true;try{sessionStorage.setItem('bravoIntro4','1')}catch(e){}html.classList.remove('lock');document.body.classList.remove('lock');
   intro.style.display='none';ist.style.display='none';Gs.set('.brand .nb',{opacity:1,clearProps:'opacity'});ready()}
 function len(u){return $(u.getAttribute('href')).getTotalLength()}
 $$('#ilogo .dr').forEach(function(u){var l=len(u);u.style.strokeDasharray=l+' '+l;u.style.strokeDashoffset=l;u.style.fillOpacity=0;u.setAttribute('stroke','#a69461');u.setAttribute('stroke-width','7')});
