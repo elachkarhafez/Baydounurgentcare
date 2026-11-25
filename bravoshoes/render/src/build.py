@@ -97,14 +97,14 @@ t = open(D + 'tpl.html').read()
 H = I['I_HEART']
 I['HB'] = H.replace('<svg ', '<svg class="h-b" ', 1); I['HK'] = H.replace('<svg ', '<svg class="h-k" ', 1); I['HW'] = H.replace('<svg ', '<svg class="h-w" ', 1)
 R = dict(I, DEFS=defs(), INTRO=intro(), NAVSIGN=sign('sl', '#17161b'), FOOTSIGN=sign('fsl', ICE, True), DUSTMARK=mark('dmk'),
-         ICE=ICE, RED=RED, FACADE=FACADE, LED=LED, LED2=LED2,
+         SWEEPX='%d' % (LW + 520),
          TEL=TEL, WA=WA, IGURL=IG, DM=DM, ALLPATH=json.dumps(L['all']), MARKVB=json.dumps([60, 80, 830, 860]))
 for k in sorted(R, key=len, reverse=True): t = t.replace('{{%s}}' % k, R[k])
 assert '{{' not in t, re.findall(r'\{\{\w+\}\}', t)
 open(S + 'index.html', 'w').write(t)
 
 # favicon: the red V alone on the night facade (BRAVO is unreadable at 32 px; the V reads)
-vx0, vy0, vx1, vy1 = SG['bbox']['V']; vc = ((vx0 + vx1) / 2, (vy0 + vy1) / 2); side = (vy1 - vy0) * 1.32
+vx0, vy0, vx1, vy1 = SG['bbox']['V']; vc = ((vx0 + vx1) / 2, (vy0 + vy1) / 2); side = (vy1 - vy0) * 1.5
 fx, fy = vc[0] - side / 2, vc[1] - side / 2
 fav = ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="%.1f %.1f %.1f %.1f"><rect x="%.1f" y="%.1f" width="%.1f" height="%.1f" rx="%.1f" fill="%s"/>'
        '<path d="%s" fill="%s"/></svg>') % (fx, fy, side, side, fx, fy, side, side, side * .22, FACADE, SG['V'], RED)
@@ -123,9 +123,10 @@ og = ('<!doctype html><html><head><meta charset="utf-8"><link href="https://font
       '.seam img{position:absolute;left:50%%;bottom:70px;height:440px;transform:translateX(-50%%);z-index:2}'
       '.seam i{position:absolute;left:50%%;bottom:54px;width:340px;height:40px;transform:translateX(-50%%);background:radial-gradient(50%% 50%% at 50%% 50%%,rgba(23,22,27,.34),rgba(23,22,27,0) 100%%)}'
       '</style></head><body><span class="led" style="left:22px"></span><span class="led" style="left:36px"></span><span class="led" style="left:724px"></span><span class="led" style="left:738px"></span>'
-      '<div class="lg">' + sign_inline(ICE, True, True) + '</div>'
+      "<div class=\"lg\">SIGNLOGO</div>"
       '<div class="hk">Boots, heels and fur slippers, sizes 36 till 40. Order on WhatsApp.</div>'
       '<div class="pl">Beirut, Lebanon <i>·</i> 70/810021</div>'
       '<div class="seam"><img src="../media/cut-ankle.webp"><i></i></div></body></html>') % (FACADE, LED, LED2, ICE, LED2)
+og = og.replace("SIGNLOGO", sign_inline(ICE, True, True))
 open(D + '../og.html', 'w').write(og)
 print('index', len(t) // 1024, 'KB')
