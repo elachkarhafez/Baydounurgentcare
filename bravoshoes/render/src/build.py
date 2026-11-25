@@ -1,14 +1,21 @@
-"""Builds bravoshoes/index.html, favicon.svg and render/og.html (+ render/icon.html) from tpl.html + blogo.json.
+"""Builds bravoshoes/index.html, favicon.svg and render/og.html (+ render/icon.html) from tpl.html, sign.json and blogo.json.
 Run from anywhere:  python3 build.py
-blogo.json is their own BS monogram (from the @bravo.shoes_ profile picture) traced by trace.py into B, S, heel and
-stars, in a box of about 1000 x 970. The pill under the mark is drawn at its measured place; its caps are set as type."""
+sign.json is the BRAVO channel-letter sign over their shopfront, traced by trace_sign.py (B, R, A, O, the red V, and
+SHOES in Montserrat ExtraBold outlines for the letters the photo cuts off). It is the logo in the opening, the header,
+the footer, the favicon and the link card.
+blogo.json is their BS monogram from the @bravo.shoes_ profile picture (trace.py); it still forms the gold dust in the
+closing call to action."""
 import os, re, json
 D = os.path.dirname(os.path.abspath(__file__)) + '/'
 S = os.path.join(D, '..', '..') + '/'
 L = json.load(open(D + 'blogo.json'))
+SG = json.load(open(D + 'sign.json'))
+SW, SH = SG['box'][2], SG['box'][3]      # BRAVO alone
+LW = SG['shoesW'] + 4                    # BRAVO + SHOES
+# sampled off the storefront photo (trace_sign.py): letter core, red V, night facade, gold LED strip core and halo
+ICE, RED, FACADE, LED, LED2 = '#d5f4fe', '#ea3323', '#272a39', '#fbefbd', '#bfa16a'
 PX, PY, PW, PH = L['pill']
 MARK_VB = '60 80 830 860'
-LOCK_VB = '60 80 870 1070'
 TEL = '+96170810021'
 WA = 'https://wa.me/96170810021'
 IG = 'https://www.instagram.com/bravo.shoes_/'
@@ -22,39 +29,48 @@ def defs():
     s += '<path id="lg-B" d="%s"/><path id="lg-S" d="%s"/><path id="lg-heel" d="%s"/>' % (L['B'], L['S'], L['heel'])
     for i, d in enumerate(L['stars']): s += '<path id="lg-st%d" d="%s"/>' % (i, d)
     s += '<path id="lg-all" d="%s"/>' % L['all']
+    for k in 'BRAOV': s += '<path id="sg-%s" d="%s"/>' % (k, SG[k])
+    for i, d in enumerate(SG['SHOES']): s += '<path id="sg-s%d" d="%s"/>' % (i, d)
     return s + '</defs></svg>'
+
+def sign(cls, fg, shoes=False):
+    """the sign logo; on white the letters go dark (fg) and the V stays red"""
+    u = ''.join('<use href="#sg-%s"/>' % k for k in 'BRAO') + (''.join('<use href="#sg-s%d"/>' % i for i in range(5)) if shoes else '')
+    return '<svg class="%s" viewBox="0 0 %s %s" aria-hidden="true"><g fill="%s">%s</g><use href="#sg-V" fill="%s"/></svg>' % (cls, LW if shoes else SW, SH, fg, u, RED)
+
+def sign_inline(fg, shoes=True, glow=False):
+    """self-contained (no <use>) for the link card"""
+    p = ''.join('<path d="%s"/>' % SG[k] for k in 'BRAO') + (''.join('<path d="%s"/>' % d for d in SG['SHOES']) if shoes else '')
+    s = '<svg viewBox="0 0 %s %s" style="width:100%%;height:auto;overflow:visible">' % (LW if shoes else SW, SH)
+    if glow:
+        s += ('<defs><filter id="ga" x="-20%%" y="-60%%" width="140%%" height="220%%"><feGaussianBlur stdDeviation="22"/></filter>'
+              '<filter id="gb" x="-20%%" y="-60%%" width="140%%" height="220%%"><feGaussianBlur stdDeviation="7"/></filter></defs>'
+              '<g fill="%s" filter="url(#ga)" opacity=".45">%s</g><g fill="%s" filter="url(#gb)" opacity=".9">%s</g>'
+              '<path d="%s" fill="%s" filter="url(#gb)" opacity=".9"/>') % (ICE, p, ICE, p, SG['V'], RED)
+    return s + '<g fill="%s">%s</g><path d="%s" fill="%s"/></svg>' % (fg, p, SG['V'], RED)
 
 def mark(cls, fill='url(#gGold)'):
     return ('<svg class="%s" viewBox="%s" aria-hidden="true"><g fill="%s"><use href="#lg-all"/><use href="#lg-B"/><use href="#lg-S"/>'
             '<use href="#lg-heel"/><use href="#lg-st0"/><use href="#lg-st1"/></g></svg>') % (cls, MARK_VB, fill)
 
-def pill(letters=True, cls='pl'):
-    s = '<rect class="%s" x="%s" y="%s" width="%s" height="%s" rx="%s" fill="none" stroke="#a69461" stroke-width="7"/>' % (cls, PX, PY, PW, PH, PH / 2)
-    if letters:
-        word = 'BRAVO SHOES'; cx = PX + PW / 2; step = 46; x0 = cx - step * (len(word) - 1) / 2
-        s += '<g class="pw" fill="#94824f" font-family="Montserrat,sans-serif" font-weight="600" font-size="56" text-anchor="middle">'
-        for i, ch in enumerate(word):
-            if ch != ' ': s += '<text class="ich" x="%.1f" y="%.1f">%s</text>' % (x0 + i * step, PY + PH / 2 + 21, ch)
-        s += '</g>'
-    return s
-
-def lockup(cls):
-    return '<svg class="%s" viewBox="%s" aria-hidden="true"><g fill="url(#gGold)"><use href="#lg-all"/><use href="#lg-B"/><use href="#lg-S"/><use href="#lg-heel"/><use href="#lg-st0"/><use href="#lg-st1"/></g>%s</svg>' % (cls, LOCK_VB, pill())
-
 def intro():
-    s = '<svg id="ilogo" viewBox="%s" aria-hidden="true"><defs>' % LOCK_VB
-    s += '<linearGradient id="gSweep" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fffaf0" stop-opacity=".95"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>'
-    s += '<mask id="mlogo" maskUnits="userSpaceOnUse" x="0" y="0" width="1100" height="1200"><use href="#lg-all" fill="#fff"/></mask></defs>'
-    s += '<g id="imark">'
-    s += '<use id="iall" href="#lg-all" fill="url(#gGold)" opacity="0"/>'
-    s += '<use id="ist0" class="star" href="#lg-st0" fill="url(#gGold)"/><use id="ist1" class="star" href="#lg-st1" fill="url(#gGold)"/>'
-    s += '<use id="iB" class="dr" href="#lg-B" fill="url(#gGold)"/><use id="iS" class="dr" href="#lg-S" fill="url(#gGold)"/><use id="iheel" class="dr" href="#lg-heel" fill="url(#gGold)"/>'
-    hx, hy = L['heelTip']
-    s += '</g><g id="ifx">'
-    s += '<ellipse id="iring" cx="%s" cy="%s" rx="60" ry="16" fill="none" stroke="#a69461" stroke-width="9" opacity="0"/>' % (hx, hy + 6)
-    s += '<ellipse id="iring2" cx="%s" cy="%s" rx="60" ry="16" fill="none" stroke="#c5b789" stroke-width="5" opacity="0"/>' % (hx, hy + 6)
-    s += '<rect id="isweep" x="-500" y="0" width="320" height="1200" fill="url(#gSweep)" mask="url(#mlogo)" transform="skewX(-16)"/>'
-    s += '</g><g id="ipill">%s</g>' % pill(cls='pl')
+    """the opening: their sign at night. Each letter has a drawn outline (.idr), a lit face (.ifc) and a blurred bloom
+    (.ihl); a day layer (#iday, dark letters) takes over while the logo glides into the header."""
+    s = '<svg id="ilogo" viewBox="0 0 %s %s" aria-hidden="true"><defs>' % (LW, SH)
+    s += '<filter id="fBloom" x="-30%" y="-60%" width="160%" height="220%"><feGaussianBlur stdDeviation="9"/></filter>'
+    s += '<filter id="fWide" x="-40%" y="-90%" width="180%" height="280%"><feGaussianBlur stdDeviation="24"/></filter>'
+    s += '<linearGradient id="gSweep" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>'
+    s += '<mask id="mSign" maskUnits="userSpaceOnUse" x="0" y="0" width="%s" height="%s"><g fill="#fff">%s</g></mask></defs>' % (
+        LW, SH, ''.join('<use href="#sg-%s"/>' % k for k in 'BRAOV') + ''.join('<use href="#sg-s%d"/>' % i for i in range(5)))
+    s += '<g id="ibravo"><rect id="ibox" width="%s" height="%s" fill="none"/>' % (SW, SH)
+    s += '<g id="iwide" filter="url(#fWide)" opacity="0"><g fill="%s">%s</g><use href="#sg-V" fill="%s"/></g>' % (ICE, ''.join('<use href="#sg-%s"/>' % k for k in 'BRAO'), RED)
+    for k in 'BRAO':
+        s += ('<g class="il" id="il%s"><use class="ihl" href="#sg-%s" fill="%s" filter="url(#fBloom)" opacity="0"/>'
+              '<use class="ifc" href="#sg-%s" fill="%s" opacity="0"/><use class="idr" href="#sg-%s" fill="none" stroke="%s" stroke-width="6"/></g>') % (k, k, ICE, k, ICE, k, ICE)
+    s += ('<g id="iv"><use class="ihl" href="#sg-V" fill="%s" filter="url(#fBloom)" opacity="0"/><use class="ifc" href="#sg-V" fill="%s" opacity="0"/></g>') % (RED, RED)
+    s += '<g id="iday" opacity="0"><g fill="#17161b">%s</g><use href="#sg-V" fill="%s"/></g></g>' % (''.join('<use href="#sg-%s"/>' % k for k in 'BRAO'), RED)
+    s += '<g id="ishoes" fill="%s">%s</g>' % (ICE, ''.join('<use class="ish" href="#sg-s%d"/>' % i for i in range(5)))
+    s += '<g mask="url(#mSign)"><rect id="isweep" x="-400" y="-20" width="260" height="%s" fill="url(#gSweep)" opacity=".85"/></g>' % (SH + 40)  # mask on the parent so it stays put
     return s + '</svg>'
 
 def ic(p, sw='1.8'):
@@ -80,37 +96,36 @@ I = {'I_WA': ic('<path d="M4 20l1.3-3.9A8.5 8.5 0 1 1 8 18.8z"/><path d="M9.2 8.
 t = open(D + 'tpl.html').read()
 H = I['I_HEART']
 I['HB'] = H.replace('<svg ', '<svg class="h-b" ', 1); I['HK'] = H.replace('<svg ', '<svg class="h-k" ', 1); I['HW'] = H.replace('<svg ', '<svg class="h-w" ', 1)
-R = dict(I, DEFS=defs(), INTRO=intro(), NAVMARK=mark('nb'), LOCKUP=lockup('lock'), DUSTMARK=mark('dmk'),
-         TEL=TEL, WA=WA, IGURL=IG, DM=DM, ALLPATH=json.dumps(L['all']), MARKVB=json.dumps([60, 80, 830, 860]),
-         HEELTIP=json.dumps(L['heelTip']))
+R = dict(I, DEFS=defs(), INTRO=intro(), NAVSIGN=sign('sl', '#17161b'), FOOTSIGN=sign('fsl', ICE, True), DUSTMARK=mark('dmk'),
+         ICE=ICE, RED=RED, FACADE=FACADE, LED=LED, LED2=LED2,
+         TEL=TEL, WA=WA, IGURL=IG, DM=DM, ALLPATH=json.dumps(L['all']), MARKVB=json.dumps([60, 80, 830, 860]))
 for k in sorted(R, key=len, reverse=True): t = t.replace('{{%s}}' % k, R[k])
 assert '{{' not in t, re.findall(r'\{\{\w+\}\}', t)
 open(S + 'index.html', 'w').write(t)
 
-# favicon: the gold mark on their cream, self-contained (no <use>)
-paths = ''.join('<path d="%s"/>' % d for d in [L['all'], L['B'], L['S'], L['heel']] + L['stars'])
-fav = ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="30 50 890 890"><defs>' + GOLD % 'g' + '</defs>'
-       '<rect x="30" y="50" width="890" height="890" rx="200" fill="#ffffff"/><g fill="url(#g)">' + paths + '</g></svg>')
+# favicon: the red V alone on the night facade (BRAVO is unreadable at 32 px; the V reads)
+vx0, vy0, vx1, vy1 = SG['bbox']['V']; vc = ((vx0 + vx1) / 2, (vy0 + vy1) / 2); side = (vy1 - vy0) * 1.32
+fx, fy = vc[0] - side / 2, vc[1] - side / 2
+fav = ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="%.1f %.1f %.1f %.1f"><rect x="%.1f" y="%.1f" width="%.1f" height="%.1f" rx="%.1f" fill="%s"/>'
+       '<path d="%s" fill="%s"/></svg>') % (fx, fy, side, side, fx, fy, side, side, side * .22, FACADE, SG['V'], RED)
 open(S + 'favicon.svg', 'w').write(fav)
-open(D + '../icon.html', 'w').write('<!doctype html><body style="margin:0;width:512px;height:512px;background:#ffffff">' + fav.replace('<svg ', '<svg width="512" height="512" ', 1) + '</body>')
+open(D + '../icon.html', 'w').write('<!doctype html><body style="margin:0;width:512px;height:512px;background:%s">' % FACADE + fav.replace('<svg ', '<svg width="512" height="512" ', 1) + '</body>')
 
-# link preview card (1200 x 630): their monogram, two of their photos, name, hook, place
-lock = ('<svg viewBox="%s" style="width:100%%;height:100%%"><defs>' % LOCK_VB) + GOLD % 'gGold' + '</defs><g fill="url(#gGold)">' + paths + '</g>' + pill() + '</svg>'
+# link preview card (1200 x 630): their sign lit up at night with the gold LED strips, one of their boots, name, hook, place
 og = ('<!doctype html><html><head><meta charset="utf-8"><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Tinos:ital@0;1&display=block" rel="stylesheet"><style>'
-      '*{margin:0;box-sizing:border-box}body{width:1200px;height:630px;overflow:hidden;position:relative;background:#ffffff;color:#17161b;font-family:Montserrat}'
-      '.lg{position:absolute;left:56px;top:40px;width:190px;height:234px}'
-      'h1{position:absolute;left:58px;top:300px;font:800 68px/1 Montserrat;letter-spacing:-.02em}'
-      '.hk{position:absolute;left:60px;top:384px;width:520px;font:italic 400 36px/1.2 Tinos;color:#33251f}'
-      '.sw{position:absolute;left:62px;top:478px;width:220px;color:#33251f}'
-      '.pl{position:absolute;left:0;right:600px;bottom:0;height:78px;background:#17161b;color:#fff;display:flex;align-items:center;gap:14px;padding:0 60px;font:700 26px Montserrat}'
-      '.pl i{font-style:normal;color:#c5b789}'
-      '.seam{position:absolute;left:600px;top:0;width:600px;height:630px;background:linear-gradient(180deg,#fff 0%,#f6f6f5 45%,#efeeed 100%)}'
-      '.seam img{position:absolute;left:50%;bottom:70px;height:470px;transform:translateX(-50%);z-index:2}'
-      '.seam i{position:absolute;left:50%;bottom:52px;width:380px;height:44px;transform:translateX(-50%);background:radial-gradient(50% 50% at 50% 50%,rgba(23,22,27,.34),rgba(23,22,27,0) 100%)}'
-      '</style></head><body><div class="lg">' + lock + '</div>'
-      '<h1>Bravo Shoes</h1><div class="hk">Boots, heels and fur slippers, sizes 36 till 40. Order on WhatsApp.</div>'
-      '<svg class="sw" viewBox="0 0 200 16"><path d="M2 12C40 2 80 2 118 8s58 6 80-4" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>'
+      '*{margin:0;box-sizing:border-box}body{width:1200px;height:630px;overflow:hidden;position:relative;background:radial-gradient(90%% 90%% at 30%% 30%%,%s 0%%,#17161b 100%%);color:#fff;font-family:Montserrat}'
+      '.led{position:absolute;top:0;bottom:0;width:4px;border-radius:2px;background:%s;box-shadow:0 0 10px 2px %s,0 0 34px 6px rgba(191,161,106,.45)}'
+      '.lg{position:absolute;left:66px;top:92px;width:600px}'
+      '.hk{position:absolute;left:68px;top:300px;width:560px;font:italic 400 38px/1.22 Tinos;color:%s}'
+      '.pl{position:absolute;left:68px;bottom:60px;display:flex;align-items:center;gap:14px;font:700 26px Montserrat;color:#fff}'
+      '.pl i{font-style:normal;color:%s}'
+      '.seam{position:absolute;left:760px;top:0;width:440px;height:630px;background:linear-gradient(180deg,#fff 0%%,#f6f6f5 45%%,#efeeed 100%%)}'
+      '.seam img{position:absolute;left:50%%;bottom:70px;height:440px;transform:translateX(-50%%);z-index:2}'
+      '.seam i{position:absolute;left:50%%;bottom:54px;width:340px;height:40px;transform:translateX(-50%%);background:radial-gradient(50%% 50%% at 50%% 50%%,rgba(23,22,27,.34),rgba(23,22,27,0) 100%%)}'
+      '</style></head><body><span class="led" style="left:22px"></span><span class="led" style="left:36px"></span><span class="led" style="left:724px"></span><span class="led" style="left:738px"></span>'
+      '<div class="lg">' + sign_inline(ICE, True, True) + '</div>'
+      '<div class="hk">Boots, heels and fur slippers, sizes 36 till 40. Order on WhatsApp.</div>'
       '<div class="pl">Beirut, Lebanon <i>·</i> 70/810021</div>'
-      '<div class="seam"><img src="../media/cut-ankle.webp"><i></i></div></body></html>')
+      '<div class="seam"><img src="../media/cut-ankle.webp"><i></i></div></body></html>') % (FACADE, LED, LED2, ICE, LED2)
 open(D + '../og.html', 'w').write(og)
 print('index', len(t) // 1024, 'KB')
