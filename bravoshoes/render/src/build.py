@@ -3,8 +3,8 @@ Run from anywhere:  python3 build.py
 sign.json is the BRAVO channel-letter sign over their shopfront, traced by trace_sign.py (B, R, A, O, the red V, and
 SHOES in Montserrat ExtraBold outlines for the letters the photo cuts off). It is the logo in the opening, the header,
 the footer, the favicon and the link card.
-blogo.json is their BS monogram from the @bravo.shoes_ profile picture (trace.py); it still forms the gold dust in the
-closing call to action."""
+blogo.json is their BS monogram from the @bravo.shoes_ profile picture (trace.py), kept for the defs; the gold dust in the
+closing call to action now forms the sign (gold letters, red V)."""
 import os, re, json
 D = os.path.dirname(os.path.abspath(__file__)) + '/'
 S = os.path.join(D, '..', '..') + '/'
@@ -96,9 +96,9 @@ I = {'I_WA': ic('<path d="M4 20l1.3-3.9A8.5 8.5 0 1 1 8 18.8z"/><path d="M9.2 8.
 t = open(D + 'tpl.html').read()
 H = I['I_HEART']
 I['HB'] = H.replace('<svg ', '<svg class="h-b" ', 1); I['HK'] = H.replace('<svg ', '<svg class="h-k" ', 1); I['HW'] = H.replace('<svg ', '<svg class="h-w" ', 1)
-R = dict(I, DEFS=defs(), INTRO=intro(), NAVSIGN=sign('sl', '#17161b'), FOOTSIGN=sign('fsl', ICE, True), DUSTMARK=mark('dmk'),
+R = dict(I, DEFS=defs(), INTRO=intro(), NAVSIGN=sign('sl', '#17161b'), FOOTSIGN=sign('fsl', ICE, True), DUSTMARK=sign('dmk', 'url(#gGold)', True),
          SWEEPX='%d' % (LW + 520),
-         TEL=TEL, WA=WA, IGURL=IG, DM=DM, ALLPATH=json.dumps(L['all']), MARKVB=json.dumps([60, 80, 830, 860]))
+         TEL=TEL, WA=WA, IGURL=IG, DM=DM, SIGNPATHS=json.dumps({'g': [SG[k] for k in 'BRAO'] + SG['SHOES'], 'r': SG['V']}), MARKVB=json.dumps([-10, -6, LW + 20, SH + 12]))
 for k in sorted(R, key=len, reverse=True): t = t.replace('{{%s}}' % k, R[k])
 assert '{{' not in t, re.findall(r'\{\{\w+\}\}', t)
 open(S + 'index.html', 'w').write(t)
