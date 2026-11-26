@@ -1,0 +1,12 @@
+import { chromium } from '/opt/node22/lib/node_modules/playwright/index.mjs';
+const [url, out] = process.argv.slice(2);
+const b = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium', proxy: process.env.HTTPS_PROXY ? { server: process.env.HTTPS_PROXY, bypass: '127.0.0.1,localhost' } : undefined, args: ['--ignore-certificate-errors'] });
+const p = await b.newPage({ viewport: { width: 390, height: 844 } });
+p.on('pageerror', e => console.log('pageerror', e.message, e.stack?.split('\n')[1]));
+p.on('console', m => console.log('console', m.type(), m.text().slice(0, 300)));
+p.on('requestfailed', r => console.log('reqfail', r.url().slice(0, 140), r.failure()?.errorText));
+await p.goto(url, { waitUntil: 'networkidle' });
+await p.waitForTimeout(3500);
+console.log(await p.evaluate(() => ({ gsap: typeof gsap, intro: !!window.__intro, cls: document.documentElement.className })));
+if (out) await p.screenshot({ path: out });
+await b.close();

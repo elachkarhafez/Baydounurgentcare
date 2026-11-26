@@ -1,0 +1,1407 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noai, noimageai">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tikiz Burgers · The Legend Of Taste</title>
+<meta name="description" content="Tikiz Burgers in Hadath, Mcharafieh and Aaramoun. Build your burger, fill the bag and send the order to Tikiz on WhatsApp.">
+<meta property="og:title" content="Tikiz Burgers · The Legend Of Taste">
+<meta property="og:description" content="Hadath · Mcharafieh · Aaramoun. Build your burger and send the order on WhatsApp. على ذوقك يا طيّب">
+<meta name="theme-color" content="#0d0c08">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Josefin+Sans:wght@600;700&family=Lemonada:wght@600;700&family=Baloo+Bhaijaan+2:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="media/hero.webp">
+<script>
+/* before first paint: language (saved choice, else Arabic browsers get Arabic) and whether the LED opening plays */
+(function(){var d=document.documentElement,l=null,seen=false;try{l=localStorage.getItem('tikiz.lang');seen=sessionStorage.getItem('tikiz.intro')==='1'}catch(e){}
+l=l?JSON.parse(l):((navigator.language||'en').toLowerCase().indexOf('ar')===0?'ar':'en');var q=location.search.match(/[?&]lang=(en|ar)/);if(q)l=q[1];
+d.lang=l;d.dir=l==='ar'?'rtl':'ltr';var rm=matchMedia('(prefers-reduced-motion: reduce)').matches;
+if(!seen&&!rm&&!/[?&]nointro/.test(location.search))d.classList.add('intro-on');if(rm)d.classList.add('rm');})();
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<style>
+/* Tikiz Burgers. Colours sampled from their logo (yellow #f9ef05, ink #0b0600) and their shop: the black fascia and LED yellow of the
+   storefront sign, the steel prep line and black gloves in their reels.
+   Type: Fredoka (their sign's rounded "The Legend Of Taste"), Josefin Sans (their BURGERS), Lemonada (their #على_ذوقك_يا_طيّب),
+   Baloo Bhaijaan 2 (rounded Arabic for body text, partner to Fredoka). TIKIZ itself is drawn as outlines in the logo. */
+:root{
+  --y:#f9ef05;--led:#ffe81a;--ink:#0b0600;--fascia:#0d0c08;--fascia2:#17150e;--steel:#a7adb3;
+  --cream:#fff8d6;--muted:#c9c3a4;--dim:#8f8a72;--line:rgba(255,248,214,.13);
+  --pad:16px;--nav:56px;
+  --display:'Fredoka',system-ui,sans-serif;--sans:'Fredoka',system-ui,sans-serif;--label:'Josefin Sans','Fredoka',sans-serif;
+}
+html[lang=ar]{--display:'Lemonada','Baloo Bhaijaan 2',sans-serif;--sans:'Baloo Bhaijaan 2',system-ui,sans-serif;--label:'Baloo Bhaijaan 2',sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;scroll-padding-top:64px}
+html.intro-on,html.lock{overflow:hidden}
+body{background:var(--fascia);color:var(--cream);font:400 15px/1.55 var(--sans);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+img,svg,video{display:block;max-width:100%}
+img{height:auto}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+a{color:inherit}
+input,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--led);outline-offset:3px;border-radius:8px}
+.wrap{width:100%;max-width:1160px;margin:0 auto;padding:0 var(--pad)}
+h1,h2,h3{font-family:var(--display);font-weight:600;line-height:1.08;letter-spacing:-.005em}
+h1{font-size:clamp(1.75rem,1.25rem + 2vw,3.2rem)}
+h2{font-size:clamp(1.4rem,1.1rem + 1.4vw,2.35rem)}
+h3{font-size:1.05rem}
+html[lang=ar] h1{font-size:clamp(1.6rem,1.15rem + 1.8vw,2.8rem);line-height:1.5}
+html[lang=ar] h2{font-size:clamp(1.3rem,1rem + 1.2vw,2.1rem);line-height:1.5}
+html[lang=ar] h3{line-height:1.5}
+.lede{color:var(--muted);font-size:15px;max-width:34em}
+.kick{font:700 12px/1 var(--label);letter-spacing:.2em;text-transform:uppercase;color:var(--led);margin-bottom:8px}
+html[lang=ar] .kick{letter-spacing:0;font-size:13px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:48px;padding:0 20px;border-radius:14px;font:600 14px/1 var(--sans);white-space:nowrap;text-decoration:none;transition:transform .18s cubic-bezier(.3,1.6,.5,1),background .2s,box-shadow .2s;position:relative;overflow:hidden}
+.btn:active{transform:scale(.95)}
+.btn-led{background:var(--y);color:var(--ink);box-shadow:0 0 0 1px rgba(0,0,0,.2) inset,0 0 22px -4px rgba(255,232,26,.65)}
+.btn-led:hover{box-shadow:0 0 0 1px rgba(0,0,0,.2) inset,0 0 34px -2px rgba(255,232,26,.85)}
+.btn-ghost{background:rgba(255,248,214,.07);color:var(--cream);box-shadow:0 0 0 1px var(--line) inset}
+.btn-ghost:hover{background:rgba(255,248,214,.13)}
+.btn-ink{background:var(--ink);color:var(--y)}
+.btn-wa{background:#1fa855;color:#fff}
+.btn svg{width:18px;height:18px;flex:none}
+html[dir=rtl] .flip{transform:scaleX(-1)}
+.ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,.4);transform:scale(0);pointer-events:none;animation:rip .55s ease-out forwards}
+@keyframes rip{to{transform:scale(2.6);opacity:0}}
+
+/* ---------- nav ---------- */
+.nav{position:fixed;inset:0 0 auto 0;height:var(--nav);z-index:40;display:flex;align-items:center;transition:background .3s,box-shadow .3s}
+.nav.solid{background:rgba(13,12,8,.93);box-shadow:0 1px 0 var(--line)}
+.nav .wrap{display:flex;align-items:center;gap:10px}
+.brand{display:flex;align-items:center;gap:9px;text-decoration:none;flex:none}
+.brand svg{width:36px;height:36px}
+.brand b{font:700 15px/1 'Josefin Sans',sans-serif;letter-spacing:.14em;color:var(--y);padding-top:2px}
+.links{display:none;gap:22px;margin-inline-start:auto;font:500 14px var(--sans)}
+.links a{text-decoration:none;color:var(--muted);transition:color .2s}
+.links a:hover{color:var(--y)}
+.navr{margin-inline-start:auto;display:flex;align-items:center;gap:8px}
+.lang{height:36px;min-width:46px;padding:0 10px;border-radius:12px;font:600 14px/1 'Fredoka',sans-serif;color:var(--y);box-shadow:0 0 0 1px rgba(249,239,5,.35) inset;display:inline-flex;align-items:center;justify-content:center}
+.lang .ar{font-family:'Baloo Bhaijaan 2',sans-serif;font-size:19px;line-height:1;padding-top:3px}
+.bagbtn{position:relative;width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:rgba(255,248,214,.08);box-shadow:0 0 0 1px var(--line) inset}
+.bagbtn svg{width:20px;height:20px}
+.bagbtn .n{position:absolute;top:-4px;inset-inline-end:-4px;min-width:19px;height:19px;padding:0 5px;border-radius:999px;background:var(--y);color:var(--ink);font:700 11px/19px 'Fredoka',sans-serif;text-align:center;transform:scale(0);transition:transform .3s cubic-bezier(.3,1.7,.5,1)}
+.bagbtn .n.on{transform:scale(1)}
+
+/* ---------- hero: the storefront at night ---------- */
+.hero{position:relative;padding:calc(var(--nav) + 4px) 0 30px;overflow:hidden;isolation:isolate;
+  background:radial-gradient(60% 45% at 50% 18%,rgba(255,232,26,.10),transparent 70%),
+   repeating-linear-gradient(90deg,rgba(255,255,255,.025) 0 1px,transparent 1px 120px),linear-gradient(180deg,#14130c,var(--fascia) 75%)}
+.hero .wrap{display:grid;gap:12px;grid-template-columns:minmax(0,1fr)}
+.wallsign{position:relative;margin:0 auto;width:min(66vw,280px);cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.spill{position:absolute;inset:-35%;z-index:-1;pointer-events:none;opacity:var(--power,0);background:radial-gradient(closest-side,rgba(255,232,26,.30),rgba(255,232,26,.08) 55%,transparent 75%)}
+.embers{position:absolute;inset:-25%;width:150%;height:150%;pointer-events:none;z-index:2}
+.signhint{position:relative;justify-content:center;margin-top:2px;font:600 11px var(--label);letter-spacing:.1em;text-transform:uppercase;color:var(--dim);display:flex;align-items:center;gap:6px;pointer-events:none}
+html[lang=ar] .signhint{letter-spacing:0;font-size:12px}
+.signhint i{width:7px;height:7px;border-radius:50%;background:var(--led);box-shadow:0 0 8px var(--led)}
+.signhint.off i{background:#3b3820;box-shadow:none}
+.hcopy{text-align:center;display:grid;justify-items:center;gap:9px}
+.hcopy h1 em{font-style:normal;color:var(--y);text-shadow:0 0 22px rgba(255,232,26,.45)}
+.ctas{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:4px}
+.status{display:inline-flex;align-items:center;gap:8px;font:500 13px var(--sans);color:var(--muted)}
+.status i{width:8px;height:8px;border-radius:50%;background:#5a5640}
+.status.open i{background:#5ce16a;box-shadow:0 0 10px #5ce16a}
+.hphoto{position:relative;margin-top:8px;width:100%;border-radius:18px;overflow:hidden;box-shadow:0 0 0 1px var(--line),0 24px 50px -20px rgba(0,0,0,.8)}
+.hphoto img{width:100%;aspect-ratio:16/10;object-fit:cover}
+.hphoto span{position:absolute;inset-inline-start:10px;bottom:10px;font:600 11px var(--label);letter-spacing:.08em;text-transform:uppercase;padding:6px 10px;border-radius:9px;background:rgba(13,12,8,.75);color:var(--y)}
+html[lang=ar] .hphoto span{letter-spacing:0;font-size:12px}
+
+/* ---------- the LED sign (SVG) ---------- */
+.led{width:100%;height:auto;overflow:visible}
+.led .seg{--on:0;--t:0}
+.led .glass{fill:rgba(255,240,150,.07)}
+.led .halo{fill:var(--c,#ffe81a);opacity:calc(var(--on) * (.55 + var(--boost,0) * .35))}
+.led .core{fill:var(--c,#ffe81a);opacity:var(--on)}
+.led .hot{fill:#fffbd6;opacity:calc(var(--on) * .45)}
+.led .trace{fill:none;stroke:#ffe81a;stroke-width:5;stroke-dasharray:1 1;stroke-dashoffset:var(--d,1);opacity:var(--t)}
+.led .face{fill:#100f0a}
+.led .edge{fill:none;stroke:#ffe81a;stroke-width:9;stroke-linejoin:round;opacity:var(--on)}
+.led .edgeglow{fill:none;stroke:#ffe81a;stroke-width:26;stroke-linejoin:round;opacity:calc(var(--on) * (.55 + var(--boost,0) * .3))}
+.led .ret{fill:#5f5810;opacity:calc(.35 + var(--on) * .65)}
+.led .ret2{fill:#a69a10;opacity:calc(.25 + var(--on) * .75)}
+.led .ltxt{fill:#ffe81a;opacity:var(--on)}
+.led .ltxtg{fill:#ffe81a;opacity:calc(var(--on) * .7)}
+.led .shine{opacity:0}
+
+/* ---------- intro overlay ---------- */
+#intro{position:fixed;inset:0;z-index:100;display:none;place-items:center}
+#intro .ibg{position:absolute;inset:0;background:radial-gradient(55% 45% at 50% 42%,rgba(255,232,26,.07),transparent 70%),repeating-linear-gradient(90deg,rgba(255,255,255,.025) 0 1px,transparent 1px 120px),#0d0c08}
+html.intro-on #intro{display:grid}
+#intro .isign{position:relative;width:min(78vw,480px);transform-origin:0 0}
+#intro .skip{position:absolute;bottom:max(22px,env(safe-area-inset-bottom));left:0;right:0;text-align:center;font:600 12px var(--label);letter-spacing:.16em;text-transform:uppercase;color:rgba(201,195,164,.55)}
+html[lang=ar] #intro .skip{letter-spacing:0;font-size:13px}
+html.intro-on .hero .wallsign .led{visibility:hidden}
+html.intro-on .rise{opacity:0}
+
+/* ---------- sections ---------- */
+section{position:relative}
+.sec{padding:34px 0}
+.sh{display:flex;align-items:end;justify-content:space-between;gap:12px;margin-bottom:14px}
+.sh p:not(.kick){color:var(--muted);font-size:14px;margin-top:6px;max-width:32em}
+.reveal{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s cubic-bezier(.2,.8,.2,1)}
+.reveal.in{opacity:1;transform:none}
+html.rm .reveal{opacity:1;transform:none;transition:none}
+
+/* ---------- menu ---------- */
+#menu{background:linear-gradient(180deg,var(--fascia),#11100b)}
+.tabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:0 calc(var(--pad) * -1);padding:2px var(--pad) 6px}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;height:38px;padding:0 15px;border-radius:12px;font:600 14px var(--sans);color:var(--muted);box-shadow:0 0 0 1px var(--line) inset;transition:color .2s,background .25s,box-shadow .25s}
+.tab[aria-selected="true"]{color:var(--ink);background:var(--y);box-shadow:0 0 18px -4px rgba(255,232,26,.7)}
+.rail{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin:0 calc(var(--pad) * -1);padding:6px var(--pad) 8px;scroll-padding:0 var(--pad)}
+.rail::-webkit-scrollbar{display:none}
+.card{flex:0 0 64%;scroll-snap-align:start;display:flex;flex-direction:column;border-radius:18px;overflow:hidden;background:linear-gradient(180deg,#1d1b12,#141309);box-shadow:0 0 0 1px var(--line) inset;text-align:start;cursor:pointer;transition:transform .25s cubic-bezier(.3,1.5,.5,1)}
+.card:active{transform:scale(.97)}
+.card .pic{position:relative;aspect-ratio:1/1;background:var(--y);display:grid;place-items:center;overflow:hidden}
+.card .pic img{width:100%;height:100%;object-fit:cover}
+.card .pic svg{width:78%;height:auto}
+.card .pic .ribbon{position:absolute;top:8px;inset-inline-start:8px;font:700 10.5px/1 var(--label);letter-spacing:.1em;text-transform:uppercase;padding:6px 8px;border-radius:8px;background:var(--ink);color:var(--y)}
+html[lang=ar] .card .pic .ribbon{letter-spacing:0;font-size:12px}
+.card .tx{padding:10px 12px 12px;display:grid;gap:4px;flex:1}
+.card h3{font-size:16px}
+.card p{font-size:12.5px;line-height:1.4;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.card .pr{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:4px}
+.card .pr b{font:700 16px 'Fredoka',sans-serif;color:var(--y)}
+.plus{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;background:var(--y);color:var(--ink);position:relative;overflow:hidden}
+.plus svg{width:18px;height:18px}
+.dots{display:flex;justify-content:center;gap:6px;margin-top:10px}
+.dots i{width:6px;height:6px;border-radius:99px;background:rgba(255,248,214,.25);transition:width .3s,background .3s}
+.dots i.on{width:18px;background:var(--y)}
+.loyal{margin-top:14px;display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:14px;background:rgba(249,239,5,.08);box-shadow:0 0 0 1px rgba(249,239,5,.25) inset;font-size:13.5px;color:var(--cream)}
+.loyal svg{width:22px;height:22px;color:var(--y);flex:none}
+
+/* ---------- builder ---------- */
+#build{background:var(--y);color:var(--ink)}
+#build .sh p:not(.kick){color:rgba(11,6,0,.78)}
+#build .kick{color:var(--ink)}
+.bld{display:grid;gap:10px;grid-template-columns:minmax(0,1fr)}
+.stackbox{position:relative;height:250px;display:flex;justify-content:center;align-items:flex-end;border-radius:20px;
+  background:linear-gradient(180deg,rgba(255,255,255,.35),rgba(255,255,255,0) 60%),repeating-linear-gradient(90deg,#c9ced2 0 2px,#dfe3e6 2px 14px);box-shadow:0 0 0 3px var(--ink) inset}
+.stackbox svg{height:100%;width:auto;max-width:100%;overflow:visible;position:relative;z-index:1}
+.stackbox .bname{position:absolute;inset-inline-start:14px;top:12px;z-index:2;font:600 17px/1.25 var(--display);color:var(--ink)}
+.stackbox .bname small{display:block;font:500 12px/1.35 var(--sans);color:rgba(11,6,0,.7);max-width:16em;margin-top:2px}
+.seg2{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:4px;padding:4px;border-radius:14px;background:rgba(11,6,0,.1)}
+.seg2 button{height:38px;border-radius:11px;font:600 14px var(--sans);color:rgba(11,6,0,.75);transition:background .2s,color .2s}
+.seg2 button[aria-pressed="true"]{background:var(--ink);color:var(--y)}
+.bases{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:0 calc(var(--pad) * -1);padding:2px var(--pad)}
+.bases::-webkit-scrollbar{display:none}
+.base{flex:none;height:36px;padding:0 13px;border-radius:11px;font:600 13px var(--sans);background:rgba(11,6,0,.1);color:var(--ink);transition:background .2s,color .2s}
+.base[aria-pressed="true"]{background:var(--ink);color:var(--y)}
+.ctrls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.ctl{display:flex;align-items:center;justify-content:space-between;gap:6px;height:44px;padding-inline:12px 6px;border-radius:12px;background:rgba(11,6,0,.09);font:500 14px var(--sans);color:var(--ink);min-width:0;white-space:nowrap;transition:background .2s,color .2s}
+.ctl>span:first-child{overflow:hidden;text-overflow:ellipsis}
+.ctl.on{background:var(--ink);color:var(--y)}
+button.ctl{width:100%;text-align:start}
+.ctl .ck{width:22px;height:22px;border-radius:7px;display:grid;place-items:center;background:rgba(11,6,0,.14);flex:none;transition:background .2s,transform .25s cubic-bezier(.3,1.8,.5,1)}
+.ctl.on .ck{background:var(--y);transform:rotate(-8deg) scale(1.08)}
+.ctl .ck svg{width:14px;height:14px;opacity:0;transition:opacity .15s}
+.ctl.on .ck svg{opacity:1}
+.ctl small{font-size:11px;opacity:.75;margin-inline-start:5px}
+.step{display:flex;align-items:center;gap:2px;flex:none}
+.step button{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:rgba(255,255,255,.16);font:600 18px/1 'Fredoka',sans-serif}
+.step button:disabled{opacity:.35}
+.step b{min-width:18px;text-align:center;font:700 15px 'Fredoka',sans-serif}
+.sauces{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:0 calc(var(--pad) * -1);padding:2px var(--pad)}
+.sauces::-webkit-scrollbar{display:none}
+.sauce{flex:none;height:34px;padding:0 12px;border-radius:999px;font:500 13px var(--sans);box-shadow:0 0 0 1.5px rgba(11,6,0,.3) inset;color:var(--ink)}
+.sauce[aria-pressed="true"]{background:var(--ink);color:var(--y);box-shadow:none}
+.bbar{display:flex;align-items:center;gap:10px;padding:8px;padding-inline:16px 8px;border-radius:16px;background:var(--ink);color:var(--cream)}
+.bbar .tot{font:700 19px 'Fredoka',sans-serif;white-space:nowrap;color:var(--y)}
+.bbar .tot small{display:block;font:500 11px var(--sans);color:var(--dim);margin-top:-2px}
+.bbar .btn{margin-inline-start:auto}
+.sample{font:500 12px var(--sans);color:rgba(11,6,0,.75)}
+
+/* ---------- reels ---------- */
+.reel{flex:0 0 52%;scroll-snap-align:start;border-radius:18px;overflow:hidden;position:relative;background:#000;aspect-ratio:9/16;max-height:52vh;cursor:pointer}
+.reel video{width:100%;height:100%;object-fit:cover}
+.reel figcaption{position:absolute;left:0;right:0;bottom:0;padding:30px 12px 11px;font:500 13px/1.35 var(--sans);background:linear-gradient(transparent,rgba(0,0,0,.85))}
+.reel .play{position:absolute;top:10px;inset-inline-end:10px;width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:rgba(0,0,0,.5)}
+.reel .play svg{width:14px;height:14px}
+.offer{flex:0 0 72%;scroll-snap-align:start;border-radius:18px;overflow:hidden;display:flex;flex-direction:column;background:var(--y);color:var(--ink);max-height:52vh}
+.offer img{width:100%;flex:1;min-height:0;object-fit:cover;object-position:50% 16%}
+.offer .tx{padding:12px 14px;display:grid;gap:6px;align-content:start}
+.offer h3{font-size:17px}
+.offer p{font-size:12.5px;line-height:1.4;color:rgba(11,6,0,.78);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.offer .pr{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.offer .pr b{font:700 20px 'Fredoka',sans-serif}
+
+/* ---------- branches ---------- */
+#where{background:linear-gradient(180deg,#11100b,var(--fascia))}
+.signpic{border-radius:18px;overflow:hidden;margin-bottom:10px;box-shadow:0 0 0 1px var(--line)}
+.signpic img{width:100%;aspect-ratio:21/10;object-fit:cover;object-position:50% 0}
+.branches{display:grid;gap:8px}
+.br{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:16px;background:rgba(255,248,214,.05);box-shadow:0 0 0 1px var(--line) inset;text-decoration:none}
+.br .ii{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:rgba(249,239,5,.12);color:var(--y);flex:none;font:700 15px 'Fredoka',sans-serif}
+.br .ii svg{width:20px;height:20px}
+.br b{display:block;font:600 15px var(--sans)}
+.br span{display:block;font-size:13px;color:var(--muted);line-height:1.4}
+.br .go{margin-inline-start:auto;color:var(--dim);flex:none}
+.br .go svg{width:18px;height:18px}
+
+/* ---------- closer ---------- */
+#end{padding:40px 0 30px;text-align:center;overflow:hidden;background:radial-gradient(60% 70% at 50% 0%,rgba(255,232,26,.14),transparent 70%),var(--fascia)}
+#end .lock{width:min(46vw,200px);margin:0 auto 14px}
+#end .lock svg{width:100%;height:auto}
+#end h2{margin-bottom:8px}
+#end .lede{margin:0 auto 16px}
+footer{padding:22px 0 calc(96px + env(safe-area-inset-bottom));border-top:1px solid var(--line);font-size:12.5px;color:var(--dim);text-align:center}
+footer p+p{margin-top:6px}
+footer a{color:var(--muted)}
+.studio{display:inline-flex;align-items:center;gap:8px;margin-top:14px;padding:8px 14px;border-radius:999px;background:rgba(0,0,0,.45);color:#fff;font:500 12px/1 'Fredoka',sans-serif;text-decoration:none;border:1px solid rgba(255,255,255,.14);direction:ltr}
+.studio i{width:10px;height:10px;border-radius:3px;background:conic-gradient(from 210deg,#ff5a1f,#ffb03b,#ff5a1f)}
+
+/* ---------- sticky bar (phones) ---------- */
+.sbar{position:fixed;left:10px;right:10px;bottom:max(10px,env(safe-area-inset-bottom));z-index:35;display:flex;gap:6px;padding:6px;border-radius:18px;background:rgba(13,12,8,.95);box-shadow:0 0 0 1px var(--line) inset,0 12px 30px rgba(0,0,0,.5);transition:transform .35s cubic-bezier(.2,.8,.2,1),opacity .3s}
+.sbar.hide{transform:translateY(130%);opacity:0;pointer-events:none}
+.sbar .btn{flex:1;height:46px;padding:0 10px}
+.sbar .bagsum{flex:0 0 auto}
+.sbar .lang{height:46px;min-width:46px;border-radius:13px}
+
+/* ---------- sheets ---------- */
+.scrim{position:fixed;inset:0;z-index:60;background:rgba(5,5,3,.62);opacity:0;pointer-events:none;transition:opacity .3s}
+.scrim.on{opacity:1;pointer-events:auto}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:61;max-height:92vh;max-height:92dvh;display:flex;flex-direction:column;border-radius:24px 24px 0 0;background:#1a180f;box-shadow:0 -1px 0 var(--line),0 -20px 60px rgba(0,0,0,.6);transform:translateY(105%);transition:transform .45s cubic-bezier(.2,.9,.2,1);visibility:hidden}
+.sheet.on{transform:none;visibility:visible}
+.sheet .grab{width:44px;height:5px;border-radius:9px;background:rgba(255,248,214,.22);margin:8px auto 0;flex:none}
+.sheet .x{position:absolute;inset-inline-end:12px;top:12px;width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:rgba(255,248,214,.08);z-index:2}
+.sheet .x svg{width:18px;height:18px}
+.sheet .body{overflow-y:auto;padding:10px var(--pad) 16px;overscroll-behavior:contain}
+.sheet .foot{flex:none;padding:10px var(--pad) max(12px,env(safe-area-inset-bottom));border-top:1px solid var(--line);display:flex;gap:10px;align-items:center;background:#1a180f}
+.sheet .foot .btn{flex:1}
+.ihero{position:relative;height:min(36vh,270px);display:grid;place-items:center;border-radius:18px;margin-top:6px;overflow:hidden;background:var(--y)}
+.ihero img{width:100%;height:100%;object-fit:cover}
+.ihero svg{height:82%;width:auto}
+.ihead{display:flex;justify-content:space-between;align-items:baseline;margin:14px 0 4px;gap:10px}
+.ihead h3{font-size:22px}
+.price{font:700 20px 'Fredoka',sans-serif;white-space:nowrap;color:var(--y)}
+.optg{margin-top:14px}
+.optg h4{font:700 12px var(--label);letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:8px}
+html[lang=ar] .optg h4{letter-spacing:0;font-size:13px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{height:38px;padding:0 13px;border-radius:12px;font:500 14px var(--sans);background:rgba(255,248,214,.06);box-shadow:0 0 0 1px var(--line) inset;color:var(--muted);transition:background .2s,color .2s,box-shadow .2s,transform .2s cubic-bezier(.3,1.8,.5,1)}
+.chip.on{background:rgba(249,239,5,.14);color:var(--cream);box-shadow:0 0 0 1.5px var(--y) inset}
+.chip.off{text-decoration:line-through;color:var(--dim)}
+.chip:active{transform:scale(.93)}
+.chip small{opacity:.7;margin-inline-start:4px}
+.qty{display:flex;align-items:center;gap:4px;background:rgba(255,248,214,.07);border-radius:14px;padding:4px}
+.qty button{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;font:600 20px/1 'Fredoka',sans-serif;background:rgba(255,248,214,.08)}
+.qty b{min-width:22px;text-align:center;font:700 16px 'Fredoka',sans-serif}
+textarea,.field input{width:100%;border-radius:14px;border:0;background:rgba(255,248,214,.06);box-shadow:0 0 0 1px var(--line) inset;padding:12px 14px;font-size:15px;resize:none}
+textarea:focus,.field input:focus{outline:0;box-shadow:0 0 0 1.5px var(--y) inset}
+.field{display:grid;gap:6px;margin-top:12px}
+.field label,.field .lab{font:700 12px var(--label);letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+html[lang=ar] .field label,html[lang=ar] .field .lab{letter-spacing:0;font-size:13px}
+.field.bad input{box-shadow:0 0 0 1.5px #ff5a3c inset}
+.dk .seg2{background:rgba(255,248,214,.06)}
+.dk .seg2 button{color:var(--muted)}
+.dk .seg2 button[aria-pressed="true"]{background:var(--y);color:var(--ink)}
+.bagh{display:flex;align-items:center;gap:10px;padding:14px var(--pad) 6px}
+.bagh h3{font-size:21px}
+.steps{display:flex;gap:4px;margin-inline-start:auto;margin-inline-end:46px}
+.steps i{width:22px;height:4px;border-radius:9px;background:rgba(255,248,214,.18);transition:background .3s}
+.steps i.on{background:var(--y)}
+.line{display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.line .th{width:58px;height:58px;flex:none;border-radius:14px;display:grid;place-items:center;background:var(--y);overflow:hidden}
+.line .th img{width:100%;height:100%;object-fit:cover}
+.line .th svg{width:84%;height:auto}
+.line .tx{flex:1;min-width:0}
+.line .tx b{display:block;font:600 15px var(--sans)}
+.line .tx span{display:block;font-size:12.5px;color:var(--muted);line-height:1.35}
+.line .rt{display:grid;justify-items:end;gap:6px}
+.line .rt b{font:700 14px 'Fredoka',sans-serif;white-space:nowrap}
+.line .qty{padding:2px}
+.line .qty button{width:30px;height:30px;font-size:16px}
+.empty{text-align:center;padding:24px 10px;color:var(--muted)}
+.empty svg{width:96px;height:96px;margin:0 auto 10px}
+.totals{margin-top:10px;display:grid;gap:4px;font-size:14px;color:var(--muted)}
+.totals div{display:flex;justify-content:space-between}
+.totals .big{color:var(--cream);font-weight:700;font-size:18px;margin-top:4px}
+.msg{white-space:pre-wrap;font:400 13px/1.55 var(--sans);background:rgba(255,248,214,.05);border-radius:14px;padding:12px 14px;color:var(--muted);margin-top:12px;max-height:30vh;overflow:auto;unicode-bidi:plaintext;text-align:start}
+.done{text-align:center;padding:8px 0}
+.done .code{display:inline-block;margin:10px 0 2px;padding:6px 14px;border-radius:10px;background:rgba(249,239,5,.14);color:var(--y);font:700 15px 'Fredoka',sans-serif;letter-spacing:.06em;direction:ltr}
+.done svg.tick{width:76px;height:76px;margin:6px auto 0}
+.note{font-size:12.5px;color:var(--dim);margin-top:10px}
+.toast{position:fixed;left:50%;bottom:calc(78px + env(safe-area-inset-bottom));z-index:90;transform:translate(-50%,20px);opacity:0;pointer-events:none;display:flex;align-items:center;gap:10px;padding:8px;padding-inline:14px 8px;border-radius:14px;background:var(--y);color:var(--ink);font:600 14px var(--sans);box-shadow:0 14px 40px rgba(0,0,0,.45);transition:transform .35s cubic-bezier(.3,1.5,.5,1),opacity .25s;white-space:nowrap}
+.toast.on{transform:translate(-50%,0);opacity:1;pointer-events:auto}
+.toast button{height:30px;padding:0 12px;border-radius:9px;background:var(--ink);color:var(--y);font:600 13px var(--sans)}
+.flyer{position:fixed;left:0;top:0;z-index:95;pointer-events:none;width:68px;height:68px;border-radius:16px;overflow:hidden;background:var(--y);display:grid;place-items:center;box-shadow:0 0 24px rgba(255,232,26,.7)}
+.flyer img{width:100%;height:100%;object-fit:cover}
+.flyer svg{width:84%;height:auto}
+.spark{position:fixed;left:0;top:0;z-index:96;width:6px;height:6px;border-radius:50%;pointer-events:none;background:var(--led);box-shadow:0 0 8px var(--led)}
+@keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+.shake{animation:shake .38s}
+.rarr{display:none;width:40px;height:40px;border-radius:12px;place-items:center;box-shadow:0 0 0 1px var(--line) inset}
+.rarr svg{width:18px;height:18px}
+.igbtn{height:40px;padding:0 12px;font-size:13px;flex:none}
+@media (max-width:420px){.igbtn{display:none}}
+@media (hover:hover) and (pointer:fine){.rarr{display:grid}.card:hover{transform:translateY(-3px)}}
+
+/* ---------- tablet / desktop ---------- */
+@media (min-width:700px){
+  :root{--pad:28px;--nav:64px}
+  body{font-size:16px}
+  .sec{padding:56px 0}
+  .card{flex-basis:calc(33.333% - 7px)}
+  .reel{flex-basis:calc(26% - 7px)}
+  .offer{flex-basis:calc(40% - 7px)}
+  .sheet{left:auto;right:0;top:0;bottom:0;width:440px;max-height:none;border-radius:24px 0 0 24px;transform:translateX(105%)}
+  html[dir=rtl] .sheet{right:auto;left:0;border-radius:0 24px 24px 0;transform:translateX(-105%)}
+  .sheet.on,html[dir=rtl] .sheet.on{transform:none}
+  .sheet .grab{display:none}
+  .toast{bottom:28px}
+  .sbar{display:none}
+  footer{padding-bottom:30px}
+  .branches{grid-template-columns:1fr 1fr}
+}
+@media (min-width:1000px){
+  .links{display:flex}
+  .navr{margin-inline-start:18px}
+  .card{flex-basis:calc(25% - 8px)}
+  .hero{padding-bottom:44px}
+  .hero .wrap{grid-template-columns:1fr 1fr;align-items:center;gap:18px 48px}
+  .wallsign{width:min(100%,400px)}
+  .hcopy{text-align:start;justify-items:start}
+  .ctas{justify-content:flex-start}
+  .hphoto{margin-top:6px;max-width:470px}
+  .hphoto img{aspect-ratio:2/1}
+  .bld{grid-template-columns:1fr 1fr;gap:12px 28px;align-items:start}
+  .bld>*{grid-column:2}
+  .stackbox{grid-column:1;grid-row:1 / span 6;height:440px;position:sticky;top:90px}
+  .where-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:20px;align-items:center}
+  .signpic{margin:0}
+}
+@media (min-width:1000px) and (max-height:820px){
+  .wallsign{width:min(100%,350px)}
+  .hphoto img{aspect-ratio:5/2}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<div id="intro" aria-hidden="true">
+  <div class="ibg"></div>
+  <div class="isign"><div class="spill"></div><div class="isvg"></div></div>
+  <div class="skip" data-t="skip">Tap to skip</div>
+</div>
+
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Tikiz Burgers"><svg id="brandmark" aria-hidden="true"></svg><b>TIKIZ</b></a>
+    <nav class="links" aria-label="Sections"><a href="#menu" data-t="n1">Menu</a><a href="#build" data-t="n2">Build yours</a><a href="#line" data-t="n3">On the line</a><a href="#where" data-t="n4">Branches</a></nav>
+    <div class="navr">
+      <button class="lang" data-lang aria-label="عربي"><span class="ar">ع</span></button>
+      <button class="bagbtn" id="bagbtn" aria-label="Bag" data-t-aria="bag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8L5 8Z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg><span class="n" id="bagn">0</span></button>
+    </div>
+  </div>
+</header>
+
+<main>
+<section class="hero" id="top">
+  <div class="wrap">
+    <div class="wallsign" id="wallsign" role="button" tabindex="0" aria-label="Tikiz sign" data-t-aria="signAria">
+      <div class="spill"></div>
+      <canvas class="embers" id="embers" aria-hidden="true"></canvas>
+      <div id="heroSign"></div>
+      <div class="signhint" id="signhint"><i></i><span data-t="hint">tap the sign</span></div>
+    </div>
+    <div class="hcopy">
+      <p class="status rise" id="status"><i></i><span>...</span></p>
+      <h1 class="rise" data-t-html="h1">The <em>Legend</em> Of Taste</h1>
+      <p class="lede rise" data-t="lede">...</p>
+      <div class="ctas rise">
+        <a class="btn btn-led" href="#build" data-t="cta1">Build my burger</a>
+        <a class="btn btn-ghost" href="#menu" data-t="cta2">See the menu</a>
+      </div>
+      <figure class="hphoto rise"><img src="media/hero.webp" width="900" height="675" alt="" data-t-alt="heroAlt"><span data-t="heroTag">From our reels</span></figure>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="menu">
+  <div class="wrap">
+    <div class="sh reveal"><div><p class="kick" data-t="mK">Menu</p><h2 data-t="mH">Pick it, tap it, change it</h2><p data-t="mP">...</p></div>
+      <div style="display:flex;gap:6px"><button class="rarr" data-rail="#rail" data-d="-1" aria-label="Previous"><svg class="flip" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="m15 5-7 7 7 7"/></svg></button><button class="rarr" data-rail="#rail" data-d="1" aria-label="Next"><svg class="flip" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="m9 5 7 7-7 7"/></svg></button></div></div>
+    <div class="tabs reveal" id="tabs" role="tablist"></div>
+    <div class="rail reveal" id="rail"></div>
+    <div class="dots" id="rdots"></div>
+    <p class="loyal reveal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11h16M5 11a7 5 0 0 1 14 0M5 15h14l-1 3H6z"/><path d="M12 4v1"/></svg><span data-t="loyal">Every 8 orders, a burger on us.</span></p>
+  </div>
+</section>
+
+<section class="sec" id="build">
+  <div class="wrap">
+    <div class="sh reveal"><div><p class="kick" data-t="bK">Build yours</p><h2 data-t="bH">Stack it like the line does</h2><p data-t="bP">...</p></div></div>
+    <div class="bld reveal">
+      <div class="stackbox" id="stackbox"><div class="bname" id="bname"></div><svg id="stack" viewBox="10 110 380 290" role="img" aria-label="Your burger"></svg></div>
+      <div class="bases" id="bases"></div>
+      <div class="seg2" id="prot"></div>
+      <div class="ctrls" id="ctrls"></div>
+      <div class="sauces" id="sauces"></div>
+      <div class="bbar"><div class="tot" id="btot">$0</div><button class="btn btn-led" id="badd" data-t="addBag">Add to bag</button></div>
+      <p class="sample" data-t="sampleNote">...</p>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="line">
+  <div class="wrap">
+    <div class="sh reveal"><div><p class="kick" data-t="lK">On the line</p><h2 data-t="lH">Straight from our reels</h2><p data-t="lP">...</p></div><div style="display:flex;gap:6px;flex:none"><button class="rarr" data-rail="#reels" data-d="-1" aria-label="Previous"><svg class="flip" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="m15 5-7 7 7 7"/></svg></button><button class="rarr" data-rail="#reels" data-d="1" aria-label="Next"><svg class="flip" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="m9 5 7 7-7 7"/></svg></button><a class="btn btn-ghost igbtn" href="https://www.instagram.com/tikiz_burgers/" target="_blank" rel="noopener" dir="ltr">@tikiz_burgers</a></div></div>
+    <div class="rail reveal" id="reels"></div>
+    <div class="dots" id="ldots"></div>
+  </div>
+</section>
+
+<section class="sec" id="where">
+  <div class="wrap">
+    <div class="sh reveal"><div><p class="kick" data-t="wK">Branches</p><h2 data-t="wH">Find the yellow sign</h2><p id="status2">...</p></div></div>
+    <div class="where-grid reveal">
+      <figure class="signpic"><img src="media/sign.webp" width="900" height="537" loading="lazy" alt="" data-t-alt="signAlt"></figure>
+      <div class="branches" id="branches"></div>
+    </div>
+  </div>
+</section>
+
+<section id="end">
+  <div class="wrap">
+    <div class="lock reveal"><svg id="lockup" aria-hidden="true"></svg></div>
+    <h2 class="reveal" data-t="eH">Hungry?</h2>
+    <p class="lede reveal" data-t="eP">...</p>
+    <div class="ctas reveal"><a class="btn btn-led" href="#build" data-t="cta1">Build my burger</a><a class="btn btn-wa" target="_blank" rel="noopener" href="https://wa.me/96171497014"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.6-1.2A9 9 0 1 0 12 3Zm0 1.6a7.4 7.4 0 1 1-3.8 13.8l-.3-.2-2.7.7.7-2.6-.2-.3A7.4 7.4 0 0 1 12 4.6Z"/></svg><span data-t="waGo">WhatsApp us</span></a></div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><span data-t="footA">Tikiz Burgers · Hadath · Mcharafieh · Aaramoun</span> · <a href="https://www.instagram.com/tikiz_burgers/" target="_blank" rel="noopener" dir="ltr">@tikiz_burgers</a> · <a href="https://wa.me/96171497014" target="_blank" rel="noopener" dir="ltr">71 497 014</a></p>
+    <p data-t="foot">...</p>
+    <a class="studio" href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener" aria-label="Site by ElaSystems (opens in a new tab)"><i aria-hidden="true"></i><span>Site by <b>ElaSystems</b></span></a>
+  </div>
+</footer>
+
+<div class="sbar" id="sbar">
+  <a class="btn btn-led" href="#build" data-t="cta1s">Build</a>
+  <button class="btn btn-ghost bagsum" data-open-bag id="sbag">Bag · $0</button>
+  <button class="lang" data-lang aria-label="عربي"><span class="ar">ع</span></button>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<aside class="sheet" id="isheet" role="dialog" aria-modal="true" aria-label="Item">
+  <div class="grab"></div>
+  <button class="x" data-close aria-label="Close" data-t-aria="close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+  <div class="body dk" id="ibody"></div>
+  <div class="foot"><div class="qty"><button id="iminus" aria-label="-">−</button><b id="iq">1</b><button id="iplus" aria-label="+">+</button></div><button class="btn btn-led" id="iadd">...</button></div>
+</aside>
+<aside class="sheet" id="bag" role="dialog" aria-modal="true" aria-label="Bag">
+  <div class="grab"></div>
+  <button class="x" data-close aria-label="Close" data-t-aria="close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+  <div class="bagh"><h3 id="bagtitle">Bag</h3><div class="steps" id="steps"><i></i><i></i><i></i></div></div>
+  <div class="body dk" id="bbody"></div>
+  <div class="foot" id="bfoot"></div>
+</aside>
+<div class="toast" id="toast" role="status"><span id="toastt"></span><button data-open-bag data-t="see">View</button></div>
+
+<script>
+const MARK = /*MARK*/null;
+</script>
+<script>
+(function(){
+'use strict';
+const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const FINE = matchMedia('(hover: hover) and (pointer: fine)').matches;
+const store = { get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} } };
+const RTL = () => document.documentElement.dir === 'rtl';
+
+/* ================= CONFIG: the business (menu + prices from their ala.menu page, contact from their posts) ================= */
+const CONFIG = {
+  wa: '96171497014', ig: 'tikiz_burgers', tz: 'Asia/Beirut',
+  hours: { open: 12 * 60, close: 2 * 60 }, // 12 PM to 2 AM
+  branches: [
+    { id: 'hadath', map: 'https://maps.google.com/?cid=14607424444781839453' },
+    { id: 'mcharafieh', map: 'https://maps.google.com/?cid=5206759189376398571' },
+    { id: 'aaramoun', map: 'https://maps.google.com/?cid=12201652136888760169' }
+  ],
+  extras: { mozz: 1, cheddar: .75, bbq: .6, jalapeno: .5, patty2: 3.5 },
+  // b: builder recipe for burgers (beef or chicken). photos only from their own reels and ads
+  items: [
+    { id: 'tikiz', cat: 'burgers', price: 8, prot: 1, pop: 1, img: 'media/zinger-ad.webp', b: { patty: 1, mozz: 1, cheddar: 1, bbq: 1, chips: 1, iceberg: 1, tomato: 1, pickles: 1, sauce: 'classic' } },
+    { id: 'lebanese', cat: 'burgers', price: 6, prot: 1, pop: 1, b: { patty: 1, coleslaw: 1, fries: 1, pickles: 1, sauce: 'ketchup' } },
+    { id: 'cheese', cat: 'burgers', price: 6, prot: 1, img: 'media/cheese.webp', b: { patty: 1, cheddar: 1, chips: 1, iceberg: 1, tomato: 1, pickles: 1, sauce: 'classic' } },
+    { id: 'bbqb', cat: 'burgers', price: 6, prot: 1, img: 'media/bbq.webp', b: { patty: 1, bbq: 1, chips: 1, iceberg: 1, tomato: 1, pickles: 1, sauce: 'classic' } },
+    { id: 'chili', cat: 'burgers', price: 6, prot: 1, b: { patty: 1, chips: 1, iceberg: 1, tomato: 1, jalapeno: 1, sauce: 'buffalo' } },
+    { id: 'crunchy', cat: 'burgers', price: 6.5, img: 'media/crispy-burger.webp', b: { patty: 1, chicken: 1, fries: 1, pickles: 1, coleslaw: 1, sauce: 'garlic' } },
+    { id: 'honey', cat: 'burgers', price: 8, prot: 1, b: { patty: 1, mozz: 1, chips: 1, iceberg: 1, tomato: 1, pickles: 1, sauce: 'honey' } },
+    { id: 'badboy', cat: 'burgers', price: 7.5, prot: 1, b: { patty: 1, cheddar: 1, bbq: 1, chips: 1, tomato: 1, sauce: 'mayo' } },
+    { id: 'double', cat: 'burgers', price: 11.5, prot: 1, b: { patty: 2, mozz: 1, cheddar: 1, bbq: 1, chips: 1, iceberg: 1, tomato: 1, pickles: 1, sauce: 'classic' } },
+    { id: 'bacon', cat: 'burgers', price: 8, b: { patty: 1, mozz: 1, cheddar: 1, iceberg: 1, tomato: 1, sauce: 'mayo' } },
+    { id: 'tzinger', cat: 'sandwich', price: 8, pop: 1, img: 'media/zinger.webp' },
+    { id: 'zinger', cat: 'sandwich', price: 7 },
+    { id: 'tawouk', cat: 'sandwich', price: 6 },
+    { id: 'crispys', cat: 'sandwich', price: 6 },
+    { id: 'twister', cat: 'sandwich', price: 6.5 },
+    { id: 'habash', cat: 'sandwich', price: 8.5 },
+    { id: 'hotdog', cat: 'sandwich', price: 4.5, img: 'media/hotdog.webp' },
+    { id: 'crispy5', cat: 'plates', price: 9.5, pop: 1 },
+    { id: 'crispy3', cat: 'plates', price: 7 },
+    { id: 'wings', cat: 'plates', price: 7.5, pop: 1 },
+    { id: 'burgerplate', cat: 'plates', price: 10 },
+    { id: 'tikizplate', cat: 'plates', price: 11 },
+    { id: 'box2', cat: 'offers', price: 17.99, img: 'media/box.webp' },
+    { id: 'zinger5', cat: 'offers', price: 15.99 },
+    { id: 'wingscrispy', cat: 'offers', price: 17.99 },
+    { id: 'combo', cat: 'offers', price: 16.99 },
+    { id: 'family', cat: 'offers', price: 22, img: 'media/tray.webp' },
+    { id: 'boxfries', cat: 'sides', price: 2.5, img: 'media/fries.webp' },
+    { id: 'xfries', cat: 'sides', price: 4.5 },
+    { id: 'mozzsticks', cat: 'sides', price: 5, pop: 1 },
+    { id: 'cheddarballs', cat: 'sides', price: 5 },
+    { id: 'rings', cat: 'sides', price: 4.5 },
+    { id: 'curly', cat: 'sides', price: 4 },
+    { id: 'pepsi', cat: 'drinks', price: 1 }, { id: 'sevenup', cat: 'drinks', price: 1 }, { id: 'miranda', cat: 'drinks', price: 1 }, { id: 'water', cat: 'drinks', price: .4 }
+  ],
+  cats: ['burgers', 'sandwich', 'plates', 'offers', 'sides', 'drinks'],
+  reels: [{ v: 'media/build.mp4', p: 'media/build-poster.webp', k: 'r1' }, { v: 'media/fries.mp4', p: 'media/fries-poster.webp', k: 'r2' }, { v: 'media/boxes.mp4', p: 'media/boxes-poster.webp', k: 'r3' }]
+};
+const LAYERS = ['patty', 'mozz', 'cheddar', 'bbq', 'chips', 'iceberg', 'tomato', 'pickles', 'coleslaw', 'fries', 'jalapeno'];
+const PAID = { mozz: 'mozz', cheddar: 'cheddar', bbq: 'bbq', jalapeno: 'jalapeno' };
+const SAUCES = ['classic', 'mayo', 'garlic', 'buffalo', 'honey', 'ketchup'];
+
+/* ================= words: English and Arabic (the way Lebanese menus write it) ================= */
+const T = {
+  en: {
+    skip: 'Tap to skip', hint: 'tap the sign', hintOff: 'sign off', signAria: 'Tikiz sign. Tap to switch it off and on.', close: 'Close', bag: 'Bag',
+    n1: 'Menu', n2: 'Build yours', n3: 'On the line', n4: 'Branches',
+    h1: 'The <em>Legend</em> Of Taste',
+    lede: 'Burgers, zingers and crispy from Hadath, Mcharafieh and Aaramoun. Build yours here and the order goes straight to our WhatsApp.',
+    cta1: 'Build my burger', cta1s: 'Build', cta2: 'See the menu', heroAlt: 'A tray of Tikiz burgers, hot dogs and fries on the line', heroTag: 'From our reels',
+    open: 'Open now · until 2 AM', opensAt: 'Closed · opens at 12 PM',
+    mK: 'Menu', mH: 'Pick it, tap it, change it', mP: 'Prices from our menu in dollars. Tap anything to see it big and choose your options.',
+    loyal: 'Every 8 orders, a burger on us.',
+    bK: 'Build yours', bH: 'Stack it like the line does', bP: 'Start from one of our burgers, pick beef or chicken and tap the layers. They drop in as you go and the price follows.',
+    addBag: 'Add to bag', sampleNote: 'Extras at menu prices: mozzarella patty $1, cheddar $0.75, BBQ $0.60, jalapeño $0.50, a second patty like our doubles. Veg and sauce swaps are on us.',
+    lK: 'On the line', lH: 'Straight from our reels', lP: 'Every burger is built by hand on this line. Tap a clip to pause it.',
+    wK: 'Branches', wH: 'Find the yellow sign', signAlt: 'The lit Tikiz Burgers sign over the shop',
+    eH: 'Hungry?', eP: 'Build it, check the bag, and the order lands on our WhatsApp already written out.', waGo: 'WhatsApp us',
+    footA: 'Tikiz Burgers · Hadath · Mcharafieh · Aaramoun',
+    foot: 'Menu and prices from the Tikiz menu on ala.menu and can change. This site takes no payment: we confirm every order and the delivery fee on WhatsApp. Also on Toters.',
+    see: 'View', added: 'added', each: 'each', sauceH: 'Sauce',
+    cats: { burgers: 'Burgers', sandwich: 'Sandwiches', plates: 'Plates', offers: 'Offers', sides: 'Sides', drinks: 'Drinks' },
+    beef: 'Beef', chicken: 'Chicken', popular: 'Popular', photo: 'Our photo',
+    L: { patty: 'Patty', mozz: 'Mozzarella patty', cheddar: 'Cheddar', bbq: 'BBQ', chips: 'Chips', iceberg: 'Iceberg', tomato: 'Tomato', pickles: 'Pickles', coleslaw: 'Coleslaw', fries: 'Fries', jalapeno: 'Jalapeño' },
+    LC: { patty: 'Patties', mozz: 'Mozzarella', cheddar: 'Cheddar', bbq: 'BBQ', chips: 'Chips', iceberg: 'Iceberg', tomato: 'Tomato', pickles: 'Pickles', coleslaw: 'Coleslaw', fries: 'Fries', jalapeno: 'Jalapeño' },
+    LS: { patty: 'patty', mozz: 'mozzarella patty', cheddar: 'cheddar', bbq: 'BBQ', chips: 'chips', iceberg: 'iceberg', tomato: 'tomato', pickles: 'pickles', coleslaw: 'coleslaw', fries: 'fries', jalapeno: 'jalapeño' },
+    S: { classic: 'Classic sauce', mayo: 'Mayo', garlic: 'Garlic mayo', buffalo: 'Buffalo', honey: 'Honey mustard', ketchup: 'Ketchup' },
+    I: {
+      tikiz: ['Tikiz burger', 'Beef or chicken, mozzarella patty, extra cheddar, extra BBQ, chips, iceberg, tomato, pickles.'],
+      lebanese: ['Lebanese burger', 'Beef or chicken, ketchup, coleslaw, fries, pickles.'],
+      cheese: ['Cheese burger', 'Beef or chicken, extra cheddar, classic sauce, chips, iceberg, tomato, pickles.'],
+      bbqb: ['BBQ burger', 'Beef or chicken, extra BBQ, chips, iceberg, tomato, pickles.'],
+      chili: ['Chili burger', 'Beef or chicken, mayo, buffalo, chips, iceberg, tomato, jalapeño.'],
+      crunchy: ['Crunchy chicken burger', 'Crunchy chicken, garlic mayo, fries, pickles, coleslaw, ketchup.'],
+      honey: ['Honey mustard burger', 'Beef or chicken, honey mustard, mozzarella patty, chips, iceberg, tomato, pickles.'],
+      badboy: ['Bad boy', 'Beef or chicken, mayo, cheddar, BBQ, chips, mozzarella and tomato on the grill.'],
+      double: ['Double Tikiz burger', 'Two patties (beef or chicken), mozzarella patty, extra cheddar, extra BBQ, chips, iceberg, tomato, pickles.'],
+      bacon: ['Bacon burger', '120 g beef, mayonnaise, cheddar, iceberg, tomato, 2 beef bacon, mozzarella patty.'],
+      tzinger: ['Tikiz zinger', 'Chicken, mozzarella patty, classic sauce, cheddar, BBQ, chips, iceberg, tomato, pickles.'],
+      zinger: ['Zinger', 'Chicken, classic sauce, BBQ, chips, iceberg, tomato, pickles.'],
+      tawouk: ['Tawouk', 'Tawouk, garlic, fries, coleslaw, pickles.'],
+      crispys: ['Crispy sandwich', '2 crispy, garlic, fries, coleslaw, pickles.'],
+      twister: ['Twister', '2 crispy, classic, cheddar and BBQ sauces, tomato, chips, iceberg, pickles.'],
+      habash: ['Tikiz habash zinger', 'Chicken, mozzarella patty, habash, classic sauce, cheddar, BBQ, chips, iceberg, tomato, pickles.'],
+      hotdog: ['Special hot dog', 'Hot dog, mayo, ketchup, iceberg, cheddar, chips.'],
+      crispy5: ['Crispy 5', '5 crispy pieces, fries, cups of cheddar, classic, garlic, pickles and coleslaw.'],
+      crispy3: ['Crispy 3', '3 crispy pieces, fries, cups of cheddar, classic, garlic, pickles and coleslaw.'],
+      wings: ['Plate wings', '8 wings (BBQ, chili or cheddar) with fries and sauce.'],
+      burgerplate: ['Burger plate', 'Cheese, chili, BBQ or Lebanese burger, box fries and a cup of classic sauce.'],
+      tikizplate: ['Tikiz plate', '3 crispy, 5 cheddar balls, fries, 2 BBQ dips, 2 cheddar dips, 1 coleslaw.'],
+      box2: ['5 crispy + 2 burgers', 'Crispy plate of 5 and 2 burgers (chili, cheese, BBQ, cajun, crunchy or Lebanese) with fries and sauces. Our savings box.'],
+      zinger5: ['Zinger + 5 crispy', 'Crispy plate of 5 and a zinger burger with fries, sauces and Pepsi.'],
+      wingscrispy: ['Wings and crispy', '8 wings and 5 crispy with fries, Pepsi and sauces.'],
+      combo: ['Tikiz combo', '3 onion rings, 3 crispy, 3 mozzarella sticks, 3 crunchy sticks, 3 cheddar balls.'],
+      family: ['Family meal', '10 crispy, fries, sauce and 2 burgers (BBQ, Lebanese, chili or cheese).'],
+      boxfries: ['Box fries', 'Fries with a cup of classic sauce.'],
+      xfries: ['Extra box fries', 'Fries with BBQ and cheddar sauce and chips.'],
+      mozzsticks: ['Mozzarella sticks', '5 pieces with a cup of classic sauce.'],
+      cheddarballs: ['Cheddar balls', '5 pieces with honey mustard dip.'],
+      rings: ['Onion rings', '5 pieces with honey mustard.'],
+      curly: ['Curly fries', '150 g with a cup of classic sauce.'],
+      pepsi: ['Pepsi', 'Can.'], sevenup: ['7up', 'Can.'], miranda: ['Miranda', 'Can.'], water: ['Water', 'Small bottle.']
+    },
+    B: { hadath: ['Hadath', 'Parking No. 4, near the Lebanese University'], mcharafieh: ['Mcharafieh', 'Hadi Hassan Nasrallah'], aaramoun: ['Aaramoun', 'Choueifat El Amroussieh'] },
+    hoursB: '12 PM to 2 AM', delivery: 'Delivery', deliveryS: '71 497 014 · 71 133 018 · also on Toters',
+    r1: 'Sauce, crispy, mozzarella patty, cheddar, BBQ. That\'s how we build it.', r2: 'Fries straight into the box.', r3: 'The savings box, packed and ready.',
+    remove: 'Leave out', addMore: 'Add', note: 'Anything else?', notePh: 'E.g. extra sauce', protein: 'Beef or chicken', yours: 'Your', asIs: 'as on the menu', without: 'no', startFrom: 'Start from',
+    addN: n => `Add ${n} to bag`,
+    subtotal: 'Subtotal', delivF: 'Delivery', toAgree: 'confirmed on WhatsApp', total: 'Total',
+    next1: 'Continue', next2: 'Review order', back: 'Back', send: 'Send on WhatsApp',
+    name: 'Your name', namePh: 'Who is it for?', phone: 'Phone', phonePh: '71 123 456', branch: 'Branch', how: 'How', deliv: 'Delivery', pick: 'Pickup',
+    addr: 'Address', addrPh: 'Area, street, building, floor', pay: 'Payment', usd: 'Cash $', lbp: 'Cash LBP', obs: 'Note', obsPh: 'Landmark, ring the bell...',
+    review: 'Check your order', doneT: 'Order sent to WhatsApp', doneS: 'WhatsApp opened with your order written out. Just press send.',
+    openWa: 'Open WhatsApp', copyAgain: 'Copy order', copied: 'Order copied',
+    doneNote: 'If WhatsApp didn\'t open, message 71 497 014 and paste the order. You can also order on Toters.',
+    bagEmpty: 'Your bag is empty.', bagEmpty2: 'Pick something from the menu or build a burger.', goBuild: 'Build my burger',
+    msg: { hi: 'Hi Tikiz! New order', name: 'Name', phone: 'Phone', branch: 'Branch', way: 'Delivery to', pick: 'Pickup', pay: 'Payment', obs: 'Note', total: 'Total', fee: '+ delivery' },
+    stepNames: ['Bag', 'Your details', 'Review', 'Sent'], remove1: 'Remove', langBtn: 'عربي'
+  },
+  ar: {
+    skip: 'اضغط لتتخطّى', hint: 'اضغط عاليافطة', hintOff: 'اليافطة مطفية', signAria: 'يافطة تيكيز. اضغط لتطفيها وتضويها.', close: 'سكّر', bag: 'السلة',
+    n1: 'المنيو', n2: 'ركّب برغرك', n3: 'من المطبخ', n4: 'الفروع',
+    h1: 'على ذوقك <em>يا طيّب</em>',
+    lede: 'برغر وزنجر وكرسبي من الحدث والمشرفية وعرمون. ركّب طلبك هون وبيوصلنا مكتوب عالواتساب.',
+    cta1: 'ركّب برغرك', cta1s: 'ركّب', cta2: 'شوف المنيو', heroAlt: 'صينية برغر وهوت دوغ وبطاطا من تيكيز', heroTag: 'من فيديوهاتنا',
+    open: 'فاتحين هلّق · لـ ٢ الصبح', opensAt: 'مسكّرين · منفتح الساعة ١٢ الظهر',
+    mK: 'المنيو', mH: 'نقّي، اضغط، وغيّر', mP: 'الأسعار من منيونا بالدولار. اضغط على أي صنف لتشوفه كبير وتختار شو بدّك.',
+    loyal: 'كل ٨ طلبيات، برغر علينا.',
+    bK: 'ركّب برغرك', bH: 'ركّبها متل ما منركّبها', bP: 'ابدأ بواحد من البرغرات، اختار لحمة أو دجاج وكبّس عالطبقات. بتنزل وحدة وحدة والسعر بيمشي معك.',
+    addBag: 'زيد عالسلة', sampleNote: 'الإضافات بأسعار المنيو: موزاريلا باتي ١$، شيدر ٠٫٧٥$، باربكيو ٠٫٦٠$، هالابينو ٠٫٥٠$، والباتي التانية متل الدبل. الخضرة وتغيير الصوص علينا.',
+    lK: 'من المطبخ', lH: 'من فيديوهاتنا مباشرة', lP: 'كل برغر بينعمل باليد على هالخط. اضغط عالفيديو لتوقّفه.',
+    wK: 'الفروع', wH: 'دوّر عاليافطة الصفرا', signAlt: 'يافطة تيكيز برغرز المضوية فوق المحل',
+    eH: 'جوعان؟', eP: 'ركّب طلبك، شيّك السلة، وبيوصلنا الطلب مكتوب عالواتساب.', waGo: 'راسلنا واتساب',
+    footA: 'تيكيز برغرز · الحدث · المشرفية · عرمون',
+    foot: 'المنيو والأسعار من منيو تيكيز على ala.menu وممكن تتغيّر. الموقع ما بياخد مصاري: منأكّدلك الطلب وسعر الديليفري عالواتساب. كمان موجودين على Toters.',
+    see: 'شوف', added: 'انزاد', each: 'الواحد', sauceH: 'الصوص',
+    cats: { burgers: 'برغر', sandwich: 'سندويشات', plates: 'صحون', offers: 'عروض', sides: 'مقبلات', drinks: 'مشروبات' },
+    beef: 'لحمة', chicken: 'دجاج', popular: 'الأكثر طلباً', photo: 'صورتنا',
+    L: { patty: 'باتي', mozz: 'موزاريلا باتي', cheddar: 'شيدر', bbq: 'باربكيو', chips: 'تشيبس', iceberg: 'خس آيسبرغ', tomato: 'بندورة', pickles: 'كبيس', coleslaw: 'كول سلو', fries: 'بطاطا', jalapeno: 'هالابينو' },
+    LC: { patty: 'باتي', mozz: 'موزاريلا', cheddar: 'شيدر', bbq: 'باربكيو', chips: 'تشيبس', iceberg: 'خس', tomato: 'بندورة', pickles: 'كبيس', coleslaw: 'كول سلو', fries: 'بطاطا', jalapeno: 'هالابينو' },
+    LS: { patty: 'باتي', mozz: 'موزاريلا باتي', cheddar: 'شيدر', bbq: 'باربكيو', chips: 'تشيبس', iceberg: 'خس', tomato: 'بندورة', pickles: 'كبيس', coleslaw: 'كول سلو', fries: 'بطاطا', jalapeno: 'هالابينو' },
+    S: { classic: 'صوص كلاسيك', mayo: 'مايونيز', garlic: 'توم', buffalo: 'بافالو', honey: 'هاني ماسترد', ketchup: 'كاتشب' },
+    I: {
+      tikiz: ['تيكيز برغر', 'لحمة أو دجاج، موزاريلا باتي، شيدر إكسترا، باربكيو إكسترا، تشيبس، خس، بندورة، كبيس.'],
+      lebanese: ['برغر لبناني', 'لحمة أو دجاج، كاتشب، كول سلو، بطاطا، كبيس.'],
+      cheese: ['تشيز برغر', 'لحمة أو دجاج، شيدر إكسترا، صوص كلاسيك، تشيبس، خس، بندورة، كبيس.'],
+      bbqb: ['باربكيو برغر', 'لحمة أو دجاج، باربكيو إكسترا، تشيبس، خس، بندورة، كبيس.'],
+      chili: ['تشيلي برغر', 'لحمة أو دجاج، مايونيز، بافالو، تشيبس، خس، بندورة، هالابينو.'],
+      crunchy: ['كرانشي تشيكن برغر', 'دجاج كرانشي، توم، بطاطا، كبيس، كول سلو، كاتشب.'],
+      honey: ['هاني ماسترد برغر', 'لحمة أو دجاج، هاني ماسترد، موزاريلا باتي، تشيبس، خس، بندورة، كبيس.'],
+      badboy: ['باد بوي', 'لحمة أو دجاج، مايونيز، شيدر، باربكيو، تشيبس، موزاريلا وبندورة عالغريل.'],
+      double: ['دبل تيكيز برغر', 'قطعتين لحمة أو دجاج، موزاريلا باتي، شيدر إكسترا، باربكيو إكسترا، تشيبس، خس، بندورة، كبيس.'],
+      bacon: ['بيكن برغر', '١٢٠ غ لحمة، مايونيز، شيدر، خس، بندورة، ٢ بيكن بقر، موزاريلا باتي.'],
+      tzinger: ['تيكيز زنجر', 'دجاج، موزاريلا باتي، صوص كلاسيك، شيدر، باربكيو، تشيبس، خس، بندورة، كبيس.'],
+      zinger: ['زنجر', 'دجاج، صوص كلاسيك، باربكيو، تشيبس، خس، بندورة، كبيس.'],
+      tawouk: ['طاووق', 'طاووق، توم، بطاطا، كول سلو، كبيس.'],
+      crispys: ['سندويش كرسبي', '٢ كرسبي، توم، بطاطا، كول سلو، كبيس.'],
+      twister: ['تويستر', '٢ كرسبي، صوص كلاسيك وشيدر وباربكيو، بندورة، تشيبس، خس، كبيس.'],
+      habash: ['تيكيز حبش زنجر', 'دجاج، موزاريلا باتي، حبش، صوص كلاسيك، شيدر، باربكيو، تشيبس، خس، بندورة، كبيس.'],
+      hotdog: ['سبيشل هوت دوغ', 'هوت دوغ، مايونيز، كاتشب، خس، شيدر، تشيبس.'],
+      crispy5: ['كرسبي ٥', '٥ قطع كرسبي، بطاطا، كاسات شيدر، كلاسيك، توم، كبيس وكول سلو.'],
+      crispy3: ['كرسبي ٣', '٣ قطع كرسبي، بطاطا، كاسات شيدر، كلاسيك، توم، كبيس وكول سلو.'],
+      wings: ['صحن وينغز', '٨ وينغز (باربكيو، تشيلي أو شيدر) مع بطاطا وصوص.'],
+      burgerplate: ['صحن برغر', 'برغر تشيز أو تشيلي أو باربكيو أو لبناني، بوكس بطاطا وكاسة صوص كلاسيك.'],
+      tikizplate: ['صحن تيكيز', '٣ كرسبي، ٥ كرات شيدر، بطاطا، ٢ باربكيو، ٢ شيدر، ١ كول سلو.'],
+      box2: ['٥ كرسبي + ٢ برغر', 'صحن ٥ كرسبي و٢ برغر (تشيلي، تشيز، باربكيو، كاجن، كرانشي أو لبناني) مع بطاطا وصوصات. بوكس التوفير.'],
+      zinger5: ['زنجر + ٥ كرسبي', 'صحن ٥ كرسبي وزنجر برغر مع بطاطا وصوصات وبيبسي.'],
+      wingscrispy: ['وينغز وكرسبي', '٨ وينغز و٥ كرسبي مع بطاطا وبيبسي وصوصات.'],
+      combo: ['تيكيز كومبو', '٣ أونيون رينغز، ٣ كرسبي، ٣ موزاريلا ستيكس، ٣ كرانشي ستيكس، ٣ كرات شيدر.'],
+      family: ['وجبة عائلية', '١٠ كرسبي، بطاطا، صوص و٢ برغر (باربكيو، لبناني، تشيلي أو تشيز).'],
+      boxfries: ['بوكس بطاطا', 'بطاطا مع كاسة صوص كلاسيك.'],
+      xfries: ['بوكس بطاطا إكسترا', 'بطاطا مع صوص باربكيو وشيدر وتشيبس.'],
+      mozzsticks: ['موزاريلا ستيكس', '٥ قطع مع كاسة صوص كلاسيك.'],
+      cheddarballs: ['كرات شيدر', '٥ قطع مع هاني ماسترد.'],
+      rings: ['أونيون رينغز', '٥ قطع مع هاني ماسترد.'],
+      curly: ['كيرلي فرايز', '١٥٠ غ مع كاسة صوص كلاسيك.'],
+      pepsi: ['بيبسي', 'علبة.'], sevenup: ['سفن أب', 'علبة.'], miranda: ['ميراندا', 'علبة.'], water: ['مي', 'قنينة صغيرة.']
+    },
+    B: { hadath: ['الحدث', 'موقف رقم ٤ قرب الجامعة اللبنانية'], mcharafieh: ['المشرفية', 'هادي حسن نصرالله'], aaramoun: ['عرمون', 'الشويفات العمروسية'] },
+    hoursB: 'من ١٢ الظهر لـ ٢ الصبح', delivery: 'ديليفري', deliveryS: '\u206671 497 014\u2069 · \u206671 133 018\u2069 · وكمان على Toters',
+    r1: 'صوص، كرسبي، موزاريلا باتي، شيدر وباربكيو. هيك منركّبها.', r2: 'البطاطا من المقلاية عالبوكس.', r3: 'بوكس التوفير، مسكّر وجاهز.',
+    remove: 'شيل', addMore: 'زيد', note: 'شي ملاحظة؟', notePh: 'مثلاً: زيد الصوص', protein: 'لحمة أو دجاج', yours: '', asIs: 'متل المنيو', without: 'بلا', startFrom: 'ابدأ من',
+    addN: n => `زيد ${n} عالسلة`,
+    subtotal: 'المجموع', delivF: 'الديليفري', toAgree: 'منأكّده عالواتساب', total: 'الحساب',
+    next1: 'كمّل', next2: 'راجع الطلب', back: 'رجوع', send: 'ابعت عالواتساب',
+    name: 'اسمك', namePh: 'الطلب لمين؟', phone: 'رقم التلفون', phonePh: '71 123 456', branch: 'الفرع', how: 'كيف', deliv: 'ديليفري', pick: 'بمرق آخدها',
+    addr: 'العنوان', addrPh: 'المنطقة، الشارع، البناية، الطابق', pay: 'الدفع', usd: 'كاش دولار', lbp: 'كاش لبناني', obs: 'ملاحظة', obsPh: 'علامة قريبة، دقّ الجرس...',
+    review: 'شيّك طلبك', doneT: 'انبعت الطلب عالواتساب', doneS: 'فتحنا الواتساب والطلب مكتوب. بس كبّس ابعت.',
+    openWa: 'افتح الواتساب', copyAgain: 'انسخ الطلب', copied: 'نسخنا الطلب',
+    doneNote: 'إذا ما فتح الواتساب، ابعت على \u206671 497 014\u2069 والصق الطلب. فيك كمان تطلب عبر Toters.',
+    bagEmpty: 'سلّتك فاضية.', bagEmpty2: 'نقّي شي من المنيو أو ركّب برغر.', goBuild: 'ركّب برغرك',
+    msg: { hi: 'مرحبا تيكيز! طلب جديد', name: 'الاسم', phone: 'التلفون', branch: 'الفرع', way: 'ديليفري على', pick: 'بمرق آخدها', pay: 'الدفع', obs: 'ملاحظة', total: 'الحساب', fee: '+ الديليفري' },
+    stepNames: ['السلة', 'معلوماتك', 'المراجعة', 'انبعت'], remove1: 'شيل', langBtn: 'English'
+  }
+};
+let lang = document.documentElement.lang === 'ar' ? 'ar' : 'en';
+const t = k => (T[lang][k] !== undefined ? T[lang][k] : T.en[k]);
+const usd = v => '\u2066$' + (Math.round(v * 100) / 100).toFixed(2).replace(/\.00$/, '') + '\u2069'; // LTR isolate so prices read right inside Arabic
+const itemById = id => CONFIG.items.find(i => i.id === id);
+const nm = (id, L = lang) => T[L].I[id][0];
+
+/* ================= the traced roundel ================= */
+const M = MARK, Y = M.colors.yellow, K = M.colors.ink;
+const STARS = [[262, 674], [975, 681]];
+const starPath = ([cx, cy], r = 20) => { let d = ''; for (let i = 0; i < 10; i++) { const a = -Math.PI / 2 + i * Math.PI / 5, rr = i % 2 ? r * .45 : r; d += (i ? 'L' : 'M') + (cx + Math.cos(a) * rr).toFixed(1) + ' ' + (cy + Math.sin(a) * rr).toFixed(1); } return d + 'Z'; };
+const arc = (cx, cy, r) => `M ${cx - r} ${cy} A ${r} ${r} 0 0 0 ${cx} ${cy + r} A ${r} ${r} 0 0 0 ${cx + r} ${cy}`;
+const AR_LINE = '#على_ذوقك_يا_طيّب', TAG = 'The Legend Of Taste';
+let uid = 0;
+/* the logo as printed (header, closer, empty bag) */
+function flatRoundel(svg, withArabic) {
+  const id = 'f' + (++uid), L = M.letters.join(' ');
+  svg.setAttribute('viewBox', withArabic ? '60 -30 1100 1230' : '100 -10 1036 1040');
+  svg.innerHTML = `<defs><path id="${id}a" d="${arc(615, 521, 396)}"/><path id="${id}b" d="${arc(620, 608, 548)}"/></defs>
+   <path fill="${Y}" d="${M.disc}"/>
+   <g fill="${K}"><path d="${M.ring}"/><path d="${M.bun_top}"/><path d="${M.cheese}"/><path d="${M.patty}"/><path d="${M.bun_bot}"/>${M.burgers.map(d => `<path d="${d}"/>`).join('')}<path d="${M.banner}"/>${STARS.map(s => `<path d="${starPath(s)}"/>`).join('')}</g>
+   <path d="${L}" fill="${K}" transform="translate(-9 10)"/><path d="${L}" fill="${K}" transform="translate(-5 6)"/><path d="${L}" fill="${Y}" stroke="${K}" stroke-width="7" stroke-linejoin="round"/>
+   <text font-family="Fredoka" font-weight="600" font-size="46" fill="${K}" letter-spacing="4" direction="ltr"><textPath href="#${id}a" startOffset="50%" text-anchor="middle">${TAG}</textPath></text>
+   ${withArabic ? `<text font-family="Lemonada" font-weight="700" font-size="76" fill="${Y}" direction="rtl"><textPath href="#${id}b" startOffset="50%" text-anchor="middle">${AR_LINE}</textPath></text>` : ''}`;
+}
+/* the LED version, built like their storefront sign: every traced shape a lit channel, TIKIZ with dark faces and lit edges */
+function buildSign(host) {
+  const id = 's' + (++uid), D = d => `d="${d}"`;
+  const seg = (k, d, extra = '') => `<g class="seg" data-k="${k}" ${extra}><path class="glass" ${D(d)}/><path class="halo" ${D(d)} filter="url(#${id}b)"/><path class="core" ${D(d)}/><path class="hot" ${D(d)} transform="translate(0 -2)"/><path class="trace" pathLength="1" ${D(d)}/></g>`;
+  const burger = [['bun_bot', M.bun_bot], ['patty', M.patty], ['cheese', M.cheese], ['bun_top', M.bun_top]];
+  const letters = M.letters.map((d, i) => `<g class="seg let" data-k="L${i}"><path class="ret" ${D(d)} transform="translate(-9 10)"/><path class="ret2" ${D(d)} transform="translate(-5 6)"/><path class="edgeglow" ${D(d)} filter="url(#${id}b)"/><path class="face" ${D(d)}/><path class="edge" pathLength="1" ${D(d)} style="stroke-dasharray:1 1;stroke-dashoffset:var(--d,0)"/></g>`).join('');
+  const txt = (k, ref, attrs, s) => `<g class="seg" data-k="${k}"><text class="ltxtg" filter="url(#${id}b)" ${attrs}><textPath href="#${ref}" startOffset="50%" text-anchor="middle">${s}</textPath></text><text class="ltxt" ${attrs}><textPath href="#${ref}" startOffset="50%" text-anchor="middle">${s}</textPath></text></g>`;
+  host.innerHTML = `<svg class="led" viewBox="60 -30 1100 1230" aria-hidden="true">
+   <defs>
+    <filter id="${id}b" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="14"/></filter>
+    <path id="${id}a" d="${arc(615, 521, 396)}"/><path id="${id}c" d="${arc(620, 608, 548)}"/>
+    <linearGradient id="${id}sg" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+    <clipPath id="${id}cp"><path d="${M.ring} ${M.bun_top} ${M.cheese} ${M.patty} ${M.bun_bot} ${M.letters.join(' ')} ${M.burgers.join(' ')} ${M.banner}"/></clipPath>
+   </defs>
+   ${seg('ring', M.ring)}
+   <g class="burger">${burger.map(([k, d]) => seg(k, d)).join('')}</g>
+   ${letters}
+   ${STARS.map((s, i) => seg('star' + i, starPath(s, 22))).join('')}
+   ${M.burgers.map((d, i) => seg('B' + i, d)).join('')}
+   ${seg('banner', M.banner)}
+   ${txt('tag', id + 'a', 'font-family="Fredoka" font-weight="600" font-size="46" letter-spacing="4" direction="ltr"', TAG)}
+   ${txt('ar', id + 'c', 'font-family="Lemonada" font-weight="700" font-size="76" direction="rtl"', AR_LINE)}
+   <g clip-path="url(#${id}cp)"><rect class="shine" x="-400" y="-30" width="360" height="1230" fill="url(#${id}sg)" transform="skewX(-16)"/></g>
+  </svg>`;
+  const svg = host.firstElementChild, all = $$('.seg', svg);
+  const by = k => all.find(g => g.dataset.k === k);
+  return { svg, all, by, lets: all.filter(g => g.classList.contains('let')), shine: $('.shine', svg) };
+}
+/* power-on: the ring traces round, the burger icon stacks itself bottom to top, TIKIZ letters trace and light one by one,
+   the stars pop, BURGERS runs across, the banner and its line, then the Arabic line; a buzz, a sweep */
+function powerOn(sign, root, opts = {}) {
+  const sp = opts.speed || 1, tl = gsap.timeline(), A = x => x * sp;
+  gsap.set(sign.all, { '--on': 0, '--t': 0, '--d': 1 });
+  gsap.set(root, { '--power': 0 });
+  const flick = (el, at, soft) => el && tl.to(el, { keyframes: soft ? [{ '--on': 1, duration: .08 }] : [{ '--on': .9, duration: .04 }, { '--on': .12, duration: .05 }, { '--on': 1, duration: .04 }, { '--on': .4, duration: .05 }, { '--on': 1, duration: .05 }] }, at);
+  const trace = (el, at, dur) => { if (!el) return; tl.set(el, { '--t': 1 }, at).to(el, { '--d': 0, duration: A(dur), ease: 'power2.inOut' }, at).to(el, { '--t': 0, duration: .15 }, at + A(dur)); };
+  trace(sign.by('ring'), A(.08), .45); flick(sign.by('ring'), A(.5));
+  tl.to(root, { '--power': .3, duration: A(.3) }, A(.4));
+  ['bun_bot', 'patty', 'cheese', 'bun_top'].forEach((k, i) => {
+    const el = sign.by(k), at = A(.58 + i * .1);
+    tl.fromTo(el, { y: -70 }, { y: 0, duration: A(.32), ease: 'bounce.out' }, at);
+    flick(el, at + A(.02), i % 2);
+  });
+  sign.lets.forEach((el, i) => { const at = A(1.0 + i * .08); tl.to(el, { '--d': 0, duration: A(.22), ease: 'power1.inOut' }, at); flick(el, at + A(.1)); });
+  tl.to(root, { '--power': .7, duration: A(.3) }, A(1.1));
+  ['star0', 'star1'].forEach((k, i) => { const el = sign.by(k), at = A(1.42 + i * .05); tl.fromTo(el, { scale: 0, rotation: -90, svgOrigin: STARS[i].join(' ') }, { scale: 1, rotation: 0, svgOrigin: STARS[i].join(' '), duration: A(.35), ease: 'back.out(3)' }, at); flick(el, at, 1); });
+  M.burgers.forEach((_, i) => flick(sign.by('B' + i), A(1.5 + i * .035), 1));
+  flick(sign.by('banner'), A(1.72)); flick(sign.by('tag'), A(1.78), 1);
+  flick(sign.by('ar'), A(1.86));
+  const bz = A(2.0);
+  tl.to(sign.all, { keyframes: [{ '--on': .35, duration: .05 }, { '--on': 1, duration: .05 }, { '--on': .6, duration: .04 }, { '--on': 1, duration: .06 }] }, bz);
+  tl.to(root, { '--power': 1, duration: A(.2) }, bz);
+  tl.fromTo(sign.shine, { attr: { x: -400 }, opacity: 1 }, { attr: { x: 1350 }, duration: A(.5), ease: 'power2.inOut' }, bz + A(.06)).set(sign.shine, { opacity: 0 });
+  return tl;
+}
+
+/* ================= intro + hero sign ================= */
+const heroWrap = $('#wallsign');
+const heroSign = buildSign($('#heroSign'));
+flatRoundel($('#brandmark'), false); flatRoundel($('#lockup'), true);
+let signOn = true;
+const litState = (sign, root) => { gsap.set(sign.all, { '--on': 1, '--t': 0, '--d': 0, y: 0, scale: 1, rotation: 0 }); gsap.set(root, { '--power': 1 }); };
+function startPage(fromIntro) {
+  document.documentElement.classList.remove('intro-on', 'lock');
+  if (!fromIntro) {
+    if (RM) litState(heroSign, heroWrap);
+    else { const tl = powerOn(heroSign, heroWrap, { speed: .7 }); if (!window.__intro) { window.__intro = tl; if (window.__qaPause) tl.pause(); } }
+    if (!RM) gsap.from('.rise', { y: 16, opacity: 0, duration: .7, stagger: .07, ease: 'power3.out', delay: .1 });
+  }
+  embers.start(); alive(); syncBar(); reels.start();
+}
+function runIntro() {
+  const ov = $('#intro'), host = $('.isign', ov);
+  const sign = buildSign($('.isvg', ov));
+  const tl = gsap.timeline({ onComplete: finish });
+  window.__intro = tl; if (window.__qaPause) tl.pause();
+  tl.add(powerOn(sign, host), 0);
+  tl.to(host, {
+    duration: .5, ease: 'power3.inOut',
+    x: () => { const a = host.getBoundingClientRect(), b = heroWrap.getBoundingClientRect(); return '+=' + (b.left - a.left); },
+    y: () => { const a = host.getBoundingClientRect(), b = heroWrap.getBoundingClientRect(); return '+=' + (b.top - a.top); },
+    scale: () => heroWrap.getBoundingClientRect().width / host.getBoundingClientRect().width
+  }, 2.06);
+  tl.to($('.ibg', ov), { opacity: 0, duration: .42, ease: 'power1.in' }, 2.1);
+  tl.to($('.skip', ov), { opacity: 0, duration: .2 }, 2.0);
+  tl.to($('.spill', ov), { opacity: 0, duration: .35 }, 2.15);
+  tl.fromTo('.rise', { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: .4, stagger: .04, ease: 'power3.out' }, 2.1);
+  tl.add(() => { $('#heroSign .led').style.visibility = 'visible'; litState(heroSign, heroWrap); }, 2.55);
+  let done = false;
+  function finish() {
+    if (done) return; done = true;
+    try { sessionStorage.setItem('tikiz.intro', '1'); } catch (e) {}
+    $('#heroSign .led').style.visibility = 'visible'; litState(heroSign, heroWrap);
+    gsap.set('.rise', { clearProps: 'opacity,transform' });
+    ov.remove(); startPage(true);
+  }
+  const skip = () => { if (!done) { tl.progress(1); finish(); } };
+  ov.addEventListener('pointerdown', skip); addEventListener('keydown', skip, { once: true });
+}
+/* the sign stays alive: tap to switch it off and on, the pointer brightens it, it flickers now and then */
+let flickTimer, heroVisible = true;
+function alive() {
+  const hint = $('#signhint');
+  const toggle = () => {
+    signOn = !signOn; buzz(signOn);
+    hint.classList.toggle('off', !signOn); hint.querySelector('span').textContent = t(signOn ? 'hint' : 'hintOff');
+    gsap.killTweensOf(heroSign.all);
+    if (signOn) powerOn(heroSign, heroWrap, { speed: .5 });
+    else {
+      gsap.utils.shuffle([...heroSign.all]).forEach((el, i) => gsap.to(el, { keyframes: [{ '--on': .5, duration: .04 }, { '--on': 1, duration: .04 }, { '--on': 0, duration: .08 }], delay: i * .012 }));
+      gsap.to(heroWrap, { '--power': 0, duration: .45, delay: .1 });
+    }
+  };
+  heroWrap.addEventListener('click', toggle);
+  heroWrap.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } });
+  if (FINE) {
+    const hero = $('#top');
+    hero.addEventListener('pointermove', e => {
+      const r = heroWrap.getBoundingClientRect(), d = Math.hypot(e.clientX - (r.left + r.width / 2), e.clientY - (r.top + r.height / 2)), b = Math.max(0, 1 - d / 520);
+      gsap.to(heroSign.svg, { '--boost': b, duration: .3, overwrite: true });
+      if (signOn) gsap.to(heroWrap, { '--power': 1 + b * .3, duration: .3, overwrite: 'auto' });
+    });
+    hero.addEventListener('pointerleave', () => gsap.to(heroSign.svg, { '--boost': 0, duration: .5 }));
+  }
+  const flick = () => {
+    clearTimeout(flickTimer);
+    flickTimer = setTimeout(() => {
+      if (signOn && heroVisible && !document.hidden && !RM) {
+        const r = Math.random(), pool = heroSign.all;
+        const many = r < .2 ? heroSign.lets : r < .35 ? [heroSign.by('ar')] : [pool[Math.floor(Math.random() * pool.length)]];
+        gsap.to(many, { keyframes: [{ '--on': .2, duration: .04 }, { '--on': 1, duration: .05 }, { '--on': .45, duration: .05 }, { '--on': 1, duration: .07 }] });
+      }
+      flick();
+    }, 2600 + Math.random() * 4600);
+  };
+  flick();
+  new IntersectionObserver(es => { heroVisible = es[0].isIntersecting; }).observe($('#top'));
+}
+let actx;
+function buzz(on) { // a small electrical clack and hum, only ever after a tap
+  try {
+    actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+    const now = actx.currentTime, g = actx.createGain(), o = actx.createOscillator(); g.connect(actx.destination);
+    o.type = 'sawtooth'; o.frequency.value = on ? 100 : 80; o.connect(g);
+    g.gain.setValueAtTime(0, now); g.gain.linearRampToValueAtTime(.03, now + .01);
+    if (on) { g.gain.setValueAtTime(.006, now + .06); g.gain.linearRampToValueAtTime(.026, now + .1); g.gain.linearRampToValueAtTime(0, now + .45); } else g.gain.linearRampToValueAtTime(0, now + .12);
+    o.start(now); o.stop(now + .5);
+  } catch (e) {}
+}
+/* sparks off the LED ring, paused off-screen */
+const embers = (() => {
+  const cv = $('#embers'), ctx = cv.getContext('2d'); let ps = [], run = false, raf, w, h;
+  const size = () => { const dpr = Math.min(devicePixelRatio || 1, 2); w = cv.clientWidth; h = cv.clientHeight; cv.width = w * dpr; cv.height = h * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); };
+  const spawn = () => { const a = Math.random() * 6.283, R = w * .3; return { x: w / 2 + Math.cos(a) * R, y: h * .44 + Math.sin(a) * R, vx: Math.cos(a) * .3, vy: Math.sin(a) * .3 - .25, life: 0, max: 60 + Math.random() * 60, r: .7 + Math.random() * 1.3 }; };
+  const tick = () => {
+    if (!run) return;
+    ctx.clearRect(0, 0, w, h);
+    const p = parseFloat(getComputedStyle(heroWrap).getPropertyValue('--power')) || 0;
+    if (p > .5 && ps.length < 22 && Math.random() < .2) ps.push(spawn());
+    ps = ps.filter(q => q.life < q.max);
+    for (const q of ps) {
+      q.life++; q.x += q.vx; q.y += q.vy; q.vy -= .004;
+      const a = Math.sin(Math.PI * q.life / q.max) * .9 * Math.min(1, p);
+      ctx.fillStyle = `rgba(255,232,26,${a})`; ctx.shadowColor = `rgba(255,232,26,${a})`; ctx.shadowBlur = 8;
+      ctx.beginPath(); ctx.arc(q.x, q.y, q.r, 0, 6.283); ctx.fill();
+    }
+    raf = requestAnimationFrame(tick);
+  };
+  const io = new IntersectionObserver(es => { const v = es[0].isIntersecting && !RM; if (v && !run) { run = true; size(); tick(); } else if (!v) { run = false; cancelAnimationFrame(raf); } });
+  addEventListener('resize', () => run && size());
+  return { start() { if (!RM) io.observe(cv); } };
+})();
+
+/* ================= burger art in the style of their burger icon: thick ink line, flat colour ================= */
+const O = K, SW = 6;
+const ART = {
+  bunB: { h: 40, draw: () => `<path d="M60 6h280c8 0 12 6 10 13l-4 9c-3 7-10 11-18 11H72c-8 0-15-4-18-11l-4-9c-2-7 2-13 10-13Z" fill="#f2b44a" stroke="${O}" stroke-width="${SW}" stroke-linejoin="round"/>` },
+  sauce: { h: 8, draw: c => `<path d="M70 4h260c4 0 5 4 2 7-6 5-10 3-14 9-3 5-8 4-10-1-4-6-12-7-20-4-6 3-10 1-14-3H130c-6 5-12 8-18 3-4-3-8-6-14-3-6 3-10 1-14-3-4-4-9-2-14 0-4 2-8 0-6-3 1-3 3-5 6-5Z" fill="${c || '#f6eed8'}" stroke="${O}" stroke-width="4.5" stroke-linejoin="round"/>` },
+  iceberg: { h: 15, draw: () => `<path d="M42 11c10-9 18 2 28-5s18 4 28-2 18 4 28-2 18 4 28-2 18 4 28-2 18 4 28-2 18 4 28-2 18 4 28-2 18 4 28 1c6 6 0 11-8 11H52c-9 0-16-5-10-11Z" fill="#c4e88a" stroke="${O}" stroke-width="${SW}" stroke-linejoin="round"/>` },
+  tomato: { h: 13, draw: () => `<rect x="62" y="2" width="132" height="14" rx="7" fill="#e3402e" stroke="${O}" stroke-width="${SW}"/><rect x="206" y="2" width="132" height="14" rx="7" fill="#e3402e" stroke="${O}" stroke-width="${SW}"/>` },
+  pickles: { h: 10, draw: () => [96, 160, 224, 288].map(x => `<ellipse cx="${x}" cy="6" rx="27" ry="7" fill="#8fae35" stroke="${O}" stroke-width="5"/>`).join('') },
+  coleslaw: { h: 12, draw: () => `<path d="M56 12c8-10 20-6 28-9s16 4 26 0 18 5 28 1 18 4 28 0 18 5 28 1 18 4 28 0 18 5 28 1 20 4 26 8l-2 6H60Z" fill="#f4f1e6" stroke="${O}" stroke-width="5" stroke-linejoin="round"/>` + [90, 130, 175, 220, 262, 305].map((x, i) => `<path d="M${x} ${7 + i % 2 * 2}h12" stroke="${i % 2 ? '#8b4a9e' : '#f08a2a'}" stroke-width="3.5" stroke-linecap="round"/>`).join('') },
+  fries: { h: 16, draw: () => [58, 82, 106, 130, 154, 178, 202, 226, 250, 274, 298, 322].map((x, i) => `<rect x="${x}" y="${3 + (i % 3) * 2}" width="30" height="9" rx="2" fill="#f7cf3d" stroke="${O}" stroke-width="3.5" transform="rotate(${(i * 23) % 22 - 11} ${x + 15} 8)"/>`).join('') },
+  chips: { h: 10, draw: () => [80, 128, 176, 224, 272, 318].map((x, i) => `<ellipse cx="${x}" cy="6" rx="24" ry="6" fill="#f6dc7a" stroke="${O}" stroke-width="4" transform="rotate(${i % 2 ? 6 : -6} ${x} 6)"/>`).join('') },
+  jalapeno: { h: 9, draw: () => [100, 165, 235, 300].map(x => `<ellipse cx="${x}" cy="5" rx="17" ry="5.5" fill="#3f8f2e" stroke="${O}" stroke-width="4"/><ellipse cx="${x}" cy="5" rx="7" ry="2" fill="#b9e07a"/>`).join('') },
+  beef: { h: 30, draw: () => `<path d="M48 10c4-6 10-8 16-5 6-5 14-5 20-1 8-4 16-4 24 0 8-4 18-3 26 0 8-3 18-3 26 0 8-3 18-3 26 1 8-4 18-4 26 0 8-3 16-2 22 2 6-2 14-1 18 4 8 0 12 6 10 12 2 6-2 12-8 13-4 5-12 6-18 3-8 4-18 4-26 1-8 3-18 3-26 0-8 3-18 3-26 0-8 3-18 3-26 0-8 3-18 2-24-1-6 3-14 2-18-3-8 1-14-5-12-11-3-5-1-11 4-13Z" fill="#5b2a14" stroke="${O}" stroke-width="${SW}" stroke-linejoin="round"/><path d="M84 14h18M138 18h24M196 12h18M242 18h22M292 13h16" stroke="#8a4a24" stroke-width="5" stroke-linecap="round"/>` },
+  chicken: { h: 30, draw: () => `<path d="M44 14c3-8 12-10 18-6 5-6 13-6 18-2 6-6 14-5 19-1 6-6 15-5 20 0 6-5 15-5 20 0 6-5 15-5 20 0 6-6 15-6 20 0 6-5 14-5 19 1 6-5 14-4 18 2 7-3 14 2 14 9 6 4 5 12-2 15-1 6-8 9-14 7-5 5-13 5-18 1-6 5-14 5-20 1-6 5-14 5-20 0-6 5-14 5-20 0-6 5-14 4-20 0-6 5-14 4-19-1-6 4-13 2-16-3-7 1-12-5-10-11-5-4-4-10 1-12Z" fill="#e0a03a" stroke="${O}" stroke-width="${SW}" stroke-linejoin="round"/>` + [70, 110, 150, 196, 240, 284, 322].map((x, i) => `<circle cx="${x}" cy="${12 + (i % 2) * 6}" r="3.2" fill="#b5731f"/>`).join('') },
+  mozz: { h: 22, draw: () => `<rect x="70" y="2" width="260" height="20" rx="8" fill="#f2c94c" stroke="${O}" stroke-width="${SW}"/>` + [95, 140, 185, 230, 275, 310].map((x, i) => `<circle cx="${x}" cy="${9 + (i % 2) * 5}" r="2.6" fill="#c98f1c"/>`).join('') },
+  cheddar: { h: 8, draw: () => `<path d="M56 3h288l-6 9-16 4-6 16-10-14-60 2-8 12-8-12H110l-10 18-8-18-30-2Z" fill="#ffa51f" stroke="${O}" stroke-width="5" stroke-linejoin="round"/>` },
+  bbq: { h: 6, draw: () => `<path d="M70 4c20 6 30-4 50 2s30 6 50-2 30 6 50 0 30-6 50 2 26 4 40-2" fill="none" stroke="${O}" stroke-width="10" stroke-linecap="round"/><path d="M70 4c20 6 30-4 50 2s30 6 50-2 30 6 50 0 30-6 50 2 26 4 40-2" fill="none" stroke="#7a2410" stroke-width="5" stroke-linecap="round"/>` },
+  bunT: { h: 92, draw: () => `<path d="M48 88c-6 0-10-5-9-11C46 30 112 4 200 4s154 26 161 73c1 6-3 11-9 11Z" fill="#f2b44a" stroke="${O}" stroke-width="${SW}" stroke-linejoin="round"/><path d="M98 40c20-16 52-24 84-24" fill="none" stroke="#fbd893" stroke-width="10" stroke-linecap="round"/>` + [[150, 30], [200, 22], [250, 32], [120, 52], [178, 46], [228, 50], [280, 54], [310, 66], [90, 70]].map(([x, y], i) => `<ellipse cx="${x}" cy="${y}" rx="6" ry="3.2" fill="#fff6dc" stroke="${O}" stroke-width="2" transform="rotate(${(i * 31) % 50 - 25} ${x} ${y})"/>`).join('') }
+};
+const SAUCE_COL = { classic: '#f3b78f', mayo: '#f6eed8', garlic: '#fbf7ee', buffalo: '#e0532a', honey: '#e8b72c', ketchup: '#c8261a' };
+function layersOf(cfg) {
+  const a = [{ k: 'bunB' }];
+  if (cfg.sauce) a.push({ k: 'sauce', c: SAUCE_COL[cfg.sauce], id: 'sauce-' + cfg.sauce });
+  if (cfg.coleslaw) a.push({ k: 'coleslaw' });
+  if (cfg.iceberg) a.push({ k: 'iceberg' });
+  if (cfg.tomato) a.push({ k: 'tomato' });
+  for (let i = 0; i < (cfg.patty || 1); i++) { a.push({ k: cfg.chicken ? 'chicken' : 'beef' }); if (cfg.cheddar) a.push({ k: 'cheddar' }); }
+  if (cfg.mozz) a.push({ k: 'mozz' });
+  if (cfg.bbq) a.push({ k: 'bbq' });
+  if (cfg.jalapeno) a.push({ k: 'jalapeno' });
+  if (cfg.pickles) a.push({ k: 'pickles' });
+  if (cfg.fries) a.push({ k: 'fries' });
+  if (cfg.chips) a.push({ k: 'chips' });
+  a.push({ k: 'bunT' });
+  const seen = {};
+  return a.map(l => { seen[l.k] = (seen[l.k] || 0) + 1; return { ...l, id: (l.id || l.k) + '#' + seen[l.k] }; });
+}
+function stackSVG(cfg) {
+  const ls = layersOf(cfg); let y = 0; const parts = [];
+  const H = ls.reduce((s, l) => s + ART[l.k].h - 2, 0) + 12;
+  for (const l of ls) { y += ART[l.k].h - 2; parts.push(`<g transform="translate(0 ${H - y})">${ART[l.k].draw(l.c)}</g>`); }
+  return `<svg viewBox="30 -6 340 ${H + 10}" aria-hidden="true">${parts.join('')}</svg>`;
+}
+/* drawn tiles (same ink style) for menu items with no photo of their own */
+const ICON = {
+  plate: `<svg viewBox="0 0 100 100"><g stroke="${O}" stroke-width="4" stroke-linejoin="round"><ellipse cx="50" cy="62" rx="40" ry="16" fill="#fffdf2"/>${[[30, 52], [46, 48], [62, 52], [40, 60], [56, 60]].map(([x, y]) => `<path d="M${x - 9} ${y}c0-7 6-9 9-9s9 2 9 9c0 5-4 7-9 7s-9-2-9-7Z" fill="#e0a03a"/>`).join('')}</g></svg>`,
+  wings: `<svg viewBox="0 0 100 100"><g stroke="${O}" stroke-width="4" stroke-linejoin="round"><ellipse cx="50" cy="64" rx="40" ry="15" fill="#fffdf2"/>${[[34, 54], [52, 50], [66, 58], [44, 64]].map(([x, y]) => `<path d="M${x - 10} ${y}c2-9 14-11 20-4 3 4 1 10-5 11-6 2-16 2-15-7Z" fill="#b8481c"/>`).join('')}</g></svg>`,
+  wrap: `<svg viewBox="0 0 100 100"><g stroke="${O}" stroke-width="4" stroke-linejoin="round"><path d="M18 62 70 22c6-4 14 2 10 9L36 80c-6 5-16 0-18-8Z" fill="#f4dfae"/><path d="M30 60l18-14M40 68l16-13" stroke="#8fae35" stroke-width="5"/></g></svg>`,
+  fries: `<svg viewBox="0 0 100 100"><g stroke="${O}" stroke-width="4" stroke-linejoin="round">${[28, 37, 46, 55, 64].map((x, i) => `<rect x="${x}" y="${16 + (i % 2) * 5}" width="8" height="40" rx="2" fill="#f7cf3d" transform="rotate(${(i - 2) * 5} ${x + 4} 56)"/>`).join('')}<path d="M22 44h56l-7 40H29Z" fill="#fffdf2"/><circle cx="50" cy="64" r="8" fill="${Y}"/></g></svg>`,
+  sticks: `<svg viewBox="0 0 100 100"><g stroke="${O}" stroke-width="4" stroke-linejoin="round">${[[22, 40], [30, 54], [40, 68]].map(([x, y]) => `<rect x="${x}" y="${y}" width="52" height="13" rx="6" fill="#e0a03a" transform="rotate(-14 ${x} ${y})"/>`).join('')}<circle cx="76" cy="72" r="12" fill="#c8261a"/></g></svg>`,
+  balls: `<svg viewBox="0 0 100 100"><g stroke="${O}" stroke-width="4">${[[34, 56], [56, 52], [44, 70], [66, 70]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="12" fill="#e9a43a"/>`).join('')}</g></svg>`,
+  rings: `<svg viewBox="0 0 100 100"><g fill="none">${[[38, 50], [60, 56], [46, 70]].map(([x, y]) => `<ellipse cx="${x}" cy="${y}" rx="16" ry="12" stroke-width="10" stroke="${O}"/><ellipse cx="${x}" cy="${y}" rx="16" ry="12" stroke-width="5" stroke="#e8b04a"/>`).join('')}</g></svg>`,
+  can: `<svg viewBox="0 0 100 100"><g stroke="${O}" stroke-width="4" stroke-linejoin="round"><path d="M34 18h32l3 7v52l-3 7H34l-3-7V25Z" fill="#fffdf2"/><path d="M31 32h38M31 70h38"/><circle cx="50" cy="51" r="10" fill="${Y}"/></g></svg>`,
+  water: `<svg viewBox="0 0 100 100"><g stroke="${O}" stroke-width="4" stroke-linejoin="round"><path d="M42 14h16v8l6 8v54a4 4 0 0 1-4 4H40a4 4 0 0 1-4-4V30l6-8Z" fill="#e6f4fb"/><path d="M36 50h28"/></g></svg>`,
+  box: `<svg viewBox="0 0 100 100"><g stroke="${O}" stroke-width="4" stroke-linejoin="round"><path d="M14 46h72v34H14Z" fill="#fffdf2"/><path d="M14 46 26 26h48l12 20" fill="#f3f0e2"/><circle cx="50" cy="63" r="10" fill="${Y}"/></g></svg>`
+};
+const iconFor = it => ({ crispy5: 'plate', crispy3: 'plate', tikizplate: 'plate', burgerplate: 'plate', wings: 'wings', wingscrispy: 'wings', zinger5: 'box', combo: 'balls', zinger: 'wrap', tawouk: 'wrap', crispys: 'wrap', twister: 'wrap', habash: 'wrap', xfries: 'fries', curly: 'fries', mozzsticks: 'sticks', cheddarballs: 'balls', rings: 'rings', pepsi: 'can', sevenup: 'can', miranda: 'can', water: 'water' }[it.id]);
+function visualFor(it, cfg) {
+  if (it.img) return `<img src="${it.img}" alt="${esc(nm(it.id))}" loading="lazy" width="640" height="640">`;
+  if (it.b) return stackSVG(cfg || it.b);
+  return ICON[iconFor(it)] || ICON.box;
+}
+
+/* ================= pricing + naming ================= */
+function priceOf(it, cfg) {
+  if (!it.b || !cfg) return it.price;
+  let p = it.price; const r = it.b;
+  if ((cfg.patty || 1) > (r.patty || 1)) p += CONFIG.extras.patty2 * ((cfg.patty || 1) - (r.patty || 1));
+  for (const k in PAID) if (cfg[k] && !r[k]) p += CONFIG.extras[PAID[k]];
+  return Math.round(p * 100) / 100;
+}
+function diffText(it, cfg, L = lang) {
+  if (!it.b || !cfg) return '';
+  const r = it.b, Tl = T[L], out = [];
+  if (it.prot) out.push(cfg.chicken ? Tl.chicken : Tl.beef);
+  if ((cfg.patty || 1) !== (r.patty || 1)) out.push(`${cfg.patty}× ${Tl.LS.patty}`);
+  for (const k of LAYERS) { if (k === 'patty') continue; if (cfg[k] && !r[k]) out.push('+' + Tl.LS[k]); if (!cfg[k] && r[k]) out.push(`${Tl.without} ${Tl.LS[k]}`); }
+  if (cfg.sauce && cfg.sauce !== r.sauce) out.push(Tl.S[cfg.sauce]);
+  return out.join(L === 'ar' ? '، ' : ', ');
+}
+
+/* ================= cart (localStorage) ================= */
+let cart = store.get('tikiz.cart.v1', []).filter(l => itemById(l.id));
+const saveCart = () => { store.set('tikiz.cart.v1', cart); paintBadge(); };
+const lineTotal = l => Math.round(l.unit * l.qty * 100) / 100;
+const cartTotal = () => Math.round(cart.reduce((s, l) => s + l.unit * l.qty, 0) * 100) / 100;
+const cartCount = () => cart.reduce((s, l) => s + l.qty, 0);
+function addLine(line) {
+  const key = JSON.stringify([line.id, line.cfg || null, line.note || '']);
+  const ex = cart.find(l => l.key === key);
+  if (ex) ex.qty += line.qty; else cart.push({ ...line, key });
+  saveCart();
+}
+function paintBadge(bump) {
+  const n = cartCount(), b = $('#bagn');
+  b.textContent = n; b.classList.toggle('on', n > 0);
+  $('#sbag').textContent = `${t('bag')} · ${usd(cartTotal())}`;
+  if (bump && !RM) { gsap.fromTo('#bagbtn', { scale: 1 }, { keyframes: [{ scale: 1.25, duration: .12 }, { scale: .92, duration: .1 }, { scale: 1, duration: .25, ease: 'elastic.out(1,.4)' }] }); gsap.fromTo(b, { y: -8 }, { y: 0, duration: .4, ease: 'bounce.out' }); }
+}
+function flyToBag(fromEl, html) {
+  const target = innerWidth >= 700 || $('#sbar').classList.contains('hide') ? $('#bagbtn') : $('#sbag');
+  if (RM || !fromEl) { paintBadge(true); return; }
+  const a = fromEl.getBoundingClientRect(), b = target.getBoundingClientRect();
+  const f = document.createElement('div'); f.className = 'flyer'; f.innerHTML = html; document.body.appendChild(f);
+  const x0 = a.left + a.width / 2 - 34, y0 = a.top + a.height / 2 - 34, x1 = b.left + b.width / 2 - 34, y1 = b.top + b.height / 2 - 34;
+  gsap.set(f, { x: x0, y: y0, scale: 1.3 });
+  gsap.timeline({ onComplete: () => { f.remove(); paintBadge(true); sparks(b.left + b.width / 2, b.top + b.height / 2); } })
+    .to(f, { x: x1, duration: .7, ease: 'power1.inOut' }, 0)
+    .to(f, { y: Math.min(y0, y1) - 120, duration: .32, ease: 'power2.out' }, 0)
+    .to(f, { y: y1, duration: .38, ease: 'power2.in' }, .32)
+    .to(f, { scale: .3, rotation: RTL() ? -200 : 200, duration: .7, ease: 'power1.in' }, 0);
+}
+function sparks(x, y) {
+  for (let i = 0; i < 10; i++) {
+    const s = document.createElement('i'); s.className = 'spark'; document.body.appendChild(s);
+    const a = Math.random() * 6.283, d = 24 + Math.random() * 30;
+    gsap.fromTo(s, { x: x - 3, y: y - 3, scale: 1 }, { x: x - 3 + Math.cos(a) * d, y: y - 3 + Math.sin(a) * d, scale: 0, duration: .5 + Math.random() * .3, ease: 'power2.out', onComplete: () => s.remove() });
+  }
+}
+let toastT;
+function toast(msg) { const el = $('#toast'); $('#toastt').textContent = msg; el.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => el.classList.remove('on'), 2600); }
+document.addEventListener('pointerdown', e => {
+  const b = e.target.closest('.btn,.plus'); if (!b || RM) return;
+  const r = b.getBoundingClientRect(), s = document.createElement('span'), d = Math.max(r.width, r.height);
+  s.className = 'ripple'; s.style.cssText = `width:${d}px;height:${d}px;left:${e.clientX - r.left - d / 2}px;top:${e.clientY - r.top - d / 2}px`;
+  b.appendChild(s); setTimeout(() => s.remove(), 600);
+});
+
+/* ================= menu ================= */
+let cat = 'burgers';
+function paintTabs() { $('#tabs').innerHTML = CONFIG.cats.map(c => `<button class="tab" role="tab" data-c="${c}" aria-selected="${c === cat}">${esc(t('cats')[c])}</button>`).join(''); }
+function paintRail(animate) {
+  const items = CONFIG.items.filter(i => i.cat === cat);
+  $('#rail').innerHTML = items.map(it => `<article class="card" data-id="${it.id}" tabindex="0" role="button" aria-label="${esc(nm(it.id))}"><div class="pic">${visualFor(it)}${it.pop ? `<span class="ribbon">${esc(t('popular'))}</span>` : it.img ? `<span class="ribbon">${esc(t('photo'))}</span>` : ''}</div><div class="tx"><h3>${esc(nm(it.id))}</h3><p>${esc(t('I')[it.id][1])}</p><div class="pr"><b>${usd(it.price)}</b><button class="plus" data-quick="${it.id}" aria-label="${esc(t('addMore'))} ${esc(nm(it.id))}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button></div></div></article>`).join('');
+  $('#rail').scrollLeft = 0;
+  dotsFor('#rail', '#rdots');
+  if (animate && !RM) gsap.from('#rail .card', { y: 24, opacity: 0, duration: .45, stagger: .05, ease: 'back.out(1.6)' });
+}
+const defaultCfg = it => it.b ? { ...it.b, chicken: it.b.chicken || 0 } : null;
+$('#tabs').addEventListener('click', e => { const b = e.target.closest('.tab'); if (!b || b.dataset.c === cat) return; cat = b.dataset.c; paintTabs(); paintRail(true); });
+$('#rail').addEventListener('click', e => {
+  const q = e.target.closest('[data-quick]');
+  if (q) { e.stopPropagation(); const it = itemById(q.dataset.quick), cfg = defaultCfg(it); addLine({ id: it.id, cfg, qty: 1, unit: priceOf(it, cfg), note: '' }); flyToBag(q.closest('.card').querySelector('.pic'), visualFor(it)); if (!RM) gsap.fromTo(q, { rotation: 0 }, { rotation: 180, duration: .45, ease: 'back.out(2)' }); toast(`${nm(it.id)} · ${t('added')}`); return; }
+  const c = e.target.closest('.card'); if (c) openItem(c.dataset.id);
+});
+$('#rail').addEventListener('keydown', e => { const c = e.target.closest('.card'); if (c && (e.key === 'Enter' || e.key === ' ') && !e.target.closest('button')) { e.preventDefault(); openItem(c.dataset.id); } });
+
+/* ================= item sheet ================= */
+let item = null;
+function openItem(id) { const it = itemById(id); item = { id, cfg: defaultCfg(it), qty: 1, note: '' }; paintItem(true); openSheet('#isheet'); }
+function paintItem(first) {
+  const it = itemById(item.id), cfg = item.cfg, r = it.b;
+  let opts = '';
+  if (r) {
+    if (it.prot) opts += `<div class="optg"><h4>${esc(t('protein'))}</h4><div class="seg2"><button data-prot="0" aria-pressed="${!cfg.chicken}">${esc(t('beef'))}</button><button data-prot="1" aria-pressed="${!!cfg.chicken}">${esc(t('chicken'))}</button></div></div>`;
+    const removable = LAYERS.filter(k => r[k] && k !== 'patty');
+    if (removable.length) opts += `<div class="optg"><h4>${esc(t('remove'))}</h4><div class="chips">${removable.map(k => `<button class="chip ${cfg[k] ? '' : 'off'}" data-rm="${k}" aria-pressed="${!cfg[k]}">${esc(t('L')[k])}</button>`).join('')}</div></div>`;
+    const addable = Object.keys(PAID).filter(k => !r[k]);
+    opts += `<div class="optg"><h4>${esc(t('addMore'))}</h4><div class="chips">${r.patty === 1 ? `<button class="chip ${cfg.patty > 1 ? 'on' : ''}" data-ad="patty">+${esc(t('L').patty)} <small>${usd(CONFIG.extras.patty2)}</small></button>` : ''}${addable.map(k => `<button class="chip ${cfg[k] ? 'on' : ''}" data-ad="${k}">+${esc(t('L')[k])} <small>${usd(CONFIG.extras[PAID[k]])}</small></button>`).join('')}</div></div>`;
+    opts += `<div class="optg"><h4>${esc(t('sauceH'))}</h4><div class="chips">${SAUCES.map(s => `<button class="chip ${cfg.sauce === s ? 'on' : ''}" data-sauce="${s}">${esc(t('S')[s])}</button>`).join('')}</div></div>`;
+  }
+  $('#ibody').innerHTML = `<div class="ihero">${visualFor(it, cfg)}</div>
+   <div class="ihead"><h3>${esc(nm(it.id))}</h3><span class="price" id="iprice">${usd(priceOf(it, cfg))}</span></div>
+   <p style="color:var(--muted);font-size:14px">${esc(t('I')[it.id][1])}</p>${opts}
+   <div class="field"><label for="inote">${esc(t('note'))}</label><textarea id="inote" rows="2" placeholder="${esc(t('notePh'))}">${esc(item.note)}</textarea></div>`;
+  $('#iq').textContent = item.qty;
+  $('#iadd').textContent = `${t('addN')(item.qty)} · ${usd(priceOf(it, cfg) * item.qty)}`;
+  $('#inote').oninput = e => item.note = e.target.value.slice(0, 140);
+  if (first && !RM) gsap.from('#ibody .ihero > *', { scale: .85, opacity: 0, duration: .5, ease: 'back.out(1.8)', delay: .08 });
+}
+$('#ibody').addEventListener('click', e => {
+  const b = e.target.closest('[data-rm],[data-ad],[data-prot],[data-sauce]'); if (!b || !item.cfg) return;
+  const cfg = item.cfg;
+  if (b.dataset.rm) cfg[b.dataset.rm] = cfg[b.dataset.rm] ? 0 : 1;
+  if (b.dataset.ad) { const k = b.dataset.ad; if (k === 'patty') cfg.patty = cfg.patty > 1 ? 1 : 2; else cfg[k] = cfg[k] ? 0 : 1; }
+  if (b.dataset.prot) cfg.chicken = +b.dataset.prot;
+  if (b.dataset.sauce) cfg.sauce = b.dataset.sauce;
+  const sc = $('#isheet .body').scrollTop; paintItem(false); $('#isheet .body').scrollTop = sc;
+  if (!RM) gsap.fromTo('#iprice', { scale: 1.3 }, { scale: 1, duration: .45, ease: 'back.out(3)' });
+});
+$('#iminus').onclick = () => { if (item.qty > 1) { item.qty--; paintItem(false); } };
+$('#iplus').onclick = () => { if (item.qty < 20) { item.qty++; paintItem(false); if (!RM) gsap.fromTo('#iq', { y: -8 }, { y: 0, duration: .35, ease: 'bounce.out' }); } };
+$('#iadd').onclick = () => {
+  const it = itemById(item.id);
+  addLine({ id: it.id, cfg: item.cfg ? { ...item.cfg } : null, qty: item.qty, unit: priceOf(it, item.cfg), note: item.note.trim() });
+  flyToBag($('#ibody .ihero'), visualFor(it, item.cfg)); closeSheets();
+  toast(`${item.qty}× ${nm(it.id)} · ${t('added')}`);
+};
+
+/* ================= builder ================= */
+const BASES = ['tikiz', 'cheese', 'bbqb', 'chili', 'lebanese', 'double'];
+let bId = 'tikiz', bCfg = defaultCfg(itemById('tikiz'));
+const stack = liveStack($('#stack'));
+function setBase(id) { const ch = bCfg.chicken; bId = id; bCfg = { ...defaultCfg(itemById(id)), chicken: ch }; paintBases(); paintProt(); paintCtrls(); paintSauces(); stack.render(bCfg); paintBTot(); }
+function paintBases() { $('#bases').innerHTML = `<span style="flex:none;align-self:center;font:600 13px var(--sans);margin-inline-end:2px">${esc(t('startFrom'))}</span>` + BASES.map(id => `<button class="base" data-id="${id}" aria-pressed="${id === bId}">${esc(nm(id))}</button>`).join(''); }
+function paintProt() { $('#prot').innerHTML = `<button data-p="0" aria-pressed="${!bCfg.chicken}">${esc(t('beef'))}</button><button data-p="1" aria-pressed="${!!bCfg.chicken}">${esc(t('chicken'))}</button>`; }
+function paintCtrls() {
+  const L = t('LC'), base = itemById(bId).b;
+  $('#ctrls').innerHTML = LAYERS.map(k => k === 'patty'
+    ? `<div class="ctl on"><span>${esc(L.patty)}</span><span class="step"><button data-k="patty" data-v="-1" aria-label="- ${esc(L.patty)}" ${bCfg.patty <= 1 ? 'disabled' : ''}>−</button><b>${bCfg.patty || 1}</b><button data-k="patty" data-v="1" aria-label="+ ${esc(L.patty)}" ${bCfg.patty >= 2 ? 'disabled' : ''}>+</button></span></div>`
+    : `<button class="ctl ${bCfg[k] ? 'on' : ''}" data-k="${k}" aria-pressed="${!!bCfg[k]}"><span>${esc(L[k])}${PAID[k] && !base[k] ? `<small>+${usd(CONFIG.extras[PAID[k]])}</small>` : ''}</span><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="${K}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5 9-10"/></svg></span></button>`).join('');
+}
+function paintSauces() { $('#sauces').innerHTML = SAUCES.map(s => `<button class="sauce" data-s="${s}" aria-pressed="${bCfg.sauce === s}">${esc(t('S')[s])}</button>`).join(''); }
+function paintBTot() {
+  const it = itemById(bId), p = priceOf(it, bCfg), el = $('#btot'), old = parseFloat(el.dataset.v || p);
+  el.dataset.v = p; const o = { v: old };
+  const html = v => `${usd(v)}<small>${esc(nm(bId))}</small>`;
+  el.innerHTML = html(p);
+  if (!RM && old !== p) gsap.to(o, { v: p, duration: .4, ease: 'power2.out', onUpdate: () => el.innerHTML = html(o.v) });
+  const d = diffText(it, bCfg);
+  $('#bname').innerHTML = `${esc(lang === 'ar' ? nm(bId) : t('yours') + ' ' + nm(bId))}<small>${esc(d)}</small>`;
+}
+$('#bases').addEventListener('click', e => { const b = e.target.closest('.base'); if (b) setBase(b.dataset.id); });
+$('#prot').addEventListener('click', e => { const b = e.target.closest('[data-p]'); if (!b) return; bCfg.chicken = +b.dataset.p; paintProt(); stack.render(bCfg); paintBTot(); });
+$('#sauces').addEventListener('click', e => { const b = e.target.closest('[data-s]'); if (!b) return; bCfg.sauce = b.dataset.s; paintSauces(); stack.render(bCfg); paintBTot(); });
+$('#ctrls').addEventListener('click', e => {
+  const b = e.target.closest('[data-k]'); if (!b || b.disabled) return;
+  const k = b.dataset.k;
+  if (k === 'patty') bCfg.patty = Math.max(1, Math.min(2, (bCfg.patty || 1) + +b.dataset.v)); else bCfg[k] = bCfg[k] ? 0 : 1;
+  paintCtrls(); stack.render(bCfg); paintBTot();
+  if (!RM) { const nb = $(`#ctrls [data-k="${k}"]`); nb && gsap.fromTo(nb.closest('.ctl') || nb, { scale: .94 }, { scale: 1, duration: .4, ease: 'elastic.out(1,.4)' }); }
+});
+$('#badd').onclick = () => {
+  const it = itemById(bId);
+  addLine({ id: bId, cfg: { ...bCfg }, qty: 1, unit: priceOf(it, bCfg), note: '' });
+  if (!RM) gsap.fromTo('#stack', { y: 0 }, { keyframes: [{ y: -18, duration: .15, ease: 'power2.out' }, { y: 0, duration: .35, ease: 'bounce.out' }] });
+  flyToBag($('#stack'), stackSVG(bCfg));
+  toast(`${nm(bId)} · ${t('added')}`);
+};
+function liveStack(svg) {
+  const H = 400, NS = 'http://www.w3.org/2000/svg'; let cur = [];
+  const shadow = document.createElementNS(NS, 'ellipse');
+  shadow.setAttribute('cx', 200); shadow.setAttribute('cy', 392); shadow.setAttribute('rx', 165); shadow.setAttribute('ry', 9); shadow.setAttribute('fill', 'rgba(11,6,0,.22)');
+  svg.appendChild(shadow);
+  function render(cfg, animate = true) {
+    const next = layersOf(cfg); let y = 0; const pos = {};
+    for (const l of next) { y += ART[l.k].h - 2; pos[l.id] = H - 8 - y; }
+    const ids = new Set(next.map(l => l.id));
+    cur.filter(c => !ids.has(c.id)).forEach(c => {
+      if (animate && !RM) gsap.to(c.el, { x: (Math.random() < .5 ? -1 : 1) * 260, rotation: (Math.random() - .5) * 40, opacity: 0, duration: .42, ease: 'power2.in', transformOrigin: '50% 50%', onComplete: () => c.el.remove() });
+      else c.el.remove();
+    });
+    const keep = {}; cur.filter(c => ids.has(c.id)).forEach(c => keep[c.id] = c);
+    const out = []; let delay = 0;
+    next.forEach(l => {
+      let c = keep[l.id];
+      if (!c) {
+        const g = document.createElementNS(NS, 'g'); g.innerHTML = `<g class="in">${ART[l.k].draw(l.c)}</g>`;
+        svg.appendChild(g); c = { id: l.id, el: g };
+        gsap.set(g, { y: pos[l.id] });
+        if (animate && !RM) {
+          gsap.fromTo(g, { y: pos[l.id] - 300, opacity: 0 }, { y: pos[l.id], opacity: 1, duration: .55, delay, ease: 'bounce.out' });
+          gsap.fromTo(g.firstChild, { scaleY: 1.14, scaleX: .94 }, { scaleY: 1, scaleX: 1, duration: .5, delay: delay + .3, ease: 'elastic.out(1,.45)', svgOrigin: `200 ${ART[l.k].h}` });
+          if (l.k === 'beef' || l.k === 'chicken') setTimeout(() => sizzle(svg, pos[l.id]), (delay + .38) * 1000);
+          delay += .05;
+        }
+      } else if (animate && !RM) gsap.to(c.el, { y: pos[l.id], duration: .45, ease: 'back.out(2)' }); else gsap.set(c.el, { y: pos[l.id] });
+      out.push(c);
+    });
+    out.forEach(c => svg.appendChild(c.el)); cur = out;
+    const top = Math.min(110, H - 8 - y - 96), vh = H - top, vw = vh * 380 / 290;
+    const vb = `${(200 - vw / 2).toFixed(1)} ${top.toFixed(1)} ${vw.toFixed(1)} ${vh.toFixed(1)}`;
+    if (animate && !RM) gsap.to(svg, { attr: { viewBox: vb }, duration: .5, ease: 'power2.out' }); else svg.setAttribute('viewBox', vb);
+  }
+  return { render };
+}
+function sizzle(svg, y) {
+  const NS = 'http://www.w3.org/2000/svg';
+  for (let i = 0; i < 9; i++) {
+    const c = document.createElementNS(NS, 'circle'), x = 60 + Math.random() * 280;
+    c.setAttribute('cx', x); c.setAttribute('cy', y + 10); c.setAttribute('r', 2 + Math.random() * 3); c.setAttribute('fill', i % 2 ? '#fffbd6' : K);
+    svg.appendChild(c);
+    gsap.to(c, { attr: { cy: y - 30 - Math.random() * 50, cx: x + (Math.random() - .5) * 60 }, opacity: 0, duration: .6 + Math.random() * .4, ease: 'power2.out', onComplete: () => c.remove() });
+  }
+}
+
+/* ================= reels: play when on screen, tap to pause ================= */
+const PAUSE_I = '<svg viewBox="0 0 24 24" fill="#fff"><path d="M7 5h3v14H7zM14 5h3v14h-3z"/></svg>', PLAY_I = '<svg viewBox="0 0 24 24" fill="#fff"><path d="M8 5l11 7-11 7z"/></svg>';
+const reels = (() => {
+  let io, started = false;
+  function paint() {
+    $('#reels').innerHTML = CONFIG.reels.map((r, i) => `<figure class="reel" data-i="${i}"><video muted loop playsinline preload="none" poster="${r.p}" src="${r.v}" aria-label="${esc(t(r.k))}"></video><span class="play" aria-hidden="true">${RM ? PLAY_I : PAUSE_I}</span><figcaption>${esc(t(r.k))}</figcaption></figure>`).join('') +
+      `<article class="offer"><img src="media/box.webp" width="640" height="900" loading="lazy" alt=""><div class="tx"><h3>${esc(nm('box2'))}</h3><p>${esc(t('I').box2[1])}</p><div class="pr"><b>${usd(17.99)}</b><button class="btn btn-ink" data-offer style="height:40px">${esc(t('addMore'))}</button></div></div></article>`;
+    dotsFor('#reels', '#ldots');
+    if (started) observe();
+  }
+  function observe() {
+    if (RM) return;
+    io && io.disconnect();
+    io = new IntersectionObserver(es => es.forEach(en => { const v = en.target.querySelector('video'); if (!v || v.dataset.paused) return; if (en.isIntersecting) v.play().catch(() => {}); else v.pause(); }), { threshold: .5 });
+    $$('#reels .reel').forEach(f => io.observe(f));
+  }
+  $('#reels').addEventListener('click', e => {
+    const o = e.target.closest('[data-offer]');
+    if (o) { const it = itemById('box2'); addLine({ id: 'box2', cfg: null, qty: 1, unit: it.price, note: '' }); flyToBag(o.closest('.offer').querySelector('img'), visualFor(it)); toast(`${nm('box2')} · ${t('added')}`); return; }
+    const f = e.target.closest('.reel'); if (!f) return; const v = f.querySelector('video');
+    if (v.paused) { delete v.dataset.paused; v.play().catch(() => {}); f.querySelector('.play').innerHTML = PAUSE_I; }
+    else { v.dataset.paused = '1'; v.pause(); f.querySelector('.play').innerHTML = PLAY_I; }
+  });
+  return { paint, start() { started = true; observe(); } };
+})();
+
+/* ================= rails: dots + arrows (mirror-aware) ================= */
+function dotsFor(railSel, dotSel) {
+  const rail = $(railSel), dots = $(dotSel), kids = [...rail.children];
+  dots.innerHTML = kids.map((_, i) => `<i class="${i ? '' : 'on'}"></i>`).join('');
+  const io = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting && en.intersectionRatio > .6) { const i = kids.indexOf(en.target); $$('i', dots).forEach((d, j) => d.classList.toggle('on', j === i)); } }), { root: rail, threshold: [.6] });
+  kids.forEach(k => io.observe(k));
+  const fits = () => dots.style.display = rail.scrollWidth > rail.clientWidth + 4 ? 'flex' : 'none';
+  fits(); addEventListener('resize', fits);
+}
+$$('.rarr').forEach(b => b.onclick = () => { const r = $(b.dataset.rail), w = r.firstElementChild.getBoundingClientRect().width + 10; r.scrollBy({ left: +b.dataset.d * w * (RTL() ? -1 : 1), behavior: RM ? 'auto' : 'smooth' }); });
+
+/* ================= branches + hours (Beirut time) ================= */
+function minsThere() {
+  const p = new Intl.DateTimeFormat('en-GB', { timeZone: CONFIG.tz, hour: '2-digit', minute: '2-digit', hour12: false }).formatToParts(new Date());
+  const g = k => +((p.find(x => x.type === k) || {}).value || 0);
+  return (g('hour') % 24) * 60 + g('minute');
+}
+function paintHours() {
+  const m = minsThere(), open = m >= CONFIG.hours.open || m < CONFIG.hours.close, txt = open ? t('open') : t('opensAt');
+  $('#status').classList.toggle('open', open); $('#status span').textContent = txt; $('#status2').textContent = `${txt} · ${t('hoursB')}`;
+}
+const GO = '<span class="go"><svg class="flip" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span>';
+function paintBranches() {
+  const B = t('B');
+  $('#branches').innerHTML = CONFIG.branches.map((b, i) => `<a class="br" href="${b.map}" target="_blank" rel="noopener"><span class="ii">${i + 1}</span><div><b>${esc(B[b.id][0])}</b><span>${esc(B[b.id][1])}</span></div>${GO}</a>`).join('') +
+    `<a class="br" href="https://wa.me/${CONFIG.wa}" target="_blank" rel="noopener"><span class="ii"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="17.5" r="1.6"/><circle cx="17" cy="17.5" r="1.6"/></svg></span><div><b>${esc(t('delivery'))}</b><span>${esc(t('deliveryS'))}</span></div>${GO}</a>`;
+}
+
+/* ================= sheets ================= */
+let lastFocus;
+function openSheet(sel) {
+  lastFocus = document.activeElement; $('#toast').classList.remove('on');
+  $$('.sheet.on').forEach(s => s.classList.remove('on'));
+  $('#scrim').classList.add('on'); $(sel).classList.add('on'); document.documentElement.classList.add('lock');
+  $('#sbar').classList.add('hide');
+  setTimeout(() => { const x = $(sel + ' .x'); x && x.focus({ preventScroll: true }); }, 60);
+}
+function closeSheets() {
+  $$('.sheet.on').forEach(s => s.classList.remove('on')); $('#scrim').classList.remove('on'); document.documentElement.classList.remove('lock');
+  syncBar(); lastFocus && lastFocus.focus && lastFocus.focus({ preventScroll: true });
+}
+$('#scrim').onclick = closeSheets;
+$$('[data-close]').forEach(b => b.onclick = closeSheets);
+addEventListener('keydown', e => { if (e.key === 'Escape') closeSheets(); });
+$$('.sheet').forEach(sh => {
+  let y0 = null;
+  sh.addEventListener('touchstart', e => { if (e.target.closest('.body') && sh.querySelector('.body').scrollTop > 0) return; y0 = e.touches[0].clientY; }, { passive: true });
+  sh.addEventListener('touchmove', e => { if (y0 === null) return; const dy = e.touches[0].clientY - y0; if (dy > 0 && innerWidth < 700) sh.style.transform = `translateY(${dy}px)`; }, { passive: true });
+  sh.addEventListener('touchend', e => { if (y0 === null) return; const dy = e.changedTouches[0].clientY - y0; y0 = null; sh.style.transform = ''; if (dy > 110 && innerWidth < 700) closeSheets(); });
+});
+
+/* ================= bag + checkout → WhatsApp ================= */
+let step = 0, orderCode = '', lastMsg = '', lastUrl = '';
+const form = store.get('tikiz.form.v1', { name: '', phone: '', branch: 'hadath', way: 'deliv', addr: '', pay: 'usd', obs: '' });
+const saveForm = () => store.set('tikiz.form.v1', form);
+const lineSub = (l, L = lang) => { const it = itemById(l.id); return diffText(it, l.cfg, L) + (l.note ? ` · "${l.note}"` : ''); };
+function openBag() { if (step === 3 || !cart.length) step = 0; paintBag(); openSheet('#bag'); }
+$$('[data-open-bag]').forEach(b => b.addEventListener('click', openBag));
+$('#bagbtn').onclick = openBag;
+function paintBag() {
+  $('#bagtitle').textContent = t('stepNames')[step];
+  $$('#steps i').forEach((d, i) => d.classList.toggle('on', i <= step));
+  const body = $('#bbody'), foot = $('#bfoot'), sub = cartTotal();
+  const totals = `<div class="totals"><div><span>${esc(t('subtotal'))}</span><span>${usd(sub)}</span></div>${form.way === 'deliv' ? `<div><span>${esc(t('delivF'))}</span><span>${esc(t('toAgree'))}</span></div>` : ''}<div class="big"><span>${esc(t('total'))}</span><span>${usd(sub)}</span></div></div>`;
+  if (step === 0) {
+    if (!cart.length) {
+      body.innerHTML = `<div class="empty"><svg id="emptymark"></svg><p><b>${esc(t('bagEmpty'))}</b></p><p>${esc(t('bagEmpty2'))}</p></div>`;
+      flatRoundel($('#emptymark'), false);
+      foot.innerHTML = `<a class="btn btn-led" href="#build" id="emptygo">${esc(t('goBuild'))}</a>`; $('#emptygo').onclick = closeSheets; return;
+    }
+    body.innerHTML = cart.map((l, i) => { const it = itemById(l.id), s = lineSub(l); return `<div class="line" data-i="${i}"><div class="th">${visualFor(it, l.cfg)}</div><div class="tx"><b>${esc(nm(l.id))}</b>${s ? `<span>${esc(s)}</span>` : ''}<span>${usd(l.unit)} ${esc(t('each'))}</span></div><div class="rt"><b>${usd(lineTotal(l))}</b><div class="qty"><button data-q="-1" aria-label="${esc(t('remove1'))}">${l.qty === 1 ? '×' : '−'}</button><b>${l.qty}</b><button data-q="1" aria-label="+">+</button></div></div></div>`; }).join('') + totals;
+    foot.innerHTML = `<button class="btn btn-led" id="bnext">${esc(t('next1'))} · ${usd(sub)}</button>`;
+    $('#bnext').onclick = () => go(1);
+  } else if (step === 1) {
+    const segb = (k, v, lab) => `<button data-f="${k}" data-v="${v}" aria-pressed="${form[k] === v}">${esc(lab)}</button>`;
+    body.innerHTML = `<div class="field" id="fname"><label for="f-name">${esc(t('name'))}</label><input id="f-name" autocomplete="given-name" placeholder="${esc(t('namePh'))}" value="${esc(form.name)}"></div>
+      <div class="field"><label for="f-phone">${esc(t('phone'))}</label><input id="f-phone" inputmode="tel" autocomplete="tel" dir="ltr" placeholder="${esc(t('phonePh'))}" value="${esc(form.phone)}" style="text-align:start"></div>
+      <div class="field"><span class="lab">${esc(t('branch'))}</span><div class="seg2">${CONFIG.branches.map(b => segb('branch', b.id, t('B')[b.id][0])).join('')}</div></div>
+      <div class="field"><span class="lab">${esc(t('how'))}</span><div class="seg2">${segb('way', 'deliv', t('deliv'))}${segb('way', 'pick', t('pick'))}</div></div>
+      ${form.way === 'deliv' ? `<div class="field" id="faddr"><label for="f-addr">${esc(t('addr'))}</label><input id="f-addr" autocomplete="street-address" placeholder="${esc(t('addrPh'))}" value="${esc(form.addr)}"></div>` : ''}
+      <div class="field"><span class="lab">${esc(t('pay'))}</span><div class="seg2">${segb('pay', 'usd', t('usd'))}${segb('pay', 'lbp', t('lbp'))}</div></div>
+      <div class="field"><label for="f-obs">${esc(t('obs'))}</label><input id="f-obs" placeholder="${esc(t('obsPh'))}" value="${esc(form.obs)}"></div>`;
+    foot.innerHTML = `<button class="btn btn-ghost" id="bback" style="flex:0 0 auto">${esc(t('back'))}</button><button class="btn btn-led" id="bnext">${esc(t('next2'))}</button>`;
+    const bind = (id, k) => { const el = $(id); if (el) el.oninput = () => { form[k] = el.value.slice(0, 160); saveForm(); el.closest('.field').classList.remove('bad'); }; };
+    bind('#f-name', 'name'); bind('#f-phone', 'phone'); bind('#f-addr', 'addr'); bind('#f-obs', 'obs');
+    $$('[data-f]', body).forEach(b => b.onclick = () => { form[b.dataset.f] = b.dataset.v; saveForm(); const sc = $('#bag .body').scrollTop; paintBag(); $('#bag .body').scrollTop = sc; });
+    $('#bback').onclick = () => go(0);
+    $('#bnext').onclick = () => { let ok = true; if (!form.name.trim()) { ok = false; bad('#fname'); } if (form.way === 'deliv' && form.addr.trim().length < 5) { ok = false; bad('#faddr'); } if (ok) go(2); };
+  } else if (step === 2) {
+    body.innerHTML = `<p style="color:var(--muted);font-size:14px;margin-top:4px">${esc(t('review'))}</p><div class="msg" dir="auto">${esc(message())}</div>${totals}`;
+    foot.innerHTML = `<button class="btn btn-ghost" id="bback" style="flex:0 0 auto">${esc(t('back'))}</button><button class="btn btn-wa" id="bsend"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.6-1.2A9 9 0 1 0 12 3Z"/></svg>${esc(t('send'))}</button>`;
+    $('#bback').onclick = () => go(1); $('#bsend').onclick = send;
+  } else {
+    body.innerHTML = `<div class="done"><svg class="tick" viewBox="0 0 80 80"><circle cx="40" cy="40" r="34" fill="none" stroke="${Y}" stroke-width="4" pathLength="1" stroke-dasharray="1 1" stroke-dashoffset="1" id="tk1"/><path d="m26 41 10 10 19-21" fill="none" stroke="#fff8d6" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1" stroke-dashoffset="1" id="tk2"/></svg><h3 style="font-size:22px;margin-top:6px">${esc(t('doneT'))}</h3><span class="code">${orderCode}</span><p style="color:var(--muted);font-size:14px;margin-top:6px">${esc(t('doneS'))}</p></div><div class="msg" dir="auto">${esc(lastMsg)}</div><p class="note">${esc(t('doneNote'))}</p>`;
+    foot.innerHTML = `<button class="btn btn-ghost" id="bcopy" style="flex:0 0 auto">${esc(t('copyAgain'))}</button><a class="btn btn-wa" href="${esc(lastUrl)}" target="_blank" rel="noopener">${esc(t('openWa'))}</a>`;
+    $('#bcopy').onclick = () => { copy(lastMsg); toast(t('copied')); };
+    gsap.to('#tk1', { attr: { 'stroke-dashoffset': 0 }, duration: RM ? 0 : .5, ease: 'power2.out' });
+    gsap.to('#tk2', { attr: { 'stroke-dashoffset': 0 }, duration: RM ? 0 : .35, delay: RM ? 0 : .4, ease: 'power2.out' });
+    if (!RM) setTimeout(() => { const r = $('#bbody .tick'); if (r) { const b = r.getBoundingClientRect(); sparks(b.left + b.width / 2, b.top + b.height / 2); } }, 650);
+  }
+  $$('.line .qty button', body).forEach(b => b.onclick = () => {
+    const i = +b.closest('.line').dataset.i, l = cart[i];
+    l.qty += +b.dataset.q;
+    if (l.qty <= 0) {
+      if (!RM) { gsap.to(b.closest('.line'), { x: RTL() ? -60 : 60, opacity: 0, height: 0, paddingTop: 0, paddingBottom: 0, duration: .3, ease: 'power2.in', onComplete: () => { cart.splice(i, 1); saveCart(); paintBag(); } }); return; }
+      cart.splice(i, 1);
+    }
+    saveCart(); paintBag();
+  });
+}
+function bad(sel) { const f = $(sel); if (!f) return; f.classList.add('bad'); f.classList.remove('shake'); void f.offsetWidth; f.classList.add('shake'); const i = f.querySelector('input'); i && i.focus(); }
+function go(n) {
+  const body = $('#bbody'), dir = (n > step ? 1 : -1) * (RTL() ? -1 : 1);
+  if (RM) { step = n; paintBag(); return; }
+  gsap.to(body, { x: -dir * 40, opacity: 0, duration: .16, ease: 'power2.in', onComplete: () => { step = n; paintBag(); $('#bag .body').scrollTop = 0; gsap.fromTo(body, { x: dir * 40, opacity: 0 }, { x: 0, opacity: 1, duration: .3, ease: 'power3.out' }); } });
+}
+function message() { // written in the visitor's language, the way they'd text it
+  const P = T[lang], m = P.msg;
+  const lines = cart.map(l => { const s = lineSub(l, lang); return `${l.qty}x ${P.I[l.id][0]}${s ? ` (${s})` : ''} · ${usd(lineTotal(l))}`; });
+  return [`${m.hi}${orderCode ? ' ' + orderCode : ''}`, '', ...lines, '',
+    `${m.total}: ${usd(cartTotal())}${form.way === 'deliv' ? ' ' + m.fee : ''}`,
+    `${m.name}: ${form.name.trim()}`,
+    form.phone.trim() ? `${m.phone}: ${form.phone.trim()}` : null,
+    `${m.branch}: ${P.B[form.branch][0]}`,
+    form.way === 'deliv' ? `${m.way}: ${form.addr.trim()}` : m.pick,
+    `${m.pay}: ${P[form.pay]}`,
+    form.obs.trim() ? `${m.obs}: ${form.obs.trim()}` : null
+  ].filter(x => x !== null).join('\n');
+}
+function copy(txt) { try { if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(txt).catch(() => fallbackCopy(txt)); } catch (e) {} fallbackCopy(txt); }
+function fallbackCopy(txt) { const ta = document.createElement('textarea'); ta.value = txt; ta.style.cssText = 'position:fixed;opacity:0'; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); } catch (e) {} ta.remove(); }
+function send() {
+  orderCode = 'TKZ-' + String(Math.floor(1000 + Math.random() * 9000));
+  lastMsg = message(); copy(lastMsg);
+  lastUrl = `https://wa.me/${CONFIG.wa}?text=${encodeURIComponent(lastMsg)}`;
+  store.set('tikiz.last.v1', { code: orderCode, msg: lastMsg, at: Date.now() });
+  window.__lastOrder = { code: orderCode, msg: lastMsg, url: lastUrl };
+  window.open(lastUrl, '_blank', 'noopener');
+  cart = []; saveCart(); go(3);
+}
+
+/* ================= sticky bar, nav, reveals ================= */
+let closerVisible = false;
+function syncBar() { $('#sbar').classList.toggle('hide', closerVisible || $('.sheet.on') !== null || document.documentElement.classList.contains('intro-on')); }
+new IntersectionObserver(es => { closerVisible = es[0].isIntersecting; syncBar(); }, { threshold: .25 }).observe($('#end'));
+new IntersectionObserver(es => { $('#nav').classList.toggle('solid', !es[0].isIntersecting); }, { rootMargin: '-80px 0px 0px 0px' }).observe($('.hero .hcopy'));
+const rio = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) { en.target.classList.add('in'); rio.unobserve(en.target); } }), { rootMargin: '0px 0px -8% 0px' });
+$$('.reveal').forEach(el => rio.observe(el));
+
+/* ================= language: English ⇄ Arabic (RTL) ================= */
+function applyLang() {
+  const d = document.documentElement; d.lang = lang; d.dir = lang === 'ar' ? 'rtl' : 'ltr';
+  document.title = lang === 'ar' ? 'تيكيز برغرز · على ذوقك يا طيّب' : 'Tikiz Burgers · The Legend Of Taste';
+  $$('[data-t]').forEach(el => el.textContent = t(el.dataset.t));
+  $$('[data-t-html]').forEach(el => el.innerHTML = t(el.dataset.tHtml));
+  $$('[data-t-alt]').forEach(el => el.alt = t(el.dataset.tAlt));
+  $$('[data-t-aria]').forEach(el => el.setAttribute('aria-label', t(el.dataset.tAria)));
+  $$('[data-lang]').forEach(b => { b.innerHTML = lang === 'ar' ? 'EN' : '<span class="ar">ع</span>'; b.setAttribute('aria-label', t('langBtn')); });
+  $('#signhint span').textContent = t(signOn ? 'hint' : 'hintOff');
+  paintTabs(); paintRail(false); paintBases(); paintProt(); paintCtrls(); paintSauces(); paintBTot(); reels.paint(); paintBranches(); paintHours(); paintBadge();
+  if ($('#bag').classList.contains('on')) paintBag();
+  if ($('#isheet').classList.contains('on') && item) paintItem(false);
+}
+$$('[data-lang]').forEach(b => b.addEventListener('click', () => {
+  lang = lang === 'ar' ? 'en' : 'ar'; store.set('tikiz.lang', lang);
+  applyLang();
+  if (!RM) gsap.fromTo('main', { opacity: .35 }, { opacity: 1, duration: .45, ease: 'power2.out', clearProps: 'opacity' });
+}));
+
+/* ================= boot ================= */
+applyLang();
+stack.render(bCfg, false);
+setInterval(paintHours, 60000);
+if (document.documentElement.classList.contains('intro-on')) {
+  document.documentElement.classList.add('lock'); syncBar();
+  Promise.race([document.fonts ? document.fonts.ready : Promise.resolve(), new Promise(r => setTimeout(r, 1200))]).then(runIntro);
+} else startPage(false);
+})();
+</script>
+</body>
+</html>

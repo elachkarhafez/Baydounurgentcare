@@ -1,0 +1,48 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Josefin+Sans:wght@700&family=Lemonada:wght@700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1200px;height:630px;overflow:hidden}
+body{position:relative;color:#fff8d6;font-family:Fredoka,sans-serif;
+  background:radial-gradient(40% 70% at 23% 50%,rgba(255,232,26,.16),transparent 70%),repeating-linear-gradient(90deg,rgba(255,255,255,.03) 0 1px,transparent 1px 120px),linear-gradient(#14130c,#0d0c08)}
+.sign{position:absolute;left:30px;top:22px;width:520px}
+.sign svg{width:100%;height:auto;overflow:visible}
+.copy{position:absolute;left:590px;top:54px;width:570px}
+.kick{font:700 22px/1 'Josefin Sans',sans-serif;letter-spacing:.22em;color:#ffe81a}
+h1{margin-top:16px;font:600 66px/1.02 Fredoka,sans-serif}
+h1 em{font-style:normal;color:#f9ef05;text-shadow:0 0 26px rgba(255,232,26,.5)}
+.ar{margin-top:10px;font:700 36px/1.6 Lemonada,sans-serif;color:#f9ef05;direction:rtl;text-align:left}
+.pics{position:absolute;left:590px;bottom:44px;display:flex;gap:14px}
+.pics img{width:230px;height:172px;object-fit:cover;border-radius:18px;box-shadow:0 0 0 2px rgba(249,239,5,.5),0 18px 40px rgba(0,0,0,.6)}
+.where{position:absolute;right:40px;bottom:58px;width:80px}
+.wa{position:absolute;left:590px;top:330px;display:flex;align-items:center;gap:12px;font:600 26px Fredoka,sans-serif;color:#fff8d6}
+.wa i{width:14px;height:14px;border-radius:50%;background:#ffe81a;box-shadow:0 0 12px #ffe81a}
+</style></head>
+<body>
+<div class="sign" id="sign"></div>
+<div class="copy">
+  <div class="kick">TIKIZ BURGERS</div>
+  <h1>The <em>Legend</em> Of Taste</h1>
+  <div class="ar">على ذوقك يا طيّب</div>
+</div>
+<div class="wa"><i></i>Hadath · Mcharafieh · Aaramoun</div>
+<div class="pics"><img src="../media/zinger-ad.webp" alt=""><img src="../media/hero.webp" alt=""></div>
+<script src="src/mark.js"></script>
+<script>
+// the LED sign, fully lit, same traced geometry as the page
+const M = window.MARK, LED = '#ffe81a';
+const arc = (cx, cy, r) => `M ${cx - r} ${cy} A ${r} ${r} 0 0 0 ${cx} ${cy + r} A ${r} ${r} 0 0 0 ${cx + r} ${cy}`;
+const star = ([cx, cy], r = 22) => { let d = ''; for (let i = 0; i < 10; i++) { const a = -Math.PI / 2 + i * Math.PI / 5, rr = i % 2 ? r * .45 : r; d += (i ? 'L' : 'M') + (cx + Math.cos(a) * rr).toFixed(1) + ' ' + (cy + Math.sin(a) * rr).toFixed(1); } return d + 'Z'; };
+const lit = [M.ring, M.bun_top, M.cheese, M.patty, M.bun_bot, ...M.burgers, M.banner, star([262, 674]), star([975, 681])].join(' ');
+const L = M.letters.join(' ');
+document.getElementById('sign').innerHTML = `<svg viewBox="60 -30 1100 1230"><defs><filter id="b" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="14"/></filter>
+<path id="a1" d="${arc(615, 521, 396)}"/><path id="a2" d="${arc(620, 608, 548)}"/></defs>
+<path d="${lit}" fill="${LED}" filter="url(#b)" opacity=".6"/><path d="${lit}" fill="${LED}"/><path d="${lit}" fill="#fffbd6" opacity=".4" transform="translate(0 -2)"/>
+<path d="${L}" fill="#5f5810" transform="translate(-9 10)"/><path d="${L}" fill="#a69a10" transform="translate(-5 6)"/>
+<path d="${L}" fill="none" stroke="${LED}" stroke-width="26" filter="url(#b)" opacity=".6"/><path d="${L}" fill="#100f0a"/><path d="${L}" fill="none" stroke="${LED}" stroke-width="9" stroke-linejoin="round"/>
+<text font-family="Fredoka" font-weight="600" font-size="46" letter-spacing="4" fill="${LED}"><textPath href="#a1" startOffset="50%" text-anchor="middle">The Legend Of Taste</textPath></text>
+<text font-family="Lemonada" font-weight="700" font-size="76" fill="${LED}" direction="rtl" filter="url(#b)" opacity=".7"><textPath href="#a2" startOffset="50%" text-anchor="middle">#على_ذوقك_يا_طيّب</textPath></text>
+<text font-family="Lemonada" font-weight="700" font-size="76" fill="${LED}" direction="rtl"><textPath href="#a2" startOffset="50%" text-anchor="middle">#على_ذوقك_يا_طيّب</textPath></text></svg>`;
+</script>
+</body></html>
