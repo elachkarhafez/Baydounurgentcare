@@ -11,14 +11,14 @@
 <meta property="og:url" content="https://goodriddancejunk.vercel.app/">
 <meta property="og:title" content="Good Riddance Junk Removal LLC">
 <meta property="og:description" content="Load the truck, see a ballpark price, and send your list for a real quote.">
-<meta property="og:image" content="https://goodriddancejunk.vercel.app/media/og.jpg?v=mwx2475e">
+<meta property="og:image" content="https://goodriddancejunk.vercel.app/media/og.jpg?v=mwx2hmqc">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Good Riddance Junk Removal LLC">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Good Riddance Junk Removal LLC">
 <meta name="twitter:description" content="Load the truck, see a ballpark price, and send your list for a real quote.">
-<meta name="twitter:image" content="https://goodriddancejunk.vercel.app/media/og.jpg?v=mwx2475e">
+<meta name="twitter:image" content="https://goodriddancejunk.vercel.app/media/og.jpg?v=mwx2hmqc">
 <link rel="apple-touch-icon" href="https://goodriddancejunk.vercel.app/media/apple-touch-icon.png">
 <meta name="theme-color" content="#050505">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
@@ -74,6 +74,10 @@ section{padding:36px 0}
 .rv.in{opacity:1;transform:none}
 html.rm .rv{opacity:1;transform:none;transition:none}
 
+/* ambient sparks + falling debris down the sides */
+#amb{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+main,footer{position:relative;z-index:1}
+html.rm #amb{display:none}
 /* nav */
 .nav{position:sticky;top:0;z-index:40;height:56px;background:rgba(5,5,5,.92);border-bottom:1px solid #1a1a1a}
 .nav .wrap{height:100%;display:flex;align-items:center;gap:10px}
@@ -290,6 +294,7 @@ footer .rule{max-width:280px;margin:0 auto 12px}
 </style>
 </head>
 <body>
+<canvas id="amb" aria-hidden="true"></canvas>
 <div class="intro-ov" aria-hidden="true"><div class="skip">Tap to skip</div></div>
 
 <header class="nav">
@@ -877,6 +882,44 @@ const dock=$('#dock');new IntersectionObserver(es=>dock.classList.toggle('hide',
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{rootMargin:'0px 0px -8% 0px'});
 $$('.rv').forEach(el=>io.observe(el));
 update(false);setStep(0);addEventListener('resize',()=>setStep(Q.step));
+
+/* ---------- ambient: sparks rise and junk tumbles down the sides ---------- */
+(function(){
+  const cv=$('#amb');if(RM||!cv.getContext)return;const cx=cv.getContext('2d');
+  let W,H,D,side,parts=[],mx=-1e4,my=-1e4,run=true,last=performance.now();
+  const COLS=['#d8bb94','#aa8c6e','#965e3c','#5a5959','#c4c4c4','#323131','#f6f6f5'];
+  function size(){D=Math.min(devicePixelRatio||1,2);W=innerWidth;H=innerHeight;cv.width=W*D;cv.height=H*D;cx.setTransform(D,0,0,D,0,0);
+    const content=Math.min(W,1160);side=W>=980?Math.max(80,(W-content)/2+60):W*.16}
+  function xIn(){const left=Math.random()<.5,w=side*(W>=980?1:1);return left?Math.random()*w:W-Math.random()*w}
+  function debris(top){const k=Math.random();return{t:'d',x:xIn(),y:top?-20-Math.random()*H*.3:Math.random()*H,vx:(Math.random()-.5)*12,vy:28+Math.random()*55,r:Math.random()*6.28,vr:(Math.random()-.5)*2.4,
+    s:(W>=980?5:3.5)+Math.random()*(W>=980?9:6),shape:k<.38?'box':k<.62?'plank':k<.8?'shard':k<.92?'bolt':'bag',c:COLS[Math.random()*COLS.length|0],z:.45+Math.random()*.55}}
+  function spark(){return{t:'s',x:xIn(),y:H+10,vx:(Math.random()-.5)*30,vy:-(60+Math.random()*120),life:0,max:1.2+Math.random()*1.8,s:1+Math.random()*1.8,flick:Math.random()*6}}
+  function init(){size();parts=[];const nd=W>=980?46:16;for(let i=0;i<nd;i++)parts.push(debris(false))}
+  function drawD(p){cx.save();cx.translate(p.x,p.y);cx.rotate(p.r);cx.globalAlpha=.42+p.z*.5;const s=p.s;cx.fillStyle=p.c;cx.strokeStyle='#0a0a0a';cx.lineWidth=1.4;
+    if(p.shape==='box'){cx.fillRect(-s/2,-s/2,s,s*.8);cx.strokeRect(-s/2,-s/2,s,s*.8);cx.fillStyle='#aa8c6e';cx.fillRect(-s*.08,-s/2,s*.16,s*.8)}
+    else if(p.shape==='plank'){cx.fillStyle='#965e3c';cx.fillRect(-s,-s*.18,s*2,s*.36);cx.strokeRect(-s,-s*.18,s*2,s*.36)}
+    else if(p.shape==='shard'){cx.beginPath();cx.moveTo(-s*.6,s*.4);cx.lineTo(s*.1,-s*.6);cx.lineTo(s*.6,s*.5);cx.closePath();cx.fill();cx.stroke()}
+    else if(p.shape==='bolt'){cx.fillStyle='#c4c4c4';cx.fillRect(-s*.15,-s*.6,s*.3,s*1.2);cx.fillRect(-s*.35,-s*.6,s*.7,s*.25)}
+    else{cx.fillStyle='#1d1d1d';cx.beginPath();cx.ellipse(0,0,s*.6,s*.75,0,0,6.29);cx.fill();cx.stroke();cx.fillStyle='#fb6308';cx.fillRect(-s*.15,-s*.85,s*.3,s*.2)}
+    cx.restore()}
+  function frame(now){if(!run)return;const dt=Math.min(.05,(now-last)/1000);last=now;cx.clearRect(0,0,W,H);
+    if(Math.random()<dt*(W>=980?9:4))parts.push(spark());
+    cx.globalCompositeOperation='source-over';
+    for(let i=parts.length-1;i>=0;i--){const p=parts[i];
+      // the pointer shoves things out of the way
+      const dx=p.x-mx,dy=p.y-my,d2=dx*dx+dy*dy;if(d2<12000){const f=(1-d2/12000)*600*dt;p.vx+=dx/Math.sqrt(d2+1)*f;p.vy+=dy/Math.sqrt(d2+1)*f*.5}
+      if(p.t==='d'){p.vx*=.985;p.vy+=(40*p.z-p.vy)*dt*.6+12*dt;p.x+=p.vx*dt;p.y+=p.vy*dt*p.z;p.r+=p.vr*dt;if(p.y>H+30){Object.assign(p,debris(true))}drawD(p)}
+      else{p.life+=dt;p.vy+=40*dt;p.vx+=(Math.random()-.5)*40*dt;p.x+=p.vx*dt;p.y+=p.vy*dt;const k=1-p.life/p.max;if(k<=0){parts.splice(i,1);continue}
+        const fl=.6+.4*Math.sin(now/60+p.flick);cx.globalCompositeOperation='lighter';
+        const g=cx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.s*6);g.addColorStop(0,`rgba(255,170,90,${.55*k*fl})`);g.addColorStop(1,'rgba(251,99,8,0)');cx.fillStyle=g;cx.beginPath();cx.arc(p.x,p.y,p.s*6,0,6.29);cx.fill();
+        cx.strokeStyle=`rgba(255,${150+60*k|0},80,${.9*k})`;cx.lineWidth=p.s;cx.beginPath();cx.moveTo(p.x,p.y);cx.lineTo(p.x-p.vx*.05,p.y-p.vy*.05);cx.stroke();cx.globalCompositeOperation='source-over'}}
+    requestAnimationFrame(frame)}
+  addEventListener('resize',size);
+  addEventListener('pointermove',e=>{mx=e.clientX;my=e.clientY},{passive:true});
+  addEventListener('pointerdown',e=>{mx=e.clientX;my=e.clientY;for(let i=0;i<8;i++){const p=spark();p.x=e.clientX;p.y=e.clientY;p.vx=(Math.random()-.5)*220;p.vy=-40-Math.random()*160;p.max=.6+Math.random()*.6;parts.push(p)}},{passive:true});
+  document.addEventListener('visibilitychange',()=>{run=!document.hidden;if(run){last=performance.now();requestAnimationFrame(frame)}});
+  init();requestAnimationFrame(frame);
+})();
 
 /* ---------- start ---------- */
 const root=document.documentElement;
