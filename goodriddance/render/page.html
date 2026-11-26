@@ -160,8 +160,8 @@ html.js-intro .intro-ov{display:block}
 .dots i.on{width:18px;background:var(--orange)}
 
 /* before / after */
-.ba{position:relative;margin-top:16px;border-radius:var(--r);overflow:hidden;aspect-ratio:4/3;max-height:52vh;width:100%;background:#0c0c0c;box-shadow:inset 0 0 0 1px #222;--pos:50%;user-select:none;touch-action:pan-y}
-.ba svg{position:absolute;inset:0;width:100%;height:100%}
+.ba{position:relative;margin-top:16px;border-radius:var(--r);overflow:hidden;aspect-ratio:3/2;max-height:52vh;width:100%;background:#0c0c0c;box-shadow:inset 0 0 0 1px #222;--pos:50%;user-select:none;touch-action:pan-y}
+.ba>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none;-webkit-user-drag:none}
 .ba .before{clip-path:inset(0 calc(100% - var(--pos)) 0 0)}
 .ba .handle{position:absolute;top:0;bottom:0;left:var(--pos);width:3px;margin-left:-1.5px;background:var(--orange);box-shadow:0 0 12px rgba(251,99,8,.8);pointer-events:none}
 .ba .handle b{position:absolute;top:50%;left:50%;width:42px;height:42px;margin:-21px 0 0 -21px;border-radius:50%;background:var(--orange);display:grid;place-items:center;color:var(--black)}
@@ -337,10 +337,10 @@ footer .rule{max-width:280px;margin:0 auto 12px}
 
   <section id="before">
     <div class="wrap ba-grid">
-      <div class="rv"><h2 class="h2">Before and <em>after</em></h2><p class="lede">Drag across the garage. This one is drawn in the logo's own style, so it's an example, not a job photo.</p><p class="small" style="margin-top:8px"><span class="tag">Drawn example</span></p></div>
+      <div class="rv"><h2 class="h2">Before and <em>after</em></h2><p class="lede">Couch, fridge, mattress, boxes and bags out of the driveway and the garage. Drag across to clear it.</p></div>
       <div class="ba rv" id="ba">
-        <svg class="after" viewBox="0 0 640 480" id="baAfter" aria-hidden="true"></svg>
-        <svg class="before" viewBox="0 0 640 480" id="baBefore" aria-hidden="true"></svg>
+        <img class="after" src="media/ba-after-800.webp" srcset="media/ba-after-800.webp 800w, media/ba-after-1400.webp 1400w" sizes="(min-width:980px) 640px, 100vw" width="1400" height="933" alt="The same garage and driveway cleared out and swept" loading="lazy" decoding="async">
+        <img class="before" src="media/ba-before-800.webp" srcset="media/ba-before-800.webp 800w, media/ba-before-1400.webp 1400w" sizes="(min-width:980px) 640px, 100vw" width="1400" height="933" alt="A garage and driveway piled with an old couch, fridge, mattress, boxes and trash bags" loading="lazy" decoding="async">
         <span class="lab l">Before</span><span class="lab r">After</span>
         <div class="handle"><b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l-5 6 5 6M15 6l5 6-5 6"/></svg></b></div>
         <input type="range" min="0" max="100" value="50" aria-label="Before and after slider">
@@ -784,18 +784,6 @@ $('#rail').addEventListener('click',e=>{const b=e.target.closest('.job');if(!b)r
   toast(`${j.t} loaded on the truck`)});
 
 /* ---------- before / after (drawn) ---------- */
-function garage(clutter){
-  let s=`<rect width="640" height="480" fill="#0e0e0e"/><rect width="640" height="330" fill="#151515"/>${[1,2,3,4,5,6,7].map(i=>`<line x1="${i*80}" y1="0" x2="${i*80}" y2="330" stroke="#1c1c1c" stroke-width="3"/>`).join('')}
-  <rect x="380" y="70" width="190" height="120" rx="4" fill="#1b1b1b" stroke="#262626" stroke-width="3"/>${Array.from({length:40},(_,i)=>`<circle cx="${394+(i%10)*18}" cy="${86+Math.floor(i/10)*28}" r="2.4" fill="#0c0c0c"/>`).join('')}
-  <rect x="40" y="150" width="200" height="10" fill="#323131"/><polygon points="0,330 640,330 640,480 0,480" fill="#1a1a1a"/><line x1="0" y1="330" x2="640" y2="330" stroke="#262626" stroke-width="4"/>
-  ${[0,1,2,3,4,5,6,7,8].map(i=>`<line x1="${320+(i-4)*60}" y1="330" x2="${320+(i-4)*180}" y2="480" stroke="#202020" stroke-width="2"/>`).join('')}
-  <ellipse cx="320" cy="24" rx="120" ry="10" fill="#fff" opacity="${clutter?.05:.12}"/><rect x="260" y="10" width="120" height="10" rx="4" fill="#c4c4c4" opacity="${clutter?.5:1}"/>`;
-  const place=(id,x,y,w,h,rot=0)=>`<g transform="translate(${x} ${y}) rotate(${rot} ${w/2} ${h/2})">${DRAW[id](w,h)}</g>`;
-  if(clutter){s+=place('carpet',30,104,210,46)+place('boxes',60,190,130,96)+place('mattress',440,150,60,230,0).replace('<g','<g')+place('dresser',300,206,104,124)+place('boxes',170,226,120,90)+place('couch',30,282,250,112)+place('tires',470,350,120,92)+place('bike',300,330,150,96)+place('bags',520,250,110,90)+place('grill',220,370,70,70)+place('yard',350,410,170,60)}
-  else{s+=`<ellipse cx="320" cy="430" rx="260" ry="30" fill="#fff" opacity=".045"/><ellipse cx="320" cy="410" rx="150" ry="14" fill="#fb6308" opacity=".08"/>`+`<path d="M90 470C200 440 440 440 560 470" fill="none" stroke="#242424" stroke-width="3" stroke-dasharray="4 10"/>`}
-  return s;
-}
-$('#baBefore').innerHTML=garage(true);$('#baAfter').innerHTML=garage(false);
 const ba=$('#ba'),bin=$('#ba input');
 bin.addEventListener('input',()=>ba.style.setProperty('--pos',bin.value+'%'));
 let baShown=false;
