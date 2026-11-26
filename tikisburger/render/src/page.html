@@ -747,7 +747,7 @@ function flatRoundel(svg, withArabic) {
    <g fill="${K}"><path d="${M.ring}"/><path d="${M.bun_top}"/><path d="${M.cheese}"/><path d="${M.patty}"/><path d="${M.bun_bot}"/>${M.burgers.map(d => `<path d="${d}"/>`).join('')}<path d="${M.banner}"/>${STARS.map(s => `<path d="${starPath(s)}"/>`).join('')}</g>
    <path d="${L}" fill="${K}" transform="translate(-9 10)"/><path d="${L}" fill="${K}" transform="translate(-5 6)"/><path d="${L}" fill="${Y}" stroke="${K}" stroke-width="7" stroke-linejoin="round"/>
    <text font-family="Fredoka" font-weight="600" font-size="46" fill="${K}" letter-spacing="4" direction="ltr"><textPath href="#${id}a" startOffset="50%" text-anchor="middle">${TAG}</textPath></text>
-   ${withArabic ? `<text font-family="Lemonada" font-weight="700" font-size="76" fill="${Y}" direction="rtl"><textPath href="#${id}b" startOffset="50%" text-anchor="middle">${AR_LINE}</textPath></text>` : ''}`;
+   ${withArabic ? `<path fill="${Y}" d="${M.ar}"><title>${AR_LINE}</title></path>` : ''}`;
 }
 /* the LED version, built like their storefront sign: every traced shape a lit channel, TIKIZ with dark faces and lit edges */
 function buildSign(host) {
@@ -770,7 +770,7 @@ function buildSign(host) {
    ${M.burgers.map((d, i) => seg('B' + i, d)).join('')}
    ${seg('banner', M.banner)}
    ${txt('tag', id + 'a', 'font-family="Fredoka" font-weight="600" font-size="46" letter-spacing="4" direction="ltr"', TAG)}
-   ${txt('ar', id + 'c', 'font-family="Lemonada" font-weight="700" font-size="76" direction="rtl"', AR_LINE)}
+   <g class="seg" data-k="ar"><path class="ltxtg" filter="url(#${id}b)" d="${M.ar}"/><path class="ltxt" d="${M.ar}"/></g>
    <g clip-path="url(#${id}cp)"><rect class="shine" x="-400" y="-30" width="360" height="1230" fill="url(#${id}sg)" transform="skewX(-16)"/></g>
   </svg>`;
   const svg = host.firstElementChild, all = $$('.seg', svg);
