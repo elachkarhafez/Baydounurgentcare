@@ -48,6 +48,7 @@ const tags = [
   `<meta name="twitter:image" content="${base}/media/og.jpg?v=${v}">`,
   fs.existsSync(touch) ? `<link rel="apple-touch-icon" href="${base}/media/apple-touch-icon.png">` : ''
 ].filter(Boolean).join('\n');
-h = h.replace(/(<meta name="description"[^>]*>)/, `$1\n${tags}`);
+// function replacement: a "$150" in the description must not be read as the $1 group
+h = h.replace(/(<meta name="description"[^>]*>)/, m => `${m}\n${tags}`);
 fs.writeFileSync(idx, h);
 console.log('card', jpg, (fs.statSync(jpg).size / 1024).toFixed(0) + ' KB', '| tags ->', base);
