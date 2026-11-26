@@ -207,18 +207,18 @@ var CATS=['all','sets','chains','bracelets','bangles','rings','diamonds','watche
 function chipsCat(){$('#fCat').innerHTML=CATS.map(function(c){return '<button class="chip" type="button" data-cat="'+c+'" aria-pressed="'+(F.cat===c)+'">'+esc(t('cat_'+c))+'</button>'}).join('')}
 function chipsK(){var dots={yellow:'linear-gradient(135deg,#e6c08d,#b2834f)',white:'linear-gradient(135deg,#f8f8f8,#9a9a98)',rose:'linear-gradient(135deg,#f1b9a3,#b9715c)'};
   $('#fK').innerHTML=['any','18','21'].map(function(k){return '<button class="chip" type="button" data-k="'+k+'" aria-pressed="'+(F.k===k)+'">'+esc(t(k==='any'?'k_any':'k'+k))+'</button>'}).join('')
-  +'<span style="flex:none;width:1px;background:var(--line2);margin:6px 2px"></span>'
+  +'<span class="chipsep"></span>'
   +['any','yellow','white','rose'].map(function(c){return '<button class="chip" type="button" data-c="'+c+'" aria-pressed="'+(F.c===c)+'">'+(c!=='any'?'<span class="dot" style="background:'+dots[c]+'"></span>':'')+esc(t('c_'+c))+'</button>'}).join('')}
-function nameSVG(txt,small){var ar=/[؀-ۿ]/.test(txt);return '<svg viewBox="0 0 300 300" aria-hidden="true"><defs><linearGradient id="ng'+(small?'s':'')+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f3d29a"/><stop offset=".45" stop-color="#cf9f67"/><stop offset=".7" stop-color="#e6c08d"/><stop offset="1" stop-color="#84582e"/></linearGradient></defs>'
+function nameSVG(txt,small){var ar=/[؀-ۿ]/.test(txt);return '<svg viewBox="0 0 300 300" aria-hidden="true"><defs><linearGradient id="ng'+(small?'s':'')+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e9c58f"/><stop offset=".45" stop-color="#b2834f"/><stop offset=".7" stop-color="#cf9f67"/><stop offset="1" stop-color="#6b4522"/></linearGradient></defs>'
   +'<path d="M20 0 C 60 120, 90 150, 104 158 M280 0 C 240 120, 210 150, 196 158" stroke="url(#ng'+(small?'s':'')+')" stroke-width="3" stroke-dasharray="4 2" fill="none"/>'
-  +'<text x="150" y="182" text-anchor="middle" font-family="'+(ar?'Aref Ruqaa':'Great Vibes')+'" font-weight="'+(ar?700:400)+'" font-size="'+(ar?64:72)+'" fill="url(#ng'+(small?'s':'')+')" stroke="#84582e" stroke-width=".6">'+esc(txt)+'</text></svg>'}
+  +'<text x="150" y="182" text-anchor="middle" font-family="'+(ar?'Aref Ruqaa':'Great Vibes')+'" font-weight="'+(ar?700:400)+'" font-size="'+(ar?64:72)+'" fill="url(#ng'+(small?'s':'')+')" stroke="#6b4522" stroke-width=".8">'+esc(txt)+'</text></svg>'}
 function card(it){var k=it.k.length?it.k[0]:null,tagTxt=it.watch?'':(k?(AR?'عيار '+arNum(k):k+'K'):''),v='';
   if(it.w){var o=it.opt.vals[it.opt.def];v='<div class="val"><span class="num">'+esc(t('goldV',{v:money(goldVal(it,k,o))}))+'</span><small class="num">'+esc(t('sampleW',{g:it.w[o]}))+'</small></div>'}
   else if(it.custom)v='<div class="val"><span>'+esc(t('nameCardGo'))+' →</span></div>';
   else if(it.watch)v='<div class="val"><span>'+esc(t('watchText'))+' →</span></div>';
   else v='<div class="val"><span>'+esc(t('askStore'))+'</span><small>'+esc(t('fromReels'))+'</small></div>';
   var shot=it.img?'<img src="'+it.img+'" alt="" loading="lazy" width="720" height="720"'+(it.pos?' style="object-position:'+it.pos+'"':'')+'>'
-    :it.custom?nameSVG(t('cDefault'),1):'<svg viewBox="0 0 48 48" fill="none" stroke="#cf9f67" stroke-width="1.2"><circle cx="24" cy="24" r="10"/><path d="M24 17v7l4 3"/><path d="M19 14l1.5-7h7l1.5 7M19 34l1.5 7h7l1.5-7"/></svg>';
+    :it.custom?nameSVG(t('cDefault'),1):'<svg viewBox="0 0 48 48" fill="none" stroke="#84582e" stroke-width="1.2"><circle cx="24" cy="24" r="10"/><path d="M24 17v7l4 3"/><path d="M19 14l1.5-7h7l1.5 7M19 34l1.5 7h7l1.5-7"/></svg>';
   return '<button class="piece'+(it.img?'':' text')+'" type="button" data-id="'+it.id+'"><div class="shot">'+shot+(tagTxt?'<span class="tag"><span>'+esc(tagTxt)+'</span></span>':'')+'</div>'
     +'<div class="meta"><h3>'+esc(L(it.name))+'</h3><div class="sub">'+esc(L(it.sub))+'</div>'+v+'</div></button>'}
 function renderCase(){$('#shelf').innerHTML=ITEMS.map(card).join('');filter(true)}
@@ -240,7 +240,7 @@ function lockModal(on){html.style.overflow=on?'hidden':''}
 function openSheet(it,from){lastFocus=from||document.activeElement;SH={it:it,k:it.k[0],o:it.opt?it.opt.vals[it.opt.def]:null};renderSheet();sheet.classList.add('on');scrim.classList.add('on');lockModal(true);updBar();setTimeout(function(){var x=$('.x',sheet);x&&x.focus({preventScroll:true})},60)}
 function closeSheet(){if(!SH)return;sheet.classList.remove('on');scrim.classList.remove('on');SH=null;lockModal(!!DW);updBar();lastFocus&&lastFocus.focus&&lastFocus.focus({preventScroll:true})}
 function renderSheet(){var it=SH.it,h='<div class="grab"></div><button class="x" type="button" aria-label="'+esc(t('close'))+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6l12 12M18 6L6 18"/></svg></button><div class="inner">';
-  if(it.watch){h+='<div class="big" style="display:grid;place-items:center;aspect-ratio:4/3"><svg viewBox="0 0 48 48" width="40%" fill="none" stroke="#cf9f67" stroke-width="1.1"><circle cx="24" cy="24" r="10"/><path d="M24 17v7l4 3"/><path d="M19 14l1.5-7h7l1.5 7M19 34l1.5 7h7l1.5-7"/></svg></div>'
+  if(it.watch){h+='<div class="big" style="display:grid;place-items:center;aspect-ratio:4/3"><svg viewBox="0 0 48 48" width="40%" fill="none" stroke="#84582e" stroke-width="1.1"><circle cx="24" cy="24" r="10"/><path d="M24 17v7l4 3"/><path d="M19 14l1.5-7h7l1.5 7M19 34l1.5 7h7l1.5-7"/></svg></div>'
     +'<div class="body"><h3 id="shTitle">'+esc(t('watchH'))+'</h3><p class="desc">'+esc(t('watchDesc'))+'</p><div class="acts"><a class="btn gold" href="sms:'+PHONE+'?&body='+encodeURIComponent(t('watchMsg'))+'">'+esc(t('watchText'))+'</a><a class="btn line" href="tel:'+PHONE+'">'+esc(t('call'))+'</a></div></div></div>';sheet.innerHTML=h;return}
   h+='<div class="big"><img src="'+it.img+'" alt="'+esc(L(it.name))+'"'+(it.pos?' style="object-position:'+it.pos+'"':'')+'></div><div class="body"><h3 id="shTitle">'+esc(L(it.name))+'</h3><p class="desc">'+esc(L(it.desc))+'</p>';
   h+='<div class="opt"><div class="lab"><span>'+esc(t('karat'))+'</span></div><div class="seg" data-s="k">'+it.k.map(function(k){return '<button type="button" data-v="'+k+'" aria-pressed="'+(SH.k===k)+'">'+esc(AR?'عيار '+arNum(k):k+'K')+'</button>'}).join('')+'</div></div>';
@@ -283,7 +283,8 @@ $$('.karat button').forEach(function(b){b.addEventListener('click',function(){W.
 /* ================= custom piece builder ================= */
 var C=store('zuC')||{type:'necklace',name:'',k:21,chain:'rope',len:'18"',size:'7'};
 var SIZES={necklace:['16"','18"','20"','22"'],bracelet:['6.5"','7"','7.5"'],ring:['5','6','7','8','9','10']};
-var GRAD={21:['#f3d29a','#e6c08d','#cf9f67','#84582e'],18:['#f6e2bd','#ead2a8','#d8b07c','#9a7040']};
+// deeper stops than the page gold so the name holds on the cream pad (sampled #cf9f67/#b2834f/#84582e, plus a darker shadow)
+var GRAD={21:['#e9c58f','#cf9f67','#a87a45','#6b4522'],18:['#efd4a6','#d8b07c','#b48a55','#7a5530']};
 function cName(){return(C.name||'').trim()||t('cDefault')}
 function cControls(){$('#cType').innerHTML=['necklace','bracelet','ring'].map(function(x){return '<button type="button" data-v="'+x+'" aria-pressed="'+(C.type===x)+'">'+esc(t('t_'+x))+'</button>'}).join('');
   $('#cK').innerHTML=[18,21].map(function(k){return '<button type="button" data-v="'+k+'" aria-pressed="'+(C.k===k)+'">'+esc(AR?'عيار '+arNum(k):k+'K')+'</button>'}).join('');
@@ -299,8 +300,8 @@ function drawPreview(pop){var svg=$('#prev'),nm=cName(),ar=/[؀-ۿ]/.test(nm),g=
   var defs='<defs><linearGradient id="pg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+g[0]+'"/><stop offset=".38" stop-color="'+g[1]+'"/><stop offset=".62" stop-color="'+g[2]+'"/><stop offset="1" stop-color="'+g[3]+'"/></linearGradient>'
     +'<linearGradient id="pc" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+g[3]+'"/><stop offset=".5" stop-color="'+g[1]+'"/><stop offset="1" stop-color="'+g[2]+'"/></linearGradient>'
     +'<linearGradient id="ps" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>'
-    +'<filter id="psh" x="-20%" y="-40%" width="140%" height="180%"><feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#000" flood-opacity=".7"/></filter>'
-    +'<radialGradient id="pool" cx=".5" cy=".55" r=".5"><stop offset="0" stop-color="#2a2a2e" stop-opacity=".9"/><stop offset="1" stop-color="#0b0b0c" stop-opacity="0"/></radialGradient></defs>';
+    +'<filter id="psh" x="-20%" y="-40%" width="140%" height="180%"><feDropShadow dx="0" dy="4" stdDeviation="3" flood-color="#5a3d1c" flood-opacity=".38"/></filter>'
+    +'<radialGradient id="pool" cx=".5" cy=".55" r=".5"><stop offset="0" stop-color="#d9cdb8" stop-opacity=".55"/><stop offset="1" stop-color="#efe8db" stop-opacity="0"/></radialGradient></defs>';
   var fam=ar?'Aref Ruqaa':'Great Vibes',fw=ar?700:400,fs=ar?62:70,ty=C.type==='ring'?150:178;
   svg.innerHTML=defs+'<ellipse cx="200" cy="190" rx="190" ry="90" fill="url(#pool)"/><g id="chain"></g><g filter="url(#psh)"><text id="pt" x="200" y="'+ty+'" text-anchor="middle" font-family="'+fam+'" font-weight="'+fw+'" font-size="'+fs+'" fill="url(#pg)" stroke="'+g[3]+'" stroke-width=".8" paint-order="stroke">'+esc(nm)+'</text></g>'
     +'<clipPath id="pclip"><text x="200" y="'+ty+'" text-anchor="middle" font-family="'+fam+'" font-weight="'+fw+'" font-size="'+fs+'">'+esc(nm)+'</text></clipPath><g clip-path="url(#pclip)"><rect class="shine" x="120" y="60" width="160" height="160" fill="url(#ps)" opacity=".55"/></g>';
@@ -352,8 +353,8 @@ function message(){var lines=[t('msgHi',{name:CK.name.trim()})];lines.push(hasCu
 function steps(){$$('#steps i').forEach(function(s,i){s.classList.toggle('on',i<=Math.min(STEP,3))})}
 function renderBag(){var inn=$('#dwIn'),ft=$('#dwFoot'),h='';steps();store('zuCk',CK);
   if(STEP===0){if(!BAG.length){inn.innerHTML='<div class="bagempty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M5 8h14l-1.2 12H6.2z"/><path d="M9 8V6.5a3 3 0 016 0V8"/></svg><p>'+esc(t('bagEmpty'))+'</p></div>';ft.innerHTML='<a class="btn line" href="#case" id="toCase">'+esc(t('toCase'))+'</a>';$('#toCase').addEventListener('click',closeDrawer);return}
-    h=BAG.map(function(b){var v=lineVal(b);return '<div class="bline" data-uid="'+b.uid+'"><div class="th">'+thumb(b)+'</div><div><b>'+esc(lineTitle(b))+'</b><small class="num">'+esc(lineSub(b))+'</small>'+(v?'<small class="num" style="color:var(--goldlit)">'+esc(t('goldV',{v:money(v)}))+'</small>':'')+'</div><button class="rm" type="button" aria-label="Remove"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>'}).join('');
-    inn.innerHTML=h;var tot=total();ft.innerHTML=(tot?'<div class="tot"><span>'+esc(t('goldTot'))+'</span><span class="num" style="color:var(--goldlit)">'+money(tot)+'</span></div>':'')+'<button class="btn gold" type="button" data-go="1">'+esc(t('cont'))+'</button>';return}
+    h=BAG.map(function(b){var v=lineVal(b);return '<div class="bline" data-uid="'+b.uid+'"><div class="th">'+thumb(b)+'</div><div><b>'+esc(lineTitle(b))+'</b><small class="num">'+esc(lineSub(b))+'</small>'+(v?'<small class="num gv">'+esc(t('goldV',{v:money(v)}))+'</small>':'')+'</div><button class="rm" type="button" aria-label="Remove"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>'}).join('');
+    inn.innerHTML=h;var tot=total();ft.innerHTML=(tot?'<div class="tot"><span>'+esc(t('goldTot'))+'</span><span class="num" style="color:var(--gold3)">'+money(tot)+'</span></div>':'')+'<button class="btn gold" type="button" data-go="1">'+esc(t('cont'))+'</button>';return}
   if(STEP===1){if(hasCustom()&&!hasPieces())CK.why='custom';
     h='<h3>'+esc(t('whyH'))+'</h3><div class="choice" style="margin-top:10px"><button type="button" data-why="view" aria-pressed="'+(CK.why==='view')+'"><b>'+esc(t('whyView'))+'</b>'+esc(t('whyViewS'))+'</button><button type="button" data-why="custom" aria-pressed="'+(CK.why==='custom')+'"><b>'+esc(t('whyCustom'))+'</b>'+esc(t('whyCustomS'))+'</button></div>'
      +'<div class="field" style="margin-top:16px"><label for="ckName">'+esc(t('yourName'))+'</label><input id="ckName" autocomplete="name" value="'+esc(CK.name)+'"><div class="err" id="eName"></div></div>'
@@ -428,13 +429,14 @@ WORD.forEach(function(id,k){var at=.86+k*.09;tl.fromTo(is.part(id),{y:14},{y:0,d
 tl.to($('.bloom',ise),{opacity:.5,duration:.5,ease:'power2.out'},.9);
 // 3. a sweep of gold light crosses the whole sign
 tl.fromTo($('.sweep b',ise),{x:0},{x:function(){return ise.getBoundingClientRect().width*1.55},duration:.5,ease:'power2.inOut'},1.5);
-// 4. hand-off: the sign flies to its place on the hero wall while the room lights come up
-var geo=null;function fly2(){if(!geo){var a=ise.getBoundingClientRect(),b=$('#hsign').getBoundingClientRect();geo={x:(b.left+b.width/2)-(a.left+a.width/2),y:(b.top+b.height/2)-(a.top+a.height/2),s:b.width/a.width}}return geo}
+// 4. hand-off: the room lights come up to the bright showroom and the sign, on its black disc, flies into the hero
+var geo=null;var ipl=$('#iplate');function fly2(){if(!geo){var a=ipl.getBoundingClientRect(),b=$('#hplate').getBoundingClientRect();geo={x:(b.left+b.width/2)-(a.left+a.width/2),y:(b.top+b.height/2)-(a.top+a.height/2),s:b.width/a.width}}return geo}
 tl.add(function(){window.scrollTo(0,0);fly2()},1.98)
   .to('#intro .skip',{opacity:0,duration:.15},1.98)
-  .to(ise,{x:function(){return fly2().x},y:function(){return fly2().y},scale:function(){return fly2().s},duration:.52,ease:'power3.inOut'},2.0)
-  .to(intro,{backgroundColor:'rgba(10,10,11,0)',duration:.4,ease:'power1.inOut'},2.08)
-  .to('#intro .ispill,#intro .cove',{opacity:0,duration:.35},2.08)
+  .to(ipl,{x:function(){return fly2().x},y:function(){return fly2().y},scale:function(){return fly2().s},duration:.56,ease:'power3.inOut'},1.98)
+  .to(ipl,{backgroundColor:'#0f0f0f',boxShadow:'0 0 0 6px #fffefb, 0 0 0 7px #ddd7cb, 0 24px 44px -22px rgba(31,32,34,.55)',duration:.3},1.98)
+  .to('#intro .dawn',{opacity:1,duration:.42,ease:'power2.inOut'},2.0)
+  .to('#intro .ispill,#intro .cove',{opacity:0,duration:.3},2.0)
   .add(function(){$('#hsign').style.visibility='visible'},2.5)
   .to(intro,{opacity:0,duration:.08},2.5);
 function skip(){if(done)return;tl.kill();finish()}

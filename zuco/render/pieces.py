@@ -13,6 +13,8 @@ OUT = argv[0] if argv else 'out'
 SEL = argv[1] if len(argv) > 1 else 'all'
 SAMPLES = int(argv[2]) if len(argv) > 2 else 160
 RES = int(argv[3]) if len(argv) > 3 else 1000
+# ZU_BG=light: an ivory seamless sweep under a big softbox (the light showroom look); default: black velvet case
+LIGHTBG = os.environ.get('ZU_BG', '') == 'light'
 os.makedirs(OUT, exist_ok=True)
 
 
@@ -22,7 +24,7 @@ def srgb(h):
 
 
 # gold colours (linear F0-ish); 21k reads deeper and warmer than 18k
-GOLD = {'21k': (1.0, .70, .26, 1), '18k': (.98, .74, .36, 1), 'white': (.86, .86, .84, 1), 'rose': (.97, .60, .47, 1)}
+GOLD = {'21k': (1.0, .67, .2, 1), '18k': (.98, .72, .32, 1), 'white': (.86, .86, .84, 1), 'rose': (.97, .60, .47, 1)}
 
 
 def reset():
@@ -32,7 +34,8 @@ def reset():
     s.cycles.max_bounces = 16; s.cycles.glossy_bounces = 8; s.cycles.transmission_bounces = 14; s.cycles.diffuse_bounces = 3
     s.cycles.caustics_reflective = False; s.cycles.caustics_refractive = False; s.cycles.sample_clamp_indirect = 12
     s.render.resolution_x = s.render.resolution_y = RES; s.render.film_transparent = False
-    s.view_settings.view_transform = 'AgX'; s.view_settings.look = 'AgX - High Contrast'
+    s.view_settings.view_transform = 'AgX'; s.view_settings.look = 'AgX - Medium High Contrast' if LIGHTBG else 'AgX - High Contrast'
+    if LIGHTBG: s.view_settings.exposure = float(os.environ.get('ZU_EV', '0.55'))
     s.render.image_settings.file_format = 'PNG'; s.render.image_settings.color_depth = '8'
     return s
 
@@ -137,6 +140,42 @@ def world_and_floor(s, floor_col='#0b0a0a', strength=.9):
     fl.data.materials.append(m)
 
 
+def world_and_sweep(s, col='#f4f0e8'):
+    """light studio: the HDRI lights everything (camera rays see the sweep colour), an ivory seamless sweep
+    (floor curving up into a back wall), and two black flags that only show in reflections so the gold keeps contrast"""
+    w = bpy.data.worlds.new('w'); s.world = w; w.use_nodes = True; t = w.node_tree; t.nodes.clear()
+    env = t.nodes.new('ShaderNodeTexEnvironment'); env.image = bpy.data.images.load(asset('studio_small_09_1k.hdr'))
+    mp = t.nodes.new('ShaderNodeMapping'); tc = t.nodes.new('ShaderNodeTexCoord'); mp.inputs['Rotation'].default_value = (0, 0, radians(30))
+    t.links.new(tc.outputs['Generated'], mp.inputs[0]); t.links.new(mp.outputs[0], env.inputs[0])
+    bg = t.nodes.new('ShaderNodeBackground'); bg.inputs[1].default_value = .6
+    cam = t.nodes.new('ShaderNodeBackground'); cam.inputs[0].default_value = srgb(col); cam.inputs[1].default_value = 1.
+    lp = t.nodes.new('ShaderNodeLightPath'); mx = t.nodes.new('ShaderNodeMixShader'); o = t.nodes.new('ShaderNodeOutputWorld')
+    t.links.new(env.outputs[0], bg.inputs[0]); t.links.new(lp.outputs['Is Camera Ray'], mx.inputs[0])
+    t.links.new(bg.outputs[0], mx.inputs[1]); t.links.new(cam.outputs[0], mx.inputs[2]); t.links.new(mx.outputs[0], o.inputs[0])
+    prof = [(y, 0.) for y in range(-140, 26, 5)] + [(25 + 40 * sin(a * pi / 2 / 12), 40 - 40 * cos(a * pi / 2 / 12)) for a in range(1, 13)] + [(65., z) for z in range(50, 160, 10)]
+    bm = bmesh.new(); rows = []
+    for x in (-160., 160.):
+        rows.append([bm.verts.new((x, y, z)) for y, z in prof])
+    for i in range(len(prof) - 1):
+        bm.faces.new((rows[0][i], rows[1][i], rows[1][i + 1], rows[0][i + 1]))
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+    sw = obj('sweep', mesh_from('sweep', bm, True))
+    m = bpy.data.materials.new('ivory'); m.use_nodes = True; nt = m.node_tree; b = nt.nodes['Principled BSDF']
+    b.inputs['Base Color'].default_value = srgb(col); b.inputs['Roughness'].default_value = .62
+    if 'Specular IOR Level' in b.inputs: b.inputs['Specular IOR Level'].default_value = .25
+    nz = nt.nodes.new('ShaderNodeTexNoise'); nz.inputs['Scale'].default_value = 140.; nz.inputs['Detail'].default_value = 6.
+    bp = nt.nodes.new('ShaderNodeBump'); bp.inputs['Strength'].default_value = .06; bp.inputs['Distance'].default_value = .005
+    nt.links.new(nz.outputs[0], bp.inputs['Height']); nt.links.new(bp.outputs[0], b.inputs['Normal'])
+    sw.data.materials.append(m)
+    fm = bpy.data.materials.new('flag'); fm.use_nodes = True; fm.node_tree.nodes['Principled BSDF'].inputs['Base Color'].default_value = (0.004, 0.004, 0.004, 1)
+    fm.node_tree.nodes['Principled BSDF'].inputs['Roughness'].default_value = 1.
+    for nm_, loc in (('flagL', (-14., -3., 8.)), ('flagR', (14., 5., 9.)), ('flagB', (0., -18., 6.))):
+        fb = bmesh.new(); bmesh.ops.create_grid(fb, x_segments=1, y_segments=1, size=1.); bmesh.ops.scale(fb, vec=(8., 24., 1.), verts=fb.verts)
+        f = obj(nm_, mesh_from(nm_, fb, False)); f.data.materials.append(fm); f.location = loc
+        f.rotation_euler = (Vector((0, 0, 1)) - Vector(loc)).to_track_quat('Z', 'Y').to_euler()
+        f.visible_camera = False; f.visible_diffuse = False; f.visible_shadow = False; f.visible_transmission = False
+
+
 def light(kind, name, loc, target, W, size=1., sy=None, spot=None, color=(1, 1, 1)):
     l = bpy.data.lights.new(name, kind); l.energy = W; l.color = color
     if kind == 'AREA':
@@ -150,7 +189,10 @@ def light(kind, name, loc, target, W, size=1., sy=None, spot=None, color=(1, 1, 
 
 def rig(target, dist, elev, az, lens=85, fstop=4., spot_W=9000.):
     s = bpy.context.scene
-    light('SPOT', 'downlight', (target[0] + .5, target[1] + 2., 34.), target, spot_W * 1.4, size=3.5, spot=34, color=(1, .97, .93))
+    if LIGHTBG:  # one big softbox overhead: soft contact shadows, like a bright showroom counter
+        sb = light('AREA', 'softbox', (target[0] - 5., target[1] - 4., 30.), target, spot_W * .42, size=12., sy=9., color=(1, .98, .95)); sb.visible_camera = False
+    else:
+        light('SPOT', 'downlight', (target[0] + .5, target[1] + 2., 34.), target, spot_W * 1.4, size=3.5, spot=34, color=(1, .97, .93))
     # thin LED strips (their showroom's cove light) give long clean highlights on the gold
     sL = light('AREA', 'stripL', (-16., -6., 14.), target, 1100., size=.5, sy=26., color=(.95, .97, 1.))
     sR = light('AREA', 'stripR', (16., 4., 12.), target, 800., size=.5, sy=26., color=(1., .96, .9))
@@ -277,7 +319,9 @@ PIECES = {'cuban': piece_cuban, 'rope': piece_rope, 'bangles': piece_bangles, 'r
           'rosebangle': lambda s: piece_bangles(s, 'rose', facet=True)}
 random.seed(7)
 for name in (PIECES if SEL == 'all' else SEL.split(',')):
-    s = reset(); world_and_floor(s)
+    s = reset()
+    if LIGHTBG: world_and_sweep(s)
+    else: world_and_floor(s)
     PIECES[name](s)
     s.render.filepath = os.path.join(OUT, name + '.png')
     bpy.ops.render.render(write_still=True)

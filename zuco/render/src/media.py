@@ -1,7 +1,8 @@
 """Make zuco/media from the sources.
  reels: the three reel covers cut from the user's screenshot of @zuco.jewelry (reels.py: overlay text inpainted, 2x)
  renders: pieces.py Cycles stills (900px)
-usage: /usr/bin/python3 -I media.py <reels dir> <renders dir>"""
+usage: /usr/bin/python3 -I media.py <reels dir> <renders dir>
+ renders made with ZU_BG=light (ivory sweep) are white-balanced so the sweep lands on the card colour #f1eee8"""
 import os, sys, shutil, cv2, numpy as np
 R, P = sys.argv[1], sys.argv[2]
 D = os.path.dirname(os.path.abspath(__file__))
@@ -18,14 +19,20 @@ webp(r[0:int(w * .75)], 'showroom.webp')
 # at the door: 3:4 from the top
 o = cv2.imread(os.path.join(R, 'owner.png')); w = o.shape[1]
 webp(o[60:60 + int(w * 4 / 3)], 'owner.webp')
-CROP = {'ring': (.5, .44, .64), 'tennis': (.5, .5, .8)}  # centre x, centre y, size (fraction of the frame)
+CARD = np.array([0xe8, 0xee, 0xf1], np.float32)  # BGR of #f1eee8, the .shot background on the page
+def level(im):
+    b = np.concatenate([im[:24].reshape(-1, 3), im[-24:].reshape(-1, 3), im[:, :24].reshape(-1, 3), im[:, -24:].reshape(-1, 3)]).astype(np.float32)
+    lum = b.mean(1); bg = np.median(b[lum >= np.percentile(lum, 50)], 0)
+    if bg.mean() < 120: return im  # a dark (velvet) render: leave it
+    return np.clip(im.astype(np.float32) * (CARD / bg), 0, 255).astype(np.uint8)
+CROP = {'ring': (.47, .47, .72), 'tennis': (.5, .5, .8)}  # centre x, centre y, size (fraction of the frame)
 for n in ('cuban', 'rope', 'bangles', 'rosebangle', 'ring', 'tennis'):
-    im = cv2.imread(os.path.join(P, n + '.png'))
+    im = level(cv2.imread(os.path.join(P, n + '.png')))
     if n in CROP:
         cx, cy, f = CROP[n]; H, W_ = im.shape[:2]; sz = int(W_ * f)
         x0, y0 = int(W_ * cx - sz / 2), int(H * cy - sz / 2); im = im[y0:y0 + sz, x0:x0 + sz]
     webp(cv2.resize(im, (720, 720), interpolation=cv2.INTER_AREA), n + '.webp', 80)
 # the bracelet card: a closer, mirrored crop of the same Cuban render
-im = cv2.imread(os.path.join(P, 'cuban.png')); h, w = im.shape[:2]
+im = level(cv2.imread(os.path.join(P, 'cuban.png'))); h, w = im.shape[:2]
 c = cv2.flip(im[int(h * .3):int(h * .3) + int(w * .62), int(w * .19):int(w * .19) + int(w * .62)], 1)
 webp(cv2.resize(c, (720, 720), interpolation=cv2.INTER_CUBIC), 'cuban-br.webp', 80)
