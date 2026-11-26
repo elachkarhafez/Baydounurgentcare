@@ -7,7 +7,7 @@ const D = path.dirname(fileURLToPath(import.meta.url));
 const url = process.argv[2];
 const b = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium' });
 const p = await b.newPage({ viewport: { width: 1600, height: 1000 }, deviceScaleFactor: 2 });
-await p.goto(url + '?qa', { waitUntil: 'networkidle' }); await p.waitForTimeout(1500);
+await p.addInitScript(() => { try { localStorage.setItem('frieslab.lang', 'en'); } catch (e) {} }); await p.goto(url + '?qa', { waitUntil: 'networkidle' }); await p.waitForTimeout(1500);
 const data = await p.evaluate(() => document.getElementById('sign').toDataURL('image/png'));
 fs.writeFileSync(path.join(D, '../sign.png'), Buffer.from(data.split(',')[1], 'base64'));
 await p.setViewportSize({ width: 512, height: 512 });
