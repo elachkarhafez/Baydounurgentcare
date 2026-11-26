@@ -688,7 +688,7 @@ tsvg.innerHTML=`
   <g id="fillLine" opacity="0"><line x1="${BED.x}" x2="${BED.x+BED.w}" y1="0" y2="0" stroke="${C.o}" stroke-width="3" stroke-dasharray="10 7" style="filter:drop-shadow(0 0 4px #fb6308)"/></g>
  </g>
  ${R(70,346,666,14,C.d,3)}
- <g id="wheels">${[150,420,640].map(x=>`<g class="wh" data-x="${x}"><circle cx="${x}" cy="370" r="36" fill="#141414" stroke="${K}" stroke-width="4"/><circle cx="${x}" cy="370" r="19" fill="${C.s}" stroke="${K}" stroke-width="3"/><g class="hubspin">${[0,1,2,3,4].map(i=>`<circle cx="${x+Math.cos(i*1.2566)*10}" cy="${370+Math.sin(i*1.2566)*10}" r="2.6" fill="${C.d}"/>`).join('')}</g></g>`).join('')}
+ <g id="wheels">${[150,420,640].map(x=>`<g class="wh" data-x="${x}"><circle cx="${x}" cy="370" r="36" fill="#141414" stroke="${K}" stroke-width="4"/><circle cx="${x}" cy="370" r="19" fill="${C.s}" stroke="${K}" stroke-width="3"/><g transform="translate(${x} 370)"><g class="hubspin">${[0,1,2,3,4].map(i=>`<circle cx="${Math.cos(i*1.2566)*10}" cy="${Math.sin(i*1.2566)*10}" r="2.6" fill="${C.d}"/>`).join('')}</g></g></g>`).join('')}
  ${[150,420].map(x=>`<path d="M${x-52} 346C${x-46} 318 ${x+46} 318 ${x+52} 346" fill="none" stroke="${C.m}" stroke-width="6"/>`).join('')}
 </g>`;
 // level ticks on the front post
@@ -796,7 +796,7 @@ new IntersectionObserver((es,o)=>{if(es[0].isIntersecting&&!baShown&&HAS_G&&!RM)
 
 /* ---------- quote flow ---------- */
 const Q={step:0,place:'',access:'',when:'',time:'',files:[]};
-$('#mini').innerHTML=`${R(6,8,46,30,'#151515',2,2.5)}${R(4,6,50,6,C.m,1,2)}<rect x="8" y="30" width="44" height="5" fill="${C.o}"/><path d="M54 38V18C54 14 56 12 60 12H70L80 24H86C89 24 90 26 90 29V38Z" fill="${C.w}" stroke="${K}" stroke-width="2.5"/><path d="M59 16H69L76 24H59Z" fill="${C.d}"/>${R(30,38,60,6,C.d,1,2)}<g class="mw">${Ci(20,46,8,'#151515',2.5)+Ci(20,46,3.5,C.s,1)}</g><g class="mw">${Ci(76,46,8,'#151515',2.5)+Ci(76,46,3.5,C.s,1)}</g><g id="miniLoad"></g>`;
+$('#mini').innerHTML=`${R(6,8,46,30,'#151515',2,2.5)}${R(4,6,50,6,C.m,1,2)}<rect x="8" y="30" width="44" height="5" fill="${C.o}"/><path d="M54 38V18C54 14 56 12 60 12H70L80 24H86C89 24 90 26 90 29V38Z" fill="${C.w}" stroke="${K}" stroke-width="2.5"/><path d="M59 16H69L76 24H59Z" fill="${C.d}"/>${R(30,38,60,6,C.d,1,2)}<g transform="translate(20 46)"><g class="mw">${Ci(0,0,8,'#151515',2.5)+Ci(0,0,3.5,C.s,1)}<circle cx="0" cy="-5" r="1.4" fill="#323131"/></g></g><g transform="translate(76 46)"><g class="mw">${Ci(0,0,8,'#151515',2.5)+Ci(0,0,3.5,C.s,1)}<circle cx="0" cy="-5" r="1.4" fill="#323131"/></g></g><g id="miniLoad"></g>`;
 function renderQItems(){const counts={};load.forEach(l=>counts[l.id]=(counts[l.id]||0)+1);const e=Object.entries(counts);
   $('#qItems').innerHTML=e.length?e.map(([id,n])=>`<span>${n>1?n+' × ':''}${esc(BYID[id].name)}</span>`).join('')+`<span style="background:#fb6308;color:#050505;border-color:#fb6308">${esc((PRICES[level(frac())]||{}).label||'')}</span>`:`<em>Nothing on the truck yet. <a href="#truck">Load it</a> or type it below.</em>`;
   $('#miniLoad').innerHTML=e.length?R(10,-2,16,10,C.b,2,1.5)+(e.length>1?R(26,-6,14,14,C.br,1,1.5):'')+(e.length>2?R(40,0,10,8,C.s,1,1.5):''):''}
@@ -830,7 +830,7 @@ function setStep(n){
   Q.step=n;$$('.qstep').forEach(s=>s.classList.toggle('on',+s.dataset.step===n));
   $$('#stepsL span').forEach((s,i)=>s.classList.toggle('on',i<=n));$$('#roadStops i').forEach((s,i)=>s.classList.toggle('on',i<=n));
   const road=$('.road'),w=road.clientWidth-28;$('#roadDone').style.width=(w*n/4)+'px';$('#mini').style.left=(14+w*n/4-36)+'px';
-  if(HAS_G&&!RM)gsap.fromTo('#mini .mw',{rotation:0},{rotation:360,svgOrigin:'0 0',transformOrigin:'50% 50%',duration:.6,ease:'power2.out'});
+  if(HAS_G&&!RM)gsap.fromTo('#mini .mw',{rotation:0},{rotation:360,svgOrigin:'0 0',duration:.6,ease:'power2.out'});
   $('#qBack').hidden=n===0;$('#qNext').hidden=n===4;$('#qErr').textContent='';
   if(n===4)refreshReview();
   sTick();
