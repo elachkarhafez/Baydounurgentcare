@@ -2,6 +2,10 @@
 
 Each folder is a single-file client website built with the `ela-studio` skill (`.claude/skills/ela-studio/`) and deployed to Vercel (team `team_AYB0SFZ1qQkp6TebSji5xEKA`).
 
+## Standing rule: no language toggle unless the user asks (newest)
+
+The user said: "dont js add that to all websites unless i ask for it" (about the English/Arabic toggle). Build every site English only. Add an Arabic (or any other) language toggle only when the user asks for it on that site. Sites that already have one keep it unless the user says to remove it (Custard Mill's was switched off on request).
+
 ## Standing rule: only the brand's own fonts and colours (newest, overrides any font choices elsewhere)
 
 The user said: "The fonts look like AI. The colors are weird... Use their actual font for the fonts, and from now on, only do that. I want you to only use their fonts on the website, not some AI generic fonts. Use only theirs."
