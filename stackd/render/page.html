@@ -1,0 +1,1250 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noai, noimageai">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>StackD Bars · Cheesecake bars by the box in Dearborn</title>
+<meta name="description" content="Cheesecake bars by the box in Dearborn: Lotus Biscoff, Strawberry Crunch, Banana Pudding, Cookies &amp; Cream, Apple Crumble and Plain. $5 each, $30 half dozen, $45 dozen, $80 two dozen. Fill a box and text the order.">
+<meta property="og:title" content="StackD Bars · Fill a box of cheesecake bars">
+<meta property="og:description" content="Pick 6, 12 or 24, fill it with your flavors and text the order. Made to order in Dearborn.">
+<meta name="theme-color" content="#fdf7ec">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Montserrat:wght@500;600;700;800&family=Open+Sans:wght@400;600;700&family=Yellowtail&display=swap">
+<script>(function(){var d=document.documentElement;d.classList.add('js');try{history.scrollRestoration='manual'}catch(e){}
+try{if(matchMedia('(prefers-reduced-motion: reduce)').matches)d.classList.add('rm');else if(!sessionStorage.getItem('sbIntro1'))d.classList.add('intro','lock')}catch(e){}})();</script>
+<style>
+/* StackD Bars. Everything here comes from their own flyer (instagram.com/p/DfXpfx5Ppjr + the Thanksgiving one, DfyEkQNhxCV):
+   colours sampled by render/trace.py from the logo pixels:
+     --choc #3e0c03   the "Stackd" script            --ink #1f0c03      "Rich. Creamy. Irresistible."
+     --caramel #914304 the BARS face (gradient #b8661c → #7a3503 like the flyer)
+     --top #a8521a / --cheese #fde5b2 / --drizzle #f9c981   the bar icon's chocolate top, cheesecake and drizzle
+     --paper #fdf7ec / --cream #fbead7 / --sand #fbe3ca  the flyer's cream background (k-means + median round the logo)
+     --board #2a0802  their script brown taken down for the lit sign's board (the only dark surface)
+   type, matched by rendering candidates over crops of the flyer:
+     Montserrat = CHEESECAKE BARS / FLAVORS / PRICING / EACH · Open Sans = the flavor names (Lotus Biscoff…)
+     Yellowtail = the $5 $30 $45 $80 prices · Dancing Script = the closest free cut of the tagline hand
+   the logo itself is traced (render/trace.py), never typeset. */
+:root{
+  --choc:#3e0c03;--ink:#1f0c03;--caramel:#914304;--caramel2:#b8661c;--top:#a8521a;--cheese:#fde5b2;--drizzle:#f9c981;
+  --paper:#fdf7ec;--cream:#fbead7;--sand:#fbe3ca;--white:#fff;--board:#2a0802;--board2:#4b1406;
+  --muted:#6e4a3a;--line:rgba(62,12,3,.13);--line2:rgba(62,12,3,.22);--berry:#c8323c;--ok:#2f7a4f;
+  --r:16px;--pad:16px;--max:1160px;
+  --f-head:'Montserrat',system-ui,sans-serif;--f-body:'Open Sans',system-ui,sans-serif;--f-price:'Yellowtail',cursive;--f-hand:'Dancing Script',cursive;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;scroll-padding-top:64px}
+html.lock,html.lock body{overflow:hidden;height:100%}
+body{background:var(--paper);color:var(--ink);font:400 14.5px/1.55 var(--f-body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{display:block;max-width:100%}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+a{color:inherit;-webkit-tap-highlight-color:transparent}
+:focus-visible{outline:2.5px solid var(--caramel);outline-offset:2px;border-radius:6px}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 var(--pad)}
+h1,h2,h3{font-family:var(--f-head);color:var(--choc);letter-spacing:-.01em}
+h1{font-size:28px;line-height:1.12;font-weight:800}
+h2{font-size:22px;line-height:1.18;font-weight:800}
+h3{font-size:16px;line-height:1.25;font-weight:700}
+.price{font-family:var(--f-price);font-weight:400;letter-spacing:.01em}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:46px;padding:0 20px;border-radius:999px;font:700 14px/1 var(--f-head);white-space:nowrap;text-decoration:none;transition:transform .18s cubic-bezier(.3,1.6,.5,1),background .2s,box-shadow .2s}
+.btn:active{transform:scale(.95)}
+.pri{background:var(--choc);color:var(--paper);box-shadow:0 8px 18px -10px rgba(62,12,3,.8)}
+.sec{background:var(--white);color:var(--choc);box-shadow:inset 0 0 0 1.5px var(--line2)}
+.btn.wide{width:100%}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+section{padding:34px 0}
+.sec-head{margin-bottom:16px}
+.sec-head p{color:var(--muted);margin-top:6px;max-width:560px}
+.reveal{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s cubic-bezier(.2,.8,.3,1)}
+.reveal.in,.rm .reveal,html:not(.js) .reveal{opacity:1;transform:none}
+
+/* ---------- nav ---------- */
+.nav{position:sticky;top:0;z-index:50;height:56px;background:rgba(253,247,236,.94);border-bottom:1px solid var(--line);transition:opacity .3s}
+.nav .wrap{height:100%;display:flex;align-items:center;gap:12px}
+.brand{display:block;height:32px;flex:none}
+.brand svg{height:32px;width:122px;display:block}
+.links{display:none;margin-left:auto;gap:22px;font:600 13.5px var(--f-head)}
+.links a{text-decoration:none;color:var(--choc);opacity:.8}
+.links a:hover{opacity:1}
+.nav-order{margin-left:auto;height:38px;padding:0 14px 0 16px;border-radius:999px;background:var(--choc);color:var(--paper);font:700 13.5px var(--f-head);display:flex;align-items:center;gap:8px;white-space:nowrap}
+.nav-order b{min-width:22px;height:22px;border-radius:11px;background:var(--drizzle);color:var(--choc);font-size:12px;display:grid;place-items:center;padding:0 6px}
+.intro .nav{opacity:0}
+
+/* ---------- the opening: a chocolate curtain the sign lights up on ---------- */
+.ov{position:fixed;inset:0;z-index:90;display:none;background:radial-gradient(90% 70% at 50% 44%,#4a1305 0%,#2a0802 58%,#1c0501 100%);will-change:transform}
+.intro .ov{display:block}
+.ov-drips{position:absolute;left:0;right:0;top:100%;height:90px;margin-top:-1px}
+.ov-drips svg{width:100%;height:100%;display:block}
+.skip{position:fixed;z-index:96;right:14px;bottom:calc(16px + env(safe-area-inset-bottom));font:600 12.5px var(--f-head);color:rgba(255,236,214,.7);display:none;padding:8px 12px}
+.intro .skip{display:block}
+
+/* ---------- hero ---------- */
+.hero{padding:16px 0 26px}
+.hero-in{display:flex;flex-direction:column;gap:16px}
+.board{position:relative;border-radius:20px;padding:8px 8px 14px;background:radial-gradient(120% 100% at 50% 0%,var(--board2) 0%,var(--board) 72%);box-shadow:inset 0 0 0 1.5px rgba(255,196,130,.15),0 20px 40px -22px rgba(62,12,3,.75)}
+.board::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(180deg,rgba(255,220,180,.06),transparent 30%)}
+.slot{position:relative;aspect-ratio:774/272;width:100%}
+.signwrap{position:absolute;inset:0;z-index:95;transform-origin:50% 50%;pointer-events:none}
+.signwrap canvas{display:block;width:100%;height:100%}
+.sign-hit{position:absolute;inset:0;z-index:2;border-radius:20px;cursor:pointer}
+.hint{position:absolute;right:14px;bottom:3px;font:600 13px var(--f-hand);color:rgba(249,201,129,.62);pointer-events:none;transition:opacity .4s}
+.hero-copy h1{max-width:15ch}
+.hero-copy p{margin-top:8px;color:var(--muted);max-width:46ch}
+.ctas{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+.ctas .btn{flex:1 1 auto}
+.strip{display:flex;gap:8px;margin-top:16px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.strip::-webkit-scrollbar{display:none}
+.strip button{flex:none;width:64px;text-align:center;font:600 10.5px/1.2 var(--f-head);color:var(--muted)}
+.strip img{width:64px;height:64px;border-radius:14px;object-fit:cover;margin-bottom:5px;box-shadow:0 6px 12px -8px rgba(62,12,3,.7);transition:transform .2s cubic-bezier(.3,1.6,.5,1)}
+.strip button:active img{transform:scale(.92)}
+
+.hp{display:none}
+@media (min-width:1180px){
+  .hero{position:relative;overflow:hidden}
+  .hp{display:block;position:absolute;top:84px;width:min(240px,calc(50vw - 460px));background:#fff;padding:8px 8px 6px;border-radius:6px;box-shadow:0 18px 30px -18px rgba(62,12,3,.6),0 1px 0 var(--line);z-index:1}
+  .hp img{width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;border-radius:3px}
+  .hp figcaption{font:600 15px/1.2 var(--f-hand);color:var(--caramel);text-align:center;padding:6px 2px 2px}
+  .hp-l{left:calc(50% - 340px - min(240px,calc(50vw - 460px)) - 34px);transform:rotate(-5deg)}
+  .hp-r{right:calc(50% - 340px - min(240px,calc(50vw - 460px)) - 34px);top:104px;transform:rotate(4deg)}
+}
+@media (min-width:1180px) and (min-height:821px){
+  .hp-l{left:calc(50% - 400px - min(240px,calc(50vw - 460px)) - 30px)}
+  .hp-r{right:calc(50% - 400px - min(240px,calc(50vw - 460px)) - 30px)}
+}
+
+/* ---------- box builder ---------- */
+.builder{background:linear-gradient(var(--cream),var(--paper));border-top:1px solid var(--line)}
+.bld{display:grid;gap:14px}
+.sizes{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.sizes button{border-radius:12px;padding:7px 4px 6px;background:var(--white);box-shadow:inset 0 0 0 1.5px var(--line);text-align:center;transition:background .2s,box-shadow .2s,transform .15s}
+.sizes button:active{transform:scale(.95)}
+.sizes .n{display:block;font:700 11.5px/1.2 var(--f-head);color:var(--choc);white-space:nowrap}
+.sizes .price{display:block;font-size:22px;line-height:1.05;color:var(--caramel)}
+.sizes [aria-selected=true]{background:var(--choc);box-shadow:none}
+.sizes [aria-selected=true] .n{color:var(--paper)}
+.sizes [aria-selected=true] .price{color:var(--drizzle)}
+.stage{position:relative;padding-top:21%;margin-top:4px}
+.stage.singles{padding-top:0}
+.bx{position:relative;perspective:1100px;perspective-origin:50% 0%}
+.lid{position:absolute;left:1.5%;right:1.5%;bottom:100%;height:100%;transform-origin:50% 100%;transform:rotateX(74deg);border-radius:9px 9px 3px 3px;background:linear-gradient(180deg,#f4efe8,#fff 60%,#f7f2ea);box-shadow:inset 0 0 0 1px #e9e0d3;transition:transform .5s cubic-bezier(.5,0,.3,1);backface-visibility:visible;z-index:3;pointer-events:none}
+.bx.closed .lid{transform:rotateX(180deg)}
+.tray{position:relative;z-index:2;background:linear-gradient(180deg,#fff,#fbf8f3);border-radius:10px;padding:9px;box-shadow:inset 0 0 0 1px #ece4d8,0 2px 0 #e6dccd,0 22px 30px -18px rgba(62,12,3,.55)}
+.paper{position:relative;border-radius:5px;padding:6px;background:
+  radial-gradient(60% 40% at 30% 20%,rgba(255,255,255,.7),transparent 70%),
+  radial-gradient(50% 60% at 80% 85%,rgba(225,205,175,.35),transparent 70%),
+  linear-gradient(135deg,#f7efe2,#f1e6d4);box-shadow:inset 0 2px 6px rgba(120,80,40,.18),inset 0 0 0 1px rgba(160,120,70,.12)}
+.grid{display:grid;gap:5px;grid-template-columns:repeat(var(--c,4),1fr)}
+.cell{position:relative;aspect-ratio:1;border-radius:6px;box-shadow:inset 0 0 0 1.5px rgba(145,67,4,.18);background:rgba(255,255,255,.28)}
+.cell::after{content:"";position:absolute;inset:32%;border-radius:50%;border:1.5px dashed rgba(145,67,4,.18)}
+.cell.has::after{display:none}
+.bb{position:absolute;inset:0;border-radius:6px;background-size:150%;background-position:center;box-shadow:0 2px 0 rgba(70,30,8,.28),0 7px 10px -5px rgba(62,12,3,.55);cursor:pointer;transform-origin:50% 80%}
+.bb::after{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(160deg,rgba(255,255,255,.22),transparent 40%,rgba(40,10,0,.16))}
+.tray.singles .grid{--c:6}
+.empty-note{position:absolute;inset:0;transition:opacity .3s;display:grid;place-items:center;text-align:center;font:600 20px var(--f-hand);color:rgba(145,67,4,.55);pointer-events:none;padding:10px}
+.full-tag{position:absolute;z-index:4;right:-6px;top:-10px;background:var(--berry);color:#fff;font:800 11px/1 var(--f-head);letter-spacing:.08em;padding:7px 10px;border-radius:8px;transform:rotate(6deg) scale(0);transition:transform .35s cubic-bezier(.3,1.7,.5,1)}
+.full .full-tag{transform:rotate(6deg) scale(1)}
+.crumb{position:absolute;z-index:5;width:5px;height:5px;border-radius:50%;pointer-events:none}
+.chips{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.chip{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;padding:7px 3px 6px;border-radius:12px;background:var(--white);box-shadow:inset 0 0 0 1.5px var(--line);font:600 11px/1.15 var(--f-body);color:var(--choc);text-align:center;transition:transform .16s cubic-bezier(.3,1.6,.5,1),box-shadow .2s}
+.chip img{width:42px;height:42px;border-radius:50%;object-fit:cover;box-shadow:0 4px 8px -5px rgba(62,12,3,.7)}
+.chip:active{transform:scale(.92)}
+.chip .ct{position:absolute;top:4px;right:6px;min-width:19px;height:19px;border-radius:10px;background:var(--choc);color:var(--paper);font:700 11px/19px var(--f-head);padding:0 5px;transform:scale(0);transition:transform .25s cubic-bezier(.3,1.7,.5,1)}
+.chip .ct.on{transform:scale(1)}
+.chip .tg{position:absolute;top:3px;left:5px;font:800 8.5px/1 var(--f-head);letter-spacing:.06em;color:#fff;background:var(--berry);border-radius:5px;padding:3px 4px}
+.chip .tg.sea{background:#b4621c}
+.chip.mix{background:var(--choc);color:var(--paper);box-shadow:none;justify-content:center;font:700 12px var(--f-head)}
+.chip.mix svg{width:30px;height:30px}
+.tally{display:flex;align-items:center;gap:12px;background:var(--white);border-radius:14px;padding:10px 12px;box-shadow:inset 0 0 0 1.5px var(--line)}
+.tally .meter{flex:1;min-width:0}
+.tally .t1{font:700 13.5px/1.3 var(--f-head);color:var(--choc)}
+.tally .t2{font-size:12.5px;color:var(--muted);line-height:1.35;margin-top:2px}
+.tally .bar{height:6px;border-radius:3px;background:var(--sand);margin-top:7px;overflow:hidden}
+.tally .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--caramel2),var(--caramel));border-radius:inherit;transition:width .35s cubic-bezier(.3,1.3,.5,1)}
+.tally .price{font-size:34px;color:var(--caramel);line-height:1;min-width:66px;text-align:right}
+.acts{display:flex;gap:8px}
+.acts .btn.sec{flex:none;padding:0 16px}
+.acts .btn.pri{flex:1}
+.pop{animation:pop .34s cubic-bezier(.3,1.7,.5,1)}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.18)}100%{transform:scale(1)}}
+.shake{animation:shake .4s}
+@keyframes shake{20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(3px)}}
+
+/* ---------- flavour rail ---------- */
+.rail{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin:0 calc(-1 * var(--pad));padding:4px var(--pad) 8px;scroll-padding:0 var(--pad)}
+.rail::-webkit-scrollbar{display:none}
+.rail>*{scroll-snap-align:start;flex:none}
+.fcard{width:72%;max-width:280px;background:var(--white);border-radius:var(--r);overflow:hidden;text-align:left;box-shadow:0 1px 0 var(--line),0 14px 24px -18px rgba(62,12,3,.6);transition:transform .2s cubic-bezier(.3,1.5,.5,1)}
+.fcard:active{transform:scale(.97)}
+.fcard .ph{position:relative;aspect-ratio:4/3;overflow:hidden;background:var(--sand)}
+.fcard img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+.fcard:hover img{transform:scale(1.05)}
+.fcard .tg{position:absolute;left:10px;top:10px;font:800 10px/1 var(--f-head);letter-spacing:.08em;color:#fff;background:var(--berry);padding:5px 7px;border-radius:6px}
+.fcard .tg.sea{background:#b4621c}
+.fcard .bd{padding:11px 13px 13px}
+.fcard h3{font-family:var(--f-body);font-weight:700;font-size:16px}
+.fcard p{font-size:13px;color:var(--muted);margin-top:3px;line-height:1.4}
+.dots{display:flex;gap:6px;justify-content:center;margin-top:8px}
+.dots i{width:6px;height:6px;border-radius:3px;background:var(--line2);transition:width .3s,background .3s}
+.dots i.on{width:18px;background:var(--caramel)}
+
+/* ---------- reviewer reels ---------- */
+.seen{background:var(--cream)}
+.rcard{width:70%;max-width:260px;background:var(--white);border-radius:var(--r);overflow:hidden;box-shadow:0 14px 24px -18px rgba(62,12,3,.6);text-decoration:none;display:block}
+.rcard .fr{position:relative;aspect-ratio:3/4;background:#1a0a04;overflow:hidden}
+.rcard .fr img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .7s}
+.rcard .fr img.on{opacity:1}
+.rcard .play{position:absolute;left:10px;bottom:10px;display:flex;align-items:center;gap:6px;font:700 11.5px var(--f-head);color:#fff;background:rgba(20,6,2,.55);padding:6px 10px 6px 8px;border-radius:999px}
+.rcard .play svg{width:14px;height:14px}
+.rcard .bd{padding:10px 12px 13px}
+.rcard .who{font:700 13.5px var(--f-head);color:var(--choc)}
+.rcard q{display:block;font-size:13px;color:var(--muted);margin-top:4px;line-height:1.4;quotes:"\201C" "\201D"}
+.rcard .where{font-size:11.5px;color:var(--caramel);margin-top:6px;font-weight:600}
+
+/* ---------- pickup ---------- */
+.steps{list-style:none;display:grid;gap:8px;counter-reset:s}
+.steps li{display:flex;gap:12px;align-items:flex-start;background:var(--white);border-radius:14px;padding:11px 12px;box-shadow:inset 0 0 0 1.5px var(--line)}
+.steps li::before{counter-increment:s;content:counter(s);flex:none;width:28px;height:28px;border-radius:50%;background:var(--sand);color:var(--caramel);font:800 13px/28px var(--f-head);text-align:center}
+.steps b{display:block;font:700 14px/1.3 var(--f-head);color:var(--choc)}
+.steps span{font-size:13px;color:var(--muted)}
+.soon{margin-top:14px;border-radius:16px;padding:14px;background:var(--choc);color:var(--paper);display:grid;gap:4px}
+.soon .k{font:600 12.5px var(--f-head);color:var(--drizzle)}
+.soon .d{font:800 18px/1.25 var(--f-head)}
+.soon .n{font-size:13px;opacity:.82}
+.menu-board{margin-top:14px;display:grid;grid-template-columns:repeat(4,1fr);background:var(--white);border-radius:16px;box-shadow:inset 0 0 0 1.5px var(--line);padding:12px 4px}
+.menu-board div{text-align:center;border-left:1.5px solid var(--line)}
+.menu-board div:first-child{border:0}
+.menu-board .price{font-size:30px;color:var(--choc);line-height:1}
+.menu-board small{display:block;font:700 10.5px/1.25 var(--f-head);letter-spacing:.04em;color:var(--caramel);margin-top:3px;text-transform:uppercase}
+
+/* ---------- closer + footer ---------- */
+.closer{padding:38px 0 40px;text-align:center;background:linear-gradient(var(--paper),var(--cream))}
+.closer svg.lock{width:min(260px,72%);height:auto;margin:0 auto 12px;display:block}
+.closer p{color:var(--muted);max-width:40ch;margin:8px auto 0}
+.closer .ctas{justify-content:center;max-width:440px;margin-left:auto;margin-right:auto}
+footer{background:var(--board);color:rgba(253,247,236,.8);padding:26px 0 calc(96px + env(safe-area-inset-bottom));font-size:13px}
+footer .wrap{display:grid;gap:10px}
+footer b{color:var(--paper);font-family:var(--f-head)}
+footer a{color:var(--drizzle)}
+footer .soc{display:flex;gap:14px;flex-wrap:wrap}
+footer .credit{opacity:.7;font-size:12px}
+
+/* ---------- sticky bar ---------- */
+.sbar{position:fixed;left:0;right:0;bottom:0;z-index:60;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:rgba(253,247,236,.96);border-top:1px solid var(--line);display:flex;gap:8px;transition:transform .35s cubic-bezier(.3,.9,.4,1)}
+.sbar.hide{transform:translateY(110%)}
+.sbar .btn{flex:1;height:44px}
+.sbar .btn b{background:var(--drizzle);color:var(--choc);border-radius:10px;min-width:22px;height:22px;display:inline-grid;place-items:center;font-size:12px;padding:0 6px}
+.intro .sbar{transform:translateY(110%)}
+
+/* ---------- sheets ---------- */
+.scrim{position:fixed;inset:0;z-index:70;background:rgba(31,12,3,.45);opacity:0;pointer-events:none;transition:opacity .3s}
+.scrim.on{opacity:1;pointer-events:auto}
+.sheet{position:fixed;z-index:80;left:0;right:0;bottom:0;max-height:92dvh;display:flex;flex-direction:column;background:var(--paper);border-radius:22px 22px 0 0;transform:translateY(105%);visibility:hidden;transition:transform .42s cubic-bezier(.3,.9,.3,1),visibility 0s .42s;box-shadow:0 -20px 40px -20px rgba(31,12,3,.5)}
+.sheet.on{transform:none;visibility:visible;transition:transform .42s cubic-bezier(.3,.9,.3,1)}
+.sheet .hd{display:flex;align-items:center;gap:10px;padding:14px 16px 10px;border-bottom:1px solid var(--line)}
+.sheet .hd h3{flex:1;font-size:17px}
+.x{width:36px;height:36px;border-radius:50%;background:var(--sand);display:grid;place-items:center;flex:none}
+.x svg{width:16px;height:16px}
+.sheet .body{overflow-y:auto;padding:14px 16px 18px;-webkit-overflow-scrolling:touch}
+.sheet .ft{padding:10px 16px calc(12px + env(safe-area-inset-bottom));border-top:1px solid var(--line);display:flex;gap:8px;background:var(--paper)}
+.sheet .ft .btn{flex:1}
+.sheet .ft.col{flex-direction:column}
+.sheet .ft.col .btn{flex:none;width:100%}
+.fs-ph{border-radius:16px;overflow:hidden;aspect-ratio:1;max-height:46dvh;margin:0 auto;background:var(--sand)}
+.fs-ph img{width:100%;height:100%;object-fit:cover}
+.fs-meta{margin-top:12px}
+.fs-meta p{color:var(--muted);margin-top:4px}
+.fs-meta .cr{font-size:12px;color:var(--caramel);margin-top:8px}
+.pdots{display:flex;gap:6px}
+.pdots i{width:7px;height:7px;border-radius:4px;background:var(--line2);transition:all .3s}
+.pdots i.on{width:20px;background:var(--caramel)}
+.line{display:flex;gap:10px;align-items:flex-start;padding:11px 0;border-bottom:1px solid var(--line)}
+.line .mini{display:grid;grid-template-columns:repeat(var(--c,4),12px);gap:2px;flex:none;padding:4px;background:#fff;border-radius:6px;box-shadow:inset 0 0 0 1px var(--line)}
+.line .mini i{width:12px;height:12px;border-radius:3px;background-size:150%;background-position:center}
+.line .mini.one{grid-template-columns:30px}
+.line .mini.one i{width:30px;height:30px;border-radius:6px}
+.line .tx{flex:1;min-width:0}
+.line .tx b{display:block;font:700 14px var(--f-head);color:var(--choc)}
+.line .tx span{font-size:12.5px;color:var(--muted);display:block;line-height:1.35}
+.line .pr{font-family:var(--f-price);font-size:24px;color:var(--caramel);line-height:1}
+.line .lk{display:flex;gap:12px;margin-top:5px}
+.line .lk button{font:600 12.5px var(--f-head);color:var(--caramel);text-decoration:underline;text-underline-offset:2px}
+.qty{display:flex;align-items:center;gap:6px;margin-top:4px}
+.qty button{width:28px;height:28px;border-radius:50%;background:var(--sand);font:700 16px/1 var(--f-head);color:var(--choc)}
+.qty output{min-width:20px;text-align:center;font:700 14px var(--f-head)}
+.sum{display:flex;justify-content:space-between;align-items:baseline;padding:12px 0 2px}
+.sum b{font:700 15px var(--f-head);color:var(--choc)}
+.sum .price{font-size:34px;color:var(--choc)}
+.empty-order{text-align:center;padding:26px 0;color:var(--muted)}
+.empty-order b{display:block;font:600 24px var(--f-hand);color:var(--caramel);margin-bottom:4px}
+.fld{display:grid;gap:5px;margin-bottom:12px}
+.fld label{font:700 13px var(--f-head);color:var(--choc)}
+.fld input,.fld textarea{font:400 16px var(--f-body);color:var(--ink);background:#fff;border:1.5px solid var(--line2);border-radius:12px;padding:11px 12px;width:100%}
+.fld textarea{font-size:14px;min-height:64px;resize:vertical}
+.fld input:focus,.fld textarea:focus{outline:none;border-color:var(--caramel)}
+.fld .err{font-size:12.5px;color:var(--berry);min-height:1em}
+.cal{background:#fff;border-radius:16px;box-shadow:inset 0 0 0 1.5px var(--line);padding:10px}
+.cal-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.cal-hd b{font:700 14.5px var(--f-head);color:var(--choc)}
+.cal-hd button{width:34px;height:34px;border-radius:50%;background:var(--sand);display:grid;place-items:center}
+.cal-hd button[disabled]{opacity:.3}
+.cal-hd svg{width:14px;height:14px}
+.cal-g{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;text-align:center}
+.cal-g .w{font:700 10.5px var(--f-head);color:var(--muted);padding:3px 0}
+.cal-g button{aspect-ratio:1;border-radius:10px;font:600 13.5px var(--f-head);color:var(--choc);position:relative;transition:background .2s,transform .15s}
+.cal-g button:active{transform:scale(.9)}
+.cal-g button.off{color:rgba(62,12,3,.28);text-decoration:line-through;text-decoration-thickness:1px}
+.cal-g button.today::after{content:"";position:absolute;left:50%;bottom:4px;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:var(--caramel)}
+.cal-g button.sel{background:var(--choc);color:var(--paper)}
+.cal-note{font-size:12.5px;color:var(--muted);margin-top:8px;line-height:1.4}
+.cal-note.warn{color:var(--berry)}
+.wins{display:grid;gap:6px;margin-top:12px}
+.wins button{display:flex;justify-content:space-between;align-items:center;padding:11px 12px;border-radius:12px;background:#fff;box-shadow:inset 0 0 0 1.5px var(--line);font:600 14px var(--f-head);color:var(--choc);text-align:left}
+.wins button span{font:400 12.5px var(--f-body);color:var(--muted)}
+.wins button.sel{box-shadow:inset 0 0 0 2px var(--choc);background:var(--cream)}
+.wins button[disabled]{opacity:.4}
+.rv{background:#fff;border-radius:16px;padding:12px;box-shadow:inset 0 0 0 1.5px var(--line);display:grid;gap:6px;font-size:13.5px}
+.rv .r{display:flex;justify-content:space-between;gap:10px}
+.rv .r span:first-child{color:var(--muted)}
+.rv .r span:last-child{font-weight:600;text-align:right}
+.msg{white-space:pre-wrap;font:400 12.5px/1.5 var(--f-body);background:var(--cream);border-radius:12px;padding:10px 12px;margin-top:10px;color:var(--ink);max-height:180px;overflow:auto}
+.send{display:grid;gap:8px;margin-top:12px}
+.send .btn{height:50px}
+.small-note{font-size:12px;color:var(--muted);margin-top:8px;text-align:center}
+.done{text-align:center;padding:14px 0 4px}
+.done b{display:block;font:600 28px var(--f-hand);color:var(--caramel)}
+.toast{position:fixed;z-index:100;left:50%;top:70px;max-width:min(92vw,420px);transform:translate(-50%,-20px);opacity:0;background:var(--choc);color:var(--paper);font:600 13.5px/1.35 var(--f-head);padding:11px 16px;border-radius:14px;box-shadow:0 12px 30px -12px rgba(31,12,3,.7);transition:opacity .25s,transform .35s cubic-bezier(.3,1.5,.5,1);pointer-events:none;text-align:center}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.fly{position:fixed;z-index:85;width:54px;height:54px;border-radius:10px;background-size:cover;background-position:center;pointer-events:none;box-shadow:0 10px 20px -8px rgba(31,12,3,.7)}
+
+/* ---------- tablet / desktop ---------- */
+@media (min-width:700px){
+  :root{--pad:28px}
+  body{font-size:15px}
+  h1{font-size:40px}
+  h2{font-size:28px}
+  section{padding:52px 0}
+  .fcard{width:260px}
+  .rcard{width:250px}
+  .chips{grid-template-columns:repeat(4,1fr)}
+  .bld{grid-template-columns:1.1fr 1fr;gap:24px;align-items:start}
+  .stage{max-width:440px;width:100%;margin-left:auto;margin-right:auto}
+}
+@media (min-width:980px){
+  footer{padding-bottom:30px}
+  .sbar{display:none}
+  .links{display:flex}
+  .nav-order{margin-left:18px}
+  .nav{height:64px}
+  .brand,.brand svg{height:38px}
+  .brand svg{width:145px}
+  .hero{padding:22px 0 40px}
+  .hero-in{align-items:center;text-align:center}
+  .board{width:min(760px,100%)}
+  .hero-copy{display:flex;flex-direction:column;align-items:center}
+  .hero-copy h1{max-width:none;font-size:46px}
+  .hero-copy p{font-size:16px}
+  .ctas .btn{flex:none;min-width:200px}
+  .strip{justify-content:center}
+  .bld{grid-template-columns:1.1fr 1fr;gap:40px;align-items:start}
+  .bld-r{display:grid;gap:14px;position:sticky;top:90px}
+  .bld-l{display:grid;gap:12px}
+  .rail.grid-d{display:grid;grid-template-columns:repeat(4,1fr);overflow:visible;margin:0;padding:4px 0}
+  .rail.grid-d>*{width:auto;max-width:none}
+  .dots.d-hide,#rdots{display:none}
+  .pick{display:grid;grid-template-columns:1.1fr 1fr;gap:30px;align-items:start}
+  .pick .soon{margin-top:0}
+  .sheet{left:50%;right:auto;width:520px;bottom:auto;top:50%;border-radius:22px;transform:translate(-50%,-46%) scale(.96);opacity:0;pointer-events:none;transition:transform .35s cubic-bezier(.3,1.3,.5,1),opacity .25s,visibility 0s .35s;max-height:88vh}
+  .sheet.on{transform:translate(-50%,-50%);opacity:1;pointer-events:auto;transition:transform .35s cubic-bezier(.3,1.3,.5,1),opacity .25s}
+}
+@media (min-width:980px) and (max-height:820px){
+  .board{width:min(640px,100%)}
+  .hero-copy h1{font-size:42px}
+}
+.bld-l,.bld-r{display:grid;gap:12px;min-width:0}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<!--DEFS-->
+<div class="ov" id="ov" aria-hidden="true">
+  <div class="ov-drips"><svg viewBox="0 0 1200 90" preserveAspectRatio="none"><path fill="#1c0501" d="M0 0H1200V22C1170 22 1166 30 1160 52C1156 66 1146 66 1143 52C1138 30 1132 24 1104 24C1072 24 1070 30 1064 40C1060 47 1052 47 1049 40C1043 28 1036 22 1002 22C966 22 962 32 957 62C954 82 941 82 938 62C933 32 925 24 890 24C852 24 848 30 843 45C840 54 831 54 828 45C822 30 816 22 780 22C744 22 738 30 734 50C731 63 721 63 718 50C713 30 706 24 670 24C634 24 630 34 625 70C622 88 608 88 605 70C600 34 592 22 556 22C520 22 515 30 510 44C507 53 498 53 495 44C490 30 482 24 446 24C410 24 406 32 401 56C398 70 387 70 384 56C379 32 372 22 336 22C300 22 295 30 290 42C287 50 279 50 276 42C271 30 264 24 228 24C192 24 188 34 183 64C180 80 168 80 165 64C160 34 152 22 116 22C80 22 76 30 71 46C68 55 59 55 56 46C51 30 44 22 0 22Z"/></svg></div>
+</div>
+<button class="skip" id="skip" type="button">Skip</button>
+
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="StackD Bars, back to top"><svg viewBox="0 0 730 192" role="img" aria-label="Stackd Bars"><use href="#sb-word"/></svg></a>
+    <nav class="links" aria-label="Sections"><a href="#box">Fill a box</a><a href="#flavors">Flavors</a><a href="#seen">Reviews</a><a href="#pickup">Pickup</a></nav>
+    <button class="nav-order" id="navOrder" type="button" aria-label="Open your order">Order <b id="navN">0</b></button>
+  </div>
+</header>
+
+<main>
+<section class="hero" id="top">
+  <figure class="hp hp-l" aria-hidden="true"><img src="media/p-box.webp" alt="" width="720" height="540"><figcaption>from @big_hamzzzreviews</figcaption></figure>
+  <figure class="hp hp-r" aria-hidden="true"><img src="media/p-tray.webp" alt="" width="720" height="540"><figcaption>at Little Caesars Arena</figcaption></figure>
+  <div class="wrap hero-in">
+    <div class="board" id="board">
+      <div class="slot" id="slot"><div class="signwrap" id="signwrap"><canvas id="sign" role="img" aria-label="The StackD Bars sign, lit"></canvas></div></div>
+      <button class="sign-hit" id="signHit" type="button" aria-label="Switch the StackD sign off and on"></button>
+      <span class="hint" id="hint">tap the sign</span>
+    </div>
+    <div class="hero-copy">
+      <h1>Cheesecake bars, boxed your way</h1>
+      <p>Made to order in Dearborn. Fill a box of 6, 12 or 24 with your flavors, then text or DM the order. Please give at least 48 hours.</p>
+      <div class="ctas"><a class="btn pri" href="#box">Fill a box</a><a class="btn sec" href="sms:+13136568557" id="heroText">Text 313-656-8557</a></div>
+      <div class="strip" id="strip" aria-label="The flavors"></div>
+    </div>
+  </div>
+</section>
+
+<section class="builder" id="box">
+  <div class="wrap">
+    <div class="sec-head reveal"><h2>Fill your box</h2><p>Pick a size, then tap flavors to drop bars in. Tap a bar to take it back out, or hit Mix it and the box gets split evenly.</p></div>
+    <div class="bld">
+      <div class="bld-l">
+        <div class="sizes" id="sizes" role="tablist" aria-label="Box size"></div>
+        <div class="stage" id="stage">
+          <div class="bx" id="bx">
+            <div class="lid" aria-hidden="true"></div>
+            <div class="tray" id="tray"><span class="full-tag">FULL</span><div class="paper"><div class="grid" id="grid"></div></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="bld-r">
+        <div class="chips" id="chips"></div>
+        <div class="tally" id="tally" aria-live="polite"><div class="meter"><div class="t1" id="t1"></div><div class="t2" id="t2"></div><div class="bar"><i id="tbar"></i></div></div><div class="price" id="tp">$0</div></div>
+        <div class="acts"><button class="btn sec" type="button" id="clear">Empty</button><button class="btn pri" type="button" id="addBox">Add to order</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="flavors">
+  <div class="wrap">
+    <div class="sec-head reveal"><h2>The flavors</h2><p>Tap one to see it up close. Apple Crumble is the new one, and Pumpkin Spice is seasonal.</p></div>
+    <div class="rail grid-d" id="frail"></div>
+    <div class="dots d-hide" id="fdots"></div>
+  </div>
+</section>
+
+<section class="seen" id="seen">
+  <div class="wrap">
+    <div class="sec-head reveal"><h2>Tried by the reviewers</h2><p>Huge thank you to @halalfoodjunkie and @big_hamzzzreviews for the reels. Tap a card to watch it on Instagram.</p></div>
+    <div class="rail" id="rrail"></div>
+    <div class="dots" id="rdots"></div>
+  </div>
+</section>
+
+<section id="pickup">
+  <div class="wrap pick">
+    <div>
+      <div class="sec-head reveal"><h2>How ordering works</h2></div>
+      <ol class="steps reveal">
+        <li><div><b>Fill a box or pick singles</b><span>Boxes of 6, 12 or 24, or $5 a bar.</span></div></li>
+        <li><div><b>Pick your pickup day</b><span>At least 48 hours out. Every bar is made to order.</span></div></li>
+        <li><div><b>Send it by text or DM</b><span>The site writes the message for you. Text <span style="white-space:nowrap">313-656-8557</span> or DM @stackd_bars.</span></div></li>
+        <li><div><b>Wait for the confirmation</b><span>You'll get a reply back to confirm your day, time and pickup spot.</span></div></li>
+      </ol>
+    </div>
+    <div class="reveal">
+      <div class="soon" id="soon"><span class="k">Order today and the soonest pickup is</span><span class="d" id="soonD">…</span><span class="n">Thanksgiving booked up this year, so text early for holidays and parties.</span></div>
+      <div class="menu-board" aria-label="Prices"><div><span class="price">$5</span><small>Each</small></div><div><span class="price">$30</span><small>Half dozen</small></div><div><span class="price">$45</span><small>Dozen</small></div><div><span class="price">$80</span><small>Two dozen</small></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="closer" id="closer">
+  <div class="wrap">
+    <svg class="lock" viewBox="0 0 730 252" role="img" aria-label="Stackd Bars, cheesecake bars. Rich. Creamy. Irresistible."><use href="#sb-lockup"/></svg>
+    <h2>Got a party coming up?</h2>
+    <p>Two dozen bars is $80. Fill a box here, or just text 313-656-8557 and say what you need.</p>
+    <div class="ctas"><a class="btn pri" href="#box">Fill a box</a><a class="btn sec" href="sms:+13136568557">Text the order</a></div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div><b>StackD</b> · Cheesecake bars and more · Dearborn, MI</div>
+    <div>Order by text at <a href="sms:+13136568557">313-656-8557</a> or DM <a href="https://ig.me/m/stackd_bars" target="_blank" rel="noopener">@stackd_bars</a>. Please give at least 48 hours.</div>
+    <div class="soc"><a href="https://www.instagram.com/stackd_bars/" target="_blank" rel="noopener">Instagram</a><a href="https://www.threads.net/@stackd_bars" target="_blank" rel="noopener">Threads</a><span>Facebook: Maha Ramadan</span></div>
+    <div>Prices and flavors from the StackD menu. Pickup time and spot are confirmed by text.</div>
+    <div class="credit">Site by <a href="https://www.instagram.com/ela.systems/" target="_blank" rel="noopener">ElaSystems</a></div>
+  </div>
+</footer>
+
+<div class="sbar" id="sbar"><a class="btn sec" href="#box" id="sbFill">Fill a box</a><button class="btn pri" type="button" id="sbOrder">Order <b id="sbN">0</b><span id="sbP"></span></button></div>
+
+<div class="scrim" id="scrim"></div>
+<div class="sheet" id="fSheet" role="dialog" aria-modal="true" aria-labelledby="fsName">
+  <div class="hd"><h3 id="fsName">Flavor</h3><button class="x" type="button" aria-label="Close"><svg viewBox="0 0 16 16"><path d="M3 3l10 10M13 3L3 13" stroke="#3e0c03" stroke-width="2" stroke-linecap="round"/></svg></button></div>
+  <div class="body"><div class="fs-ph"><img id="fsImg" alt=""></div><div class="fs-meta"><p id="fsTop"></p><p class="cr" id="fsCr"></p></div></div>
+  <div class="ft"><button class="btn sec" type="button" id="fsOne">Add one · $5</button><button class="btn pri" type="button" id="fsBox">Put in my box</button></div>
+</div>
+<div class="sheet" id="pSheet" role="dialog" aria-modal="true" aria-labelledby="psT">
+  <div class="hd"><h3 id="psT">Your box isn't full yet</h3><button class="x" type="button" aria-label="Close"><svg viewBox="0 0 16 16"><path d="M3 3l10 10M13 3L3 13" stroke="#3e0c03" stroke-width="2" stroke-linecap="round"/></svg></button></div>
+  <div class="body"><p id="psP"></p></div>
+  <div class="ft col"><button class="btn pri" type="button" id="psFill"></button><button class="btn sec" type="button" id="psSingles"></button></div>
+</div>
+<div class="sheet" id="oSheet" role="dialog" aria-modal="true" aria-labelledby="osT">
+  <div class="hd"><h3 id="osT">Your order</h3><div class="pdots" id="pdots"><i></i><i></i><i></i><i></i></div><button class="x" type="button" aria-label="Close"><svg viewBox="0 0 16 16"><path d="M3 3l10 10M13 3L3 13" stroke="#3e0c03" stroke-width="2" stroke-linecap="round"/></svg></button></div>
+  <div class="body" id="oBody"></div>
+  <div class="ft" id="oFt"></div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+'use strict';
+const META = /*META*/;
+const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const D = document.documentElement, RM = D.classList.contains('rm');
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const money = n => '$' + (Math.round(n * 100) / 100).toString();
+const store = { get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { } } };
+let toastT = 0;
+function toast(msg) { const el = $('#toast'); el.textContent = msg; el.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => el.classList.remove('on'), 2300); }
+function bump(el) { if (!el || RM) return; el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop'); }
+function shake(el) { if (!el || RM) return; el.classList.remove('shake'); void el.offsetWidth; el.classList.add('shake'); }
+function buzz(ms = 8) { try { navigator.vibrate && navigator.vibrate(ms); } catch (e) { } }
+const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
+const seg = (t, a, b) => clamp((t - a) / (b - a));
+const eo3 = x => 1 - Math.pow(1 - x, 3), eio = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+const back = x => { const c = 2.1, c3 = c + 1; return 1 + c3 * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2); };
+
+/* ---------------- the business (all from their Instagram) ---------------- */
+const CONFIG = {
+  name: 'StackD', phone: '+13136568557', phoneFmt: '313-656-8557', ig: 'stackd_bars', city: 'Dearborn, MI',
+  noticeH: 48, single: 5, boxes: { 6: 30, 12: 45, 24: 80 },
+  sizeName: { 6: 'Half dozen', 12: 'Dozen', 24: 'Two dozen', 1: 'Singles' },
+  cols: { 6: 3, 12: 4, 24: 6 },
+  // pickup windows are a request; the exact time is confirmed by text
+  windows: [{ id: 'am', name: 'Morning', range: '10 AM to 12 PM', s: 10, e: 12 }, { id: 'mid', name: 'Afternoon', range: '12 to 4 PM', s: 12, e: 16 }, { id: 'pm', name: 'Evening', range: '4 to 8 PM', s: 16, e: 20 }],
+};
+const REEL_H = '@big_hamzzzreviews reel', REEL_A = '@halalfoodjunkie reel';
+const FLAVORS = [
+  { id: 'lotus', name: 'Lotus Biscoff', top: 'Crushed Biscoff cookie on top with a white and Biscoff drizzle.', img: 'media/f-lotus.webp', cr: 'Photo from the ' + REEL_H },
+  { id: 'straw', name: 'Strawberry Crunch', top: 'Covered in pink strawberry crunch, top and sides.', img: 'media/f-strawberry.webp', cr: 'Photo from the ' + REEL_H },
+  { id: 'banana', name: 'Banana Pudding', top: 'Vanilla wafers laid across the top with a white drizzle.', img: 'media/f-banana.webp', cr: 'Photo from the ' + REEL_A },
+  { id: 'oreo', name: 'Cookies & Cream', top: 'Oreo crumble on a chocolate top with a white drizzle, on a cookie crust.', img: 'media/f-oreo.webp', cr: 'Photo from the ' + REEL_H },
+  { id: 'apple', name: 'Apple Crumble', top: 'A thick crumble topping all over. The newest one on the menu.', img: 'media/f-apple.webp', cr: 'Photo from the ' + REEL_A, tag: 'NEW' },
+  { id: 'plain', name: 'Plain', top: 'Just the cheesecake, nothing on top. The one to start with.', img: 'media/f-plain.webp', cr: 'Picture from the StackD menu' },
+  { id: 'pumpkin', name: 'Pumpkin Spice', top: 'Pumpkin cheesecake with little piped cream swirls on top. Seasonal, so ask if it\'s still on.', img: 'media/f-pumpkin.webp', cr: 'Photo from the ' + REEL_A, tag: 'SEASONAL', sea: true },
+];
+const FBY = Object.fromEntries(FLAVORS.map(f => [f.id, f]));
+const REGULAR = FLAVORS.filter(f => !f.sea).map(f => f.id);
+const REELS = [
+  { who: '@big_hamzzzreviews', q: 'make sure yall place your orders before she sells out', where: 'Reel tagged Dearborn, Michigan', url: 'https://www.instagram.com/reel/DfXY_OaBGa-/', fr: ['rh1', 'rh2', 'rh3'] },
+  { who: '@halalfoodjunkie', q: 'Mini Cheesecake bar review from @raptors & @detroitpistons fans … they loved them', where: 'Reel at Little Caesars Arena', url: 'https://www.instagram.com/reel/Df_SB5qzjtf/', fr: ['ra1', 'ra2', 'ra3'] },
+  { who: '@halalfoodjunkie', q: '@rolam thought this was her favorite dessert ever WOW!! That’s a huge statement!!', where: 'Post tagged Dearborn, Michigan', url: 'https://www.instagram.com/p/DgOgfhgFmKt/', fr: ['rf1', 'rf2'] },
+];
+
+/* ---------------- Detroit time + the 48 hour rule ---------------- */
+const QS = new URLSearchParams(location.search);
+const NOW0 = QS.get('now') ? Date.parse(QS.get('now')) : 0, T0 = Date.now();
+const now = () => NOW0 ? NOW0 + (Date.now() - T0) : Date.now();
+const DTF = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Detroit', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
+function dParts(ms) { const p = {}; DTF.formatToParts(new Date(ms)).forEach(x => p[x.type] = x.value); return { y: +p.year, m: +p.month, d: +p.day, h: +p.hour % 24, mi: +p.minute }; }
+function detroitMs(y, m, d, h) { let g = Date.UTC(y, m - 1, d, h); for (let i = 0; i < 3; i++) { const p = dParts(g); g += Date.UTC(y, m - 1, d, h) - Date.UTC(p.y, p.m - 1, p.d, p.h, p.mi); } return g; }
+const dkey = (y, m, d) => `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+const fromKey = k => k.split('-').map(Number);
+const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'], MONL = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const DOW = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], DOWL = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const dow = (y, m, d) => new Date(Date.UTC(y, m - 1, d)).getUTCDay();
+const cutoff = () => now() + CONFIG.noticeH * 3600e3;
+function winOk(y, m, d, w) { return detroitMs(y, m, d, w.s) >= cutoff(); }
+function dayOk(y, m, d) { return CONFIG.windows.some(w => winOk(y, m, d, w)); }
+function soonest() {
+  const p = dParts(now());
+  for (let i = 0; i < 10; i++) { const dt = new Date(Date.UTC(p.y, p.m - 1, p.d + i)); const y = dt.getUTCFullYear(), m = dt.getUTCMonth() + 1, d = dt.getUTCDate(); const w = CONFIG.windows.find(w => winOk(y, m, d, w)); if (w) return { y, m, d, w }; }
+}
+const niceDay = (y, m, d, long) => long ? `${DOWL[dow(y, m, d)]}, ${MONL[m - 1]} ${d}` : `${DOW[dow(y, m, d)]}, ${MON[m - 1]} ${d}`;
+</script>
+<script>
+/* ======================================================================================
+   THE LED SIGN (canvas). Every part is their traced logo (Path2D from the <defs> paths).
+   Script letters are "written" along their skeleton centrelines, BARS ignite like channel
+   letters, the bar icon fills up like a lightbox, and the sticker outline is a neon edge.
+   ====================================================================================== */
+const Sign = (() => {
+  const OX = 22, OY = 10, W = 774, H = 272, cv = $('#sign'), ctx = cv.getContext('2d');
+  const PM = META.parts, LINES = META.lines;
+  const P = {}; Object.keys(PM).forEach(n => { const el = document.getElementById('p-' + n); if (el) P[n] = new Path2D(el.getAttribute('d')); });
+  const box = n => PM[n][1];
+  const SCRIPT = ['s0', 's1', 's2', 's3', 's4', 's5', 'drip'], BARS = [0, 1, 2, 3], CAPS = [...Array(14).keys()].map(i => 'c' + i);
+  const S = {}; Object.keys(P).forEach(n => S[n] = { i: 1, w: 1, dy: 0 });
+  const st = { u: 1, plate: 1, edge: 1, fill: 1, drz: 0, drzA: 0, drip: 0, shine: -1, gain: 1, rule: 1, tag: 1, on: 1, hot: 0, hx: 0, hy: 0, spark: 1 };
+  let k = 1, dpr = 1, scale = 1, sprites = {}, tmpA, tmpB, raf = 0, busy = 0;
+  const GLOW = { script: '#ff9b3d', bars: '#ff8a2a', icon: '#ffae55', caps: '#ffb062', tag: '#ff9f45', edge: '#ffe2bf' };
+  // centreline geometry for the written letters
+  const GEO = {};
+  for (const n of SCRIPT) {
+    const L = LINES[n]; if (!L) continue;
+    const segs = []; let tot = 0;
+    L.p.forEach(pl => { const cum = [0]; let l = 0; for (let i = 1; i < pl.length; i++) { l += Math.hypot(pl[i][0] - pl[i - 1][0], pl[i][1] - pl[i - 1][1]); cum.push(l); } segs.push({ pl, cum, s: tot }); tot += l; });
+    GEO[n] = { segs, tot, w: L.w };
+  }
+  function penPath(c, n, p) {   // stroke the first p (0..1) of a letter's centreline; returns the pen tip
+    const g = GEO[n]; const lim = p * g.tot; let tip = null;
+    c.beginPath();
+    for (const sg of g.segs) {
+      if (sg.s > lim) break;
+      const pl = sg.pl; c.moveTo(pl[0][0], pl[0][1]);
+      for (let i = 1; i < pl.length; i++) {
+        const a = sg.s + sg.cum[i - 1], b = sg.s + sg.cum[i];
+        if (b <= lim) { c.lineTo(pl[i][0], pl[i][1]); tip = pl[i]; }
+        else { const f = (lim - a) / (b - a); const x = pl[i - 1][0] + (pl[i][0] - pl[i - 1][0]) * f, y = pl[i - 1][1] + (pl[i][1] - pl[i - 1][1]) * f; c.lineTo(x, y); tip = [x, y]; break; }
+      }
+    }
+    return tip;
+  }
+  function sprite(n, color, blur, pad = 30) {
+    const b = box(n), w = Math.ceil((b[2] - b[0] + pad * 2) * k), h = Math.ceil((b[3] - b[1] + pad * 2) * k);
+    const c = document.createElement('canvas'); c.width = Math.max(1, w); c.height = Math.max(1, h);
+    const x = c.getContext('2d'), OFF = 4000;
+    x.setTransform(k, 0, 0, k, (pad - b[0]) * k - OFF, (pad - b[1]) * k);
+    x.shadowColor = color; x.shadowBlur = blur * k; x.shadowOffsetX = OFF; x.fillStyle = '#000';
+    x.fill(P[n]);
+    if (n === 'plate') { x.lineWidth = 3; x.strokeStyle = '#000'; x.stroke(P[n]); }
+    return { c, x: b[0] - pad, y: b[1] - pad, w: w / k, h: h / k };
+  }
+  function build() {
+    sprites = {};
+    SCRIPT.forEach(n => sprites[n] = sprite(n, GLOW.script, 13));
+    BARS.forEach(i => sprites['b' + i] = sprite('b' + i, GLOW.bars, 14));
+    sprites.ic_base = sprite('ic_base', GLOW.icon, 16);
+    CAPS.forEach(n => sprites[n] = sprite(n, GLOW.caps, 6, 12));
+    sprites.tag = sprite('tag', GLOW.tag, 6, 14);
+    ['ic_spark0', 'ic_spark1', 'ic_spark2'].forEach(n => sprites[n] = sprite(n, GLOW.icon, 7, 14));
+    tmpA = document.createElement('canvas'); tmpB = document.createElement('canvas');
+    [tmpA, tmpB].forEach(c => { c.width = cv.width; c.height = cv.height; });
+  }
+  function resize(sc = 1) {
+    scale = sc; dpr = Math.min(2, window.devicePixelRatio || 1);
+    const r = cv.getBoundingClientRect(); const cssW = (r.width / (sc === 1 ? 1 : 1)) || 300;
+    const wpx = Math.round((cv.offsetWidth || cssW) * sc * dpr);
+    cv.width = wpx; cv.height = Math.round(wpx * H / W); k = cv.width / W;
+    build(); draw();
+  }
+  const scriptGrad = c => { const g = c.createLinearGradient(0, 10, 0, 185); g.addColorStop(0, '#fff8ec'); g.addColorStop(.6, '#ffe2bb'); g.addColorStop(1, '#ffc98e'); return g; };
+  const barsGrad = c => { const g = c.createLinearGradient(0, 118, 0, 186); g.addColorStop(0, '#ffd690'); g.addColorStop(.5, '#f7a446'); g.addColorStop(1, '#de7a22'); return g; };
+  function blit(c, sp, a) { if (a <= 0) return; c.globalAlpha = clamp(a, 0, 1); c.drawImage(sp.c, sp.x, sp.y, sp.w, sp.h); }
+  const UNLIT = '#5c2210';
+  function drawLetter(c, n, i, w, dy) {
+    const u = st.u * .5 * (1 - (w >= 1 ? i : 0));
+    c.save(); c.translate(0, dy);
+    if (u > 0.01) { c.globalAlpha = u; c.fillStyle = UNLIT; c.fill(P[n]); }
+    if (w >= 1) {
+      c.globalCompositeOperation = 'lighter'; blit(c, sprites[n], i * .95 * st.gain); c.globalCompositeOperation = 'source-over';
+      c.globalAlpha = clamp(.25 + i * .75); c.fillStyle = i > .5 ? scriptGrad(c) : '#8a4a2a'; c.fill(P[n]);
+    } else if (w > 0) {
+      // written in light: the lit letter is masked by the pen's stroke so far
+      for (const [t, wide] of [[tmpB, 2.1], [tmpA, 1.08]]) {
+        const x = t.getContext('2d'); x.setTransform(1, 0, 0, 1, 0, 0); x.clearRect(0, 0, t.width, t.height); x.setTransform(k, 0, 0, k, OX * k, OY * k);
+        if (t === tmpB) { x.globalAlpha = st.gain; x.drawImage(sprites[n].c, sprites[n].x, sprites[n].y, sprites[n].w, sprites[n].h); }
+        else { x.fillStyle = scriptGrad(x); x.fill(P[n]); }
+        x.globalAlpha = 1; x.globalCompositeOperation = 'destination-in'; x.lineCap = 'round'; x.lineJoin = 'round'; x.lineWidth = GEO[n].w * wide; x.strokeStyle = '#000';
+        penPath(x, n, w); x.stroke(); x.globalCompositeOperation = 'source-over';
+      }
+      c.setTransform(1, 0, 0, 1, 0, dy * k);
+      c.globalAlpha = 1; c.globalCompositeOperation = 'lighter'; c.drawImage(tmpB, 0, 0); c.globalCompositeOperation = 'source-over'; c.drawImage(tmpA, 0, 0);
+      c.setTransform(k, 0, 0, k, OX * k, (OY + dy) * k);
+      const tip = penPath(c, n, w);
+      if (tip) { const g = c.createRadialGradient(tip[0], tip[1], 0, tip[0], tip[1], 20); g.addColorStop(0, 'rgba(255,255,255,.95)'); g.addColorStop(.3, 'rgba(255,214,160,.6)'); g.addColorStop(1, 'rgba(255,150,60,0)'); c.globalCompositeOperation = 'lighter'; c.globalAlpha = 1; c.fillStyle = g; c.fillRect(tip[0] - 20, tip[1] - 20, 40, 40); c.globalCompositeOperation = 'source-over'; }
+    }
+    c.restore(); c.globalAlpha = 1;
+  }
+  function drizzlePath(c, p) {
+    // a white chocolate drizzle piped back and forth across the sign, like the drizzle on their bars
+    const N = 160, pts = [], lows = [];
+    for (let j = 0; j <= N; j++) {
+      const u = j / N, ph = u * Math.PI * 2 * 5.5;
+      const x = -30 + u * 790 + 16 * Math.sin(ph * 2 + 1), y = 104 - 4 * u * 10 + 66 * Math.sin(ph) * (0.85 + .15 * Math.sin(u * 9));
+      pts.push([x, y]);
+      if (j > 0 && j < N && Math.sin(ph) > .985 && (!lows.length || j - lows[lows.length - 1] > 8)) lows.push(j);
+    }
+    const lim = p * N; c.beginPath(); c.moveTo(pts[0][0], pts[0][1]);
+    for (let j = 1; j <= lim; j++) c.lineTo(pts[j][0], pts[j][1]);
+    return { pts, lows: lows.filter(j => j <= lim) };
+  }
+  function draw() {
+    const c = ctx; c.setTransform(1, 0, 0, 1, 0, 0); c.clearRect(0, 0, cv.width, cv.height); c.setTransform(k, 0, 0, k, OX * k, OY * k);
+    const on = st.on;
+    // sticker plate (their white outline, here a dark acrylic backer with a neon edge)
+    if (st.plate > 0) {
+      c.globalAlpha = st.plate; c.fillStyle = '#1b0601'; c.fill(P.plate);
+      c.globalAlpha = st.plate * .9; c.lineWidth = 1.2; c.strokeStyle = 'rgba(255,205,150,.18)'; c.stroke(P.plate);
+      if (st.edge > 0) {
+        c.save(); c.setLineDash([st.edge * 2600, 2600]); c.lineCap = 'round';
+        c.globalCompositeOperation = 'lighter'; c.globalAlpha = .55 * on * st.gain; c.lineWidth = 5; c.strokeStyle = 'rgba(255,190,120,.35)'; c.stroke(P.plate);
+        c.globalAlpha = .9 * on; c.lineWidth = 1.6; c.strokeStyle = '#ffe9cf'; c.stroke(P.plate);
+        c.restore();
+      }
+      c.globalAlpha = 1;
+    }
+    // script, written stroke by stroke
+    SCRIPT.forEach(n => drawLetter(c, n, S[n].i * on, S[n].w, S[n].dy));
+    // BARS: channel letters, caramel faces
+    BARS.forEach(j => {
+      const bn = 'b' + j, fn = 'f' + j, s = S[bn], i = s.i * on;
+      c.save(); c.translate(0, s.dy); c.globalAlpha = clamp(s.a ?? 1);
+      if (st.u > 0 && i < 1) { c.globalAlpha = st.u * .5 * (1 - i) * clamp(s.a ?? 1); c.fillStyle = UNLIT; c.fill(P[bn]); c.globalAlpha = clamp(s.a ?? 1); }
+      if (i > 0) {
+        c.globalCompositeOperation = 'lighter'; blit(c, sprites[bn], i * .9 * st.gain); c.globalCompositeOperation = 'source-over';
+        c.globalAlpha = clamp(i) * clamp(s.a ?? 1); c.fillStyle = '#c4631a'; c.fill(P[bn]); c.fillStyle = barsGrad(c); c.fill(P[fn]);
+      }
+      c.restore(); c.globalAlpha = 1;
+    });
+    // the bar icon: fills up from the bottom like a lightbox
+    {
+      const ib = box('ic_base'), i = S.ic_base.i * on;
+      if (st.u > 0) { c.globalAlpha = st.u * .55; c.fillStyle = '#3a1306'; c.fill(P.ic_base); c.globalAlpha = 1; }
+      if (i > 0) {
+        c.globalCompositeOperation = 'lighter'; blit(c, sprites.ic_base, i * .55 * st.gain); c.globalCompositeOperation = 'source-over';
+        c.save(); const top = ib[3] - (ib[3] - ib[1] + 6) * st.fill; c.beginPath(); c.rect(ib[0] - 4, top, ib[2] - ib[0] + 8, ib[3] - top + 4); c.clip();
+        c.globalAlpha = clamp(i); c.fillStyle = '#2e0d04'; c.fill(P.ic_base); c.fillStyle = '#e8893c'; c.fill(P.ic_choc); c.fillStyle = '#fff0cf'; c.fill(P.ic_cream); c.fillStyle = '#fffaf1'; c.fill(P.ic_drizzle);
+        // the fill line glows as it rises
+        if (st.fill > 0 && st.fill < 1) { const g = c.createLinearGradient(0, top - 6, 0, top + 8); g.addColorStop(0, 'rgba(255,230,190,0)'); g.addColorStop(.5, 'rgba(255,240,215,.9)'); g.addColorStop(1, 'rgba(255,230,190,0)'); c.globalCompositeOperation = 'lighter'; c.fillStyle = g; c.fillRect(ib[0], top - 6, ib[2] - ib[0], 14); }
+        c.restore(); c.globalAlpha = 1; c.globalCompositeOperation = 'source-over';
+      }
+      ['ic_spark0', 'ic_spark1', 'ic_spark2'].forEach((n, j) => {
+        const si = S[n].i * on; if (st.u > 0) { c.globalAlpha = st.u * .4 * (1 - si); c.fillStyle = UNLIT; c.fill(P[n]); }
+        if (si > 0) { c.globalCompositeOperation = 'lighter'; blit(c, sprites[n], si * st.gain); c.globalCompositeOperation = 'source-over'; c.globalAlpha = si; c.fillStyle = '#ffdca8'; c.fill(P[n]); }
+        c.globalAlpha = 1;
+      });
+    }
+    // CHEESECAKE BARS + rules + tagline
+    CAPS.forEach(n => {
+      const i = S[n].i * on;
+      if (st.u > 0 && i < 1) { c.globalAlpha = st.u * .45 * (1 - i); c.fillStyle = UNLIT; c.fill(P[n]); }
+      if (i > 0) { c.globalCompositeOperation = 'lighter'; blit(c, sprites[n], i * .8 * st.gain); c.globalCompositeOperation = 'source-over'; c.globalAlpha = i; c.fillStyle = '#ffeacd'; c.fill(P[n]); }
+      c.globalAlpha = 1;
+    });
+    for (const [n, dir] of [['ruleL', -1], ['ruleR', 1]]) {
+      const b = box(n), r = st.rule; if (r <= 0) continue;
+      c.save(); const x0 = dir < 0 ? b[2] - (b[2] - b[0]) * r : b[0]; c.beginPath(); c.rect(x0, b[1] - 3, (b[2] - b[0]) * r, b[3] - b[1] + 6); c.clip();
+      c.globalAlpha = on; c.fillStyle = '#ffc887'; c.fill(P[n]); c.restore(); c.globalAlpha = 1;
+    }
+    {
+      const b = box('tag'), r = st.tag;
+      if (st.u > 0 && r < 1) { c.globalAlpha = st.u * .4; c.fillStyle = UNLIT; c.fill(P.tag); c.globalAlpha = 1; }
+      if (r > 0) {
+        c.save(); c.beginPath(); c.rect(b[0] - 10, b[1] - 10, (b[2] - b[0] + 20) * r, b[3] - b[1] + 20); c.clip();
+        c.globalCompositeOperation = 'lighter'; blit(c, sprites.tag, .75 * on * st.gain); c.globalCompositeOperation = 'source-over';
+        c.globalAlpha = on; c.fillStyle = '#ffd7a2'; c.fill(P.tag); c.restore(); c.globalAlpha = 1;
+      }
+    }
+    // white chocolate drizzle (intro beat)
+    if (st.drz > 0 && st.drzA > 0) {
+      c.save(); c.lineCap = 'round'; c.lineJoin = 'round';
+      c.save(); c.translate(0, 2.6); drizzlePath(c, st.drz); c.globalAlpha = st.drzA * .55; c.lineWidth = 8; c.strokeStyle = 'rgba(40,12,3,.75)'; c.stroke(); c.restore();
+      const d = drizzlePath(c, st.drz); c.globalAlpha = st.drzA; c.lineWidth = 6; c.strokeStyle = '#fff3e2'; c.stroke();
+      c.save(); c.translate(-1, -1.4); drizzlePath(c, st.drz); c.lineWidth = 1.8; c.strokeStyle = 'rgba(255,255,255,.95)'; c.stroke(); c.restore();
+      // drips off the low points
+      d.lows.forEach((j, q) => { const p = d.pts[j]; const grow = clamp(st.drip * 1.4 - q * .07); if (grow <= 0) return; const len = (8 + (q * 7 % 11)) * grow; c.fillStyle = '#fff3e2'; c.globalAlpha = st.drzA; c.beginPath(); c.moveTo(p[0] - 3, p[1]); c.lineTo(p[0] + 3, p[1]); c.lineTo(p[0] + 2.3, p[1] + len); c.arc(p[0], p[1] + len, 3, 0, Math.PI); c.lineTo(p[0] - 2.3, p[1] + len); c.closePath(); c.fill(); });
+      c.restore(); c.globalAlpha = 1;
+    }
+    // shine sweep over everything lit, and a warm hot spot under the pointer
+    if (st.shine > 0 && st.shine < 1) {
+      const x = -260 + st.shine * 1260; const g = c.createLinearGradient(x, 0, x + 170, 252);
+      g.addColorStop(0, 'rgba(255,255,255,0)'); g.addColorStop(.5, 'rgba(255,250,240,.75)'); g.addColorStop(1, 'rgba(255,255,255,0)');
+      c.globalCompositeOperation = 'source-atop'; c.fillStyle = g; c.fillRect(-OX, -OY, W, H); c.globalCompositeOperation = 'source-over';
+    }
+    if (st.hot > 0.01 && on > 0) {
+      const g = c.createRadialGradient(st.hx, st.hy, 0, st.hx, st.hy, 170); g.addColorStop(0, `rgba(255,236,205,${.38 * st.hot})`); g.addColorStop(1, 'rgba(255,236,205,0)');
+      c.globalCompositeOperation = 'source-atop'; c.fillStyle = g; c.fillRect(-OX, -OY, W, H); c.globalCompositeOperation = 'source-over';
+    }
+  }
+  function settle() { Object.values(S).forEach(s => { s.i = 1; s.w = 1; s.dy = 0; s.a = 1; }); Object.assign(st, { u: 1, plate: 1, edge: 1, fill: 1, drz: 0, drzA: 0, drip: 0, shine: -1, gain: 1, rule: 1, tag: 1 }); }
+  function kick() { if (!raf) raf = requestAnimationFrame(t => { raf = 0; draw(); }); }
+  return { S, st, P, resize, draw, kick, settle, SCRIPT, BARS, CAPS, W, H, OX, OY, get busy() { return busy; }, set busy(v) { busy = v; } };
+})();
+</script>
+<script>
+/* ---------------- the opening (~2.6 s): a pure function of time, so every frame is reproducible ---------------- */
+let introDone = !D.classList.contains('intro'), skippedAt = 0;
+const slot = $('#slot'), wrapS = $('#signwrap'), ov = $('#ov');
+const HERO_KIDS = () => [...$$('.hero-copy > *'), $('#hint')];
+const IN = { dx: 0, dy: 0, sc: 1 };
+// letter timing: [start, end] of the pen for each script part
+const WRITE = { s0: [.14, .58], s1: [.5, .7], s2: [.64, .86], s3: [.8, .96], s4: [.92, 1.12], s5: [1.06, 1.28], drip: [1.24, 1.46] };
+function flick(t, at, pat) { if (t < at) return 0; let x = at; for (const [v, d] of pat) { x += d; if (t < x) return v; } return 1; }
+const BUZZ = [[.7, .03], [.15, .04], [1, .05], [.45, .03]], BUZZ2 = [[.6, .03], [.1, .05], [.9, .03], [.2, .06], [1, .04], [.5, .04]];
+function apply(t) {
+  const { S, st } = Sign;
+  st.u = seg(t, 0, .25); st.plate = seg(t, .02, .3); st.on = 1;
+  for (const [n, [a, b]] of Object.entries(WRITE)) {
+    const w = seg(t, a, b); S[n].w = w < 1 ? (w > 0 ? eio(w) : 0) : 1; S[n].dy = 0;
+    S[n].i = w >= 1 ? flick(t, b, n === 's4' ? BUZZ2 : [[.55, .04], [1, .05]]) : 1;
+  }
+  st.edge = eio(seg(t, 1.0, 1.65));
+  Sign.BARS.forEach(j => { const at = 1.1 + j * .075, s = S['b' + j], x = seg(t, at, at + .32); s.dy = (1 - back(x)) * 22; s.a = seg(t, at, at + .1); s.i = flick(t, at + .03, j === 2 ? BUZZ2 : BUZZ); });
+  S.ic_base.i = flick(t, 1.2, [[.5, .04], [1, .05]]); st.fill = eo3(seg(t, 1.24, 1.62));
+  ['ic_spark0', 'ic_spark1', 'ic_spark2'].forEach((n, j) => S[n].i = flick(t, 1.6 + j * .05, [[1, .04], [.3, .03]]));
+  st.drz = eio(seg(t, 1.3, 1.8)); st.drip = seg(t, 1.6, 2.0); st.drzA = 1 - seg(t, 2.05, 2.4);
+  Sign.CAPS.forEach((n, j) => S[n].i = flick(t, 1.5 + j * .022, [[1, .03], [.35, .02]]));
+  st.rule = eo3(seg(t, 1.5, 1.85)); st.tag = eio(seg(t, 1.62, 1.98));
+  st.gain = 1 + .55 * Math.sin(Math.PI * seg(t, 1.85, 2.3));
+  st.shine = t > 1.86 && t < 2.4 ? seg(t, 1.86, 2.4) : -1;
+  Sign.draw();
+  // hand-off: the chocolate lifts away with its drips while the sign settles into the hero
+  const h = eio(seg(t, 2.05, 2.6));
+  wrapS.style.transform = `translate(${IN.dx * (1 - h)}px,${IN.dy * (1 - h)}px) scale(${IN.sc + (1 - IN.sc) * h})`;
+  ov.style.transform = `translateY(${-h * 112}%)`;
+  HERO_KIDS().forEach((el, i) => { const x = eo3(seg(t, 2.25 + i * .06, 2.6 + i * .06)); el.style.opacity = x; el.style.transform = `translateY(${(1 - x) * 14}px)`; });
+  $('#nav').style.opacity = seg(t, 2.25, 2.6);
+}
+const tl = {
+  duration: 2.6, t: 0, paused: false, _raf: 0, _last: 0,
+  pause() { this.paused = true; return this; }, play() { this.paused = false; this._go(); return this; },
+  seek(t) { this.t = clamp(t, 0, this.duration); apply(this.t); return this; },
+  progress(p) { if (p === undefined) return this.t / this.duration; this.seek(p * this.duration); if (p >= 1) endIntro(); return this; },
+  time() { return this.t; },
+  _go() { if (this._raf || introDone) return; this._last = performance.now(); const step = now2 => { this._raf = 0; if (this.paused || introDone) return; this.t += Math.min(.05, (now2 - this._last) / 1000); this._last = now2; if (this.t >= this.duration) { this.seek(this.duration); endIntro(); return; } apply(this.t); this._raf = requestAnimationFrame(step); }; this._raf = requestAnimationFrame(step); }
+};
+function endIntro() {
+  if (introDone) return; introDone = true;
+  if (tl._raf) cancelAnimationFrame(tl._raf); tl._raf = 0;
+  D.classList.remove('intro', 'lock');
+  try { sessionStorage.setItem('sbIntro1', '1'); } catch (e) { }
+  // clear ONLY what the intro set (the sign's slot and sizes come from the stylesheet)
+  wrapS.style.removeProperty('transform'); ov.style.removeProperty('transform');
+  HERO_KIDS().forEach(el => { el.style.removeProperty('opacity'); el.style.removeProperty('transform'); });
+  $('#nav').style.removeProperty('opacity');
+  Sign.settle(); Sign.resize(1); startLive(); onScrollBar();
+}
+function runIntro() {
+  if (introDone) return;
+  window.scrollTo(0, 0);
+  const r = slot.getBoundingClientRect(), vw = innerWidth, vh = innerHeight;
+  const tw = Math.min(vw * .94, 980, vh * 2.1);
+  IN.sc = Math.max(1, tw / r.width); IN.dx = vw / 2 - (r.left + r.width / 2); IN.dy = vh * .46 - (r.top + r.height / 2);
+  Sign.resize(IN.sc);
+  window.__intro = tl; if (window.__qaPause) tl.pause();
+  apply(0);
+  if (!tl.paused) tl.play();
+  const skip = e => { if (introDone) return; if (e.type === 'keydown' && ['Tab', 'Shift', 'Alt', 'Meta', 'Control'].includes(e.key)) return; skippedAt = Date.now(); tl.progress(1); };
+  addEventListener('pointerdown', skip, { once: true }); addEventListener('keydown', skip, { once: true });
+  setTimeout(() => { if (!introDone && !window.__qaPause) tl.progress(1); }, 7000);
+}
+
+/* ---------------- the live sign: tap to switch off/on, pointer brightens, it flickers now and then ---------------- */
+let liveT = 0, liveAnim = 0;
+function animate(fn, dur) { return new Promise(res => { const t0 = performance.now(); const step = n => { const x = clamp((n - t0) / dur); fn(x); Sign.draw(); if (x < 1) requestAnimationFrame(step); else res(); }; requestAnimationFrame(step); }); }
+function signFlick(names, pat, base = 1) {
+  const { S } = Sign; const t0 = performance.now(); const tot = pat.reduce((a, p) => a + p[1], 0);
+  return new Promise(res => { const step = n => { const t = (n - t0) / 1000; names.forEach(nm => S[nm].i = t >= tot ? base : flick(t, 0, pat)); Sign.draw(); if (t < tot) requestAnimationFrame(step); else res(); }; requestAnimationFrame(step); });
+}
+const ALLP = () => [...Sign.SCRIPT, 'b0', 'b1', 'b2', 'b3', 'ic_base', 'ic_spark0', 'ic_spark1', 'ic_spark2', ...Sign.CAPS];
+let signBusy = false;
+async function toggleSign() {
+  if (signBusy || !introDone || Date.now() - skippedAt < 700) return; signBusy = true; buzz(10);
+  const { st } = Sign;
+  if (st.on > .5) {
+    await animate(x => { st.on = x < .15 ? .4 : x < .3 ? 1 : x < .45 ? .2 : x < .6 ? .7 : 1 - eo3((x - .6) / .4); }, 520);
+    st.on = 0; $('#hint').textContent = 'tap to switch it on'; Sign.draw();
+  } else {
+    await animate(x => { st.on = x < .2 ? .6 * (x / .2) : x < .32 ? .1 : x < .5 ? 1 : x < .6 ? .35 : eo3((x - .6) / .4); }, 620);
+    st.on = 1; $('#hint').textContent = 'tap the sign'; Sign.draw();
+    if (!RM) animate(x => { st.shine = x; }, 650).then(() => { st.shine = -1; Sign.draw(); });
+  }
+  signBusy = false;
+}
+function startLive() {
+  const hit = $('#signHit'), { st } = Sign;
+  hit.addEventListener('click', toggleSign);
+  if (matchMedia('(hover:hover) and (pointer:fine)').matches && !RM) {
+    let tgt = 0, raf = 0;
+    const loop = () => { st.hot += (tgt - st.hot) * .16; st.gain = 1 + st.hot * .35; Sign.draw(); raf = Math.abs(tgt - st.hot) > .01 ? requestAnimationFrame(loop) : 0; };
+    hit.addEventListener('pointermove', e => { const r = slot.getBoundingClientRect(); st.hx = (e.clientX - r.left) / r.width * Sign.W - Sign.OX; st.hy = (e.clientY - r.top) / r.height * Sign.H - Sign.OY; tgt = 1; if (!raf) raf = requestAnimationFrame(loop); else Sign.draw(); });
+    hit.addEventListener('pointerleave', () => { tgt = 0; if (!raf) raf = requestAnimationFrame(loop); });
+  } else {
+    // touch: a press warms the glow where the finger is
+    hit.addEventListener('pointerdown', e => { const r = slot.getBoundingClientRect(); st.hx = (e.clientX - r.left) / r.width * Sign.W - Sign.OX; st.hy = (e.clientY - r.top) / r.height * Sign.H - Sign.OY; if (RM) return; animate(x => { st.hot = Math.sin(Math.PI * x); st.gain = 1 + st.hot * .3; }, 700); });
+  }
+  if (RM) return;
+  let visible = true;
+  new IntersectionObserver(es => es.forEach(e => visible = e.isIntersecting)).observe($('#board'));
+  const tick = () => {
+    liveT = setTimeout(async () => {
+      if (visible && !document.hidden && st.on > .5 && !signBusy) {
+        const r = Math.random();
+        if (r < .45) await signFlick([['s4', 's2', 's1', 's5'][Math.floor(Math.random() * 4)]], BUZZ2);
+        else if (r < .75) await animate(x => { st.shine = x; }, 900).then(() => { st.shine = -1; });
+        else await signFlick(['b' + Math.floor(Math.random() * 4)], BUZZ);
+        Sign.draw();
+      }
+      tick();
+    }, 3500 + Math.random() * 4500);
+  };
+  tick();
+}
+</script>
+<script>
+/* ======================================================================================
+   THE BOX BUILDER + ORDER
+   ====================================================================================== */
+const O = store.get('stackd_order_v1', { boxes: [], singles: {} });
+if (!Array.isArray(O.boxes)) O.boxes = []; if (!O.singles || typeof O.singles !== 'object') O.singles = {};
+const B = Object.assign({ size: 12, bars: [], singles: {} }, store.get('stackd_build_v1', {}));
+if (![1, 6, 12, 24].includes(B.size)) B.size = 12;
+const saveO = () => { store.set('stackd_order_v1', O); renderCounts(); };
+const saveB = () => store.set('stackd_build_v1', B);
+const nBars = () => B.bars.filter(Boolean).length;
+const nSingles = s => Object.values(s).reduce((a, b) => a + b, 0);
+const boxPrice = n => CONFIG.boxes[n];
+const orderTotal = () => O.boxes.reduce((a, b) => a + boxPrice(b.size), 0) + nSingles(O.singles) * CONFIG.single;
+const orderCount = () => O.boxes.reduce((a, b) => a + b.size, 0) + nSingles(O.singles);
+function fitBars() { if (B.size === 1) return; B.bars = B.bars.slice(0, B.size); while (B.bars.length < B.size) B.bars.push(null); }
+fitBars();
+
+function renderSizes() {
+  $('#sizes').innerHTML = [6, 12, 24, 1].map(n => `<button type="button" role="tab" data-size="${n}" aria-selected="${B.size === n}"><span class="n">${CONFIG.sizeName[n]}</span><span class="price">${n === 1 ? '$5 ea' : money(CONFIG.boxes[n])}</span></button>`).join('');
+}
+function renderChips() {
+  const cnt = {}; (B.size === 1 ? Object.entries(B.singles) : B.bars.filter(Boolean).map(id => [id, 1])).forEach(([id, c]) => cnt[id] = (cnt[id] || 0) + c);
+  $('#chips').innerHTML = FLAVORS.map(f => `<button type="button" class="chip" data-f="${f.id}" aria-label="Add ${esc(f.name)}">${f.tag ? `<span class="tg${f.sea ? ' sea' : ''}">${f.sea ? 'FALL' : 'NEW'}</span>` : ''}<img src="${f.img}" alt="" width="42" height="42" loading="lazy"><span>${esc(f.name)}</span><span class="ct${cnt[f.id] ? ' on' : ''}">${cnt[f.id] || ''}</span></button>`).join('') +
+    `<button type="button" class="chip mix" id="mix" aria-label="Mix it: fill the box evenly"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h5c6 0 8 14 14 14h5M24 19l4 4-4 4M4 23h5c2 0 3.5-1.4 4.7-3.4M18.3 12.4C19.5 10.4 21 9 23 9h5M24 5l4 4-4 4"/></svg>${B.size === 1 ? 'One of each' : 'Mix it'}</button>`;
+}
+function updateChipCounts() {
+  const cnt = {}; (B.size === 1 ? Object.entries(B.singles) : B.bars.filter(Boolean).map(id => [id, 1])).forEach(([id, c]) => cnt[id] = (cnt[id] || 0) + c);
+  $$('#chips .chip[data-f]').forEach(ch => { const c = $('.ct', ch), v = cnt[ch.dataset.f] || 0; if (String(v || '') !== c.textContent) { c.textContent = v || ''; c.classList.toggle('on', !!v); if (v) bump(c); } });
+}
+function cellBar(id) { const f = FBY[id]; return `<div class="bb" style="background-image:url('${f.img}')" role="button" tabindex="0" aria-label="${esc(f.name)}, tap to take it out"></div>`; }
+function renderBox() {
+  const tray = $('#tray'), grid = $('#grid');
+  tray.classList.toggle('singles', B.size === 1); $('#stage').classList.toggle('singles', B.size === 1);
+  $('#bx').classList.toggle('single-mode', B.size === 1);
+  $('.lid').style.display = B.size === 1 ? 'none' : '';
+  if (B.size === 1) {
+    const list = []; FLAVORS.forEach(f => { for (let i = 0; i < (B.singles[f.id] || 0); i++) list.push(f.id); });
+    const cells = Math.max(12, Math.ceil(list.length / 6) * 6);
+    grid.style.setProperty('--c', 6);
+    grid.innerHTML = Array.from({ length: cells }, (_, i) => `<div class="cell${list[i] ? ' has' : ''}" data-i="${i}">${list[i] ? cellBar(list[i]) : ''}</div>`).join('') + (list.length ? '' : '<div class="empty-note">Tap flavors to add singles, $5 each</div>');
+    grid._list = list;
+  } else {
+    grid.style.setProperty('--c', CONFIG.cols[B.size]);
+    grid.innerHTML = B.bars.map((id, i) => `<div class="cell${id ? ' has' : ''}" data-i="${i}">${id ? cellBar(id) : ''}</div>`).join('') + '<div class="empty-note" id="boxNote">Tap a flavor to drop a bar in</div>';
+  }
+  tally();
+}
+function syncNote() { const n = $('#boxNote'); if (n) n.style.opacity = B.size !== 1 && !nBars() ? 1 : 0; }
+function tally() {
+  syncNote();
+  const tp = $('#tp'), t1 = $('#t1'), t2 = $('#t2'), bar = $('#tbar'), tray = $('#tray'), add = $('#addBox');
+  let price, a, b, pct;
+  if (B.size === 1) {
+    const n = nSingles(B.singles); price = n * CONFIG.single; pct = Math.min(1, n / 6);
+    a = n ? `${n} single${n > 1 ? 's' : ''}` : 'No singles yet';
+    b = '$5 a bar, any flavor.';
+    if (n === 6) b = 'Six singles is $30, same as a half dozen box.';
+    else if (n === 12) b = 'Heads up: a dozen box is $45, less than 12 singles.';
+    else if (n === 24) b = 'Heads up: a two dozen box is $80, less than 24 singles.';
+    else if (n > 12) b = 'A box of 24 is $80 if you want to round it up.';
+    else if (n > 6) b = 'A dozen box is $45 if you want to round it up.';
+    tray.classList.remove('full'); add.textContent = n ? `Add ${n} single${n > 1 ? 's' : ''}` : 'Add to order';
+  } else {
+    const n = nBars(), S = B.size, P = boxPrice(S); pct = n / S;
+    if (n === S) { price = P; a = `${CONFIG.sizeName[S]} box · full`; b = 'Ready to add. Tap a bar if you want to swap it.'; tray.classList.add('full'); }
+    else if (n === 0) { price = P; a = `${CONFIG.sizeName[S]} box · empty`; b = `${S} bars for ${money(P)} once it's full.`; tray.classList.remove('full'); }
+    else { price = n * CONFIG.single; a = `${n} of ${S} in`; b = `${money(price)} as singles right now. Fill the other ${S - n} and the whole box is ${money(P)}.`; tray.classList.remove('full'); }
+    add.textContent = n === S ? 'Add box to order' : 'Add to order';
+  }
+  const txt = money(price); if (tp.textContent !== txt) { tp.textContent = txt; bump(tp); }
+  t1.textContent = a; t2.textContent = b; bar.style.width = (pct * 100) + '%';
+}
+function crumbs(el, col) {
+  if (RM) return; const st = $('#stage').getBoundingClientRect(), r = el.getBoundingClientRect();
+  const cx = r.left + r.width / 2 - st.left, cy = r.top + r.height * .85 - st.top;
+  for (let i = 0; i < 7; i++) {
+    const d = document.createElement('i'); d.className = 'crumb'; d.style.left = cx + 'px'; d.style.top = cy + 'px'; d.style.background = col[i % col.length]; $('#stage').appendChild(d);
+    const a = Math.PI + Math.random() * Math.PI, v = 18 + Math.random() * 26;
+    d.animate([{ transform: 'translate(0,0) scale(1)', opacity: 1 }, { transform: `translate(${Math.cos(a) * v}px,${Math.sin(a) * v * .6 + 14}px) scale(.4)`, opacity: 0 }], { duration: 520 + Math.random() * 200, easing: 'cubic-bezier(.2,.7,.4,1)' }).onfinish = () => d.remove();
+  }
+}
+const CRUMB = { lotus: ['#c27a3a', '#f3dcb3'], straw: ['#e2545f', '#f6b2b8'], banana: ['#e8b45a', '#fff3d6'], oreo: ['#2b1a12', '#f5efe6'], apple: ['#b06a2c', '#e7b673'], plain: ['#f6e6c4', '#d9a35c'], pumpkin: ['#d08a3a', '#f3d6c4'] };
+function dropAnim(cell, id) {
+  const bb = $('.bb', cell); if (!bb || RM) return;
+  bb.animate([{ transform: 'translateY(-90px) scale(1.25) rotate(-7deg)', opacity: 0, offset: 0 }, { opacity: 1, offset: .2 }, { transform: 'translateY(0) scale(1.08,.88) rotate(0)', offset: .58 }, { transform: 'translateY(-8px) scale(.97,1.04)', offset: .78 }, { transform: 'none', opacity: 1 }], { duration: 560, easing: 'cubic-bezier(.3,.6,.4,1)' });
+  setTimeout(() => crumbs(cell, CRUMB[id] || ['#c27a3a']), 310);
+}
+function addFlavor(id, from) {
+  const f = FBY[id]; buzz(8);
+  if (f.sea && !addFlavor._seaTold) { addFlavor._seaTold = 1; toast('Pumpkin Spice is seasonal. Maha will tell you if it\'s still on.'); }
+  if (B.size === 1) {
+    if (nSingles(B.singles) >= 48) { toast('That\'s a lot of bars! Text for big orders.'); return; }
+    B.singles[id] = (B.singles[id] || 0) + 1; saveB(); renderBox();
+    const list = $('#grid')._list; const idx = list.lastIndexOf(id); const cell = $(`#grid .cell[data-i="${idx}"]`);
+    // the new single lands where its flavor group ends
+    if (cell) dropAnim(cell, id);
+  } else {
+    const i = B.bars.indexOf(null);
+    if (i < 0) { toast('Your box is full. Add it to your order, or tap a bar to swap it out.'); shake($('#bx')); return; }
+    B.bars[i] = id; saveB();
+    const cell = $(`#grid .cell[data-i="${i}"]`); cell.classList.add('has'); cell.innerHTML = cellBar(id); dropAnim(cell, id);
+    tally();
+    if (nBars() === B.size) { setTimeout(() => { bump($('.full-tag')); toast(`Full! ${CONFIG.sizeName[B.size]} box for ${money(boxPrice(B.size))}.`); }, 380); }
+  }
+  updateChipCounts();
+}
+function removeAt(i) {
+  buzz(6);
+  if (B.size === 1) {
+    const id = $('#grid')._list[i]; if (!id) return; const cell = $(`#grid .cell[data-i="${i}"]`), bb = $('.bb', cell);
+    const done = () => { B.singles[id]--; if (!B.singles[id]) delete B.singles[id]; saveB(); renderBox(); updateChipCounts(); };
+    if (bb && !RM) bb.animate([{ transform: 'none' }, { transform: 'translateY(-30px) scale(.3) rotate(18deg)', opacity: 0 }], { duration: 260, easing: 'ease-in' }).onfinish = done; else done();
+    return;
+  }
+  const id = B.bars[i]; if (!id) return; const cell = $(`#grid .cell[data-i="${i}"]`), bb = $('.bb', cell);
+  B.bars[i] = null; saveB();
+  const done = () => { cell.classList.remove('has'); cell.innerHTML = ''; tally(); };
+  if (bb && !RM) bb.animate([{ transform: 'none' }, { transform: 'translateY(-34px) scale(.3) rotate(18deg)', opacity: 0 }], { duration: 260, easing: 'ease-in' }).onfinish = done; else done();
+  tally(); updateChipCounts();
+}
+function mixIt() {
+  buzz(12);
+  if (B.size === 1) { REGULAR.forEach(id => B.singles[id] = (B.singles[id] || 0) + 1); saveB(); renderBox(); updateChipCounts(); if (!RM) $$('#grid .bb').forEach((bb, j) => bb.animate([{ transform: 'translateY(-60px) scale(1.2)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 420, delay: j * 25, easing: 'cubic-bezier(.3,1.4,.5,1)', fill: 'backwards' })); toast('One of each regular flavor added.'); return; }
+  const empty = B.bars.map((v, i) => v ? -1 : i).filter(i => i >= 0);
+  if (!empty.length) { toast('Box is already full. Tap a bar to swap it.'); shake($('#bx')); return; }
+  const cnt = Object.fromEntries(REGULAR.map(id => [id, 0])); B.bars.forEach(id => { if (id && id in cnt) cnt[id]++; });
+  const picks = empty.map(() => { const id = REGULAR.reduce((a, b) => cnt[b] < cnt[a] ? b : a); cnt[id]++; return id; });
+  // spread the picks so the same flavors don't sit in a clump
+  picks.sort((a, b) => REGULAR.indexOf(a) - REGULAR.indexOf(b));
+  const order = []; const by = {}; picks.forEach(p => (by[p] = by[p] || []).push(p)); let left = picks.length; while (left) { REGULAR.forEach(id => { if (by[id] && by[id].length) { order.push(by[id].pop()); left--; } }); }
+  empty.forEach((i, j) => { B.bars[i] = order[j]; }); saveB();
+  empty.forEach((i, j) => setTimeout(() => { const cell = $(`#grid .cell[data-i="${i}"]`); cell.classList.add('has'); cell.innerHTML = cellBar(B.bars[i]); dropAnim(cell, B.bars[i]); if (j === empty.length - 1) { tally(); updateChipCounts(); setTimeout(() => { bump($('.full-tag')); toast(`Mixed! ${CONFIG.sizeName[B.size]} box for ${money(boxPrice(B.size))}.`); }, 400); } else if (j % 3 === 0) { tally(); updateChipCounts(); } }, RM ? 0 : j * (B.size === 24 ? 32 : 55)));
+}
+function setSize(n) {
+  if (n === B.size) return; buzz(6);
+  const had = nBars(); const prev = B.size; B.size = n;
+  if (n !== 1) {
+    const ids = B.bars.filter(Boolean); B.bars = ids.slice(0, n); fitBars();
+    if (prev !== 1 && ids.length > n) toast(`Switched to a ${CONFIG.sizeName[n].toLowerCase()}. Kept your first ${n}.`);
+  }
+  saveB(); renderSizes(); renderChips(); renderBox();
+  if (!RM) $('#bx').animate([{ transform: 'scale(.94)', opacity: .5 }, { transform: 'none', opacity: 1 }], { duration: 320, easing: 'cubic-bezier(.3,1.5,.5,1)' });
+}
+function flyTo(srcEl, img) {
+  if (RM) return;
+  const target = innerWidth >= 980 ? $('#navOrder') : $('#sbOrder');
+  const a = srcEl.getBoundingClientRect(), b = target.getBoundingClientRect();
+  const f = document.createElement('div'); f.className = 'fly'; f.style.backgroundImage = `url('${img}')`; f.style.left = (a.left + a.width / 2 - 27) + 'px'; f.style.top = (a.top + a.height / 2 - 27) + 'px'; document.body.appendChild(f);
+  const dx = b.left + b.width / 2 - (a.left + a.width / 2), dy = b.top + b.height / 2 - (a.top + a.height / 2);
+  f.animate([{ transform: 'translate(0,0) scale(1.4) rotate(0)', opacity: 1 }, { transform: `translate(${dx * .5}px,${dy * .5 - 80}px) scale(1) rotate(-12deg)`, opacity: 1, offset: .55 }, { transform: `translate(${dx}px,${dy}px) scale(.3) rotate(10deg)`, opacity: .3 }], { duration: 720, easing: 'cubic-bezier(.4,.1,.4,1)' }).onfinish = () => { f.remove(); bump(target); bump($('#navN')); bump($('#sbN')); };
+}
+function addBoxToOrder(mode) {
+  if (B.size === 1) {
+    const n = nSingles(B.singles); if (!n) { toast('Tap a flavor first to add singles.'); shake($('#chips')); return; }
+    Object.entries(B.singles).forEach(([id, c]) => O.singles[id] = (O.singles[id] || 0) + c);
+    const img = FBY[Object.keys(B.singles)[0]].img; B.singles = {}; saveB(); saveO();
+    flyTo($('#tray'), img); renderBox(); updateChipCounts(); toast(`${n} single${n > 1 ? 's' : ''} added to your order.`); return;
+  }
+  const n = nBars();
+  if (!n) { toast('Your box is empty. Tap flavors to drop bars in.'); shake($('#chips')); return; }
+  if (n < B.size && !mode) { openPartial(); return; }
+  if (mode === 'singles') {
+    B.bars.filter(Boolean).forEach(id => O.singles[id] = (O.singles[id] || 0) + 1);
+    const img = FBY[B.bars.find(Boolean)].img; B.bars = []; fitBars(); saveB(); saveO(); flyTo($('#tray'), img); renderBox(); updateChipCounts(); toast(`${n} singles added to your order.`); return;
+  }
+  // full box: close the lid, fly it to the order, open a fresh one
+  const box = { size: B.size, bars: B.bars.slice() }; O.boxes.push(box); saveO();
+  const bx = $('#bx'); bx.classList.add('closed'); buzz([10, 40, 10]);
+  setTimeout(() => { flyTo($('#tray'), FBY[box.bars[0]].img); toast(`${CONFIG.sizeName[box.size]} box added. ${money(orderTotal())} so far.`); }, RM ? 0 : 420);
+  setTimeout(() => { B.bars = []; fitBars(); saveB(); renderBox(); updateChipCounts(); bx.classList.remove('closed'); }, RM ? 0 : 900);
+}
+function openPartial() {
+  const n = nBars(), S = B.size, k = S - n;
+  $('#psP').textContent = `You've got ${n} of ${S} in. Fill the other ${k} and it's a ${CONFIG.sizeName[S].toLowerCase()} box for ${money(boxPrice(S))}, or add these ${n} as singles for ${money(n * CONFIG.single)}.`;
+  $('#psFill').textContent = `Mix in ${k} more · ${money(boxPrice(S))}`;
+  $('#psSingles').textContent = `Add ${n} as singles · ${money(n * CONFIG.single)}`;
+  openSheet('#pSheet');
+}
+
+/* ---------------- order sheet: order → you → pickup → send ---------------- */
+let step = 0;
+const F = Object.assign({ name: '', phone: '', day: '', win: '', note: '' }, store.get('stackd_form_v1', {}));
+const saveF = () => store.set('stackd_form_v1', F);
+let calY, calM;
+function boxCounts(bars) { const c = {}; bars.forEach(id => id && (c[id] = (c[id] || 0) + 1)); return FLAVORS.filter(f => c[f.id]).map(f => `${c[f.id]} ${f.name}`).join(', '); }
+function renderCounts() {
+  const n = orderCount(), t = orderTotal();
+  $('#navN').textContent = n; $('#sbN').textContent = n; $('#sbP').textContent = n ? ' · ' + money(t) : '';
+}
+function lineHTML() {
+  let h = '';
+  O.boxes.forEach((b, i) => {
+    h += `<div class="line"><div class="mini" style="--c:${CONFIG.cols[b.size]}">${b.bars.map(id => `<i style="background-image:url('${FBY[id].img}')"></i>`).join('')}</div><div class="tx"><b>${CONFIG.sizeName[b.size]} box · ${b.size}</b><span>${esc(boxCounts(b.bars))}</span><div class="lk"><button type="button" data-edit="${i}">Edit</button><button type="button" data-rm="${i}">Remove</button></div></div><span class="pr">${money(boxPrice(b.size))}</span></div>`;
+  });
+  FLAVORS.forEach(f => {
+    const c = O.singles[f.id]; if (!c) return;
+    h += `<div class="line"><div class="mini one"><i style="background-image:url('${f.img}')"></i></div><div class="tx"><b>${esc(f.name)}</b><span>Single, $5 each</span><div class="qty"><button type="button" data-dec="${f.id}" aria-label="One less ${esc(f.name)}">−</button><output>${c}</output><button type="button" data-inc="${f.id}" aria-label="One more ${esc(f.name)}">+</button></div></div><span class="pr">${money(c * CONFIG.single)}</span></div>`;
+  });
+  return h;
+}
+function message() {
+  const lines = ['Hi! I\'d like to place a StackD order:', ''];
+  O.boxes.forEach(b => lines.push(`• ${CONFIG.sizeName[b.size]} box (${b.size}) ${money(boxPrice(b.size))}: ${boxCounts(b.bars)}`));
+  const s = FLAVORS.filter(f => O.singles[f.id]); if (s.length) lines.push(`• Singles ${money(nSingles(O.singles) * CONFIG.single)}: ${s.map(f => `${O.singles[f.id]} ${f.name}`).join(', ')}`);
+  lines.push('', `Total: ${money(orderTotal())} (${orderCount()} bars)`);
+  if (F.day) { const [y, m, d] = fromKey(F.day); const w = CONFIG.windows.find(w => w.id === F.win); lines.push(`Pickup: ${niceDay(y, m, d)}${w ? `, ${w.name.toLowerCase()} (${w.range})` : ''}`); }
+  lines.push(`Name: ${F.name}`, `Phone: ${F.phone}`);
+  if (F.note.trim()) lines.push(`Note: ${F.note.trim()}`);
+  lines.push('', 'Sent from the StackD website. Thank you!');
+  return lines.join('\n');
+}
+const smsHref = () => `sms:${CONFIG.phone}?&body=${encodeURIComponent(message())}`;
+function pdots() { $$('#pdots i').forEach((d, i) => d.classList.toggle('on', i === step)); }
+function renderCal() {
+  const p = dParts(now()); const todayK = dkey(p.y, p.m, p.d);
+  if (calY === undefined) { const s = soonest(); calY = s.y; calM = s.m; if (F.day) { const [y, m] = fromKey(F.day); if (dayOk(...fromKey(F.day))) { calY = y; calM = m; } } }
+  const first = dow(calY, calM, 1), days = new Date(Date.UTC(calY, calM, 0)).getUTCDate();
+  let g = DOW.map(d => `<span class="w">${d[0]}</span>`).join('');
+  for (let i = 0; i < first; i++) g += '<span></span>';
+  for (let d = 1; d <= days; d++) {
+    const k = dkey(calY, calM, d), ok = dayOk(calY, calM, d), past = k < todayK;
+    g += `<button type="button" data-day="${k}" class="${ok ? '' : 'off'}${k === todayK ? ' today' : ''}${F.day === k ? ' sel' : ''}" aria-label="${niceDay(calY, calM, d, true)}${ok ? '' : past ? ', past' : ', less than 48 hours away'}"${past ? ' disabled' : ''}>${d}</button>`;
+  }
+  const canPrev = calY * 12 + calM > p.y * 12 + p.m, canNext = calY * 12 + calM < p.y * 12 + p.m + 3;
+  const s = soonest();
+  let note = `Bars are made to order, so the soonest pickup is ${niceDay(s.y, s.m, s.d, true)}.`;
+  if (F.day && !dayOk(...fromKey(F.day))) F.day = '';
+  return `<div class="cal"><div class="cal-hd"><button type="button" id="calP" aria-label="Previous month"${canPrev ? '' : ' disabled'}><svg viewBox="0 0 14 14"><path d="M9 2L4 7l5 5" stroke="#3e0c03" stroke-width="2" fill="none" stroke-linecap="round"/></svg></button><b>${MONL[calM - 1]} ${calY}</b><button type="button" id="calN" aria-label="Next month"${canNext ? '' : ' disabled'}><svg viewBox="0 0 14 14"><path d="M5 2l5 5-5 5" stroke="#3e0c03" stroke-width="2" fill="none" stroke-linecap="round"/></svg></button></div><div class="cal-g">${g}</div><p class="cal-note" id="calNote">${note}</p></div>`;
+}
+function renderWins() {
+  if (!F.day) return '<p class="cal-note">Pick a day to see the pickup times.</p>';
+  const [y, m, d] = fromKey(F.day);
+  if (F.win && !winOk(y, m, d, CONFIG.windows.find(w => w.id === F.win))) F.win = '';
+  return '<div class="wins">' + CONFIG.windows.map(w => { const ok = winOk(y, m, d, w); return `<button type="button" data-win="${w.id}" class="${F.win === w.id ? 'sel' : ''}"${ok ? '' : ' disabled'}>${w.name}<span>${ok ? w.range : 'too soon'}</span></button>`; }).join('') + '</div><p class="cal-note">These are pickup windows. The exact time gets confirmed by text.</p>';
+}
+function renderOrder() {
+  const body = $('#oBody'), ft = $('#oFt'); pdots();
+  const n = orderCount();
+  if (step === 0) {
+    $('#osT').textContent = 'Your order';
+    body.innerHTML = n ? lineHTML() + `<div class="sum"><b>Total · ${n} bars</b><span class="price">${money(orderTotal())}</span></div>` : '<div class="empty-order"><b>Nothing in here yet</b>Fill a box or add a few singles first.</div>';
+    ft.innerHTML = n ? '<button class="btn sec" type="button" data-go="more">Add more</button><button class="btn pri" type="button" data-go="1">Next: your details</button>' : '<button class="btn pri" type="button" data-go="more">Fill a box</button>';
+  } else if (step === 1) {
+    $('#osT').textContent = 'Your details';
+    body.innerHTML = `<div class="fld"><label for="fName">Name</label><input id="fName" autocomplete="name" value="${esc(F.name)}" placeholder="Your name"><span class="err" id="eName"></span></div><div class="fld"><label for="fPhone">Phone</label><input id="fPhone" type="tel" inputmode="tel" autocomplete="tel" value="${esc(F.phone)}" placeholder="313-555-0123"><span class="err" id="ePhone"></span></div><div class="fld"><label for="fNote">Anything else? <span style="font-weight:400;color:var(--muted)">(optional)</span></label><textarea id="fNote" placeholder="Party, allergies, a special request">${esc(F.note)}</textarea></div>`;
+    ft.innerHTML = '<button class="btn sec" type="button" data-go="0">Back</button><button class="btn pri" type="button" data-go="2">Next: pickup day</button>';
+  } else if (step === 2) {
+    $('#osT').textContent = 'Pickup day';
+    body.innerHTML = renderCal() + `<div id="winBox">${renderWins()}</div>`;
+    ft.innerHTML = '<button class="btn sec" type="button" data-go="1">Back</button><button class="btn pri" type="button" data-go="3">Next: review</button>';
+  } else if (step === 3) {
+    $('#osT').textContent = 'Send your order';
+    const [y, m, d] = fromKey(F.day); const w = CONFIG.windows.find(w => w.id === F.win);
+    body.innerHTML = `<div class="rv"><div class="r"><span>Order</span><span>${orderCount()} bars · ${money(orderTotal())}</span></div><div class="r"><span>Pickup</span><span>${niceDay(y, m, d)}, ${w.name.toLowerCase()}</span></div><div class="r"><span>Name</span><span>${esc(F.name)}</span></div><div class="r"><span>Phone</span><span>${esc(F.phone)}</span></div></div><div class="msg" id="msgBox">${esc(message())}</div><div class="send"><a class="btn pri" id="sendSms" href="${esc(smsHref())}">Text it to ${CONFIG.phoneFmt}</a><button class="btn sec" type="button" id="sendIg">Copy + open Instagram DM</button><button class="btn sec" type="button" id="copyMsg">Copy the order</button></div><p class="small-note">Nothing is paid on the site. You'll get a text back to confirm.</p>`;
+    ft.innerHTML = '<button class="btn sec" type="button" data-go="2">Back</button>';
+  }
+  body.scrollTop = 0;
+}
+function validDetails() {
+  F.name = $('#fName').value.trim(); F.phone = $('#fPhone').value.trim(); F.note = $('#fNote').value; saveF();
+  let ok = true; const digits = F.phone.replace(/\D/g, '');
+  $('#eName').textContent = F.name ? '' : 'Add your name so she knows whose box it is.'; if (!F.name) ok = false;
+  $('#ePhone').textContent = digits.length === 10 || (digits.length === 11 && digits[0] === '1') ? '' : 'Add a 10 digit phone number.'; if ($('#ePhone').textContent) ok = false;
+  if (!ok) { shake($('#oBody')); buzz([8, 30, 8]); }
+  return ok;
+}
+function go(n) {
+  if (n === 'more') { closeSheets(); setTimeout(() => $('#box').scrollIntoView({ behavior: RM ? 'auto' : 'smooth' }), 120); return; }
+  n = +n;
+  if (step === 1 && n > 1 && !validDetails()) return;
+  if (step === 1 && n < 1) { F.name = $('#fName').value.trim(); F.phone = $('#fPhone').value.trim(); F.note = $('#fNote').value; saveF(); }
+  if (step === 2 && n > 2) { if (!F.day) { const nt = $('#calNote'); nt.textContent = 'Pick a pickup day first.'; nt.classList.add('warn'); shake($('.cal')); return; } if (!F.win) { toast('Pick a pickup window.'); shake($('#winBox')); return; } }
+  step = n; renderOrder(); buzz(6);
+}
+async function copyText(t) { try { await navigator.clipboard.writeText(t); return true; } catch (e) { const ta = document.createElement('textarea'); ta.value = t; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); let ok = false; try { ok = document.execCommand('copy'); } catch (e2) { } ta.remove(); return ok; } }
+$('#oSheet').addEventListener('click', async e => {
+  const t = e.target.closest('button,a'); if (!t) return;
+  if (t.dataset.go !== undefined) return go(t.dataset.go);
+  if (t.dataset.rm !== undefined) { O.boxes.splice(+t.dataset.rm, 1); saveO(); renderOrder(); toast('Box removed.'); return; }
+  if (t.dataset.edit !== undefined) { const b = O.boxes.splice(+t.dataset.edit, 1)[0]; saveO(); B.size = b.size; B.bars = b.bars.slice(); fitBars(); saveB(); renderSizes(); renderChips(); renderBox(); closeSheets(); toast('Your box is back in the builder.'); setTimeout(() => $('#box').scrollIntoView({ behavior: RM ? 'auto' : 'smooth' }), 120); return; }
+  if (t.dataset.inc) { O.singles[t.dataset.inc]++; saveO(); renderOrder(); return; }
+  if (t.dataset.dec) { O.singles[t.dataset.dec]--; if (!O.singles[t.dataset.dec]) delete O.singles[t.dataset.dec]; saveO(); renderOrder(); return; }
+  if (t.dataset.day) { if (t.classList.contains('off')) { const s = soonest(); const nt = $('#calNote'); nt.textContent = `That's less than 48 hours away. Bars are made to order, so the soonest pickup is ${niceDay(s.y, s.m, s.d, true)}.`; nt.classList.add('warn'); shake(t); buzz([8, 30, 8]); return; } F.day = t.dataset.day; saveF(); $$('.cal-g button').forEach(b => b.classList.toggle('sel', b === t)); bump(t); const nt = $('#calNote'); nt.classList.remove('warn'); const [y, m, d] = fromKey(F.day); nt.textContent = `Pickup on ${niceDay(y, m, d, true)}. Now pick a time.`; $('#winBox').innerHTML = renderWins(); return; }
+  if (t.id === 'calP' || t.id === 'calN') { calM += t.id === 'calN' ? 1 : -1; if (calM > 12) { calM = 1; calY++; } if (calM < 1) { calM = 12; calY--; } $('#oBody').innerHTML = renderCal() + `<div id="winBox">${renderWins()}</div>`; return; }
+  if (t.dataset.win) { F.win = t.dataset.win; saveF(); $$('.wins button').forEach(b => b.classList.toggle('sel', b === t)); bump(t); return; }
+  if (t.id === 'sendSms') { buzz(10); setTimeout(() => sent('text'), 400); return; }
+  if (t.id === 'sendIg') { const ok = await copyText(message()); toast(ok ? 'Order copied. Paste it in the DM.' : 'Copy the order from the box above, then paste it in the DM.'); window.open('https://ig.me/m/' + CONFIG.ig, '_blank', 'noopener'); sent('dm'); return; }
+  if (t.id === 'copyMsg') { const ok = await copyText(message()); toast(ok ? 'Order copied.' : 'Select the order above to copy it.'); bump(t); return; }
+});
+function sent(how) {
+  const ft = $('#oFt'); ft.innerHTML = '<button class="btn sec" type="button" id="keep">Keep my order</button><button class="btn pri" type="button" id="fresh">Start a new order</button>';
+  const msg = $('#msgBox'); msg.insertAdjacentHTML('beforebegin', `<div class="done"><b>${how === 'text' ? 'Hit send in Messages' : 'Paste it in the DM'}</b>You'll get a reply to confirm your pickup.</div>`);
+  $('#keep').onclick = closeSheets; $('#fresh').onclick = () => { O.boxes = []; O.singles = {}; saveO(); F.day = ''; F.win = ''; saveF(); closeSheets(); toast('Fresh start. Your details are saved.'); };
+}
+
+/* ---------------- sheets ---------------- */
+let lastFocus = null;
+function openSheet(id) { lastFocus = document.activeElement; $$('.sheet').forEach(s => s.classList.remove('on')); $(id).classList.add('on'); $('#scrim').classList.add('on'); document.body.style.overflow = 'hidden'; $('#sbar').classList.add('hide'); setTimeout(() => { const x = $(id + ' .x'); x && x.focus({ preventScroll: true }); }, 60); }
+function closeSheets() { $$('.sheet').forEach(s => s.classList.remove('on')); $('#scrim').classList.remove('on'); document.body.style.overflow = ''; onScrollBar(); if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true }); }
+function openOrder() { step = 0; renderOrder(); openSheet('#oSheet'); }
+$('#scrim').addEventListener('click', closeSheets);
+$$('.sheet .x').forEach(x => x.addEventListener('click', closeSheets));
+addEventListener('keydown', e => { if (e.key === 'Escape') closeSheets(); });
+
+/* ---------------- flavour cards + sheet ---------------- */
+let curF = null;
+function openFlavor(id) {
+  const f = FBY[id]; curF = id; buzz(6);
+  $('#fsName').textContent = f.name + (f.tag ? (f.sea ? ' · seasonal' : ' · new') : '');
+  const img = $('#fsImg'); img.src = f.img; img.alt = f.name + ' cheesecake bar';
+  $('#fsTop').textContent = f.top; $('#fsCr').textContent = f.cr;
+  openSheet('#fSheet');
+  if (!RM) img.animate([{ transform: 'scale(1.12)', opacity: .4 }, { transform: 'none', opacity: 1 }], { duration: 500, easing: 'cubic-bezier(.2,.8,.3,1)' });
+}
+$('#fsOne').addEventListener('click', () => { O.singles[curF] = (O.singles[curF] || 0) + 1; saveO(); flyTo($('#fsImg'), FBY[curF].img); toast(`One ${FBY[curF].name} added. ${money(orderTotal())} so far.`); setTimeout(closeSheets, 350); });
+$('#fsBox').addEventListener('click', () => { const id = curF; closeSheets(); if (B.size === 1) setSize(12); setTimeout(() => { $('#box').scrollIntoView({ behavior: RM ? 'auto' : 'smooth' }); setTimeout(() => addFlavor(id), RM ? 0 : 550); }, 150); });
+function renderFlavors() {
+  $('#frail').innerHTML = FLAVORS.map(f => `<button type="button" class="fcard" data-f="${f.id}"><div class="ph"><img src="${f.img}" alt="${esc(f.name)} cheesecake bar" loading="lazy" width="480" height="360">${f.tag ? `<span class="tg${f.sea ? ' sea' : ''}">${f.tag}</span>` : ''}</div><div class="bd"><h3>${esc(f.name)}</h3><p>${esc(f.top)}</p></div></button>`).join('');
+  $('#strip').innerHTML = FLAVORS.slice(0, 6).map(f => `<button type="button" data-f="${f.id}" aria-label="See ${esc(f.name)}"><img src="${f.img}" alt="" width="64" height="64">${esc(f.name.replace('Cookies & Cream', 'Cookies & Cream').split(' ')[0])}</button>`).join('');
+}
+function renderReels() {
+  $('#rrail').innerHTML = REELS.map(r => `<a class="rcard" href="${r.url}" target="_blank" rel="noopener"><div class="fr">${r.fr.map((f, i) => `<img src="media/r-${f}.webp" alt="Frame from the ${esc(r.who)} reel" width="450" height="600"${i ? '' : ' class="on"'}>`).join('')}<span class="play"><svg viewBox="0 0 14 14"><path d="M3 2l9 5-9 5z" fill="#fff"/></svg>Watch</span></div><div class="bd"><div class="who">${esc(r.who)}</div><q>${esc(r.q)}</q><div class="where">${esc(r.where)}</div></div></a>`).join('');
+  if (RM) return;
+  let on = false; new IntersectionObserver(es => es.forEach(e => on = e.isIntersecting), { threshold: .2 }).observe($('#rrail'));
+  let k = 0; setInterval(() => { if (!on || document.hidden) return; k++; $$('#rrail .rcard').forEach((c, ci) => { const im = $$('img', c); const j = (k + ci) % im.length; im.forEach((x, xi) => x.classList.toggle('on', xi === j)); }); }, 1700);
+}
+function railDots(rail, dots) {
+  const n = rail.children.length; dots.innerHTML = Array.from({ length: n }, (_, i) => `<i${i ? '' : ' class="on"'}></i>`).join('');
+  rail.addEventListener('scroll', () => { const c = rail.children[0]; if (!c) return; const w = c.getBoundingClientRect().width + 12; const i = Math.round(rail.scrollLeft / w); $$('i', dots).forEach((d, j) => d.classList.toggle('on', j === Math.min(n - 1, i))); }, { passive: true });
+}
+
+/* ---------------- sticky bar, reveals, soonest pickup ---------------- */
+let closerIn = false;
+function onScrollBar() { $('#sbar').classList.toggle('hide', closerIn || !!$$('.sheet.on').length || !introDone); }
+function renderSoon() { const s = soonest(); $('#soonD').textContent = `${niceDay(s.y, s.m, s.d, true)}, ${s.w.name.toLowerCase()}`; }
+
+/* ---------------- wire it up ---------------- */
+function init() {
+  renderSizes(); renderChips(); renderBox(); renderFlavors(); renderReels(); renderCounts(); renderSoon();
+  railDots($('#frail'), $('#fdots')); railDots($('#rrail'), $('#rdots'));
+  $('#sizes').addEventListener('click', e => { const b = e.target.closest('[data-size]'); if (b) { setSize(+b.dataset.size); bump(b); } });
+  $('#chips').addEventListener('click', e => { const b = e.target.closest('.chip'); if (!b) return; bump(b); if (b.id === 'mix') mixIt(); else addFlavor(b.dataset.f); });
+  $('#grid').addEventListener('click', e => { const c = e.target.closest('.cell'); if (c && $('.bb', c)) removeAt(+c.dataset.i); });
+  $('#grid').addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && e.target.classList.contains('bb')) { e.preventDefault(); removeAt(+e.target.parentNode.dataset.i); } });
+  $('#clear').addEventListener('click', () => { if (B.size === 1 ? !nSingles(B.singles) : !nBars()) { shake($('#bx')); return; } buzz(10); const go2 = () => { if (B.size === 1) B.singles = {}; else { B.bars = []; fitBars(); } saveB(); renderBox(); updateChipCounts(); toast('Box emptied.'); }; if (RM) return go2(); const bbs = $$('#grid .bb'); bbs.forEach((bb, j) => bb.animate([{ transform: 'none' }, { transform: 'translateY(-26px) scale(.2) rotate(20deg)', opacity: 0 }], { duration: 240, delay: j * 12, easing: 'ease-in', fill: 'forwards' })); setTimeout(go2, 240 + bbs.length * 12); });
+  $('#addBox').addEventListener('click', e => { bump(e.currentTarget); addBoxToOrder(); });
+  $('#psFill').addEventListener('click', () => { closeSheets(); setTimeout(() => { mixIt(); setTimeout(() => addBoxToOrder('full'), RM ? 0 : 900); }, 200); });
+  $('#psSingles').addEventListener('click', () => { closeSheets(); setTimeout(() => addBoxToOrder('singles'), 150); });
+  $('#frail').addEventListener('click', e => { const c = e.target.closest('.fcard'); if (c) openFlavor(c.dataset.f); });
+  $('#strip').addEventListener('click', e => { const c = e.target.closest('button'); if (c) openFlavor(c.dataset.f); });
+  [$('#navOrder'), $('#sbOrder')].forEach(b => b.addEventListener('click', openOrder));
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .12, rootMargin: '0px 0px -30px 0px' });
+  $$('.reveal').forEach(el => io.observe(el));
+  new IntersectionObserver(es => es.forEach(e => { closerIn = e.isIntersecting; onScrollBar(); }), { threshold: .25 }).observe($('#closer'));
+  setInterval(renderSoon, 60e3);
+  // the first time the empty box comes into view, the flavor chips hop in turn to show where to tap
+  if (!RM) { const so = new IntersectionObserver(es => { if (!es[0].isIntersecting) return; so.disconnect(); if (B.size === 1 ? nSingles(B.singles) : nBars()) return; $$('#chips .chip').forEach((c, i) => c.animate([{ transform: 'none' }, { transform: 'translateY(-7px)' }, { transform: 'none' }], { duration: 380, delay: 250 + i * 70, easing: 'cubic-bezier(.3,1.6,.5,1)' })); }, { threshold: .6 }); so.observe($('#chips')); }
+  let rt = 0; addEventListener('resize', () => { if (!introDone) return; clearTimeout(rt); rt = setTimeout(() => Sign.resize(1), 120); });
+  if (introDone) { Sign.settle(); Sign.resize(1); startLive(); onScrollBar(); }
+  else requestAnimationFrame(() => runIntro());
+}
+init();
+</script>
+</body>
+</html>
