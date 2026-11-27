@@ -157,7 +157,7 @@ p{margin:0}
 .empty{padding:22px;border-radius:12px;background:#fff;color:var(--ink2);text-align:center}
 
 /* ---------- viewer ---------- */
-.viewer{position:fixed;inset:0;z-index:80;background:rgba(3,10,18,.96);display:flex;flex-direction:column;opacity:0;visibility:hidden;transition:opacity .25s,visibility 0s .25s;color:#fff}
+.viewer{position:fixed;inset:0;z-index:80;background:#040c15;display:flex;flex-direction:column;opacity:0;visibility:hidden;transition:opacity .25s,visibility 0s .25s;color:#fff}
 .viewer.open{opacity:1;visibility:visible;transition:opacity .25s}
 .vw-top{display:flex;align-items:center;justify-content:space-between;padding:10px var(--pad);padding-top:max(10px,env(safe-area-inset-top));gap:10px}
 .vw-top .count{color:#9fb8cc}
@@ -187,6 +187,7 @@ p{margin:0}
 .vw-q button.on{opacity:1;box-shadow:0 0 0 2px var(--sky)}
 .vw-q img{width:100%;height:100%;object-fit:cover}
 .snd.on{background:var(--sky);color:var(--navy)}
+.vw-fb{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);z-index:3;white-space:nowrap;animation:slidein .35s}
 
 /* ---------- shows ---------- */
 .shows .card{width:80vw;max-width:340px;background:#fff;border-radius:var(--r);padding:16px;box-shadow:0 1px 0 var(--line),0 10px 28px rgba(9,30,50,.07);display:flex;flex-direction:column;gap:10px}
@@ -956,7 +957,7 @@ function openViewer(list, i) {
   show(i); $('#vw-x').focus();
 }
 function closeViewer() {
-  vw.classList.remove('open'); frame.innerHTML = ''; document.documentElement.style.overflow = '';
+  clearTimeout(V.fbT); vw.classList.remove('open'); frame.innerHTML = ''; document.documentElement.style.overflow = '';
   dockCheck(); V.lastFocus && V.lastFocus.focus && V.lastFocus.focus({ preventScroll: true });
 }
 function sndBtn() { const b = $('#vw-snd'); b.innerHTML = V.muted ? ICON.mute : ICON.snd; b.classList.toggle('on', !V.muted); b.setAttribute('aria-pressed', !V.muted); b.setAttribute('aria-label', V.muted ? 'Turn sound on' : 'Turn sound off'); }
@@ -968,7 +969,12 @@ function show(i) {
   else {
     frame.style.backgroundImage = `url(${thumb(it.kind, it.id)})`;
     frame.innerHTML = `<div class="ld"><i></i></div><iframe title="${esc(it.t)}" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen src="https://www.youtube.com/embed/${it.id}?autoplay=1&mute=${V.muted ? 1 : 0}&playsinline=1&rel=0&modestbranding=1&enablejsapi=1"></iframe>`;
-    const f = $('iframe', frame); f.addEventListener('load', () => { const l = $('.ld', frame); l && l.remove(); f.contentWindow.postMessage('{"event":"listening","id":1}', '*'); });
+    const f = $('iframe', frame); V.got = false; clearTimeout(V.fbT);
+    f.addEventListener('load', () => {
+      const l = $('.ld', frame); l && l.remove(); f.contentWindow.postMessage('{"event":"listening","id":1}', '*');
+      // if YouTube's player never answers (blocked network, app webview), offer the video on YouTube instead of a dead frame
+      V.fbT = setTimeout(() => { if (!V.got) fallback(it); }, 7000);
+    });
   }
   if (isPh) frame.style.backgroundImage = '';
   $('#vw-snd').style.display = isPh ? 'none' : ''; sndBtn();
@@ -980,6 +986,17 @@ function show(i) {
   const on = $('#vw-q button.on'); on && on.scrollIntoView({ inline: 'center', block: 'nearest', behavior: RM ? 'auto' : 'smooth' });
   if (!RM) gsap.fromTo(frame, { opacity: 0, scale: .97 }, { opacity: 1, scale: 1, duration: .3, ease: 'power2.out', clearProps: 'transform,opacity' });
 }
+function fallback(it) {
+  if (!vw.classList.contains('open') || $('.vw-fb', frame)) return;
+  frame.insertAdjacentHTML('beforeend', `<a class="btn btn-sky vw-fb" href="${yt(it.id, it.kind === 'sh')}" target="_blank" rel="noopener">${ICON.youtube} Not playing? Watch it on YouTube</a>`);
+}
+addEventListener('message', e => {
+  let host = ''; try { host = new URL(e.origin).hostname; } catch (_) {}
+  if (!/(^|\.)youtube\.com$/.test(host)) return;
+  const d = typeof e.data === 'string' ? e.data : '';
+  if (d.includes('"event":"onError"')) { fallback(V.list[V.i]); return; }
+  if (/"playerState":1\b/.test(d) || /"currentTime":(?!0[,}])\d/.test(d)) { V.got = true; const fb = $('.vw-fb', frame); fb && fb.remove(); }
+});
 async function share(it) {
   const url = yt(it.id, it.kind === 'sh');
   try { if (navigator.share) { await navigator.share({ title: it.t, url }); return; } await navigator.clipboard.writeText(url); toast('Link copied'); } catch (e) {}
