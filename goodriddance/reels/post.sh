@@ -5,10 +5,15 @@
 set -euo pipefail
 IG=17841443138141505
 G=https://graph.facebook.com/v21.0
-BASE=${BASE:-https://goodriddancejunk.vercel.app/reels}
+REPO=elachkarhafez/Baydounurgentcare
+# queue + videos come straight from the public GitHub repo, so new reels go live on a git push (no site deploy).
+# Videos go through jsDelivr pinned to the current commit (correct video/mp4 type, immutable, fetched fresh).
+QURL=${QURL:-https://raw.githubusercontent.com/$REPO/main/goodriddance/reels/queue.json}
+SHA=$(curl -fsS "https://api.github.com/repos/$REPO/commits/main" | python3 -I -c 'import json,sys;print(json.load(sys.stdin)["sha"])' 2>/dev/null || true)
+if [ -n "$SHA" ]; then BASE=${BASE:-https://cdn.jsdelivr.net/gh/$REPO@$SHA/goodriddance/reels}; else BASE=${BASE:-https://goodriddancejunk.vercel.app/reels}; fi
 DRY=${DRY:-0}   # DRY=1: create and check the container, don't publish
 TMP=$(mktemp -d); trap 'rm -rf "$TMP"' EXIT
-curl -fsS "$BASE/queue.json" -o "$TMP/q.json"
+curl -fsS "$QURL?t=$(date +%s)" -o "$TMP/q.json" || curl -fsS "https://goodriddancejunk.vercel.app/reels/queue.json" -o "$TMP/q.json"
 curl -sS "$G/$IG/media?fields=caption&limit=100" -o "$TMP/m.json"
 python3 -I - "$TMP" <<'PY'
 import json,sys,os
@@ -20,6 +25,7 @@ open(d+'/left','w').write(str(len(left)))
 if left: json.dump(left[0],open(d+'/next.json','w'))
 PY
 LEFT=$(cat "$TMP/left")
+if [ "${COUNT_ONLY:-0}" = 1 ]; then echo "UNPOSTED $LEFT"; exit 0; fi
 if [ "$LEFT" = 0 ]; then echo "QUEUE EMPTY: every reel in queue.json is already posted"; exit 3; fi
 ID=$(python3 -I -c 'import json,sys;print(json.load(open(sys.argv[1]))["id"])' "$TMP/next.json")
 FILE=$(python3 -I -c 'import json,sys;print(json.load(open(sys.argv[1]))["file"])' "$TMP/next.json")
